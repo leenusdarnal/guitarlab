@@ -2,13 +2,13 @@
 
 **Learn. Practise. Master.**
 
-GuitarLab is a personal, full-stack guitar-learning platform designed to turn structured lessons and deliberate practice into measurable musical ability.
+GuitarLab is a self-contained, full-stack guitar-learning platform with an authored three-year curriculum, interactive music tools and deliberate practice.
 
 It combines a guided curriculum, interactive music tools, focused practice sessions, skill assessments and progress history. It is designed to work locally and offline first, with optional cloud synchronisation.
 
 ## Product goals
 
-- Preserve learning continuity and the learner's existing curriculum and progress.
+- Provide a complete learning route that starts with a fresh learner profile.
 - Teach practical playing alongside music theory, listening and musicianship.
 - Make practice sessions purposeful, measurable and easy to resume.
 - Adapt review to demonstrated skill, not just lesson completion.
@@ -57,12 +57,15 @@ The product definition, curriculum foundation, final architecture and pre-implem
 - [Curriculum research and revision](docs/CURRICULUM_RESEARCH.md)
 - [Machine-readable spiral learning framework](content/curriculum/learning-framework.json)
 - [Year 1 curriculum data](content/curriculum/year-1.json)
+- [Year 1 authored lessons — 52 lessons](content/curriculum/year-1-lessons.json)
 - [Year 2 curriculum data](content/curriculum/year-2.json)
+- [Year 2 authored lessons — 52 lessons](content/curriculum/year-2-lessons.json)
 - [Year 3+ specialisation outlines](content/curriculum/year-3-specialisations.json)
+- [Year 3+ authored lessons — 48 lessons](content/curriculum/year-3-specialisation-lessons.json)
 - [Curriculum content model and skill taxonomy](docs/CURRICULUM_CONTENT_MODEL.md)
 - [First-release scope](docs/RELEASE_SCOPE.md)
 - [Design direction](docs/DESIGN_DIRECTION.md)
-- [Learner progress migration](docs/LEARNING_PROGRESS_MIGRATION.md)
+- [Fresh learner profile policy](docs/LEARNING_PROGRESS_MIGRATION.md)
 - [M0 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
 - [Implementation roadmap](docs/ROADMAP.md)
 - [Pre-implementation readiness review](docs/PRE_IMPLEMENTATION_READINESS.md)
