@@ -31,7 +31,7 @@ jobs:
       - name: Inspect dependency advisories
         shell: bash
         run: |
-          npm audit --json > "$RUNNER_TEMP/npm-audit.json" || true
+          timeout 90s npm audit --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || true
           node - <<'NODE'
           const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
           const entries = Object.entries(report.vulnerabilities || {});
