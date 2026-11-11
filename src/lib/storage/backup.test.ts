@@ -67,9 +67,7 @@ describe('learner backup contract', () => {
     });
   });
 
-  it(
-    'round-trips M4.2 checkpoint state while accepting older version-1 backups',
-    () => {
+  it('round-trips M4.2 checkpoint state while accepting older version-1 backups', () => {
     const older = makeBackup();
     expect(parseLearnerBackup(older)).toMatchObject({ success: true });
     const newer = makeBackup();
@@ -190,7 +188,11 @@ describe('learner backup contract', () => {
     const existing = structuredClone(incoming.records);
     existing.profile.id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 
-    expect(createRestorePreview(incoming, existing).replacesActiveProfile).toBe(true);
-    expect(createRestorePreview(incoming, null).replacesActiveProfile).toBe(false);
+    expect(createRestorePreview(incoming, existing).replacesActiveProfile).toBe(
+      true
+    );
+    expect(createRestorePreview(incoming, null).replacesActiveProfile).toBe(
+      false
+    );
   });
 });

@@ -218,7 +218,9 @@ const updateLessonProgressInputSchema = z
   })
   .strict()
   .superRefine((value, context) => {
-    if (new Set(value.completedBlockIds).size !== value.completedBlockIds.length) {
+    if (
+      new Set(value.completedBlockIds).size !== value.completedBlockIds.length
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['completedBlockIds'],
@@ -232,7 +234,8 @@ const updateLessonProgressInputSchema = z
       context.addIssue({
         code: 'custom',
         path: ['lastBlockId'],
-        message: 'The last visited block must be included in completed lesson blocks.'
+        message:
+          'The last visited block must be included in completed lesson blocks.'
       });
     }
   });

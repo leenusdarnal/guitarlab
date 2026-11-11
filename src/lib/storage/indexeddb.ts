@@ -3,7 +3,11 @@ import {
   profilePreferencesSchema,
   type ProfilePreferences
 } from '../domain/profile/preferences';
-import { completeLesson, updateLearnerPreferences, updateLessonProgress } from '../application/services';
+import {
+  completeLesson,
+  updateLearnerPreferences,
+  updateLessonProgress
+} from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
 import year1Curriculum from '../../../content/curriculum/year-1.json';
 import year1Lessons from '../../../content/curriculum/year-1-lessons.json';
@@ -49,9 +53,13 @@ function transactionResult(transaction: IDBTransaction): Promise<void> {
   return new Promise((resolve, reject) => {
     transaction.oncomplete = () => resolve();
     transaction.onabort = () =>
-      reject(transaction.error ?? new Error('Local database transaction aborted.'));
+      reject(
+        transaction.error ?? new Error('Local database transaction aborted.')
+      );
     transaction.onerror = () =>
-      reject(transaction.error ?? new Error('Local database transaction failed.'));
+      reject(
+        transaction.error ?? new Error('Local database transaction failed.')
+      );
   });
 }
 
@@ -119,19 +127,20 @@ export function openLocalDatabase(
           keyPath: 'id'
         });
         events.createIndex('byProgressId', 'progressId');
-        events.createIndex(
-          'byLearnerCompletedAt',
-          ['learnerId', 'completedAt']
-        );
+        events.createIndex('byLearnerCompletedAt', [
+          'learnerId',
+          'completedAt'
+        ]);
       }
       if (!database.objectStoreNames.contains(stores.assessmentAttempts)) {
         const attempts = database.createObjectStore(stores.assessmentAttempts, {
           keyPath: 'id'
         });
-        attempts.createIndex(
-          'byLearnerReleaseSkill',
-          ['learnerId', 'curriculumReleaseId', 'skillId']
-        );
+        attempts.createIndex('byLearnerReleaseSkill', [
+          'learnerId',
+          'curriculumReleaseId',
+          'skillId'
+        ]);
       }
       if (!database.objectStoreNames.contains(stores.mastery)) {
         const mastery = database.createObjectStore(stores.mastery, {
@@ -154,9 +163,13 @@ export function openLocalDatabase(
       resolve(database);
     };
     request.onerror = () =>
-      reject(request.error ?? new Error('Could not open local learner storage.'));
+      reject(
+        request.error ?? new Error('Could not open local learner storage.')
+      );
     request.onblocked = () =>
-      reject(new Error('Close other GuitarLab tabs to finish the storage upgrade.'));
+      reject(
+        new Error('Close other GuitarLab tabs to finish the storage upgrade.')
+      );
   });
 }
 
@@ -210,7 +223,10 @@ export async function ensureActiveLearnerProfile(
         Date.now()
       );
       profiles.add(profile);
-      metadata.put({ key: ACTIVE_PROFILE_KEY, value: profile.id } satisfies MetadataRecord);
+      metadata.put({
+        key: ACTIVE_PROFILE_KEY,
+        value: profile.id
+      } satisfies MetadataRecord);
       return profile;
     }
   );
@@ -230,9 +246,14 @@ export function createIndexedDbRepositories(
 ): IndexedDbRepositories {
   const profiles: LearnerProfileRepository = {
     create: async (profile) => {
-      await inTransaction(database, [stores.profiles], 'readwrite', async (tx) => {
-        await requestResult(tx.objectStore(stores.profiles).add(profile));
-      });
+      await inTransaction(
+        database,
+        [stores.profiles],
+        'readwrite',
+        async (tx) => {
+          await requestResult(tx.objectStore(stores.profiles).add(profile));
+        }
+      );
     },
     findById: async (learnerId) =>
       inTransaction(database, [stores.profiles], 'readonly', async (tx) => {
@@ -240,7 +261,10 @@ export function createIndexedDbRepositories(
           tx.objectStore(stores.profiles).get(learnerId)
         );
         return value
-          ? { ...value, preferences: profilePreferencesSchema.parse(value.preferences) }
+          ? {
+              ...value,
+              preferences: profilePreferencesSchema.parse(value.preferences)
+            }
           : null;
       }),
     updatePreferences: async (learnerId, preferences, updatedAt) =>
@@ -264,16 +288,23 @@ export function createIndexedDbRepositories(
   const progress: LessonProgressRepository = {
     find: async (learnerId, releaseId, lessonId) =>
       inTransaction(database, [stores.progress], 'readonly', async (tx) => {
-        const index = tx.objectStore(stores.progress).index('byLearnerReleaseLesson');
+        const index = tx
+          .objectStore(stores.progress)
+          .index('byLearnerReleaseLesson');
         const value = await requestResult<LessonProgressRecord | undefined>(
           index.get(IDBKeyRange.only([learnerId, releaseId, lessonId]))
         );
         return value ?? null;
       }),
     create: async (record) => {
-      await inTransaction(database, [stores.progress], 'readwrite', async (tx) => {
-        await requestResult(tx.objectStore(stores.progress).add(record));
-      });
+      await inTransaction(
+        database,
+        [stores.progress],
+        'readwrite',
+        async (tx) => {
+          await requestResult(tx.objectStore(stores.progress).add(record));
+        }
+      );
     },
     updateInProgress: async (record, expectedRevision) =>
       inTransaction(database, [stores.progress], 'readwrite', async (tx) => {
@@ -321,7 +352,9 @@ export function createIndexedDbRepositories(
           }
 
           await requestResult(progressStore.put(record));
-          await requestResult(tx.objectStore(stores.completionEvents).add(event));
+          await requestResult(
+            tx.objectStore(stores.completionEvents).add(event)
+          );
           return record;
         }
       )
@@ -329,24 +362,43 @@ export function createIndexedDbRepositories(
 
   const assessments: AssessmentAttemptRepository = {
     append: async (record) => {
-      await inTransaction(database, [stores.assessmentAttempts], 'readwrite', async (tx) => {
-        await requestResult(tx.objectStore(stores.assessmentAttempts).add(record));
-      });
+      await inTransaction(
+        database,
+        [stores.assessmentAttempts],
+        'readwrite',
+        async (tx) => {
+          await requestResult(
+            tx.objectStore(stores.assessmentAttempts).add(record)
+          );
+        }
+      );
     },
     listBySkill: async (learnerId, releaseId, skillId) =>
-      inTransaction(database, [stores.assessmentAttempts], 'readonly', async (tx) => {
-        const index = tx.objectStore(stores.assessmentAttempts).index('byLearnerReleaseSkill');
-        return requestResult<AssessmentAttemptRecord[]>(
-          index.getAll(IDBKeyRange.only([learnerId, releaseId, skillId]))
-        );
-      }),
+      inTransaction(
+        database,
+        [stores.assessmentAttempts],
+        'readonly',
+        async (tx) => {
+          const index = tx
+            .objectStore(stores.assessmentAttempts)
+            .index('byLearnerReleaseSkill');
+          return requestResult<AssessmentAttemptRecord[]>(
+            index.getAll(IDBKeyRange.only([learnerId, releaseId, skillId]))
+          );
+        }
+      ),
     findById: async (attemptId) =>
-      inTransaction(database, [stores.assessmentAttempts], 'readonly', async (tx) => {
-        const record = await requestResult<AssessmentAttemptRecord | undefined>(
-          tx.objectStore(stores.assessmentAttempts).get(attemptId)
-        );
-        return record ?? null;
-      })
+      inTransaction(
+        database,
+        [stores.assessmentAttempts],
+        'readonly',
+        async (tx) => {
+          const record = await requestResult<
+            AssessmentAttemptRecord | undefined
+          >(tx.objectStore(stores.assessmentAttempts).get(attemptId));
+          return record ?? null;
+        }
+      )
   };
 
   const mastery: SkillMasteryRepository = {
@@ -358,35 +410,57 @@ export function createIndexedDbRepositories(
         return value ?? null;
       }),
     save: async (snapshot) => {
-      await inTransaction(database, [stores.mastery], 'readwrite', async (tx) => {
-        await requestResult(tx.objectStore(stores.mastery).put(snapshot));
-      });
+      await inTransaction(
+        database,
+        [stores.mastery],
+        'readwrite',
+        async (tx) => {
+          await requestResult(tx.objectStore(stores.mastery).put(snapshot));
+        }
+      );
     }
   };
 
   const practice: PracticeSessionRepository = {
     create: async (session) => {
-      await inTransaction(database, [stores.practiceSessions], 'readwrite', async (tx) => {
-        await requestResult(tx.objectStore(stores.practiceSessions).add(session));
-      });
+      await inTransaction(
+        database,
+        [stores.practiceSessions],
+        'readwrite',
+        async (tx) => {
+          await requestResult(
+            tx.objectStore(stores.practiceSessions).add(session)
+          );
+        }
+      );
     },
     findById: async (sessionId) =>
-      inTransaction(database, [stores.practiceSessions], 'readonly', async (tx) => {
-        const value = await requestResult<PracticeSessionRecord | undefined>(
-          tx.objectStore(stores.practiceSessions).get(sessionId)
-        );
-        return value ?? null;
-      }),
+      inTransaction(
+        database,
+        [stores.practiceSessions],
+        'readonly',
+        async (tx) => {
+          const value = await requestResult<PracticeSessionRecord | undefined>(
+            tx.objectStore(stores.practiceSessions).get(sessionId)
+          );
+          return value ?? null;
+        }
+      ),
     updateIfInProgress: async (session) =>
-      inTransaction(database, [stores.practiceSessions], 'readwrite', async (tx) => {
-        const store = tx.objectStore(stores.practiceSessions);
-        const current = await requestResult<PracticeSessionRecord | undefined>(
-          store.get(session.id)
-        );
-        if (!current || current.status !== 'in_progress') return false;
-        await requestResult(store.put(session));
-        return true;
-      })
+      inTransaction(
+        database,
+        [stores.practiceSessions],
+        'readwrite',
+        async (tx) => {
+          const store = tx.objectStore(stores.practiceSessions);
+          const current = await requestResult<
+            PracticeSessionRecord | undefined
+          >(store.get(session.id));
+          if (!current || current.status !== 'in_progress') return false;
+          await requestResult(store.put(session));
+          return true;
+        }
+      )
   };
 
   return { profiles, progress, assessments, mastery, practice };
@@ -425,11 +499,7 @@ export async function loadActiveLessonProgress(
   allowedBlockIds: string[],
   releaseId = 'curriculum-v1'
 ): Promise<LessonProgressRecord> {
-  if (
-    !lessonId ||
-    lessonId.length > 160 ||
-    allowedBlockIds.length > 200
-  ) {
+  if (!lessonId || lessonId.length > 160 || allowedBlockIds.length > 200) {
     throw new Error('The lesson progress request is invalid.');
   }
 
@@ -503,7 +573,8 @@ export async function saveActiveLessonProgress(
     !Number.isSafeInteger(update.expectedRevision) ||
     update.expectedRevision < 0 ||
     update.completedBlockIds.length > 200 ||
-    new Set(update.completedBlockIds).size !== update.completedBlockIds.length ||
+    new Set(update.completedBlockIds).size !==
+      update.completedBlockIds.length ||
     update.completedBlockIds.some((id) => !validIds.has(id)) ||
     (update.lastBlockId !== null &&
       (!validIds.has(update.lastBlockId) ||
@@ -545,7 +616,11 @@ export async function completeActiveLessonProgress(
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
-    const current = await repositories.progress.find(profile.id, releaseId, lessonId);
+    const current = await repositories.progress.find(
+      profile.id,
+      releaseId,
+      lessonId
+    );
     if (!current) {
       throw new Error('Start this lesson before marking it complete.');
     }

@@ -12,46 +12,53 @@ const timestamp = z.number().int().nonnegative();
 const boundedRecords = <T extends z.ZodTypeAny>(schema: T) =>
   z.array(schema).max(10_000);
 
-const learnerProfileSchema = z.object({
-  id,
-  preferencesSchemaVersion: z.literal(1),
-  preferences: profilePreferencesSchema.strict(),
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  lastActiveAt: timestamp.nullable()
-}).strict();
+const learnerProfileSchema = z
+  .object({
+    id,
+    preferencesSchemaVersion: z.literal(1),
+    preferences: profilePreferencesSchema.strict(),
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    lastActiveAt: timestamp.nullable()
+  })
+  .strict();
 
-const lessonProgressSchema = z.object({
-  id,
-  learnerId: id,
-  curriculumReleaseId: z.string().min(1).max(100),
-  lessonId: z.string().min(1).max(160),
-  status: z.enum(['in_progress', 'completed']),
-  lastBlockId: z.string().max(160).nullable(),
-  completedBlockIds: z
-    .array(z.string().min(1).max(160))
-    .max(200)
-    .optional(),
-  revision: z.number().int().nonnegative().optional(),
-  checkpointOutcome: z
-    .enum(['achieved', 'needs_practice'])
-    .nullable()
-    .optional(),
-  checkpointNote: z.string().max(500).nullable().optional(),
-  startedAt: timestamp,
-  completedAt: timestamp.nullable(),
-  updatedAt: timestamp
-}).strict();
+const lessonProgressSchema = z
+  .object({
+    id,
+    learnerId: id,
+    curriculumReleaseId: z.string().min(1).max(100),
+    lessonId: z.string().min(1).max(160),
+    status: z.enum(['in_progress', 'completed']),
+    lastBlockId: z.string().max(160).nullable(),
+    completedBlockIds: z.array(z.string().min(1).max(160)).max(200).optional(),
+    revision: z.number().int().nonnegative().optional(),
+    checkpointOutcome: z
+      .enum(['achieved', 'needs_practice'])
+      .nullable()
+      .optional(),
+    checkpointNote: z.string().max(500).nullable().optional(),
+    startedAt: timestamp,
+    completedAt: timestamp.nullable(),
+    updatedAt: timestamp
+  })
+  .strict();
 
-const lessonCompletionEventSchema = z.object({
-  id,
-  progressId: id,
-  learnerId: id,
-  curriculumReleaseId: z.string().min(1).max(100),
-  lessonId: z.string().min(1).max(160),
-  completionSource: z.enum(['checkpoint', 'learner_confirmed', 'resume_recovery']),
-  completedAt: timestamp
-}).strict();
+const lessonCompletionEventSchema = z
+  .object({
+    id,
+    progressId: id,
+    learnerId: id,
+    curriculumReleaseId: z.string().min(1).max(100),
+    lessonId: z.string().min(1).max(160),
+    completionSource: z.enum([
+      'checkpoint',
+      'learner_confirmed',
+      'resume_recovery'
+    ]),
+    completedAt: timestamp
+  })
+  .strict();
 
 const assessmentAttemptSchema = assessmentAttemptInputSchema
   .extend({ recordedAt: timestamp })
@@ -62,112 +69,141 @@ const skillMasterySchema = z.intersection(
   z.object({ updatedAt: timestamp }).strict()
 );
 
-const practiceSessionSchema = z.object({
-  id,
-  learnerId: id,
-  primaryCurriculumReleaseId: z.string().min(1).max(100).nullable(),
-  primaryLessonId: z.string().min(1).max(160).nullable(),
-  status: z.enum(['in_progress', 'completed', 'abandoned']),
-  plannedMinutes: z.number().int().min(1).max(600).nullable(),
-  actualDurationSeconds: z.number().int().nonnegative(),
-  focus: z.string().max(1000).nullable(),
-  difficulty: z.number().int().min(1).max(5).nullable(),
-  reflection: z.string().max(2000).nullable(),
-  startedAt: timestamp,
-  endedAt: timestamp.nullable(),
-  createdAt: timestamp,
-  updatedAt: timestamp
-}).strict();
+const practiceSessionSchema = z
+  .object({
+    id,
+    learnerId: id,
+    primaryCurriculumReleaseId: z.string().min(1).max(100).nullable(),
+    primaryLessonId: z.string().min(1).max(160).nullable(),
+    status: z.enum(['in_progress', 'completed', 'abandoned']),
+    plannedMinutes: z.number().int().min(1).max(600).nullable(),
+    actualDurationSeconds: z.number().int().nonnegative(),
+    focus: z.string().max(1000).nullable(),
+    difficulty: z.number().int().min(1).max(5).nullable(),
+    reflection: z.string().max(2000).nullable(),
+    startedAt: timestamp,
+    endedAt: timestamp.nullable(),
+    createdAt: timestamp,
+    updatedAt: timestamp
+  })
+  .strict();
 
-export const learnerBackupRecordsSchema = z.object({
-  profile: learnerProfileSchema,
-  lessonProgress: boundedRecords(lessonProgressSchema),
-  completionEvents: boundedRecords(lessonCompletionEventSchema),
-  assessmentAttempts: boundedRecords(assessmentAttemptSchema),
-  skillMastery: boundedRecords(skillMasterySchema),
-  practiceSessions: boundedRecords(practiceSessionSchema)
-}).strict();
+export const learnerBackupRecordsSchema = z
+  .object({
+    profile: learnerProfileSchema,
+    lessonProgress: boundedRecords(lessonProgressSchema),
+    completionEvents: boundedRecords(lessonCompletionEventSchema),
+    assessmentAttempts: boundedRecords(assessmentAttemptSchema),
+    skillMastery: boundedRecords(skillMasterySchema),
+    practiceSessions: boundedRecords(practiceSessionSchema)
+  })
+  .strict();
 
 export type LearnerBackupRecords = z.infer<typeof learnerBackupRecordsSchema>;
 
-export const learnerBackupSchema = z.object({
-  format: z.literal(LEARNER_BACKUP_FORMAT),
-  version: z.literal(LEARNER_BACKUP_VERSION),
-  exportedAt: timestamp,
-  learnerId: id,
-  records: learnerBackupRecordsSchema
-}).strict().superRefine((backup, context) => {
-  const { learnerId, records } = backup;
+export const learnerBackupSchema = z
+  .object({
+    format: z.literal(LEARNER_BACKUP_FORMAT),
+    version: z.literal(LEARNER_BACKUP_VERSION),
+    exportedAt: timestamp,
+    learnerId: id,
+    records: learnerBackupRecordsSchema
+  })
+  .strict()
+  .superRefine((backup, context) => {
+    const { learnerId, records } = backup;
 
-  if (records.profile.id !== learnerId) {
-    context.addIssue({
-      code: 'custom',
-      path: ['records', 'profile', 'id'],
-      message: 'The profile ID must match the backup learner ID.'
-    });
-  }
-
-  const learnerIds = [
-    ...records.lessonProgress.map((record) => record.learnerId),
-    ...records.completionEvents.map((record) => record.learnerId),
-    ...records.assessmentAttempts.map((record) => record.learnerId),
-    ...records.skillMastery.map((record) => record.learnerId),
-    ...records.practiceSessions.map((record) => record.learnerId)
-  ];
-
-  if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
-    context.addIssue({
-      code: 'custom',
-      path: ['records'],
-      message: 'Every learner-owned record must belong to the exported profile.'
-    });
-  }
-
-  const uniqueCollections: Array<[string, string[]]> = [
-    ['lessonProgress', records.lessonProgress.map((record) => record.id)],
-    ['completionEvents', records.completionEvents.map((record) => record.id)],
-    ['assessmentAttempts', records.assessmentAttempts.map((record) => record.id)],
-    ['skillMastery', records.skillMastery.map((record) =>
-      `${record.learnerId}:${record.curriculumReleaseId}:${record.skillId}`) ],
-    ['practiceSessions', records.practiceSessions.map((record) => record.id)]
-  ];
-
-  for (const [collection, keys] of uniqueCollections) {
-    if (new Set(keys).size !== keys.length) {
+    if (records.profile.id !== learnerId) {
       context.addIssue({
         code: 'custom',
-        path: ['records', collection],
-        message: 'A backup cannot contain duplicate record keys.'
+        path: ['records', 'profile', 'id'],
+        message: 'The profile ID must match the backup learner ID.'
       });
     }
-  }
 
-  const progressIds = new Set(records.lessonProgress.map((record) => record.id));
-  if (records.completionEvents.some((event) => !progressIds.has(event.progressId))) {
-    context.addIssue({
-      code: 'custom',
-      path: ['records', 'completionEvents'],
-      message: 'Every completion event must reference an included progress record.'
-    });
-  }
+    const learnerIds = [
+      ...records.lessonProgress.map((record) => record.learnerId),
+      ...records.completionEvents.map((record) => record.learnerId),
+      ...records.assessmentAttempts.map((record) => record.learnerId),
+      ...records.skillMastery.map((record) => record.learnerId),
+      ...records.practiceSessions.map((record) => record.learnerId)
+    ];
 
-  const assessmentIds = new Set(records.assessmentAttempts.map((attempt) => attempt.id));
-  if (records.skillMastery.some((snapshot) =>
-    snapshot.lastAssessmentId !== null && !assessmentIds.has(snapshot.lastAssessmentId)
-  )) {
-    context.addIssue({
-      code: 'custom',
-      path: ['records', 'skillMastery'],
-      message: 'A mastery snapshot must reference an included assessment attempt.'
-    });
-  }
-});
+    if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
+      context.addIssue({
+        code: 'custom',
+        path: ['records'],
+        message:
+          'Every learner-owned record must belong to the exported profile.'
+      });
+    }
+
+    const uniqueCollections: Array<[string, string[]]> = [
+      ['lessonProgress', records.lessonProgress.map((record) => record.id)],
+      ['completionEvents', records.completionEvents.map((record) => record.id)],
+      [
+        'assessmentAttempts',
+        records.assessmentAttempts.map((record) => record.id)
+      ],
+      [
+        'skillMastery',
+        records.skillMastery.map(
+          (record) =>
+            `${record.learnerId}:${record.curriculumReleaseId}:${record.skillId}`
+        )
+      ],
+      ['practiceSessions', records.practiceSessions.map((record) => record.id)]
+    ];
+
+    for (const [collection, keys] of uniqueCollections) {
+      if (new Set(keys).size !== keys.length) {
+        context.addIssue({
+          code: 'custom',
+          path: ['records', collection],
+          message: 'A backup cannot contain duplicate record keys.'
+        });
+      }
+    }
+
+    const progressIds = new Set(
+      records.lessonProgress.map((record) => record.id)
+    );
+    if (
+      records.completionEvents.some(
+        (event) => !progressIds.has(event.progressId)
+      )
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['records', 'completionEvents'],
+        message:
+          'Every completion event must reference an included progress record.'
+      });
+    }
+
+    const assessmentIds = new Set(
+      records.assessmentAttempts.map((attempt) => attempt.id)
+    );
+    if (
+      records.skillMastery.some(
+        (snapshot) =>
+          snapshot.lastAssessmentId !== null &&
+          !assessmentIds.has(snapshot.lastAssessmentId)
+      )
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['records', 'skillMastery'],
+        message:
+          'A mastery snapshot must reference an included assessment attempt.'
+      });
+    }
+  });
 
 export type LearnerBackup = z.infer<typeof learnerBackupSchema>;
 
 export type BackupParseResult =
-  | { success: true; data: LearnerBackup }
-  | { success: false; message: string };
+  { success: true; data: LearnerBackup } | { success: false; message: string };
 
 export function parseLearnerBackup(input: unknown): BackupParseResult {
   const parsed = learnerBackupSchema.safeParse(input);
@@ -265,7 +301,8 @@ export function createRestorePreview(
     skillMastery: compareRecords(
       incoming.records.skillMastery,
       existing?.skillMastery ?? [],
-      (record) => `${record.learnerId}:${record.curriculumReleaseId}:${record.skillId}`
+      (record) =>
+        `${record.learnerId}:${record.curriculumReleaseId}:${record.skillId}`
     ),
     practiceSessions: compareRecords(
       incoming.records.practiceSessions,
@@ -284,7 +321,8 @@ export function createRestorePreview(
   );
 
   return {
-    replacesActiveProfile: existing !== null && existing.profile.id !== incoming.learnerId,
+    replacesActiveProfile:
+      existing !== null && existing.profile.id !== incoming.learnerId,
     records,
     totals
   };
