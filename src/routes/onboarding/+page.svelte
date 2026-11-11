@@ -3,6 +3,26 @@
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
   let message = $state('');
+  const instruments = [
+    { value: 'acoustic', label: 'Acoustic guitar' },
+    { value: 'electric', label: 'Electric guitar' },
+    { value: 'classical', label: 'Classical guitar' },
+    { value: 'other', label: 'Other' }
+  ] as const;
+  const startingPoints = [
+    { value: 'fresh-beginner', label: 'Starting from the beginning' },
+    { value: 'some-experience', label: 'I know a few things already' },
+    { value: 'placement-needed', label: 'Help me find my level'
+  ] as const;
+  const goalOptions = [
+    { value: 'all-round-musician', label: 'All-round musician' },
+    { value: 'acoustic-fingerstyle', label: 'Acoustic & fingerstyle' },
+    { value: 'rock-blues', label: 'Rock & blues' },
+    { value: 'jazz-harmony', label: 'Jazz & harmony' },
+    { value: 'singer-songwriter', label: 'Singer-songwriter' },
+    { value: 'custom', label: 'Something else' }
+  ] as const;
+  const practiceOptions = [10, 20, 40, 60] as const;
 
   function submitSetup(event: SubmitEvent) {
     event.preventDefault();
@@ -31,7 +51,7 @@
       <fieldset>
         <legend>01 · What instrument do you play?</legend>
         <div class="choices">
-          {#each [{value:'acoustic',label:'Acoustic guitar'},{value:'electric',label:'Electric guitar'},{value:'classical',label:'Classical guitar'},{value:'other',label:'Other'}] as item}
+          {#each instruments as item}
             <label class:chosen={preferences.instrument===item.value}><input type="radio" name="instrument" value={item.value} bind:group={preferences.instrument}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -39,14 +59,14 @@
       <fieldset>
         <legend>02 · Which hand do you fret with?</legend>
         <div class="choices two">
-          <label class:chosen={preferences.handedness==='right'}><input type="radio" name="handedness" value="right" bind:group={preferences.handedness}/><span>Left hand frets</span></label>
-          <label class:chosen={preferences.handedness==='left'}><input type="radio" name="handedness" value="left" bind:group={preferences.handedness}/><span>Right hand frets</span></label>
+          <label class:chosen={preferences.handedness==='right'}><input type="radio" name="handedness" value="right" bind:group={preferences.handedness}/><span>Right-handed · left hand frets</span></label>
+          <label class:chosen={preferences.handedness==='left'}><input type="radio" name="handedness" value="left" bind:group={preferences.handedness}/><span>Left-handed · right hand frets</span></label>
         </div>
       </fieldset>
       <fieldset>
         <legend>03 · Where are you starting?</legend>
         <div class="choices">
-          {#each [{value:'fresh-beginner',label:'Starting from the beginning'},{value:'some-experience',label:'I know a few things already'},{value:'placement-needed',label:'Help me find my level'}] as item}
+          {#each startingPoints as item}
             <label class:chosen={preferences.startingPoint===item.value}><input type="radio" name="starting" value={item.value} bind:group={preferences.startingPoint}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -54,7 +74,7 @@
       <fieldset>
         <legend>04 · What would you like to work towards?</legend>
         <div class="choices">
-          {#each [{value:'all-round-musician',label:'All-round musician'},{value:'acoustic-fingerstyle',label:'Acoustic & fingerstyle'},{value:'rock-blues',label:'Rock & blues'},{value:'jazz-harmony',label:'Jazz & harmony'},{value:'singer-songwriter',label:'Singer-songwriter'},{value:'custom',label:'Something else'}] as item}
+          {#each goalOptions as item}
             <label class:chosen={preferences.goals.includes(item.value)}><input type="checkbox" checked={preferences.goals.includes(item.value)} onchange={(event)=>{preferences.goals=event.currentTarget.checked?[...preferences.goals,item.value as ProfilePreferences['goals'][number]]:preferences.goals.filter(goal=>goal!==item.value)}}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -62,8 +82,8 @@
       <fieldset>
         <legend>05 · How long would you like to practise?</legend>
         <div class="choices four">
-          {#each [10,20,40,60] as minutes}
-            <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} bind:group={preferences.practiceMinutes} onchange={()=>preferences.practiceMinutes=minutes}/><span>{minutes} min</span></label>
+          {#each practiceOptions as minutes}
+            <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} checked={preferences.practiceMinutes===minutes} onchange={()=>preferences.practiceMinutes=minutes}/><span>{minutes} min</span></label>
           {/each}
         </div>
       </fieldset>

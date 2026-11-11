@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "engines": { "node": ">=22.0.0" },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
@@ -11,8 +13,8 @@
     "deploy": "wrangler deploy",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write \"src/**/*.{ts,svelte,css}\" \"*.{js,json,jsonc,ts}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,svelte,css}\" \"*.{js,json,jsonc,ts}\"",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs"
@@ -37,6 +39,7 @@
     "vite": "^6.0.0",
     "vitest": "^3.0.0",
     "wrangler": "^4.0.0",
-    "zod": "^4.0.0"
+    "zod": "^4.0.0",
+    "@eslint/js": "^9.0.0"
   }
 }
