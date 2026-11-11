@@ -315,6 +315,7 @@ describe('M2.2 application service boundaries', () => {
         learnerId,
         releaseId,
         lessonId,
+        expectedRevision: 0,
         lastBlockId: 'guided-demo',
         completedBlockIds: ['guided-demo'],
         checkpointOutcome: 'needs_practice',
@@ -329,6 +330,25 @@ describe('M2.2 application service boundaries', () => {
     expect(saved.completedBlockIds).toEqual(['guided-demo']);
     expect(saved.checkpointOutcome).toBe('needs_practice');
     expect(saved.checkpointNote).toBe('Slow down and keep each note even.');
+    expect(saved.revision).toBe(1);
+    await expect(
+      updateLessonProgress(
+        {
+          learnerId,
+          releaseId,
+          lessonId,
+          expectedRevision: 0,
+          lastBlockId: 'guided-demo',
+          completedBlockIds: ['guided-demo'],
+          checkpointOutcome: 'achieved',
+          checkpointNote: null
+        },
+        {
+          progress: harness.progressRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(ConflictError);
     expect(harness.masteryRows.size).toBe(0);
 
     const resumed = await startLessonProgress(
@@ -360,6 +380,7 @@ describe('M2.2 application service boundaries', () => {
           learnerId,
           releaseId,
           lessonId,
+          expectedRevision: 1,
           lastBlockId: 'guided-demo',
           completedBlockIds: ['guided-demo'],
           checkpointOutcome: 'achieved',
