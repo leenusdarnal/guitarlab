@@ -16,3 +16,6 @@ build/
 *.log
 *.sqlite
 *.sqlite-journal
+/private-data/
+/personal-recordings/
+/local-profile.json
