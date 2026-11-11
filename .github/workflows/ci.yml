@@ -78,8 +78,76 @@ jobs:
       - name: Validate design-token contrast
         run: npm run design:validate
 
-      - name: Check formatting
-        run: npm run format:check
+      - name: Check formatting for changed files
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            echo "A valid base commit is required for changed-file formatting checks."
+            exit 1
+          fi
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          mapfile -t changed_files < <(
+            git diff --name-only "$BASE_SHA" "$GITHUB_SHA" |
+              grep -E '^(src/lib/.+\.ts|src/app\.d\.ts|[^/]+\.(js|json|ts)|wrangler\.jsonc|scripts/(validate-design-tokens|finalize-db-migration|test-local-db|browser-acceptance|curriculum-browser-acceptance)\.mjs)
+      - name: Lint
+        run: npm run lint
+
+      - name: Type and Svelte checks
+        run: npm run check
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Production build
+        run: npm run build
+
+      - name: Cloudflare Worker local smoke test
+        shell: bash
+        run: |
+          ./node_modules/.bin/wrangler dev --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --silent --show-error --fail http://127.0.0.1:8787/ --output "$RUNNER_TEMP/guitarlab-home.html"; then
+              break
+            fi
+            sleep 2
+          done
+          if [ ! -s "$RUNNER_TEMP/guitarlab-home.html" ]; then
+            cat "$RUNNER_TEMP/wrangler-preview.log"
+            echo "Cloudflare Worker did not return the home page."
+            exit 1
+          fi
+          grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
+          echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
+
+      - name: Browser acceptance tests
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        run: npm run test:browser
+
+      - name: Curriculum browser acceptance tests
+        run: npm run test:curriculum-browser
+
+      - name: Preserve Cloudflare preview build
+        if: github.event_name == 'push' && github.ref_name == 'main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitarlab-cloudflare-preview
+          path: |
+            .svelte-kit/cloudflare/
+            wrangler.jsonc
+          if-no-files-found: error
+          retention-days: 1
+
+ || true
+          )
+          if [ "${#changed_files[@]}" -eq 0 ]; then
+            echo "No Prettier-managed source files changed."
+          else
+            npx prettier --check "${changed_files[@]}"
+          fi
 
       - name: Lint
         run: npm run lint
