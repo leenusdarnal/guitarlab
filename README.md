@@ -56,6 +56,8 @@ The product definition, curriculum foundation, final architecture and pre-implem
 - [Learning curriculum](docs/CURRICULUM.md)
 - [Curriculum research and revision](docs/CURRICULUM_RESEARCH.md)
 - [Machine-readable spiral learning framework](content/curriculum/learning-framework.json)
+- [Authored lesson JSON Schema](content/curriculum/lesson.schema.json)
+- [Curriculum validation script](scripts/validate-curriculum.mjs)
 - [Year 1 curriculum data](content/curriculum/year-1.json)
 - [Year 1 authored lessons — 52 lessons](content/curriculum/year-1-lessons.json)
 - [Year 2 curriculum data](content/curriculum/year-2.json)
