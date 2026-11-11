@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { LessonProgressRecord } from '../repositories/contracts';
 import {
   createEmptyLocalLearnerProfile,
   createIndexedDbRepositories,
@@ -185,6 +186,33 @@ describe('local learner profile persistence', () => {
   });
 
   it('persists validated preferences without creating lesson or mastery records', async () => {
+  it('updates only in-progress lessons using the compound learner/release/lesson key', async () => {
+    const database = makeDatabase();
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const record: LessonProgressRecord = {
+      id: 'progress-1', learnerId: profile.id, curriculumReleaseId: 'curriculum-v1',
+      lessonId: 'y1-w01-lesson', status: 'in_progress', lastBlockId: null,
+      completedBlockIds: [], checkpointOutcome: null, checkpointNote: null,
+      startedAt: 100, completedAt: null, updatedAt: 100
+    };
+    await repositories.progress.create(record);
+    await expect(repositories.progress.updateInProgress({
+      ...record, lastBlockId: 'guided-demo', completedBlockIds: ['guided-demo'],
+      checkpointOutcome: 'needs_practice', updatedAt: 200
+    })).resolves.toBe(true);
+    await expect(repositories.progress.find(profile.id, 'curriculum-v1', 'y1-w01-lesson')).resolves.toMatchObject({
+      completedBlockIds: ['guided-demo'], checkpointOutcome: 'needs_practice', updatedAt: 200
+    });
+    await repositories.progress.completeWithEvent(
+      { ...record, status: 'completed', completedAt: 300, updatedAt: 300 },
+      { id: 'event-1', progressId: record.id, learnerId: profile.id, curriculumReleaseId: 'curriculum-v1',
+        lessonId: record.lessonId, completionSource: 'checkpoint', completedAt: 300 }
+    );
+    await expect(repositories.progress.updateInProgress({ ...record, updatedAt: 400 })).resolves.toBe(false);
+  });
+
+
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
