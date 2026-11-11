@@ -143,9 +143,9 @@ function createHarness() {
     async create(progress) {
       progressRows.set(progress.id, progress);
     },
-    async updateInProgress(progress) {
+    async updateInProgress(progress, expectedRevision) {
       const current = progressRows.get(progress.id);
-      if (!current || current.status !== 'in_progress') return false;
+      if (!current || current.status !== 'in_progress' || (current.revision ?? 0) !== expectedRevision) return false;
       progressRows.set(progress.id, progress);
       return true;
     },
