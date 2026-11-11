@@ -58,6 +58,7 @@
     progressError = '';
     try {
       progress = await saveActiveLessonProgress(lesson.id, {
+        expectedRevision: progress.revision ?? 0,
         lastBlockId: overrides.lastBlockId !== undefined ? overrides.lastBlockId : progress.lastBlockId,
         completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
         checkpointOutcome: overrides.checkpointOutcome !== undefined ? overrides.checkpointOutcome : checkpointOutcome,
