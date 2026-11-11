@@ -248,7 +248,9 @@ export async function updateLessonProgress(
     value.releaseId,
     value.lessonId
   );
-  if (!current) throw new NotFoundError('Lesson progress not found.');
+  if (!current) {
+    throw new NotFoundError('Lesson progress not found.');
+  }
   if (current.status !== 'in_progress') {
     throw new ConflictError('A completed lesson can no longer be changed.');
   }
