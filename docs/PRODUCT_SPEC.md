@@ -55,7 +55,7 @@ Skill domains:
 
 ## Practice design
 
-Practice duration is a learner-specific preference. Offer 10-, 20- and 40-minute presets plus a custom duration, but do not enforce one global duration as the right plan for every learner. The selected duration is stored in the active learner profile. A short session selects fewer, higher-value tasks rather than rushing through every category. The current project owner's intended profile uses 20 minutes per day; this must not become a global default for other learners.
+Practice duration is a learner-specific preference. Offer 10-, 20- and 40-minute presets plus a custom duration, but do not enforce one global duration as the right plan for every learner. The selected duration is stored in the active learner profile. A short session selects fewer, higher-value tasks rather than rushing through every category.
 
 A full session may include preparation, a warm-up, focused new learning, spaced review, musical application and reflection. The learner may practise on any sustainable schedule and split a weekly lesson across sessions. The suggested tempo is a reference only; accuracy, tone and comfort take priority.
 
@@ -117,4 +117,4 @@ Supported lesson presentation preferences include balanced, visual-first, demons
 
 Compose a personalised practice plan from the learner's profile, prerequisites, current lesson, skill evidence, due reviews, available time, stated difficulty/confidence and goals. Explain each recommendation and let the learner edit, postpone or dismiss it. Do not create a separate conflicting syllabus for each learner, change stable curriculum IDs, or infer mastery from a timer or lesson viewing.
 
-The current project owner's intended private profile is acoustic guitar, absolute beginner, 20 minutes per day and an all-round musician goal. Apply those values only to that learner's private profile when configured in the app. Do not hard-code them into shared curriculum files, global defaults, generic fixtures or another learner's profile. Handedness is not yet known and must remain unset until the learner selects it.
+Collect instrument, experience, schedule, goals and presentation preferences from each learner through private profile setup. Store these values only in that learner's local profile, never in shared curriculum files, global defaults or generic fixtures. Do not infer handedness; leave it unset until the learner selects it.
