@@ -119,7 +119,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Find and name every natural note to fret 5",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -161,6 +161,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Find and name every natural note to fret 5"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -213,7 +217,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Find and name every natural note to fret 5",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ]
     },
     {
       "id": "y2-w02-lesson",
@@ -326,7 +335,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Find octave roots on E/A, A/D and D/G strings",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -368,6 +377,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Find octave roots on E/A, A/D and D/G strings"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -420,7 +433,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 64 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Find octave roots on E/A, A/D and D/G strings",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ]
     },
     {
       "id": "y2-w03-lesson",
@@ -533,7 +551,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -575,6 +593,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -627,7 +649,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 58 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ]
     },
     {
       "id": "y2-w04-lesson",
@@ -740,7 +767,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play three inversions on the top string set",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -782,6 +809,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play three inversions on the top string set"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -834,7 +865,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play three inversions on the top string set",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.triads"
+      ]
     },
     {
       "id": "y2-w05-lesson",
@@ -947,7 +983,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Move Am, Dm and Em triads between close positions",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -989,6 +1025,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Move Am, Dm and Em triads between close positions"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -1041,7 +1081,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Move Am, Dm and Em triads between close positions",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.triads"
+      ]
     },
     {
       "id": "y2-w06-lesson",
@@ -1154,7 +1199,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate accurate note-finding, octave links and triad recall; record time as a secondary measure",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -1196,6 +1241,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Demonstrate accurate note-finding, octave links and triad recall; record time as a secondary measure"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -1248,7 +1297,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Demonstrate accurate note-finding, octave links and triad recall; record time as a secondary measure",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w07-lesson",
@@ -1361,7 +1416,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Name roots while changing power chords",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -1403,6 +1458,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Name roots while changing power chords"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -1455,7 +1514,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 82 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Name roots while changing power chords",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.power-chords"
+      ]
     },
     {
       "id": "y2-w08-lesson",
@@ -1568,7 +1632,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Control muting with the heel of the picking hand",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -1610,6 +1674,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Control muting with the heel of the picking hand"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -1662,7 +1730,14 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 80 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Control muting with the heel of the picking hand",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming",
+        "rhythm.muting"
+      ]
     },
     {
       "id": "y2-w09-lesson",
@@ -1775,7 +1850,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Move F, G and A barres with short relaxed holds",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -1817,6 +1892,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Move F, G and A barres with short relaxed holds"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -1869,7 +1948,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 52 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Move F, G and A barres with short relaxed holds",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.barre-chords"
+      ]
     },
     {
       "id": "y2-w10-lesson",
@@ -1982,7 +2066,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play Bm, C#m and Dm as movable shapes",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -2024,6 +2108,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play Bm, C#m and Dm as movable shapes"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -2076,7 +2164,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 50 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play Bm, C#m and Dm as movable shapes",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.barre-chords"
+      ]
     },
     {
       "id": "y2-w11-lesson",
@@ -2189,7 +2282,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record 16 bars with clear starts and stops",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -2231,6 +2324,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record 16 bars with clear starts and stops"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -2283,7 +2380,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 82 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record 16 bars with clear starts and stops",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w12-lesson",
@@ -2396,7 +2499,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play one position evenly in two keys",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -2438,6 +2541,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play one position evenly in two keys"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -2490,7 +2597,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 68 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play one position evenly in two keys",
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ]
     },
     {
       "id": "y2-w13-lesson",
@@ -2603,7 +2715,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The notes and fingering are accurate, the pulse remains even, and the learner can identify the root and describe the scale pattern.",
+          "successCriterion": "Demonstrate this week's checkpoint: Practise a scale in thirds without changing pulse",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -2645,6 +2757,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Practise a scale in thirds without changing pulse"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -2697,7 +2813,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Practise a scale in thirds without changing pulse",
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ]
     },
     {
       "id": "y2-w14-lesson",
@@ -2810,7 +2931,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Shift between two scale patterns with a target note",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -2852,6 +2973,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Shift between two scale patterns with a target note"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -2904,7 +3029,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Shift between two scale patterns with a target note",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ]
     },
     {
       "id": "y2-w15-lesson",
@@ -3017,7 +3147,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play scale notes then end phrases on chord tones",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -3059,6 +3189,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play scale notes then end phrases on chord tones"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -3111,7 +3245,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play scale notes then end phrases on chord tones",
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ]
     },
     {
       "id": "y2-w16-lesson",
@@ -3224,7 +3363,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The notes and fingering are accurate, the pulse remains even, and the learner can identify the root and describe the scale pattern.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record one scale, one phrase and one chord-tone landing",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -3266,6 +3405,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record one scale, one phrase and one chord-tone landing"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -3318,7 +3461,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record one scale, one phrase and one chord-tone landing",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w17-lesson",
@@ -3431,7 +3580,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep swung eighths even through 12 bars",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -3473,6 +3622,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep swung eighths even through 12 bars"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -3525,7 +3678,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep swung eighths even through 12 bars",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ]
     },
     {
       "id": "y2-w18-lesson",
@@ -3638,7 +3797,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play A7-D7-E7 in 12-bar form",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -3680,6 +3839,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play A7-D7-E7 in 12-bar form"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -3732,7 +3895,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 76 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play A7-D7-E7 in 12-bar form",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ]
     },
     {
       "id": "y2-w19-lesson",
@@ -3845,7 +4014,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Create two motifs over A blues",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -3887,6 +4056,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Create two motifs over A blues"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -3939,7 +4112,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Create two motifs over A blues",
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w20-lesson",
@@ -4052,7 +4230,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "Demonstrate this week's checkpoint: Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -4094,6 +4272,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -4146,7 +4328,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand",
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing",
+        "technique.bends"
+      ]
     },
     {
       "id": "y2-w21-lesson",
@@ -4259,7 +4447,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play a turnaround with correct form timing",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -4301,6 +4489,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play a turnaround with correct form timing"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -4353,7 +4545,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 74 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play a turnaround with correct form timing",
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w22-lesson",
@@ -4466,7 +4663,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record 12-bar rhythm and 12-bar solo",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -4508,6 +4705,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record 12-bar rhythm and 12-bar solo"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -4560,7 +4761,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 78 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record 12-bar rhythm and 12-bar solo",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w23-lesson",
@@ -4673,7 +4880,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The bass pulse remains even while treble notes are added; notes ring for their intended duration and the hand stays relaxed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Repeat a Travis-style pattern slowly",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -4715,6 +4922,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Repeat a Travis-style pattern slowly"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -4767,7 +4978,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 58 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Repeat a Travis-style pattern slowly",
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ]
     },
     {
       "id": "y2-w24-lesson",
@@ -4880,7 +5096,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The bass pulse remains even while treble notes are added; notes ring for their intended duration and the hand stays relaxed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep thumb steady across chord changes",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -4922,6 +5138,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep thumb steady across chord changes"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -4974,7 +5194,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 58 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep thumb steady across chord changes",
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ]
     },
     {
       "id": "y2-w25-lesson",
@@ -5087,7 +5312,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The bass pulse remains even while treble notes are added; notes ring for their intended duration and the hand stays relaxed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play melody notes louder without rushing bass",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -5129,6 +5354,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play melody notes louder without rushing bass"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -5181,7 +5410,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 56 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play melody notes louder without rushing bass",
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ]
     },
     {
       "id": "y2-w26-lesson",
@@ -5294,7 +5528,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Integrate one muted accent per bar",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -5336,6 +5570,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Integrate one muted accent per bar"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -5388,7 +5626,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Integrate one muted accent per bar",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.muting"
+      ]
     },
     {
       "id": "y2-w27-lesson",
@@ -5501,7 +5745,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The sketch has a recognisable idea, a planned contrast and a clear ending; the learner can describe the arrangement choices.",
+          "successCriterion": "Demonstrate this week's checkpoint: Arrange two sections using fingerstyle and strumming",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -5543,6 +5787,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Arrange two sections using fingerstyle and strumming"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -5595,7 +5843,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Arrange two sections using fingerstyle and strumming",
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w28-lesson",
@@ -5708,7 +5961,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner translates the line into the correct string/fret sequence and keeps the written order and rhythm.",
+          "successCriterion": "Demonstrate this week's checkpoint: Compare rhythm-only and fingerstyle takes",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -5750,6 +6003,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Compare rhythm-only and fingerstyle takes"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -5802,7 +6059,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Compare rhythm-only and fingerstyle takes",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w29-lesson",
@@ -5915,7 +6178,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "Demonstrate this week's checkpoint: Map the form of one song before learning it",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -5957,6 +6220,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Map the form of one song before learning it"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -6009,7 +6276,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Map the form of one song before learning it",
+      "skillIds": [
+        "harmony.triads",
+        "harmony.voice-leading"
+      ]
     },
     {
       "id": "y2-w30-lesson",
@@ -6122,7 +6394,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Write a four-bar rhythm after listening",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6164,6 +6436,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Write a four-bar rhythm after listening"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -6216,7 +6492,14 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 68 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Write a four-bar rhythm after listening",
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y2-w31-lesson",
@@ -6329,7 +6612,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner reproduces the contour and rhythm, locates the intended notes with a deliberate checking process, and can explain what was uncertain.",
+          "successCriterion": "Demonstrate this week's checkpoint: Identify roots before adding chord names",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6371,6 +6654,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Identify roots before adding chord names"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -6423,7 +6710,14 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Identify roots before adding chord names",
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y2-w32-lesson",
@@ -6536,7 +6830,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The phrase has a deliberate beginning and ending, fits the pulse, and resolves or rests intentionally rather than continuing without shape.",
+          "successCriterion": "Demonstrate this week's checkpoint: Sing, locate and verify each note by ear",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6578,6 +6872,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Sing, locate and verify each note by ear"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -6630,7 +6928,14 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Sing, locate and verify each note by ear",
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y2-w33-lesson",
@@ -6743,7 +7048,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep the top voice connected through chord changes",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6785,6 +7090,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep the top voice connected through chord changes"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -6837,7 +7146,11 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 56 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep the top voice connected through chord changes",
+      "skillIds": [
+        "harmony.open-chords"
+      ]
     },
     {
       "id": "y2-w34-lesson",
@@ -6950,7 +7263,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner reproduces the contour and rhythm, locates the intended notes with a deliberate checking process, and can explain what was uncertain.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record form, transitions and ending",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6992,6 +7305,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record form, transitions and ending"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -7044,7 +7361,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record form, transitions and ending",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w35-lesson",
@@ -7157,7 +7480,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Play and sing unison, thirds, fifths and octaves",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -7199,6 +7522,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Play and sing unison, thirds, fifths and octaves"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -7251,7 +7578,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Play and sing unison, thirds, fifths and octaves",
+      "skillIds": [
+        "harmony.open-chords",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y2-w36-lesson",
@@ -7364,7 +7696,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Name chord tones before finding a shape",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -7406,6 +7738,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Name chord tones before finding a shape"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -7458,7 +7794,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 58 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Name chord tones before finding a shape",
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.seventh-chords"
+      ]
     },
     {
       "id": "y2-w37-lesson",
@@ -7571,7 +7912,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Compare basic triad and extended version",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -7613,6 +7954,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Compare basic triad and extended version"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -7665,7 +8010,11 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Compare basic triad and extended version",
+      "skillIds": [
+        "harmony.open-chords"
+      ]
     },
     {
       "id": "y2-w38-lesson",
@@ -7778,7 +8127,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep melody common tones where possible",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -7820,6 +8169,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep melody common tones where possible"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -7872,7 +8225,11 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep melody common tones where possible",
+      "skillIds": [
+        "harmony.open-chords"
+      ]
     },
     {
       "id": "y2-w39-lesson",
@@ -7985,7 +8342,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner can explain the relationship in plain language, name the relevant notes or degrees, and demonstrate the sound on the instrument.",
+          "successCriterion": "Demonstrate this week's checkpoint: Label Roman numerals and play in two keys",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -8027,6 +8384,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Label Roman numerals and play in two keys"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -8079,7 +8440,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Label Roman numerals and play in two keys",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w40-lesson",
@@ -8192,7 +8559,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep 2 and 4 in the body while comping",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -8234,6 +8601,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep 2 and 4 in the body while comping"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -8286,7 +8657,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 74 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep 2 and 4 in the body while comping",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ]
     },
     {
       "id": "y2-w41-lesson",
@@ -8399,7 +8776,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Track the third and seventh through the sequence",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -8441,6 +8818,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Track the third and seventh through the sequence"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -8493,7 +8874,11 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Track the third and seventh through the sequence",
+      "skillIds": [
+        "harmony.open-chords"
+      ]
     },
     {
       "id": "y2-w42-lesson",
@@ -8606,7 +8991,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep bass pulse stable and chord attacks quiet",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -8648,6 +9033,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep bass pulse stable and chord attacks quiet"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -8700,7 +9089,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep bass pulse stable and chord attacks quiet",
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ]
     },
     {
       "id": "y2-w43-lesson",
@@ -8813,7 +9208,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The phrase has a deliberate beginning and ending, fits the pulse, and resolves or rests intentionally rather than continuing without shape.",
+          "successCriterion": "Demonstrate this week's checkpoint: Leave space and use chord tones at changes",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -8855,6 +9250,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Leave space and use chord tones at changes"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -8907,7 +9306,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Leave space and use chord tones at changes",
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w44-lesson",
@@ -9020,7 +9424,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep chord changes clear through a jazz blues",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -9062,6 +9466,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep chord changes clear through a jazz blues"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -9114,7 +9522,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep chord changes clear through a jazz blues",
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w45-lesson",
@@ -9227,7 +9640,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The phrase has a deliberate beginning and ending, fits the pulse, and resolves or rests intentionally rather than continuing without shape.",
+          "successCriterion": "Demonstrate this week's checkpoint: Keep form without written prompts",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -9269,6 +9682,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Keep form without written prompts"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -9321,7 +9738,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Keep form without written prompts",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w46-lesson",
@@ -9434,7 +9857,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner can explain the relationship in plain language, name the relevant notes or degrees, and demonstrate the sound on the instrument.",
+          "successCriterion": "Demonstrate this week's checkpoint: Use maintenance, growth and repertoire slots",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -9476,6 +9899,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Use maintenance, growth and repertoire slots"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -9528,7 +9955,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Use maintenance, growth and repertoire slots",
+      "skillIds": [
+        "harmony.triads",
+        "harmony.voice-leading"
+      ]
     },
     {
       "id": "y2-w47-lesson",
@@ -9641,7 +10073,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed.",
+          "successCriterion": "Demonstrate this week's checkpoint: Transcribe 4-8 notes, including rhythm",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -9683,6 +10115,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Transcribe 4-8 notes, including rhythm"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -9735,7 +10171,14 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Transcribe 4-8 notes, including rhythm",
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y2-w48-lesson",
@@ -9848,7 +10291,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised.",
+          "successCriterion": "Demonstrate this week's checkpoint: Plan opening, development and ending",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -9890,6 +10333,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Plan opening, development and ending"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -9942,7 +10389,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 74 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Plan opening, development and ending",
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w49-lesson",
@@ -10055,7 +10507,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The sketch has a recognisable idea, a planned contrast and a clear ending; the learner can describe the arrangement choices.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record the same 8-bar progression in two styles with different dynamics",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -10097,6 +10549,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record the same 8-bar progression in two styles with different dynamics"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -10149,7 +10605,12 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record the same 8-bar progression in two styles with different dynamics",
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ]
     },
     {
       "id": "y2-w50-lesson",
@@ -10262,7 +10723,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner completes the form, maintains the pulse or recovers musically, and identifies one specific strength and one next target from the recording.",
+          "successCriterion": "Demonstrate this week's checkpoint: Check tuning, noise, timing and dynamic balance",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -10304,6 +10765,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Check tuning, noise, timing and dynamic balance"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -10356,7 +10821,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Check tuning, noise, timing and dynamic balance",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w51-lesson",
@@ -10469,7 +10940,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner reproduces the contour and rhythm, locates the intended notes with a deliberate checking process, and can explain what was uncertain.",
+          "successCriterion": "Demonstrate this week's checkpoint: Perform three short pieces in sequence with count-ins, planned endings and recovery points",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -10511,6 +10982,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Perform three short pieces in sequence with count-ins, planned endings and recovery points"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -10563,7 +11038,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Perform three short pieces in sequence with count-ins, planned endings and recovery points",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y2-w52-lesson",
@@ -10676,7 +11157,7 @@
             "Play a short phrase, loop or section with a count-in and intentional ending.",
             "Where possible, combine the new skill with one familiar skill while preserving the pulse."
           ],
-          "successCriterion": "You can complete the musical application while meeting the checkpoint: The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used.",
+          "successCriterion": "Demonstrate this week's checkpoint: Record prepared repertoire, reading or TAB, a progression and a short improvised phrase; choose a Year 3+ path",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -10718,6 +11199,10 @@
         {
           "dimension": "understanding-and-transfer",
           "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+        },
+        {
+          "dimension": "curriculum-checkpoint",
+          "criterion": "Record prepared repertoire, reading or TAB, a progression and a short improvised phrase; choose a Year 3+ path"
         }
       ],
       "commonMistakesAndCorrections": [
@@ -10770,7 +11255,13 @@
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
         "tempoGuidance": "The outline tempo of 72 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
-      }
+      },
+      "checkpoint": "Record prepared repertoire, reading or TAB, a progression and a short improvised phrase; choose a Year 3+ path",
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     }
   ]
 }
