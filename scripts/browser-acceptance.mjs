@@ -122,7 +122,7 @@ try {
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: /Download backup/ }).click();
   const download = await downloadPromise;
-  assert.match(download.suggestedFilename(), /^guitarlab-backup-\\d{4}-\\d{2}-\\d{2}\\.json$/);
+    assert.match(download.suggestedFilename(), /^guitarlab-backup-\d{4}-\d{2}-\d{2}\.json$/);
   const downloadPath = await download.path();
   assert.ok(downloadPath, 'Backup download should be available to the browser test');
   const backup = JSON.parse(await readFile(downloadPath, 'utf8'));
