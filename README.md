@@ -56,6 +56,7 @@ The product definition and curriculum foundation are documented. The SvelteKit a
 - [Learning curriculum](docs/CURRICULUM.md)
 - [Year 1 curriculum data](content/curriculum/year-1.json)
 - [Year 2 curriculum data](content/curriculum/year-2.json)
+- [Year 3+ specialisation outlines](content/curriculum/year-3-specialisations.json)
 - [Curriculum content model and skill taxonomy](docs/CURRICULUM_CONTENT_MODEL.md)
 - [First-release scope](docs/RELEASE_SCOPE.md)
 - [Design direction](docs/DESIGN_DIRECTION.md)
