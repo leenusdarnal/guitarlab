@@ -222,6 +222,13 @@
       "skillIds": [
         "instrument.tuning",
         "instrument.posture"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Open-string pulse: four relaxed quarter notes per string; listen, hum the string names and tap a steady beat Success target: Tune all six strings; name them low-to-high E-A-D-G-B-E."
+        }
       ]
     },
     {
@@ -438,6 +445,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-fret ladder: 0-1-2-3-4-3-2-1 Success target: Fret one note close behind the fret and coordinate both hands."
+        }
       ]
     },
     {
@@ -653,6 +667,18 @@
       "checkpoint": "Translate a short TAB line into string and fret movements.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "High-string reading motif Success target: Translate a short TAB line into string and fret movements."
+        }
       ]
     },
     {
@@ -868,6 +894,18 @@
       "checkpoint": "Form Em and G and move between them without squeezing.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Em: 022000; G: 320003. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Em-G pulse: one chord per bar Success target: Form Em and G and move between them without squeezing."
+        }
       ]
     },
     {
@@ -1083,6 +1121,18 @@
       "checkpoint": "Form A, D and E and check every intended string.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. D: xx0232; A: x02220; E: 022100. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "A-D-E four-bar cycle Success target: Form A, D and E and check every intended string."
+        }
       ]
     },
     {
@@ -1299,6 +1349,18 @@
       "skillIds": [
         "harmony.open-chords",
         "harmony.transitions"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Em: 022000; G: 320003; D: xx0232; A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Em-G-D-A loop, one bar each; change on the beat at a comfortable tempo Success target: Play a four-chord loop with four beats per chord."
+        }
       ]
     },
     {
@@ -1516,6 +1578,18 @@
         "rhythm.pulse",
         "rhythm.subdivision",
         "rhythm.strumming"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Muted down/up groove Success target: Keep a steady hand motion through both played and skipped strokes."
+        }
       ]
     },
     {
@@ -1731,6 +1805,23 @@
       "checkpoint": "Core: play the melody from TAB. Optional: match the same notes to staff notation.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. E: 022100. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "High E-B answer phrase (TAB first; staff-reading optional) Success target: Core: play the melody from TAB. Optional: match the same notes to staff notation."
+        }
       ]
     },
     {
@@ -1947,6 +2038,18 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Am: x02210; Dm: xx0231; C: x32010. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "C-Am-Dm-Am, one bar each Success target: Learn C, Am and Dm; move between them at a slow pulse."
+        }
       ]
     },
     {
@@ -2163,6 +2266,18 @@
       "skillIds": [
         "rhythm.pulse",
         "rhythm.subdivision"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Accent beats 2 and 4; rest on beat 3 Success target: Play a pattern with one accent and one intentional rest."
+        }
       ]
     },
     {
@@ -2379,6 +2494,18 @@
       "skillIds": [
         "fretboard.string-map",
         "fretboard.natural-notes"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fretboard-reference",
+          "label": "Natural-note landmarks",
+          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Two-string note-finding pattern Success target: Name the six open strings, explain that adjacent frets are a semitone apart, and locate a selected note on two strings"
+        }
       ]
     },
     {
@@ -2596,6 +2723,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-skill mini medley Success target: Review Weeks 1-11: tune, keep a pulse, play open chords and a short melody; record a clean 45-second excerpt"
+        }
       ]
     },
     {
@@ -2811,6 +2950,23 @@
       "checkpoint": "Core: play the TAB phrase. Optional: identify matching G- and D-string notes.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. G: 320003; D: xx0232. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "G-D string answer melody (TAB core; staff optional) Success target: Core: play the TAB phrase. Optional: identify matching G- and D-string notes."
+        }
       ]
     },
     {
@@ -3026,6 +3182,23 @@
       "checkpoint": "Core: find listed frets and play TAB. Optional: connect note names to staff positions.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220; E: 022100. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Low-string landmark walk (TAB first; notation optional) Success target: Core: find listed frets and play TAB. Optional: connect note names to staff positions."
+        }
       ]
     },
     {
@@ -3242,6 +3415,18 @@
       "skillIds": [
         "technique.alternate-picking",
         "technique.string-crossing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "technique-reference",
+          "label": "Picking pattern",
+          "content": "Alternate the pick D–U–D–U on successive notes. Keep the pick depth shallow. Say the stroke direction aloud while practising a slow two-string crossing."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Alternate-pick pulse cell Success target: Use down-up picking on one string, then cross between two strings."
+        }
       ]
     },
     {
@@ -3458,6 +3643,18 @@
       "skillIds": [
         "fingerstyle.thumb-independence",
         "fingerstyle.patterns"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fingerstyle-reference",
+          "label": "Right-hand roles",
+          "content": "Common classical-style labels: p = thumb (bass strings), i = index, m = middle, a = ring. Practise the bass alone, add one treble note, then combine the parts without changing the thumb pulse."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Thumb-3-2-1 arpeggio Success target: Play a four-note arpeggio with a steady thumb and relaxed fingers."
+        }
       ]
     },
     {
@@ -3674,6 +3871,23 @@
       "skillIds": [
         "lead.major-scale",
         "lead.pentatonic"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. C: x32010. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "scale-reference",
+          "label": "Major-scale formula",
+          "content": "Whole–whole–half–whole–whole–whole–half. In C major the notes are C–D–E–F–G–A–B; say the note names and identify the root before playing."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "C major scale fragment Success target: Play a one-octave C major fragment and say the note names."
+        }
       ]
     },
     {
@@ -3889,6 +4103,18 @@
       "checkpoint": "Play Cmaj7, Dm7 and G7 shell grips; move Dm7-G7-Cmaj7 in time.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Cmaj7: x32000; Dm7: xx0211; G7: 320001. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Three-note shell progression: Dm7-G7-Cmaj7, one bar each Success target: Play Cmaj7, Dm7 and G7 shell grips; move Dm7-G7-Cmaj7 in time."
+        }
       ]
     },
     {
@@ -4105,6 +4331,23 @@
       "skillIds": [
         "lead.pentatonic",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "form-reference",
+          "label": "12-bar blues map",
+          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "12-bar blues in A Success target: Play a 12-bar blues in A with a steady quarter-note pulse."
+        }
       ]
     },
     {
@@ -4321,6 +4564,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Five-note slide phrase Success target: Use one expressive technique accurately in a short phrase."
+        }
       ]
     },
     {
@@ -4537,6 +4787,13 @@
       "skillIds": [
         "harmony.open-chords",
         "harmony.power-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Two-bar power chord riff Success target: Move a power-chord shape and mute unwanted strings."
+        }
       ]
     },
     {
@@ -4753,6 +5010,18 @@
       "skillIds": [
         "harmony.open-chords",
         "harmony.barre-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. C: x32010; F: 133211. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "F partial to C change Success target: Build a partial F shape and test each string individually."
+        }
       ]
     },
     {
@@ -4969,6 +5238,23 @@
       "skillIds": [
         "lead.major-scale",
         "lead.pentatonic"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "scale-reference",
+          "label": "A minor pentatonic",
+          "content": "Notes: A–C–D–E–G. Box 1 at the 5th fret, low E to high e: 5–8 / 5–7 / 5–7 / 5–7 / 5–8 / 5–8. The roots A are on the low E and high e strings at fret 5. Start and finish phrases on A to hear the tonal centre."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "A minor pentatonic call-and-response Success target: Play A minor pentatonic box 1 slowly and end on A."
+        }
       ]
     },
     {
@@ -5186,6 +5472,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Three-part mid-year medley Success target: Perform one chord piece, one melody and one lead phrase."
+        }
       ]
     },
     {
@@ -5403,6 +5701,23 @@
         "fretboard.string-map",
         "fretboard.natural-notes",
         "fretboard.octaves"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "fretboard-reference",
+          "label": "Natural-note landmarks",
+          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "A-root octave jumps Success target: Find the same root in two positions and play an octave jump."
+        }
       ]
     },
     {
@@ -5619,6 +5934,13 @@
       "skillIds": [
         "harmony.open-chords",
         "harmony.triads"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Top-string triad walk Success target: Play C, F and G triads on the top three strings."
+        }
       ]
     },
     {
@@ -5834,6 +6156,18 @@
       "checkpoint": "Build I, IV, V and vi in C and G major.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. G: 320003; C: x32010. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "I-vi-IV-V in C, then G Success target: Build I, IV, V and vi in C and G major."
+        }
       ]
     },
     {
@@ -6050,6 +6384,18 @@
       "skillIds": [
         "fretboard.string-map",
         "fretboard.natural-notes"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fretboard-reference",
+          "label": "Natural-note landmarks",
+          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-chord capo loop Success target: Use a capo or transpose a short progression and explain the result."
+        }
       ]
     },
     {
@@ -6266,6 +6612,18 @@
       "skillIds": [
         "harmony.open-chords",
         "harmony.seventh-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Dsus4: xx0233; A7: x02020; D: xx0232; A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "D-Dsus4-D; A-A7-A Success target: Compare D-Dsus4-D and A-A7-A."
+        }
       ]
     },
     {
@@ -6482,6 +6840,18 @@
       "skillIds": [
         "rhythm.pulse",
         "rhythm.subdivision"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "One-bar sixteenth groove Success target: Count 1-e-and-a at a slow tempo and play a clean muted pattern."
+        }
       ]
     },
     {
@@ -6699,6 +7069,23 @@
         "technique.alternate-picking",
         "technique.string-crossing",
         "technique.legato"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. E: 022100. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "technique-reference",
+          "label": "Picking pattern",
+          "content": "Alternate the pick D–U–D–U on successive notes. Keep the pick depth shallow. Say the stroke direction aloud while practising a slow two-string crossing."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "High-E legato cell Success target: Play a hammer-on and pull-off without re-picking every note."
+        }
       ]
     },
     {
@@ -6916,6 +7303,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Review medley at a comfortable tempo Success target: Select two weak skills from Weeks 13-31 and retest them."
+        }
       ]
     },
     {
@@ -7132,6 +7531,18 @@
       "skillIds": [
         "lead.major-scale",
         "lead.pentatonic"
+      ],
+      "workedExamples": [
+        {
+          "kind": "scale-reference",
+          "label": "A minor pentatonic",
+          "content": "Notes: A–C–D–E–G. Box 1 at the 5th fret, low E to high e: 5–8 / 5–7 / 5–7 / 5–7 / 5–8 / 5–8. The roots A are on the low E and high e strings at fret 5. Start and finish phrases on A to hear the tonal centre."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Major-pentatonic question / minor-pentatonic answer Success target: Play a short major pentatonic phrase over a major chord."
+        }
       ]
     },
     {
@@ -7348,6 +7759,23 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Am: x02210. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Two-note motif over Am Success target: Create a four-bar solo from a two-note motif."
+        }
       ]
     },
     {
@@ -7563,6 +7991,18 @@
       "checkpoint": "Play an arpeggio that follows Em-G-D-C without losing the beat.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Em: 022000; G: 320003; D: xx0232; C: x32010. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Em-G-D-C arpeggio cycle Success target: Play an arpeggio that follows Em-G-D-C without losing the beat."
+        }
       ]
     },
     {
@@ -7779,6 +8219,23 @@
       "skillIds": [
         "lead.major-scale",
         "lead.pentatonic"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. G: 320003. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "scale-reference",
+          "label": "G major scale",
+          "content": "Notes: G–A–B–C–D–E–F#. Formula: whole–whole–half–whole–whole–whole–half. Name G as the root before playing the pattern."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "G major three-note fragment Success target: Play a short three-notes-per-string fragment with alternate picking."
+        }
       ]
     },
     {
@@ -7997,6 +8454,18 @@
         "ear.rhythm",
         "ear.melody-transcription",
         "ear.intervals"
+      ],
+      "workedExamples": [
+        {
+          "kind": "ear-practice",
+          "label": "Listen–sing–find–verify",
+          "content": "Use a three-to-eight-note original phrase. First hum the contour, then clap the rhythm, find the opening note, work in short fragments and compare your playing with the reference."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-note call-and-response Success target: Transcribe a two-bar melody from sound without first reading TAB."
+        }
       ]
     },
     {
@@ -8213,6 +8682,23 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Em: 022000; G: 320003; D: xx0232; C: x32010. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Original Em-C-G-D eight-bar sketch Success target: Write a progression and pair it with a melody or picking pattern."
+        }
       ]
     },
     {
@@ -8429,6 +8915,23 @@
       "skillIds": [
         "lead.pentatonic",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "form-reference",
+          "label": "12-bar blues map",
+          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "A blues turnaround into bar 1 Success target: Play a short turnaround and return to the I chord on time."
+        }
       ]
     },
     {
@@ -8646,6 +9149,23 @@
         "rhythm.pulse",
         "rhythm.subdivision",
         "rhythm.muting"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. E5: 022xxx; G5: 355xxx; A5: x022xx. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "E5-G5-A5-G5 rock cell Success target: Play two power chords with tight starts and stops."
+        }
       ]
     },
     {
@@ -8861,6 +9381,18 @@
       "checkpoint": "Play Dm7-G7-Cmaj7 as a slow ii-V-I.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Cmaj7: x32000; Dm7: xx0211; G7: 320001. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Dm7-G7-Cmaj7, two beats each Success target: Play Dm7-G7-Cmaj7 as a slow ii-V-I."
+        }
       ]
     },
     {
@@ -9076,6 +9608,18 @@
       "checkpoint": "Move Dm7-G7-Cmaj7 using the smallest hand movement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. Cmaj7: x32000; Dm7: xx0211; G7: 320001. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Dm7-G7-Cmaj7 voice-leading loop Success target: Move Dm7-G7-Cmaj7 using the smallest hand movement."
+        }
       ]
     },
     {
@@ -9293,6 +9837,18 @@
         "rhythm.pulse",
         "rhythm.subdivision",
         "rhythm.strumming"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "One progression, three groove feels Success target: Play the same progression as straight eighths, shuffle and sparse accents."
+        }
       ]
     },
     {
@@ -9510,6 +10066,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Three-skill review medley Success target: Choose a chord task, rhythm task and melody task from Weeks 25-43."
+        }
       ]
     },
     {
@@ -9725,6 +10293,18 @@
       "checkpoint": "Read a short melody on strings 1-4 with rests and repeated notes.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-string sight-reading phrase Success target: Read a short melody on strings 1-4 with rests and repeated notes."
+        }
       ]
     },
     {
@@ -9941,6 +10521,23 @@
       "skillIds": [
         "fretboard.string-map",
         "fretboard.natural-notes"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. G: 320003. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "fretboard-reference",
+          "label": "Natural-note landmarks",
+          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "G major position-link phrase Success target: Link two positions of G major and land on B or G."
+        }
       ]
     },
     {
@@ -10156,6 +10753,13 @@
       "checkpoint": "Harmonise a three-note melody using small chord shapes.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Three-note chord-melody sketch Success target: Harmonise a three-note melody using small chord shapes."
+        }
       ]
     },
     {
@@ -10372,6 +10976,23 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "chord-reference",
+          "label": "Chord shapes in this lesson",
+          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220. Form each shape slowly and check individual strings before strumming."
+        },
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Original 8-bar A-B-A sketch Success target: Build an A section and contrasting B section from your motifs."
+        }
       ]
     },
     {
@@ -10588,6 +11209,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Four-bar dynamic arc Success target: Perform the same phrase softly, loudly and with a clear final note."
+        }
       ]
     },
     {
@@ -10805,6 +11438,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Personal repertoire piece: weakest transition loop Success target: Choose a piece with a beginning, middle and ending and polish transitions."
+        }
       ]
     },
     {
@@ -11022,6 +11667,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Mock performance plus 5-note transcription Success target: Record a complete take and transcribe a short phrase by ear."
+        }
       ]
     },
     {
@@ -11239,6 +11896,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Year-end three-part audition Success target: Perform a prepared piece, a sight-read excerpt and a short improvised phrase."
+        }
       ]
     }
   ]
