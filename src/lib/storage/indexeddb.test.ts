@@ -188,7 +188,9 @@ describe('local learner profile persistence', () => {
     expect(second.preferences).toEqual(first.preferences);
   });
 
-  it('guards lesson completion and completion events with the checkpoint revision', async () => {
+  it(
+    'guards lesson completion and completion events with the checkpoint revision',
+    async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
