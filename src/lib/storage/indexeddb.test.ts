@@ -101,6 +101,23 @@ class FakeStore {
     });
   }
 
+  index(name: string) {
+    const fields =
+      name === 'byLearnerReleaseLesson'
+        ? ['learnerId', 'curriculumReleaseId', 'lessonId']
+        : ['learnerId', 'curriculumReleaseId', 'skillId'];
+    return {
+      get: (key: IDBValidKey) =>
+        this.tx().request(() =>
+          [...this.records.values()].find((record) => {
+            const value = record as Record<string, unknown>;
+            const candidate = fields.map((field) => value[field]);
+            return JSON.stringify(candidate) === JSON.stringify(key);
+          })
+        )
+    };
+  }
+
   private key(value: IDBValidKey) {
     return JSON.stringify(value);
   }
