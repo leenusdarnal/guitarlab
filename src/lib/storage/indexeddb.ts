@@ -275,13 +275,13 @@ export function createIndexedDbRepositories(
         await requestResult(tx.objectStore(stores.progress).add(record));
       });
     },
-    updateInProgress: async (record) =>
+    updateInProgress: async (record, expectedRevision) =>
       inTransaction(database, [stores.progress], 'readwrite', async (tx) => {
         const store = tx.objectStore(stores.progress);
         const current = await requestResult<LessonProgressRecord | undefined>(store.index('byLearnerReleaseLesson').get(IDBKeyRange.only([
           record.learnerId, record.curriculumReleaseId, record.lessonId
         ])));
-        if (!current || current.status !== 'in_progress' || current.id !== record.id) return false;
+        if (!current || current.status !== 'in_progress' || current.id !== record.id || (current.revision ?? 0) !== expectedRevision) return false;
         await requestResult(store.put(record));
         return true;
       }),
@@ -416,7 +416,8 @@ export async function loadActiveLessonProgress(
         allowedBlockIds.includes(id)
       ),
       checkpointOutcome: record.checkpointOutcome ?? null,
-      checkpointNote: record.checkpointNote ?? null
+      checkpointNote: record.checkpointNote ?? null,
+      revision: record.revision ?? 0
     });
 
     const existing = await repository.find(profile.id, releaseId, lessonId);
@@ -433,6 +434,7 @@ export async function loadActiveLessonProgress(
       completedBlockIds: [],
       checkpointOutcome: null,
       checkpointNote: null,
+      revision: 0,
       startedAt: now,
       completedAt: null,
       updatedAt: now
