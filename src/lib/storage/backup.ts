@@ -28,7 +28,10 @@ const lessonProgressSchema = z.object({
   lessonId: z.string().min(1).max(160),
   status: z.enum(['in_progress', 'completed']),
   lastBlockId: z.string().max(160).nullable(),
-  completedBlockIds: z.array(z.string().min(1).max(160)).max(200).optional(),
+  completedBlockIds: z
+    .array(z.string().min(1).max(160))
+    .max(200)
+    .optional(),
   revision: z.number().int().nonnegative().optional(),
   checkpointOutcome: z.enum(['achieved', 'needs_practice']).nullable().optional(),
   checkpointNote: z.string().max(500).nullable().optional(),
