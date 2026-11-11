@@ -13,7 +13,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | Product definition, architecture and curriculum | Complete | M0 documents; 152 authored lessons across six routes; versioned content contract and validator |
 | Visual direction and design tokens | Implemented | Approved hybrid direction; both-theme contrast validation runs in CI. Full component-level accessibility audit remains in M9 |
 | Application foundation | Merged | PR #21: SvelteKit, Svelte 5, TypeScript, Tailwind, Cloudflare adapter, responsive shell and onboarding |
-| Cloudflare runtime | Local only | Worker production build and local Wrangler smoke test pass. Explicit preview/production environment isolation and live deploy are not configured |
+| Cloudflare runtime | Preview workflow merged | PR #32 adds an isolated public preview Worker and manually confirmed deploy workflow; configure GitHub Actions credentials and run with synthetic data only. Production is not configured |
 | CI quality gates | Passing on current main | PR #30 adds locked installs, changed-file Prettier checks and a required high/critical dependency audit; local D1, curriculum/design, lint/type, unit, Worker and Chromium checks pass. Issue #5 still tracks a controlled failing-check verification |
 | M2.1 data schema | Merged | PR #22: versioned Drizzle schema, local D1 migration, 152 lesson metadata references, 34 stable skill IDs and database integrity tests |
 | M2.2 application boundary | Merged | PR #23: repository ports, validated use cases, typed errors and in-memory tests; no remote D1 access |
@@ -59,7 +59,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
 | M4.1 | [#13 — Curriculum navigation and authored lesson reader](https://github.com/leenusdarnal/guitarlab/issues/13) | Merged — PR #29 | Six routes and 152 stable lesson links; Year 1, Year 2 and specialist reader paths pass Chromium acceptance |
-| M4.2 | [#14 — Checkpoints, completion and resume](https://github.com/leenusdarnal/guitarlab/issues/14) | Not started | Persist block/checkpoint state and resume; completion events must not grant skill mastery |
+| M4.2 | [#14 — Checkpoints, completion and resume](https://github.com/leenusdarnal/guitarlab/issues/14) | Implemented in PR #33; CI/manual QA pending | Local section progress, checkpoint self-check and private practice note; reload/resume and explicit completion. Completion remains separate from skill mastery |
 
 ## M5–M9 — Learning state, tools and release
 
@@ -90,8 +90,9 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Immediate next actions
 
-1. Finish browser reload/offline and schema-upgrade verification for IndexedDB.
-2. Verify backup/restore round-trip, failed-restore rollback and safe reset in a browser.
-3. Implement M4.2 checkpoints, completion and resume on top of the merged curriculum reader.
-4. Configure isolated Cloudflare preview/production environments and a protected preview deploy before provisioning any production data service.
-5. Complete the M9 privacy, accessibility, performance and rollback gates before a private production release.
+1. Complete PR #33 browser acceptance for checkpoint persistence, reload/resume, route-to-route navigation and explicit completion.
+2. Verify IndexedDB offline restart/schema upgrade and backup/restore round-trip, failed-restore rollback and safe reset in a real browser.
+3. Configure Cloudflare preview credentials and run the public preview workflow with synthetic learner data only.
+4. Implement and validate offline app-shell/curriculum caching before adding any account or sync service.
+5. Complete the essential music tools, practice session capture and musicianship/repertoire workflows.
+6. Complete the privacy, accessibility, performance, production-environment and rollback gates before a private production release.

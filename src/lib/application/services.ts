@@ -193,6 +193,9 @@ export async function startLessonProgress(
     lessonId: value.lessonId,
     status: 'in_progress',
     lastBlockId: null,
+    completedBlockIds: [],
+    checkpointOutcome: null,
+    checkpointNote: null,
     startedAt: now,
     completedAt: null,
     updatedAt: now
@@ -200,6 +203,96 @@ export async function startLessonProgress(
 
   await dependencies.progress.create(progress);
   return progress;
+}
+
+const updateLessonProgressInputSchema = z
+  .object({
+    learnerId: uuidSchema,
+    releaseId: releaseIdSchema,
+    lessonId: lessonIdSchema,
+    expectedRevision: z.number().int().nonnegative(),
+    lastBlockId: z.string().min(1).max(160).nullable(),
+    completedBlockIds: z.array(z.string().min(1).max(160)).max(200),
+    checkpointOutcome: z.enum(['achieved', 'needs_practice']).nullable(),
+    checkpointNote: z.string().max(500).nullable()
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (
+      new Set(value.completedBlockIds).size !== value.completedBlockIds.length
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['completedBlockIds'],
+        message: 'A lesson block can only be recorded once.'
+      });
+    }
+    if (
+      value.lastBlockId &&
+      !value.completedBlockIds.includes(value.lastBlockId)
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['lastBlockId'],
+        message:
+          'The last visited block must be included in completed lesson blocks.'
+      });
+    }
+  });
+
+/** Save learner-controlled section/checkpoint state, never skill mastery evidence. */
+export async function updateLessonProgress(
+  input: unknown,
+  dependencies: {
+    progress: LessonProgressRepository;
+    runtime: ApplicationRuntime;
+  }
+): Promise<LessonProgressRecord> {
+  const value = parseInput(updateLessonProgressInputSchema, input);
+  const current = await dependencies.progress.find(
+    value.learnerId,
+    value.releaseId,
+    value.lessonId
+  );
+  if (!current) {
+    throw new NotFoundError('Lesson progress not found.');
+  }
+  if (current.status !== 'in_progress') {
+    throw new ConflictError('A completed lesson can no longer be changed.');
+  }
+  if ((current.revision ?? 0) !== value.expectedRevision) {
+    throw new ConflictError(
+      'Lesson progress changed in another tab. Reload and try again.'
+    );
+  }
+
+  const updated: LessonProgressRecord = {
+    ...current,
+    lastBlockId: value.lastBlockId,
+    completedBlockIds: [...value.completedBlockIds],
+    checkpointOutcome: value.checkpointOutcome,
+    checkpointNote: value.checkpointNote,
+    revision: value.expectedRevision + 1,
+    updatedAt: dependencies.runtime.now()
+  };
+  const saved = await dependencies.progress.updateInProgress(
+    updated,
+    value.expectedRevision
+  );
+  if (!saved) {
+    const latest = await dependencies.progress.find(
+      value.learnerId,
+      value.releaseId,
+      value.lessonId
+    );
+    if (latest?.status === 'completed') {
+      throw new ConflictError('A completed lesson can no longer be changed.');
+    }
+    throw new ConflictError(
+      'Lesson progress changed in another tab. Reload and try again.'
+    );
+  }
+  return updated;
 }
 
 const completeLessonInputSchema = z
@@ -229,7 +322,9 @@ export async function completeLesson(
     value.releaseId,
     value.lessonId
   );
-  if (!current) throw new NotFoundError('Lesson progress not found.');
+  if (!current) {
+    throw new NotFoundError('Lesson progress not found.');
+  }
   if (current.status === 'completed') {
     throw new ConflictError('This lesson is already marked as completed.');
   }
@@ -240,7 +335,8 @@ export async function completeLesson(
     status: 'completed',
     lastBlockId: value.lastBlockId,
     completedAt: now,
-    updatedAt: now
+    updatedAt: now,
+    revision: (current.revision ?? 0) + 1
   };
   const event: LessonCompletionEventRecord = {
     id: dependencies.runtime.newId(),
@@ -254,7 +350,19 @@ export async function completeLesson(
 
   // The repository owns the atomic progress + event write. No mastery port is
   // available here, so content completion cannot grant skill mastery.
-  return dependencies.progress.completeWithEvent(completed, event);
+  const result = await dependencies.progress.completeWithEvent(
+    completed,
+    event,
+    current.revision ?? 0
+  );
+  if (!result) {
+    throw new ConflictError(
+      value.completionSource === 'checkpoint'
+        ? 'Lesson progress changed or the checkpoint is no longer achieved. Reload and try again.'
+        : 'Lesson progress changed in another tab. Reload and try again.'
+    );
+  }
+  return result;
 }
 
 const assessmentSubmissionSchema = assessmentAttemptInputSchema.omit({

@@ -1,4 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import type {
+  LessonCompletionEventRecord,
+  LessonProgressRecord
+} from '../repositories/contracts';
 import {
   createEmptyLocalLearnerProfile,
   createIndexedDbRepositories,
@@ -41,7 +45,8 @@ class FakeTransaction {
         request.result = operation();
         request.onsuccess?.(new Event('success'));
       } catch (error) {
-        request.error = error instanceof Error ? error : new Error('Request failed.');
+        request.error =
+          error instanceof Error ? error : new Error('Request failed.');
         request.onerror?.(new Event('error'));
       } finally {
         this.pending -= 1;
@@ -130,7 +135,8 @@ class FakeStore {
   }
 
   private tx() {
-    if (!this.transaction) throw new Error('Fake store is not attached to a transaction.');
+    if (!this.transaction)
+      throw new Error('Fake store is not attached to a transaction.');
     return this.transaction;
   }
 }
@@ -142,7 +148,10 @@ function makeDatabase(): IDBDatabase {
     ['lessonProgress', new FakeStore('id')],
     ['lessonCompletionEvents', new FakeStore('id')],
     ['assessmentAttempts', new FakeStore('id')],
-    ['skillMastery', new FakeStore(['learnerId', 'curriculumReleaseId', 'skillId'])],
+    [
+      'skillMastery',
+      new FakeStore(['learnerId', 'curriculumReleaseId', 'skillId'])
+    ],
     ['practiceSessions', new FakeStore('id')]
   ]);
 
@@ -184,6 +193,113 @@ describe('local learner profile persistence', () => {
     expect(second.preferences).toEqual(first.preferences);
   });
 
+  it('guards lesson completion and completion events with the checkpoint revision', async () => {
+    const database = makeDatabase();
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const record: LessonProgressRecord = {
+      id: 'progress-1',
+      learnerId: profile.id,
+      curriculumReleaseId: 'curriculum-v1',
+      lessonId: 'y1-w01-lesson',
+      status: 'in_progress',
+      lastBlockId: null,
+      completedBlockIds: [],
+      checkpointOutcome: null,
+      checkpointNote: null,
+      revision: 0,
+      startedAt: 100,
+      completedAt: null,
+      updatedAt: 100
+    };
+    await repositories.progress.create(record);
+
+    await expect(
+      repositories.progress.updateInProgress(
+        {
+          ...record,
+          lastBlockId: 'guided-demo',
+          completedBlockIds: ['guided-demo'],
+          checkpointOutcome: 'needs_practice',
+          revision: 1,
+          updatedAt: 200
+        },
+        0
+      )
+    ).resolves.toBe(true);
+
+    const event: LessonCompletionEventRecord = {
+      id: 'event-1',
+      progressId: record.id,
+      learnerId: profile.id,
+      curriculumReleaseId: 'curriculum-v1',
+      lessonId: record.lessonId,
+      completionSource: 'checkpoint',
+      completedAt: 300
+    };
+    await expect(
+      repositories.progress.completeWithEvent(
+        {
+          ...record,
+          revision: 2,
+          status: 'completed',
+          completedAt: 300,
+          updatedAt: 300
+        },
+        event,
+        1
+      )
+    ).resolves.toBeNull();
+
+    await expect(
+      repositories.progress.find(profile.id, 'curriculum-v1', 'y1-w01-lesson')
+    ).resolves.toMatchObject({
+      status: 'in_progress',
+      checkpointOutcome: 'needs_practice',
+      revision: 1
+    });
+
+    await expect(
+      repositories.progress.updateInProgress(
+        {
+          ...record,
+          lastBlockId: 'guided-demo',
+          completedBlockIds: ['guided-demo'],
+          checkpointOutcome: 'achieved',
+          revision: 2,
+          updatedAt: 400
+        },
+        1
+      )
+    ).resolves.toBe(true);
+
+    const current = await repositories.progress.find(
+      profile.id,
+      'curriculum-v1',
+      'y1-w01-lesson'
+    );
+    expect(current?.checkpointOutcome).toBe('achieved');
+    const completed = await repositories.progress.completeWithEvent(
+      {
+        ...current!,
+        status: 'completed',
+        completedAt: 500,
+        updatedAt: 500,
+        revision: 3
+      },
+      { ...event, completedAt: 500 },
+      2
+    );
+    expect(completed?.status).toBe('completed');
+
+    await expect(
+      repositories.progress.updateInProgress(
+        { ...record, revision: 4, updatedAt: 600 },
+        2
+      )
+    ).resolves.toBe(false);
+  });
+
   it('persists validated preferences without creating lesson or mastery records', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
@@ -203,10 +319,12 @@ describe('local learner profile persistence', () => {
     expect(updated?.preferences.instrument).toBe('acoustic');
     expect(updated?.preferences.practiceMinutes).toBe(20);
     expect(updated?.updatedAt).toBe(200);
-    expect(await repositories.mastery.find(
-      profile.id,
-      'curriculum-v1',
-      'rhythm-pulse'
-    )).toBeNull();
+    expect(
+      await repositories.mastery.find(
+        profile.id,
+        'curriculum-v1',
+        'rhythm-pulse'
+      )
+    ).toBeNull();
   });
 });

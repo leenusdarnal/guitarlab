@@ -47,6 +47,13 @@ export type LessonProgressRecord = {
   lessonId: string;
   status: 'in_progress' | 'completed';
   lastBlockId: string | null;
+  /** Completed authored blocks; optional for compatibility with earlier local rows and backups. */
+  completedBlockIds?: string[];
+  /** Monotonic local revision for stale-tab protection; absent in pre-M4.2 rows. */
+  revision?: number;
+  /** Learner self-check only; this is not skill mastery evidence. */
+  checkpointOutcome?: 'achieved' | 'needs_practice' | null;
+  checkpointNote?: string | null;
   startedAt: number;
   completedAt: number | null;
   updatedAt: number;
@@ -123,14 +130,20 @@ export interface LessonProgressRepository {
     lessonId: string
   ): Promise<LessonProgressRecord | null>;
   create(progress: LessonProgressRecord): Promise<void>;
+  /** Compare-and-set update: only an in-progress lesson may be changed. */
+  updateInProgress(
+    progress: LessonProgressRecord,
+    expectedRevision: number
+  ): Promise<boolean>;
   /**
    * Must persist the completed progress row and append its event atomically.
    * It must never create or update a skill mastery snapshot.
    */
   completeWithEvent(
     progress: LessonProgressRecord,
-    event: LessonCompletionEventRecord
-  ): Promise<LessonProgressRecord>;
+    event: LessonCompletionEventRecord,
+    expectedRevision: number
+  ): Promise<LessonProgressRecord | null>;
 }
 
 export interface AssessmentAttemptRepository {
