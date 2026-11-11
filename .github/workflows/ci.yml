@@ -1,0 +1,85 @@
+name: GuitarLab CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "feat/**", "chore/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guitarlab-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate application and curriculum
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Validate curriculum
+        run: npm run curriculum:validate
+
+      - name: Validate design-token contrast
+        run: npm run design:validate
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type and Svelte checks
+        run: npm run check
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Production build
+        run: npm run build
+
+  security-audit:
+    name: Dependency security audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+
+      - name: Audit dependency lockfile
+        shell: bash
+        run: |
+          timeout 45s npm audit --package-lock-only --json --fetch-timeout=20000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
+          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
+            echo "npm audit could not complete within 45 seconds; inspect registry availability and rerun."
+            exit 1
+          fi
+          node - <<'NODE'
+          const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
+          const entries = Object.entries(report.vulnerabilities || {});
+          for (const [name, item] of entries) {
+            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
+          }
+          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
+          if (blocking.length) {
+            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
+            process.exit(1);
+          }
+          NODE
