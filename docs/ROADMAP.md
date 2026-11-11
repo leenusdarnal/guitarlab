@@ -17,6 +17,8 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Finalise the implementation architecture, trust boundaries, data model, sync policy, Cloudflare services and delivery gates.
 - [x] Complete the pre-implementation readiness review, curriculum data audit, feature prioritisation, non-functional requirements and external-tool evaluation.
 - [x] Complete multi-angle curriculum research and revise the spiral learning framework, practice progression and selected checkpoints (curriculum v1.1.0).
+- [x] Author all 52 Year 1, 52 Year 2 and 48 Year 3 specialist lessons.
+- [x] Add a versioned lesson JSON Schema, stable specialist-week IDs and a dependency-free content validator.
 - [ ] Select final visual concept and detailed design tokens before UI implementation.
 - [x] Retire all legacy learner-baseline import requirements; start profiles empty.
 
@@ -95,7 +97,7 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Security and privacy review.
 - [ ] Backup/restore verification.
 - [ ] Performance and reliability checks.
-- [ ] Verify curriculum schema and content validation in CI.
+- [ ] Add the curriculum validator to the wider application CI and expand automated tests after the app scaffold exists.
 - [ ] Production deployment and smoke tests.
 
 ## Definition of done
