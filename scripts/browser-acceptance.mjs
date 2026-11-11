@@ -65,7 +65,7 @@ try {
   await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page.getByRole('status').filter({ hasText: 'saved privately on this device' }).waitFor();
   await page.goto(origin, { waitUntil: 'networkidle' });
-  await page.getByText('20', { exact: true }).waitFor();
+  assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByText('20', { exact: true }).waitFor();
 
