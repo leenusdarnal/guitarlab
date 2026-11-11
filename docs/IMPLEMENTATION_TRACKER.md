@@ -1,104 +1,97 @@
 # GuitarLab Implementation Tracker
 
 **Last updated:** 2026-11-11  
-**Tracking source:** GitHub Issues in this repository  
+**Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
-This file is the human-readable index. GitHub Issues remain the execution records: each work item has a scope, dependencies and acceptance criteria. A task is not complete just because code was written; it must pass its stated checks and be verified in a pull request.
+GitHub Issues remain the execution records. A task is complete only when its code is merged and its stated checks pass. Manual acceptance checks are called out separately; merging an implementation slice does not silently mark those checks complete.
 
 ## Current status
 
 | Area | Status | Evidence / next action |
 |---|---|---|
-| Product definition and architecture | Complete | `docs/PRODUCT_SPEC.md`, `docs/ARCHITECTURE.md` |
-| Curriculum foundation | Complete | 152 authored lessons; `npm run curriculum:validate` validates 52 + 52 + 48 lessons |
-| Visual direction | Approved | Hybrid of modern interactive structure, warm acoustic character and focused practice; `docs/DESIGN_DIRECTION.md` |
-| Design-token contrast | Added to CI | `scripts/validate-design-tokens.mjs` checks dark/light text, status, accent and focus pairs |
-| Application foundation | Merged | PR #21; SvelteKit 3/Svelte 5/TypeScript, Tailwind 4, Cloudflare adapter, initial dashboard and onboarding |
-| Cloudflare runtime | Configured and locally verified | Worker production build and local Wrangler smoke test pass; no live preview or production deployment is claimed |
-| CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
-| Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
-| Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
-| Learner-local persistence | Draft PR #24; CI green, manual QA pending | Browser-local IndexedDB stores, empty active profile, preference persistence and repository adapters. Still needs browser reload/offline and upgrade verification before issue #9 is complete |
-| Backup and recovery | M2.4 implementation in draft PR #25; CI/browser verification pending | Versioned export, strict import validation, non-mutating restore preview, one-transaction replacement restore and typed-confirmation reset. Browser-level round-trip and rollback QA remains |
-| Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
+| Product definition, architecture and curriculum | Complete | M0 documents; 152 authored lessons across six routes; versioned content contract and validator |
+| Visual direction and design tokens | Implemented | Approved hybrid direction; both-theme contrast validation runs in CI. Full component-level accessibility audit remains in M9 |
+| Application foundation | Merged | PR #21: SvelteKit, Svelte 5, TypeScript, Tailwind, Cloudflare adapter, responsive shell and onboarding |
+| Cloudflare runtime | Local only | Worker production build and local Wrangler smoke test pass. Explicit preview/production environment isolation and live deploy are not configured |
+| CI quality gates | Passing on current main | PR #29 merge commit passed local D1 migration/invariants, curriculum/design validation, formatting, lint, type/Svelte checks, unit tests, Worker build/smoke and Chromium acceptance. Security audit is currently non-blocking; CI hardening is the next maintenance improvement |
+| M2.1 data schema | Merged | PR #22: versioned Drizzle schema, local D1 migration, 152 lesson metadata references, 34 stable skill IDs and database integrity tests |
+| M2.2 application boundary | Merged | PR #23: repository ports, validated use cases, typed errors and in-memory tests; no remote D1 access |
+| M2.3 local learner persistence | Merged; manual QA pending | PR #24: empty active profile and versioned IndexedDB stores/repositories. Verify browser reload, offline restart and storage upgrade behaviour |
+| M2.4 local backup and recovery | Merged; manual QA pending | PR #25: versioned export, strict restore preview, transactional replacement and typed-confirmation reset. Verify browser round-trip and rollback-under-failure |
+| M3 dashboard and planning | Merged | PR #26 dashboard and PR #28 explainable 10/20/40/custom practice planner; browser acceptance covers key planning journeys |
+| M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
+| M4.2 interactive lesson progress | Not started | Add checkpoint answers, progress persistence, completion and resume. Keep lesson completion separate from skill mastery |
+| Music tools, practice studio and repertoire | Not started | M6–M8 issues #15–17 |
+| Release hardening | Not ready | Offline app shell, full accessibility/privacy review, backup QA, environment isolation, preview/production deployment and rollback verification remain |
 
-**Important:** PR #21, PR #22 and PR #23 are merged. M2.3 is proposed in draft PR #24 and is not part of `main` until reviewed and merged. Its CI passes, but browser-level reload/offline and upgrade verification remain open. M2.4.1 is proposed in draft PR #25, stacked on PR #24; it adds the versioned backup contract, active-learner export/download, validated preview, transactional replacement restore and explicit safe reset UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Repository state:** PR #29 is merged into `main`; its post-merge workflow passed. There are currently no open pull requests. No production Worker, production D1 database, authentication, cloud sync or live Cloudflare deployment is configured.
 
 ## M1 — Application foundation
 
-| Slice | Work item | Current status | Evidence / exit check |
+| Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M1.0 | [#1 — Select visual concept and freeze design tokens](https://github.com/leenusdarnal/guitarlab/issues/1) | Direction approved; contrast validation added | Hybrid direction documented; both themes must pass automated contrast checks |
-| M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Merged | Install, Svelte/type check, unit tests and production build passed in GitHub Actions |
-| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Build passed; preview pending | Worker build and local Wrangler smoke test passed; live preview and browser-level test remain |
-| M1.3 | [#4 — Implement approved visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell merged | Browser QA on desktop/mobile, keyboard and reduced motion remains |
-| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Merged; core validation passed | Formatting, lint, Svelte/type-check, unit tests and Worker build passed. Audit job is informational/continue-on-error and reports moderate/low dev-tool advisories |
-| M1.5 | [#6 — Integrate curriculum integrity checks](https://github.com/leenusdarnal/guitarlab/issues/6) | Added to CI; validator passed | 52 Year 1 + 52 Year 2 + 48 Year 3 lessons validate |
-
-Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarnal/guitarlab/pull/21)
+| M1.0 | [#1 — Select visual concept and freeze design tokens](https://github.com/leenusdarnal/guitarlab/issues/1) | Implemented | Approved hybrid direction and contrast-validated semantic tokens |
+| M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Merged — PR #21 | Type/Svelte checks and production Worker build pass |
+| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Local runtime implemented | Explicit preview/production environment separation and live deployment remain |
+| M1.3 | [#4 — Implement the visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell merged — PR #21 | Full keyboard, device and component-level accessibility review remains |
+| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Core gates merged — PR #21 | CI hardening: deterministic install, non-mutating format check and enforceable dependency audit |
+| M1.5 | [#6 — Integrate curriculum integrity checks](https://github.com/leenusdarnal/guitarlab/issues/6) | Implemented | Validator runs in the main CI workflow and checks 52 + 52 + 48 authored lessons |
 
 ## M2 — Data foundation
 
-M2.1 is merged in [PR #22](https://github.com/leenusdarnal/guitarlab/pull/22), and [issue #7](https://github.com/leenusdarnal/guitarlab/issues/7) is closed. The schema defines 10 relational tables, seeds 152 lesson metadata references and 34 skill IDs, and keeps lesson bodies in Git. The versioned migration and database invariants pass in Wrangler local D1. No production D1, authentication or cloud sync is created.
-
-M2.2 is merged in [PR #23](https://github.com/leenusdarnal/guitarlab/pull/23), and [issue #8](https://github.com/leenusdarnal/guitarlab/issues/8) is closed. The slice keeps application logic independent of Drizzle and IndexedDB, separates public curriculum reads from private learner repositories, and tests transitions with in-memory adapters. It does not provision or expose remote data.
-
-M2.3 is proposed in [draft PR #24](https://github.com/leenusdarnal/guitarlab/pull/24). CI passes for its current head. The remaining acceptance check is browser-level persistence across reload/offline restart plus verification of storage upgrade behaviour; therefore issue #9 is not yet marked complete.
-
-
-
-| Slice | Work item | Depends on | Exit check |
+| Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Fresh local D1 migration, FK/unique constraints, append-only assessment triggers and separate completion/mastery invariants all pass in CI |
-| M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | Merged — PR #23 | Storage-independent contracts, typed validation/errors, versioned public reads, atomic completion and evidence/practice transition tests passed in CI |
-| M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | Draft PR #24; CI passes, browser reload/offline QA pending | New profile is empty, persists locally and survives offline reload |
-| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Draft PR #25, stacked on M2.3 | Validated round-trip; failed restore leaves existing data intact; reset requires explicit confirmation |
+| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Local migration and database invariants pass; no production D1 resource |
+| M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | Merged — PR #23 | Storage-independent ports, Zod validation, typed safe errors and application tests |
+| M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | Merged — PR #24 | Browser reload/offline restart and IndexedDB upgrade verification remain |
+| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Merged — PR #25; manual QA open | Verify browser export/import round-trip, failed-restore rollback and reset behaviour |
 
-## M3 — Dashboard
+## M3 — Learning dashboard and practice planning
 
-| Slice | Work item | Depends on | Exit check |
+| Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M3.1 | [#11 — Learner dashboard and learning path](https://github.com/leenusdarnal/guitarlab/issues/11) | M1.3, M2.3 | Fresh-start, progress and review states render correctly |
-| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | M2.2, M2.3, M3.1 | 10/20/40/custom plans and reasoned recommendations pass unit tests |
+| M3.1 | [#11 — Learner dashboard and learning path](https://github.com/leenusdarnal/guitarlab/issues/11) | Merged — PR #26 | Fresh-start, current lesson, progress and empty/review/practice states |
+| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | Merged — PR #28 | 10/20/40/custom budgets, goal-aware explanations, accept/dismiss/restore and browser coverage |
 
-## M4 — Curriculum and lessons
+## M4 — Curriculum and lesson engine
 
-| Slice | Work item | Depends on | Exit check |
+| Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M4.1 | [#13 — Curriculum navigation and lesson reader](https://github.com/leenusdarnal/guitarlab/issues/13) | M1.5, M2.2, M3.1 | All 152 authored lessons load in stable order |
-| M4.2 | [#14 — Checkpoints, completion and resume](https://github.com/leenusdarnal/guitarlab/issues/14) | M2.3, M4.1 | Resume works; lesson completion never implies skill mastery |
+| M4.1 | [#13 — Curriculum navigation and authored lesson reader](https://github.com/leenusdarnal/guitarlab/issues/13) | Merged — PR #29 | Six routes and 152 stable lesson links; Year 1, Year 2 and specialist reader paths pass Chromium acceptance |
+| M4.2 | [#14 — Checkpoints, completion and resume](https://github.com/leenusdarnal/guitarlab/issues/14) | Not started | Persist block/checkpoint state and resume; completion events must not grant skill mastery |
 
-## M6–M9 — Practice and release
+## M5–M9 — Learning state, tools and release
 
-| Slice | Work item | Depends on | Exit check |
+| Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | M1.3, M2.2, M2.3 | Pitch calculations, diagrams and transport controls are tested |
-| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | M2.3, M3.2, M6.1 | Accurate session capture; timer never grants mastery |
-| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | M4.1, M6.1, M7.1 | Accessible drills and copyright-safe song workspace |
-| M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | M1–M8 core slices | Offline, recovery, security, accessibility and release checks pass |
+| M5 | Local-first state and optional sync | Partially implemented | IndexedDB and local backup/restore exist in M2.3/M2.4. Offline app-shell caching, outbox, conflict handling, authentication and cloud sync remain |
+| M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Not started | Music-tool domain and browser acceptance |
+| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Not started | Session UI, pause/resume, exercise capture and review workflow |
+| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
+| M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
 
 ## How progress is recorded
 
-1. Move the corresponding GitHub Issue through its status as work starts and completes.
-2. Use one pull request per small slice where practical; link it to the issue with `Closes #N`.
-3. Include test/build results and any manual verification in the pull request description.
-4. Update this page when a slice changes state or an acceptance criterion changes.
-5. Keep the main branch buildable. Do not merge a slice with failing checks.
-6. Keep personal practice history, recordings, credentials and runtime databases out of this public repository.
+1. Use one pull request per small implementation slice where practical; link it to its issue with `Closes #N` when all acceptance criteria are complete.
+2. Include CI results and manual verification evidence in the pull request description.
+3. Update this page when a slice changes state or an acceptance criterion changes.
+4. Keep `main` buildable and protected by pull-request and required-status-check rules.
+5. Keep learner records, recordings, credentials and runtime databases out of this public repository.
 
-## Definition of done for every slice
+## Definition of done
 
 - Acceptance criteria are met and checked in the issue.
-- Relevant format, lint, type-check, unit/integration/e2e tests and production build pass.
-- Mobile and desktop behaviour is verified for user-facing work.
-- Loading, empty, error and offline states are handled where applicable.
-- Documentation matches the actual code.
+- Relevant format, lint, type-check, unit/integration/browser tests and production build pass.
+- Mobile, desktop, keyboard and offline behaviour are verified for user-facing work where applicable.
+- Loading, empty, error and offline states are handled.
+- Documentation matches the merged implementation.
 - No secrets or private learner records are committed.
 
 ## Immediate next actions
 
-1. Finish M2.3 browser reload/offline and upgrade verification before merging PR #24.
-2. Verify M2.4 export/import round-trip, failed-restore rollback and reset in a browser; keep PR #25 stacked until M2.3 is merged.
-3. Keep D1 isolated to local/test use until authentication and ownership checks exist; no production database or cloud sync is enabled.
-4. Add a live Cloudflare preview deployment and browser-level verification as a separate release task; no live preview URL is claimed yet.
+1. Finish browser reload/offline and schema-upgrade verification for IndexedDB.
+2. Verify backup/restore round-trip, failed-restore rollback and safe reset in a browser.
+3. Implement M4.2 checkpoints, completion and resume on top of the merged curriculum reader.
+4. Configure isolated Cloudflare preview/production environments and a protected preview deploy before provisioning any production data service.
+5. Complete the M9 privacy, accessibility, performance and rollback gates before a private production release.
