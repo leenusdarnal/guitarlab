@@ -23,11 +23,19 @@
 | skill_mastery | Derived skill-state snapshot with evidence pointer | Update only from a validated use case |
 | practice_sessions | Planned vs actual practice activity and reflection | Learner-owned |
 
+## M2.2 repository and application boundary
+
+Repository ports are defined in src/lib/repositories/contracts.ts. Application use cases live in src/lib/application/services.ts and depend only on those ports plus injectable clock/ID generation. No use case imports Drizzle, D1, IndexedDB or SvelteKit.
+
+Public curriculum reads (CurriculumRepository, SkillRepository) are separate from learner-owned repositories (LearnerProfileRepository, progress, assessment, mastery and practice). A future authenticated route must supply its learner scope from a verified session, never from an untrusted request body.
+
+The application layer provides typed validation, not-found, conflict and invalid-state errors. Unexpected storage/runtime errors are mapped to a generic user-safe response; SQL text and stack traces are not exposed.
+
 ## Progression guarantees
 
 1. Lesson completion is stored in lesson_progress and lesson_completion_events. It does not create or update a mastery row.
 2. Assessment attempts are immutable. Corrections are represented by a new attempt, never by overwriting evidence.
-3. A stable mastery row must point to a passed attempt for the same learner, skill and curriculum release. This is checked in the application contract and SQLite triggers/foreign keys.
+3. Stable mastery is derived from the full evidence history and must point to the latest passing attempt for the same learner, skill and curriculum release. The M2.1 database constraints enforce evidence ownership and a passed evidence pointer; the M2.2 use case enforces that the latest scoped attempt passed.
 4. An absent mastery row means the skill has not yet been assessed in that release. A timer or completed lesson does not create mastery.
 5. Practice stores planned minutes separately from actual duration. Completing a timer is not evidence of skill.
 
@@ -57,5 +65,5 @@ The first release is curriculum-v1 / semantic version 1.0.0. The migration recor
 - Cloud sync endpoints, devices and sync cursors
 - IndexedDB adapters and offline outbox (M5)
 - Practice exercise breakdown and audio storage
-- Profile editing/use cases and repository adapters
+- Concrete Drizzle/D1 and IndexedDB repository adapters
 - Import/restore workflow

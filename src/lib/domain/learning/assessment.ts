@@ -20,6 +20,28 @@ export const assessmentOutcomeSchema = z.enum([
   'inconclusive'
 ]);
 
+const evidenceScalarSchema = z.union([
+  z.string().max(160),
+  z.number().finite(),
+  z.boolean(),
+  z.null()
+]);
+
+/** Small, shallow evidence metadata only; never store media or arbitrary payloads. */
+export const assessmentEvidenceSchema = z
+  .record(
+    z.string().min(1).max(60),
+    z.union([evidenceScalarSchema, z.array(evidenceScalarSchema).max(40)])
+  )
+  .superRefine((value, context) => {
+    if (Object.keys(value).length > 30) {
+      context.addIssue({
+        code: 'custom',
+        message: 'Evidence may contain at most 30 fields.'
+      });
+    }
+  });
+
 /**
  * Structured assessment evidence. Audio and recording blobs are deliberately
  * excluded: this contract stores a summary and small metadata only.
@@ -36,7 +58,7 @@ export const assessmentAttemptInputSchema = z
     outcome: assessmentOutcomeSchema,
     score: z.number().int().min(0).max(100).nullable(),
     evidenceSummary: z.string().max(1000).nullable(),
-    evidence: z.record(z.string(), z.unknown()).default({}),
+    evidence: assessmentEvidenceSchema.default({}),
     assessedAt: z.number().int().nonnegative()
   })
   .strict();

@@ -226,3 +226,22 @@ erDiagram
 
 **Important distinctions:** `lesson_progress` is the current/resume state; `lesson_completion_events` is append-only completion history; `skill_assessment_attempts` is append-only evidence; `skill_mastery` is a derived snapshot that must reference a passed attempt for the same learner, release and skill. These relationships are enforced by composite foreign keys, checks and database triggers in the M2.1 migration.
 
+
+
+## 7. M2.2 application and repository boundaries
+
+```mermaid
+flowchart TB
+  UI["Svelte UI / thin route"] --> UC["Application use case"]
+  UC --> ZOD["Zod input validation"]
+  ZOD --> PORTS["Repository contracts"]
+  PORTS --> PUBLIC["Public content ports"]
+  PORTS --> PRIVATE["Private learner-state ports"]
+  PUBLIC --> JSON["Versioned curriculum JSON"]
+  PRIVATE --> IDB["IndexedDB adapter · M2.3"]
+  PRIVATE -. "server-only, future authenticated sync" .-> D1["Drizzle / D1 adapter"]
+  UC --> ERR["Typed safe application errors"]
+  ERR --> UI
+```
+
+The use cases depend on interfaces, not storage libraries. Public curriculum reads cannot access learner records. Lesson completion writes progress and its immutable event through one atomic repository operation; assessment attempts are append-only; stable mastery is recalculated from scoped evidence; practice completion is a conditional transition and never grants mastery. Concrete IndexedDB and D1 adapters remain separate milestones.
