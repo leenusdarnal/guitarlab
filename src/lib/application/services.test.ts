@@ -333,7 +333,11 @@ describe('M2.2 application service boundaries', () => {
 
     const resumed = await startLessonProgress(
       { learnerId, releaseId, lessonId },
-      { curriculum: harness.curriculumRepository, progress: harness.progressRepository, runtime: harness.runtime }
+      {
+        curriculum: harness.curriculumRepository,
+        progress: harness.progressRepository,
+        runtime: harness.runtime
+      }
     );
     expect(resumed.completedBlockIds).toEqual(['guided-demo']);
 
