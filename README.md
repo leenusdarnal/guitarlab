@@ -43,7 +43,7 @@ The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52
 | Audio | Web Audio API and MediaDevices |
 | Testing | Vitest and Playwright |
 | Quality | ESLint and Prettier |
-| CI/CD | GitHub Actions CI; Wrangler deployment (not yet configured for live environments) |
+| CI/CD | GitHub Actions CI; manually triggered Cloudflare preview deployment; production deployment not configured |
 
 The application uses the Cloudflare adapter and a full-stack Worker runtime. It is not a static-only Pages application.
 
@@ -115,3 +115,16 @@ Never commit API tokens, Cloudflare credentials, private recordings or personal 
 ## License
 
 No open-source license has been selected yet. Until a license is added, the repository remains publicly viewable but reuse is not automatically granted.
+
+### Cloudflare preview deployment
+
+A manually triggered preview deployment is provided by `.github/workflows/deploy-preview.yml`. It deploys the current `main` branch to the public Worker URL `https://guitarlab-preview.leenus-darnal.workers.dev`.
+
+Before running it, configure these GitHub repository settings:
+
+- **Actions secret:** `CLOUDFLARE_API_TOKEN` — a Cloudflare API token permitted to deploy Workers scripts.
+- **Actions variable:** `CLOUDFLARE_ACCOUNT_ID` — the 32-character Cloudflare account ID.
+
+Then open **GitHub → Actions → Deploy GuitarLab preview → Run workflow**, select `main`, and confirm the `deploy_preview` input. The workflow builds the app, validates the preview Wrangler configuration, deploys the Worker and smoke-tests the public URL.
+
+The preview configuration intentionally has **no D1 binding**: current learner-facing routes read authored curriculum bundled with the app, and no server-side code currently calls the D1 client. Learner preferences and practice data remain local in the browser. Do not put real private learner data or recordings into this public preview. Production hosting, custom-domain routing, authentication and cloud sync remain separate release decisions.
