@@ -112,6 +112,9 @@
       checkpointNote = saved.checkpointNote ?? '';
     } catch (error) {
       if (requestId === progressRequestId) {
+        completedBlockIds = currentProgress.completedBlockIds ?? [];
+        checkpointOutcome = currentProgress.checkpointOutcome ?? null;
+        checkpointNote = currentProgress.checkpointNote ?? '';
         progressError = error instanceof Error
           ? error.message
           : 'Your lesson progress could not be saved. Please try again.';
