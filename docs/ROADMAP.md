@@ -25,50 +25,69 @@ Build a useful learning product in verified increments. Each milestone should le
 M0 product, architecture, curriculum and implementation guidelines are ready for M1. The approved hybrid design direction is documented in docs/DESIGN_DIRECTION.md and docs/IMPLEMENTATION_GUIDELINES.md. M1 can proceed without Work-mode access. The first profile will be initialized empty when local persistence is implemented; the learner's own preferences are entered into that private profile, not committed as shared defaults.
 
 ### M1 — Application foundation
-- [ ] Create SvelteKit/Svelte 5/TypeScript application.
-- [ ] Configure Tailwind CSS 4.
-- [ ] Configure Cloudflare adapter and Wrangler.
-- [ ] Establish local development and environment separation.
-- [ ] Build a versioned, profile-scoped learner settings model and skippable onboarding.
-- [ ] Add formatting, linting, type-checking and CI.
-- [ ] Add accessible responsive application shell using the approved hybrid design direction and semantic design tokens.
+
+- [x] Create SvelteKit/Svelte 5/TypeScript application (PR #21).
+- [x] Configure Tailwind CSS 4.
+- [x] Configure Cloudflare adapter and Wrangler for the local Worker runtime.
+- [ ] Establish isolated local, preview and production environments; no live deployment is configured yet.
+- [x] Build a versioned, profile-scoped learner settings model and skippable onboarding.
+- [x] Add formatting, linting, type-checking, unit tests and GitHub Actions CI.
+- [x] Add the initial responsive application shell using the approved hybrid design direction and semantic design tokens.
+- [ ] Complete manual mobile, keyboard and component-level accessibility verification.
+
+M1 foundation is merged in PR #21. Worker build and local smoke checks pass. Cloudflare preview/production configuration and live deployment remain separate release work.
 
 ### M2 — Data foundation
-- [ ] Configure D1 and Drizzle ORM.
-- [ ] Add versioned schema and migrations.
-- [ ] Define repository/service boundaries.
-- [ ] Add Zod validation and error handling.
-- [ ] Add seed data for generic curriculum content.
-- [ ] Test migrations and data access.
+
+- [x] Add the versioned Drizzle domain schema and local D1 migrations (PR #22).
+- [x] Define repository/service boundaries and application use cases (PR #23).
+- [x] Add Zod validation, typed errors and safe error boundaries.
+- [x] Seed versioned curriculum metadata and stable skill IDs.
+- [x] Test local migrations and data integrity.
+- [x] Implement an empty learner profile and browser-local IndexedDB repositories (PR #24).
+- [x] Implement local export, validated restore preview, transactional replacement and safe reset (PR #25).
+- [ ] Verify IndexedDB reload/offline restart/upgrade and backup round-trip/rollback in a real browser.
+
+The D1 schema and migration are local/test foundations only. There is no production D1 database, learner-facing cloud route, authentication or cloud sync.
 
 ### M3 — Learning dashboard
-- [ ] Today's practice and next recommended lesson.
-- [ ] Explainable next-action recommendations based on current lesson, review needs, evidence, prerequisites and available time.
-- [ ] 10-, 20- and 40-minute practice plans plus custom duration.
-- [ ] Current learning phase and progress.
-- [ ] Review-due skills and weak areas.
-- [ ] Per-profile goals, practice schedule/duration, preferred lesson presentation and accessibility settings.
-- [ ] Compose an explainable daily plan from learner preferences and skill evidence.
-- [ ] Responsive desktop and mobile navigation.
+
+- [x] Today's practice and next recommended lesson.
+- [x] Explainable next-action recommendations based on current lesson, review needs, available evidence and learner goals.
+- [x] 10-, 20- and 40-minute practice plans plus custom duration.
+- [x] Current learning phase and progress.
+- [x] Review-due skills and recent practice context without inventing learner history.
+- [x] Per-profile goals, practice duration and lesson presentation preferences.
+- [x] Compose an explainable daily plan from learner preferences and available skill evidence.
+- [x] Responsive desktop and mobile dashboard/planner journeys.
+
+M3.1 is merged in PR #26 and M3.2 in PR #28. Advanced accessibility and offline browser verification remain part of M9.
 
 ### M4 — Curriculum and lesson engine
-- [ ] Curriculum overview and phase navigation.
-- [ ] Lesson content, objectives and prerequisites.
-- [ ] Exercises, checkpoints and lesson completion.
-- [ ] Resume-in-progress behaviour.
-- [ ] Load self-contained lesson content and record fresh progress.
+
+- [x] Curriculum overview and phase/week navigation across six routes.
+- [x] Self-contained lesson content, objectives, prerequisites and optional refreshers.
+- [x] Worked examples, demonstration steps, exercises, musical application, success criteria and accessible alternatives.
+- [ ] Interactive checkpoints, lesson completion events and resume behaviour (M4.2).
+- [x] Load all 152 authored lessons with stable IDs and versioned content.
+- [ ] Record and restore learner progress against lesson blocks/checkpoints.
 - [ ] Render lesson blocks according to per-profile presentation preferences while preserving authored learning outcomes and text fallbacks.
 
+M4.1 is merged in PR #29. The reader displays authored content but deliberately does not mark lessons complete or grant skill mastery. M4.2 is the next curriculum implementation slice.
+
 ### M5 — Learning state and synchronisation
-- [ ] Local IndexedDB persistence.
-- [ ] Offline practice and lesson progress capture.
-- [ ] Initialize an empty versioned learner profile.
-- [ ] Outbox-based synchronisation.
+
+- [x] Local IndexedDB learner profile and repository foundation (delivered in M2.3).
+- [ ] Offline app-shell and selected-curriculum caching.
+- [ ] Reliable offline lesson/practice capture and recovery across browser restarts.
+- [x] Initialize an empty versioned learner profile.
+- [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
 - [ ] Account and secure cloud sync when ready.
-- [ ] Export and restore.
+- [x] Local export and validated restore workflow; browser round-trip/rollback acceptance remains.
 
 ### M6 — Interactive music tools
+
 - [ ] Fretboard explorer and note identification.
 - [ ] Tuning-aware instrument profile and handedness-aware fretboard presentation.
 - [ ] Chord diagrams and chord laboratory.
@@ -77,31 +96,35 @@ M0 product, architecture, curriculum and implementation guidelines are ready for
 - [ ] Chromatic tuner with explicit microphone permission.
 
 ### M7 — Practice studio
+
 - [ ] Custom practice routines.
 - [ ] Session timer and exercise sequence.
 - [ ] Practice journal and session history.
 - [ ] Tempo and repetition tracking with accuracy-first tempo ladders.
-- [ ] Add an optional external ComposeYogi launcher for learner-created backing tracks; core practice must remain native and independent.
+- [ ] Optional external ComposeYogi launcher; core practice remains native.
 - [ ] Quick session reflection and one next target with minimal friction.
 - [ ] Skill assessments and review scheduling.
 
 ### M8 — Musicianship and repertoire
+
 - [ ] Music theory reference and exercises.
 - [ ] Ear-training exercises.
 - [ ] Progressive scale, interval, triad and CAGED fretboard modes.
 - [ ] Song library and bookmark management.
 - [ ] TAB/notation viewer for permitted content.
 - [ ] Song section loops and practice targets.
-- [ ] Add an optional Midee MIDI-visualiser reference link after licence and mobile usability recheck; never make it a required dependency.
+- [ ] Optional Midee MIDI-visualiser reference link after licence and mobile usability recheck.
 
 ### M9 — Release hardening
+
 - [ ] PWA installability and offline asset strategy.
 - [ ] Accessibility and mobile usability audit.
 - [ ] Security and privacy review.
-- [ ] Backup/restore verification.
+- [ ] Backup/restore verification in a browser.
 - [ ] Performance and reliability checks.
-- [ ] Add the curriculum validator to the wider application CI and expand automated tests after the app scaffold exists.
-- [ ] Production deployment and smoke tests.
+- [x] Curriculum validator integrated into the main application CI.
+- [ ] Explicit Cloudflare preview deployment and browser-level verification.
+- [ ] Private production deployment, smoke tests and rollback procedure.
 
 ## Definition of done
 

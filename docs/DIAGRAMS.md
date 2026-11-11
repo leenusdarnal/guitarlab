@@ -1,6 +1,6 @@
 # GuitarLab System Diagrams
 
-These diagrams describe the approved architecture and the implementation boundaries. Solid nodes/links describe the product design; dashed nodes/links indicate later milestones. The repository's authored curriculum and architecture document remain the sources of truth.
+These diagrams describe the approved architecture and implementation boundaries. They are architecture views, not a live status dashboard; use the [Implementation Tracker](IMPLEMENTATION_TRACKER.md) and [Roadmap](ROADMAP.md) for current delivery status. M2.3 local IndexedDB persistence and M2.4 local backup/restore are implemented; M4.2 checkpoints/resume, full offline app-shell support, authenticated sync and live Cloudflare deployment remain later work.
 
 ## 1. System context and trust boundaries
 
@@ -13,7 +13,7 @@ flowchart LR
     idb[("IndexedDB · M2.3")]
     audio["Web Audio / MediaDevices"]
     ui <--> prefs
-    prefs -. "persist locally · M2.3" .-> idb
+    prefs -->|persist locally · M2.3 shipped| idb
     ui --> audio
   end
   subgraph public["Public application assets"]
@@ -37,7 +37,7 @@ flowchart LR
   ui -. "future sync only" .-> worker
 ```
 
-**Privacy rule:** public curriculum and application code may be served from the edge. Learner preferences, assessments, practice notes and recordings remain private. Local persistence is added in M5; D1 is an optional authenticated sync copy, not a requirement for local practice.
+**Privacy rule:** public curriculum and application code may be served from the edge. Learner preferences, assessments, practice notes and recordings remain private. Local IndexedDB persistence shipped in M2.3; M5 adds remaining offline reliability and may later add authenticated sync. D1 is an optional authenticated sync copy, not a requirement for local practice.
 
 ## 2. Progressive teaching and evidence loop
 

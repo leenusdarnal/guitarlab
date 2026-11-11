@@ -77,4 +77,4 @@ The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READ
 - [ ] Daily practice plans are composed from the active profile, current lesson, prerequisites, available time and demonstrated skill evidence.
 - [ ] The learner can edit, postpone or dismiss recommendations and see why each was suggested.
 - [ ] Profile preferences do not mutate shared curriculum JSON or another learner's progress.
-- [ ] The current project owner's intended acoustic/20-minute/all-round preferences can be entered into their own profile without becoming global defaults.
+- [ ] No individual's profile values are committed to shared source, curriculum data, fixtures or global defaults; learners enter their own choices in private profile setup.

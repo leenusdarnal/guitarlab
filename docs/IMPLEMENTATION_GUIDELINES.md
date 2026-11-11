@@ -102,17 +102,11 @@ Collect these preference groups:
 
 Do not require a learner to answer every field before starting. At minimum, capture enough information to choose an appropriate instrument presentation and useful first session. Offer a sensible balanced route when a learner skips goal or presentation preferences.
 
-### The current project owner's intended profile
+### Private profile values and shared defaults
 
-The preferences supplied during this project conversation are:
+Do not store any individual's instrument, experience level, schedule, goals, lesson-format choices or progress baseline in shared source files. Collect those values through the learner's own profile setup and keep them in private local profile storage. A project conversation or test example is not a source of global product defaults.
 
-- Acoustic guitar.
-- Absolute beginner.
-- 20 minutes per practice day.
-- All-round musician as the long-term goal.
-- Fresh progress baseline: zero.
-
-Use these choices when configuring the owner's own private profile during onboarding or profile setup. They are **not global defaults for every GuitarLab learner**, and must not be inserted into shared curriculum files, public fixtures, generic application constants or another learner's profile. Handedness remains unknown and must be asked or left configurable; do not assume it.
+If a learner skips a field, leave it unset or use an explicitly documented neutral fallback. In particular, do not infer handedness.
 
 ### Per-profile isolation
 
@@ -269,7 +263,7 @@ Before the first useful release, verify that:
 - [ ] A new learner can create a profile without an account and can skip optional questions.
 - [ ] Instrument, handedness, tuning, time, goal and lesson-presentation preferences are editable.
 - [ ] A learner's preferences never affect another profile or shared curriculum content.
-- [ ] The owner's intended profile can be configured as acoustic, absolute beginner, 20 minutes/day and all-round musician without making those values global defaults.
+- [ ] No individual's profile values are hard-coded in shared source, fixtures or global defaults; the learner can enter them privately.
 - [ ] A learner can choose balanced, visual, demonstration, text, interactive or song-first lesson presentation.
 - [ ] The 10/20/40/custom planner selects an appropriate amount of work rather than rushing through a fixed checklist.
 - [ ] The next-practice recommendation exposes its reason and can be changed by the learner.

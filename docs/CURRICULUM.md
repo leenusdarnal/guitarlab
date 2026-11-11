@@ -56,7 +56,7 @@ The routes are selectable extensions, not a mandatory fourth calendar year. Choo
 
 ## The authored lesson format
 
-Each of the 156 lesson records includes:
+Each of the 152 lesson records includes:
 
 1. Learner-facing objectives.
 2. A plain-language explanation and worked example.

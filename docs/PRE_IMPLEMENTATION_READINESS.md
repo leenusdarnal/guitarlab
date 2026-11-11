@@ -2,8 +2,8 @@
 
 **Review date:** 2026-11-11  
 **Repository:** [leenusdarnal/guitarlab](https://github.com/leenusdarnal/guitarlab)  
-**Status:** Product, curriculum and technical preparation are complete for M1; the hybrid visual direction and implementation guidelines are approved. Application implementation has not yet started.  
-**Purpose:** Resolve product decisions and acceptance criteria before creating the application scaffold. This document does not mark any application milestone as implemented.
+**Status:** Historical readiness snapshot from before implementation began on 2026-11-11. The application foundation and multiple product slices have since been merged. Use the [Implementation Tracker](IMPLEMENTATION_TRACKER.md) and [Roadmap](ROADMAP.md) for current delivery status.  
+**Purpose:** Preserve the product decisions and acceptance criteria that gated the initial application scaffold. This document is not the current implementation status report.
 
 ## 1. Executive decision
 
@@ -32,13 +32,13 @@ The three curriculum JSON files were parsed and checked during this review.
 | Starting tempo markers | All integer values within the broad 30–240 BPM validation range |
 | Year 3+ | Four specialist routes, 12 stable week IDs and authored lessons per route |
 
-The repository now contains 52 authored Year 1 lessons, 52 authored Year 2 lessons and 48 authored lessons across the four optional Year 3 routes. Each lesson includes objectives, explanation, guided demonstration, exercises, musical application, checkpoint, worked guitar examples where relevant, success criteria, common corrections, accessible alternatives and review prompts.
+The repository now contains 52 authored Year 1 lessons, 52 authored Year 2 lessons and 48 authored lessons across the four optional Year 3 routes (152 total). Each lesson includes objectives, explanation, guided demonstration, exercises, musical application, checkpoint, worked guitar examples where relevant, success criteria, common corrections, accessible alternatives and review prompts.
 
 The shared contract is `content/curriculum/lesson.schema.json`. The dependency-free validator is `scripts/validate-curriculum.mjs`, and the GitHub Actions workflow runs it when curriculum content changes. The latest validation run passed. Automated checks cover JSON parsing, counts, stable IDs, ordered weeks, cross-file links and required lesson content. A future teaching review should still check musical accuracy and suitability; structural validation is not an instructor endorsement.
 
-### Validation to extend during M1
+### Validation follow-up status
 
-Integrate the existing curriculum validator into the wider application CI and add app-level tests for lesson rendering, accessibility, progress capture and content-version migrations. Add richer schema validation only if a validator dependency is justified; the current repository check is dependency-free.
+The curriculum validator is now integrated into the main application CI and checks the authored lesson counts, stable IDs, ordered weeks, cross-file lesson links and required content. The validator remains dependency-free. The lesson reader also has dedicated unit and Chromium acceptance coverage. Broader component-level accessibility, progress-capture, content-version migration and physical-device checks remain in their relevant later milestones. A future improvement is to compare the manual validator against the published JSON Schema and strengthen global prerequisite/skill reference checks without introducing unnecessary dependencies.
 
 Do not change existing IDs or the meaning of current fields. Content schema changes must be explicitly versioned.
 
@@ -48,7 +48,7 @@ These refinements improve the learning loop without making the initial product s
 
 ### A. Flexible practice length
 
-Practice duration is profile-specific. Offer **10-, 20- and 40-minute presets**, plus a custom duration. Do not impose a universal default: each learner chooses a sustainable duration during onboarding or profile setup. The current project owner's intended profile uses 20 minutes per day. A short session selects fewer high-value tasks rather than squeezing every practice category into a rushed routine.
+Practice duration is profile-specific. Offer **10-, 20- and 40-minute presets**, plus a custom duration. Do not impose a universal default: each learner chooses a sustainable duration during onboarding or profile setup. Keep each learner's choices in private profile storage rather than shared documentation, fixtures or global defaults. A short session selects fewer high-value tasks rather than squeezing every practice category into a rushed routine.
 
 The learner can edit or skip any block. A session timer records elapsed practice only; it never awards mastery on its own.
 
