@@ -10,7 +10,6 @@ import type {
   AssessmentAttemptRepository,
   LearnerProfileRecord,
   LearnerProfileRepository,
-  LessonCompletionEventRecord,
   LessonProgressRecord,
   LessonProgressRepository,
   PracticeSessionRecord,
