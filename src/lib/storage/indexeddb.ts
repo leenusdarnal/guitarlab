@@ -300,13 +300,27 @@ export function createIndexedDbRepositories(
         await requestResult(store.put(record));
         return true;
       }),
-    completeWithEvent: async (record, event) =>
+    completeWithEvent: async (record, event, expectedRevision) =>
       inTransaction(
         database,
         [stores.progress, stores.completionEvents],
         'readwrite',
         async (tx) => {
-          await requestResult(tx.objectStore(stores.progress).put(record));
+          const progressStore = tx.objectStore(stores.progress);
+          const current = await requestResult<LessonProgressRecord | undefined>(
+            progressStore.get(record.id)
+          );
+          if (
+            !current ||
+            current.status !== 'in_progress' ||
+            (current.revision ?? 0) !== expectedRevision ||
+            (event.completionSource === 'checkpoint' &&
+              current.checkpointOutcome !== 'achieved')
+          ) {
+            return null;
+          }
+
+          await requestResult(progressStore.put(record));
           await requestResult(tx.objectStore(stores.completionEvents).add(event));
           return record;
         }
