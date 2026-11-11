@@ -55,6 +55,49 @@ describe('explainable practice planning', () => {
     expect(plan.recommendations.some((task) => task.skillId === 'ear.intervals')).toBe(false);
   });
 
+  it('uses learner goals to explain the musical application task', () => {
+    const plan = buildPracticePlan({
+      minutes: 20,
+      currentLesson: lesson,
+      dueReviews: [],
+      learnerGoals: ['acoustic-fingerstyle'],
+      now: 1_000
+    });
+    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    expect(application?.reason).toContain('acoustic and fingerstyle playing');
+  });
+
+  it('uses recent practice evidence to encourage transfer instead of repetition', () => {
+    const plan = buildPracticePlan({
+      minutes: 20,
+      currentLesson: lesson,
+      dueReviews: [],
+      recentPractice: [
+        { focus: 'old unrelated focus', difficulty: null, startedAt: 100 },
+        { focus: 'Posture and instrument setup', difficulty: null, startedAt: 900 }
+      ],
+      now: 1_000
+    });
+    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    expect(application?.reason).toContain('latest recorded session also focused on Posture and instrument setup');
+    expect(application?.reason).toContain('vary the musical context');
+  });
+
+  it('does not invent goals or previous practice when evidence is missing', () => {
+    const plan = buildPracticePlan({
+      minutes: 20,
+      currentLesson: lesson,
+      dueReviews: [],
+      learnerGoals: [],
+      recentPractice: [],
+      now: 1_000
+    });
+    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    expect(application?.reason).toBe(
+      'Applying posture and instrument setup in a musical context helps connect the exercise to real playing.'
+    );
+  });
+
   it('uses a custom duration and allows a learner to override the preset', () => {
     const plan = buildPracticePlan({
       minutes: 15,
