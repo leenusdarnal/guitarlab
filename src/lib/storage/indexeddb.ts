@@ -405,8 +405,6 @@ export async function saveActiveLearnerPreferences(
   }
 }
 
-
-
 /** Read or create local progress for one authored lesson. */
 export async function loadActiveLessonProgress(
   lessonId: string,
@@ -494,7 +492,9 @@ export async function saveActiveLessonProgress(
         !update.completedBlockIds.includes(update.lastBlockId))) ||
     (update.checkpointNote !== null && update.checkpointNote.length > 500)
   ) {
-    throw new Error('The lesson progress update contains invalid lesson content references.');
+    throw new Error(
+      'The lesson progress update contains invalid lesson content references.'
+    );
   }
 
   const database = await openLocalDatabase();
@@ -502,8 +502,16 @@ export async function saveActiveLessonProgress(
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
     return await updateLessonProgress(
-      { learnerId: profile.id, releaseId, lessonId, ...update },
-      { progress: repositories.progress, runtime: systemRuntime }
+      {
+        learnerId: profile.id,
+        releaseId,
+        lessonId,
+        ...update
+      },
+      {
+        progress: repositories.progress,
+        runtime: systemRuntime
+      }
     );
   } finally {
     database.close();
@@ -520,7 +528,9 @@ export async function completeActiveLessonProgress(
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
     const current = await repositories.progress.find(profile.id, releaseId, lessonId);
-    if (!current) throw new Error('Start this lesson before marking it complete.');
+    if (!current) {
+      throw new Error('Start this lesson before marking it complete.');
+    }
     if (current.status === 'completed') return current;
     if (current.checkpointOutcome !== 'achieved') {
       throw new Error('Confirm that you can meet the lesson checkpoint before completing it.');
