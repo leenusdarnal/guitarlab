@@ -248,7 +248,9 @@ export async function updateLessonProgress(
     value.lessonId
   );
   if (!current) throw new NotFoundError('Lesson progress not found.');
-  if (current.status !== 'in_progress') throw new ConflictError('A completed lesson can no longer be changed.');
+  if (current.status !== 'in_progress') {
+    throw new ConflictError('A completed lesson can no longer be changed.');
+  }
 
   const updated: LessonProgressRecord = {
     ...current,
@@ -269,8 +271,12 @@ export async function updateLessonProgress(
       value.releaseId,
       value.lessonId
     );
-    if (latest?.status === 'completed') throw new ConflictError('A completed lesson can no longer be changed.');
-    throw new ConflictError('Lesson progress changed in another tab. Reload and try again.');
+    if (latest?.status === 'completed') {
+      throw new ConflictError('A completed lesson can no longer be changed.');
+    }
+    throw new ConflictError(
+      'Lesson progress changed in another tab. Reload and try again.'
+    );
   }
   return updated;
 }
