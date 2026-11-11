@@ -5,25 +5,33 @@ export const profilePreferencesSchema = z.object({
   instrument: z.enum(['acoustic', 'electric', 'classical', 'other']).nullable(),
   handedness: z.enum(['right', 'left']).nullable(),
   tuning: z.string().trim().min(1).max(80).nullable(),
-  startingPoint: z.enum(['fresh-beginner', 'some-experience', 'placement-needed']).nullable(),
-  goals: z.array(z.enum([
-    'all-round-musician',
-    'acoustic-fingerstyle',
-    'rock-blues',
-    'jazz-harmony',
-    'singer-songwriter',
-    'custom'
-  ])).max(6),
+  startingPoint: z
+    .enum(['fresh-beginner', 'some-experience', 'placement-needed'])
+    .nullable(),
+  goals: z
+    .array(
+      z.enum([
+        'all-round-musician',
+        'acoustic-fingerstyle',
+        'rock-blues',
+        'jazz-harmony',
+        'singer-songwriter',
+        'custom'
+      ])
+    )
+    .max(6),
   practiceMinutes: z.number().int().min(5).max(180).nullable(),
   availableDays: z.array(z.number().int().min(0).max(6)).max(7),
-  lessonPresentation: z.enum([
-    'balanced',
-    'visual-first',
-    'demonstration-first',
-    'text-first',
-    'interactive-first',
-    'song-first'
-  ]).nullable()
+  lessonPresentation: z
+    .enum([
+      'balanced',
+      'visual-first',
+      'demonstration-first',
+      'text-first',
+      'interactive-first',
+      'song-first'
+    ])
+    .nullable()
 });
 
 export type ProfilePreferences = z.infer<typeof profilePreferencesSchema>;
