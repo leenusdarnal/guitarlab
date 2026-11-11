@@ -26,6 +26,7 @@ import {
   listCurriculumLessons,
   recordAssessmentAttempt,
   startLessonProgress,
+  updateLessonProgress,
   startPracticeSession,
   updateLearnerPreferences,
   updateSkillMasteryFromEvidence
@@ -141,6 +142,12 @@ function createHarness() {
     },
     async create(progress) {
       progressRows.set(progress.id, progress);
+    },
+    async updateInProgress(progress) {
+      const current = progressRows.get(progress.id);
+      if (!current || current.status !== 'in_progress') return false;
+      progressRows.set(progress.id, progress);
+      return true;
     },
     async completeWithEvent(progress, event) {
       progressRows.set(progress.id, progress);
@@ -289,6 +296,41 @@ describe('M2.2 application service boundaries', () => {
   });
 
   it('starts/resumes lesson progress and records completion without granting mastery', async () => {
+  it('persists lesson sections and checkpoint self-check without granting mastery', async () => {
+    const started = await startLessonProgress(
+      { learnerId, releaseId, lessonId },
+      { curriculum: harness.curriculumRepository, progress: harness.progressRepository, runtime: harness.runtime }
+    );
+    const saved = await updateLessonProgress({
+      learnerId, releaseId, lessonId, lastBlockId: 'guided-demo',
+      completedBlockIds: ['guided-demo'], checkpointOutcome: 'needs_practice',
+      checkpointNote: 'Slow down and keep each note even.'
+    }, { progress: harness.progressRepository, runtime: harness.runtime });
+    expect(saved.id).toBe(started.id);
+    expect(saved.completedBlockIds).toEqual(['guided-demo']);
+    expect(saved.checkpointOutcome).toBe('needs_practice');
+    expect(saved.checkpointNote).toBe('Slow down and keep each note even.');
+    expect(harness.masteryRows.size).toBe(0);
+
+    const resumed = await startLessonProgress(
+      { learnerId, releaseId, lessonId },
+      { curriculum: harness.curriculumRepository, progress: harness.progressRepository, runtime: harness.runtime }
+    );
+    expect(resumed.completedBlockIds).toEqual(['guided-demo']);
+
+    await completeLesson({
+      learnerId, releaseId, lessonId,
+      completionSource: 'learner_confirmed', lastBlockId: 'guided-demo'
+    }, { progress: harness.progressRepository, runtime: harness.runtime });
+    await expect(updateLessonProgress({
+      learnerId, releaseId, lessonId, lastBlockId: 'guided-demo',
+      completedBlockIds: ['guided-demo'], checkpointOutcome: 'achieved',
+      checkpointNote: null
+    }, { progress: harness.progressRepository, runtime: harness.runtime })).rejects.toBeInstanceOf(ConflictError);
+    expect(harness.masteryRows.size).toBe(0);
+  });
+
+
     const started = await startLessonProgress(
       { learnerId, releaseId, lessonId },
       {
