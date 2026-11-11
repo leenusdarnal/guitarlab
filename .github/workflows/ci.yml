@@ -49,6 +49,17 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Preserve Cloudflare preview build
+        if: github.event_name == 'push' && github.ref_name == 'main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitarlab-cloudflare-preview
+          path: |
+            .svelte-kit/cloudflare/
+            wrangler.jsonc
+          if-no-files-found: error
+          retention-days: 1
+
   security-audit:
     name: Dependency security audit
     runs-on: ubuntu-24.04
