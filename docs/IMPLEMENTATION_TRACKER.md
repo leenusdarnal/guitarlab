@@ -17,8 +17,8 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Application foundation | Merged | PR #21; SvelteKit 3/Svelte 5/TypeScript, Tailwind 4, Cloudflare adapter, initial dashboard and onboarding |
 | Cloudflare runtime | Configured in PR #21 | Wrangler and adapter configured; preview/runtime smoke test still required |
 | CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
-| Cloud data and local persistence | Not started | M2 D1/Drizzle; M5 IndexedDB and offline-first learner records |
-| Full curriculum reader and progress engine | Not started | M3–M5; preserve all authored lesson IDs and separate lesson completion from demonstrated mastery |
+| Cloud data and local persistence | M2.1 in implementation | Versioned Drizzle/D1 schema, local-only migrations and database invariants in PR under review; M5 IndexedDB remains later |
+| Full curriculum reader and progress engine | Not started | M3–M5; the data model preserves authored IDs and separates lesson completion from demonstrated mastery |
 
 **Important:** PR #21 is still subject to passing CI and runtime verification. The dashboard is an initial shell. Learner setup validates preferences in memory only; it does not yet persist them. No production deployment or cloud learner-data endpoint is claimed.
 
@@ -35,11 +35,11 @@ This file is the human-readable index. GitHub Issues remain the execution record
 
 Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarnal/guitarlab/pull/21)
 
-## M2 — Data foundation
+## M2 — Data foundation\n\nM2.1 is being implemented in branch feat/m2-d1-drizzle-data-foundation. The schema seeds 152 lesson metadata references and 34 skill IDs while keeping lesson bodies in Git. The first migration is local-only; no production D1 database or authentication is created.\n
 
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|
-| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | M1.2, M1.4 | Fresh local D1 migrates; ownership and append-only evidence constraints tested |
+| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | In implementation | Fresh local D1 migration, FK/unique checks, append-only assessment triggers and separate completion/mastery invariants are being tested in CI |
 | M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | M2.1 | Storage-independent contracts and validation tests |
 | M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | M2.2 | New profile is empty, persists locally and survives offline reload |
 | M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | M2.3 | Validated round-trip; failed restore leaves existing data intact |
