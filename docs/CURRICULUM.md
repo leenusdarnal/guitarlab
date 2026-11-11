@@ -39,13 +39,15 @@ It is a continuation, not a requirement for the first private MVP to unlock. The
 
 ## Year 3+ specialisation paths
 
-The source course preserves four optional deepening routes:
-- Rock and Blues
-- Fingerstyle and Acoustic
-- Jazz and Harmony
-- All-Round Musician
+Machine-readable outlines: [`content/curriculum/year-3-specialisations.json`](../content/curriculum/year-3-specialisations.json).
 
-These pathways should become selectable extensions after the Year 2 capstone, not mandatory content in the initial release.
+Four optional 12-week routes are retained:
+- **Rock & Blues:** advanced lead technique, pentatonic vocabulary, bends, legato, riffs, phrasing and performance.
+- **Fingerstyle & Acoustic:** right-hand independence, arpeggios, alternating bass, chord melody, arrangement and dynamics.
+- **Jazz & Harmony:** jazz grips, swing, guide tones, ii-V-I, extensions, bossa, jazz blues and reharmonisation.
+- **All-Round Musician:** listening, ear intervals, sight reading, harmony, transposition, arranging, recording, songwriting and ensemble skills.
+
+These pathways should become selectable extensions after the Year 2 capstone, not mandatory content in the initial release. The JSON records are outlines; detailed exercises and checkpoints can be authored when a path is selected.
 
 ## Weekly rhythm and practice routine
 
