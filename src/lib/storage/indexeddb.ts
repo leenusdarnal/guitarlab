@@ -425,7 +425,11 @@ export async function loadActiveLessonProgress(
   allowedBlockIds: string[],
   releaseId = 'curriculum-v1'
 ): Promise<LessonProgressRecord> {
-  if (!lessonId || lessonId.length > 160 || allowedBlockIds.length > 200) {
+  if (
+    !lessonId ||
+    lessonId.length > 160 ||
+    allowedBlockIds.length > 200
+  ) {
     throw new Error('The lesson progress request is invalid.');
   }
 
@@ -547,7 +551,9 @@ export async function completeActiveLessonProgress(
     }
     if (current.status === 'completed') return current;
     if (current.checkpointOutcome !== 'achieved') {
-      throw new Error('Confirm that you can meet the lesson checkpoint before completing it.');
+      throw new Error(
+        'Confirm that you can meet the lesson checkpoint before completing it.'
+      );
     }
 
     return await completeLesson(
