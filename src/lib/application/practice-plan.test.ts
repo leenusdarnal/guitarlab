@@ -73,14 +73,31 @@ describe('explainable practice planning', () => {
       currentLesson: lesson,
       dueReviews: [],
       recentPractice: [
-        { focus: 'old unrelated focus', difficulty: null, startedAt: 100 },
-        { focus: 'Posture and instrument setup', difficulty: null, startedAt: 900 }
+        { focus: 'old unrelated focus', difficulty: null, status: 'completed', startedAt: 100 },
+        { focus: 'Posture and instrument setup', difficulty: null, status: 'completed', startedAt: 900 }
       ],
       now: 1_000
     });
     const application = plan.recommendations.find((task) => task.kind === 'musical-application');
     expect(application?.reason).toContain('latest recorded session also focused on Posture and instrument setup');
     expect(application?.reason).toContain('vary the musical context');
+  });
+
+  it('uses difficulty only from completed practice as a pacing signal, not a grade', () => {
+    const plan = buildPracticePlan({
+      minutes: 20,
+      currentLesson: lesson,
+      dueReviews: [],
+      recentPractice: [
+        { focus: 'Posture and instrument setup', difficulty: 4, status: 'completed', startedAt: 800 },
+        { focus: 'Interrupted session', difficulty: 5, status: 'abandoned', startedAt: 1_000 }
+      ],
+      now: 1_100
+    });
+    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    expect(application?.reason).toContain('difficulty value of 4');
+    expect(application?.reason).toContain('not as a grade');
+    expect(application?.reason).not.toContain('difficulty value of 5');
   });
 
   it('does not invent goals or previous practice when evidence is missing', () => {
