@@ -28,30 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Inspect dependency advisories
-        shell: bash
-        run: |
-          audit_status=0
-          timeout 45s npm audit --json --fetch-timeout=20000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
-          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
-            echo '{"vulnerabilities":{},"auditUnavailable":true}' > "$RUNNER_TEMP/npm-audit.json"
-          fi
-          node - <<'NODE'
-          const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
-          if (report.auditUnavailable) {
-            console.warn('::warning::npm audit produced no report; dependency audit could not be completed in the allotted time.');
-            process.exit(0);
-          }
-          const entries = Object.entries(report.vulnerabilities || {});
-          for (const [name, item] of entries) {
-            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
-          }
-          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
-          if (blocking.length) {
-            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
-            process.exit(1);
-          }
-          NODE
       - name: Validate curriculum
         run: npm run curriculum:validate
 
@@ -72,3 +48,38 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+  security-audit:
+    name: Dependency security audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+
+      - name: Audit dependency lockfile
+        shell: bash
+        run: |
+          timeout 45s npm audit --package-lock-only --json --fetch-timeout=20000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
+          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
+            echo "npm audit could not complete within 45 seconds; inspect registry availability and rerun."
+            exit 1
+          fi
+          node - <<'NODE'
+          const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
+          const entries = Object.entries(report.vulnerabilities || {});
+          for (const [name, item] of entries) {
+            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
+          }
+          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
+          if (blocking.length) {
+            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
+            process.exit(1);
+          }
+          NODE
