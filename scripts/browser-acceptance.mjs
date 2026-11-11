@@ -67,7 +67,7 @@ try {
   await page.goto(origin, { waitUntil: 'networkidle' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
-  await page.getByText('20', { exact: true }).waitFor();
+  assert.match(await page.locator('.practice-number').innerText(), /20/);
 
   // Mobile navigation and curriculum anchor remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
