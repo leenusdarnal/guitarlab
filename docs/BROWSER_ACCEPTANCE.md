@@ -23,7 +23,7 @@ The CI workflow installs Chromium before running the same script.
 - The dashboard renders all four Year 1 phases and its honest empty states.
 - Theme preference persists after a full page reload.
 - Learner preferences are saved in IndexedDB, then shown on the dashboard after navigation and reload.
-- Practice planning explains each recommended task and respects 10-minute, 20-minute, 40-minute and custom duration choices.
+- Practice planning explains each recommended task, uses the learner's selected goal and recent practice evidence, and respects 10-minute, 20-minute, 40-minute and custom duration choices.
 - Custom durations outside 5–180 whole minutes are rejected.
 - A learner can select a plan, dismiss suggestions and restore them without recording a session or changing progress.
 - Mobile navigation and practice recommendations remain usable at a 390px viewport.
