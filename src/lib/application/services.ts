@@ -327,7 +327,8 @@ export async function completeLesson(
     status: 'completed',
     lastBlockId: value.lastBlockId,
     completedAt: now,
-    updatedAt: now
+    updatedAt: now,
+    revision: (current.revision ?? 0) + 1
   };
   const event: LessonCompletionEventRecord = {
     id: dependencies.runtime.newId(),
@@ -341,7 +342,19 @@ export async function completeLesson(
 
   // The repository owns the atomic progress + event write. No mastery port is
   // available here, so content completion cannot grant skill mastery.
-  return dependencies.progress.completeWithEvent(completed, event);
+  const result = await dependencies.progress.completeWithEvent(
+    completed,
+    event,
+    current.revision ?? 0
+  );
+  if (!result) {
+    throw new ConflictError(
+      value.completionSource === 'checkpoint'
+        ? 'Lesson progress changed or the checkpoint is no longer achieved. Reload and try again.'
+        : 'Lesson progress changed in another tab. Reload and try again.'
+    );
+  }
+  return result;
 }
 
 const assessmentSubmissionSchema = assessmentAttemptInputSchema.omit({
