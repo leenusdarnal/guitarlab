@@ -161,6 +161,7 @@
     <div class="nav-label">YOUR WORKSPACE</div>
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span aria-hidden="true">⌂</span> Today</a>
+      <a class="nav-link" href={resolve('/learn')}><span aria-hidden="true">♫</span> Curriculum</a>
       <a class="nav-link" href="#learning-path"><span aria-hidden="true">▤</span> Learning path</a>
       <a class="nav-link" href="#reviews"><span aria-hidden="true">◷</span> Reviews</a>
       <a class="nav-link" href="#practice-history"><span aria-hidden="true">◉</span> Practice history</a>
@@ -182,6 +183,7 @@
     {#if menuOpen}
       <nav class="mobile-menu" id="mobile-navigation" aria-label="Mobile navigation">
         <a href="#today" onclick={() => (menuOpen = false)}>Today</a>
+        <a href={resolve('/learn')}>Curriculum</a>
         <a href="#learning-path" onclick={() => (menuOpen = false)}>Learning path</a>
         <a href="#reviews" onclick={() => (menuOpen = false)}>Reviews</a>
         <a href="#practice-history" onclick={() => (menuOpen = false)}>Practice history</a>
@@ -211,7 +213,7 @@
             {#if dashboard.nextLesson}
               <div class="target-meta">YEAR 1 <span>·</span> WEEK {dashboard.nextLesson.week}{#if dashboard.currentPhase}<span>·</span>{dashboard.currentPhase}{/if}</div>
               <h2>{dashboard.nextLesson.title}</h2><p>{dashboard.nextLesson.focus}</p>
-              <div class="target-footer"><span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span><a href="#learning-path">View learning path <b>→</b></a></div>
+              <div class="target-footer"><span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span><a href={resolve('/learn/[lessonId]', { lessonId: dashboard.nextLesson.id })}>Open lesson <b>→</b></a></div>
             {:else}
               <h2>Year 1 route complete</h2><p>You've completed every lesson in this route. Your learning record remains available for review.</p>
               <div class="target-footer"><span>{dashboard.completedLessons} lessons completed</span><a href="#learning-path">Review your path <b>→</b></a></div>
