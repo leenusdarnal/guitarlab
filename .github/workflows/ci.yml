@@ -27,16 +27,41 @@ jobs:
           node-version: 22.18.0
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
+
+      - name: Dependency security audit
+        shell: bash
+        run: |
+          timeout 120s npm audit --package-lock-only --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
+          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
+            echo "npm audit did not produce a report; check registry availability and retry."
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/npm-audit.json', 'utf8'));
+          if (report.error || !report.metadata?.vulnerabilities) {
+            console.error('npm audit returned an incomplete report:', JSON.stringify(report.error ?? report));
+            process.exit(2);
+          }
+          const entries = Object.entries(report.vulnerabilities || {});
+          for (const [name, item] of entries) {
+            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
+          }
+          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
+          if (blocking.length) {
+            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
+            process.exit(1);
+          }
+          const advisoryCount = report.metadata.vulnerabilities.moderate + report.metadata.vulnerabilities.low;
+          console.log(`Dependency audit passed: no high/critical advisories; moderate/low advisories: ${advisoryCount}.`);
+          NODE
 
       - name: Install Playwright for browser acceptance
         run: npm install --no-save --package-lock=false playwright@1.56.1
 
       - name: Install Chromium for browser acceptance
         run: npx playwright install chromium
-
-      - name: Format touched source files
-        run: npm run format
 
       - name: Generate and finalize Drizzle migration
         run: npm run db:generate && npm run db:finalize
@@ -106,37 +131,3 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  security-audit:
-    name: Dependency security audit
-    runs-on: ubuntu-24.04
-    timeout-minutes: 2
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.18.0
-
-      - name: Audit dependency lockfile
-        shell: bash
-        run: |
-          timeout 45s npm audit --package-lock-only --json --fetch-timeout=20000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
-          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
-            echo "npm audit could not complete within 45 seconds; inspect registry availability and rerun."
-            exit 1
-          fi
-          node - <<'NODE'
-          const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
-          const entries = Object.entries(report.vulnerabilities || {});
-          for (const [name, item] of entries) {
-            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
-          }
-          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
-          if (blocking.length) {
-            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
-            process.exit(1);
-          }
-          NODE
