@@ -19,7 +19,10 @@ export default tseslint.config(
   {
     files: ['**/*.{js,ts,svelte}'],
     languageOptions: {
-      globals: { ...globals.browser, ...globals.node }
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      }
     }
   }
 );
