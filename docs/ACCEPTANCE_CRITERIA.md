@@ -67,4 +67,5 @@ The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READ
 - [x] Author all 52 Year 1 and 52 Year 2 lessons with the complete lesson-content contract.
 - [x] Author all 48 optional Year 3 specialist lessons.
 - [x] Link every authored lesson to its stable outline ID and define a shared lesson schema contract.
+- [x] Add a JSON Schema for authored lesson records and a dependency-free validator for counts, references, IDs and required content.
 - [ ] Add automated schema validation and curriculum tests during M1.
