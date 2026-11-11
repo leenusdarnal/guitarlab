@@ -98,3 +98,37 @@ The learner's private baseline is deliberately excluded from this public curricu
 | Backing tracks | Musical application and later improvisation |
 
 Keep only the currently relevant resources visible. Paid-course videos and protected tabs are linked, not copied into GuitarLab.
+
+
+## Research-backed revision (curriculum v1.1.0)
+
+The curriculum now uses a spiral learning model rather than treating each week as a sealed topic. The full evidence review and change rationale are in [Curriculum Research and Revision](CURRICULUM_RESEARCH.md), and the machine-readable teaching rules are in [learning-framework.json](../content/curriculum/learning-framework.json).
+
+### What changes for the learner
+
+- Pulse, listening, singing/humming, technique, fretboard awareness, musical application and reflection recur from the first week.
+- New movements are practised in a focused block first; familiar skills are mixed later. The app will not force random interleaving for every task because music-practice findings are mixed.
+- Ear training is no longer a late isolated topic. The dedicated Year 1 and Year 2 ear-learning weeks deepen a skill that has been present all along.
+- Short practice is valid. The 40-minute session is a suggested full session; 10- and 20-minute sessions select fewer, higher-value tasks rather than rushing through everything.
+- Tempo is increased only when an exercise-specific accuracy and comfort target is met. BPM is a starting reference, not a pass mark.
+- Reviews use delayed retrieval and learner evidence. Review dates are suggestions, not streak deadlines.
+- Checkpoints consider accuracy, sound, time, control/comfort, musical application and understanding. Speed alone is never mastery.
+
+### Targeted data corrections in v1.1.0
+
+- Year 1 Week 6 now uses Em–G–D–A, all introduced in Weeks 4–5; the earlier Em–G–D–C loop introduced C before its dedicated teaching week.
+- Year 1 Week 11 now introduces open-string names, semitone relationships and selected landmarks instead of asking a beginner to map natural notes across all six strings in one week.
+- Year 1 Week 1 explicitly includes a pulse and listening activity.
+- Year 1 Week 12 review checkpoint now integrates tuning, pulse, chords and melody.
+- Year 2 Week 6 treats speed as secondary to accurate note-finding and triad recall.
+- Year 2 Week 20 makes bend target-pitch matching and comfortable execution explicit.
+
+All existing Year 1 and Year 2 week IDs are preserved. The Year 3+ specialisations remain optional 12-week outlines.
+
+### Practice cadence
+
+The previous five-day weekly cycle is a suggestion, not a requirement. Learners may practise on any sustainable schedule and repeat or split weeks as needed. The product should encourage distributed practice and retrieval across sessions, but must not award progress simply for checking in on consecutive days.
+
+### Content quality boundary
+
+The 52-week records are curriculum outlines. A week becomes a fully authored lesson only when it has clear objectives, a concise explanation, a demonstration/reference, focused exercise, musical application, success criteria, common mistake/correction, accessible alternative and retrieval prompt. Add these details progressively without changing stable IDs or rewriting private learner history.
