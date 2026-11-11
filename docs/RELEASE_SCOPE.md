@@ -2,15 +2,15 @@
 
 ## Product target
 
-A personal learning companion for one guitarist, usable on a phone beside the instrument and on desktop for planning and review. It should make the next useful practice action obvious and preserve the learner's existing progress.
+A personal learning companion for one guitarist, usable on a phone beside the instrument and on desktop for planning and review. It should make the next useful practice action obvious and support reliable progress from a fresh learner start.
 
 ## Included in the first useful release
 
 ### Learning experience
 - Responsive dashboard with current target, next lesson, review-due skills and today's practice.
-- Versioned Year 1 curriculum (all 52 weekly cards) and the Year 2 continuation outline.
-- A lesson reader with objectives, explanation, exercise, practice piece and observable checkpoint.
-- Separate handling for the weekly course and the learner's numbered micro-lessons.
+- Versioned, fully authored Year 1 and Year 2 curricula (104 lessons) and four optional Year 3 specialisation paths (48 lessons).
+- A self-contained lesson reader with objectives, worked examples, guided demonstration, exercises, musical application and observable checkpoint.
+- Separate content-completion state from skill mastery and append-only assessment evidence.
 - Manual progress marking that never equates lesson viewing with mastery.
 
 ### Practice experience
@@ -49,7 +49,7 @@ A personal learning companion for one guitarist, usable on a phone beside the in
 ### Curriculum and progress
 - All 52 Year 1 records load in order and carry stable IDs.
 - The learner can resume the last active lesson.
-- Weekly card progress and numbered micro-lesson progress are independent.
+- Lesson completion and linked skill mastery remain independent.
 - A lesson can be complete while a linked skill remains in learning/practising state.
 - Review-due skills are visible and can be practised without reopening the whole lesson.
 - Assessment history is append-only; changing current mastery does not erase prior evidence.
@@ -64,7 +64,7 @@ A personal learning companion for one guitarist, usable on a phone beside the in
 - A previously loaded lesson and local progress remain available without network access.
 - Progress changes made offline survive reload and are queued for future sync.
 - The user can export personal data and restore it into a clean profile.
-- No personal lesson baseline, recordings, credentials or runtime databases are committed to this public repo.
+- No previous-chat lesson history or personal learner baseline is imported; recordings, credentials and runtime databases are not committed to this public repo.
 
 ### Interactive tools
 - Fretboard labels and string order are correct for standard E-A-D-G-B-E tuning.
@@ -92,7 +92,7 @@ These clarifications refine—not replace—the first-release scope. The priorit
 ### Required first-release behaviours
 - Offer 10-, 20- and 40-minute practice plans plus a custom duration; preserve 40 minutes as the default suggestion.
 - Explain the reason for the suggested next practice action and let the learner change it.
-- Keep progress records for numbered micro-lessons and weekly cards independent.
+- Keep lesson completion separate from skill evidence and mastery.
 - Make practice capture quick: actual duration, exercises, tempo/repetition observations where applicable, difficulty, short reflection and next target.
 - Record accuracy separately from speed. Do not infer mastery from a timer, number of minutes, or raw repetition count.
 - Provide local settings for handedness, instrument type, standard tuning, note-label preference and practice-time preference.
