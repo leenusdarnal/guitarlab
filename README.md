@@ -49,8 +49,9 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 
 ## Development status
 
-The product definition, curriculum foundation, final architecture, approved hybrid design direction and implementation guidelines are documented. The SvelteKit application scaffold has not yet been started. The implementation baseline requires per-learner lesson plans, presentation preferences and practice settings; see:
+The product definition, curriculum foundation, final architecture, approved hybrid visual direction and implementation guidelines are documented. **M1 application foundation is under implementation in [PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)**: SvelteKit/TypeScript, Tailwind CSS, Cloudflare Workers configuration, an initial responsive dashboard, learner setup, CI and design-token validation. The PR remains unmerged until its checks and runtime verification are complete. The dashboard and onboarding are an initial foundation, not yet a persisted learning product; D1/Drizzle is M2 and IndexedDB is M5. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md) and [system diagrams](docs/DIAGRAMS.md):
 
+- [System diagrams — architecture, learning loop and delivery](docs/DIAGRAMS.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Product specification](docs/PRODUCT_SPEC.md)
 - [Learning curriculum](docs/CURRICULUM.md)
@@ -77,7 +78,27 @@ The product definition, curriculum foundation, final architecture, approved hybr
 
 ## Local development
 
-The exact bootstrap commands and configuration will be added with the first application scaffold. The intended workflow uses SvelteKit's Cloudflare integration and Wrangler local development with isolated local D1 data.
+Requires Node.js 22.18 or newer.
+
+```bash
+npm install
+npm run dev
+```
+
+Quality checks and Worker build:
+
+```bash
+npm run curriculum:validate
+npm run design:validate
+npm run format:check
+npm run lint
+npm run check
+npm run test:run
+npm run build
+npm run preview
+```
+
+The current M1 shell and learner setup are not yet backed by local persistence. D1 is not configured in M1; it is added with M2. Never use production databases for local testing.
 
 Never commit API tokens, Cloudflare credentials, private recordings or personal learning data.
 
