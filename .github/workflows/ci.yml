@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Install Playwright for browser acceptance
+        run: npm install --no-save --package-lock=false playwright@1.56.1
+
+      - name: Install Chromium for browser acceptance
+        run: npx playwright install --with-deps chromium
+
       - name: Format touched source files
         run: npm run format
 
@@ -80,6 +86,9 @@ jobs:
           fi
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
+
+      - name: Browser acceptance tests
+        run: npm run test:browser
 
       - name: Preserve Cloudflare preview build
         if: github.event_name == 'push' && github.ref_name == 'main'
