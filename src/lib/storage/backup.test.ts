@@ -67,7 +67,6 @@ describe('learner backup contract', () => {
     });
   });
 
-  it('rejects malformed JSON, unsupported versions and oversized files', () => {
   it('round-trips M4.2 checkpoint state while accepting older version-1 backups', () => {
     const older = makeBackup();
     expect(parseLearnerBackup(older)).toMatchObject({ success: true });
@@ -86,7 +85,7 @@ describe('learner backup contract', () => {
     });
   });
 
-
+  it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,
       message: 'The selected file is not valid JSON.'
