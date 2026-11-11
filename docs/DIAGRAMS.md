@@ -10,10 +10,10 @@ flowchart LR
   subgraph device["Learner device · private boundary"]
     ui["GuitarLab SvelteKit UI"]
     prefs["Learner preferences"]
-    idb[("IndexedDB · M5")]
+    idb[("IndexedDB · M2.3")]
     audio["Web Audio / MediaDevices"]
     ui <--> prefs
-    prefs -. "persist locally · M5" .-> idb
+    prefs -. "persist locally · M2.3" .-> idb
     ui --> audio
   end
   subgraph public["Public application assets"]
@@ -66,9 +66,9 @@ A lesson view, elapsed timer or completion button does not establish skill maste
 ```mermaid
 flowchart TB
   curriculum["Git-versioned curriculum JSON"] --> browser["Client application"]
-  browser --> local["Local learner profile / preferences"]
+  browser --> local["Local learner profile / preferences · M2.3"]
   browser --> practice["Practice sessions / notes / attempts"]
-  local --> storage[("IndexedDB · M5")]
+  local --> storage[("IndexedDB · M2.3")]
   practice --> storage
   storage -. "authenticated, explicit sync" .-> outbox["Idempotent sync outbox · later"]
   outbox -.-> worker["Cloudflare Worker"]
@@ -108,10 +108,12 @@ The CI gate validates the source and builds the Worker. A successful build is no
 ```mermaid
 flowchart LR
   M0["M0 · Product, curriculum and architecture"] --> M1["M1 · SvelteKit + Worker foundation"]
-  M1 --> M2["M2 · D1 / Drizzle + domain services"]
-  M2 --> M3["M3 · Learning dashboard"]
+  M1 --> M2["M2.1–M2.2 · D1 / Drizzle + domain services"]
+  M2 --> M23["M2.3 · Local IndexedDB profile and repositories"]
+  M23 --> M24["M2.4 · Export / restore / safe reset"]
+  M24 --> M3["M3 · Learning dashboard"]
   M3 --> M4["M4 · Curriculum and lesson engine"]
-  M4 --> M5["M5 · IndexedDB + offline + sync"]
+  M4 --> M5["M5 · Offline hardening + authenticated sync"]
   M5 --> M6["M6 · Music tools"]
   M6 --> M7["M7 · Practice studio"]
   M7 --> M8["M8 · Musicianship and repertoire"]

@@ -19,9 +19,10 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
 | Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
 | Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
+| Learner-local persistence | M2.3 implementation in progress | Branch `feat/m2-3-indexeddb-learner-persistence`; versioned IndexedDB stores, fresh active profile, preference persistence, repository adapters and tests. CI and PR review pending |
 | Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21, PR #22 and PR #23 are merged. M2.2 adds use cases and repository contracts, not concrete persistence adapters or routes. Learner setup is still not persisted by the current UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Important:** PR #21, PR #22 and PR #23 are merged. The current M2.3 work is proposed in draft PR #24 and is not part of `main` until it is reviewed and merged. M2.3 adds browser-local IndexedDB adapters only; no production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
@@ -41,6 +42,8 @@ Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusd
 M2.1 is merged in [PR #22](https://github.com/leenusdarnal/guitarlab/pull/22), and [issue #7](https://github.com/leenusdarnal/guitarlab/issues/7) is closed. The schema defines 10 relational tables, seeds 152 lesson metadata references and 34 skill IDs, and keeps lesson bodies in Git. The versioned migration and database invariants pass in Wrangler local D1. No production D1, authentication or cloud sync is created.
 
 M2.2 is merged in [PR #23](https://github.com/leenusdarnal/guitarlab/pull/23), and [issue #8](https://github.com/leenusdarnal/guitarlab/issues/8) is closed. The slice keeps application logic independent of Drizzle and IndexedDB, separates public curriculum reads from private learner repositories, and tests transitions with in-memory adapters. It does not provision or expose remote data.
+
+M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. The branch adds a versioned browser-local IndexedDB schema for learner profiles, progress, completion events, assessment attempts, mastery snapshots and practice sessions; creates/reuses a fresh active profile; connects onboarding preference saves; adds tests; and documents the local-storage boundary. This is not complete until CI passes and the PR is reviewed and merged.
 
 
 

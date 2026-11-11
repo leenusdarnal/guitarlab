@@ -1,9 +1,41 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
-  import { createEmptyProfilePreferences, profilePreferencesSchema, type ProfilePreferences } from '../../lib/domain/profile/preferences';
+  import {
+    createEmptyProfilePreferences,
+    profilePreferencesSchema,
+    type ProfilePreferences
+  } from '../../lib/domain/profile/preferences';
+  import {
+    loadActiveLearnerProfile,
+    saveActiveLearnerPreferences
+  } from '../../lib/storage/indexeddb';
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
   let message = $state('');
+  let isLoading = $state(true);
+  let isSaving = $state(false);
+
+  onMount(() => {
+    let active = true;
+    void loadActiveLearnerProfile()
+      .then((profile) => {
+        if (active) preferences = profile.preferences;
+      })
+      .catch(() => {
+        if (active) {
+          message = 'Local storage is unavailable. Your choices have not been saved.';
+        }
+      })
+      .finally(() => {
+        if (active) isLoading = false;
+      });
+
+    return () => {
+      active = false;
+    };
+  });
+
   const instruments = [
     { value: 'acoustic', label: 'Acoustic guitar' },
     { value: 'electric', label: 'Electric guitar' },
@@ -25,14 +57,25 @@
   ] as const;
   const practiceOptions = [10, 20, 40, 60] as const;
 
-  function submitSetup(event: SubmitEvent) {
+  async function submitSetup(event: SubmitEvent) {
     event.preventDefault();
     const result = profilePreferencesSchema.safeParse(preferences);
     if (!result.success) {
       message = 'Please review the selected preferences.';
       return;
     }
-    message = 'Your setup is valid. Profile persistence will be enabled with the local-data milestone; nothing has been uploaded or saved yet.';
+
+    isSaving = true;
+    message = '';
+    try {
+      const saved = await saveActiveLearnerPreferences(result.data);
+      preferences = saved.preferences;
+      message = 'Your preferences have been saved privately on this device.';
+    } catch {
+      message = 'Could not save your preferences. Your existing local profile has been left unchanged.';
+    } finally {
+      isSaving = false;
+    }
   }
 </script>
 
@@ -100,13 +143,13 @@
           <option value="song-first">Song-first</option>
         </select>
       </fieldset>
-      <div class="form-actions"><button type="submit">Review my preferences <span>→</span></button><a href={resolve('/')}>I'll do this later</a></div>
+      <div class="form-actions"><button type="submit" disabled={isLoading || isSaving}>{isLoading ? 'Loading profile…' : isSaving ? 'Saving…' : 'Save my preferences'} <span>→</span></button><a href={resolve('/')}>I'll do this later</a></div>
       {#if message}<p class="message" role="status">{message}</p>{/if}
     </form>
-    <p class="privacy-note">Privacy by design: this first setup preview validates your choices in this page only. Local profile saving arrives with the local-persistence milestone. No account or microphone permission is required.</p>
+    <p class="privacy-note">Privacy by design: your profile and preferences are stored in this browser only. They are not uploaded or synced to a server. No account or microphone permission is required.</p>
   </section>
 </main>
 
 <style>
-  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:700 22px Georgia,serif}.brand strong{font-size:15px}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button span{padding-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
+  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:700 22px Georgia,serif}.brand strong{font-size:15px}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button span{padding-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
 </style>
