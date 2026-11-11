@@ -2,16 +2,23 @@
 import { readFile } from 'node:fs/promises';
 
 const css = await readFile(new URL('../src/app.css', import.meta.url), 'utf8');
-const blocks = [...css.matchAll(/:root(?:\[data-theme='light'\])?\s*\{([^}]+)\}/g)];
+const blocks = [
+  ...css.matchAll(/:root(?:\\[data-theme='light'\\])?\\s*\\{([^}]+)\\}/g)
+];
 
 function tokensFrom(block) {
   return Object.fromEntries(
-    [...block.matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{6})/g)].map((match) => [match[1], match[2]])
+    [...block.matchAll(/--([\\w-]+):\\s*(#[0-9a-fA-F]{6})/g)].map((match) => [
+      match[1],
+      match[2]
+    ])
   );
 }
 
 function luminance(hex) {
-  const values = [1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16) / 255);
+  const values = [1, 3, 5].map(
+    (index) => parseInt(hex.slice(index, index + 2), 16) / 255
+  );
   const linear = values.map((value) =>
     value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
   );
@@ -19,7 +26,9 @@ function luminance(hex) {
 }
 
 function contrast(foreground, background) {
-  const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+  const values = [luminance(foreground), luminance(background)].sort(
+    (a, b) => b - a
+  );
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
@@ -53,17 +62,25 @@ for (const [themeName, tokens] of themes) {
     const foreground = tokens[foregroundKey];
     const background = tokens[backgroundKey];
     if (!foreground || !background) {
-      failures.push(`${themeName}: missing token --${!foreground ? foregroundKey : backgroundKey}`);
+      failures.push(
+        `${themeName}: missing token --${!foreground ? foregroundKey : backgroundKey}`
+      );
       continue;
     }
     const ratio = contrast(foreground, background);
-    console.log(`${themeName}: --${foregroundKey} / --${backgroundKey} = ${ratio.toFixed(2)}:1 (min ${minimum}:1)`);
-    if (ratio < minimum) failures.push(`${themeName}: --${foregroundKey} on --${backgroundKey} is below ${minimum}:1`);
+    console.log(
+      `${themeName}: --${foregroundKey} / --${backgroundKey} = ${ratio.toFixed(2)}:1 (min ${minimum}:1)`
+    );
+    if (ratio < minimum) {
+      failures.push(
+        `${themeName}: --${foregroundKey} on --${backgroundKey} is below ${minimum}:1`
+      );
+    }
   }
 }
 
 if (failures.length) {
-  console.error(failures.join('\n'));
+  console.error(failures.join('\\n'));
   process.exit(1);
 }
 console.log('Design-token contrast checks passed for dark and light themes.');
