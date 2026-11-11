@@ -1,0 +1,560 @@
+{
+  "id": "year-1-core",
+  "version": "1.0.0",
+  "title": "Year 1 - Foundations to independent playing",
+  "description": "The complete 52-week first-year route from the curated master guitar course. Weekly BPM values are starting reference points, not deadlines or mandatory pass marks. Use the checkpoint to decide when to advance.",
+  "year": 1,
+  "pacing": "adaptive",
+  "phases": [
+    {
+      "id": "beginner-base",
+      "title": "Beginner base",
+      "firstWeek": 1,
+      "lastWeek": 12,
+      "goal": "Setup, clean notes, reading basics, open chords, pulse and first review."
+    },
+    {
+      "id": "skills-in-context",
+      "title": "Skills in context",
+      "firstWeek": 13,
+      "lastWeek": 24,
+      "goal": "Picking, fingerstyle, scales, shell chords, blues, expressive technique and the mid-year test."
+    },
+    {
+      "id": "early-intermediate",
+      "title": "Early intermediate",
+      "firstWeek": 25,
+      "lastWeek": 36,
+      "goal": "Fretboard navigation, triads, harmony, rhythm subdivisions, legato and review."
+    },
+    {
+      "id": "intermediate-bridge",
+      "title": "Intermediate bridge",
+      "firstWeek": 37,
+      "lastWeek": 52,
+      "goal": "Ear learning, creative work, genre vocabulary, reading, performance and year-end assessment."
+    }
+  ],
+  "weeks": [
+    {
+      "id": "y1-w01",
+      "week": 1,
+      "phaseId": "beginner-base",
+      "title": "Meet your guitar",
+      "focus": "Setup, posture, string names and tuning",
+      "checkpoint": "Tune all six strings; name them low-to-high E-A-D-G-B-E.",
+      "practiceExercise": "Open-string pulse: four relaxed quarter notes per string",
+      "startingTempoBpm": 50
+    },
+    {
+      "id": "y1-w02",
+      "week": 2,
+      "phaseId": "beginner-base",
+      "title": "Clear single notes",
+      "focus": "Fretting-hand basics, clean tone and relaxed pressure",
+      "checkpoint": "Fret one note close behind the fret and coordinate both hands.",
+      "practiceExercise": "Four-fret ladder: 0-1-2-3-4-3-2-1",
+      "startingTempoBpm": 48
+    },
+    {
+      "id": "y1-w03",
+      "week": 3,
+      "phaseId": "beginner-base",
+      "title": "Read guitar maps",
+      "focus": "Chord-box orientation, TAB lines and fret numbers",
+      "checkpoint": "Translate a short TAB line into string and fret movements.",
+      "practiceExercise": "High-string reading motif",
+      "startingTempoBpm": 55
+    },
+    {
+      "id": "y1-w04",
+      "week": 4,
+      "phaseId": "beginner-base",
+      "title": "First chord shapes",
+      "focus": "Em and G; checking each string",
+      "checkpoint": "Form Em and G and move between them without squeezing.",
+      "practiceExercise": "Em-G pulse: one chord per bar",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y1-w05",
+      "week": 5,
+      "phaseId": "beginner-base",
+      "title": "Open chords A, D and E",
+      "focus": "Three essential open-chord shapes",
+      "checkpoint": "Form A, D and E and check every intended string.",
+      "practiceExercise": "A-D-E four-bar cycle",
+      "startingTempoBpm": 55
+    },
+    {
+      "id": "y1-w06",
+      "week": 6,
+      "phaseId": "beginner-base",
+      "title": "First complete chord loop",
+      "focus": "Chord changes with pulse and a first musical phrase",
+      "checkpoint": "Play a four-chord loop with four beats per chord.",
+      "practiceExercise": "Em-G-D-C loop, one bar each",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w07",
+      "week": 7,
+      "phaseId": "beginner-base",
+      "title": "Strum in time",
+      "focus": "Downstrokes, upstrokes and subdivisions",
+      "checkpoint": "Keep a steady hand motion through both played and skipped strokes.",
+      "practiceExercise": "Muted down/up groove",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w08",
+      "week": 8,
+      "phaseId": "beginner-base",
+      "title": "Optional notation: strings 1 and 2",
+      "focus": "Parallel track: first-position notes on high E and B",
+      "checkpoint": "Core: play the melody from TAB. Optional: match the same notes to staff notation.",
+      "practiceExercise": "High E-B answer phrase (TAB first; staff-reading optional)",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w09",
+      "week": 9,
+      "phaseId": "beginner-base",
+      "title": "Add C, Am and Dm",
+      "focus": "Major/minor open chords and smooth transitions",
+      "checkpoint": "Learn C, Am and Dm; move between them at a slow pulse.",
+      "practiceExercise": "C-Am-Dm-Am, one bar each",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y1-w10",
+      "week": 10,
+      "phaseId": "beginner-base",
+      "title": "Make rhythm musical",
+      "focus": "Accents, rests and dynamics",
+      "checkpoint": "Play a pattern with one accent and one intentional rest.",
+      "practiceExercise": "Accent beats 2 and 4; rest on beat 3",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y1-w11",
+      "week": 11,
+      "phaseId": "beginner-base",
+      "title": "Your first music map",
+      "focus": "Natural notes, frets and intervals",
+      "checkpoint": "Locate notes on strings 1-6 and compare adjacent frets.",
+      "practiceExercise": "Two-string note-finding pattern",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w12",
+      "week": 12,
+      "phaseId": "beginner-base",
+      "title": "Quarter 1 review and recording",
+      "focus": "Consolidate tuning, reading, open chords and pulse",
+      "checkpoint": "Review Weeks 1-11 and keep a clean 45-second recording.",
+      "practiceExercise": "Four-skill mini medley",
+      "startingTempoBpm": 55
+    },
+    {
+      "id": "y1-w13",
+      "week": 13,
+      "phaseId": "skills-in-context",
+      "title": "Optional notation: strings 3 and 4",
+      "focus": "Parallel track: extend staff-reading to G and D strings",
+      "checkpoint": "Core: play the TAB phrase. Optional: identify matching G- and D-string notes.",
+      "practiceExercise": "G-D string answer melody (TAB core; staff optional)",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y1-w14",
+      "week": 14,
+      "phaseId": "skills-in-context",
+      "title": "Optional notation: low E and A landmarks",
+      "focus": "Parallel track: low-string fretboard landmarks",
+      "checkpoint": "Core: find listed frets and play TAB. Optional: connect note names to staff positions.",
+      "practiceExercise": "Low-string landmark walk (TAB first; notation optional)",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w15",
+      "week": 15,
+      "phaseId": "skills-in-context",
+      "title": "Pick control and clean tone",
+      "focus": "Alternate picking and string crossing",
+      "checkpoint": "Use down-up picking on one string, then cross between two strings.",
+      "practiceExercise": "Alternate-pick pulse cell",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y1-w16",
+      "week": 16,
+      "phaseId": "skills-in-context",
+      "title": "Fingerstyle foundation",
+      "focus": "Thumb and fingers as separate roles",
+      "checkpoint": "Play a four-note arpeggio with a steady thumb and relaxed fingers.",
+      "practiceExercise": "Thumb-3-2-1 arpeggio",
+      "startingTempoBpm": 54
+    },
+    {
+      "id": "y1-w17",
+      "week": 17,
+      "phaseId": "skills-in-context",
+      "title": "Build the major scale",
+      "focus": "Whole-step/half-step formula and a small C major pattern",
+      "checkpoint": "Play a one-octave C major fragment and say the note names.",
+      "practiceExercise": "C major scale fragment",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w18",
+      "week": 18,
+      "phaseId": "skills-in-context",
+      "title": "Shell chords: roots and guide tones",
+      "focus": "Three-note chord grips as a bridge to movable chords",
+      "checkpoint": "Play Cmaj7, Dm7 and G7 shell grips; move Dm7-G7-Cmaj7 in time.",
+      "practiceExercise": "Three-note shell progression: Dm7-G7-Cmaj7, one bar each",
+      "startingTempoBpm": 50
+    },
+    {
+      "id": "y1-w19",
+      "week": 19,
+      "phaseId": "skills-in-context",
+      "title": "Your first 12-bar blues",
+      "focus": "Blues form, dominant seventh colour and groove",
+      "checkpoint": "Play a 12-bar blues in A with a steady quarter-note pulse.",
+      "practiceExercise": "12-bar blues in A",
+      "startingTempoBpm": 68
+    },
+    {
+      "id": "y1-w20",
+      "week": 20,
+      "phaseId": "skills-in-context",
+      "title": "Play with expression",
+      "focus": "Slides, bends, dynamics and phrasing",
+      "checkpoint": "Use one expressive technique accurately in a short phrase.",
+      "practiceExercise": "Five-note slide phrase",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w21",
+      "week": 21,
+      "phaseId": "skills-in-context",
+      "title": "Movable power chords",
+      "focus": "Root-5 shapes, muting and rock rhythm",
+      "checkpoint": "Move a power-chord shape and mute unwanted strings.",
+      "practiceExercise": "Two-bar power chord riff",
+      "startingTempoBpm": 76
+    },
+    {
+      "id": "y1-w22",
+      "week": 22,
+      "phaseId": "skills-in-context",
+      "title": "Approach barre chords safely",
+      "focus": "Partial barre shape and efficient pressure",
+      "checkpoint": "Build a partial F shape and test each string individually.",
+      "practiceExercise": "F partial to C change",
+      "startingTempoBpm": 46
+    },
+    {
+      "id": "y1-w23",
+      "week": 23,
+      "phaseId": "skills-in-context",
+      "title": "Minor pentatonic box 1",
+      "focus": "Map the five notes and find the roots",
+      "checkpoint": "Play A minor pentatonic box 1 slowly and end on A.",
+      "practiceExercise": "A minor pentatonic call-and-response",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y1-w24",
+      "week": 24,
+      "phaseId": "skills-in-context",
+      "title": "Half-year playing test",
+      "focus": "Integrate chords, rhythm, melody and recording",
+      "checkpoint": "Perform one chord piece, one melody and one lead phrase.",
+      "practiceExercise": "Three-part mid-year medley",
+      "startingTempoBpm": 65
+    },
+    {
+      "id": "y1-w25",
+      "week": 25,
+      "phaseId": "early-intermediate",
+      "title": "Find roots and octaves",
+      "focus": "Fretboard navigation beyond open position",
+      "checkpoint": "Find the same root in two positions and play an octave jump.",
+      "practiceExercise": "A-root octave jumps",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y1-w26",
+      "week": 26,
+      "phaseId": "early-intermediate",
+      "title": "Triads on the top strings",
+      "focus": "Compact voicings and inversions",
+      "checkpoint": "Play C, F and G triads on the top three strings.",
+      "practiceExercise": "Top-string triad walk",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y1-w27",
+      "week": 27,
+      "phaseId": "early-intermediate",
+      "title": "Chords in keys",
+      "focus": "Roman numerals and diatonic chord families",
+      "checkpoint": "Build I, IV, V and vi in C and G major.",
+      "practiceExercise": "I-vi-IV-V in C, then G",
+      "startingTempoBpm": 68
+    },
+    {
+      "id": "y1-w28",
+      "week": 28,
+      "phaseId": "early-intermediate",
+      "title": "Capo and transposition",
+      "focus": "Move a song to a comfortable singing key",
+      "checkpoint": "Use a capo or transpose a short progression and explain the result.",
+      "practiceExercise": "Four-chord capo loop",
+      "startingTempoBpm": 65
+    },
+    {
+      "id": "y1-w29",
+      "week": 29,
+      "phaseId": "early-intermediate",
+      "title": "Suspended and seventh chords",
+      "focus": "Add colour tones without losing pulse",
+      "checkpoint": "Compare D-Dsus4-D and A-A7-A.",
+      "practiceExercise": "D-Dsus4-D; A-A7-A",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y1-w30",
+      "week": 30,
+      "phaseId": "early-intermediate",
+      "title": "Sixteenth-note rhythm",
+      "focus": "Count subdivisions and control accents",
+      "checkpoint": "Count 1-e-and-a at a slow tempo and play a clean muted pattern.",
+      "practiceExercise": "One-bar sixteenth groove",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y1-w31",
+      "week": 31,
+      "phaseId": "early-intermediate",
+      "title": "Hammer-ons and pull-offs",
+      "focus": "Legato notes with consistent volume",
+      "checkpoint": "Play a hammer-on and pull-off without re-picking every note.",
+      "practiceExercise": "High-E legato cell",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y1-w32",
+      "week": 32,
+      "phaseId": "early-intermediate",
+      "title": "Quarter 2 review",
+      "focus": "Revisit notes, chords, fingerstyle, scales and blues",
+      "checkpoint": "Select two weak skills from Weeks 13-31 and retest them.",
+      "practiceExercise": "Review medley at a comfortable tempo",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w33",
+      "week": 33,
+      "phaseId": "early-intermediate",
+      "title": "Major pentatonic and phrasing",
+      "focus": "Contrast major and minor pentatonic colour",
+      "checkpoint": "Play a short major pentatonic phrase over a major chord.",
+      "practiceExercise": "Major-pentatonic question / minor-pentatonic answer",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y1-w34",
+      "week": 34,
+      "phaseId": "early-intermediate",
+      "title": "Improvise with motifs",
+      "focus": "Repeat, vary and resolve short melodic ideas",
+      "checkpoint": "Create a four-bar solo from a two-note motif.",
+      "practiceExercise": "Two-note motif over Am",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y1-w35",
+      "week": 35,
+      "phaseId": "early-intermediate",
+      "title": "Arpeggios and chord tones",
+      "focus": "Outline harmony with notes of each chord",
+      "checkpoint": "Play an arpeggio that follows Em-G-D-C without losing the beat.",
+      "practiceExercise": "Em-G-D-C arpeggio cycle",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w36",
+      "week": 36,
+      "phaseId": "early-intermediate",
+      "title": "Three notes per string",
+      "focus": "Extend the scale beyond first position",
+      "checkpoint": "Play a short three-notes-per-string fragment with alternate picking.",
+      "practiceExercise": "G major three-note fragment",
+      "startingTempoBpm": 55
+    },
+    {
+      "id": "y1-w37",
+      "week": 37,
+      "phaseId": "intermediate-bridge",
+      "title": "Learn a melody by ear",
+      "focus": "Listen, sing, find and verify notes",
+      "checkpoint": "Transcribe a two-bar melody from sound without first reading TAB.",
+      "practiceExercise": "Four-note call-and-response",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w38",
+      "week": 38,
+      "phaseId": "intermediate-bridge",
+      "title": "Songwriting and arrangement",
+      "focus": "Create an original 4- or 8-bar section",
+      "checkpoint": "Write a progression and pair it with a melody or picking pattern.",
+      "practiceExercise": "Original Em-C-G-D eight-bar sketch",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y1-w39",
+      "week": 39,
+      "phaseId": "intermediate-bridge",
+      "title": "Blues turnarounds",
+      "focus": "End a blues chorus and lead into the next cycle",
+      "checkpoint": "Play a short turnaround and return to the I chord on time.",
+      "practiceExercise": "A blues turnaround into bar 1",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y1-w40",
+      "week": 40,
+      "phaseId": "intermediate-bridge",
+      "title": "Rock rhythm and muting",
+      "focus": "Palm muting, power-chord changes and silence",
+      "checkpoint": "Play two power chords with tight starts and stops.",
+      "practiceExercise": "E5-G5-A5-G5 rock cell",
+      "startingTempoBpm": 78
+    },
+    {
+      "id": "y1-w41",
+      "week": 41,
+      "phaseId": "intermediate-bridge",
+      "title": "Jazz chord grips",
+      "focus": "Basic maj7, m7 and dominant 7 colour",
+      "checkpoint": "Play Dm7-G7-Cmaj7 as a slow ii-V-I.",
+      "practiceExercise": "Dm7-G7-Cmaj7, two beats each",
+      "startingTempoBpm": 55
+    },
+    {
+      "id": "y1-w42",
+      "week": 42,
+      "phaseId": "intermediate-bridge",
+      "title": "The ii-V-I connection",
+      "focus": "Connect jazz chords with voice leading",
+      "checkpoint": "Move Dm7-G7-Cmaj7 using the smallest hand movement.",
+      "practiceExercise": "Dm7-G7-Cmaj7 voice-leading loop",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w43",
+      "week": 43,
+      "phaseId": "intermediate-bridge",
+      "title": "Comping styles",
+      "focus": "Change the accompaniment rhythm without changing harmony",
+      "checkpoint": "Play the same progression as straight eighths, shuffle and sparse accents.",
+      "practiceExercise": "One progression, three groove feels",
+      "startingTempoBpm": 68
+    },
+    {
+      "id": "y1-w44",
+      "week": 44,
+      "phaseId": "intermediate-bridge",
+      "title": "Quarter 3 review",
+      "focus": "Retest barre, triads, ear skills, 16ths and lead phrasing",
+      "checkpoint": "Choose a chord task, rhythm task and melody task from Weeks 25-43.",
+      "practiceExercise": "Three-skill review medley",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y1-w45",
+      "week": 45,
+      "phaseId": "intermediate-bridge",
+      "title": "Sight-read across strings",
+      "focus": "Read pitch and rhythm together",
+      "checkpoint": "Read a short melody on strings 1-4 with rests and repeated notes.",
+      "practiceExercise": "Four-string sight-reading phrase",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y1-w46",
+      "week": 46,
+      "phaseId": "intermediate-bridge",
+      "title": "Move between positions",
+      "focus": "Connect two scale areas using a guide tone",
+      "checkpoint": "Link two positions of G major and land on B or G.",
+      "practiceExercise": "G major position-link phrase",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w47",
+      "week": 47,
+      "phaseId": "intermediate-bridge",
+      "title": "Chord melody basics",
+      "focus": "Place melody notes above simple chord tones",
+      "checkpoint": "Harmonise a three-note melody using small chord shapes.",
+      "practiceExercise": "Three-note chord-melody sketch",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y1-w48",
+      "week": 48,
+      "phaseId": "intermediate-bridge",
+      "title": "Compose a complete study",
+      "focus": "Write an 8-bar piece with clear form",
+      "checkpoint": "Build an A section and contrasting B section from your motifs.",
+      "practiceExercise": "Original 8-bar A-B-A sketch",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y1-w49",
+      "week": 49,
+      "phaseId": "intermediate-bridge",
+      "title": "Dynamics and articulation",
+      "focus": "Control volume, note length and phrase endings",
+      "checkpoint": "Perform the same phrase softly, loudly and with a clear final note.",
+      "practiceExercise": "Four-bar dynamic arc",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y1-w50",
+      "week": 50,
+      "phaseId": "intermediate-bridge",
+      "title": "Repertoire polishing",
+      "focus": "Bring one complete piece close to performance-ready",
+      "checkpoint": "Choose a piece with a beginning, middle and ending and polish transitions.",
+      "practiceExercise": "Personal repertoire piece: weakest transition loop",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y1-w51",
+      "week": 51,
+      "phaseId": "intermediate-bridge",
+      "title": "Mock performance and transcription",
+      "focus": "Perform, listen back and reproduce one short phrase",
+      "checkpoint": "Record a complete take and transcribe a short phrase by ear.",
+      "practiceExercise": "Mock performance plus 5-note transcription",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y1-w52",
+      "week": 52,
+      "phaseId": "intermediate-bridge",
+      "title": "Year-end playing test",
+      "focus": "Demonstrate rhythm, chords, reading, lead/fingerstyle and musicianship",
+      "checkpoint": "Perform a prepared piece, a sight-read excerpt and a short improvised phrase.",
+      "practiceExercise": "Year-end three-part audition",
+      "startingTempoBpm": 72
+    }
+  ]
+}
