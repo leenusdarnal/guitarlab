@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
@@ -77,6 +78,23 @@ try {
   await mobileNavigation.getByRole('link', { name: 'Learning path' }).click();
   assert.equal(new URL(page.url()).hash, '#learning-path');
   await page.locator('#learning-path').waitFor();
+
+  // The M2.4 backup route remains reachable from the dashboard on mobile,
+  // and its download contains only the active learner's profile data.
+  await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
+  await page.getByRole('heading', { name: 'Keep your learning safe.' }).waitFor();
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: /Download backup/ }).click();
+  const download = await downloadPromise;
+  assert.match(download.suggestedFilename(), /^guitarlab-backup-\\d{4}-\\d{2}-\\d{2}\\.json$/);
+  const downloadPath = await download.path();
+  assert.ok(downloadPath, 'Backup download should be available to the browser test');
+  const backup = JSON.parse(await readFile(downloadPath, 'utf8'));
+  assert.equal(backup.format, 'guitarlab-learner-backup');
+  assert.equal(backup.version, 1);
+  assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
+  assert.equal(backup.records.lessonProgress.length, 0);
 
   assert.deepEqual(pageErrors, [], `Browser runtime errors: ${pageErrors.join('; ')}`);
   console.log('Browser acceptance passed: fresh dashboard, four phases, honest empty states, theme persistence, IndexedDB preference persistence, mobile navigation and zero uncaught page errors.');
