@@ -292,7 +292,7 @@ export function createIndexedDbRepositories(
           .objectStore(stores.progress)
           .index('byLearnerReleaseLesson');
         const value = await requestResult<LessonProgressRecord | undefined>(
-          index.get(IDBKeyRange.only([learnerId, releaseId, lessonId]))
+          index.get([learnerId, releaseId, lessonId])
         );
         return value ?? null;
       }),
@@ -312,13 +312,11 @@ export function createIndexedDbRepositories(
         const current = await requestResult<LessonProgressRecord | undefined>(
           store
             .index('byLearnerReleaseLesson')
-            .get(
-              IDBKeyRange.only([
-                record.learnerId,
-                record.curriculumReleaseId,
-                record.lessonId
-              ])
-            )
+            .get([
+              record.learnerId,
+              record.curriculumReleaseId,
+              record.lessonId
+            ])
         );
         if (
           !current ||
