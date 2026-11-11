@@ -101,6 +101,7 @@ describe('learner dashboard read model', () => {
     expect(result.nextLessonIsInProgress).toBe(false);
     expect(result.completedLessons).toBe(0);
     expect(result.practiceMinutes).toBeNull();
+    expect(result.learnerGoals).toEqual([]);
     expect(result.dueReviews).toEqual([]);
     expect(result.recentPractice).toEqual([]);
   });
