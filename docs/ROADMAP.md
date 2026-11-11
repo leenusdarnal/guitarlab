@@ -14,10 +14,11 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Define first-release scope and product-level visual direction.
 - [x] Document foundation and first-release acceptance criteria.
 - [x] Specify private learner-baseline migration and privacy boundary.
+- [x] Finalise the implementation architecture, trust boundaries, data model, sync policy, Cloudflare services and delivery gates.
 - [ ] Select final visual concept and detailed design tokens before UI implementation.
 - [ ] Execute private learner-baseline import after local persistence exists (M5).
 
-M0 specification is ready for M1. The two deferred items are explicit gates for detailed UI and private data migration; they are not reasons to invent or expose personal data in a public commit.
+M0 product and architecture specifications are ready for M1. Finalising the architectural design does not select the final visual UI concept; that remains a design gate before detailed UI implementation. The private progress import remains deferred until a private local profile exists.
 
 ### M1 — Application foundation
 - [ ] Create SvelteKit/Svelte 5/TypeScript application.
