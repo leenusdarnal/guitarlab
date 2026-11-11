@@ -24,7 +24,7 @@
     "db:finalize": "node scripts/finalize-db-migration.mjs",
     "db:migrate:local": "wrangler d1 migrations apply guitarlab-local --local",
     "db:test:local": "node scripts/test-local-db.mjs",
-    "db:setup:local": "npm run db:generate && npm run db:finalize && npm run db:migrate:local && npm run db:test:local"
+    "db:setup:local": "npm run db:generate && npm run db:finalize && npm run db:migrate:local && npm run db:test:local",\n    "test:browser": "node scripts/browser-acceptance.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
