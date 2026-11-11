@@ -185,7 +185,6 @@ describe('local learner profile persistence', () => {
     expect(second.preferences).toEqual(first.preferences);
   });
 
-  it('persists validated preferences without creating lesson or mastery records', async () => {
   it('updates only in-progress lessons using the compound learner/release/lesson key', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
@@ -212,7 +211,7 @@ describe('local learner profile persistence', () => {
     await expect(repositories.progress.updateInProgress({ ...record, updatedAt: 400 })).resolves.toBe(false);
   });
 
-
+  it('persists validated preferences without creating lesson or mastery records', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
