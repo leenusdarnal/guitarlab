@@ -49,11 +49,19 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 
 ## Development status
 
-This repository is in the foundation and specification stage. See:
+The product definition and curriculum foundation are documented. The SvelteKit application scaffold has not yet been started. See:
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Implementation roadmap](docs/ROADMAP.md)
 - [Product specification](docs/PRODUCT_SPEC.md)
+- [Learning curriculum](docs/CURRICULUM.md)
+- [Year 1 curriculum data](content/curriculum/year-1.json)
+- [Year 2 curriculum data](content/curriculum/year-2.json)
+- [Curriculum content model and skill taxonomy](docs/CURRICULUM_CONTENT_MODEL.md)
+- [First-release scope](docs/RELEASE_SCOPE.md)
+- [Design direction](docs/DESIGN_DIRECTION.md)
+- [Learner progress migration](docs/LEARNING_PROGRESS_MIGRATION.md)
+- [M0 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
+- [Implementation roadmap](docs/ROADMAP.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Local development
