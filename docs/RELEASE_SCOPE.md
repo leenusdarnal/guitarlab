@@ -2,7 +2,7 @@
 
 ## Product target
 
-A personal learning companion for one guitarist, usable on a phone beside the instrument and on desktop for planning and review. It should make the next useful practice action obvious and support reliable progress from a fresh learner start.
+A personal learning companion for a guitarist, usable on a phone beside the instrument and on desktop for planning and review. The first release is local-first for one active learner profile per browser installation, with profile-scoped preferences and progress. It should make the next useful practice action obvious and support reliable progress from a fresh learner start.
 
 ## Included in the first useful release
 
@@ -14,7 +14,7 @@ A personal learning companion for one guitarist, usable on a phone beside the in
 - Manual progress marking that never equates lesson viewing with mastery.
 
 ### Practice experience
-- Adjustable 40-minute suggested routine and optional recording/review block.
+- Learner-selected 10-, 20-, 40-minute or custom practice duration and editable routine; no global duration is forced.
 - Practice timer, metronome and session journal.
 - Exercise logging for tempo, repetitions, clean attempts, difficulty and next target.
 - Simple review queue for skills that need retrieval or more practice.
@@ -108,3 +108,9 @@ These clarifications refine—not replace—the first-release scope. The priorit
 - Optional external backing-track launcher, beginning with ComposeYogi.
 
 These additions must not delay the reliable curriculum, practice capture, local persistence, export/restore and mobile usability.
+
+### Learner-specific preferences
+- The active profile stores instrument configuration, handedness, tuning, goals, practice schedule/duration, lesson-presentation preference, practice emphasis and accessibility settings.
+- The first-run setup is skippable and all preferences remain editable.
+- A daily practice plan is generated for that learner from preferences, current curriculum state, skill evidence and available time.
+- Shared lesson content remains canonical; user-specific settings must not be written into public curriculum files.
