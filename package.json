@@ -13,8 +13,8 @@
     "deploy": "wrangler deploy",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\"",
-    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\"",
+    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\"",
+    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\"",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs",
@@ -25,7 +25,8 @@
     "db:migrate:local": "wrangler d1 migrations apply guitarlab-local --local",
     "db:test:local": "node scripts/test-local-db.mjs",
     "db:setup:local": "npm run db:generate && npm run db:finalize && npm run db:migrate:local && npm run db:test:local",
-    "test:browser": "node scripts/browser-acceptance.mjs"
+    "test:browser": "node scripts/browser-acceptance.mjs",
+    "test:curriculum-browser": "node scripts/curriculum-browser-acceptance.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
