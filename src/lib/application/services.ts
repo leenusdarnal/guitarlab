@@ -210,6 +210,7 @@ const updateLessonProgressInputSchema = z
     learnerId: uuidSchema,
     releaseId: releaseIdSchema,
     lessonId: lessonIdSchema,
+    expectedRevision: z.number().int().nonnegative(),
     lastBlockId: z.string().min(1).max(160).nullable(),
     completedBlockIds: z.array(z.string().min(1).max(160)).max(200),
     checkpointOutcome: z.enum(['achieved', 'needs_practice']).nullable(),
@@ -251,6 +252,11 @@ export async function updateLessonProgress(
   if (current.status !== 'in_progress') {
     throw new ConflictError('A completed lesson can no longer be changed.');
   }
+  if ((current.revision ?? 0) !== value.expectedRevision) {
+    throw new ConflictError(
+      'Lesson progress changed in another tab. Reload and try again.'
+    );
+  }
 
   const updated: LessonProgressRecord = {
     ...current,
@@ -258,12 +264,12 @@ export async function updateLessonProgress(
     completedBlockIds: [...value.completedBlockIds],
     checkpointOutcome: value.checkpointOutcome,
     checkpointNote: value.checkpointNote,
-    revision: (current.revision ?? 0) + 1,
+    revision: value.expectedRevision + 1,
     updatedAt: dependencies.runtime.now()
   };
   const saved = await dependencies.progress.updateInProgress(
     updated,
-    current.revision ?? 0
+    value.expectedRevision
   );
   if (!saved) {
     const latest = await dependencies.progress.find(
