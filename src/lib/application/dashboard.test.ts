@@ -98,6 +98,7 @@ describe('learner dashboard read model', () => {
     const result = snapshot();
     expect(result.isFreshStart).toBe(true);
     expect(result.nextLesson).toMatchObject({ id: 'lesson-1', week: 1 });
+    expect(result.nextLessonIsInProgress).toBe(false);
     expect(result.completedLessons).toBe(0);
     expect(result.practiceMinutes).toBeNull();
     expect(result.dueReviews).toEqual([]);
@@ -107,6 +108,7 @@ describe('learner dashboard read model', () => {
   it('resumes the earliest in-progress lesson without marking it complete', () => {
     const result = snapshot({ progress: [progress('lesson-1', 'in_progress')] });
     expect(result.nextLesson?.id).toBe('lesson-1');
+    expect(result.nextLessonIsInProgress).toBe(true);
     expect(result.completedLessons).toBe(0);
     expect(result.isFreshStart).toBe(false);
   });
@@ -114,6 +116,7 @@ describe('learner dashboard read model', () => {
   it('moves to the next lesson only after recorded completion', () => {
     const result = snapshot({ progress: [progress('lesson-1', 'completed')] });
     expect(result.nextLesson?.id).toBe('lesson-2');
+    expect(result.nextLessonIsInProgress).toBe(false);
     expect(result.completedLessons).toBe(1);
     expect(result.phases[0].completedLessons).toBe(1);
   });
