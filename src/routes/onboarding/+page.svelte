@@ -52,7 +52,7 @@
       <fieldset>
         <legend>01 · What instrument do you play?</legend>
         <div class="choices">
-          {#each instruments as item}
+          {#each instruments as item (item.value)}
             <label class:chosen={preferences.instrument===item.value}><input type="radio" name="instrument" value={item.value} bind:group={preferences.instrument}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -67,7 +67,7 @@
       <fieldset>
         <legend>03 · Where are you starting?</legend>
         <div class="choices">
-          {#each startingPoints as item}
+          {#each startingPoints as item (item.value)}
             <label class:chosen={preferences.startingPoint===item.value}><input type="radio" name="starting" value={item.value} bind:group={preferences.startingPoint}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -75,7 +75,7 @@
       <fieldset>
         <legend>04 · What would you like to work towards?</legend>
         <div class="choices">
-          {#each goalOptions as item}
+          {#each goalOptions as item (item.value)}
             <label class:chosen={preferences.goals.includes(item.value)}><input type="checkbox" checked={preferences.goals.includes(item.value)} onchange={(event)=>{preferences.goals=event.currentTarget.checked?[...preferences.goals,item.value as ProfilePreferences['goals'][number]]:preferences.goals.filter(goal=>goal!==item.value)}}/><span>{item.label}</span></label>
           {/each}
         </div>
@@ -83,7 +83,7 @@
       <fieldset>
         <legend>05 · How long would you like to practise?</legend>
         <div class="choices four">
-          {#each practiceOptions as minutes}
+          {#each practiceOptions as minutes (minutes)}
             <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} checked={preferences.practiceMinutes===minutes} onchange={()=>preferences.practiceMinutes=minutes}/><span>{minutes} min</span></label>
           {/each}
         </div>
