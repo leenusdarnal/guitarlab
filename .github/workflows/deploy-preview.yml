@@ -1,0 +1,78 @@
+name: Deploy GuitarLab preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_preview:
+        description: Confirm deployment to the public guitarlab-preview Worker
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guitarlab-preview-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy-preview:
+    name: Build and deploy preview Worker
+    if: github.ref == 'refs/heads/main' && inputs.deploy_preview
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Verify Cloudflare credentials are configured
+        shell: bash
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Missing GitHub Actions secret: CLOUDFLARE_API_TOKEN"
+            exit 1
+          fi
+          if [[ ! "$CLOUDFLARE_ACCOUNT_ID" =~ ^[a-fA-F0-9]{32}$ ]]; then
+            echo "Set the GitHub Actions repository variable CLOUDFLARE_ACCOUNT_ID to the Cloudflare account ID."
+            exit 1
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build Cloudflare Worker
+        run: npm run build
+
+      - name: Validate preview deployment configuration
+        run: npx wrangler deploy --config wrangler.preview.jsonc --dry-run
+
+      - name: Deploy preview Worker
+        run: npx wrangler deploy --config wrangler.preview.jsonc
+
+      - name: Smoke-test deployed preview
+        shell: bash
+        run: |
+          url="https://guitarlab-preview.leenus-darnal.workers.dev/"
+          for attempt in $(seq 1 12); do
+            if curl --silent --show-error --fail "$url" --output "$RUNNER_TEMP/guitarlab-preview.html"; then
+              if grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-preview.html"; then
+                echo "Preview deployment smoke test passed: $url"
+                exit 0
+              fi
+            fi
+            sleep 5
+          done
+          echo "Preview Worker did not return the expected GuitarLab page."
+          exit 1
