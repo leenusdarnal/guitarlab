@@ -200,7 +200,7 @@
           <table>
             <thead><tr><th>Data</th><th>Add</th><th>Replace</th><th>Remove</th></tr></thead>
             <tbody>
-              {#each Object.entries(review.preview.records) as entry}
+              {#each Object.entries(review.preview.records) as entry (entry[0])}
                 <tr>
                   <td>{entry[0].replace(/([A-Z])/g, ' $1')}</td>
                   <td>{entry[1].add}</td>
