@@ -13,12 +13,13 @@
     "deploy": "wrangler deploy",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,jsonc,ts}\"",
-    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,jsonc,ts}\"",
+    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,jsonc,ts}\" \"scripts/*.mjs\"",
+    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,jsonc,ts}\" \"scripts/*.mjs\"",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "design:validate": "node scripts/validate-design-tokens.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",

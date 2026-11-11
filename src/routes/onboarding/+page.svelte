@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { createEmptyProfilePreferences, profilePreferencesSchema, type ProfilePreferences } from '$lib/domain/profile/preferences';
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
@@ -41,7 +42,7 @@
 </svelte:head>
 
 <main class="setup-page">
-  <header><a href="/" class="brand"><span class="mark">G</span><strong>GuitarLab</strong></a><a href="/" class="skip">Skip for now ↗</a></header>
+  <header><a href={resolve('/')} class="brand"><span class="mark">G</span><strong>GuitarLab</strong></a><a href={resolve('/')} class="skip">Skip for now ↗</a></header>
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>
     <h1>Make GuitarLab <em>yours.</em></h1>
@@ -99,7 +100,7 @@
           <option value="song-first">Song-first</option>
         </select>
       </fieldset>
-      <div class="form-actions"><button type="submit">Review my preferences <span>→</span></button><a href="/">I'll do this later</a></div>
+      <div class="form-actions"><button type="submit">Review my preferences <span>→</span></button><a href={resolve('/')}>I'll do this later</a></div>
       {#if message}<p class="message" role="status">{message}</p>{/if}
     </form>
     <p class="privacy-note">Privacy by design: this first setup preview validates your choices in this page only. Local profile saving arrives with the local-persistence milestone. No account or microphone permission is required.</p>

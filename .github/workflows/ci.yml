@@ -6,7 +6,7 @@ on:
     branches: [main, "feat/**", "chore/**"]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}
@@ -36,6 +36,17 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+      - name: Commit generated dependency lockfile
+        if: github.event_name == 'push' && github.ref_name == 'feat/m1-application-foundation'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "build: add reproducible npm lockfile"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
       - name: Inspect dependency advisories
         shell: bash
         run: |
@@ -55,6 +66,9 @@ jobs:
 
       - name: Validate curriculum
         run: npm run curriculum:validate
+
+      - name: Validate design-token contrast
+        run: npm run design:validate
 
       - name: Check formatting
         run: npm run format:check
