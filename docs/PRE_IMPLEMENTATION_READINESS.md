@@ -48,7 +48,7 @@ These refinements improve the learning loop without making the initial product s
 
 ### A. Flexible practice length
 
-Practice duration is profile-specific. Offer **10-, 20- and 40-minute presets**, plus a custom duration. Do not impose a universal default: each learner chooses a sustainable duration during onboarding or profile setup. The current project owner's intended profile uses 20 minutes per day. A short session selects fewer high-value tasks rather than squeezing every practice category into a rushed routine.
+Practice duration is profile-specific. Offer **10-, 20- and 40-minute presets**, plus a custom duration. Do not impose a universal default: each learner chooses a sustainable duration during onboarding or profile setup. Keep each learner's choices in private profile storage rather than shared documentation, fixtures or global defaults. A short session selects fewer high-value tasks rather than squeezing every practice category into a rushed routine.
 
 The learner can edit or skip any block. A session timer records elapsed practice only; it never awards mastery on its own.
 
