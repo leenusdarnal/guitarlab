@@ -96,3 +96,37 @@ Review scheduling should use failure/uncertainty and recent success rather than 
 ## Content and licensing
 
 Course references store provider, title, URL, role and access notes. GuitarLab links to the learner's course and external references; it does not mirror paid videos or reproduce protected tabs, books or recordings without permission.
+
+
+## Expanded lesson authoring contract
+
+The present Year 1 and Year 2 records are valid weekly outlines. Do not pretend they are fully authored lesson scripts. Extend them gradually as individual lessons are prepared, using a backwards-compatible and explicitly versioned content schema.
+
+The next schema revision should distinguish:
+- `schemaVersion`: structural schema version used by validators and migrations;
+- `version`: semantic release version of the curriculum content itself.
+
+Recommended optional fields for a progressively authored week:
+
+| Field | Purpose |
+|---|---|
+| `learningObjectives` | Observable outcomes written from the learner's point of view |
+| `prerequisites` | Stable skill IDs or lesson IDs required before this activity |
+| `lessonBlocks` | Ordered teaching blocks such as explanation, diagram, demonstration link or recall prompt |
+| `exercises` | Typed practice instructions with targets, constraints and success criteria |
+| `resources` | Metadata and external links; no copied paid videos or protected tabs |
+| `reviewPolicy` | Suggested retrieval/review guidance based on evidence |
+| `estimatedMinutes` | Planning estimate, not a completion requirement |
+| `optionalTracks` | Enrichment that never blocks the core route |
+
+An exercise should contain a stable ID, title, type, instructions, linked skill IDs, target duration or repetitions, optional starting BPM, observable success criterion, evidence type and accessible alternative where appropriate. Suggested types include `recall`, `fretboard-identification`, `chord-formation`, `chord-transition`, `rhythm`, `picking`, `ear-training`, `theory-quiz`, `song-section` and `reflection`.
+
+A practice target must describe what the learner does and how they can tell whether it was successful. Avoid unsupported objective claims such as automatic tone or timing scores when no validated measurement exists. Identify learner self-assessment as self-reported evidence.
+
+### Content validation rules
+
+The M1 validation command should check JSON parsing, schema version, stable unique IDs, ordered week numbers, valid phase/skill references, allowed exercise types, sensible tempo values, required fields and safe resource URLs. It should not require all optional authoring fields to be present in the existing outline files. Each schema migration must have tests and must preserve existing curriculum IDs and progress references.
+
+### Practice recommendation provenance
+
+When the app recommends a lesson, skill or exercise, preserve the recommendation reason and the evidence used to produce it. The recommendation engine is deterministic in the first release; no external AI call or cloud dependency is required.
