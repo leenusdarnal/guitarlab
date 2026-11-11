@@ -2,7 +2,7 @@
 
 ## Delivery principles
 
-Build a useful learning product in verified increments. Each milestone should leave the application buildable and usable. Do not replace or reset the learner's existing guitar progress when importing curriculum content. The curriculum is versioned content; private learner data is never committed to this public source repository.
+Build a useful learning product in verified increments. Each milestone should leave the application buildable and usable. The initial learner profile is fresh; do not import lesson history from previous chats or external learning systems. The curriculum is versioned content; private learner data is never committed to this public source repository.
 
 ## Milestones
 
@@ -10,17 +10,17 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Recover and reconcile the detailed Year 1 52-week plan.
 - [x] Recover the Year 2 continuation and optional Year 3+ pathways.
 - [x] Define curriculum content format and skill taxonomy.
-- [x] Define separate weekly-card and numbered micro-lesson progress.
+- [x] Define stable weekly lesson IDs, authored lesson records and independent skill evidence.
 - [x] Define first-release scope and product-level visual direction.
 - [x] Document foundation and first-release acceptance criteria.
-- [x] Specify private learner-baseline migration and privacy boundary.
+- [x] Define fresh learner profile initialization and privacy boundary.
 - [x] Finalise the implementation architecture, trust boundaries, data model, sync policy, Cloudflare services and delivery gates.
 - [x] Complete the pre-implementation readiness review, curriculum data audit, feature prioritisation, non-functional requirements and external-tool evaluation.
 - [x] Complete multi-angle curriculum research and revise the spiral learning framework, practice progression and selected checkpoints (curriculum v1.1.0).
 - [ ] Select final visual concept and detailed design tokens before UI implementation.
-- [ ] Execute private learner-baseline import after local persistence exists (M5).
+- [x] Retire all legacy learner-baseline import requirements; start profiles empty.
 
-M0 product and architecture specifications are ready for M1. Finalising the architectural design does not select the final visual UI concept; that remains a design gate before detailed UI implementation. The private progress import remains deferred until a private local profile exists.
+M0 product and architecture specifications are ready for M1. Finalising the architectural design does not select the final visual UI concept; that remains a design gate before detailed UI implementation. The first profile will be initialized empty when local persistence is implemented.
 
 ### M1 — Application foundation
 - [ ] Create SvelteKit/Svelte 5/TypeScript application.
@@ -52,12 +52,12 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Lesson content, objectives and prerequisites.
 - [ ] Exercises, checkpoints and lesson completion.
 - [ ] Resume-in-progress behaviour.
-- [ ] Import existing progress without resetting history.
+- [ ] Load self-contained lesson content and record fresh progress.
 
 ### M5 — Learning state and synchronisation
 - [ ] Local IndexedDB persistence.
 - [ ] Offline practice and lesson progress capture.
-- [ ] Idempotent private learner-baseline import.
+- [ ] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation.
 - [ ] Conflict detection and recovery.
 - [ ] Account and secure cloud sync when ready.
@@ -111,7 +111,7 @@ A milestone is complete only when:
 ## Initial release priorities
 
 1. A reliable, mobile-first dashboard.
-2. The preserved Year 1 curriculum and separate numbered micro-lesson continuity.
+2. The self-contained Year 1 curriculum with a fresh start and clear checkpoints.
 3. Lesson viewing, checkpoints and resume behaviour.
 4. Practice logging and evidence-based skill status.
 5. Local/offline persistence, export and restore.
