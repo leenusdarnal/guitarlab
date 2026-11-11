@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { resolve } from '$app/paths';
 
   let theme = $state<'dark' | 'light'>('dark');
   let menuOpen = $state(false);
@@ -25,7 +26,7 @@
 
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
-    <a class="brand" href="/" aria-label="GuitarLab home">
+    <a class="brand" href={resolve('/')} aria-label="GuitarLab home">
       <span class="brand-mark">G</span>
       <span><strong>GuitarLab</strong><small>LEARN. PRACTISE. MASTER.</small></span>
     </a>
@@ -41,7 +42,7 @@
 
     <div class="sidebar-bottom">
       <div class="offline-indicator"><span></span> Local-first foundation</div>
-      <a class="nav-link" href="/onboarding"><span>⚙</span> Set up learner profile</a>
+      <a class="nav-link" href={resolve('/onboarding')}><span>⚙</span> Set up learner profile</a>
     </div>
   </aside>
 
@@ -52,7 +53,7 @@
       <div class="top-actions">
         <span class="status-pill"><i></i> Your progress starts fresh</span>
         <button class="icon-button" onclick={toggleTheme} aria-label="Toggle colour theme" title="Toggle theme">{theme === 'dark' ? '☼' : '☾'}</button>
-        <a class="avatar" href="/onboarding" aria-label="Learner profile setup">?</a>
+        <a class="avatar" href={resolve('/onboarding')} aria-label="Learner profile setup">?</a>
       </div>
     </header>
 
@@ -63,7 +64,7 @@
         <a href="#practice" onclick={() => (menuOpen = false)}>Practice</a>
         <a href="#tools" onclick={() => (menuOpen = false)}>Tools</a>
         <a href="#progress" onclick={() => (menuOpen = false)}>Progress</a>
-        <a href="/onboarding">Learner setup</a>
+        <a href={resolve('/onboarding')}>Learner setup</a>
       </nav>
     {/if}
 
@@ -74,7 +75,7 @@
           <h1>Make room for <em>music.</em></h1>
           <p>A calm place to build a skill, one useful practice at a time.</p>
         </div>
-        <a class="primary-button" href="/onboarding">Set up your learning profile <span>→</span></a>
+        <a class="primary-button" href={resolve('/onboarding')}>Set up your learning profile <span>→</span></a>
       </section>
 
       <section class="fresh-state" aria-labelledby="fresh-title">
@@ -84,7 +85,7 @@
           <h2 id="fresh-title">Your learning journey begins here.</h2>
           <p>No previous lessons or skill levels have been assumed. Set your preferences when you're ready; you can skip any question and change them later.</p>
         </div>
-        <a class="text-link" href="/onboarding">Get started <span>↗</span></a>
+        <a class="text-link" href={resolve('/onboarding')}>Get started <span>↗</span></a>
       </section>
 
       <div class="section-heading">
@@ -92,19 +93,19 @@
       </div>
 
       <section class="workspace-grid" aria-label="Learning areas">
-        <a class="feature-card learn-card" id="learn" href="/onboarding">
+        <a class="feature-card learn-card" id="learn" href={resolve('/onboarding')}>
           <div class="card-top"><span class="card-icon">▤</span><span class="card-kicker">BUILD YOUR FOUNDATION</span></div>
           <h3>Learn</h3>
           <p>Explore the curriculum, understand new ideas and follow guided lessons.</p>
           <span class="card-link">Explore learning path <b>→</b></span>
         </a>
-        <a class="feature-card practice-card" id="practice" href="/onboarding">
+        <a class="feature-card practice-card" id="practice" href={resolve('/onboarding')}>
           <div class="card-top"><span class="card-icon">◉</span><span class="card-kicker">MAKE IT MUSICAL</span></div>
           <h3>Practice</h3>
           <p>Work through focused exercises and build a consistent practice habit.</p>
           <span class="card-link">Open practice space <b>→</b></span>
         </a>
-        <a class="feature-card tools-card" id="tools" href="/onboarding">
+        <a class="feature-card tools-card" id="tools" href={resolve('/onboarding')}>
           <div class="card-top"><span class="card-icon">⌘</span><span class="card-kicker">YOUR MUSIC TOOLKIT</span></div>
           <h3>Tools</h3>
           <p>Fretboard, chords, rhythm and tuning tools will live in one place.</p>
@@ -122,7 +123,7 @@
           <div class="eyebrow">A NOTE ON THE METHOD</div>
           <h3>Learn. See and hear. Practise. Test. Reflect.</h3>
           <p class="muted">Lessons will combine clear explanations, demonstrations, guided exercises and practical checks. You move forward when you're ready.</p>
-          <a class="text-link" href="/onboarding">Configure your learning preferences <span>↗</span></a>
+          <a class="text-link" href={resolve('/onboarding')}>Configure your learning preferences <span>↗</span></a>
         </div>
       </section>
 
