@@ -82,12 +82,16 @@ try {
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   assert.match(page.url(), /y1-w02-lesson/);
   const secondLessonSections = await page.locator('.lesson-block').count();
-  await page.getByText(`0 of ${secondLessonSections} sections completed`).waitFor();
+  await page
+    .getByText(`0 of ${secondLessonSections} sections completed`)
+    .waitFor();
   await page.getByRole('link', { name: /Previous lesson/ }).click();
   await page.getByText('Lesson completed', { exact: true }).waitFor();
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
-  await page.getByText(`0 of ${secondLessonSections} sections completed`).waitFor();
+  await page
+    .getByText(`0 of ${secondLessonSections} sections completed`)
+    .waitFor();
 
   // Year 2 route and an optional specialist route use the same reader contract.
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
