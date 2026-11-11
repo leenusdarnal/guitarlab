@@ -31,7 +31,7 @@ for (const file of files) {
 const contentHash = hasher.digest('hex');
 
 const migrationNames = (await readdir(migrationsDir))
-  .filter((name) => /^\\d+_[\\w-]+\\.sql$/.test(name))
+  .filter((name) => name.includes('_') && name.endsWith('.sql'))
   .sort();
 
 if (migrationNames.length === 0) {
