@@ -295,7 +295,6 @@ describe('M2.2 application service boundaries', () => {
     expect(harness.profiles.size).toBe(0);
   });
 
-  it('starts/resumes lesson progress and records completion without granting mastery', async () => {
   it('persists lesson sections and checkpoint self-check without granting mastery', async () => {
     const started = await startLessonProgress(
       { learnerId, releaseId, lessonId },
@@ -330,7 +329,7 @@ describe('M2.2 application service boundaries', () => {
     expect(harness.masteryRows.size).toBe(0);
   });
 
-
+  it('starts/resumes lesson progress and records completion without granting mastery', async () => {
     const started = await startLessonProgress(
       { learnerId, releaseId, lessonId },
       {
