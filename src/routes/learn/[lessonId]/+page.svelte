@@ -10,6 +10,7 @@
   let progress = $state<LessonProgressRecord | null>(null);
   let progressLoading = $state(true);
   let progressSaving = $state(false);
+  let progressRequestId = 0;
   let progressError = $state('');
   let completedBlockIds = $state<string[]>([]);
   let checkpointOutcome = $state<'achieved' | 'needs_practice' | null>(null);
@@ -25,26 +26,39 @@
   $effect(() => {
     const lessonId = lesson.id;
     const blockIds = lesson.lessonBlocks.map((block) => block.id);
+    const requestId = ++progressRequestId;
     let active = true;
+
     progress = null;
     progressLoading = true;
+    progressSaving = false;
     progressError = '';
     completedBlockIds = [];
     checkpointOutcome = null;
     checkpointNote = '';
+
     void loadActiveLessonProgress(lessonId, blockIds, curriculumReleaseId)
       .then((record) => {
-        if (!active) return;
+        if (!active || requestId !== progressRequestId) return;
         progress = record;
         completedBlockIds = record.completedBlockIds ?? [];
         checkpointOutcome = record.checkpointOutcome ?? null;
         checkpointNote = record.checkpointNote ?? '';
       })
       .catch((error: unknown) => {
-        if (active) progressError = error instanceof Error ? error.message : 'Local lesson progress could not be loaded.';
+        if (active && requestId === progressRequestId) {
+          progressError = error instanceof Error
+            ? error.message
+            : 'Local lesson progress could not be loaded.';
+        }
       })
-      .finally(() => { if (active) progressLoading = false; });
-    return () => { active = false; };
+      .finally(() => {
+        if (active && requestId === progressRequestId) progressLoading = false;
+      });
+
+    return () => {
+      active = false;
+    };
   });
 
   async function persistProgress(overrides: Partial<{
@@ -53,23 +67,58 @@
     checkpointOutcome: 'achieved' | 'needs_practice' | null;
     checkpointNote: string | null;
   }> = {}) {
-    if (!progress || progress.status === 'completed' || progressSaving) return;
+    const currentProgress = progress;
+    if (
+      !currentProgress ||
+      currentProgress.status === 'completed' ||
+      progressSaving
+    ) {
+      return;
+    }
+
+    const lessonId = lesson.id;
+    const blockIds = lesson.lessonBlocks.map((block) => block.id);
+    const requestId = progressRequestId;
     progressSaving = true;
     progressError = '';
+
     try {
-      progress = await saveActiveLessonProgress(lesson.id, {
-        expectedRevision: progress.revision ?? 0,
-        lastBlockId: overrides.lastBlockId !== undefined ? overrides.lastBlockId : progress.lastBlockId,
-        completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
-        checkpointOutcome: overrides.checkpointOutcome !== undefined ? overrides.checkpointOutcome : checkpointOutcome,
-        checkpointNote: overrides.checkpointNote !== undefined ? overrides.checkpointNote : checkpointNote
-      }, lesson.lessonBlocks.map((block) => block.id), curriculumReleaseId);
-      completedBlockIds = progress.completedBlockIds ?? [];
-      checkpointOutcome = progress.checkpointOutcome ?? null;
-      checkpointNote = progress.checkpointNote ?? '';
+      const saved = await saveActiveLessonProgress(
+        lessonId,
+        {
+          expectedRevision: currentProgress.revision ?? 0,
+          lastBlockId:
+            overrides.lastBlockId !== undefined
+              ? overrides.lastBlockId
+              : currentProgress.lastBlockId,
+          completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
+          checkpointOutcome:
+            overrides.checkpointOutcome !== undefined
+              ? overrides.checkpointOutcome
+              : checkpointOutcome,
+          checkpointNote:
+            overrides.checkpointNote !== undefined
+              ? overrides.checkpointNote
+              : checkpointNote
+        },
+        blockIds,
+        curriculumReleaseId
+      );
+
+      if (requestId !== progressRequestId) return;
+      progress = saved;
+      completedBlockIds = saved.completedBlockIds ?? [];
+      checkpointOutcome = saved.checkpointOutcome ?? null;
+      checkpointNote = saved.checkpointNote ?? '';
     } catch (error) {
-      progressError = error instanceof Error ? error.message : 'Your lesson progress could not be saved. Please try again.';
-    } finally { progressSaving = false; }
+      if (requestId === progressRequestId) {
+        progressError = error instanceof Error
+          ? error.message
+          : 'Your lesson progress could not be saved. Please try again.';
+      }
+    } finally {
+      if (requestId === progressRequestId) progressSaving = false;
+    }
   }
 
   async function toggleBlock(blockId: string) {
