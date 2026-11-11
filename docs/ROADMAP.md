@@ -15,6 +15,7 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Document foundation and first-release acceptance criteria.
 - [x] Specify private learner-baseline migration and privacy boundary.
 - [x] Finalise the implementation architecture, trust boundaries, data model, sync policy, Cloudflare services and delivery gates.
+- [x] Complete the pre-implementation readiness review, curriculum data audit, feature prioritisation, non-functional requirements and external-tool evaluation.
 - [ ] Select final visual concept and detailed design tokens before UI implementation.
 - [ ] Execute private learner-baseline import after local persistence exists (M5).
 
@@ -38,6 +39,8 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 
 ### M3 — Learning dashboard
 - [ ] Today's practice and next recommended lesson.
+- [ ] Explainable next-action recommendations based on current lesson, review needs, evidence, prerequisites and available time.
+- [ ] 10-, 20- and 40-minute practice plans plus custom duration.
 - [ ] Current learning phase and progress.
 - [ ] Review-due skills and weak areas.
 - [ ] Goal and schedule preferences.
@@ -61,8 +64,9 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 
 ### M6 — Interactive music tools
 - [ ] Fretboard explorer and note identification.
+- [ ] Tuning-aware instrument profile and handedness-aware fretboard presentation.
 - [ ] Chord diagrams and chord laboratory.
-- [ ] Chord-transition drills.
+- [ ] Chord-transition drills with clean-change quality tracked separately from speed.
 - [ ] Metronome and reference tones.
 - [ ] Chromatic tuner with explicit microphone permission.
 
@@ -70,13 +74,15 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Custom practice routines.
 - [ ] Session timer and exercise sequence.
 - [ ] Practice journal and session history.
-- [ ] Tempo and repetition tracking.
+- [ ] Tempo and repetition tracking with accuracy-first tempo ladders.
 - [ ] Add an optional external ComposeYogi launcher for learner-created backing tracks; core practice must remain native and independent.
+- [ ] Quick session reflection and one next target with minimal friction.
 - [ ] Skill assessments and review scheduling.
 
 ### M8 — Musicianship and repertoire
 - [ ] Music theory reference and exercises.
 - [ ] Ear-training exercises.
+- [ ] Progressive scale, interval, triad and CAGED fretboard modes.
 - [ ] Song library and bookmark management.
 - [ ] TAB/notation viewer for permitted content.
 - [ ] Song section loops and practice targets.
@@ -88,6 +94,7 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Security and privacy review.
 - [ ] Backup/restore verification.
 - [ ] Performance and reliability checks.
+- [ ] Verify curriculum schema and content validation in CI.
 - [ ] Production deployment and smoke tests.
 
 ## Definition of done
