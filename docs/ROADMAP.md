@@ -19,18 +19,19 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Complete multi-angle curriculum research and revise the spiral learning framework, practice progression and selected checkpoints (curriculum v1.1.0).
 - [x] Author all 52 Year 1, 52 Year 2 and 48 Year 3 specialist lessons.
 - [x] Add a versioned lesson JSON Schema, stable specialist-week IDs and a dependency-free content validator.
-- [ ] Select final visual concept and detailed design tokens before UI implementation.
+- [x] Establish the approved hybrid visual direction and publish the implementation guideline; define and contrast-test exact UI tokens during M1.
 - [x] Retire all legacy learner-baseline import requirements; start profiles empty.
 
-M0 product and architecture specifications are ready for M1. Finalising the architectural design does not select the final visual UI concept; that remains a design gate before detailed UI implementation. The first profile will be initialized empty when local persistence is implemented.
+M0 product, architecture, curriculum and implementation guidelines are ready for M1. The approved hybrid design direction is documented in docs/DESIGN_DIRECTION.md and docs/IMPLEMENTATION_GUIDELINES.md. M1 can proceed without Work-mode access. The first profile will be initialized empty when local persistence is implemented; the learner's own preferences are entered into that private profile, not committed as shared defaults.
 
 ### M1 — Application foundation
 - [ ] Create SvelteKit/Svelte 5/TypeScript application.
 - [ ] Configure Tailwind CSS 4.
 - [ ] Configure Cloudflare adapter and Wrangler.
 - [ ] Establish local development and environment separation.
+- [ ] Build a versioned, profile-scoped learner settings model and skippable onboarding.
 - [ ] Add formatting, linting, type-checking and CI.
-- [ ] Add accessible responsive application shell after visual concept selection.
+- [ ] Add accessible responsive application shell using the approved hybrid design direction and semantic design tokens.
 
 ### M2 — Data foundation
 - [ ] Configure D1 and Drizzle ORM.
@@ -46,7 +47,8 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] 10-, 20- and 40-minute practice plans plus custom duration.
 - [ ] Current learning phase and progress.
 - [ ] Review-due skills and weak areas.
-- [ ] Goal and schedule preferences.
+- [ ] Per-profile goals, practice schedule/duration, preferred lesson presentation and accessibility settings.
+- [ ] Compose an explainable daily plan from learner preferences and skill evidence.
 - [ ] Responsive desktop and mobile navigation.
 
 ### M4 — Curriculum and lesson engine
@@ -55,6 +57,7 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Exercises, checkpoints and lesson completion.
 - [ ] Resume-in-progress behaviour.
 - [ ] Load self-contained lesson content and record fresh progress.
+- [ ] Render lesson blocks according to per-profile presentation preferences while preserving authored learning outcomes and text fallbacks.
 
 ### M5 — Learning state and synchronisation
 - [ ] Local IndexedDB persistence.
@@ -120,3 +123,8 @@ A milestone is complete only when:
 6. Basic fretboard, chord diagrams, metronome and single-note tuner.
 
 Automatic polyphonic chord grading, AI tutoring, social features and collaboration are deferred.
+
+
+### Personalisation and design implementation baseline
+
+Follow [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md) for the approved hybrid visual direction, per-profile onboarding, lesson presentation types, daily-plan composition and acceptance criteria. The shared curriculum remains canonical; the learner's session plan, goals, practice emphasis and teaching format are profile-specific. Do not use the current owner's acoustic/20-minute/all-round choices as application-wide defaults.
