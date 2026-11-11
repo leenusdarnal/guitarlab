@@ -74,13 +74,13 @@ describe('learner backup contract', () => {
     newer.records.lessonProgress[0] = {
       ...newer.records.lessonProgress[0],
       lastBlockId: 'guided-demo', completedBlockIds: ['guided-demo'],
-      checkpointOutcome: 'needs_practice', checkpointNote: 'Keep the pulse relaxed.'
+      checkpointOutcome: 'needs_practice', checkpointNote: 'Keep the pulse relaxed.', revision: 1
     };
     expect(parseLearnerBackup(newer)).toMatchObject({
       success: true,
       data: { records: { lessonProgress: [{
         completedBlockIds: ['guided-demo'], checkpointOutcome: 'needs_practice',
-        checkpointNote: 'Keep the pulse relaxed.'
+        checkpointNote: 'Keep the pulse relaxed.', revision: 1
       }] } }
     });
   });
