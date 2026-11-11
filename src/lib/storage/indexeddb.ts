@@ -4,6 +4,9 @@ import {
   type ProfilePreferences
 } from '../domain/profile/preferences';
 import { updateLearnerPreferences } from '../application/services';
+import { buildDashboardSnapshot } from '../application/dashboard';
+import year1Curriculum from '../../../content/curriculum/year-1.json';
+import year1Lessons from '../../../content/curriculum/year-1-lessons.json';
 import { systemRuntime } from '../repositories/contracts';
 import type {
   AssessmentAttemptRecord,
@@ -372,6 +375,53 @@ export async function saveActiveLearnerPreferences(
       { learnerId: active.id, preferences },
       { profiles: repositories.profiles, runtime: systemRuntime }
     );
+  } finally {
+    database.close();
+  }
+}
+
+
+/** Build the dashboard from local learner evidence and the authored Year 1 route. */
+export async function loadActiveLearnerDashboard() {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const snapshot = await inTransaction(
+      database,
+      [stores.progress, stores.mastery, stores.practiceSessions],
+      'readonly',
+      async (transaction) => {
+        const progressRequest = transaction
+          .objectStore(stores.progress)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const masteryRequest = transaction
+          .objectStore(stores.mastery)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const practiceRequest = transaction
+          .objectStore(stores.practiceSessions)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+
+        const [progress, mastery, practiceSessions] = await Promise.all([
+          requestResult<LessonProgressRecord[]>(progressRequest),
+          requestResult<SkillMasteryRecord[]>(masteryRequest),
+          requestResult<PracticeSessionRecord[]>(practiceRequest)
+        ]);
+
+        return buildDashboardSnapshot({
+          profile,
+          lessons: year1Lessons.lessons,
+          phases: year1Curriculum.phases,
+          progress,
+          mastery,
+          practiceSessions,
+          now: Date.now()
+        });
+      }
+    );
+    return snapshot;
   } finally {
     database.close();
   }
