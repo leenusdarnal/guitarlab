@@ -147,7 +147,7 @@ function makeDatabase(): IDBDatabase {
   ]);
 
   return {
-    transaction: (_names: string | string[]) => new FakeTransaction(stores)
+    transaction: () => new FakeTransaction(stores)
   } as unknown as IDBDatabase;
 }
 
