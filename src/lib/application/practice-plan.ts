@@ -60,7 +60,7 @@ export function buildPracticePlan(input: {
     throw new RangeError('Practice duration must be between 5 and 180 minutes.');
   }
 
-  const preset = input.preset ?? (minutes === 10 || minutes === 20 || minutes === 40 ? minutes : 'custom');
+  const preset: PracticePlanPreset = input.preset ?? (minutes === 10 ? 10 : minutes === 20 ? 20 : minutes === 40 ? 40 : 'custom');
   const scale = minutes < 15 ? 'short' : minutes < 30 ? 'standard' : 'extended';
   const candidates: Candidate[] = [];
   let order = 0;
@@ -119,7 +119,7 @@ export function buildPracticePlan(input: {
   });
 
   if (input.currentLesson) {
-    const applicationMinutes = scale === 'short' ? 3 : scale === 'standard' ? 4 : Math.min(10, Math.round(minutes * 0.25));
+    const applicationMinutes = scale === 'short' ? 4 : scale === 'standard' ? 4 : Math.min(10, Math.round(minutes * 0.25));
     add({
       id: `apply:${input.currentLesson.id}`,
       kind: 'musical-application',
@@ -153,7 +153,7 @@ export function buildPracticePlan(input: {
   return {
     minutes,
     preset,
-    recommendations: selected.map(({ priority: _priority, order: _order, ...task }) => task),
+    recommendations: selected.map((task) => ({\n      id: task.id,\n      kind: task.kind,\n      title: task.title,\n      minutes: task.minutes,\n      reason: task.reason,\n      ...(task.skillId ? { skillId: task.skillId } : {}),\n      ...(task.lessonId ? { lessonId: task.lessonId } : {})\n    })),
     allocatedMinutes: minutes - remaining,
     remainingMinutes: remaining
   };
