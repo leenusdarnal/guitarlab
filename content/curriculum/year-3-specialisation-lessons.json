@@ -303,6 +303,13 @@
       "skillIds": [
         "instrument.tuning",
         "instrument.posture"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating technique reset. Success target: Demonstrate technique reset in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -522,6 +529,18 @@
       "skillIds": [
         "lead.major-scale",
         "lead.pentatonic"
+      ],
+      "workedExamples": [
+        {
+          "kind": "scale-reference",
+          "label": "A minor pentatonic",
+          "content": "Notes: A–C–D–E–G. Box 1 at the 5th fret, low E to high e: 5–8 / 5–7 / 5–7 / 5–7 / 5–8 / 5–8. The roots A are on the low E and high e strings at fret 5. Start and finish phrases on A to hear the tonal centre."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck. Success target: Demonstrate pentatonic across neck in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -742,6 +761,18 @@
         "lead.pentatonic",
         "lead.phrasing",
         "technique.bends"
+      ],
+      "workedExamples": [
+        {
+          "kind": "form-reference",
+          "label": "12-bar blues map",
+          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating bends to pitch. Success target: Demonstrate bends to pitch in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -962,6 +993,18 @@
         "technique.alternate-picking",
         "technique.string-crossing",
         "technique.legato"
+      ],
+      "workedExamples": [
+        {
+          "kind": "technique-reference",
+          "label": "Picking pattern",
+          "content": "Alternate the pick D–U–D–U on successive notes. Keep the pick depth shallow. Say the stroke direction aloud while practising a slow two-string crossing."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating legato control. Success target: Demonstrate legato control in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -1183,6 +1226,18 @@
         "rhythm.subdivision",
         "rhythm.strumming",
         "arrangement.song-form"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating blues shuffle arrangement. Success target: Demonstrate blues shuffle arrangement in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -1403,6 +1458,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating quarter review: lead tone. Success target: Demonstrate quarter review: lead tone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -1621,6 +1688,13 @@
       "checkpoint": "Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating chord-tone soloing. Success target: Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -1840,6 +1914,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating riff construction. Success target: Demonstrate riff construction in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -2059,6 +2145,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating modal colour. Success target: Demonstrate modal colour in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -2278,6 +2376,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating phrasing and silence. Success target: Demonstrate phrasing and silence in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -2499,6 +2604,18 @@
         "performance.recording",
         "performance.recovery",
         "arrangement.song-form"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating performance arrangement. Success target: Demonstrate performance arrangement in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -2719,6 +2836,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating path capstone. Success target: Demonstrate path capstone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -2938,6 +3067,18 @@
       "skillIds": [
         "fingerstyle.thumb-independence",
         "fingerstyle.patterns"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fingerstyle-reference",
+          "label": "Right-hand roles",
+          "content": "Common classical-style labels: p = thumb (bass strings), i = index, m = middle, a = ring. Practise the bass alone, add one treble note, then combine the parts without changing the thumb pulse."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating right-hand independence. Success target: Demonstrate right-hand independence in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -3157,6 +3298,18 @@
       "skillIds": [
         "fingerstyle.thumb-independence",
         "fingerstyle.patterns"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fingerstyle-reference",
+          "label": "Right-hand roles",
+          "content": "Common classical-style labels: p = thumb (bass strings), i = index, m = middle, a = ring. Practise the bass alone, add one treble note, then combine the parts without changing the thumb pulse."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating arpeggio consistency. Success target: Demonstrate arpeggio consistency in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -3376,6 +3529,18 @@
       "skillIds": [
         "fingerstyle.thumb-independence",
         "fingerstyle.patterns"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fingerstyle-reference",
+          "label": "Right-hand roles",
+          "content": "Common classical-style labels: p = thumb (bass strings), i = index, m = middle, a = ring. Practise the bass alone, add one treble note, then combine the parts without changing the thumb pulse."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating alternating bass. Success target: Demonstrate alternating bass in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -3594,6 +3759,13 @@
       "checkpoint": "Demonstrate chord melody basics in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating chord melody basics. Success target: Demonstrate chord melody basics in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -3813,6 +3985,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating sus and add9 colour. Success target: Demonstrate sus and add9 colour in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -4033,6 +4212,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating quarter review: acoustic tone. Success target: Demonstrate quarter review: acoustic tone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -4252,6 +4443,18 @@
       "skillIds": [
         "rhythm.pulse",
         "rhythm.subdivision"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating percussive accompaniment. Success target: Demonstrate percussive accompaniment in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -4471,6 +4674,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating moving bass lines. Success target: Demonstrate moving bass lines in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -4690,6 +4900,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating arrange a melody. Success target: Demonstrate arrange a melody in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -4909,6 +5131,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating open-string colour. Success target: Demonstrate open-string colour in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -5128,6 +5357,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating dynamic arc. Success target: Demonstrate dynamic arc in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -5348,6 +5589,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating path capstone. Success target: Demonstrate path capstone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -5566,6 +5819,13 @@
       "checkpoint": "Demonstrate jazz chord grips in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating jazz chord grips. Success target: Demonstrate jazz chord grips in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -5786,6 +6046,18 @@
         "rhythm.pulse",
         "rhythm.subdivision",
         "rhythm.strumming"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating swing subdivision. Success target: Demonstrate swing subdivision in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -6004,6 +6276,13 @@
       "checkpoint": "Demonstrate guide tones in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating guide tones. Success target: Demonstrate guide tones in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -6222,6 +6501,13 @@
       "checkpoint": "Demonstrate ii-v-i in two keys in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating ii-v-i in two keys. Success target: Demonstrate ii-v-i in two keys in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -6440,6 +6726,13 @@
       "checkpoint": "Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating chord extensions. Success target: Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -6660,6 +6953,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp. Success target: Demonstrate quarter review: jazz comp in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -6880,6 +7185,18 @@
         "rhythm.pulse",
         "rhythm.subdivision",
         "rhythm.strumming"
+      ],
+      "workedExamples": [
+        {
+          "kind": "rhythm-reference",
+          "label": "Count before playing",
+          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating bossa pattern. Success target: Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -7099,6 +7416,18 @@
       "skillIds": [
         "lead.pentatonic",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "form-reference",
+          "label": "12-bar blues map",
+          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating jazz blues form. Success target: Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -7317,6 +7646,13 @@
       "checkpoint": "Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating chord-tone soloing. Success target: Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -7537,6 +7873,18 @@
         "ear.pitch",
         "ear.rhythm",
         "ear.melody-transcription"
+      ],
+      "workedExamples": [
+        {
+          "kind": "ear-practice",
+          "label": "Listen–sing–find–verify",
+          "content": "Use a three-to-eight-note original phrase. First hum the contour, then clap the rhythm, find the opening note, work in short fragments and compare your playing with the reference."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating tune learning workflow. Success target: Demonstrate tune learning workflow in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -7755,6 +8103,13 @@
       "checkpoint": "Demonstrate reharmonisation in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating reharmonisation. Success target: Demonstrate reharmonisation in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -7975,6 +8330,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating path capstone. Success target: Demonstrate path capstone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -8196,6 +8563,18 @@
         "ear.rhythm",
         "ear.melody-transcription",
         "ear.intervals"
+      ],
+      "workedExamples": [
+        {
+          "kind": "ear-practice",
+          "label": "Listen–sing–find–verify",
+          "content": "Use a three-to-eight-note original phrase. First hum the contour, then clap the rhythm, find the opening note, work in short fragments and compare your playing with the reference."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating listening journal. Success target: Demonstrate listening journal in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -8417,6 +8796,18 @@
         "ear.rhythm",
         "ear.melody-transcription",
         "ear.intervals"
+      ],
+      "workedExamples": [
+        {
+          "kind": "ear-practice",
+          "label": "Listen–sing–find–verify",
+          "content": "Use a three-to-eight-note original phrase. First hum the contour, then clap the rhythm, find the opening note, work in short fragments and compare your playing with the reference."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating ear intervals. Success target: Demonstrate ear intervals in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -8635,6 +9026,18 @@
       "checkpoint": "Demonstrate sight reading routine in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "notation.tab"
+      ],
+      "workedExamples": [
+        {
+          "kind": "notation-reference",
+          "label": "TAB orientation",
+          "content": "Six TAB lines, top to bottom: high E, B, G, D, A, low E. Read left to right; 0 is open; stacked fret numbers are played together. Read the rhythm separately when it is not fully shown in the TAB."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating sight reading routine. Success target: Demonstrate sight reading routine in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -8853,6 +9256,13 @@
       "checkpoint": "Demonstrate harmony analysis in a short musical example, explain the key choice and identify one next improvement.",
       "skillIds": [
         "harmony.open-chords"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating harmony analysis. Success target: Demonstrate harmony analysis in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -9072,6 +9482,18 @@
       "skillIds": [
         "fretboard.string-map",
         "fretboard.natural-notes"
+      ],
+      "workedExamples": [
+        {
+          "kind": "fretboard-reference",
+          "label": "Natural-note landmarks",
+          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating transposition. Success target: Demonstrate transposition in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -9292,6 +9714,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating quarter review: musicianship. Success target: Demonstrate quarter review: musicianship in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -9511,6 +9945,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating arranging texture. Success target: Demonstrate arranging texture in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -9731,6 +10177,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating recording feedback. Success target: Demonstrate recording feedback in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -9950,6 +10408,18 @@
       "skillIds": [
         "arrangement.song-form",
         "lead.phrasing"
+      ],
+      "workedExamples": [
+        {
+          "kind": "creative-prompt",
+          "label": "Build a musical idea",
+          "content": "Create a two- or four-bar motif, repeat it, change one feature (rhythm, ending, register or dynamics), then leave space. Keep the pulse and make the final note feel intentional."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating songwriting form. Success target: Demonstrate songwriting form in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -10170,6 +10640,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating ensemble preparation. Success target: Demonstrate ensemble preparation in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -10389,6 +10871,13 @@
       "skillIds": [
         "harmony.triads",
         "harmony.voice-leading"
+      ],
+      "workedExamples": [
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating teaching a skill. Success target: Demonstrate teaching a skill in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     },
     {
@@ -10609,6 +11098,18 @@
         "repertoire.song-learning",
         "performance.recording",
         "performance.recovery"
+      ],
+      "workedExamples": [
+        {
+          "kind": "performance-check",
+          "label": "Performance run-through",
+          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+        },
+        {
+          "kind": "lesson-application",
+          "label": "This week's example",
+          "content": "Create or perform an original 4- to 8-bar example demonstrating path capstone. Success target: Demonstrate path capstone in a short musical example, explain the key choice and identify one next improvement."
+        }
       ]
     }
   ]
