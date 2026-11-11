@@ -3,7 +3,7 @@
 ## Boundary rules
 
 - Svelte components and route handlers call application use cases; they do not issue SQL or call Drizzle directly.
-- Application use cases depend on repository interfaces in \`src/lib/repositories/contracts.ts\`, never on D1, Drizzle, IndexedDB or SvelteKit.
+- Application use cases depend on repository interfaces in `src/lib/repositories/contracts.ts`, never on D1, Drizzle, IndexedDB or SvelteKit.
 - Curriculum and skill reads use public, version-scoped repositories. Learner profile, progress, assessment, mastery and practice repositories are private learner-state paths.
 - The current product remains local-first. These interfaces do not enable cloud sync, create public learner endpoints or establish an authentication model.
 - A future authenticated route must derive the learner scope from its verified session. It must never trust a client-supplied owner ID. Local-only callers may use the active local profile identifier.
@@ -24,10 +24,10 @@
 
 ## Typed errors
 
-- \`ValidationError\`: input did not meet a Zod boundary schema; issue paths/messages are safe to display.
-- \`NotFoundError\`: the requested release, lesson, skill, profile, progress row or session is not available in the requested scope.
-- \`ConflictError\`: a one-time transition was already applied or lost a compare-and-set race.
-- \`InvalidStateError\`: a transition violates the current learning/practice state rules.
+- `ValidationError`: input did not meet a Zod boundary schema; issue paths/messages are safe to display.
+- `NotFoundError`: the requested release, lesson, skill, profile, progress row or session is not available in the requested scope.
+- `ConflictError`: a one-time transition was already applied or lost a compare-and-set race.
+- `InvalidStateError`: a transition violates the current learning/practice state rules.
 - Unknown storage/runtime exceptions are mapped to a generic internal message. SQL text, stack traces and arbitrary exception text are not returned to the UI.
 
 ## Adapter requirements
@@ -36,7 +36,7 @@ Any future IndexedDB or Drizzle adapter must implement the contracts and preserv
 
 1. Assessment attempts are append-only.
 2. Lesson completion writes the progress transition and immutable event in one transaction.
-3. Practice completion is a compare-and-set from \`in_progress\`; duplicate completion cannot overwrite the first result.
+3. Practice completion is a compare-and-set from `in_progress`; duplicate completion cannot overwrite the first result.
 4. A stable mastery snapshot references the latest passing assessment from the same learner, release and skill.
 5. Queries include the full learner/release/skill scope. An adapter must not widen a private query to a global collection.
 6. Repository failures are allowed to throw internally; application boundaries convert only known domain failures to safe typed errors.
