@@ -49,6 +49,8 @@ export type LessonProgressRecord = {
   lastBlockId: string | null;
   /** Completed authored blocks; optional for compatibility with earlier local rows and backups. */
   completedBlockIds?: string[];
+  /** Monotonic local revision for stale-tab protection; absent in pre-M4.2 rows. */
+  revision?: number;
   /** Learner self-check only; this is not skill mastery evidence. */
   checkpointOutcome?: 'achieved' | 'needs_practice' | null;
   checkpointNote?: string | null;
