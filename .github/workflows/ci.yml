@@ -89,6 +89,7 @@ jobs:
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
       - name: Browser acceptance tests
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         run: npm run test:browser
 
       - name: Preserve Cloudflare preview build
