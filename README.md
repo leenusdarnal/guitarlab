@@ -49,10 +49,10 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 
 ## Development status
 
-The product definition, curriculum foundation, final architecture, approved hybrid visual direction and implementation guidelines are documented. **M1 application foundation is merged** ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)): SvelteKit/TypeScript, Tailwind CSS, Cloudflare Workers configuration, an initial responsive dashboard, learner setup, CI and design-token validation. The merged application passes GitHub Actions source validation, Svelte/TypeScript checks, unit tests, the Cloudflare production build and a local Wrangler Worker smoke test. A live Cloudflare preview and browser-level verification remain separate release tasks. The dashboard and onboarding are an initial foundation, not yet a persisted learning product; D1/Drizzle is M2 and IndexedDB is M5. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md) and [system diagrams](docs/DIAGRAMS.md):
+The product definition, authored curriculum, final architecture and approved visual direction are in place. **M1 application foundation is merged** ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)): SvelteKit/TypeScript, Tailwind CSS, Cloudflare Workers, the first responsive dashboard and learner setup. **M2.1 data foundation is also merged** ([PR #22](https://github.com/leenusdarnal/guitarlab/pull/22)): versioned Drizzle schema, local-only D1 migrations, 152 lesson metadata references, 34 stable skill IDs and database integrity tests. The D1 schema is not yet connected to learner-facing routes; authentication, cloud sync, production D1 and IndexedDB remain deferred. The merged workflows pass curriculum, contrast, format, lint, type, unit, local D1 migration/invariant, production Worker build and local Worker smoke tests. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
 
-- [System diagrams — architecture, learning loop and delivery](docs/DIAGRAMS.md)
-- [Data model and D1 migrations](docs/DATA_MODEL.md)\n- [Data model and D1 migrations](docs/DATA_MODEL.md)
+- [System diagrams — architecture, learning loop, database and delivery](docs/DIAGRAMS.md)
+- [Data model and D1 migrations](docs/DATA_MODEL.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Product specification](docs/PRODUCT_SPEC.md)
 - [Learning curriculum](docs/CURRICULUM.md)
@@ -100,7 +100,7 @@ npm run build
 npm run preview
 ```
 
-The current M1 shell and learner setup are not yet backed by local persistence. D1 is not configured in M1; it is added with M2. Never use production databases for local testing.
+M2.1 adds the D1 schema and Wrangler local binding, but no learner-facing data route or cloud sync is enabled. Run `npm run db:setup:local` to generate/verify the versioned migration, apply it to Wrangler's local D1 and run the database invariant tests. The all-zero database ID in `wrangler.jsonc` is a local placeholder. Never use `--remote` or a production database for these checks.
 
 Never commit API tokens, Cloudflare credentials, private recordings or personal learning data.
 

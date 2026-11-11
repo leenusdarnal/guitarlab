@@ -15,12 +15,12 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Visual direction | Approved | Hybrid of modern interactive structure, warm acoustic character and focused practice; `docs/DESIGN_DIRECTION.md` |
 | Design-token contrast | Added to CI | `scripts/validate-design-tokens.mjs` checks dark/light text, status, accent and focus pairs |
 | Application foundation | Merged | PR #21; SvelteKit 3/Svelte 5/TypeScript, Tailwind 4, Cloudflare adapter, initial dashboard and onboarding |
-| Cloudflare runtime | Configured in PR #21 | Wrangler and adapter configured; preview/runtime smoke test still required |
+| Cloudflare runtime | Configured and locally verified | Worker production build and local Wrangler smoke test pass; no live preview or production deployment is claimed |
 | CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
-| Cloud data and local persistence | M2.1 in implementation | Versioned Drizzle/D1 schema, local-only migrations and database invariants in PR under review; M5 IndexedDB remains later |
-| Full curriculum reader and progress engine | Not started | M3–M5; the data model preserves authored IDs and separates lesson completion from demonstrated mastery |
+| Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
+| Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21 is still subject to passing CI and runtime verification. The dashboard is an initial shell. Learner setup validates preferences in memory only; it does not yet persist them. No production deployment or cloud learner-data endpoint is claimed.
+**Important:** PR #21 and PR #22 are merged. The dashboard is an initial shell; learner setup validates preferences in memory only and does not yet persist them. M2.1 provides the database contract and local migration/tests, not learner-facing D1 repositories or routes. No production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
@@ -37,13 +37,13 @@ Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusd
 
 ## M2 — Data foundation
 
-M2.1 is being implemented in branch feat/m2-d1-drizzle-data-foundation. The schema seeds 152 lesson metadata references and 34 skill IDs while keeping lesson bodies in Git. The first migration is local-only; no production D1 database or authentication is created.
+M2.1 is merged in [PR #22](https://github.com/leenusdarnal/guitarlab/pull/22), and [issue #7](https://github.com/leenusdarnal/guitarlab/issues/7) is closed. The schema defines 10 relational tables, seeds 152 lesson metadata references and 34 skill IDs, and keeps lesson bodies in Git. The versioned migration and database invariants pass in Wrangler local D1. No production D1, authentication or cloud sync is created.
 
 
 
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|
-| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | In implementation | Fresh local D1 migration, FK/unique checks, append-only assessment triggers and separate completion/mastery invariants are being tested in CI |
+| M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Fresh local D1 migration, FK/unique constraints, append-only assessment triggers and separate completion/mastery invariants all pass in CI |
 | M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | M2.1 | Storage-independent contracts and validation tests |
 | M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | M2.2 | New profile is empty, persists locally and survives offline reload |
 | M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | M2.3 | Validated round-trip; failed restore leaves existing data intact |
@@ -91,5 +91,6 @@ M2.1 is being implemented in branch feat/m2-d1-drizzle-data-foundation. The sche
 
 ## Immediate next actions
 
-1. Configure a live Cloudflare preview deployment using the preserved CI build artifact, then complete browser-level verification; no live preview URL is claimed yet.
-2. Start M2.1 ([issue #7](https://github.com/leenusdarnal/guitarlab/issues/7)) with D1/Drizzle migrations and versioned domain tables.
+1. Start M2.2 ([issue #8](https://github.com/leenusdarnal/guitarlab/issues/8)): define repository interfaces and application services over the new domain contracts, keeping database access server-only.
+2. Keep local D1 as a development/test binding only until authentication and ownership checks exist; IndexedDB-first learner persistence remains M2.3/M5 as planned.
+3. Add a live Cloudflare preview deployment and browser-level verification as a separate release task; no live preview URL is claimed yet.

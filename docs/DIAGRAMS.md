@@ -118,3 +118,111 @@ flowchart LR
   M8 --> M9["M9 · Release hardening"]
 ```
 
+## 6. M2.1 relational data model
+
+The relational schema is split between immutable curriculum release metadata and learner-owned activity/evidence. Foreign-key ownership keys are shown where they enforce scope. Full lesson bodies remain in versioned JSON and are not stored in D1.
+
+```mermaid
+erDiagram
+  CURRICULUM_RELEASES ||--o{ CURRICULUM_LESSONS : indexes
+  CURRICULUM_RELEASES ||--o{ CURRICULUM_RELEASE_SKILLS : contains
+  SKILLS ||--o{ CURRICULUM_RELEASE_SKILLS : versioned_in
+  LEARNER_PROFILES ||--o{ LESSON_PROGRESS : owns
+  CURRICULUM_LESSONS ||--o{ LESSON_PROGRESS : referenced_by
+  LESSON_PROGRESS ||--o{ LESSON_COMPLETION_EVENTS : records
+  LEARNER_PROFILES ||--o{ LESSON_COMPLETION_EVENTS : owns
+  LEARNER_PROFILES ||--o{ SKILL_ASSESSMENT_ATTEMPTS : owns
+  CURRICULUM_RELEASE_SKILLS ||--o{ SKILL_ASSESSMENT_ATTEMPTS : assesses
+  CURRICULUM_LESSONS o|--o{ SKILL_ASSESSMENT_ATTEMPTS : context_for
+  LEARNER_PROFILES ||--o{ SKILL_MASTERY : owns
+  CURRICULUM_RELEASE_SKILLS ||--o{ SKILL_MASTERY : tracks
+  SKILL_ASSESSMENT_ATTEMPTS o|--o{ SKILL_MASTERY : evidence_pointer
+  LEARNER_PROFILES ||--o{ PRACTICE_SESSIONS : owns
+  CURRICULUM_LESSONS o|--o{ PRACTICE_SESSIONS : optional_focus
+
+  CURRICULUM_RELEASES {
+    text id PK
+    text version UK
+    integer schema_version
+    text content_hash
+    integer published_at
+    text status
+  }
+  CURRICULUM_LESSONS {
+    text release_id PK,FK
+    text lesson_id PK
+    text curriculum_id
+    text curriculum_week_id
+    integer week
+    text route
+    text title
+    text focus
+    integer estimated_minutes
+  }
+  SKILLS {
+    text id PK
+    text category
+    text display_name
+  }
+  CURRICULUM_RELEASE_SKILLS {
+    text release_id PK,FK
+    text skill_id PK,FK
+  }
+  LEARNER_PROFILES {
+    text id PK
+    integer preferences_schema_version
+    text preferences_json
+    integer created_at
+    integer updated_at
+  }
+  LESSON_PROGRESS {
+    text id PK
+    text learner_id FK
+    text curriculum_release_id FK
+    text lesson_id FK
+    text status
+    integer started_at
+    integer completed_at
+  }
+  LESSON_COMPLETION_EVENTS {
+    text id PK
+    text progress_id FK
+    text learner_id FK
+    text completion_source
+    integer completed_at
+  }
+  SKILL_ASSESSMENT_ATTEMPTS {
+    text id PK
+    text learner_id FK
+    text curriculum_release_id FK
+    text skill_id FK
+    text lesson_id FK
+    text evidence_type
+    text outcome
+    integer score
+    integer assessed_at
+  }
+  SKILL_MASTERY {
+    text learner_id PK,FK
+    text curriculum_release_id PK,FK
+    text skill_id PK,FK
+    text state
+    integer evidence_count
+    text last_assessment_id FK
+    integer next_review_at
+  }
+  PRACTICE_SESSIONS {
+    text id PK
+    text learner_id FK
+    text primary_curriculum_release_id FK
+    text primary_lesson_id FK
+    text status
+    integer planned_minutes
+    integer actual_duration_seconds
+    integer started_at
+    integer ended_at
+  }
+```
+
+**Important distinctions:** `lesson_progress` is the current/resume state; `lesson_completion_events` is append-only completion history; `skill_assessment_attempts` is append-only evidence; `skill_mastery` is a derived snapshot that must reference a passed attempt for the same learner, release and skill. These relationships are enforced by composite foreign keys, checks and database triggers in the M2.1 migration.
+
