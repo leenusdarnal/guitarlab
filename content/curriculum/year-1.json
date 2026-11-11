@@ -1,6 +1,6 @@
 {
   "id": "year-1-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Year 1 - Foundations to independent playing",
   "description": "The complete 52-week first-year route from the curated master guitar course. Weekly BPM values are starting reference points, not deadlines or mandatory pass marks. Use the checkpoint to decide when to advance.",
   "year": 1,
@@ -43,7 +43,7 @@
       "title": "Meet your guitar",
       "focus": "Setup, posture, string names and tuning",
       "checkpoint": "Tune all six strings; name them low-to-high E-A-D-G-B-E.",
-      "practiceExercise": "Open-string pulse: four relaxed quarter notes per string",
+      "practiceExercise": "Open-string pulse: four relaxed quarter notes per string; listen, hum the string names and tap a steady beat",
       "startingTempoBpm": 50
     },
     {
@@ -93,7 +93,7 @@
       "title": "First complete chord loop",
       "focus": "Chord changes with pulse and a first musical phrase",
       "checkpoint": "Play a four-chord loop with four beats per chord.",
-      "practiceExercise": "Em-G-D-C loop, one bar each",
+      "practiceExercise": "Em-G-D-A loop, one bar each; change on the beat at a comfortable tempo",
       "startingTempoBpm": 60
     },
     {
@@ -141,8 +141,8 @@
       "week": 11,
       "phaseId": "beginner-base",
       "title": "Your first music map",
-      "focus": "Natural notes, frets and intervals",
-      "checkpoint": "Locate notes on strings 1-6 and compare adjacent frets.",
+      "focus": "Open-string map, semitone steps and first fretboard landmarks",
+      "checkpoint": "Name the six open strings, explain that adjacent frets are a semitone apart, and locate a selected note on two strings",
       "practiceExercise": "Two-string note-finding pattern",
       "startingTempoBpm": 58
     },
@@ -152,7 +152,7 @@
       "phaseId": "beginner-base",
       "title": "Quarter 1 review and recording",
       "focus": "Consolidate tuning, reading, open chords and pulse",
-      "checkpoint": "Review Weeks 1-11 and keep a clean 45-second recording.",
+      "checkpoint": "Review Weeks 1-11: tune, keep a pulse, play open chords and a short melody; record a clean 45-second excerpt",
       "practiceExercise": "Four-skill mini medley",
       "startingTempoBpm": 55
     },
@@ -556,5 +556,9 @@
       "practiceExercise": "Year-end three-part audition",
       "startingTempoBpm": 72
     }
+  ],
+  "schemaVersion": 1,
+  "revisionNotes": [
+    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and sequence except prerequisite correction in Week 6 and a narrower first fretboard checkpoint in Week 11."
   ]
 }
