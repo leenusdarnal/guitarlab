@@ -1,6 +1,6 @@
 {
   "id": "year-3-specialisations",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "year": 3,
   "description": "Optional 12-week routes from the existing master course. These are outlines for choosing a direction after Year 2, not part of the initial release.",
   "paths": [
@@ -21,6 +21,68 @@
         "Phrasing and silence",
         "Performance arrangement",
         "Path capstone"
+      ],
+      "weekRecords": [
+        {
+          "id": "y3-rock-blues-w01",
+          "week": 1,
+          "title": "Technique reset"
+        },
+        {
+          "id": "y3-rock-blues-w02",
+          "week": 2,
+          "title": "Pentatonic across neck"
+        },
+        {
+          "id": "y3-rock-blues-w03",
+          "week": 3,
+          "title": "Bends to pitch"
+        },
+        {
+          "id": "y3-rock-blues-w04",
+          "week": 4,
+          "title": "Legato control"
+        },
+        {
+          "id": "y3-rock-blues-w05",
+          "week": 5,
+          "title": "Blues shuffle arrangement"
+        },
+        {
+          "id": "y3-rock-blues-w06",
+          "week": 6,
+          "title": "Quarter review: lead tone"
+        },
+        {
+          "id": "y3-rock-blues-w07",
+          "week": 7,
+          "title": "Chord-tone soloing"
+        },
+        {
+          "id": "y3-rock-blues-w08",
+          "week": 8,
+          "title": "Riff construction"
+        },
+        {
+          "id": "y3-rock-blues-w09",
+          "week": 9,
+          "title": "Modal colour"
+        },
+        {
+          "id": "y3-rock-blues-w10",
+          "week": 10,
+          "title": "Phrasing and silence"
+        },
+        {
+          "id": "y3-rock-blues-w11",
+          "week": 11,
+          "title": "Performance arrangement"
+        },
+        {
+          "id": "y3-rock-blues-w12",
+          "week": 12,
+          "title": "Path capstone"
+        }
       ]
     },
     {
@@ -40,6 +102,68 @@
         "Open-string colour",
         "Dynamic arc",
         "Path capstone"
+      ],
+      "weekRecords": [
+        {
+          "id": "y3-fingerstyle-acoustic-w01",
+          "week": 1,
+          "title": "Right-hand independence"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w02",
+          "week": 2,
+          "title": "Arpeggio consistency"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w03",
+          "week": 3,
+          "title": "Alternating bass"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w04",
+          "week": 4,
+          "title": "Chord melody basics"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w05",
+          "week": 5,
+          "title": "Sus and add9 colour"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w06",
+          "week": 6,
+          "title": "Quarter review: acoustic tone"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w07",
+          "week": 7,
+          "title": "Percussive accompaniment"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w08",
+          "week": 8,
+          "title": "Moving bass lines"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w09",
+          "week": 9,
+          "title": "Arrange a melody"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w10",
+          "week": 10,
+          "title": "Open-string colour"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w11",
+          "week": 11,
+          "title": "Dynamic arc"
+        },
+        {
+          "id": "y3-fingerstyle-acoustic-w12",
+          "week": 12,
+          "title": "Path capstone"
+        }
       ]
     },
     {
@@ -59,6 +183,68 @@
         "Tune learning workflow",
         "Reharmonisation",
         "Path capstone"
+      ],
+      "weekRecords": [
+        {
+          "id": "y3-jazz-harmony-w01",
+          "week": 1,
+          "title": "Jazz chord grips"
+        },
+        {
+          "id": "y3-jazz-harmony-w02",
+          "week": 2,
+          "title": "Swing subdivision"
+        },
+        {
+          "id": "y3-jazz-harmony-w03",
+          "week": 3,
+          "title": "Guide tones"
+        },
+        {
+          "id": "y3-jazz-harmony-w04",
+          "week": 4,
+          "title": "ii-V-I in two keys"
+        },
+        {
+          "id": "y3-jazz-harmony-w05",
+          "week": 5,
+          "title": "Chord extensions"
+        },
+        {
+          "id": "y3-jazz-harmony-w06",
+          "week": 6,
+          "title": "Quarter review: jazz comp"
+        },
+        {
+          "id": "y3-jazz-harmony-w07",
+          "week": 7,
+          "title": "Bossa pattern"
+        },
+        {
+          "id": "y3-jazz-harmony-w08",
+          "week": 8,
+          "title": "Jazz blues form"
+        },
+        {
+          "id": "y3-jazz-harmony-w09",
+          "week": 9,
+          "title": "Chord-tone soloing"
+        },
+        {
+          "id": "y3-jazz-harmony-w10",
+          "week": 10,
+          "title": "Tune learning workflow"
+        },
+        {
+          "id": "y3-jazz-harmony-w11",
+          "week": 11,
+          "title": "Reharmonisation"
+        },
+        {
+          "id": "y3-jazz-harmony-w12",
+          "week": 12,
+          "title": "Path capstone"
+        }
       ]
     },
     {
@@ -78,6 +264,68 @@
         "Ensemble preparation",
         "Teaching a skill",
         "Path capstone"
+      ],
+      "weekRecords": [
+        {
+          "id": "y3-all-round-musician-w01",
+          "week": 1,
+          "title": "Listening journal"
+        },
+        {
+          "id": "y3-all-round-musician-w02",
+          "week": 2,
+          "title": "Ear intervals"
+        },
+        {
+          "id": "y3-all-round-musician-w03",
+          "week": 3,
+          "title": "Sight reading routine"
+        },
+        {
+          "id": "y3-all-round-musician-w04",
+          "week": 4,
+          "title": "Harmony analysis"
+        },
+        {
+          "id": "y3-all-round-musician-w05",
+          "week": 5,
+          "title": "Transposition"
+        },
+        {
+          "id": "y3-all-round-musician-w06",
+          "week": 6,
+          "title": "Quarter review: musicianship"
+        },
+        {
+          "id": "y3-all-round-musician-w07",
+          "week": 7,
+          "title": "Arranging texture"
+        },
+        {
+          "id": "y3-all-round-musician-w08",
+          "week": 8,
+          "title": "Recording feedback"
+        },
+        {
+          "id": "y3-all-round-musician-w09",
+          "week": 9,
+          "title": "Songwriting form"
+        },
+        {
+          "id": "y3-all-round-musician-w10",
+          "week": 10,
+          "title": "Ensemble preparation"
+        },
+        {
+          "id": "y3-all-round-musician-w11",
+          "week": 11,
+          "title": "Teaching a skill"
+        },
+        {
+          "id": "y3-all-round-musician-w12",
+          "week": 12,
+          "title": "Path capstone"
+        }
       ]
     }
   ]
