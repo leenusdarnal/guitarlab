@@ -48,7 +48,7 @@ The research and authoritative curricula converge on these principles:
 | Tempo markers could be misread as pass marks | Starting BPM is not a universal proficiency standard | Keep BPM as a starting suggestion; measure clean accuracy separately |
 | Reviews are present but not clearly spaced or adaptive | One-off tests do not show durable retention | Use low-friction retrieval checks across later sessions |
 | Physical comfort is not prominent enough in weekly practice | Poor setup, tension and overuse can undermine practice | Include relaxed setup, breaks and stop-if-pain guidance |
-| Weekly topic records are outlines, not full lessons | A title and checkpoint are not sufficient teaching content | Author lesson blocks and exercises progressively with stable IDs |
+| Weekly topic records were outlines, not full lessons | A title and checkpoint are not sufficient teaching content | Author full lesson blocks, exercises, worked examples and checks; now completed for 156 curriculum entries |
 
 ## 3. Revised instructional model
 
@@ -174,7 +174,7 @@ A reasonable default mastery rule is more than one successful demonstration sepa
 
 ## 8. Content authoring standard
 
-A week outline becomes a teachable lesson only when it has:
+A teachable lesson should contain:
 - learner-facing objectives;
 - a short explanation with guitar-specific examples;
 - a demonstration/reference link with access notes;
@@ -225,7 +225,7 @@ Write original explanations and exercises. Link to the learner's paid course and
 ## 11. Revision policy
 
 - Preserve all current Year 1 and Year 2 week IDs.
-- Keep numbered micro-lessons separate from weekly curriculum cards.
+- Keep curriculum content completion separate from evidence-based skill mastery; do not import personal lesson continuity.
 - Treat this research document as the rationale for the curriculum framework.
-- Revise weekly content in small, versioned increments; don't silently rewrite learner history.
-- Validate all curriculum JSON and cross-references in CI once M1 is implemented.
+- Revise weekly lesson content in small, versioned increments; preserve curriculum IDs and never infer imported learner history.
+- Validate all curriculum JSON and cross-references in the curriculum-specific GitHub Actions workflow; extend coverage into application CI during M1.
