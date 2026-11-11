@@ -2,7 +2,7 @@
 
 ## Curriculum promise
 
-GuitarLab provides a complete, self-contained learning route from first contact with the guitar through intermediate musicianship and optional advanced specialisation. Every weekly curriculum card now has a corresponding authored lesson with an explanation, guided demonstration, focused exercises, musical application, success criteria, corrections, accessible alternatives and retrieval prompts.
+GuitarLab provides a complete, self-contained learning route from first contact with the guitar through intermediate musicianship and optional advanced specialisation. The curriculum contains **152 authored lessons**: 52 in Year 1, 52 in Year 2 and 48 across four optional Year 3 routes. Every weekly curriculum card has a corresponding authored lesson with an explanation, guided demonstration, focused exercises, musical application, success criteria, corrections, accessible alternatives and retrieval prompts.
 
 The route is progress-based rather than calendar-bound. A numbered week is an ordering aid: it may take one session or several. Advance when the checkpoint is reliable, not because seven days have passed.
 
