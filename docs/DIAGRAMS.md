@@ -108,8 +108,10 @@ The CI gate validates the source and builds the Worker. A successful build is no
 ```mermaid
 flowchart LR
   M0["M0 · Product, curriculum and architecture"] --> M1["M1 · SvelteKit + Worker foundation"]
-  M1 --> M2["M2 · D1 / Drizzle + domain services"]
-  M2 --> M3["M3 · Learning dashboard"]
+  M1 --> M2["M2.1–M2.2 · D1 / Drizzle + domain services"]
+  M2 --> M23["M2.3 · Local IndexedDB profile and repositories"]
+  M23 --> M24["M2.4 · Export / restore / safe reset"]
+  M24 --> M3["M3 · Learning dashboard"]
   M3 --> M4["M4 · Curriculum and lesson engine"]
   M4 --> M5["M5 · Offline hardening + authenticated sync"]
   M5 --> M6["M6 · Music tools"]
