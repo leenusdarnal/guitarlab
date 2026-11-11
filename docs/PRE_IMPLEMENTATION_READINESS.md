@@ -65,9 +65,10 @@ Every recommendation must have a plain-language reason, such as “review this c
 
 ### C. Accuracy-first tempo progression
 
-Add a repeatable tempo-ladder pattern for appropriate exercises:
+For P0, record actual tempo and clean repetitions separately from total repetitions wherever the exercise supports those measures. Do not treat speed or repetition count alone as mastery.
+
+For P1, add a repeatable tempo-ladder pattern:
 - set a comfortable starting tempo;
-- count clean repetitions separately from total repetitions;
 - increase tempo only when the exercise meets its stated accuracy criterion;
 - reduce tempo when accuracy or comfort drops;
 - allow manual override and record the actual tempo.
