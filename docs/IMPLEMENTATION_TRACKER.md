@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-11-11  
 **Tracking source:** GitHub Issues in this repository  
-**Implementation branch:** `feat/m2-repositories-app-services`
+**Implementation branch:** `main`
 
 This file is the human-readable index. GitHub Issues remain the execution records: each work item has a scope, dependencies and acceptance criteria. A task is not complete just because code was written; it must pass its stated checks and be verified in a pull request.
 
@@ -18,10 +18,10 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Cloudflare runtime | Configured and locally verified | Worker production build and local Wrangler smoke test pass; no live preview or production deployment is claimed |
 | CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
 | Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
-| Repository/application boundary | M2.2 implementation prepared | Feature branch adds storage-independent ports, typed use cases and in-memory contract tests; waiting on PR CI |
+| Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
 | Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21 and PR #22 are merged. M2.2 adds use cases and repository contracts, not concrete persistence adapters or routes. Learner setup is still not persisted by the current UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Important:** PR #21, PR #22 and PR #23 are merged. M2.2 adds use cases and repository contracts, not concrete persistence adapters or routes. Learner setup is still not persisted by the current UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
@@ -40,14 +40,14 @@ Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusd
 
 M2.1 is merged in [PR #22](https://github.com/leenusdarnal/guitarlab/pull/22), and [issue #7](https://github.com/leenusdarnal/guitarlab/issues/7) is closed. The schema defines 10 relational tables, seeds 152 lesson metadata references and 34 skill IDs, and keeps lesson bodies in Git. The versioned migration and database invariants pass in Wrangler local D1. No production D1, authentication or cloud sync is created.
 
-M2.2 is being implemented on `feat/m2-repositories-app-services`. The slice keeps application logic independent of Drizzle and IndexedDB, separates public curriculum reads from private learner repositories, and tests transitions with in-memory adapters. It does not provision or expose remote data.
+M2.2 is merged in [PR #23](https://github.com/leenusdarnal/guitarlab/pull/23), and [issue #8](https://github.com/leenusdarnal/guitarlab/issues/8) is closed. The slice keeps application logic independent of Drizzle and IndexedDB, separates public curriculum reads from private learner repositories, and tests transitions with in-memory adapters. It does not provision or expose remote data.
 
 
 
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|
 | M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Fresh local D1 migration, FK/unique constraints, append-only assessment triggers and separate completion/mastery invariants all pass in CI |
-| M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | In implementation | Storage-independent contracts, typed validation/errors, versioned public reads, atomic completion and evidence/practice transition tests |
+| M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | Merged — PR #23 | Storage-independent contracts, typed validation/errors, versioned public reads, atomic completion and evidence/practice transition tests passed in CI |
 | M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | M2.2 | New profile is empty, persists locally and survives offline reload |
 | M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | M2.3 | Validated round-trip; failed restore leaves existing data intact |
 
