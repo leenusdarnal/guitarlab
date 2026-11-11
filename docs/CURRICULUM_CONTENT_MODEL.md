@@ -46,6 +46,7 @@ The lesson JSON files use `schemaVersion: 1` and their own semantic content vers
 | `curriculumWeekId` | Matching stable weekly outline ID |
 | `week` / `route` | Position within the year or optional specialisation |
 | `checkpoint` | The observable finish line inherited from the matching weekly outline |
+| `workedExamples` | Concrete chord shapes, note maps, scale formulas, rhythm counts or musical prompts where relevant |
 | `skillIds` | Stable skill taxonomy links trained by this lesson |
 | `title` / `focus` | Learner-facing title and learning focus |
 | `estimatedMinutes` | Planning estimate, never a completion rule |
