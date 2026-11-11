@@ -57,6 +57,28 @@ This hybrid is the approved direction for implementation. The generated concept 
 - **Accessibility:** semantic HTML, keyboard operation, visible focus, reduced motion, readable labels for audio controls and contrast-safe theme tokens.
 - **Resilience:** design saved/unsaved, offline, loading, empty, error and microphone-permission states.
 
+## Implemented semantic token baseline
+
+The first coded token values are in `src/app.css`. CI runs `npm run design:validate` to calculate contrast ratios directly from those CSS values in both themes. The checked pairings use a 4.5:1 minimum for normal text and a 3:1 minimum for focus indicators.
+
+| Token | Dark theme | Light theme |
+|---|---|---|
+| Background | `#171715` | `#f5f3ed` |
+| Surface | `#20201d` | `#fffefa` |
+| Raised surface | `#292923` | `#efede5` |
+| Text | `#f4f1e9` | `#24231f` |
+| Muted text | `#aaa69b` | `#69665d` |
+| Border | `#39382f` | `#dedbd1` |
+| Primary accent | `#e7a94b` | `#96580f` |
+| Primary text | `#21190c` | `#fffaf0` |
+| Secondary accent | `#9a8ad6` | `#6653a8` |
+| Success | `#77b99a` | `#267653` |
+| Warning | `#e4bd71` | `#94630e` |
+| Error | `#e38c80` | `#a63f35` |
+| Focus | `#f5c66f` | `#80510b` |
+
+These are the initial implementation values, not a substitute for browser/device accessibility review. Review contrast in real component contexts as the UI grows.
+
 ## Design-system preparation
 
 Define semantic tokens for backgrounds, surfaces, borders, text, focus, accent, success, warning and error. Define type roles, spacing scale, radii, motion durations, focus ring, minimum touch target and responsive breakpoints. Keep exact token values in the code design system and document them after contrast testing.
