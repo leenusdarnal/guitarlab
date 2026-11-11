@@ -35,7 +35,11 @@ This file is the human-readable index. GitHub Issues remain the execution record
 
 Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarnal/guitarlab/pull/21)
 
-## M2 — Data foundation\n\nM2.1 is being implemented in branch feat/m2-d1-drizzle-data-foundation. The schema seeds 152 lesson metadata references and 34 skill IDs while keeping lesson bodies in Git. The first migration is local-only; no production D1 database or authentication is created.\n
+## M2 — Data foundation
+
+M2.1 is being implemented in branch feat/m2-d1-drizzle-data-foundation. The schema seeds 152 lesson metadata references and 34 skill IDs while keeping lesson bodies in Git. The first migration is local-only; no production D1 database or authentication is created.
+
+
 
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|

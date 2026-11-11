@@ -3,6 +3,12 @@ declare global {
     interface Error {
       message: string;
     }
+
+    interface Platform {
+      env: {
+        DB: D1Database;
+      };
+    }
   }
 }
 

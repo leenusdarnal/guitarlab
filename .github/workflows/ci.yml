@@ -6,7 +6,7 @@ on:
     branches: [main, "feat/**", "chore/**"]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}

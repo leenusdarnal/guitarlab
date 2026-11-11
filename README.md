@@ -52,7 +52,8 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 The product definition, curriculum foundation, final architecture, approved hybrid visual direction and implementation guidelines are documented. **M1 application foundation is merged** ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)): SvelteKit/TypeScript, Tailwind CSS, Cloudflare Workers configuration, an initial responsive dashboard, learner setup, CI and design-token validation. The merged application passes GitHub Actions source validation, Svelte/TypeScript checks, unit tests, the Cloudflare production build and a local Wrangler Worker smoke test. A live Cloudflare preview and browser-level verification remain separate release tasks. The dashboard and onboarding are an initial foundation, not yet a persisted learning product; D1/Drizzle is M2 and IndexedDB is M5. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md) and [system diagrams](docs/DIAGRAMS.md):
 
 - [System diagrams — architecture, learning loop and delivery](docs/DIAGRAMS.md)
-- [Data model and D1 migrations](docs/DATA_MODEL.md)\n- [Architecture](docs/ARCHITECTURE.md)
+- [Data model and D1 migrations](docs/DATA_MODEL.md)\n- [Data model and D1 migrations](docs/DATA_MODEL.md)
+- [Architecture](docs/ARCHITECTURE.md)
 - [Product specification](docs/PRODUCT_SPEC.md)
 - [Learning curriculum](docs/CURRICULUM.md)
 - [Curriculum research and revision](docs/CURRICULUM_RESEARCH.md)
@@ -90,6 +91,7 @@ Quality checks and Worker build:
 ```bash
 npm run curriculum:validate
 npm run design:validate
+npm run db:setup:local
 npm run format:check
 npm run lint
 npm run check
