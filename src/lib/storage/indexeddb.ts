@@ -473,6 +473,7 @@ export async function loadActiveLessonProgress(
 export async function saveActiveLessonProgress(
   lessonId: string,
   update: {
+    expectedRevision: number;
     lastBlockId: string | null;
     completedBlockIds: string[];
     checkpointOutcome: 'achieved' | 'needs_practice' | null;
@@ -483,6 +484,8 @@ export async function saveActiveLessonProgress(
 ): Promise<LessonProgressRecord> {
   const validIds = new Set(allowedBlockIds);
   if (
+    !Number.isSafeInteger(update.expectedRevision) ||
+    update.expectedRevision < 0 ||
     update.completedBlockIds.length > 200 ||
     new Set(update.completedBlockIds).size !== update.completedBlockIds.length ||
     update.completedBlockIds.some((id) => !validIds.has(id)) ||
