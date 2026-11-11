@@ -16,6 +16,7 @@ Build a useful learning product in verified increments. Each milestone should le
 - [x] Specify private learner-baseline migration and privacy boundary.
 - [x] Finalise the implementation architecture, trust boundaries, data model, sync policy, Cloudflare services and delivery gates.
 - [x] Complete the pre-implementation readiness review, curriculum data audit, feature prioritisation, non-functional requirements and external-tool evaluation.
+- [x] Complete multi-angle curriculum research and revise the spiral learning framework, practice progression and selected checkpoints (curriculum v1.1.0).
 - [ ] Select final visual concept and detailed design tokens before UI implementation.
 - [ ] Execute private learner-baseline import after local persistence exists (M5).
 
