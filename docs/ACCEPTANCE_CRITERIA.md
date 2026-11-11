@@ -36,3 +36,19 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 
 ## Gate to M1
 M1 may begin from the documented product and architecture requirements. Detailed UI implementation must wait for the final visual concept selection. The private progress import is intentionally deferred until a private local profile exists.
+
+
+## Pre-implementation readiness additions
+
+- [x] Audit Year 1 and Year 2 JSON: 52 ordered records each, unique IDs, valid phase references and valid starting-tempo bounds.
+- [x] Confirm Year 3+ has four 12-week specialist outlines.
+- [x] Document that current curriculum records are weekly outlines, not fully authored lesson scripts.
+- [x] Define first-release practice presets (10/20/40/custom) and explainable next-action recommendations.
+- [x] Define accuracy-first evidence rules and prohibit timer-only mastery.
+- [x] Define local instrument preferences and a progressive fretboard feature path.
+- [x] Evaluate external no-signup music tools and set a link-only integration boundary.
+- [x] Document P0/P1/deferred feature priorities and non-functional requirements.
+- [ ] Select the final visual concept using the Product Design workflow before detailed UI implementation.
+- [ ] Add a repository licence only if the owner decides to grant reuse permissions; this is not required to begin private local-first development.
+
+The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READINESS.md). The checks above are documentation and data-shape checks; they do not represent application implementation, build or runtime test results.
