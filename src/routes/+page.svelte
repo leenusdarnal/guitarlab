@@ -35,6 +35,12 @@
               }
             : null,
           dueReviews: dashboard.dueReviews,
+          learnerGoals: dashboard.learnerGoals,
+          recentPractice: dashboard.recentPractice.map((session) => ({
+            focus: session.focus,
+            difficulty: session.difficulty,
+            startedAt: session.startedAt
+          })),
           now: Date.now()
         })
       : null
