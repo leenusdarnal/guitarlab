@@ -61,6 +61,7 @@ try {
   await page.getByRole('link', { name: /Learning preferences/ }).first().click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
   await page.getByRole('radio', { name: 'Acoustic guitar' }).check();
+  await page.getByRole('checkbox', { name: 'Acoustic & fingerstyle' }).check();
   await page.getByRole('radio', { name: '20 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page.getByRole('status').filter({ hasText: 'saved privately on this device' }).waitFor();
@@ -68,6 +69,8 @@ try {
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
+  const personalizedReasons = await page.locator('.practice-task p').allTextContents();
+  assert.ok(personalizedReasons.some((reason) => reason.includes('acoustic and fingerstyle playing')), 'Learner goals should inform musical application recommendations');
 
   // The planner responds to the selected duration and explains each task.
   await page.getByRole('heading', { name: 'A focused plan for today' }).waitFor();
