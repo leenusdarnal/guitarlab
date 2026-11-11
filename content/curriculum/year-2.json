@@ -1,6 +1,6 @@
 {
   "id": "year-2-intermediate",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "Year 2 - Structured intermediate development",
   "description": "The 52-week continuation of the curated master course. This route deepens fretboard fluency, chord vocabulary, style, ear skills, arranging and performance readiness.",
   "year": 2,
@@ -127,7 +127,7 @@
       "phaseId": "fretboard-triads",
       "title": "Quarter review: fretboard",
       "focus": "Test roots, octave links and triads",
-      "checkpoint": "Complete a timed note-finding and triad test",
+      "checkpoint": "Demonstrate accurate note-finding, octave links and triad recall; record time as a secondary measure",
       "practiceExercise": "Record a 60-second fretboard demonstration",
       "startingTempoBpm": 60
     },
@@ -267,7 +267,7 @@
       "phaseId": "blues",
       "title": "Bends and vibrato",
       "focus": "Bend to target pitch and control vibrato",
-      "checkpoint": "Match a fretted target before adding vibrato",
+      "checkpoint": "Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand",
       "practiceExercise": "Two-note bend-and-release phrase",
       "startingTempoBpm": 60
     },
@@ -591,5 +591,9 @@
       "practiceExercise": "Year 2 capstone: prepared piece + progression + 8-bar lead",
       "startingTempoBpm": 72
     }
+  ],
+  "schemaVersion": 1,
+  "revisionNotes": [
+    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and specialist sequence. Review checkpoints now prioritise accuracy over speed."
   ]
 }
