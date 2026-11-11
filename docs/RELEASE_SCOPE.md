@@ -83,3 +83,26 @@ A personal learning companion for one guitarist, usable on a phone beside the in
 ## Release boundary
 
 This is a private personal learning tool even though its source repository is public. The production app must not expose the learner's profile or progress. Keep the initial experience single-user and local-first; introduce cloud account/sync only with a verified authentication and authorisation boundary.
+
+
+## Pre-implementation refinements
+
+These clarifications refine—not replace—the first-release scope. The prioritisation and rationale are maintained in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READINESS.md).
+
+### Required first-release behaviours
+- Offer 10-, 20- and 40-minute practice plans plus a custom duration; preserve 40 minutes as the default suggestion.
+- Explain the reason for the suggested next practice action and let the learner change it.
+- Keep progress records for numbered micro-lessons and weekly cards independent.
+- Make practice capture quick: actual duration, exercises, tempo/repetition observations where applicable, difficulty, short reflection and next target.
+- Record accuracy separately from speed. Do not infer mastery from a timer, number of minutes, or raw repetition count.
+- Provide local settings for handedness, instrument type, standard tuning, note-label preference and practice-time preference.
+- Include a curriculum-content validation command in CI before content is treated as release-ready.
+
+### Planned enhancements after the core loop
+- Accuracy-gated tempo ladders and more detailed exercise-specific evidence.
+- Scale/interval/triad/CAGED fretboard views.
+- Metronome subdivisions, accents, tap tempo and improved count-in.
+- Local audio review and phrase looping where device support is reliable.
+- Optional external backing-track launcher, beginning with ComposeYogi.
+
+These additions must not delay the reliable curriculum, practice capture, local persistence, export/restore and mobile usability.
