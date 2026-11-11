@@ -225,7 +225,10 @@ const updateLessonProgressInputSchema = z
         message: 'A lesson block can only be recorded once.'
       });
     }
-    if (value.lastBlockId && !value.completedBlockIds.includes(value.lastBlockId)) {
+    if (
+      value.lastBlockId &&
+      !value.completedBlockIds.includes(value.lastBlockId)
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['lastBlockId'],
@@ -316,7 +319,9 @@ export async function completeLesson(
     value.releaseId,
     value.lessonId
   );
-  if (!current) throw new NotFoundError('Lesson progress not found.');
+  if (!current) {
+    throw new NotFoundError('Lesson progress not found.');
+  }
   if (current.status === 'completed') {
     throw new ConflictError('This lesson is already marked as completed.');
   }
