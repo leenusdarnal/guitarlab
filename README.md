@@ -63,6 +63,7 @@ The product definition and curriculum foundation are documented. The SvelteKit a
 - [Learner progress migration](docs/LEARNING_PROGRESS_MIGRATION.md)
 - [M0 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
 - [Implementation roadmap](docs/ROADMAP.md)
+- [External practice tools evaluation](docs/EXTERNAL_TOOLS.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## Local development
