@@ -2,19 +2,19 @@
 
 ## Source and approach
 
-The Year 1 and Year 2 structures in this repository are distilled from the learner's existing *Complete Guitar Course – Curated Learning Path Edition*. The existing sequence is retained rather than replaced. Its weekly cards, Year 2 continuation, optional notation track and four Year 3+ routes remain the curriculum source of truth.
+The Year 1 and Year 2 structures in this repository are distilled from the learner's curated *Complete Guitar Course – Curated Learning Path Edition*. The existing sequence is retained rather than replaced. Its weekly cards, Year 2 continuation, optional notation track and four Year 3+ routes remain the curriculum source of truth.
 
 The route is deliberately progress-based: a week may take more or less than seven days. Advance when the checkpoint is reliable, not because the calendar says so.
 
 ## Five-layer learning system
 
 1. **Main course:** follow the primary Udemy Complete Guitar Lessons System course in its intended sequence.
-2. **Numbered micro-lesson:** work on the current small personal target; it may span several sessions and is not the same as a curriculum week.
+2. **Numbered micro-lesson:** work on the learner's current small personal target; it may span several sessions and is not the same as a curriculum week.
 3. **Weekly card:** use the weekly objective, theory connection, practice piece and checkpoint as the broader structure.
 4. **One targeted helper:** use one relevant diagram, tutorial or reference only when needed.
 5. **Play, record, review:** apply the skill musically, then reflect on tone, timing, relaxed movement and understanding.
 
-This separation resolves an important curriculum detail: numbered micro-lessons and the 52-week course cards are different layers. The app must not force their lesson numbers to match.
+Numbered micro-lessons and the 52-week course cards are different layers. The app must not force their lesson numbers to match.
 
 ## Year 1: 52-week core path
 
@@ -27,7 +27,7 @@ Machine-readable records: [`content/curriculum/year-1.json`](../content/curricul
 | Early intermediate | 25-36 | Roots and octaves, triads, keys, capo/transposition, chord colour, sixteenth rhythm, legato and Quarter 2 review |
 | Intermediate bridge | 37-52 | Ear learning, songwriting, blues/rock/jazz vocabulary, sight-reading, position shifts, chord melody, composition and year-end performance |
 
-The Year 1 file preserves all 52 weekly titles, focus areas, observable checkpoints, practice pieces and starting BPM markers. The BPM is a practice reference, not a required pass mark. Start 10-15 BPM below it when clean accuracy is not yet secure.
+The Year 1 file preserves all 52 weekly titles, focus areas, observable checkpoints, practice pieces and starting BPM markers. BPM values are practice references, not required pass marks. Start 10-15 BPM below a marker when clean accuracy is not yet secure.
 
 ## Year 2: structured intermediate development
 
@@ -76,13 +76,13 @@ A checkpoint is ready when the learner can demonstrate:
 
 Do not require staff notation in the core route where TAB is specified as the main path; notation is an optional parallel track.
 
-## Current learner continuity
+## Learner continuity and privacy
 
-The app will need two independent progress dimensions:
-- the weekly curriculum position and weekly checkpoint status;
-- the learner's numbered micro-lesson sequence and its individual status.
+The app maintains two independent progress dimensions:
+- weekly curriculum position and weekly checkpoint status;
+- numbered micro-lesson sequence and its individual status.
 
-The learner's existing baseline is retained for private profile initialisation and must never be committed to this public repository. When the local-first profile is created, seed the known completed/in-progress numbered lessons and keep the current E-minor checkpoint pending; the next planned micro-lesson is A minor, followed by Em-Am transitions. This baseline must not be used to overwrite or falsely complete a weekly card.
+The learner's private baseline is deliberately excluded from this public curriculum file and from all public seed fixtures. It will be imported into the private local profile using the migration rules in [Learner Progress Migration](LEARNING_PROGRESS_MIGRATION.md). Do not mark a weekly card complete merely because a numbered micro-lesson was completed.
 
 ## Resource roles
 
