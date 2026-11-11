@@ -7,7 +7,7 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 - [x] Recover the 52-week Year 2 continuation outline.
 - [x] Record four optional Year 3+ specialisation routes.
 - [x] Preserve optional staff notation as an enrichment track, not a core-route blocker.
-- [x] Preserve the five-day learning cycle and adaptive pacing checkpoints.
+- [x] Preserve the suggested practice cycle as optional and adaptive pacing checkpoints.
 
 ## Learning model
 - [x] Separate weekly curriculum cards from numbered micro-lessons.
