@@ -1,11 +1,7 @@
 import { z } from 'zod';
 
 export type ApplicationErrorCode =
-  | 'VALIDATION'
-  | 'NOT_FOUND'
-  | 'CONFLICT'
-  | 'INVALID_STATE'
-  | 'INTERNAL';
+  'VALIDATION' | 'NOT_FOUND' | 'CONFLICT' | 'INVALID_STATE' | 'INTERNAL';
 
 export type SafeApplicationError = {
   code: ApplicationErrorCode;

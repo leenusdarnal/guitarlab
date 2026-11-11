@@ -172,7 +172,11 @@ function createHarness() {
     },
     async save(snapshot) {
       masteryRows.set(
-        [snapshot.learnerId, snapshot.curriculumReleaseId, snapshot.skillId].join(':'),
+        [
+          snapshot.learnerId,
+          snapshot.curriculumReleaseId,
+          snapshot.skillId
+        ].join(':'),
         snapshot
       );
     }
@@ -220,10 +224,13 @@ describe('M2.2 application service boundaries', () => {
   });
 
   it('creates a genuinely empty learner profile', async () => {
-    const profile = await createEmptyLearnerProfile({}, {
-      profiles: harness.profileRepository,
-      runtime: harness.runtime
-    });
+    const profile = await createEmptyLearnerProfile(
+      {},
+      {
+        profiles: harness.profileRepository,
+        runtime: harness.runtime
+      }
+    );
 
     expect(profile.preferences).toEqual(createEmptyProfilePreferences());
     expect(profile.lastActiveAt).toBeNull();
@@ -232,10 +239,13 @@ describe('M2.2 application service boundaries', () => {
   });
 
   it('validates preferences before saving them', async () => {
-    const profile = await createEmptyLearnerProfile({}, {
-      profiles: harness.profileRepository,
-      runtime: harness.runtime
-    });
+    const profile = await createEmptyLearnerProfile(
+      {},
+      {
+        profiles: harness.profileRepository,
+        runtime: harness.runtime
+      }
+    );
     const updated = await updateLearnerPreferences(
       {
         learnerId: profile.id,
@@ -267,10 +277,7 @@ describe('M2.2 application service boundaries', () => {
 
   it('keeps public curriculum reads version-scoped and separate from profiles', async () => {
     await expect(
-      listCurriculumLessons(
-        { releaseId },
-        harness.curriculumRepository
-      )
+      listCurriculumLessons({ releaseId }, harness.curriculumRepository)
     ).resolves.toEqual([lesson]);
     await expect(
       getCurriculumLesson(
@@ -520,7 +527,9 @@ describe('M2.2 application service boundaries', () => {
   });
 
   it('returns typed, user-safe errors without leaking unknown storage exceptions', () => {
-    expect(toSafeApplicationError(new Error('SQLITE constraint failed'))).toEqual({
+    expect(
+      toSafeApplicationError(new Error('SQLITE constraint failed'))
+    ).toEqual({
       code: 'INTERNAL',
       message: 'Something went wrong. Please try again.'
     });

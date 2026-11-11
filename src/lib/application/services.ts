@@ -172,7 +172,9 @@ export async function startLessonProgress(
   }
 ): Promise<LessonProgressRecord> {
   const value = parseInput(lessonProgressStartSchema, input);
-  if (!(await dependencies.curriculum.findLesson(value.releaseId, value.lessonId))) {
+  if (
+    !(await dependencies.curriculum.findLesson(value.releaseId, value.lessonId))
+  ) {
     throw new NotFoundError('Lesson not found in this curriculum release.');
   }
 
@@ -291,7 +293,9 @@ export async function recordAssessmentAttempt(
       submission.lessonId
     ))
   ) {
-    throw new NotFoundError('Lesson context not found in this curriculum release.');
+    throw new NotFoundError(
+      'Lesson context not found in this curriculum release.'
+    );
   }
 
   const assessedAt = dependencies.runtime.now();
@@ -408,7 +412,8 @@ const startPracticeInputSchema = z
       context.addIssue({
         code: 'custom',
         path: ['primaryLessonId'],
-        message: 'A primary lesson requires both a release and lesson identifier.'
+        message:
+          'A primary lesson requires both a release and lesson identifier.'
       });
     }
   });
@@ -430,7 +435,9 @@ export async function startPracticeSession(
       value.primaryLessonId
     ))
   ) {
-    throw new NotFoundError('Practice lesson not found in this curriculum release.');
+    throw new NotFoundError(
+      'Practice lesson not found in this curriculum release.'
+    );
   }
 
   const now = dependencies.runtime.now();
@@ -476,12 +483,16 @@ export async function finishPracticeSession(
     throw new NotFoundError('Practice session not found.');
   }
   if (current.status !== 'in_progress') {
-    throw new ConflictError('Only an active practice session can be completed.');
+    throw new ConflictError(
+      'Only an active practice session can be completed.'
+    );
   }
 
   const now = dependencies.runtime.now();
   if (now < current.startedAt) {
-    throw new InvalidStateError('The practice clock is earlier than the session start.');
+    throw new InvalidStateError(
+      'The practice clock is earlier than the session start.'
+    );
   }
 
   const completed: PracticeSessionRecord = {
