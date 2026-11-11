@@ -22,7 +22,7 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Learner-local persistence | M2.3 implementation in progress | Branch `feat/m2-3-indexeddb-learner-persistence`; versioned IndexedDB stores, fresh active profile, preference persistence, repository adapters and tests. CI and PR review pending |
 | Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21, PR #22 and PR #23 are merged. M2.2 adds use cases and repository contracts, not concrete persistence adapters or routes. Learner setup is still not persisted by the current UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Important:** PR #21, PR #22 and PR #23 are merged. The current M2.3 work is proposed in draft PR #24 and is not part of `main` until it is reviewed and merged. M2.3 adds browser-local IndexedDB adapters only; no production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
