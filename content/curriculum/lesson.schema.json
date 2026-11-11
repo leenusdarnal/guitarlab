@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leenusdarnal/guitarlab/blob/main/content/curriculum/lesson.schema.json",
+  "title": "GuitarLab authored lesson",
+  "type": "object",
+  "required": [
+    "id",
+    "curriculumId",
+    "curriculumWeekId",
+    "week",
+    "route",
+    "title",
+    "focus",
+    "estimatedMinutes",
+    "learningObjectives",
+    "prerequisites",
+    "explanation",
+    "demonstrationOrReference",
+    "lessonBlocks",
+    "exercises",
+    "musicalApplication",
+    "successCriteria",
+    "commonMistakesAndCorrections",
+    "accessibleAlternative",
+    "retrievalPrompt",
+    "nextReviewSuggestion",
+    "practiceOptions",
+    "instructorNotes",
+    "checkpoint",
+    "skillIds"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "curriculumId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "curriculumWeekId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "week": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 52
+    },
+    "route": {
+      "type": "string",
+      "minLength": 1
+    },
+    "routeGoal": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "focus": {
+      "type": "string",
+      "minLength": 1
+    },
+    "estimatedMinutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 180
+    },
+    "startingTempoBpm": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 30,
+      "maximum": 240
+    },
+    "learningObjectives": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "priorTopicsToRefresh": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "explanation": {
+      "type": "object",
+      "required": [
+        "keyIdea",
+        "plainLanguage",
+        "workedExample"
+      ],
+      "properties": {
+        "keyIdea": {
+          "type": "string",
+          "minLength": 1
+        },
+        "plainLanguage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workedExample": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "demonstrationOrReference": {
+      "type": "object",
+      "required": [
+        "kind",
+        "referenceSuggestion",
+        "steps"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "referenceSuggestion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "lessonBlocks": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "title",
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "content": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "exercises": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "type",
+          "durationMinutes",
+          "instructions",
+          "successCriterion",
+          "evidenceType"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "durationMinutes": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "instructions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "successCriterion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceType": {
+            "enum": [
+              "measured",
+              "observed_or_self_checked",
+              "self_reported",
+              "recording_reviewed"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "musicalApplication": {
+      "type": "object",
+      "required": [
+        "prompt",
+        "instructions",
+        "sourcePolicy"
+      ],
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "instructions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "sourcePolicy": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "successCriteria": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "criterion"
+        ],
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          },
+          "criterion": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "commonMistakesAndCorrections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "mistake",
+          "correction"
+        ],
+        "properties": {
+          "mistake": {
+            "type": "string",
+            "minLength": 1
+          },
+          "correction": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "accessibleAlternative": {
+      "type": "string",
+      "minLength": 1
+    },
+    "retrievalPrompt": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "nextReviewSuggestion": {
+      "type": "object",
+      "required": [
+        "approach",
+        "suggestedChecks",
+        "adaptation"
+      ],
+      "properties": {
+        "approach": {
+          "type": "string"
+        },
+        "suggestedChecks": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "adaptation": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "practiceOptions": {
+      "type": "object",
+      "required": [
+        "tenMinutes",
+        "twentyMinutes",
+        "fortyMinutes",
+        "rule"
+      ],
+      "properties": {
+        "tenMinutes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "twentyMinutes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fortyMinutes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rule": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "instructorNotes": {
+      "type": "object",
+      "required": [
+        "pacing",
+        "tempoGuidance",
+        "masteryBoundary"
+      ],
+      "properties": {
+        "pacing": {
+          "type": "string"
+        },
+        "tempoGuidance": {
+          "type": "string"
+        },
+        "masteryBoundary": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "checkpoint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skillIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": true
+}
