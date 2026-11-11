@@ -278,10 +278,25 @@ export function createIndexedDbRepositories(
     updateInProgress: async (record, expectedRevision) =>
       inTransaction(database, [stores.progress], 'readwrite', async (tx) => {
         const store = tx.objectStore(stores.progress);
-        const current = await requestResult<LessonProgressRecord | undefined>(store.index('byLearnerReleaseLesson').get(IDBKeyRange.only([
-          record.learnerId, record.curriculumReleaseId, record.lessonId
-        ])));
-        if (!current || current.status !== 'in_progress' || current.id !== record.id || (current.revision ?? 0) !== expectedRevision) return false;
+        const current = await requestResult<LessonProgressRecord | undefined>(
+          store
+            .index('byLearnerReleaseLesson')
+            .get(
+              IDBKeyRange.only([
+                record.learnerId,
+                record.curriculumReleaseId,
+                record.lessonId
+              ])
+            )
+        );
+        if (
+          !current ||
+          current.status !== 'in_progress' ||
+          current.id !== record.id ||
+          (current.revision ?? 0) !== expectedRevision
+        ) {
+          return false;
+        }
         await requestResult(store.put(record));
         return true;
       }),
