@@ -36,3 +36,20 @@
 ## Status
 
 The product-level direction and screen priorities are documented. The exact visual concept, component styling and final design tokens remain a visual-design decision before detailed UI implementation. The working palette above is a default, not a claim that a visual mockup has been approved.
+
+
+## Interaction and feedback refinements
+
+- Every recommended practice task should state why it was selected and remain editable by the learner.
+- Offer a short practice route as a first-class option; do not make a 40-minute session feel mandatory.
+- Practice transport, timer and metronome controls should remain reachable in focused practice mode.
+- Show accuracy and speed as separate measures. Use exercise-specific criteria rather than a generic score.
+- Saving a session should be quick and should not force a long reflection form.
+- Setup preferences must cover left/right handedness and the active guitar tuning. Mirror fretboard diagrams when appropriate while preserving pitch/string identity.
+- Offline readiness and save/sync state must be understandable at a glance.
+
+## Design-system preparation
+
+Define semantic tokens for backgrounds, surfaces, borders, text, focus, accent, success, warning and error. Tokens must have tested contrast pairings in both themes. Define type roles, spacing scale, radii, motion durations, focus ring, minimum touch target and responsive breakpoints in the selected visual concept.
+
+The exact token values, typography choices and component look remain unapproved until the visual-concept selection gate is completed.
