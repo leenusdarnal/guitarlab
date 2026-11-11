@@ -37,7 +37,7 @@ Each authored lesson has its own stable ID and a `curriculumWeekId` that points 
 
 ## Lesson record contract
 
-The lesson JSON files use `schemaVersion: 1` and their own semantic content version. Each lesson record contains:
+The lesson JSON files use `schemaVersion: 1` and their own semantic content version. The contract is published in [`lesson.schema.json`](../content/curriculum/lesson.schema.json). Each lesson record contains:
 
 | Field | Meaning |
 |---|---|
@@ -45,6 +45,8 @@ The lesson JSON files use `schemaVersion: 1` and their own semantic content vers
 | `curriculumId` | Parent curriculum |
 | `curriculumWeekId` | Matching stable weekly outline ID |
 | `week` / `route` | Position within the year or optional specialisation |
+| `checkpoint` | The observable finish line inherited from the matching weekly outline |
+| `skillIds` | Stable skill taxonomy links trained by this lesson |
 | `title` / `focus` | Learner-facing title and learning focus |
 | `estimatedMinutes` | Planning estimate, never a completion rule |
 | `startingTempoBpm` | Optional starting reference; not a pass mark |
@@ -128,7 +130,7 @@ Use adaptive spaced retrieval. Suggested starter prompts are the next practice s
 
 ## Validation requirements
 
-The curriculum validator should check:
+Run the dependency-free integrity check from the repository root with `node scripts/validate-curriculum.mjs`. The curriculum validator should check:
 
 - JSON parsing and supported schema/content versions.
 - Expected lesson counts: 52 Year 1, 52 Year 2 and 48 Year 3 specialist lessons.
@@ -140,4 +142,4 @@ The curriculum validator should check:
 - Sensible non-negative durations and positive BPM references when present.
 - No user-specific learner progress, recordings, tokens or private profile records in curriculum files.
 
-Validation is a content integrity check, not a substitute for a guitarist/instructor review of musical accuracy. Updates to content do not silently change skill ID meaning or curriculum week IDs.
+Validation is a content integrity check, not a substitute for a guitarist/instructor review of musical accuracy. Updates to content do not silently change skill ID meaning or curriculum week IDs. Year 3 specialist week IDs are stored in `weekRecords` while the existing human-readable `weeks` title arrays remain available for compatibility.
