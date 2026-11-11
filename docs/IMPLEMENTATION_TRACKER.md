@@ -19,10 +19,11 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
 | Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
 | Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
-| Learner-local persistence | M2.3 implementation in progress | Branch `feat/m2-3-indexeddb-learner-persistence`; versioned IndexedDB stores, fresh active profile, preference persistence, repository adapters and tests. CI and PR review pending |
+| Learner-local persistence | Draft PR #24; CI green, manual QA pending | Browser-local IndexedDB stores, empty active profile, preference persistence and repository adapters. Still needs browser reload/offline and upgrade verification before issue #9 is complete |
+| Backup and recovery | M2.4.1 in draft PR #25 | Versioned backup contract, strict data validation and read-only restore preview; IndexedDB export/restore and safe reset remain to implement |
 | Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21, PR #22 and PR #23 are merged. The current M2.3 work is proposed in draft PR #24 and is not part of `main` until it is reviewed and merged. M2.3 adds browser-local IndexedDB adapters only; no production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Important:** PR #21, PR #22 and PR #23 are merged. M2.3 is proposed in draft PR #24 and is not part of `main` until reviewed and merged. Its CI passes, but browser-level reload/offline and upgrade verification remain open. M2.4.1 is proposed in draft PR #25, stacked on PR #24; it adds only the versioned backup contract and restore preview, not database writes or UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
@@ -43,7 +44,7 @@ M2.1 is merged in [PR #22](https://github.com/leenusdarnal/guitarlab/pull/22), a
 
 M2.2 is merged in [PR #23](https://github.com/leenusdarnal/guitarlab/pull/23), and [issue #8](https://github.com/leenusdarnal/guitarlab/issues/8) is closed. The slice keeps application logic independent of Drizzle and IndexedDB, separates public curriculum reads from private learner repositories, and tests transitions with in-memory adapters. It does not provision or expose remote data.
 
-M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. The branch adds a versioned browser-local IndexedDB schema for learner profiles, progress, completion events, assessment attempts, mastery snapshots and practice sessions; creates/reuses a fresh active profile; connects onboarding preference saves; adds tests; and documents the local-storage boundary. This is not complete until CI passes and the PR is reviewed and merged.
+M2.3 is proposed in [draft PR #24](https://github.com/leenusdarnal/guitarlab/pull/24). CI passes for its current head. The remaining acceptance check is browser-level persistence across reload/offline restart plus verification of storage upgrade behaviour; therefore issue #9 is not yet marked complete.
 
 
 
@@ -51,8 +52,8 @@ M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. Th
 |---|---|---|---|
 | M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Fresh local D1 migration, FK/unique constraints, append-only assessment triggers and separate completion/mastery invariants all pass in CI |
 | M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | Merged — PR #23 | Storage-independent contracts, typed validation/errors, versioned public reads, atomic completion and evidence/practice transition tests passed in CI |
-| M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | M2.2 | New profile is empty, persists locally and survives offline reload |
-| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | M2.3 | Validated round-trip; failed restore leaves existing data intact |
+| M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | Draft PR #24; CI passes, browser reload/offline QA pending | New profile is empty, persists locally and survives offline reload |
+| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Draft PR #25, stacked on M2.3 | Validated round-trip; failed restore leaves existing data intact; reset requires explicit confirmation |
 
 ## M3 — Dashboard
 
@@ -97,7 +98,7 @@ M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. Th
 
 ## Immediate next actions
 
-1. Complete M2.2 ([issue #8](https://github.com/leenusdarnal/guitarlab/issues/8)) after repository/application tests pass.
-2. Implement M2.3 ([issue #9](https://github.com/leenusdarnal/guitarlab/issues/9)): an empty first-run profile backed by IndexedDB, with migrations and offline restart tests.
-3. Keep D1 as an isolated local/test binding until authentication and ownership checks exist; no production database or cloud sync is enabled.
+1. Finish M2.3 browser reload/offline and upgrade verification before merging PR #24.
+2. Extend M2.4 with real IndexedDB export, validated transactional restore, download/import UI and explicit safe reset; keep PR #25 stacked until M2.3 is merged.
+3. Keep D1 isolated to local/test use until authentication and ownership checks exist; no production database or cloud sync is enabled.
 4. Add a live Cloudflare preview deployment and browser-level verification as a separate release task; no live preview URL is claimed yet.
