@@ -14,7 +14,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | Visual direction and design tokens | Implemented | Approved hybrid direction; both-theme contrast validation runs in CI. Full component-level accessibility audit remains in M9 |
 | Application foundation | Merged | PR #21: SvelteKit, Svelte 5, TypeScript, Tailwind, Cloudflare adapter, responsive shell and onboarding |
 | Cloudflare runtime | Local only | Worker production build and local Wrangler smoke test pass. Explicit preview/production environment isolation and live deploy are not configured |
-| CI quality gates | Passing on current main | PR #29 merge commit passed local D1 migration/invariants, curriculum/design validation, formatting, lint, type/Svelte checks, unit tests, Worker build/smoke and Chromium acceptance. Security audit is currently non-blocking; CI hardening is the next maintenance improvement |
+| CI quality gates | Passing on current main | PR #30 adds locked installs, changed-file Prettier checks and a required high/critical dependency audit; local D1, curriculum/design, lint/type, unit, Worker and Chromium checks pass. Issue #5 still tracks a controlled failing-check verification |
 | M2.1 data schema | Merged | PR #22: versioned Drizzle schema, local D1 migration, 152 lesson metadata references, 34 stable skill IDs and database integrity tests |
 | M2.2 application boundary | Merged | PR #23: repository ports, validated use cases, typed errors and in-memory tests; no remote D1 access |
 | M2.3 local learner persistence | Merged; manual QA pending | PR #24: empty active profile and versioned IndexedDB stores/repositories. Verify browser reload, offline restart and storage upgrade behaviour |
@@ -35,7 +35,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Merged — PR #21 | Type/Svelte checks and production Worker build pass |
 | M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Local runtime implemented | Explicit preview/production environment separation and live deployment remain |
 | M1.3 | [#4 — Implement the visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell merged — PR #21 | Full keyboard, device and component-level accessibility review remains |
-| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Core gates merged — PR #21 | CI hardening: deterministic install, non-mutating format check and enforceable dependency audit |
+| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Core gates merged — PR #21; hardening merged — PR #30 | Verify controlled failing-check behaviour and maintain dependency/action updates |
 | M1.5 | [#6 — Integrate curriculum integrity checks](https://github.com/leenusdarnal/guitarlab/issues/6) | Implemented | Validator runs in the main CI workflow and checks 52 + 52 + 48 authored lessons |
 
 ## M2 — Data foundation
