@@ -1,0 +1,30 @@
+name: Curriculum validation
+
+on:
+  push:
+    paths:
+      - "content/curriculum/**"
+      - "scripts/validate-curriculum.mjs"
+      - ".github/workflows/curriculum-validation.yml"
+  pull_request:
+    paths:
+      - "content/curriculum/**"
+      - "scripts/validate-curriculum.mjs"
+      - ".github/workflows/curriculum-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-curriculum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate curriculum structure and lesson links
+        run: node scripts/validate-curriculum.mjs
