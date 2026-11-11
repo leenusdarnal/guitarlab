@@ -16,6 +16,7 @@ jobs:
   validate:
     name: Validate application and curriculum
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +28,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+
+      - name: Install Playwright for browser acceptance
+        run: npm install --no-save --package-lock=false playwright@1.56.1
+
+      - name: Install Chromium for browser acceptance
+        run: npx playwright install chromium
 
       - name: Format touched source files
         run: npm run format
@@ -64,7 +71,7 @@ jobs:
       - name: Cloudflare Worker local smoke test
         shell: bash
         run: |
-          npm run preview -- --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
+          ./node_modules/.bin/wrangler dev --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 30); do
@@ -80,6 +87,10 @@ jobs:
           fi
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
+
+      - name: Browser acceptance tests
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        run: npm run test:browser
 
       - name: Preserve Cloudflare preview build
         if: github.event_name == 'push' && github.ref_name == 'main'
