@@ -238,9 +238,10 @@ export async function updateLessonProgress(
     completedBlockIds: [...value.completedBlockIds],
     checkpointOutcome: value.checkpointOutcome,
     checkpointNote: value.checkpointNote,
+    revision: (current.revision ?? 0) + 1,
     updatedAt: dependencies.runtime.now()
   };
-  const saved = await dependencies.progress.updateInProgress(updated);
+  const saved = await dependencies.progress.updateInProgress(updated, current.revision ?? 0);
   if (!saved) {
     const latest = await dependencies.progress.find(value.learnerId, value.releaseId, value.lessonId);
     if (latest?.status === 'completed') throw new ConflictError('A completed lesson can no longer be changed.');
