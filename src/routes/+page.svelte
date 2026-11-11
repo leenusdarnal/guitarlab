@@ -3,12 +3,42 @@
   import { resolve } from '$app/paths';
   import { loadActiveLearnerDashboard } from '../lib/storage/indexeddb';
   import type { DashboardSnapshot } from '../lib/application/dashboard';
+  import {
+    buildPracticePlan,
+    type PracticePlanPreset
+  } from '../lib/application/practice-plan';
 
   let theme = $state<'dark' | 'light'>('dark');
   let menuOpen = $state(false);
   let dashboard = $state<DashboardSnapshot | null>(null);
   let isLoading = $state(true);
   let dashboardError = $state('');
+  let selectedPracticeMinutes = $state(20);
+  let selectedPracticePreset = $state<PracticePlanPreset>(20);
+  let customPracticeValue = $state('30');
+  let customDurationError = $state('');
+  let planDismissed = $state(false);
+  let planAccepted = $state(false);
+  let planNotice = $state('');
+  let practicePlan = $derived(
+    dashboard
+      ? buildPracticePlan({
+          minutes: selectedPracticeMinutes,
+          preset: selectedPracticePreset,
+          currentLesson: dashboard.nextLesson
+            ? {
+                id: dashboard.nextLesson.id,
+                title: dashboard.nextLesson.title,
+                focus: dashboard.nextLesson.focus,
+                estimatedMinutes: dashboard.nextLesson.estimatedMinutes,
+                isInProgress: false
+              }
+            : null,
+          dueReviews: dashboard.dueReviews,
+          now: Date.now()
+        })
+      : null
+  );
 
   onMount(() => {
     const stored = window.localStorage.getItem('guitarlab-theme');
@@ -16,11 +46,73 @@
     document.documentElement.dataset.theme = theme;
     let active = true;
     void loadActiveLearnerDashboard()
-      .then((snapshot) => { if (active) dashboard = snapshot; })
+      .then((snapshot) => {
+        if (active) {
+          dashboard = snapshot;
+          selectedPracticeMinutes = snapshot.practiceMinutes ?? 20;
+          selectedPracticePreset =
+            selectedPracticeMinutes === 10 ||
+            selectedPracticeMinutes === 20 ||
+            selectedPracticeMinutes === 40
+              ? selectedPracticeMinutes
+              : 'custom';
+          customPracticeValue = String(selectedPracticeMinutes);
+        }
+      })
       .catch(() => { if (active) dashboardError = 'Your local learning data could not be loaded. Check browser storage and try again.'; })
       .finally(() => { if (active) isLoading = false; });
     return () => { active = false; };
   });
+
+  function selectPracticePreset(minutes: 10 | 20 | 40) {
+    selectedPracticeMinutes = minutes;
+    selectedPracticePreset = minutes;
+    customPracticeValue = String(minutes);
+    customDurationError = '';
+    planAccepted = false;
+    planNotice = '';
+  }
+
+  function selectCustomPracticePreset() {
+    selectedPracticePreset = 'custom';
+    const minutes = Number(customPracticeValue);
+    if (Number.isInteger(minutes) && minutes >= 5 && minutes <= 180) {
+      selectedPracticeMinutes = minutes;
+      customDurationError = '';
+      planAccepted = false;
+      planNotice = '';
+    } else {
+      customDurationError = 'Enter a whole number from 5 to 180 minutes.';
+    }
+  }
+
+  function updateCustomPracticeDuration(event: Event) {
+    const input = event.currentTarget as HTMLInputElement;
+    customPracticeValue = input.value;
+    const minutes = Number(input.value);
+    if (!Number.isInteger(minutes) || minutes < 5 || minutes > 180) {
+      customDurationError = 'Enter a whole number from 5 to 180 minutes.';
+      return;
+    }
+    selectedPracticeMinutes = minutes;
+    selectedPracticePreset = 'custom';
+    customDurationError = '';
+    planAccepted = false;
+    planNotice = '';
+  }
+
+  function acceptPracticePlan() {
+    planAccepted = true;
+    planDismissed = false;
+    planNotice =
+      'Plan selected. This does not record practice, complete lessons or change skill mastery.';
+  }
+
+  function dismissPracticePlan() {
+    planDismissed = true;
+    planAccepted = false;
+    planNotice = 'Suggestions hidden for now. Your learning progress has not changed.';
+  }
 
   function toggleTheme() {
     theme = theme === 'dark' ? 'light' : 'dark';
@@ -119,6 +211,83 @@
           </article>
         </section>
 
+        <section class="practice-planner panel" aria-labelledby="planner-title">
+          <div class="planner-heading">
+            <div>
+              <div class="eyebrow">ADAPTIVE PRACTICE</div>
+              <h2 id="planner-title">A focused plan for today</h2>
+              <p>Suggestions use your next lesson and skills due for review. Change the time to fit your day.</p>
+            </div>
+            {#if practicePlan}
+              <span class="neutral-tag">{practicePlan.allocatedMinutes} / {practicePlan.minutes} min planned</span>
+            {/if}
+          </div>
+
+          <div class="duration-controls" role="group" aria-label="Practice duration">
+            <button type="button" class:choice-active={selectedPracticePreset === 10} aria-pressed={selectedPracticePreset === 10} onclick={() => selectPracticePreset(10)}>10 min</button>
+            <button type="button" class:choice-active={selectedPracticePreset === 20} aria-pressed={selectedPracticePreset === 20} onclick={() => selectPracticePreset(20)}>20 min</button>
+            <button type="button" class:choice-active={selectedPracticePreset === 40} aria-pressed={selectedPracticePreset === 40} onclick={() => selectPracticePreset(40)}>40 min</button>
+            <button type="button" class:choice-active={selectedPracticePreset === 'custom'} aria-pressed={selectedPracticePreset === 'custom'} onclick={selectCustomPracticePreset}>Custom</button>
+          </div>
+
+          {#if selectedPracticePreset === 'custom'}
+            <label class="custom-duration">
+              Custom duration (5–180 minutes)
+              <input
+                type="number"
+                min="5"
+                max="180"
+                step="1"
+                value={customPracticeValue}
+                oninput={updateCustomPracticeDuration}
+                aria-describedby="custom-duration-help"
+              />
+            </label>
+            <p class="duration-help" id="custom-duration-help">
+              {customDurationError || 'Choose any whole-minute duration that works for you.'}
+            </p>
+          {/if}
+
+          {#if planDismissed}
+            <div class="planner-empty" role="status">
+              <p>{planNotice}</p>
+              <button type="button" class="planner-secondary" onclick={() => (planDismissed = false)}>Show suggestions</button>
+            </div>
+          {:else if practicePlan}
+            {#if practicePlan.recommendations.length > 0}
+              <div class="task-list">
+                {#each practicePlan.recommendations as task (task.id)}
+                  <article class="practice-task">
+                    <div class="task-meta">
+                      <span>{task.kind.replaceAll('-', ' ')}</span>
+                      <span>{task.minutes} min</span>
+                    </div>
+                    <h3>{task.title}</h3>
+                    <p>{task.reason}</p>
+                  </article>
+                {/each}
+              </div>
+            {:else}
+              <div class="planner-empty">There is no suggested task yet. Continue with a lesson or record a skill assessment to build useful evidence.</div>
+            {/if}
+            <div class="planner-footer">
+              <p>{practicePlan.remainingMinutes > 0
+                ? `${practicePlan.remainingMinutes} min remain flexible. You do not need to fill every minute.`
+                : 'The selected time is allocated. Take breaks whenever you need.'}</p>
+              <div class="planner-actions">
+                <button type="button" class="planner-primary" disabled={Boolean(customDurationError)} onclick={acceptPracticePlan}>
+                  {planAccepted ? 'Plan selected' : 'Use this plan'}
+                </button>
+                <button type="button" class="planner-secondary" onclick={dismissPracticePlan}>Dismiss</button>
+              </div>
+            </div>
+            {#if planNotice}
+              <p class="planner-notice" role="status">{planNotice}</p>
+            {/if}
+          {/if}
+          <p class="planner-guardrail">These are suggestions only. GuitarLab will not mark lessons complete or award skill mastery because a plan was selected or time was spent practising.</p>
+        </section>
+
         <section class="dashboard-grid">
           <article class="panel" id="reviews">
             <div class="panel-heading"><div><div class="eyebrow">SPACED REVIEW</div><h2>Skills ready to revisit</h2></div><span class="neutral-tag">{dashboard.dueReviews.length} due</span></div>
@@ -163,7 +332,8 @@
   .app-shell{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr);background:var(--bg)}.sidebar{position:sticky;top:0;height:100vh;padding:28px 18px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface)}.brand{display:flex;align-items:center;gap:11px;padding:0 8px 38px}.brand-mark{width:38px;height:38px;border-radius:12px;background:var(--primary);color:var(--primary-ink);display:grid;place-items:center;font:700 25px Georgia,serif}.brand strong{display:block;font-size:16px}.brand small{display:block;color:var(--muted);font-size:8px;letter-spacing:1.25px;margin-top:3px}.nav-label,.eyebrow{font-size:10px;font-weight:750;letter-spacing:1.35px;color:var(--muted)}.nav-label{padding:0 11px 12px}.nav-list{display:grid;gap:5px}.nav-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:var(--muted);font-size:13px}.nav-link span{width:18px;text-align:center;font-size:17px}.nav-link:hover,.nav-link.active{background:var(--surface-raised);color:var(--text)}.nav-link.active{box-shadow:inset 2px 0 var(--primary)}.sidebar-bottom{margin-top:auto;display:grid;gap:12px}.offline-indicator{font-size:11px;color:var(--muted);padding:12px 10px;border-top:1px solid var(--border)}.offline-indicator span,.status-pill i{display:inline-block;width:7px;height:7px;background:var(--success);border-radius:50%;margin-right:7px}.main-area{min-width:0}.topbar{height:70px;padding:0 clamp(20px,4vw,54px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}.breadcrumb{font-size:12px;color:var(--muted)}.breadcrumb span{padding:0 8px;color:var(--border)}.top-actions{display:flex;align-items:center;gap:13px}.status-pill,.neutral-tag{font-size:10px;color:var(--muted);border:1px solid var(--border);padding:7px 10px;border-radius:99px}.status-pill i{width:6px;height:6px}.icon-button,.avatar{border:1px solid var(--border);background:var(--surface);color:var(--text);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer}.avatar{font-size:12px;color:var(--primary);font-weight:700}.mobile-brand,.mobile-menu{display:none}
   .page-content{max-width:var(--content);margin:0 auto;padding:44px clamp(20px,4vw,54px) 24px}.welcome{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:28px}.welcome h1{font:500 clamp(36px,5vw,58px)/1.08 Georgia,serif;letter-spacing:-2px;margin:12px 0}.welcome h1 em{color:var(--primary)}.welcome p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}.secondary-button{border:1px solid var(--border);border-radius:10px;padding:12px 15px;font-size:11px;white-space:nowrap}.secondary-button span{padding-left:8px;color:var(--primary)}.fresh-state{display:flex;align-items:center;gap:18px;padding:19px 21px;border:1px solid color-mix(in srgb,var(--primary) 35%,var(--border));background:color-mix(in srgb,var(--primary) 7%,var(--surface));border-radius:var(--radius);margin-bottom:17px}.fresh-icon{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--primary) 16%,transparent);color:var(--primary);font-size:22px}.fresh-copy{flex:1}.fresh-copy h2{font-size:15px;margin:5px 0 4px}.fresh-copy p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}.state-panel{padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:13px;color:var(--muted)}.error-panel{border-color:var(--danger)}.error-panel strong{color:var(--text)}.error-panel p{font-size:12px;line-height:1.6}.text-link{font-size:11px;color:var(--primary);font-weight:750}
   .hero-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-bottom:15px}.target-card,.practice-target,.panel,.phase-card{border:1px solid var(--border);background:var(--surface);border-radius:var(--radius)}.target-card{padding:25px;min-height:220px;display:flex;flex-direction:column}.target-meta{display:flex;gap:8px;align-items:center;font-size:9px;letter-spacing:1px;font-weight:750;color:var(--primary);margin-top:20px}.target-meta span{color:var(--muted)}.target-card h2{font:500 clamp(25px,3vw,34px)/1.2 Georgia,serif;margin:9px 0 6px}.target-card>p,.practice-target>p{font-size:12px;color:var(--muted);line-height:1.65;margin:0}.target-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:auto;padding-top:22px;font-size:10px;color:var(--muted)}.target-footer a{font-size:11px;color:var(--primary);font-weight:750}.target-footer b{padding-left:6px}.practice-target{padding:23px;display:flex;flex-direction:column;align-items:flex-start}.practice-number{font:500 42px/1 Georgia,serif;color:var(--primary);margin:19px 0 9px}.practice-number small{font:500 14px system-ui;color:var(--muted);padding-left:5px}.practice-symbol{font-size:30px;color:var(--primary);margin:20px 0 7px}.practice-target h2{font-size:15px;margin:0 0 7px}.practice-target>p{margin-bottom:16px}.practice-target .text-link{margin-top:auto}
-  .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:37px}.panel{padding:21px;min-width:0}.panel-heading{display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-heading h2{font-size:15px;margin:7px 0 0}.neutral-tag{white-space:nowrap}.empty-state{display:flex;align-items:flex-start;gap:13px;margin-top:21px;padding-top:17px;border-top:1px solid var(--border)}.empty-symbol{width:28px;height:28px;flex:none;border-radius:9px;background:var(--surface-raised);display:grid;place-items:center;color:var(--success)}.empty-state strong{font-size:11px}.empty-state p{font-size:10px;line-height:1.6;color:var(--muted);margin:5px 0 0}.review-list,.session-list{list-style:none;margin:19px 0 0;padding:0}.review-list li,.session-list li{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--border);font-size:11px}.review-dot{width:7px;height:7px;flex:none;border-radius:50%;background:var(--warning)}.review-date,.session-duration{margin-left:auto;color:var(--muted);font-size:10px}.session-mark{color:var(--primary);font-size:16px}.session-copy{display:grid;gap:3px}.session-copy strong{font-size:11px}.session-copy small{font-size:10px;color:var(--muted)}
+  .practice-planner{margin:0 0 15px;padding:23px}.planner-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.planner-heading h2{font-size:18px;margin:7px 0}.planner-heading p{font-size:11px;line-height:1.6;color:var(--muted);margin:0;max-width:570px}.duration-controls{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 16px}.duration-controls button,.planner-primary,.planner-secondary{border:1px solid var(--border);border-radius:9px;padding:9px 13px;background:var(--surface-raised);color:var(--text);font:inherit;font-size:11px;cursor:pointer}.duration-controls button.choice-active{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,var(--surface));color:var(--text)}.duration-controls button:focus-visible,.planner-primary:focus-visible,.planner-secondary:focus-visible,.custom-duration input:focus-visible{outline:2px solid var(--primary);outline-offset:2px}.custom-duration{display:grid;gap:7px;max-width:240px;font-size:11px;font-weight:650}.custom-duration input{width:100%;min-height:39px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface-raised);color:var(--text)}.duration-help{font-size:10px;color:var(--muted);margin:7px 0 14px}.task-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.practice-task{min-width:0;padding:15px;border:1px solid var(--border);border-radius:11px;background:var(--surface-raised)}.task-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:9px;text-transform:capitalize;letter-spacing:.4px}.task-meta span:last-child{white-space:nowrap;color:var(--primary);font-weight:750}.practice-task h3{font-size:12px;margin:10px 0 6px}.practice-task p{font-size:10px;line-height:1.6;color:var(--muted);margin:0}.planner-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:16px}.planner-footer>p,.planner-guardrail,.planner-notice{font-size:10px;line-height:1.6;color:var(--muted);margin:0}.planner-actions{display:flex;gap:8px;flex-wrap:wrap}.planner-primary{background:var(--primary);border-color:var(--primary);color:var(--primary-ink);font-weight:750}.planner-primary:disabled{opacity:.55;cursor:not-allowed}.planner-empty{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px;border:1px dashed var(--border);border-radius:10px;font-size:11px;color:var(--muted)}.planner-empty p{margin:0}.planner-notice{margin-top:12px;color:var(--text)}.planner-guardrail{border-top:1px solid var(--border);padding-top:13px;margin-top:16px}
+    .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:37px}.panel{padding:21px;min-width:0}.panel-heading{display:flex;justify-content:space-between;gap:12px;align-items:center}.panel-heading h2{font-size:15px;margin:7px 0 0}.neutral-tag{white-space:nowrap}.empty-state{display:flex;align-items:flex-start;gap:13px;margin-top:21px;padding-top:17px;border-top:1px solid var(--border)}.empty-symbol{width:28px;height:28px;flex:none;border-radius:9px;background:var(--surface-raised);display:grid;place-items:center;color:var(--success)}.empty-state strong{font-size:11px}.empty-state p{font-size:10px;line-height:1.6;color:var(--muted);margin:5px 0 0}.review-list,.session-list{list-style:none;margin:19px 0 0;padding:0}.review-list li,.session-list li{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--border);font-size:11px}.review-dot{width:7px;height:7px;flex:none;border-radius:50%;background:var(--warning)}.review-date,.session-duration{margin-left:auto;color:var(--muted);font-size:10px}.session-mark{color:var(--primary);font-size:16px}.session-copy{display:grid;gap:3px}.session-copy strong{font-size:11px}.session-copy small{font-size:10px;color:var(--muted)}
   .learning-path{margin-bottom:35px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.section-heading h2{font-size:20px;margin:7px 0 5px}.section-heading p{font-size:11px;color:var(--muted);margin:0}.phase-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.phase-card{padding:17px;min-width:0}.phase-card.current-phase{border-color:color-mix(in srgb,var(--primary) 65%,var(--border));background:color-mix(in srgb,var(--primary) 5%,var(--surface))}.phase-top{display:flex;justify-content:space-between;gap:6px;font-size:8px;letter-spacing:.8px;color:var(--muted);font-weight:750}.current-label{color:var(--primary)}.phase-card h3{font:500 19px/1.2 Georgia,serif;margin:17px 0 7px}.phase-card>p{font-size:10px;line-height:1.6;color:var(--muted);min-height:64px;margin:0 0 15px}.phase-progress{height:5px;border-radius:9px;background:var(--surface-raised);overflow:hidden}.phase-progress span{display:block;height:100%;border-radius:9px;background:var(--primary)}.phase-count{font-size:9px;color:var(--muted);margin-top:8px}.path-note{font-size:10px;line-height:1.6;color:var(--muted);margin:13px 0 0}footer{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--border);padding-top:17px;margin-top:30px;color:var(--muted);font-size:10px}
   @media(max-width:1050px){.phase-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.phase-card>p{min-height:44px}}@media(max-width:900px){.app-shell{grid-template-columns:205px minmax(0,1fr)}.hero-grid,.dashboard-grid{grid-template-columns:1fr}.section-heading{align-items:flex-start;flex-direction:column}}@media(max-width:650px){.app-shell{display:block}.sidebar{display:none}.topbar{height:60px;padding:0 17px}.mobile-brand{display:flex;align-items:center;gap:9px;border:0;background:transparent;color:var(--text);font-size:14px}.mobile-brand strong{font-size:14px}.breadcrumb,.status-pill{display:none}.mobile-menu{display:grid;position:absolute;z-index:5;top:60px;left:12px;right:12px;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:0 15px 40px #0003}.mobile-menu a{padding:12px;border-radius:8px;font-size:13px}.mobile-menu a:hover{background:var(--surface-raised)}.page-content{padding:32px 17px 22px}.welcome{align-items:flex-start;flex-direction:column;gap:17px}.welcome h1{font-size:42px}.secondary-button{width:100%;text-align:center}.fresh-state{align-items:flex-start;padding:16px}.target-card{padding:20px;min-height:215px}.target-footer{align-items:flex-start;flex-direction:column}.practice-target{min-height:200px}.phase-grid{grid-template-columns:1fr}.phase-card>p{min-height:0}.panel{padding:18px}footer{flex-direction:column}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
