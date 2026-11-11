@@ -138,8 +138,9 @@ export interface LessonProgressRepository {
    */
   completeWithEvent(
     progress: LessonProgressRecord,
-    event: LessonCompletionEventRecord
-  ): Promise<LessonProgressRecord>;
+    event: LessonCompletionEventRecord,
+    expectedRevision: number
+  ): Promise<LessonProgressRecord | null>;
 }
 
 export interface AssessmentAttemptRepository {
