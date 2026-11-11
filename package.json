@@ -37,7 +37,9 @@
     "vite": "^6.0.0",
     "vitest": "^3.0.0",
     "wrangler": "^4.0.0",
-    "zod": "^4.0.0",
     "@eslint/js": "^9.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.0.0"
   }
 }
