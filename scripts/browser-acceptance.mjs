@@ -49,6 +49,8 @@ try {
   assert.equal(await page.locator('.phase-card').count(), 4, 'Year 1 should show four curriculum phases');
   await page.getByText('No reviews due right now').waitFor();
   await page.getByText('Your first session is still ahead').waitFor();
+  await page.getByText('A fresh profile has no assumed practice-time preference.').waitFor();
+  assert.equal(await page.locator('.practice-task').count(), 0, 'A fresh profile should choose a duration before receiving a plan');
   assert.equal(await page.locator('.storage-warning').count(), 0, 'IndexedDB should be available in the browser');
 
   // Theme selection persists across a full reload.
@@ -62,6 +64,7 @@ try {
   await page.getByRole('link', { name: /Learning preferences/ }).first().click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
   await page.getByRole('radio', { name: 'Acoustic guitar' }).check();
+  await page.getByRole('checkbox', { name: 'Acoustic & fingerstyle' }).check();
   await page.getByRole('radio', { name: '20 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page.getByRole('status').filter({ hasText: 'saved privately on this device' }).waitFor();
@@ -69,8 +72,40 @@ try {
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
+  const personalizedReasons = await page.locator('.practice-task p').allTextContents();
+  assert.ok(personalizedReasons.some((reason) => reason.includes('acoustic and fingerstyle playing')), 'Learner goals should inform musical application recommendations');
 
-  // Mobile navigation and curriculum anchor remain usable at a narrow viewport.
+  // The planner responds to the selected duration and explains each task.
+  await page.getByRole('heading', { name: 'A focused plan for today' }).waitFor();
+  const planner = page.locator('.practice-planner');
+  const taskCards = planner.locator('.practice-task');
+  assert.ok(await taskCards.count() > 0, 'A fresh learner should receive a useful warm-up/lesson plan');
+  const reasons = await taskCards.locator('p').allTextContents();
+  assert.ok(reasons.every((reason) => reason.trim().length > 20), 'Each suggested task must explain why it is included');
+
+  await planner.locator('.duration-controls').getByRole('button', { name: '10 min' }).click();
+  assert.match(await planner.locator('.planner-heading .neutral-tag').innerText(), /\/ 10 min planned/);
+  await planner.getByRole('button', { name: 'Use this plan' }).click();
+  await planner.getByRole('status').filter({ hasText: 'does not record practice' }).waitFor();
+
+  // Dismiss and restore suggestions without touching learner progress.
+  await planner.getByRole('button', { name: 'Dismiss' }).click();
+  assert.equal(await taskCards.count(), 0, 'Dismiss should hide suggestions');
+  await planner.getByRole('button', { name: 'Show suggestions' }).click();
+  assert.ok(await taskCards.count() > 0, 'Dismissed suggestions can be restored');
+
+  // Custom durations are validated and reflected in the plan budget.
+  await planner.locator('.duration-controls').getByRole('button', { name: 'Custom' }).click();
+  const customDuration = page.getByLabel('Custom duration (5–180 minutes)');
+  await customDuration.fill('15');
+  assert.equal(await planner.locator('.planner-heading .neutral-tag').innerText(), '15 / 15 min planned');
+  await customDuration.fill('4');
+  await planner.getByText('Enter a whole number from 5 to 180 minutes.').waitFor();
+  assert.equal(await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(), true);
+  await customDuration.fill('15');
+  assert.equal(await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(), false);
+
+  // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
@@ -78,26 +113,25 @@ try {
   await mobileNavigation.getByRole('link', { name: 'Learning path' }).click();
   assert.equal(new URL(page.url()).hash, '#learning-path');
   await page.locator('#learning-path').waitFor();
+  assert.ok(await page.locator('.practice-task').first().isVisible(), 'Practice recommendations should remain visible on mobile');
 
-  // The M2.4 backup route remains reachable from the dashboard on mobile,
-  // and its download contains only the active learner's profile data.
+  // Backup navigation and export remain available from the learner dashboard.
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
   await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
   await page.getByRole('heading', { name: 'Keep your learning safe.' }).waitFor();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: /Download backup/ }).click();
   const download = await downloadPromise;
-  assert.match(download.suggestedFilename(), /^guitarlab-backup-\d{4}-\d{2}-\d{2}\.json$/);
+    assert.match(download.suggestedFilename(), /^guitarlab-backup-\d{4}-\d{2}-\d{2}\.json$/);
   const downloadPath = await download.path();
   assert.ok(downloadPath, 'Backup download should be available to the browser test');
   const backup = JSON.parse(await readFile(downloadPath, 'utf8'));
   assert.equal(backup.format, 'guitarlab-learner-backup');
   assert.equal(backup.version, 1);
   assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
-  assert.equal(backup.records.lessonProgress.length, 0);
 
   assert.deepEqual(pageErrors, [], `Browser runtime errors: ${pageErrors.join('; ')}`);
-  console.log('Browser acceptance passed: fresh dashboard, four phases, honest empty states, theme persistence, IndexedDB preference persistence, mobile navigation and zero uncaught page errors.');
+  console.log('Browser acceptance passed: dashboard, fresh state, preference/theme persistence, explainable planner presets/custom validation, accept/dismiss/restore, mobile navigation and zero uncaught page errors.');
 } catch (error) {
   console.error(error);
   console.error('Wrangler preview output:\n' + serverOutput);

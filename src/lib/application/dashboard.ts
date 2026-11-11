@@ -24,10 +24,12 @@ export type DashboardPhase = {
 export type DashboardSnapshot = {
   learnerId: string;
   practiceMinutes: number | null;
+  learnerGoals: string[];
   isFreshStart: boolean;
   completedLessons: number;
   totalLessons: number;
   nextLesson: DashboardLesson | null;
+  nextLessonIsInProgress: boolean;
   currentPhase: string | null;
   phases: Array<DashboardPhase & {
     completedLessons: number;
@@ -132,10 +134,12 @@ export function buildDashboardSnapshot(input: {
   return {
     learnerId: profile.id,
     practiceMinutes: profile.preferences.practiceMinutes,
+    learnerGoals: [...profile.preferences.goals],
     isFreshStart: completedIds.size === 0 && inProgressIds.size === 0,
     completedLessons: completedIds.size,
     totalLessons: orderedLessons.length,
     nextLesson,
+    nextLessonIsInProgress: nextLesson !== null && inProgressIds.has(nextLesson.id),
     currentPhase,
     phases: phaseSummaries,
     dueReviews,
