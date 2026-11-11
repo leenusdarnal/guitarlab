@@ -60,8 +60,8 @@ M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. Th
 
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|
-| M3.1 | [#11 — Learner dashboard and learning path](https://github.com/leenusdarnal/guitarlab/issues/11) | M1.3, M2.3 | Fresh-start, progress and review states render correctly |
-| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | M2.2, M2.3, M3.1 | 10/20/40/custom plans and reasoned recommendations pass unit tests |
+| M3.1 | [#11 — Learner dashboard and learning path](https://github.com/leenusdarnal/guitarlab/issues/11) | M1.3, M2.3 | Fresh-start, progress and review states render correctly; Chromium browser acceptance passes on PR #27 |
+| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | M2.2, M2.3, M3.1 | 10/20/40/custom plans, goal/recent-evidence-aware reasons, plan overrides and Chromium acceptance pass |
 
 ## M4 — Curriculum and lessons
 
