@@ -1,0 +1,84 @@
+{
+  "id": "year-3-specialisations",
+  "version": "1.0.0",
+  "year": 3,
+  "description": "Optional 12-week routes from the existing master course. These are outlines for choosing a direction after Year 2, not part of the initial release.",
+  "paths": [
+    {
+      "id": "rock-blues",
+      "title": "Rock & Blues",
+      "goal": "Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
+      "weeks": [
+        "Technique reset",
+        "Pentatonic across neck",
+        "Bends to pitch",
+        "Legato control",
+        "Blues shuffle arrangement",
+        "Quarter review: lead tone",
+        "Chord-tone soloing",
+        "Riff construction",
+        "Modal colour",
+        "Phrasing and silence",
+        "Performance arrangement",
+        "Path capstone"
+      ]
+    },
+    {
+      "id": "fingerstyle-acoustic",
+      "title": "Fingerstyle & Acoustic",
+      "goal": "Build independent fingerstyle, bass movement, chord melody and acoustic arrangement skills.",
+      "weeks": [
+        "Right-hand independence",
+        "Arpeggio consistency",
+        "Alternating bass",
+        "Chord melody basics",
+        "Sus and add9 colour",
+        "Quarter review: acoustic tone",
+        "Percussive accompaniment",
+        "Moving bass lines",
+        "Arrange a melody",
+        "Open-string colour",
+        "Dynamic arc",
+        "Path capstone"
+      ]
+    },
+    {
+      "id": "jazz-harmony",
+      "title": "Jazz & Harmony",
+      "goal": "Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
+      "weeks": [
+        "Jazz chord grips",
+        "Swing subdivision",
+        "Guide tones",
+        "ii-V-I in two keys",
+        "Chord extensions",
+        "Quarter review: jazz comp",
+        "Bossa pattern",
+        "Jazz blues form",
+        "Chord-tone soloing",
+        "Tune learning workflow",
+        "Reharmonisation",
+        "Path capstone"
+      ]
+    },
+    {
+      "id": "all-round-musician",
+      "title": "All-Round Musician",
+      "goal": "Integrate listening, reading, harmony, arranging, recording, songwriting and ensemble skills.",
+      "weeks": [
+        "Listening journal",
+        "Ear intervals",
+        "Sight reading routine",
+        "Harmony analysis",
+        "Transposition",
+        "Quarter review: musicianship",
+        "Arranging texture",
+        "Recording feedback",
+        "Songwriting form",
+        "Ensemble preparation",
+        "Teaching a skill",
+        "Path capstone"
+      ]
+    }
+  ]
+}
