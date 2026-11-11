@@ -13,18 +13,24 @@
   let dashboard = $state<DashboardSnapshot | null>(null);
   let isLoading = $state(true);
   let dashboardError = $state('');
-  let selectedPracticeMinutes = $state(20);
-  let selectedPracticePreset = $state<PracticePlanPreset>(20);
+  let selectedPracticeMinutes = $state<number | null>(null);
+  let selectedPracticePreset = $state<PracticePlanPreset | null>(null);
   let customPracticeValue = $state('30');
   let customDurationError = $state('');
   let planDismissed = $state(false);
   let planAccepted = $state(false);
   let planNotice = $state('');
   let practicePlan = $derived(
-    dashboard
+    dashboard && selectedPracticeMinutes !== null
       ? buildPracticePlan({
           minutes: selectedPracticeMinutes,
-          preset: selectedPracticePreset,
+          preset:
+            selectedPracticePreset ??
+            (selectedPracticeMinutes === 10 ||
+            selectedPracticeMinutes === 20 ||
+            selectedPracticeMinutes === 40
+              ? selectedPracticeMinutes
+              : 'custom'),
           currentLesson: dashboard.nextLesson
             ? {
                 id: dashboard.nextLesson.id,
@@ -56,14 +62,17 @@
       .then((snapshot) => {
         if (active) {
           dashboard = snapshot;
-          selectedPracticeMinutes = snapshot.practiceMinutes ?? 20;
+          selectedPracticeMinutes = snapshot.practiceMinutes;
           selectedPracticePreset =
-            selectedPracticeMinutes === 10 ||
-            selectedPracticeMinutes === 20 ||
-            selectedPracticeMinutes === 40
-              ? selectedPracticeMinutes
-              : 'custom';
-          customPracticeValue = String(selectedPracticeMinutes);
+            selectedPracticeMinutes === null
+              ? null
+              : selectedPracticeMinutes === 10 ||
+                  selectedPracticeMinutes === 20 ||
+                  selectedPracticeMinutes === 40
+                ? selectedPracticeMinutes
+                : 'custom';
+          customPracticeValue =
+            selectedPracticeMinutes === null ? '30' : String(selectedPracticeMinutes);
         }
       })
       .catch(() => { if (active) dashboardError = 'Your local learning data could not be loaded. Check browser storage and try again.'; })
@@ -291,6 +300,10 @@
             {#if planNotice}
               <p class="planner-notice" role="status">{planNotice}</p>
             {/if}
+          {:else}
+            <div class="planner-empty" role="status">
+              <p>Choose 10, 20, 40 or a custom duration to build today's plan. A fresh profile has no assumed practice-time preference.</p>
+            </div>
           {/if}
           <p class="planner-guardrail">These are suggestions only. GuitarLab will not mark lessons complete or award skill mastery because a plan was selected or time was spent practising.</p>
         </section>
