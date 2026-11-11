@@ -1,54 +1,13 @@
-name: GuitarLab CI
-
-on:
-  pull_request:
-  push:
-    branches: [main, "feat/**"]
-
-permissions:
-  contents: read
-
-concurrency:
-  group: guitarlab-ci-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  validate:
-    name: Validate application and curriculum
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Inspect dependency advisories
-        run: |
-          npm audit --json > npm-audit.json || true
-          node -e "const a=require('./npm-audit.json'); for (const [name, item] of Object.entries(a.vulnerabilities || {})) console.log(name + ': ' + item.severity + '; direct=' + item.isDirect + '; fix=' + JSON.stringify(item.fixAvailable))"
-
-      - name: Validate curriculum
-        run: npm run curriculum:validate
-
-      - name: Check formatting
-        run: npm run format:check
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Type and Svelte checks
-        run: npm run check
-
-      - name: Unit tests
-        run: npm run test:run
-
-      - name: Production build
-        run: npm run build
+node_modules/
+.svelte-kit/
+.wrangler/
 worker-configuration.d.ts
-.vitest
+build/
+dist/
+coverage/
+.vitest/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store

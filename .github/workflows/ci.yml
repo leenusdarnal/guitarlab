@@ -1,10 +1,72 @@
-import tailwindcss from '@tailwindcss/vite';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
+name: GuitarLab CI
 
-export default defineConfig({
-  plugins: [tailwindcss(), sveltekit()],
-  test: {
-    include: ['src/**/*.{test,spec}.{js,ts}']
-  }
-});
+on:
+  pull_request:
+  push:
+    branches: [main, "feat/**", "chore/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guitarlab-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate application and curriculum
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Preserve generated lockfile
+        uses: actions/upload-artifact@v4
+        with:
+          name: guitarlab-package-lock
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Inspect dependency advisories
+        shell: bash
+        run: |
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json" || true
+          node - <<'NODE'
+          const report = require(process.env.RUNNER_TEMP + '/npm-audit.json');
+          const entries = Object.entries(report.vulnerabilities || {});
+          for (const [name, item] of entries) {
+            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
+          }
+          const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
+          if (blocking.length) {
+            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
+            process.exit(1);
+          }
+          NODE
+
+      - name: Validate curriculum
+        run: npm run curriculum:validate
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type and Svelte checks
+        run: npm run check
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Production build
+        run: npm run build
