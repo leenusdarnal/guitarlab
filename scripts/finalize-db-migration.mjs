@@ -35,7 +35,9 @@ const migrationNames = (await readdir(migrationsDir))
   .sort();
 
 if (migrationNames.length === 0) {
-  throw new Error('Drizzle Kit did not produce a SQL migration in drizzle/migrations.');
+  throw new Error(
+    'Drizzle Kit did not produce a SQL migration in drizzle/migrations.'
+  );
 }
 
 const existing = await Promise.all(
@@ -44,24 +46,32 @@ const existing = await Promise.all(
     content: await readFile(join(migrationsDir, name), 'utf8')
   }))
 );
-const seeded = existing.find((entry) => entry.content.includes('-- GUITARLAB_CURRICULUM_SEED:'));
+const seeded = existing.find((entry) =>
+  entry.content.includes('-- GUITARLAB_CURRICULUM_SEED:')
+);
 
 if (seeded) {
-  const recordedHash = seeded.content.match(/-- GUITARLAB_CURRICULUM_SEED: ([a-f0-9]{64})/)?.[1];
+  const recordedHash = seeded.content.match(
+    /-- GUITARLAB_CURRICULUM_SEED: ([a-f0-9]{64})/
+  )?.[1];
   if (recordedHash !== contentHash) {
     throw new Error(
       'Curriculum content changed after curriculum-v1 was seeded. Create an explicit new curriculum-release migration; do not rewrite an applied migration.'
     );
   }
-  console.log('Curriculum seed already exists and its SHA-256 fingerprint matches.');
+  console.log(
+    'Curriculum seed already exists and its SHA-256 fingerprint matches.'
+  );
   process.exit(0);
 }
 
 const parsed = new Map(
-  await Promise.all(files.map(async (file) => [
-    file.name,
-    JSON.parse(file.bytes.toString('utf8'))
-  ]))
+  await Promise.all(
+    files.map(async (file) => [
+      file.name,
+      JSON.parse(file.bytes.toString('utf8'))
+    ])
+  )
 );
 
 const lessons = [
@@ -72,13 +82,22 @@ const lessons = [
 
 const lessonIds = new Set();
 for (const lesson of lessons) {
-  if (lessonIds.has(lesson.id)) throw new Error('Duplicate lesson ID: ' + lesson.id);
+  if (lessonIds.has(lesson.id))
+    throw new Error('Duplicate lesson ID: ' + lesson.id);
   lessonIds.add(lesson.id);
 }
 
-const skillIds = [...new Set(lessons.flatMap((lesson) => lesson.skillIds))].sort();
+const skillIds = [
+  ...new Set(lessons.flatMap((lesson) => lesson.skillIds))
+].sort();
 if (lessons.length !== 152 || skillIds.length !== 34) {
-  throw new Error('Expected 152 lessons and 34 skills; found ' + lessons.length + ' lessons and ' + skillIds.length + ' skills.');
+  throw new Error(
+    'Expected 152 lessons and 34 skills; found ' +
+      lessons.length +
+      ' lessons and ' +
+      skillIds.length +
+      ' skills.'
+  );
 }
 
 function quote(value) {
@@ -89,7 +108,10 @@ function quote(value) {
 
 function readableName(skillId) {
   const finalPart = skillId.split('.').at(-1) || skillId;
-  return finalPart.split(/[-_]/).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+  return finalPart
+    .split(/[-_]/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 }
 
 const releaseId = 'curriculum-v1';
@@ -98,38 +120,44 @@ const statements = [];
 
 statements.push(
   'INSERT INTO curriculum_releases (id, version, schema_version, content_hash, published_at, status) VALUES (' +
-  [releaseId, '1.0.0', 1, contentHash, releasedAt, 'published'].map(quote).join(', ') +
-  ') ON CONFLICT(id) DO NOTHING;'
+    [releaseId, '1.0.0', 1, contentHash, releasedAt, 'published']
+      .map(quote)
+      .join(', ') +
+    ') ON CONFLICT(id) DO NOTHING;'
 );
 
 for (const skillId of skillIds) {
   statements.push(
     'INSERT INTO skills (id, category, display_name) VALUES (' +
-    [skillId, skillId.split('.')[0], readableName(skillId)].map(quote).join(', ') +
-    ') ON CONFLICT(id) DO NOTHING;'
+      [skillId, skillId.split('.')[0], readableName(skillId)]
+        .map(quote)
+        .join(', ') +
+      ') ON CONFLICT(id) DO NOTHING;'
   );
   statements.push(
     'INSERT INTO curriculum_release_skills (release_id, skill_id) VALUES (' +
-    [releaseId, skillId].map(quote).join(', ') +
-    ') ON CONFLICT(release_id, skill_id) DO NOTHING;'
+      [releaseId, skillId].map(quote).join(', ') +
+      ') ON CONFLICT(release_id, skill_id) DO NOTHING;'
   );
 }
 
 for (const lesson of lessons) {
   statements.push(
     'INSERT INTO curriculum_lessons (release_id, lesson_id, curriculum_id, curriculum_week_id, week, route, title, focus, estimated_minutes) VALUES (' +
-    [
-      releaseId,
-      lesson.id,
-      lesson.curriculumId,
-      lesson.curriculumWeekId,
-      lesson.week,
-      lesson.route,
-      lesson.title,
-      lesson.focus,
-      lesson.estimatedMinutes
-    ].map(quote).join(', ') +
-    ') ON CONFLICT(release_id, lesson_id) DO NOTHING;'
+      [
+        releaseId,
+        lesson.id,
+        lesson.curriculumId,
+        lesson.curriculumWeekId,
+        lesson.week,
+        lesson.route,
+        lesson.title,
+        lesson.focus,
+        lesson.estimatedMinutes
+      ]
+        .map(quote)
+        .join(', ') +
+      ') ON CONFLICT(release_id, lesson_id) DO NOTHING;'
   );
 }
 
@@ -162,5 +190,17 @@ const additions = [
   ''
 ].join('\n');
 
-await writeFile(migrationPath, previousSql.trimEnd() + '\n' + additions, 'utf8');
-console.log('Finalized ' + migrationNames.at(-1) + ': ' + lessons.length + ' lessons, ' + skillIds.length + ' skills.');
+await writeFile(
+  migrationPath,
+  previousSql.trimEnd() + '\n' + additions,
+  'utf8'
+);
+console.log(
+  'Finalized ' +
+    migrationNames.at(-1) +
+    ': ' +
+    lessons.length +
+    ' lessons, ' +
+    skillIds.length +
+    ' skills.'
+);

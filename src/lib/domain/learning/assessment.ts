@@ -41,4 +41,6 @@ export const assessmentAttemptInputSchema = z
   })
   .strict();
 
-export type AssessmentAttemptInput = z.infer<typeof assessmentAttemptInputSchema>;
+export type AssessmentAttemptInput = z.infer<
+  typeof assessmentAttemptInputSchema
+>;

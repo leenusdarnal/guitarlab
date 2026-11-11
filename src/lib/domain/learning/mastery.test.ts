@@ -21,7 +21,8 @@ describe('skill mastery state validation', () => {
 
   it('allows a learner to be practising without implying mastery', () => {
     expect(
-      skillMasteryUpdateSchema.safeParse({ ...base, state: 'practising' }).success
+      skillMasteryUpdateSchema.safeParse({ ...base, state: 'practising' })
+        .success
     ).toBe(true);
   });
 

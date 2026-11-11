@@ -18,12 +18,20 @@ export const curriculumReleases = sqliteTable(
     schemaVersion: integer('schema_version').notNull(),
     contentHash: text('content_hash').notNull(),
     publishedAt: integer('published_at').notNull(),
-    status: text('status', { enum: ['published', 'retired'] }).notNull().default('published')
+    status: text('status', { enum: ['published', 'retired'] })
+      .notNull()
+      .default('published')
   },
   (table) => [
     uniqueIndex('curriculum_releases_version_unique').on(table.version),
-    check('curriculum_releases_schema_version_positive', sql.raw('schema_version > 0')),
-    check('curriculum_releases_content_hash_sha256', sql.raw('length(content_hash) = 64'))
+    check(
+      'curriculum_releases_schema_version_positive',
+      sql.raw('schema_version > 0')
+    ),
+    check(
+      'curriculum_releases_content_hash_sha256',
+      sql.raw('length(content_hash) = 64')
+    )
   ]
 );
 
@@ -108,8 +116,12 @@ export const learnerProfiles = sqliteTable(
   'learner_profiles',
   {
     id: text('id').primaryKey(),
-    preferencesSchemaVersion: integer('preferences_schema_version').notNull().default(1),
-    preferencesJson: text('preferences_json').notNull().default(emptyPreferences),
+    preferencesSchemaVersion: integer('preferences_schema_version')
+      .notNull()
+      .default(1),
+    preferencesJson: text('preferences_json')
+      .notNull()
+      .default(emptyPreferences),
     createdAt: integer('created_at').notNull(),
     updatedAt: integer('updated_at').notNull(),
     lastActiveAt: integer('last_active_at')
@@ -134,7 +146,9 @@ export const lessonProgress = sqliteTable(
     learnerId: text('learner_id').notNull(),
     curriculumReleaseId: text('curriculum_release_id').notNull(),
     lessonId: text('lesson_id').notNull(),
-    status: text('status', { enum: ['in_progress', 'completed'] }).notNull().default('in_progress'),
+    status: text('status', { enum: ['in_progress', 'completed'] })
+      .notNull()
+      .default('in_progress'),
     lastBlockId: text('last_block_id'),
     startedAt: integer('started_at').notNull(),
     completedAt: integer('completed_at'),
@@ -156,11 +170,19 @@ export const lessonProgress = sqliteTable(
       table.curriculumReleaseId,
       table.lessonId
     ),
-    uniqueIndex('lesson_progress_id_learner_unique').on(table.id, table.learnerId),
-    index('lesson_progress_learner_status_idx').on(table.learnerId, table.status),
+    uniqueIndex('lesson_progress_id_learner_unique').on(
+      table.id,
+      table.learnerId
+    ),
+    index('lesson_progress_learner_status_idx').on(
+      table.learnerId,
+      table.status
+    ),
     check(
       'lesson_progress_completion_timestamp_consistent',
-      sql.raw("(status = 'in_progress' and completed_at is null) or (status = 'completed' and completed_at is not null)")
+      sql.raw(
+        "(status = 'in_progress' and completed_at is null) or (status = 'completed' and completed_at is not null)"
+      )
     )
   ]
 );
@@ -209,9 +231,16 @@ export const skillAssessmentAttempts = sqliteTable(
       enum: ['checkpoint', 'guided_self_check', 'recording_review', 'measured']
     }).notNull(),
     evidenceType: text('evidence_type', {
-      enum: ['measured', 'observed_or_self_checked', 'self_reported', 'recording_reviewed']
+      enum: [
+        'measured',
+        'observed_or_self_checked',
+        'self_reported',
+        'recording_reviewed'
+      ]
     }).notNull(),
-    outcome: text('outcome', { enum: ['passed', 'needs_practice', 'inconclusive'] }).notNull(),
+    outcome: text('outcome', {
+      enum: ['passed', 'needs_practice', 'inconclusive']
+    }).notNull(),
     score: integer('score'),
     evidenceSummary: text('evidence_summary'),
     evidenceJson: text('evidence_json').notNull().default('{}'),
@@ -226,7 +255,10 @@ export const skillAssessmentAttempts = sqliteTable(
     }).onDelete('cascade'),
     foreignKey({
       columns: [table.curriculumReleaseId, table.skillId],
-      foreignColumns: [curriculumReleaseSkills.releaseId, curriculumReleaseSkills.skillId],
+      foreignColumns: [
+        curriculumReleaseSkills.releaseId,
+        curriculumReleaseSkills.skillId
+      ],
       name: 'skill_assessment_attempts_release_skill_fk'
     }).onDelete('restrict'),
     foreignKey({
@@ -288,7 +320,10 @@ export const skillMastery = sqliteTable(
     }).onDelete('cascade'),
     foreignKey({
       columns: [table.curriculumReleaseId, table.skillId],
-      foreignColumns: [curriculumReleaseSkills.releaseId, curriculumReleaseSkills.skillId],
+      foreignColumns: [
+        curriculumReleaseSkills.releaseId,
+        curriculumReleaseSkills.skillId
+      ],
       name: 'skill_mastery_release_skill_fk'
     }).onDelete('restrict'),
     foreignKey({
@@ -307,14 +342,19 @@ export const skillMastery = sqliteTable(
       name: 'skill_mastery_last_assessment_owner_fk'
     }).onDelete('restrict'),
     index('skill_mastery_learner_state_idx').on(table.learnerId, table.state),
-    check('skill_mastery_evidence_count_nonnegative', sql.raw('evidence_count >= 0')),
+    check(
+      'skill_mastery_evidence_count_nonnegative',
+      sql.raw('evidence_count >= 0')
+    ),
     check(
       'skill_mastery_confidence_range',
       sql.raw('confidence is null or confidence between 0 and 100')
     ),
     check(
       'skill_mastery_stable_requires_evidence',
-      sql.raw("state <> 'stable' or (evidence_count > 0 and last_assessment_id is not null)")
+      sql.raw(
+        "state <> 'stable' or (evidence_count > 0 and last_assessment_id is not null)"
+      )
     )
   ]
 );
@@ -330,7 +370,9 @@ export const practiceSessions = sqliteTable(
       .notNull()
       .default('in_progress'),
     plannedMinutes: integer('planned_minutes'),
-    actualDurationSeconds: integer('actual_duration_seconds').notNull().default(0),
+    actualDurationSeconds: integer('actual_duration_seconds')
+      .notNull()
+      .default(0),
     focus: text('focus'),
     difficulty: integer('difficulty'),
     reflection: text('reflection'),
@@ -350,7 +392,10 @@ export const practiceSessions = sqliteTable(
       foreignColumns: [curriculumLessons.releaseId, curriculumLessons.lessonId],
       name: 'practice_sessions_primary_lesson_fk'
     }).onDelete('restrict'),
-    index('practice_sessions_learner_started_idx').on(table.learnerId, table.startedAt),
+    index('practice_sessions_learner_started_idx').on(
+      table.learnerId,
+      table.startedAt
+    ),
     check(
       'practice_sessions_planned_minutes_range',
       sql.raw('planned_minutes is null or planned_minutes between 1 and 180')
@@ -365,11 +410,15 @@ export const practiceSessions = sqliteTable(
     ),
     check(
       'practice_sessions_primary_lesson_pair',
-      sql.raw('(primary_curriculum_release_id is null and primary_lesson_id is null) or (primary_curriculum_release_id is not null and primary_lesson_id is not null)')
+      sql.raw(
+        '(primary_curriculum_release_id is null and primary_lesson_id is null) or (primary_curriculum_release_id is not null and primary_lesson_id is not null)'
+      )
     ),
     check(
       'practice_sessions_status_timestamps_consistent',
-      sql.raw("(status = 'in_progress' and ended_at is null) or (status in ('completed', 'abandoned') and ended_at is not null)")
+      sql.raw(
+        "(status = 'in_progress' and ended_at is null) or (status in ('completed', 'abandoned') and ended_at is not null)"
+      )
     ),
     check(
       'practice_sessions_completed_duration_positive',
@@ -385,7 +434,8 @@ export const practiceSessions = sqliteTable(
 export type CurriculumRelease = typeof curriculumReleases.$inferSelect;
 export type NewLearnerProfile = typeof learnerProfiles.$inferInsert;
 export type LessonProgress = typeof lessonProgress.$inferSelect;
-export type SkillAssessmentAttempt = typeof skillAssessmentAttempts.$inferSelect;
+export type SkillAssessmentAttempt =
+  typeof skillAssessmentAttempts.$inferSelect;
 export type SkillMastery = typeof skillMastery.$inferSelect;
 export type PracticeSession = typeof practiceSessions.$inferSelect;
 

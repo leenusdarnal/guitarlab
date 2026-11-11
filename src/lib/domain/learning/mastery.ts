@@ -26,11 +26,15 @@ export const skillMasteryUpdateSchema = z
   })
   .strict()
   .superRefine((value, context) => {
-    if (value.state === 'stable' && (value.evidenceCount < 1 || !value.lastAssessmentId)) {
+    if (
+      value.state === 'stable' &&
+      (value.evidenceCount < 1 || !value.lastAssessmentId)
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['lastAssessmentId'],
-        message: 'Stable mastery requires at least one linked assessment attempt.'
+        message:
+          'Stable mastery requires at least one linked assessment attempt.'
       });
     }
   });

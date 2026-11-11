@@ -30,16 +30,29 @@ function runSql(statement, shouldFail = false) {
   );
 
   if (shouldFail) {
-    assert.notEqual(result.status, 0, 'Expected SQL to fail but it succeeded: ' + statement + '\n' + result.stdout);
+    assert.notEqual(
+      result.status,
+      0,
+      'Expected SQL to fail but it succeeded: ' +
+        statement +
+        '\n' +
+        result.stdout
+    );
     return result;
   }
 
-  assert.equal(result.status, 0, 'SQL failed: ' + statement + '\n' + result.stderr + '\n' + result.stdout);
+  assert.equal(
+    result.status,
+    0,
+    'SQL failed: ' + statement + '\n' + result.stderr + '\n' + result.stdout
+  );
   return result;
 }
 
 function parseOutput(output) {
-  const candidates = [...output.matchAll(/(?:^|\n)(\{[\s\S]*\}|\[[\s\S]*\])\s*$/g)];
+  const candidates = [
+    ...output.matchAll(/(?:^|\n)(\{[\s\S]*\}|\[[\s\S]*\])\s*$/g)
+  ];
   for (const candidate of candidates.reverse()) {
     try {
       return JSON.parse(candidate[1]);
@@ -75,74 +88,136 @@ const skill = quote('instrument.tuning');
 
 runSql(
   'INSERT INTO learner_profiles (id, created_at, updated_at) VALUES (' +
-  [learner, now, now].join(', ') + ');'
+    [learner, now, now].join(', ') +
+    ');'
 );
 
 runSql(
   'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, completed_at, updated_at) VALUES (' +
-  [progress, learner, release, lesson, quote('completed'), now, now, now].join(', ') + ');'
+    [
+      progress,
+      learner,
+      release,
+      lesson,
+      quote('completed'),
+      now,
+      now,
+      now
+    ].join(', ') +
+    ');'
 );
 
 const result = runSql(
-  'SELECT COUNT(*) AS masteryCount FROM skill_mastery WHERE learner_id = ' + learner + ';'
+  'SELECT COUNT(*) AS masteryCount FROM skill_mastery WHERE learner_id = ' +
+    learner +
+    ';'
 );
 const masteryCount = findValue(parseOutput(result.stdout), 'masteryCount');
-assert.equal(Number(masteryCount), 0, 'Lesson completion must not create skill mastery.');
+assert.equal(
+  Number(masteryCount),
+  0,
+  'Lesson completion must not create skill mastery.'
+);
 
 runSql(
   'INSERT INTO lesson_completion_events (id, progress_id, learner_id, curriculum_release_id, lesson_id, completion_source, completed_at) VALUES (' +
-  [quote(randomUUID()), progress, learner, release, lesson, quote('checkpoint'), now].join(', ') + ');'
+    [
+      quote(randomUUID()),
+      progress,
+      learner,
+      release,
+      lesson,
+      quote('checkpoint'),
+      now
+    ].join(', ') +
+    ');'
 );
 
 runSql(
   'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, updated_at) VALUES (' +
-  [quote(randomUUID()), learner, release, lesson, quote('in_progress'), now, now].join(', ') + ');',
+    [
+      quote(randomUUID()),
+      learner,
+      release,
+      lesson,
+      quote('in_progress'),
+      now,
+      now
+    ].join(', ') +
+    ');',
   true
 );
 
 runSql(
   'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, updated_at) VALUES (' +
-  [quote(randomUUID()), quote(randomUUID()), release, lesson, quote('in_progress'), now, now].join(', ') + ');',
+    [
+      quote(randomUUID()),
+      quote(randomUUID()),
+      release,
+      lesson,
+      quote('in_progress'),
+      now,
+      now
+    ].join(', ') +
+    ');',
   true
 );
 
 runSql(
   'INSERT INTO skill_assessment_attempts (id, learner_id, curriculum_release_id, skill_id, lesson_id, assessment_kind, evidence_type, outcome, evidence_json, assessed_at, recorded_at) VALUES (' +
-  [
-    attempt,
-    learner,
-    release,
-    skill,
-    lesson,
-    quote('checkpoint'),
-    quote('observed_or_self_checked'),
-    quote('passed'),
-    quote('{"itemsCorrect":6}'),
-    now,
-    now
-  ].join(', ') + ');'
+    [
+      attempt,
+      learner,
+      release,
+      skill,
+      lesson,
+      quote('checkpoint'),
+      quote('observed_or_self_checked'),
+      quote('passed'),
+      quote('{"itemsCorrect":6}'),
+      now,
+      now
+    ].join(', ') +
+    ');'
 );
 
 runSql(
-  'UPDATE skill_assessment_attempts SET outcome = ' + quote('needs_practice') + ' WHERE id = ' + attempt + ';',
+  'UPDATE skill_assessment_attempts SET outcome = ' +
+    quote('needs_practice') +
+    ' WHERE id = ' +
+    attempt +
+    ';',
   true
 );
-runSql('DELETE FROM skill_assessment_attempts WHERE id = ' + attempt + ';', true);
+runSql(
+  'DELETE FROM skill_assessment_attempts WHERE id = ' + attempt + ';',
+  true
+);
 
 runSql(
   'INSERT INTO skill_mastery (learner_id, curriculum_release_id, skill_id, state, evidence_count, updated_at) VALUES (' +
-  [learner, release, skill, quote('stable'), 1, now].join(', ') + ');',
+    [learner, release, skill, quote('stable'), 1, now].join(', ') +
+    ');',
   true
 );
 
 runSql(
   'INSERT INTO skill_mastery (learner_id, curriculum_release_id, skill_id, state, evidence_count, last_assessment_id, last_assessed_at, updated_at) VALUES (' +
-  [learner, release, skill, quote('stable'), 1, attempt, now, now].join(', ') + ');'
+    [learner, release, skill, quote('stable'), 1, attempt, now, now].join(
+      ', '
+    ) +
+    ');'
 );
 
 runSql(
-  'UPDATE lesson_completion_events SET completion_source = ' + quote('learner_confirmed') + ' WHERE progress_id = ' + progress + ';',
+  'UPDATE lesson_completion_events SET completion_source = ' +
+    quote('learner_confirmed') +
+    ' WHERE progress_id = ' +
+    progress +
+    ';',
   true
 );
 
-console.log('Local D1 invariant tests passed: foreign keys, unique progress, append-only evidence, and the mastery evidence gate.');
+console.log(
+  'Local D1 invariant tests passed: foreign keys, unique progress, append-only evidence, and the mastery evidence gate.'
+);

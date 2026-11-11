@@ -23,12 +23,16 @@ describe('GuitarLab D1 relational contract', () => {
   it('uses a release-to-skill join so assessment evidence is version-specific', () => {
     expect(getTableConfig(skills).name).toBe('skills');
     expect(getTableConfig(curriculumReleaseSkills).primaryKeys).toHaveLength(1);
-    expect(getTableConfig(skillAssessmentAttempts).foreignKeys.length).toBeGreaterThanOrEqual(3);
+    expect(
+      getTableConfig(skillAssessmentAttempts).foreignKeys.length
+    ).toBeGreaterThanOrEqual(3);
   });
 
   it('keeps lesson content progress and lesson completion events distinct from mastery', () => {
     expect(getTableConfig(lessonProgress).name).toBe('lesson_progress');
-    expect(getTableConfig(lessonCompletionEvents).name).toBe('lesson_completion_events');
+    expect(getTableConfig(lessonCompletionEvents).name).toBe(
+      'lesson_completion_events'
+    );
     expect(getTableConfig(skillMastery).name).toBe('skill_mastery');
     expect(getTableConfig(lessonCompletionEvents).indexes).toHaveLength(1);
   });
@@ -37,9 +41,15 @@ describe('GuitarLab D1 relational contract', () => {
     const attemptConfig = getTableConfig(skillAssessmentAttempts);
     const masteryConfig = getTableConfig(skillMastery);
 
-    expect(attemptConfig.columns.map((column) => column.name)).toContain('outcome');
-    expect(attemptConfig.columns.map((column) => column.name)).toContain('evidence_json');
-    expect(masteryConfig.columns.map((column) => column.name)).toContain('last_assessment_id');
+    expect(attemptConfig.columns.map((column) => column.name)).toContain(
+      'outcome'
+    );
+    expect(attemptConfig.columns.map((column) => column.name)).toContain(
+      'evidence_json'
+    );
+    expect(masteryConfig.columns.map((column) => column.name)).toContain(
+      'last_assessment_id'
+    );
     expect(masteryConfig.checks).toHaveLength(3);
   });
 
