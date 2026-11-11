@@ -43,6 +43,7 @@
     <div class="sidebar-bottom">
       <div class="offline-indicator"><span></span> Local-first foundation</div>
       <a class="nav-link" href={resolve('/onboarding')}><span>⚙</span> Set up learner profile</a>
+      <a class="nav-link" href={resolve('/settings/data')}><span>↓</span> Data &amp; backups</a>
     </div>
   </aside>
 
@@ -65,6 +66,7 @@
         <a href="#tools" onclick={() => (menuOpen = false)}>Tools</a>
         <a href="#progress" onclick={() => (menuOpen = false)}>Progress</a>
         <a href={resolve('/onboarding')}>Learner setup</a>
+        <a href={resolve('/settings/data')}>Data &amp; backups</a>
       </nav>
     {/if}
 
