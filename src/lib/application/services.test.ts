@@ -155,7 +155,17 @@ function createHarness() {
       progressRows.set(progress.id, progress);
       return true;
     },
-    async completeWithEvent(progress, event) {
+    async completeWithEvent(progress, event, expectedRevision) {
+      const current = progressRows.get(progress.id);
+      if (
+        !current ||
+        current.status !== 'in_progress' ||
+        (current.revision ?? 0) !== expectedRevision ||
+        (event.completionSource === 'checkpoint' &&
+          current.checkpointOutcome !== 'achieved')
+      ) {
+        return null;
+      }
       progressRows.set(progress.id, progress);
       completionEvents.push(event);
       return progress;
