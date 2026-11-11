@@ -60,6 +60,7 @@
     <div class="sidebar-bottom">
       <div class="offline-indicator"><span></span> Your data stays on this device</div>
       <a class="nav-link" href={resolve('/onboarding')}><span aria-hidden="true">⚙</span> Learning preferences</a>
+      <a class="nav-link" href={resolve('/settings/data')}><span aria-hidden="true">↓</span> Data &amp; backups</a>
     </div>
   </aside>
 
@@ -77,6 +78,7 @@
         <a href="#reviews" onclick={() => (menuOpen = false)}>Reviews</a>
         <a href="#practice-history" onclick={() => (menuOpen = false)}>Practice history</a>
         <a href={resolve('/onboarding')}>Learning preferences</a>
+        <a href={resolve('/settings/data')}>Data &amp; backups</a>
       </nav>
     {/if}
 
