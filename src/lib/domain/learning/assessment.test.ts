@@ -27,6 +27,23 @@ describe('assessment attempt validation', () => {
     ).toBe(false);
   });
 
+  it('rejects evidence values that could contain private media or oversized payloads', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        evidence: { recording: 'x'.repeat(161) }
+      }).success
+    ).toBe(false);
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        evidence: Object.fromEntries(
+          Array.from({ length: 31 }, (_, index) => [`field${index}`, index])
+        )
+      }).success
+    ).toBe(false);
+  });
+
   it('rejects unbounded private media fields', () => {
     expect(
       assessmentAttemptInputSchema.safeParse({
