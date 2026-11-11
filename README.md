@@ -2,9 +2,9 @@
 
 **Learn. Practise. Master.**
 
-GuitarLab is a self-contained, full-stack guitar-learning platform with an authored three-year curriculum, interactive music tools and deliberate practice.
+GuitarLab is a local-first guitar-learning application under active development, built around a self-contained, authored three-year curriculum and deliberate practice.
 
-It combines 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations, alongside interactive music tools, focused practice sessions, skill assessments and progress history. Every new learner starts fresh. It is designed to work locally and offline first, with optional cloud synchronisation.
+The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations. The current application includes learner onboarding and local profiles, a personalised dashboard and practice planner, local backup/restore, and a curriculum navigation and lesson reader. Interactive music tools, full lesson-progress capture, complete offline app-shell support and optional cloud synchronisation are later delivery slices. Every new learner starts fresh.
 
 ## Product goals
 
@@ -43,13 +43,13 @@ It combines 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2
 | Audio | Web Audio API and MediaDevices |
 | Testing | Vitest and Playwright |
 | Quality | ESLint and Prettier |
-| CI/CD | GitHub Actions; Cloudflare deployment |
+| CI/CD | GitHub Actions CI; Wrangler deployment (not yet configured for live environments) |
 
 The application uses the Cloudflare adapter and a full-stack Worker runtime. It is not a static-only Pages application.
 
 ## Development status
 
-The product definition, authored curriculum, final architecture and approved visual direction are in place. **M1 application foundation is merged** ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)): SvelteKit/TypeScript, Tailwind CSS, Cloudflare Workers, the first responsive dashboard and learner setup. **M2.1 data foundation is also merged** ([PR #22](https://github.com/leenusdarnal/guitarlab/pull/22)): versioned Drizzle schema, local-only D1 migrations, 152 lesson metadata references, 34 stable skill IDs and database integrity tests. The D1 schema is not yet connected to learner-facing routes; authentication, cloud sync, production D1 and IndexedDB remain deferred. The merged workflows pass curriculum, contrast, format, lint, type, unit, local D1 migration/invariant, production Worker build and local Worker smoke tests. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
+The current `main` branch includes the application foundation ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)), the versioned D1/Drizzle schema and repository/application boundaries ([PRs #22–23](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), IndexedDB learner persistence and local backup/restore ([PRs #24–25](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), the learner dashboard and explainable practice planner ([PRs #26 and #28](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), and the six-route curriculum reader ([PR #29](https://github.com/leenusdarnal/guitarlab/pull/29)). The post-merge CI run for PR #29 passed, including local D1 migration/invariant checks, curriculum and design-token validation, format/lint/type checks, unit tests, Worker build/smoke tests and Chromium acceptance. **Still pending:** browser verification of backup/restore and offline recovery, M4.2 interactive checkpoints/completion/resume, explicit Cloudflare preview/production environment configuration, a live deployment workflow, production D1 provisioning (only when required), and authentication/cloud sync. No live Cloudflare deployment is claimed. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
 
 - [System diagrams — architecture, learning loop, database and delivery](docs/DIAGRAMS.md)
 - [Data model and D1 migrations](docs/DATA_MODEL.md)
