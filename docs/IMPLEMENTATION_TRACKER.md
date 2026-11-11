@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-11-11  
 **Tracking source:** GitHub Issues in this repository  
-**Implementation branch:** `feat/m1-application-foundation`
+**Implementation branch:** `main`
 
 This file is the human-readable index. GitHub Issues remain the execution records: each work item has a scope, dependencies and acceptance criteria. A task is not complete just because code was written; it must pass its stated checks and be verified in a pull request.
 
@@ -14,9 +14,9 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Curriculum foundation | Complete | 152 authored lessons; `npm run curriculum:validate` validates 52 + 52 + 48 lessons |
 | Visual direction | Approved | Hybrid of modern interactive structure, warm acoustic character and focused practice; `docs/DESIGN_DIRECTION.md` |
 | Design-token contrast | Added to CI | `scripts/validate-design-tokens.mjs` checks dark/light text, status, accent and focus pairs |
-| Application foundation | In PR #21 | SvelteKit 3/Svelte 5/TypeScript, Tailwind 4, Cloudflare adapter, initial dashboard and onboarding |
+| Application foundation | Merged | PR #21; SvelteKit 3/Svelte 5/TypeScript, Tailwind 4, Cloudflare adapter, initial dashboard and onboarding |
 | Cloudflare runtime | Configured in PR #21 | Wrangler and adapter configured; preview/runtime smoke test still required |
-| CI quality gates | Added in PR #21 | Curriculum, theme contrast, formatting, lint, type-check, unit tests, security audit and Worker build |
+| CI quality gates | Passing | Latest merged commit passed curriculum, theme contrast, formatting, lint, Svelte/type-check, unit tests and Cloudflare Worker build. Audit reported no high/critical advisories; moderate/low dev-tool advisories remain |
 | Cloud data and local persistence | Not started | M2 D1/Drizzle; M5 IndexedDB and offline-first learner records |
 | Full curriculum reader and progress engine | Not started | M3–M5; preserve all authored lesson IDs and separate lesson completion from demonstrated mastery |
 
@@ -27,13 +27,13 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Slice | Work item | Current status | Evidence / exit check |
 |---|---|---|---|
 | M1.0 | [#1 — Select visual concept and freeze design tokens](https://github.com/leenusdarnal/guitarlab/issues/1) | Direction approved; contrast validation added | Hybrid direction documented; both themes must pass automated contrast checks |
-| M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Implemented in PR #21; CI verification pending | Install, Svelte/type check, unit tests and production build |
-| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Configured in PR #21 | Worker-compatible production build and local Wrangler smoke test |
-| M1.3 | [#4 — Implement approved visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell implemented | Browser QA on desktop/mobile, keyboard and reduced motion |
-| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | CI implemented; final run pending | Formatting, lint, Svelte/type-check, tests, audit and build all green |
+| M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Merged | Install, Svelte/type check, unit tests and production build passed in GitHub Actions |
+| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Build passed; preview pending | Worker-compatible production build passed; live preview and browser smoke test remain |
+| M1.3 | [#4 — Implement approved visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell merged | Browser QA on desktop/mobile, keyboard and reduced motion remains |
+| M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Merged; core validation passed | Formatting, lint, Svelte/type-check, unit tests and Worker build passed. Audit job is informational/continue-on-error and reports moderate/low dev-tool advisories |
 | M1.5 | [#6 — Integrate curriculum integrity checks](https://github.com/leenusdarnal/guitarlab/issues/6) | Added to CI; validator passed | 52 Year 1 + 52 Year 2 + 48 Year 3 lessons validate |
 
-PR: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarnal/guitarlab/pull/21)
+Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarnal/guitarlab/pull/21)
 
 ## M2 — Data foundation
 
@@ -87,6 +87,5 @@ PR: [#21 — GuitarLab M1 application foundation](https://github.com/leenusdarna
 
 ## Immediate next actions
 
-1. Get PR #21 green and complete a Cloudflare Worker preview/smoke test.
-2. Merge PR #21 after verification.
-3. Start M2.1 ([issue #7](https://github.com/leenusdarnal/guitarlab/issues/7)) with D1/Drizzle migrations and versioned domain tables.
+1. Add a preview deployment path and complete a browser/Worker smoke test; no live preview URL is claimed yet.
+2. Start M2.1 ([issue #7](https://github.com/leenusdarnal/guitarlab/issues/7)) with D1/Drizzle migrations and versioned domain tables.
