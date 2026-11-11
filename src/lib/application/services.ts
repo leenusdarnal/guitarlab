@@ -193,6 +193,9 @@ export async function startLessonProgress(
     lessonId: value.lessonId,
     status: 'in_progress',
     lastBlockId: null,
+    completedBlockIds: [],
+    checkpointOutcome: null,
+    checkpointNote: null,
     startedAt: now,
     completedAt: null,
     updatedAt: now
@@ -200,6 +203,50 @@ export async function startLessonProgress(
 
   await dependencies.progress.create(progress);
   return progress;
+}
+
+const updateLessonProgressInputSchema = z.object({
+  learnerId: uuidSchema,
+  releaseId: releaseIdSchema,
+  lessonId: lessonIdSchema,
+  lastBlockId: z.string().min(1).max(160).nullable(),
+  completedBlockIds: z.array(z.string().min(1).max(160)).max(200),
+  checkpointOutcome: z.enum(['achieved', 'needs_practice']).nullable(),
+  checkpointNote: z.string().max(500).nullable()
+}).strict().superRefine((value, context) => {
+  if (new Set(value.completedBlockIds).size !== value.completedBlockIds.length) {
+    context.addIssue({ code: 'custom', path: ['completedBlockIds'], message: 'A lesson block can only be recorded once.' });
+  }
+  if (value.lastBlockId && !value.completedBlockIds.includes(value.lastBlockId)) {
+    context.addIssue({ code: 'custom', path: ['lastBlockId'], message: 'The last visited block must be included in completed lesson blocks.' });
+  }
+});
+
+/** Save learner-controlled section/checkpoint state, never skill mastery evidence. */
+export async function updateLessonProgress(
+  input: unknown,
+  dependencies: { progress: LessonProgressRepository; runtime: ApplicationRuntime }
+): Promise<LessonProgressRecord> {
+  const value = parseInput(updateLessonProgressInputSchema, input);
+  const current = await dependencies.progress.find(value.learnerId, value.releaseId, value.lessonId);
+  if (!current) throw new NotFoundError('Lesson progress not found.');
+  if (current.status !== 'in_progress') throw new ConflictError('A completed lesson can no longer be changed.');
+
+  const updated: LessonProgressRecord = {
+    ...current,
+    lastBlockId: value.lastBlockId,
+    completedBlockIds: [...value.completedBlockIds],
+    checkpointOutcome: value.checkpointOutcome,
+    checkpointNote: value.checkpointNote,
+    updatedAt: dependencies.runtime.now()
+  };
+  const saved = await dependencies.progress.updateInProgress(updated);
+  if (!saved) {
+    const latest = await dependencies.progress.find(value.learnerId, value.releaseId, value.lessonId);
+    if (latest?.status === 'completed') throw new ConflictError('A completed lesson can no longer be changed.');
+    throw new ConflictError('Lesson progress changed in another tab. Reload and try again.');
+  }
+  return updated;
 }
 
 const completeLessonInputSchema = z
