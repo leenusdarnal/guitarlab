@@ -392,7 +392,6 @@ export async function saveActiveLearnerPreferences(
 
 
 /** Build the dashboard from local learner evidence and the authored Year 1 route. */
-export async function loadActiveLearnerDashboard() {
 /** Read or create local progress for one authored lesson. */
 export async function loadActiveLessonProgress(
   lessonId: string, allowedBlockIds: string[], releaseId = 'curriculum-v1'
@@ -453,6 +452,7 @@ export async function saveActiveLessonProgress(
     (update.checkpointNote !== null && update.checkpointNote.length > 500)
   ) throw new Error('The lesson progress update contains invalid lesson content references.');
 
+export async function loadActiveLearnerDashboard() {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
