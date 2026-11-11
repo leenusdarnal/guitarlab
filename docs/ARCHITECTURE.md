@@ -125,7 +125,7 @@ Initial relational domains:
 |---|---|---|
 | Identity | users, sessions, linked accounts | Add only when cloud authentication is enabled |
 | Curriculum | curriculum_versions, learning_paths, phases, lessons | Released content versions are immutable |
-| Progress | curriculum_progress, micro_lessons, micro_lesson_progress | Weekly cards and numbered micro-lessons are independent |
+| Progress | lesson_progress, skill_mastery, skill_assessments | Lesson completion is independent from skill evidence; new profiles start empty |
 | Skills | skills, skill_mastery, skill_assessments | Assessment evidence is append-only |
 | Practice | practice_sessions, practice_exercises, practice_notes | Store actual activity, not assumed timer completion |
 | Music reference | chords, scales, intervals, songs, bookmarks | Metadata separate from copyrighted source material |
@@ -150,7 +150,7 @@ Sync is a later milestone, not a prerequisite for the first useful local release
 
 Conflict policy:
 - Append-only assessments and practice events: preserve both.
-- Curriculum completion and micro-lesson progress: merge evidence while retaining timestamps and provenance.
+- Lesson completion and skill mastery remain separate; assessment evidence is append-only.
 - Editable notes/preferences: version check; offer resolution if both sides changed.
 - Curriculum content: application release version is authoritative; progress references a content version.
 - Delete/reset: explicit tombstone and confirmation; never infer deletion from a missing record.
@@ -169,7 +169,7 @@ Export/restore works without cloud sync. Restore validates schema version, previ
 - Microphone permission follows explicit user action. Process audio locally; no upload by default.
 - Provide export and account/data deletion flows before cloud accounts are enabled.
 
-The repository is public, but the production application and learner profile remain private. No personal lesson baseline, practice journal, recording or profile data belongs in Git.
+The repository is public, but the production application and learner profile remain private. No legacy personal lesson baseline, practice journal, recording or profile data belongs in Git; initialize new profiles empty.
 
 ## 7. Cloudflare service decisions
 
