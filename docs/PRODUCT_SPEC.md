@@ -97,3 +97,18 @@ The initial private release is defined in [First-Release Scope](RELEASE_SCOPE.md
 - Skills have meaningful evidence and review intervals.
 - Core learning and practice flows remain usable offline.
 - The learner can export and restore personal learning data.
+
+
+## Pre-implementation refinements
+
+The pre-implementation decisions and priority boundaries are recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READINESS.md). The following behaviours are part of the product specification:
+
+- **Flexible practice length:** 10-, 20- and 40-minute plans plus custom duration; 40 minutes remains the suggested default. A short session selects the most useful task instead of rushing through every category.
+- **Explainable next action:** deterministic recommendations based on current lesson, due skills, prerequisites, recent practice evidence, learner difficulty/confidence and available time. Display why an activity is recommended and let the learner override it.
+- **Accuracy before speed:** tempo ladders record clean repetitions and total repetitions separately. Tempo increases only when the exercise-specific accuracy target is met; a timer or speed alone never grants mastery.
+- **Instrument setup:** local preferences include handedness, instrument type, string count, tuning, note-label mode and practice goal. The data model is tuning-aware; the initial six-string standard-tuning path remains the default.
+- **Progressive fretboard learning:** start with note identification; later add interval/scale-degree labels, scale positions, triads and CAGED views.
+- **Quick session review:** actual duration, exercises, tempo/repetitions where applicable, difficulty, short reflection and one next target. Keep saving lightweight.
+- **External companions:** ComposeYogi is the first optional backing-track resource. External providers never receive learner profile, journal or recording data and never become a runtime dependency.
+
+Do not add AI tutoring, social features, automatic polyphonic chord grading or a full DAW to the first useful release.
