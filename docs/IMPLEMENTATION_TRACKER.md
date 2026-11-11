@@ -20,10 +20,10 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Data foundation | M2.1 merged | PR #22; 10 Drizzle tables, versioned local D1 migration, 152 lesson metadata references, 34 skill IDs and passing database invariants; no production DB or cloud sync |
 | Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
 | Learner-local persistence | Draft PR #24; CI green, manual QA pending | Browser-local IndexedDB stores, empty active profile, preference persistence and repository adapters. Still needs browser reload/offline and upgrade verification before issue #9 is complete |
-| Backup and recovery | M2.4.1 in draft PR #25 | Versioned backup contract, strict data validation and read-only restore preview; IndexedDB export/restore and safe reset remain to implement |
+| Backup and recovery | M2.4 implementation in draft PR #25 | Versioned backup validation and restore preview plus active-learner IndexedDB export/download; transactional restore/import and explicit safe reset remain |
 | Full curriculum reader and progress engine | Not started | M3–M5; current database contract preserves authored IDs and separates lesson completion from demonstrated mastery |
 
-**Important:** PR #21, PR #22 and PR #23 are merged. M2.3 is proposed in draft PR #24 and is not part of `main` until reviewed and merged. Its CI passes, but browser-level reload/offline and upgrade verification remain open. M2.4.1 is proposed in draft PR #25, stacked on PR #24; it adds only the versioned backup contract and restore preview, not database writes or UI. No production D1 resource, authentication, cloud sync or live deployment is claimed.
+**Important:** PR #21, PR #22 and PR #23 are merged. M2.3 is proposed in draft PR #24 and is not part of `main` until reviewed and merged. Its CI passes, but browser-level reload/offline and upgrade verification remain open. M2.4.1 is proposed in draft PR #25, stacked on PR #24; it adds the versioned backup contract, active-learner export and download UI; transactional restore/import and safe reset remain. No production D1 resource, authentication, cloud sync or live deployment is claimed.
 
 ## M1 — Application foundation
 
@@ -99,6 +99,6 @@ M2.3 is proposed in [draft PR #24](https://github.com/leenusdarnal/guitarlab/pul
 ## Immediate next actions
 
 1. Finish M2.3 browser reload/offline and upgrade verification before merging PR #24.
-2. Extend M2.4 with real IndexedDB export, validated transactional restore, download/import UI and explicit safe reset; keep PR #25 stacked until M2.3 is merged.
+2. Finish M2.4 with validated transactional restore/import, restore preview confirmation and explicit safe reset; keep PR #25 stacked until M2.3 is merged.
 3. Keep D1 isolated to local/test use until authentication and ownership checks exist; no production database or cloud sync is enabled.
 4. Add a live Cloudflare preview deployment and browser-level verification as a separate release task; no live preview URL is claimed yet.
