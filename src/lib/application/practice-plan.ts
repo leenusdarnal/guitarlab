@@ -15,6 +15,12 @@ export type PracticeReview = {
   nextReviewAt: number;
 };
 
+export type RecentPracticeSignal = {
+  focus: string | null;
+  difficulty: number | null;
+  startedAt: number;
+};
+
 export type PracticeTaskKind =
   | 'warm-up'
   | 'lesson-focus'
@@ -53,6 +59,8 @@ export function buildPracticePlan(input: {
   preset?: PracticePlanPreset;
   currentLesson: PracticeLesson | null;
   dueReviews: PracticeReview[];
+  learnerGoals?: string[];
+  recentPractice?: RecentPracticeSignal[];
   now: number;
 }): PracticePlan {
   const minutes = Math.floor(input.minutes);
@@ -125,7 +133,11 @@ export function buildPracticePlan(input: {
       kind: 'musical-application',
       title: 'Use the idea in a short musical phrase',
       minutes: applicationMinutes,
-      reason: `Applying ${input.currentLesson.focus} in a musical context helps connect the exercise to real playing.`,
+      reason: buildApplicationReason({
+        focus: input.currentLesson.focus,
+        learnerGoals: input.learnerGoals ?? [],
+        recentPractice: input.recentPractice ?? []
+      }),
       lessonId: input.currentLesson.id
     }, 60);
   }
@@ -165,6 +177,44 @@ export function buildPracticePlan(input: {
     allocatedMinutes: minutes - remaining,
     remainingMinutes: remaining
   };
+}
+
+function buildApplicationReason(input: {
+  focus: string;
+  learnerGoals: string[];
+  recentPractice: RecentPracticeSignal[];
+}): string {
+  const goalLabels = input.learnerGoals
+    .map(describeLearnerGoal)
+    .filter((goal): goal is string => Boolean(goal));
+  const latestPractice = [...input.recentPractice]
+    .sort((a, b) => b.startedAt - a.startedAt)
+    .find((session) => Boolean(session.focus?.trim()));
+  const base = `Applying ${input.focus} in a musical context helps connect the exercise to real playing.`;
+  const goalContext = goalLabels.length
+    ? ` Your stated goal is ${goalLabels.join(' and ')}, so choose a musical example that moves towards it.`
+    : '';
+  let recentContext = '';
+  if (latestPractice?.focus) {
+    const sameFocus =
+      latestPractice.focus.trim().toLocaleLowerCase() === input.focus.trim().toLocaleLowerCase();
+    recentContext = sameFocus
+      ? ` Your latest recorded session also focused on ${latestPractice.focus}; vary the musical context this time to practise transferring the idea.`
+      : ` Your latest recorded session focused on ${latestPractice.focus}; connect today's focus to it without simply repeating the same drill.`;
+  }
+  return base + goalContext + recentContext;
+}
+
+function describeLearnerGoal(goal: string): string | null {
+  const labels: Record<string, string> = {
+    'all-round-musician': 'all-round musicianship',
+    'acoustic-fingerstyle': 'acoustic and fingerstyle playing',
+    'rock-blues': 'rock and blues',
+    'jazz-harmony': 'jazz and harmony',
+    'singer-songwriter': 'singer-songwriter playing',
+    custom: 'your personal musical goal'
+  };
+  return labels[goal] ?? null;
 }
 
 function formatSkillName(skillId: string): string {
