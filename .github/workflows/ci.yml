@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Format touched source files
+      - name: Install Playwright for browser acceptance\n        run: npm install --no-save --package-lock=false playwright@1.56.1\n\n      - name: Install Chromium for browser acceptance\n        run: npx playwright install chromium\n\n      - name: Format touched source files
         run: npm run format
 
       - name: Generate and finalize Drizzle migration
@@ -81,7 +81,7 @@ jobs:
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
-      - name: Preserve Cloudflare preview build
+      - name: Browser acceptance tests\n        run: npm run test:browser\n\n      - name: Preserve Cloudflare preview build
         if: github.event_name == 'push' && github.ref_name == 'main'
         uses: actions/upload-artifact@v4
         with:
