@@ -43,7 +43,7 @@ Year 2 is a structured next stage, not an automatic calendar unlock. The learner
 
 Outline: [year-3-specialisations.json](../content/curriculum/year-3-specialisations.json).
 
-Fully authored content for all 48 specialist lessons: [year-3-specialisation-lessons.json](../content/curriculum/year-3-specialisation-lessons.json).
+Fully authored content for all 48 specialist lessons: [year-3-specialisation-lessons.json](../content/curriculum/year-3-specialisation-lessons.json). Each specialist week has a stable ID in the route's `weekRecords` array.
 
 Four optional 12-week routes are available:
 
@@ -69,7 +69,7 @@ Each of the 156 lesson records includes:
 9. Retrieval questions and an adaptive review suggestion.
 10. Flexible 10-, 20- and 40-minute practice options.
 
-The schema and skill taxonomy are described in [Curriculum Content Model](CURRICULUM_CONTENT_MODEL.md). The evidence review and instructional rationale are in [Curriculum Research and Revision](CURRICULUM_RESEARCH.md).
+The schema is published in [lesson.schema.json](../content/curriculum/lesson.schema.json); run `node scripts/validate-curriculum.mjs` to check content integrity. The skill taxonomy and data model are described in [Curriculum Content Model](CURRICULUM_CONTENT_MODEL.md). The evidence review and instructional rationale are in [Curriculum Research and Revision](CURRICULUM_RESEARCH.md).
 
 ## Spiral learning model
 
