@@ -48,6 +48,8 @@ try {
   assert.equal(await page.locator('.phase-card').count(), 4, 'Year 1 should show four curriculum phases');
   await page.getByText('No reviews due right now').waitFor();
   await page.getByText('Your first session is still ahead').waitFor();
+  await page.getByText('A fresh profile has no assumed practice-time preference.').waitFor();
+  assert.equal(await page.locator('.practice-task').count(), 0, 'A fresh profile should choose a duration before receiving a plan');
   assert.equal(await page.locator('.storage-warning').count(), 0, 'IndexedDB should be available in the browser');
 
   // Theme selection persists across a full reload.
