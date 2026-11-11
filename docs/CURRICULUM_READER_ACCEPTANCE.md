@@ -22,6 +22,9 @@ npm run test:curriculum-browser
 - Year 1, Year 2 and a specialist lesson open the same complete reader contract.
 - Lesson pages show objectives, prerequisites/refreshers, explanation, worked example, guided demonstration, lesson blocks, exercises, success criteria, musical application, accessible alternatives and review guidance.
 - Previous/next lesson navigation follows the selected route, without implying lesson completion or skill mastery.
+- Lesson sections can be marked individually; section progress, checkpoint self-check and optional note persist in browser-local IndexedDB after reload.
+- An explicit completion action is enabled only after the learner selects the positive checkpoint self-check; it does not grant skill mastery.
+- Navigating between lesson IDs reloads the correct learner progress record without requiring a full page reload.
 - Unknown lesson IDs show a deliberate 404 error state.
 - The catalogue fits a 390px viewport without page-level horizontal overflow.
 - No uncaught browser page errors occur during the tested journey.
