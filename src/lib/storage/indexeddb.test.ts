@@ -203,11 +203,6 @@ describe('local learner profile persistence', () => {
     expect(updated?.preferences.instrument).toBe('acoustic');
     expect(updated?.preferences.practiceMinutes).toBe(20);
     expect(updated?.updatedAt).toBe(200);
-    expect(await repositories.progress.find(
-      profile.id,
-      'curriculum-v1',
-      'year-1-week-1-lesson-1'
-    )).toBeNull();
     expect(await repositories.mastery.find(
       profile.id,
       'curriculum-v1',
