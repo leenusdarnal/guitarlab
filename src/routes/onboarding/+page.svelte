@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { createEmptyProfilePreferences, profilePreferencesSchema, type ProfilePreferences } from '$lib/domain/profile/preferences';
+  import { createEmptyProfilePreferences, profilePreferencesSchema, type ProfilePreferences } from '../../lib/domain/profile/preferences';
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
   let message = $state('');
