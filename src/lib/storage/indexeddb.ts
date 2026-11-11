@@ -3,7 +3,7 @@ import {
   profilePreferencesSchema,
   type ProfilePreferences
 } from '../domain/profile/preferences';
-import { updateLearnerPreferences } from '../application/services';
+import { completeLesson, updateLearnerPreferences, updateLessonProgress } from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
 import year1Curriculum from '../../../content/curriculum/year-1.json';
 import year1Lessons from '../../../content/curriculum/year-1-lessons.json';
@@ -275,6 +275,16 @@ export function createIndexedDbRepositories(
         await requestResult(tx.objectStore(stores.progress).add(record));
       });
     },
+    updateInProgress: async (record) =>
+      inTransaction(database, [stores.progress], 'readwrite', async (tx) => {
+        const store = tx.objectStore(stores.progress);
+        const current = await requestResult<LessonProgressRecord | undefined>(store.index('byLearnerReleaseLesson').get(IDBKeyRange.only([
+          record.learnerId, record.curriculumReleaseId, record.lessonId
+        ])));
+        if (!current || current.status !== 'in_progress' || current.id !== record.id) return false;
+        await requestResult(store.put(record));
+        return true;
+      }),
     completeWithEvent: async (record, event) =>
       inTransaction(
         database,
@@ -383,6 +393,96 @@ export async function saveActiveLearnerPreferences(
 
 /** Build the dashboard from local learner evidence and the authored Year 1 route. */
 export async function loadActiveLearnerDashboard() {
+/** Read or create local progress for one authored lesson. */
+export async function loadActiveLessonProgress(
+  lessonId: string, allowedBlockIds: string[], releaseId = 'curriculum-v1'
+): Promise<LessonProgressRecord> {
+  if (!lessonId || lessonId.length > 160 || allowedBlockIds.length > 200) {
+    throw new Error('The lesson progress request is invalid.');
+  }
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repository = createIndexedDbRepositories(database).progress;
+    const normalize = (record: LessonProgressRecord): LessonProgressRecord => ({
+      ...record,
+      lastBlockId: record.lastBlockId && allowedBlockIds.includes(record.lastBlockId) ? record.lastBlockId : null,
+      completedBlockIds: (record.completedBlockIds ?? []).filter((id) => allowedBlockIds.includes(id)),
+      checkpointOutcome: record.checkpointOutcome ?? null,
+      checkpointNote: record.checkpointNote ?? null
+    });
+    const existing = await repository.find(profile.id, releaseId, lessonId);
+    if (existing) return normalize(existing);
+
+    const now = systemRuntime.now();
+    const created: LessonProgressRecord = {
+      id: systemRuntime.newId(), learnerId: profile.id, curriculumReleaseId: releaseId,
+      lessonId, status: 'in_progress', lastBlockId: null, completedBlockIds: [],
+      checkpointOutcome: null, checkpointNote: null, startedAt: now, completedAt: null, updatedAt: now
+    };
+    try {
+      await repository.create(created);
+      return created;
+    } catch (error) {
+      // Multiple tabs can race; reuse the row that won the unique compound index.
+      const concurrent = await repository.find(profile.id, releaseId, lessonId);
+      if (concurrent) return normalize(concurrent);
+      throw error;
+    }
+  } finally { database.close(); }
+}
+
+/** Persist section progress and an optional learner-authored practice note locally. */
+export async function saveActiveLessonProgress(
+  lessonId: string,
+  update: {
+    lastBlockId: string | null;
+    completedBlockIds: string[];
+    checkpointOutcome: 'achieved' | 'needs_practice' | null;
+    checkpointNote: string | null;
+  },
+  allowedBlockIds: string[],
+  releaseId = 'curriculum-v1'
+): Promise<LessonProgressRecord> {
+  const validIds = new Set(allowedBlockIds);
+  if (
+    update.completedBlockIds.length > 200 ||
+    new Set(update.completedBlockIds).size !== update.completedBlockIds.length ||
+    update.completedBlockIds.some((id) => !validIds.has(id)) ||
+    (update.lastBlockId !== null && (!validIds.has(update.lastBlockId) || !update.completedBlockIds.includes(update.lastBlockId))) ||
+    (update.checkpointNote !== null && update.checkpointNote.length > 500)
+  ) throw new Error('The lesson progress update contains invalid lesson content references.');
+
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    return await updateLessonProgress({ learnerId: profile.id, releaseId, lessonId, ...update }, {
+      progress: repositories.progress, runtime: systemRuntime
+    });
+  } finally { database.close(); }
+}
+
+/** Completion requires a positive learner checkpoint self-check; it never grants mastery. */
+export async function completeActiveLessonProgress(
+  lessonId: string, releaseId = 'curriculum-v1'
+): Promise<LessonProgressRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const current = await repositories.progress.find(profile.id, releaseId, lessonId);
+    if (!current) throw new Error('Start this lesson before marking it complete.');
+    if (current.status === 'completed') return current;
+    if (current.checkpointOutcome !== 'achieved') throw new Error('Confirm that you can meet the lesson checkpoint before completing it.');
+    return await completeLesson({
+      learnerId: profile.id, releaseId, lessonId,
+      completionSource: 'checkpoint', lastBlockId: current.lastBlockId
+    }, { progress: repositories.progress, runtime: systemRuntime });
+  } finally { database.close(); }
+}
+
+
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
