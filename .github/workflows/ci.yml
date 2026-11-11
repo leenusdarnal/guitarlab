@@ -6,7 +6,7 @@ on:
     branches: [main, "feat/**", "chore/**"]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}
@@ -33,18 +33,6 @@ jobs:
 
       - name: Generate and finalize Drizzle migration
         run: npm run db:generate && npm run db:finalize
-
-      - name: Commit generated lockfile and migrations
-        if: github.event_name == 'push' && github.ref_name == 'feat/m2-d1-drizzle-data-foundation'
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json package.json drizzle.config.ts drizzle/migrations wrangler.jsonc src/app.d.ts src/lib scripts/validate-design-tokens.mjs scripts/finalize-db-migration.mjs scripts/test-local-db.mjs
-          if ! git diff --cached --quiet; then
-            git commit -m "build: lock Drizzle dependencies and seed D1 migration"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
 
       - name: Apply migrations to local-only D1
         run: npm run db:migrate:local
