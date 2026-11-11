@@ -56,7 +56,7 @@ const requiredLessonFields = [
   "demonstrationOrReference", "lessonBlocks", "exercises", "musicalApplication",
   "successCriteria", "commonMistakesAndCorrections", "accessibleAlternative",
   "retrievalPrompt", "nextReviewSuggestion", "practiceOptions", "instructorNotes",
-  "checkpoint", "skillIds"
+  "checkpoint", "skillIds", "workedExamples"
 ];
 const validateLessons = (name, dataset, outline, expectedCount, isYear3 = false) => {
   const lessons = dataset.lessons ?? [];
@@ -74,6 +74,7 @@ const validateLessons = (name, dataset, outline, expectedCount, isYear3 = false)
     check(lesson.exercises?.length >= 3, `${name} ${lesson.id}: lesson needs at least three exercises`);
     check(lesson.skillIds?.length > 0 && unique(lesson.skillIds), `${name} ${lesson.id}: missing or duplicate skill IDs`);
     check(lesson.successCriteria?.length >= 3, `${name} ${lesson.id}: incomplete success criteria`);
+    check(lesson.workedExamples?.length > 0 && lesson.workedExamples.every((example) => isText(example.kind) && isText(example.label) && isText(example.content)), `${name} ${lesson.id}: missing or incomplete worked examples`);
     check(isText(lesson.accessibleAlternative), `${name} ${lesson.id}: missing accessible alternative`);
     for (const exercise of lesson.exercises ?? []) {
       check(isText(exercise.id) && isText(exercise.title), `${name} ${lesson.id}: exercise has no ID/title`);
