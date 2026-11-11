@@ -4,7 +4,7 @@
 
 GuitarLab is a self-contained, full-stack guitar-learning platform with an authored three-year curriculum, interactive music tools and deliberate practice.
 
-It combines a guided curriculum, interactive music tools, focused practice sessions, skill assessments and progress history. It is designed to work locally and offline first, with optional cloud synchronisation.
+It combines 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations, alongside interactive music tools, focused practice sessions, skill assessments and progress history. Every new learner starts fresh. It is designed to work locally and offline first, with optional cloud synchronisation.
 
 ## Product goals
 
