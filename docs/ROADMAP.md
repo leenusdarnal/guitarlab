@@ -2,16 +2,22 @@
 
 ## Delivery principles
 
-Build a useful learning product in verified increments. Each milestone should leave the application buildable and usable. Do not replace or reset the learner's existing guitar progress when importing curriculum content.
+Build a useful learning product in verified increments. Each milestone should leave the application buildable and usable. Do not replace or reset the learner's existing guitar progress when importing curriculum content. The curriculum is versioned content; private learner data is never committed to this public source repository.
 
 ## Milestones
 
 ### M0 — Product definition and curriculum
-- [ ] Recover and reconcile the learner's existing 52-week plan.
-- [ ] Import completed lessons and current lesson position.
-- [ ] Define curriculum content format and skill taxonomy.
-- [ ] Confirm first-release scope and visual direction.
-- [ ] Document acceptance criteria.
+- [x] Recover and reconcile the detailed Year 1 52-week plan.
+- [x] Recover the Year 2 continuation and optional Year 3+ pathways.
+- [x] Define curriculum content format and skill taxonomy.
+- [x] Define separate weekly-card and numbered micro-lesson progress.
+- [x] Define first-release scope and product-level visual direction.
+- [x] Document foundation and first-release acceptance criteria.
+- [x] Specify private learner-baseline migration and privacy boundary.
+- [ ] Select final visual concept and detailed design tokens before UI implementation.
+- [ ] Execute private learner-baseline import after local persistence exists (M5).
+
+M0 specification is ready for M1. The two deferred items are explicit gates for detailed UI and private data migration; they are not reasons to invent or expose personal data in a public commit.
 
 ### M1 — Application foundation
 - [ ] Create SvelteKit/Svelte 5/TypeScript application.
@@ -19,7 +25,7 @@ Build a useful learning product in verified increments. Each milestone should le
 - [ ] Configure Cloudflare adapter and Wrangler.
 - [ ] Establish local development and environment separation.
 - [ ] Add formatting, linting, type-checking and CI.
-- [ ] Add accessible responsive application shell.
+- [ ] Add accessible responsive application shell after visual concept selection.
 
 ### M2 — Data foundation
 - [ ] Configure D1 and Drizzle ORM.
@@ -46,6 +52,7 @@ Build a useful learning product in verified increments. Each milestone should le
 ### M5 — Learning state and synchronisation
 - [ ] Local IndexedDB persistence.
 - [ ] Offline practice and lesson progress capture.
+- [ ] Idempotent private learner-baseline import.
 - [ ] Outbox-based synchronisation.
 - [ ] Conflict detection and recovery.
 - [ ] Account and secure cloud sync when ready.
@@ -92,12 +99,11 @@ A milestone is complete only when:
 
 ## Initial release priorities
 
-The first useful release should prioritise:
-1. A reliable dashboard.
-2. The learner's real curriculum and current progress.
-3. Lesson viewing and completion.
-4. Practice logging.
-5. Local/offline persistence.
-6. Basic fretboard, chord diagrams and metronome.
+1. A reliable, mobile-first dashboard.
+2. The preserved Year 1 curriculum and separate numbered micro-lesson continuity.
+3. Lesson viewing, checkpoints and resume behaviour.
+4. Practice logging and evidence-based skill status.
+5. Local/offline persistence, export and restore.
+6. Basic fretboard, chord diagrams, metronome and single-note tuner.
 
-Advanced audio grading, social features, AI tutors and collaboration are explicitly later-stage work.
+Automatic polyphonic chord grading, AI tutoring, social features and collaboration are deferred.
