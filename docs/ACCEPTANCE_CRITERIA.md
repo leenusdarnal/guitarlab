@@ -27,7 +27,7 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 - [x] Establish hybrid dashboard + immersive practice studio.
 - [x] Establish minimal, premium, high-contrast visual principles.
 - [x] Establish screen hierarchy and mobile practice requirements.
-- [ ] Select a final visual concept and token set before detailed UI implementation.
+- [x] Approve a hybrid visual direction and document implementation guidance; define and verify semantic design tokens during M1.
 
 ## Fresh learner profile
 - [x] Require a new profile to start with no imported lesson completions, lesson number, skill ratings or practice history.
@@ -36,7 +36,7 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 - [ ] Test empty profile initialization and export/restore when local persistence is implemented.
 
 ## Gate to M1
-M1 may begin from the documented product and architecture requirements. Detailed UI implementation must wait for the final visual concept selection. Profiles must initialize empty; legacy personal progress import is not part of the product.
+M1 may begin from the documented product, architecture and implementation guidelines. Detailed UI should follow the approved hybrid direction and tested semantic tokens; no Work-mode workflow is required. Profiles must initialize empty; legacy personal progress import is not part of the product.
 
 
 ## Pre-implementation readiness additions
@@ -69,3 +69,12 @@ The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READ
 - [x] Link every authored lesson to its stable outline ID and define a shared lesson schema contract.
 - [x] Add a JSON Schema for authored lesson records and a dependency-free validator for counts, references, IDs and required content.
 - [ ] Add automated schema validation and curriculum tests during M1.
+
+
+## Learner-specific configuration acceptance
+- [ ] Each active learner profile can configure instrument, handedness, tuning, goals, practice duration/schedule and lesson presentation preferences.
+- [ ] Lesson presentation can be balanced, visual-first, demonstration/audio-first, text-first, interactive/drill-first or song-first.
+- [ ] Daily practice plans are composed from the active profile, current lesson, prerequisites, available time and demonstrated skill evidence.
+- [ ] The learner can edit, postpone or dismiss recommendations and see why each was suggested.
+- [ ] Profile preferences do not mutate shared curriculum JSON or another learner's progress.
+- [ ] The current project owner's intended acoustic/20-minute/all-round preferences can be entered into their own profile without becoming global defaults.

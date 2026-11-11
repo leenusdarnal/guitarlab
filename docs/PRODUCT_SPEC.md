@@ -20,7 +20,7 @@ GuitarLab is a self-contained guitar-learning environment. It teaches the learne
 - Mobile-first controls for use beside the instrument.
 - Keyboard accessibility for non-audio interactions.
 - Minimal distractions during timed exercises.
-- Dark charcoal with restrained violet is the working visual direction, subject to final visual concept selection.
+- Approved hybrid visual direction: clear interactive structure, warm acoustic-guitar character and a calm, low-distraction practice experience. See [Design Direction](DESIGN_DIRECTION.md) and [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md).
 - Encouraging feedback without punitive streaks.
 - Clear distinction between lesson completion and demonstrated skill.
 - No assumption that the learner has completed a lesson in another app, chat or course.
@@ -55,7 +55,7 @@ Skill domains:
 
 ## Practice design
 
-The 40-minute session is the suggested full plan. Ten- and 20-minute options plus custom durations are supported. A shorter session selects fewer, high-value tasks rather than rushing through every category.
+Practice duration is a learner-specific preference. Offer 10-, 20- and 40-minute presets plus a custom duration, but do not enforce one global duration as the right plan for every learner. The selected duration is stored in the active learner profile. A short session selects fewer, higher-value tasks rather than rushing through every category. The current project owner's intended profile uses 20 minutes per day; this must not become a global default for other learners.
 
 A full session may include preparation, a warm-up, focused new learning, spaced review, musical application and reflection. The learner may practise on any sustainable schedule and split a weekly lesson across sessions. The suggested tempo is a reference only; accuracy, tone and comfort take priority.
 
@@ -107,3 +107,14 @@ The pre-implementation decisions and priority boundaries are recorded in [Pre-Im
 - **External companions:** optional backing-track and learning tools never receive learner profile, journal or recording data and never become runtime dependencies.
 
 Do not add AI tutoring, social features, automatic polyphonic chord grading or a full DAW to the first useful release.
+
+
+## Learner-specific personalisation
+
+The curriculum is shared, stable and authored; the teaching plan and presentation are specific to the active learner profile. Onboarding should capture editable preferences for instrument, handedness, tuning, starting point, goals, preferred lesson presentation, practice duration/schedule, practice emphasis, pace/feedback and accessibility. Allow optional fields to be skipped and updated later.
+
+Supported lesson presentation preferences include balanced, visual-first, demonstration/audio-first, text-first, interactive/drill-first and song-first. A lesson may combine formats; text and visual fallbacks must keep every lesson self-contained when media is unavailable.
+
+Compose a personalised practice plan from the learner's profile, prerequisites, current lesson, skill evidence, due reviews, available time, stated difficulty/confidence and goals. Explain each recommendation and let the learner edit, postpone or dismiss it. Do not create a separate conflicting syllabus for each learner, change stable curriculum IDs, or infer mastery from a timer or lesson viewing.
+
+The current project owner's intended private profile is acoustic guitar, absolute beginner, 20 minutes per day and an all-round musician goal. Apply those values only to that learner's private profile when configured in the app. Do not hard-code them into shared curriculum files, global defaults, generic fixtures or another learner's profile. Handedness is not yet known and must remain unset until the learner selects it.

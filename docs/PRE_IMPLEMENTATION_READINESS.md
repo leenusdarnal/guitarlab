@@ -2,7 +2,7 @@
 
 **Review date:** 2026-11-11  
 **Repository:** [leenusdarnal/guitarlab](https://github.com/leenusdarnal/guitarlab)  
-**Status:** Product and technical preparation substantially complete; visual-concept gate remains open.  
+**Status:** Product, curriculum and technical preparation are complete for M1; the hybrid visual direction and implementation guidelines are approved. Application implementation has not yet started.  
 **Purpose:** Resolve product decisions and acceptance criteria before creating the application scaffold. This document does not mark any application milestone as implemented.
 
 ## 1. Executive decision
@@ -48,7 +48,7 @@ These refinements improve the learning loop without making the initial product s
 
 ### A. Flexible practice length
 
-Keep 40 minutes as the recommended default, but add quick plans for **10, 20 and 40 minutes**, plus a custom duration. A short session must still be useful and should select one high-value task rather than squeezing every practice category into a rushed routine.
+Practice duration is profile-specific. Offer **10-, 20- and 40-minute presets**, plus a custom duration. Do not impose a universal default: each learner chooses a sustainable duration during onboarding or profile setup. The current project owner's intended profile uses 20 minutes per day. A short session selects fewer high-value tasks rather than squeezing every practice category into a rushed routine.
 
 The learner can edit or skip any block. A session timer records elapsed practice only; it never awards mastery on its own.
 
@@ -206,17 +206,17 @@ Do not import a previous private learner baseline. When IndexedDB is added, init
 | First-release scope | Refined | P0/P1/deferred boundaries are listed above. |
 | External companion strategy | Decided | Optional links only; ComposeYogi is the first candidate. |
 | Learner profile start | Decided | Initialize a fresh, empty profile; do not import old chat or course progress. |
-| Final visual concept | **Open gate** | Must be selected before building the detailed application shell. |
+| Visual direction | **Approved hybrid** | Use the approved combination of clear interactive structure, warm acoustic-guitar character and focused low-distraction layouts. Exact design tokens are defined and tested during M1. |
 | Repository licence | Open, non-blocking | Do not add a licence until the owner chooses whether source reuse is permitted. Public visibility is not a reuse licence. |
 | Cloud production resources | Deferred | No production D1, secrets or public learner-data endpoint until security controls are implemented and verified. |
 
-The Product Design workflow requires three visual directions and the learner's selection. This must be completed in a supported Work-mode design workflow before detailed UI implementation. Do not claim that the final visual concept or final design tokens are approved from this requirements review alone.
+The owner approved a hybrid visual direction after reviewing the generated concepts. The implementation guidance is recorded in [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md) and [Design Direction](DESIGN_DIRECTION.md). Work-mode access is not a prerequisite. The precise semantic token values and component details remain M1 implementation tasks and must be contrast-tested; the approved direction should not be mistaken for a finished coded UI.
 
 ## 10. Definition of ready for M1
 
 M1 can begin when:
-- the learner has selected one of the three visual concepts;
-- the selected direction is translated into accessible design tokens and responsive shell rules;
+- the approved hybrid direction is translated into accessible semantic design tokens and responsive shell rules;
+- per-profile learner preferences and a skippable onboarding model are defined from the implementation guideline;
 - the existing architecture and scope docs are linked and internally consistent;
 - the repo remains free of personal progress data and credentials;
 - the implementation plan makes local-only mode the default and keeps cloud sync disabled.
@@ -225,4 +225,4 @@ M1's scaffold, build, tests and deployment readiness must then be verified in co
 
 ## 11. Owner decisions deliberately left open
 
-Only two owner-level decisions remain before a polished, distributable release: the final visual concept and whether the public source repository should receive an open-source licence. The first is a prerequisite to the detailed UI build; the second is not a blocker for a private local-first implementation.
+The visual direction is approved and no further design-tool access is required to begin M1. The repository licence remains an owner decision for any future open-source distribution; it is not a blocker for private local-first implementation.
