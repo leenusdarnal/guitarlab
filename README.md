@@ -49,7 +49,7 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 
 ## Development status
 
-The product definition and curriculum foundation are documented. The SvelteKit application scaffold has not yet been started. See:
+The product definition, curriculum foundation, final architecture and pre-implementation readiness review are documented. The SvelteKit application scaffold has not yet been started; the selected visual concept remains the gate before detailed UI implementation. See:
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Product specification](docs/PRODUCT_SPEC.md)
@@ -63,6 +63,7 @@ The product definition and curriculum foundation are documented. The SvelteKit a
 - [Learner progress migration](docs/LEARNING_PROGRESS_MIGRATION.md)
 - [M0 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
 - [Implementation roadmap](docs/ROADMAP.md)
+- [Pre-implementation readiness review](docs/PRE_IMPLEMENTATION_READINESS.md)
 - [External practice tools evaluation](docs/EXTERNAL_TOOLS.md)
 - [Contributing](CONTRIBUTING.md)
 
