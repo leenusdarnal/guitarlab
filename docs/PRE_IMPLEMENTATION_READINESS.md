@@ -30,15 +30,15 @@ The three curriculum JSON files were parsed and checked during this review.
 | Year 1 | 52 ordered weeks, 4 phases, 52 unique IDs, valid phase references |
 | Year 2 | 52 ordered weeks, 9 phases, 52 unique IDs, valid phase references |
 | Starting tempo markers | All integer values within the broad 30–240 BPM validation range |
-| Year 3+ | Four specialist routes, each outlined for 12 weeks |
+| Year 3+ | Four specialist routes, 12 stable week IDs and authored lessons per route |
 
-The records contain stable IDs, titles, focus, checkpoints, practice exercises and starting BPM. The JSON files are structurally consistent at this level.
+The repository now contains 52 authored Year 1 lessons, 52 authored Year 2 lessons and 48 authored lessons across the four optional Year 3 routes. Each lesson includes objectives, explanation, guided demonstration, exercises, musical application, checkpoint, worked guitar examples where relevant, success criteria, common corrections, accessible alternatives and review prompts.
 
-**Important content boundary:** the current week records are curriculum outlines, not fully authored lesson scripts. They do not yet carry complete objectives, prerequisite graphs, step-by-step teaching content, exercise sets, resource timestamps or evidence definitions. Those should be added progressively using the content model; do not fabricate detailed lesson content merely to fill every field before M1.
+The shared contract is `content/curriculum/lesson.schema.json`. The dependency-free validator is `scripts/validate-curriculum.mjs`, and the GitHub Actions workflow runs it when curriculum content changes. The latest validation run passed. Automated checks cover JSON parsing, counts, stable IDs, ordered weeks, cross-file links and required lesson content. A future teaching review should still check musical accuracy and suitability; structural validation is not an instructor endorsement.
 
-### Validation work to automate
+### Validation to extend during M1
 
-Add a curriculum validation command and CI gate during M1. It should verify JSON shape, stable and unique IDs, ordered week numbers, valid phase references, tempo bounds, required learner-facing fields, valid skill IDs once the skill registry exists, safe resource URLs and schema-version compatibility.
+Integrate the existing curriculum validator into the wider application CI and add app-level tests for lesson rendering, accessibility, progress capture and content-version migrations. Add richer schema validation only if a validator dependency is justified; the current repository check is dependency-free.
 
 Do not change existing IDs or the meaning of current fields. Content schema changes must be explicitly versioned.
 
@@ -55,7 +55,7 @@ The learner can edit or skip any block. A session timer records elapsed practice
 ### B. Explainable next-practice recommendation
 
 Use a small deterministic recommendation engine, not an AI dependency. It should consider:
-- the active numbered micro-lesson and current curriculum checkpoint;
+- the active curriculum lesson and its checkpoint;
 - skills marked review-due or still being practised;
 - the last recorded result and the learner's stated difficulty/confidence;
 - available practice time and the learner's selected goal;
@@ -111,8 +111,8 @@ Show whether the app is ready offline and whether local data was saved. Include 
 ### P0 — first useful release
 
 - Mobile-first dashboard and focused practice view.
-- Existing Year 1 route and Year 2 continuation outline.
-- Separate numbered micro-lessons and weekly curriculum progress.
+- Fully authored Year 1 and Year 2 routes, plus optional Year 3 specialisations.
+- Separate lesson-content completion from evidence-based skill mastery.
 - Lesson checkpoints, resume behaviour and explicit next-action reasons.
 - 10/20/40/custom practice plans.
 - Practice timer, metronome, basic chord library and diagrams.
@@ -161,8 +161,8 @@ Integration rule: link out in a new tab with a clear external-resource label. Do
 
 ## 6. Learning-state rules to freeze before coding
 
-1. Weekly curriculum progress and numbered micro-lesson progress are different records with different IDs.
-2. Viewing a lesson, running a timer or importing a baseline is not proof of mastery.
+1. Curriculum lesson completion and skill mastery are different records.
+2. A new learner profile begins empty; do not import lesson history or mastery from previous chats or external learning systems. Viewing a lesson or running a timer is not proof of mastery.
 3. Keep each assessment attempt as append-only evidence.
 4. Store the evidence source and whether a result is objectively measured or self-reported.
 5. Keep speed and accuracy separate. A fast but inaccurate chord change is not an improvement.
@@ -183,7 +183,7 @@ Data-model requirements:
 - exportable settings and learner records;
 - separate public curriculum content from private learner state.
 
-The existing private learner baseline remains outside this public repository. Import it only after IndexedDB exists, with idempotency and export/restore tests.
+Do not import a previous private learner baseline. When IndexedDB is added, initialize a new, empty learner profile. Export/restore applies only to records created within GuitarLab.
 
 ## 8. Non-functional requirements
 
@@ -205,7 +205,7 @@ The existing private learner baseline remains outside this public repository. Im
 | Architecture | Accepted | Do not introduce a second backend, microservices or a mandatory account. |
 | First-release scope | Refined | P0/P1/deferred boundaries are listed above. |
 | External companion strategy | Decided | Optional links only; ComposeYogi is the first candidate. |
-| Private progress import | Intentionally deferred | Import to IndexedDB in M5; no private baseline in Git. |
+| Learner profile start | Decided | Initialize a fresh, empty profile; do not import old chat or course progress. |
 | Final visual concept | **Open gate** | Must be selected before building the detailed application shell. |
 | Repository licence | Open, non-blocking | Do not add a licence until the owner chooses whether source reuse is permitted. Public visibility is not a reuse licence. |
 | Cloud production resources | Deferred | No production D1, secrets or public learner-data endpoint until security controls are implemented and verified. |
