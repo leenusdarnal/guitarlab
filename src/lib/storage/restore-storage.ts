@@ -88,11 +88,15 @@ async function readActiveRecords(database: IDBDatabase): Promise<LearnerBackupRe
     if (profile.preferencesSchemaVersion !== 1) {
       throw new Error('The active learner profile uses an unsupported preferences version.');
     }
+    const backupProfile = {
+      ...profile,
+      preferencesSchemaVersion: 1 as const
+    };
     const owned = <T extends { learnerId: string }>(records: T[]) =>
       records.filter((record) => record.learnerId === metadata.value);
 
     return {
-      profile,
+      profile: backupProfile,
       lessonProgress: owned(progress),
       completionEvents: owned(events),
       assessmentAttempts: owned(attempts),
