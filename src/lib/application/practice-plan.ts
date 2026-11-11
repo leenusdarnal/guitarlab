@@ -18,6 +18,7 @@ export type PracticeReview = {
 export type RecentPracticeSignal = {
   focus: string | null;
   difficulty: number | null;
+  status: 'in_progress' | 'completed' | 'abandoned';
   startedAt: number;
 };
 
@@ -188,6 +189,7 @@ function buildApplicationReason(input: {
     .map(describeLearnerGoal)
     .filter((goal): goal is string => Boolean(goal));
   const latestPractice = [...input.recentPractice]
+    .filter((session) => session.status === 'completed')
     .sort((a, b) => b.startedAt - a.startedAt)
     .find((session) => Boolean(session.focus?.trim()));
   const base = `Applying ${input.focus} in a musical context helps connect the exercise to real playing.`;
@@ -202,7 +204,11 @@ function buildApplicationReason(input: {
       ? ` Your latest recorded session also focused on ${latestPractice.focus}; vary the musical context this time to practise transferring the idea.`
       : ` Your latest recorded session focused on ${latestPractice.focus}; connect today's focus to it without simply repeating the same drill.`;
   }
-  return base + goalContext + recentContext;
+  const difficultyContext =
+    latestPractice?.difficulty !== null && latestPractice?.difficulty !== undefined
+      ? ` The session recorded a difficulty value of ${latestPractice.difficulty}; use it as context, not as a grade, and adjust tempo or task size if needed.`
+      : '';
+  return base + goalContext + recentContext + difficultyContext;
 }
 
 function describeLearnerGoal(goal: string): string | null {
