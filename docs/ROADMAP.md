@@ -71,6 +71,7 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Session timer and exercise sequence.
 - [ ] Practice journal and session history.
 - [ ] Tempo and repetition tracking.
+- [ ] Add an optional external ComposeYogi launcher for learner-created backing tracks; core practice must remain native and independent.
 - [ ] Skill assessments and review scheduling.
 
 ### M8 — Musicianship and repertoire
@@ -79,6 +80,7 @@ M0 product and architecture specifications are ready for M1. Finalising the arch
 - [ ] Song library and bookmark management.
 - [ ] TAB/notation viewer for permitted content.
 - [ ] Song section loops and practice targets.
+- [ ] Add an optional Midee MIDI-visualiser reference link after licence and mobile usability recheck; never make it a required dependency.
 
 ### M9 — Release hardening
 - [ ] PWA installability and offline asset strategy.
