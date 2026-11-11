@@ -71,7 +71,7 @@ jobs:
       - name: Cloudflare Worker local smoke test
         shell: bash
         run: |
-          npm run preview -- --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
+          ./node_modules/.bin/wrangler dev --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 30); do
