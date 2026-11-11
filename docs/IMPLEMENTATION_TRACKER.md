@@ -21,7 +21,7 @@ This file is the human-readable index. GitHub Issues remain the execution record
 | Repository/application boundary | M2.2 merged | PR #23; repository ports, validated use cases, typed safe errors, in-memory tests and updated architecture documentation. No storage adapter or cloud sync is enabled |
 | Learner-local persistence | M2.3 implementation ready for review | PR #24 adds browser-local IndexedDB stores and preference persistence; automated CI passed. Awaiting review and merge into protected `main` |
 | Dashboard and browser acceptance | M3.1 implementation and automated browser QA ready for review | PR #26 builds the learner dashboard; PR #27 passes Chromium browser acceptance for fresh state, preferences, theme persistence and mobile navigation. Both depend on M2.3 PR #24 |
-| Adaptive practice planning | M3.2 implementation in progress | PR #28 adds evidence-aware recommendations, 10/20/40/custom time controls, goal/recent-practice explanations and accept/dismiss controls. Latest CI including Chromium planner acceptance is pending |
+| Adaptive practice planning | M3.2 implementation ready for review | PR #28 adds evidence-aware recommendations, 10/20/40/custom controls, goal/recent-practice explanations and accept/dismiss controls. CI run #43059573205 passed unit, browser, build and security checks; PR is stacked on M3.1 |
 | Full curriculum reader and progress engine | Not started | M4–M5; current data contracts preserve authored IDs and separate lesson completion from demonstrated mastery |
 
 **Important:** PR #21, PR #22 and PR #23 are merged. The current M2.3 work is proposed in draft PR #24 and is not part of `main` until it is reviewed and merged. M2.3 adds browser-local IndexedDB adapters only; no production D1 resource, authentication, cloud sync or live deployment is claimed.
@@ -61,7 +61,7 @@ M2.3 implementation is underway on `feat/m2-3-indexeddb-learner-persistence`. Th
 | Slice | Work item | Depends on | Exit check |
 |---|---|---|---|
 | M3.1 | [#11 — Learner dashboard and learning path](https://github.com/leenusdarnal/guitarlab/issues/11) | M1.3, M2.3 | Fresh-start, progress and review states render correctly; Chromium browser acceptance passes on PR #27 |
-| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | M2.2, M2.3, M3.1 | 10/20/40/custom plans, goal/recent-evidence-aware reasons, plan overrides and Chromium acceptance pass |
+| M3.2 | [#12 — Explainable recommendations and flexible practice plans](https://github.com/leenusdarnal/guitarlab/issues/12) | M2.2, M2.3, M3.1 | Implemented on PR #28; 10/20/40/custom plans, goal/recent-evidence-aware explanations, plan overrides and Chromium acceptance passed in CI run #43059573205 |
 
 ## M4 — Curriculum and lessons
 
