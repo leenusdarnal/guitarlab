@@ -1,0 +1,595 @@
+{
+  "id": "year-2-intermediate",
+  "version": "1.0.0",
+  "title": "Year 2 - Structured intermediate development",
+  "description": "The 52-week continuation of the curated master course. This route deepens fretboard fluency, chord vocabulary, style, ear skills, arranging and performance readiness.",
+  "year": 2,
+  "pacing": "adaptive",
+  "phases": [
+    {
+      "id": "fretboard-triads",
+      "title": "Fretboard and triads",
+      "firstWeek": 1,
+      "lastWeek": 6,
+      "goal": "Natural-note map, octaves, CAGED and triad inversions."
+    },
+    {
+      "id": "rhythm-guitar",
+      "title": "Rhythm guitar",
+      "firstWeek": 7,
+      "lastWeek": 11,
+      "goal": "Power chords, muting and barre-chord fluency."
+    },
+    {
+      "id": "scales-melody",
+      "title": "Scales and melody",
+      "firstWeek": 12,
+      "lastWeek": 16,
+      "goal": "Major scale positions, sequences and phrase-making."
+    },
+    {
+      "id": "blues",
+      "title": "Blues",
+      "firstWeek": 17,
+      "lastWeek": 22,
+      "goal": "Shuffle, seventh chords, blues lead, bends and turnarounds."
+    },
+    {
+      "id": "fingerstyle-acoustic",
+      "title": "Fingerstyle and acoustic arranging",
+      "firstWeek": 23,
+      "lastWeek": 28,
+      "goal": "Bass independence, patterns, melody balance and acoustic arrangement."
+    },
+    {
+      "id": "repertoire-ear",
+      "title": "Repertoire and ear learning",
+      "firstWeek": 29,
+      "lastWeek": 34,
+      "goal": "Song form, transcription, chord melody and complete repertoire."
+    },
+    {
+      "id": "harmony",
+      "title": "Harmony",
+      "firstWeek": 35,
+      "lastWeek": 39,
+      "goal": "Intervals, seventh chords, extensions and substitutions."
+    },
+    {
+      "id": "jazz",
+      "title": "Jazz",
+      "firstWeek": 40,
+      "lastWeek": 45,
+      "goal": "Swing, voice leading, bossa nova, jazz melody and jazz blues."
+    },
+    {
+      "id": "independent-musician",
+      "title": "Independent musicianship",
+      "firstWeek": 46,
+      "lastWeek": 52,
+      "goal": "Practice design, transcription, solo writing, recording and performance."
+    }
+  ],
+  "weeks": [
+    {
+      "id": "y2-w01",
+      "week": 1,
+      "phaseId": "fretboard-triads",
+      "title": "Fretboard map 1",
+      "focus": "Natural notes on low E and A",
+      "checkpoint": "Find and name every natural note to fret 5",
+      "practiceExercise": "Low E/A note map, 2 minutes daily",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w02",
+      "week": 2,
+      "phaseId": "fretboard-triads",
+      "title": "Fretboard map 2",
+      "focus": "Octaves across adjacent string sets",
+      "checkpoint": "Find octave roots on E/A, A/D and D/G strings",
+      "practiceExercise": "Root-to-octave jumps in C and G",
+      "startingTempoBpm": 64
+    },
+    {
+      "id": "y2-w03",
+      "week": 3,
+      "phaseId": "fretboard-triads",
+      "title": "CAGED and advanced fretboard map",
+      "focus": "Connect open shapes, movable regions and octave landmarks",
+      "checkpoint": "Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12",
+      "practiceExercise": "CAGED map with root notes and octave links across two positions",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y2-w04",
+      "week": 4,
+      "phaseId": "fretboard-triads",
+      "title": "Triad inversions",
+      "focus": "Major triads in root position and inversions",
+      "checkpoint": "Play three inversions on the top string set",
+      "practiceExercise": "C-F-G top-string triad cycle",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w05",
+      "week": 5,
+      "phaseId": "fretboard-triads",
+      "title": "Minor triad inversions",
+      "focus": "Minor colour across the neck",
+      "checkpoint": "Move Am, Dm and Em triads between close positions",
+      "practiceExercise": "Am-Dm-Em inversion chain",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w06",
+      "week": 6,
+      "phaseId": "fretboard-triads",
+      "title": "Quarter review: fretboard",
+      "focus": "Test roots, octave links and triads",
+      "checkpoint": "Complete a timed note-finding and triad test",
+      "practiceExercise": "Record a 60-second fretboard demonstration",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w07",
+      "week": 7,
+      "phaseId": "rhythm-guitar",
+      "title": "Power-chord accuracy",
+      "focus": "Root-6 and root-5 power chords",
+      "checkpoint": "Name roots while changing power chords",
+      "practiceExercise": "E5-G5-A5, tight eighth notes",
+      "startingTempoBpm": 82
+    },
+    {
+      "id": "y2-w08",
+      "week": 8,
+      "phaseId": "rhythm-guitar",
+      "title": "Palm-muted groove",
+      "focus": "Switch between open and palm-muted notes",
+      "checkpoint": "Control muting with the heel of the picking hand",
+      "practiceExercise": "E5 riff: open bar, muted bar",
+      "startingTempoBpm": 80
+    },
+    {
+      "id": "y2-w09",
+      "week": 9,
+      "phaseId": "rhythm-guitar",
+      "title": "Barre chord refresh",
+      "focus": "E-shape major and minor forms",
+      "checkpoint": "Move F, G and A barres with short relaxed holds",
+      "practiceExercise": "F-G-A movable barre cycle",
+      "startingTempoBpm": 52
+    },
+    {
+      "id": "y2-w10",
+      "week": 10,
+      "phaseId": "rhythm-guitar",
+      "title": "A-shape barre chords",
+      "focus": "Five-string movable shapes and muting",
+      "checkpoint": "Play Bm, C#m and Dm as movable shapes",
+      "practiceExercise": "Bm-C#m-Dm with clean fifth-string roots",
+      "startingTempoBpm": 50
+    },
+    {
+      "id": "y2-w11",
+      "week": 11,
+      "phaseId": "rhythm-guitar",
+      "title": "Quarter review: rhythm guitar",
+      "focus": "Combine power chords, barres and muting",
+      "checkpoint": "Record 16 bars with clear starts and stops",
+      "practiceExercise": "Rock rhythm study with two textures",
+      "startingTempoBpm": 82
+    },
+    {
+      "id": "y2-w12",
+      "week": 12,
+      "phaseId": "scales-melody",
+      "title": "Major scale position 1",
+      "focus": "C major/G major scale and root awareness",
+      "checkpoint": "Play one position evenly in two keys",
+      "practiceExercise": "G major one-octave fragment",
+      "startingTempoBpm": 68
+    },
+    {
+      "id": "y2-w13",
+      "week": 13,
+      "phaseId": "scales-melody",
+      "title": "Scale sequences",
+      "focus": "Thirds and four-note sequences",
+      "checkpoint": "Practise a scale in thirds without changing pulse",
+      "practiceExercise": "G major in thirds, one octave",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w14",
+      "week": 14,
+      "phaseId": "scales-melody",
+      "title": "Position changes",
+      "focus": "Link positions by a shared note",
+      "checkpoint": "Shift between two scale patterns with a target note",
+      "practiceExercise": "G major position bridge",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w15",
+      "week": 15,
+      "phaseId": "scales-melody",
+      "title": "Major scale phrase-making",
+      "focus": "Build melody with chord tones",
+      "checkpoint": "Play scale notes then end phrases on chord tones",
+      "practiceExercise": "G major 4-bar question and answer",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w16",
+      "week": 16,
+      "phaseId": "scales-melody",
+      "title": "Quarter review: melody",
+      "focus": "Assess scale accuracy, phrasing and timing",
+      "checkpoint": "Record one scale, one phrase and one chord-tone landing",
+      "practiceExercise": "G major phrase with a clear ending",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y2-w17",
+      "week": 17,
+      "phaseId": "blues",
+      "title": "Blues shuffle 1",
+      "focus": "Swing subdivision and shuffle feel",
+      "checkpoint": "Keep swung eighths even through 12 bars",
+      "practiceExercise": "A shuffle: two-beat riff per chord",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w18",
+      "week": 18,
+      "phaseId": "blues",
+      "title": "Blues shuffle 2",
+      "focus": "Open seventh chords and chord changes",
+      "checkpoint": "Play A7-D7-E7 in 12-bar form",
+      "practiceExercise": "12-bar blues with two strums per bar",
+      "startingTempoBpm": 76
+    },
+    {
+      "id": "y2-w19",
+      "week": 19,
+      "phaseId": "blues",
+      "title": "Blues lead vocabulary",
+      "focus": "Mix minor pentatonic with chord tones",
+      "checkpoint": "Create two motifs over A blues",
+      "practiceExercise": "A minor pentatonic motif with rests",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w20",
+      "week": 20,
+      "phaseId": "blues",
+      "title": "Bends and vibrato",
+      "focus": "Bend to target pitch and control vibrato",
+      "checkpoint": "Match a fretted target before adding vibrato",
+      "practiceExercise": "Two-note bend-and-release phrase",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w21",
+      "week": 21,
+      "phaseId": "blues",
+      "title": "Blues turnaround",
+      "focus": "Connect bar 12 to the next chorus",
+      "checkpoint": "Play a turnaround with correct form timing",
+      "practiceExercise": "A turnaround over bars 11-12",
+      "startingTempoBpm": 74
+    },
+    {
+      "id": "y2-w22",
+      "week": 22,
+      "phaseId": "blues",
+      "title": "Quarter review: blues",
+      "focus": "Play a complete blues form and lead chorus",
+      "checkpoint": "Record 12-bar rhythm and 12-bar solo",
+      "practiceExercise": "A blues performance with a clear start and ending",
+      "startingTempoBpm": 78
+    },
+    {
+      "id": "y2-w23",
+      "week": 23,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Fingerstyle bass independence",
+      "focus": "Keep bass steady while treble notes vary",
+      "checkpoint": "Repeat a Travis-style pattern slowly",
+      "practiceExercise": "Alternating bass over C and G",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y2-w24",
+      "week": 24,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Fingerstyle pattern changes",
+      "focus": "Shift from arpeggio to syncopated pattern",
+      "checkpoint": "Keep thumb steady across chord changes",
+      "practiceExercise": "C-Am-F-G fingerstyle loop",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y2-w25",
+      "week": 25,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Fingerstyle melody balance",
+      "focus": "Bring out top melody over accompaniment",
+      "checkpoint": "Play melody notes louder without rushing bass",
+      "practiceExercise": "Four-bar melody on a bass pattern",
+      "startingTempoBpm": 56
+    },
+    {
+      "id": "y2-w26",
+      "week": 26,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Percussive and muted accents",
+      "focus": "Add light percussive texture safely",
+      "checkpoint": "Integrate one muted accent per bar",
+      "practiceExercise": "Acoustic groove with rest and accent",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w27",
+      "week": 27,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Arrange a folk piece",
+      "focus": "Create intro, verse and ending from one progression",
+      "checkpoint": "Arrange two sections using fingerstyle and strumming",
+      "practiceExercise": "A/B acoustic arrangement sketch",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w28",
+      "week": 28,
+      "phaseId": "fingerstyle-acoustic",
+      "title": "Quarter review: acoustic",
+      "focus": "Record an acoustic piece with stable dynamics",
+      "checkpoint": "Compare rhythm-only and fingerstyle takes",
+      "practiceExercise": "One verse: strummed then fingerpicked",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w29",
+      "week": 29,
+      "phaseId": "repertoire-ear",
+      "title": "Song form and sections",
+      "focus": "Hear verse, chorus, bridge and turnarounds",
+      "checkpoint": "Map the form of one song before learning it",
+      "practiceExercise": "Form map + 8-bar original loop",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w30",
+      "week": 30,
+      "phaseId": "repertoire-ear",
+      "title": "Learn by ear: rhythm",
+      "focus": "Transcribe strumming accents and rests",
+      "checkpoint": "Write a four-bar rhythm after listening",
+      "practiceExercise": "Clap and reproduce an 8-beat groove",
+      "startingTempoBpm": 68
+    },
+    {
+      "id": "y2-w31",
+      "week": 31,
+      "phaseId": "repertoire-ear",
+      "title": "Learn by ear: bass",
+      "focus": "Find the root movement under a progression",
+      "checkpoint": "Identify roots before adding chord names",
+      "practiceExercise": "Four-root bass line in G",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w32",
+      "week": 32,
+      "phaseId": "repertoire-ear",
+      "title": "Learn by ear: melody",
+      "focus": "Transcribe a 5-8 note phrase",
+      "checkpoint": "Sing, locate and verify each note by ear",
+      "practiceExercise": "Five-note call-and-response",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w33",
+      "week": 33,
+      "phaseId": "repertoire-ear",
+      "title": "Chord melody II",
+      "focus": "Add inner voices to a short melody",
+      "checkpoint": "Keep the top voice connected through chord changes",
+      "practiceExercise": "Three-chord melody with nearest voicings",
+      "startingTempoBpm": 56
+    },
+    {
+      "id": "y2-w34",
+      "week": 34,
+      "phaseId": "repertoire-ear",
+      "title": "Quarter review: repertoire",
+      "focus": "Learn a complete piece from map to performance",
+      "checkpoint": "Record form, transitions and ending",
+      "practiceExercise": "Personal song: one uninterrupted take",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y2-w35",
+      "week": 35,
+      "phaseId": "harmony",
+      "title": "Music theory: intervals",
+      "focus": "Identify intervals by sound and fretboard distance",
+      "checkpoint": "Play and sing unison, thirds, fifths and octaves",
+      "practiceExercise": "Interval call-and-response in C",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w36",
+      "week": 36,
+      "phaseId": "harmony",
+      "title": "Build seventh chords",
+      "focus": "Construct maj7, m7 and dominant 7 from formulas",
+      "checkpoint": "Name chord tones before finding a shape",
+      "practiceExercise": "Dm7-G7-Cmaj7",
+      "startingTempoBpm": 58
+    },
+    {
+      "id": "y2-w37",
+      "week": 37,
+      "phaseId": "harmony",
+      "title": "Chord extensions",
+      "focus": "Add 9ths and suspended tones tastefully",
+      "checkpoint": "Compare basic triad and extended version",
+      "practiceExercise": "C-Cadd9-Am7-G",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w38",
+      "week": 38,
+      "phaseId": "harmony",
+      "title": "Chord substitution",
+      "focus": "Try one substitution and explain its function",
+      "checkpoint": "Keep melody common tones where possible",
+      "practiceExercise": "C-Am-F-G then C-Am-Dm-G",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w39",
+      "week": 39,
+      "phaseId": "harmony",
+      "title": "Quarter review: harmony",
+      "focus": "Create a progression, analyse and perform it",
+      "checkpoint": "Label Roman numerals and play in two keys",
+      "practiceExercise": "I-vi-IV-V in C and G",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w40",
+      "week": 40,
+      "phaseId": "jazz",
+      "title": "Jazz swing comping",
+      "focus": "Use a relaxed swing feel and sparse voicings",
+      "checkpoint": "Keep 2 and 4 in the body while comping",
+      "practiceExercise": "Dm7-G7-Cmaj7 with swing comping",
+      "startingTempoBpm": 74
+    },
+    {
+      "id": "y2-w41",
+      "week": 41,
+      "phaseId": "jazz",
+      "title": "Jazz ii-V-I voice leading",
+      "focus": "Resolve guide tones with small movements",
+      "checkpoint": "Track the third and seventh through the sequence",
+      "practiceExercise": "Two guide-tone notes per chord",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w42",
+      "week": 42,
+      "phaseId": "jazz",
+      "title": "Bossa nova foundation",
+      "focus": "Play a repeating bass/chord pattern",
+      "checkpoint": "Keep bass pulse stable and chord attacks quiet",
+      "practiceExercise": "Two-bar Bossa pattern over Am-Dm",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w43",
+      "week": 43,
+      "phaseId": "jazz",
+      "title": "Jazz melody phrasing",
+      "focus": "Play melody, comp and short solo over a form",
+      "checkpoint": "Leave space and use chord tones at changes",
+      "practiceExercise": "Eight-bar jazz melody and response",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w44",
+      "week": 44,
+      "phaseId": "jazz",
+      "title": "Jazz blues",
+      "focus": "Combine 12-bar form and seventh chords",
+      "checkpoint": "Keep chord changes clear through a jazz blues",
+      "practiceExercise": "F jazz blues: roots and guide tones",
+      "startingTempoBpm": 60
+    },
+    {
+      "id": "y2-w45",
+      "week": 45,
+      "phaseId": "jazz",
+      "title": "Quarter review: jazz",
+      "focus": "Record a short melody-comp-solo arrangement",
+      "checkpoint": "Keep form without written prompts",
+      "practiceExercise": "One chorus: melody, comp, solo",
+      "startingTempoBpm": 66
+    },
+    {
+      "id": "y2-w46",
+      "week": 46,
+      "phaseId": "independent-musician",
+      "title": "Practice architecture",
+      "focus": "Build a weekly practice menu by priority",
+      "checkpoint": "Use maintenance, growth and repertoire slots",
+      "practiceExercise": "Three 5-minute blocks with a timer",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y2-w47",
+      "week": 47,
+      "phaseId": "independent-musician",
+      "title": "Transcribe a phrase",
+      "focus": "Copy articulation, rhythm and pitch from a reference",
+      "checkpoint": "Transcribe 4-8 notes, including rhythm",
+      "practiceExercise": "Phrase transcription plus original variation",
+      "startingTempoBpm": 62
+    },
+    {
+      "id": "y2-w48",
+      "week": 48,
+      "phaseId": "independent-musician",
+      "title": "Write a solo chorus",
+      "focus": "Use motifs, space and chord tones over progression",
+      "checkpoint": "Plan opening, development and ending",
+      "practiceExercise": "12-bar solo with 3 motifs",
+      "startingTempoBpm": 74
+    },
+    {
+      "id": "y2-w49",
+      "week": 49,
+      "phaseId": "independent-musician",
+      "title": "Arrangement, dynamics and style comparison",
+      "focus": "Create contrast without losing the pulse",
+      "checkpoint": "Record the same 8-bar progression in two styles with different dynamics",
+      "practiceExercise": "One progression: acoustic strum versus rock groove",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y2-w50",
+      "week": 50,
+      "phaseId": "independent-musician",
+      "title": "Recording craft",
+      "focus": "Balance levels and capture a clean one-take performance",
+      "checkpoint": "Check tuning, noise, timing and dynamic balance",
+      "practiceExercise": "Record a 60-second repertoire excerpt",
+      "startingTempoBpm": 70
+    },
+    {
+      "id": "y2-w51",
+      "week": 51,
+      "phaseId": "independent-musician",
+      "title": "Rehearsal, stamina and a 3-piece set",
+      "focus": "Prepare a short set with reliable transitions",
+      "checkpoint": "Perform three short pieces in sequence with count-ins, planned endings and recovery points",
+      "practiceExercise": "Three-piece set: acoustic, rhythm-guitar and lead/blues excerpts",
+      "startingTempoBpm": 72
+    },
+    {
+      "id": "y2-w52",
+      "week": 52,
+      "phaseId": "independent-musician",
+      "title": "Year 2 mock exam and next-path plan",
+      "focus": "Assess repertoire, fretboard, harmony and performance readiness",
+      "checkpoint": "Record prepared repertoire, reading or TAB, a progression and a short improvised phrase; choose a Year 3+ path",
+      "practiceExercise": "Year 2 capstone: prepared piece + progression + 8-bar lead",
+      "startingTempoBpm": 72
+    }
+  ]
+}
