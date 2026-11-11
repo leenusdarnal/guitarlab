@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { LessonProgressRecord } from '../repositories/contracts';
+import type {
+  LessonCompletionEventRecord,
+  LessonProgressRecord
+} from '../repositories/contracts';
 import {
   createEmptyLocalLearnerProfile,
   createIndexedDbRepositories,
