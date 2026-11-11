@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
@@ -23,9 +22,17 @@
     return value ? [value] : [];
   }
 
-  onMount(() => {
+  $effect(() => {
+    const lessonId = lesson.id;
+    const blockIds = lesson.lessonBlocks.map((block) => block.id);
     let active = true;
-    void loadActiveLessonProgress(lesson.id, lesson.lessonBlocks.map((block) => block.id), curriculumReleaseId)
+    progress = null;
+    progressLoading = true;
+    progressError = '';
+    completedBlockIds = [];
+    checkpointOutcome = null;
+    checkpointNote = '';
+    void loadActiveLessonProgress(lessonId, blockIds, curriculumReleaseId)
       .then((record) => {
         if (!active) return;
         progress = record;
