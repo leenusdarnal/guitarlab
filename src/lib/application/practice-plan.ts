@@ -153,7 +153,15 @@ export function buildPracticePlan(input: {
   return {
     minutes,
     preset,
-    recommendations: selected.map((task) => ({\n      id: task.id,\n      kind: task.kind,\n      title: task.title,\n      minutes: task.minutes,\n      reason: task.reason,\n      ...(task.skillId ? { skillId: task.skillId } : {}),\n      ...(task.lessonId ? { lessonId: task.lessonId } : {})\n    })),
+    recommendations: selected.map((task) => ({
+      id: task.id,
+      kind: task.kind,
+      title: task.title,
+      minutes: task.minutes,
+      reason: task.reason,
+      ...(task.skillId ? { skillId: task.skillId } : {}),
+      ...(task.lessonId ? { lessonId: task.lessonId } : {})
+    })),
     allocatedMinutes: minutes - remaining,
     remainingMinutes: remaining
   };
