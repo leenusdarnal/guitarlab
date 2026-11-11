@@ -10,7 +10,7 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 - [x] Preserve the suggested practice cycle as optional and adaptive pacing checkpoints.
 
 ## Learning model
-- [x] Separate weekly curriculum cards from numbered micro-lessons.
+- [x] Separate curriculum content completion from skill mastery and evidence.
 - [x] Define versioned content structure and stable IDs.
 - [x] Define the nine skill domains and evidence types.
 - [x] Separate lesson completion from demonstrated mastery.
@@ -29,13 +29,14 @@ M0 is a specification and curriculum milestone. It is complete when the requirem
 - [x] Establish screen hierarchy and mobile practice requirements.
 - [ ] Select a final visual concept and token set before detailed UI implementation.
 
-## Private learner baseline
-- [x] Record the baseline migration rules and lesson-state mapping.
-- [x] Specify idempotent import, unknown timestamp handling and immutable history.
-- [ ] Execute the private runtime import when the local persistence layer exists (M5).
+## Fresh learner profile
+- [x] Require a new profile to start with no imported lesson completions, lesson number, skill ratings or practice history.
+- [x] Retire legacy baseline migration and external lesson-history import.
+- [x] Allow an optional new GuitarLab placement assessment without marking external lessons complete.
+- [ ] Test empty profile initialization and export/restore when local persistence is implemented.
 
 ## Gate to M1
-M1 may begin from the documented product and architecture requirements. Detailed UI implementation must wait for the final visual concept selection. The private progress import is intentionally deferred until a private local profile exists.
+M1 may begin from the documented product and architecture requirements. Detailed UI implementation must wait for the final visual concept selection. Profiles must initialize empty; legacy personal progress import is not part of the product.
 
 
 ## Pre-implementation readiness additions
@@ -63,4 +64,7 @@ The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READ
 - [x] Define flexible practice lengths, accuracy-first tempo progression, adaptive review and multi-dimensional assessment.
 - [x] Document evidence limitations and selected source bibliography.
 - [ ] Add automated schema validation and curriculum tests during M1.
-- [ ] Progressively author full lesson content; current weekly records remain outlines.
+- [x] Author all 52 Year 1 and 52 Year 2 lessons with the complete lesson-content contract.
+- [x] Author all 48 optional Year 3 specialist lessons.
+- [x] Link every authored lesson to its stable outline ID and define a shared lesson schema contract.
+- [ ] Add automated schema validation and curriculum tests during M1.
