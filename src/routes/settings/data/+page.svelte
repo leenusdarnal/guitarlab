@@ -1,12 +1,12 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import { exportActiveLearnerBackup } from '$lib/storage/backup-storage';
+  import { exportActiveLearnerBackup } from '../../../lib/storage/backup-storage';
   import {
     resetActiveLearnerData,
     restoreLearnerBackup,
     reviewLearnerBackup,
     type RestoreReview
-  } from '$lib/storage/restore-storage';
+  } from '../../../lib/storage/restore-storage';
 
   let isExporting = $state(false);
   let isReviewing = $state(false);
@@ -37,7 +37,7 @@
       const date = new Date().toISOString().slice(0, 10);
       link.href = url;
       link.download = `guitarlab-backup-${date}.json`;
-      document.body.append(link);
+      document.body.appendChild(link);
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
