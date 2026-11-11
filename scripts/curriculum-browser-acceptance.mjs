@@ -60,18 +60,24 @@ try {
   assert.match(await page.locator('.checkpoint').innerText(), /Tune all six strings/);
 
   // M4.2: section progress and checkpoint self-check survive reload.
-  await page.locator('.lesson-block').first().getByRole('button', { name: 'Mark section complete' }).click();
-  await page.getByText('1 of 5 sections completed').waitFor();
+  const sectionCount = await page.locator('.lesson-block').count();
+  const progressLabel = `1 of ${sectionCount} sections completed`;
+  await page
+    .locator('.lesson-block')
+    .first()
+    .getByRole('button', { name: 'Mark section complete' })
+    .click();
+  await page.getByText(progressLabel).waitFor();
   await page.getByRole('button', { name: 'I need more practice' }).click();
   await page.reload({ waitUntil: 'networkidle' });
-  await page.getByText('1 of 5 sections completed').waitFor();
+  await page.getByText(progressLabel).waitFor();
   await page.getByRole('button', { name: 'Continue from saved section' }).waitFor();
   await page.getByRole('button', { name: 'I can meet this target' }).click();
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', { waitUntil: 'networkidle' });
   await page.getByText('Lesson completed', { exact: true }).waitFor();
-  await page.getByText('1 of 5 sections completed').waitFor();
+  await page.getByText(progressLabel).waitFor();
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   assert.match(page.url(), /y1-w02-lesson/);
@@ -101,7 +107,10 @@ try {
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth
   }));
-  assert.ok(dimensions.content <= dimensions.viewport, `Curriculum page overflows horizontally: ${JSON.stringify(dimensions)}`);
+  assert.ok(
+    dimensions.content <= dimensions.viewport,
+    `Curriculum page overflows horizontally: ${JSON.stringify(dimensions)}`
+  );
 
   assert.deepEqual(pageErrors, [], `Browser runtime errors: ${pageErrors.join('; ')}`);
   console.log('Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and mobile layout.');
