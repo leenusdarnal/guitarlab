@@ -63,17 +63,17 @@ for (const [themeName, tokens] of themes) {
     const background = tokens[backgroundKey];
     if (!foreground || !background) {
       failures.push(
-        `\${themeName}: missing token --\${!foreground ? foregroundKey : backgroundKey}`
+        `${themeName}: missing token --${!foreground ? foregroundKey : backgroundKey}`
       );
       continue;
     }
     const ratio = contrast(foreground, background);
     console.log(
-      `\${themeName}: --\${foregroundKey} / --\${backgroundKey} = \${ratio.toFixed(2)}:1 (min \${minimum}:1)`
+      `${themeName}: --${foregroundKey} / --${backgroundKey} = ${ratio.toFixed(2)}:1 (min ${minimum}:1)`
     );
     if (ratio < minimum) {
       failures.push(
-        `\${themeName}: --\${foregroundKey} on --\${backgroundKey} is below \${minimum}:1`
+        `${themeName}: --${foregroundKey} on --${backgroundKey} is below ${minimum}:1`
       );
     }
   }
