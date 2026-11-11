@@ -47,8 +47,10 @@ A personal learning companion for one guitarist, usable on a phone beside the in
 ## Release 1 acceptance criteria
 
 ### Curriculum and progress
-- All 52 Year 1 records load in order and carry stable IDs.
-- The learner can resume the last active lesson.
+- All 52 Year 1 and 52 Year 2 lessons load in order and carry stable IDs.
+- Each of the four optional Year 3 routes exposes its 12 authored lessons with stable week IDs.
+- A new learner profile begins at Year 1 Week 1 with no external or previous-chat history.
+- The learner can resume a lesson started within GuitarLab.
 - Lesson completion and linked skill mastery remain independent.
 - A lesson can be complete while a linked skill remains in learning/practising state.
 - Review-due skills are visible and can be practised without reopening the whole lesson.
