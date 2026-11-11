@@ -36,7 +36,7 @@ Stored preferences are validated again when read. If the browser does not provid
 - A blocked upgrade asks the learner to close other GuitarLab tabs.
 - Storage errors are surfaced; the application does not silently reset or overwrite the existing profile.
 
-M2.4 will add the learner-facing export, restore preview and safe-reset workflow. Until that work is complete, clearing browser site data or uninstalling a browser profile can remove local learner data. Learners should not treat local storage as a backup.
+The M2.4 implementation in draft PR #25 adds a versioned local JSON export, validated import preview, transactional replacement restore and typed-confirmation reset. It remains under CI and browser verification; until released, clearing browser site data or uninstalling a browser profile can remove local learner data. Keep a downloaded backup in a private safe location.
 
 ## Privacy and deployment
 
