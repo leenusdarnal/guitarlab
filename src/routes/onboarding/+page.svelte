@@ -12,7 +12,7 @@
   const startingPoints = [
     { value: 'fresh-beginner', label: 'Starting from the beginning' },
     { value: 'some-experience', label: 'I know a few things already' },
-    { value: 'placement-needed', label: 'Help me find my level'
+    { value: 'placement-needed', label: 'Help me find my level' }
   ] as const;
   const goalOptions = [
     { value: 'all-round-musician', label: 'All-round musician' },
