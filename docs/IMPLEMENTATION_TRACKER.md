@@ -28,7 +28,7 @@ This file is the human-readable index. GitHub Issues remain the execution record
 |---|---|---|---|
 | M1.0 | [#1 — Select visual concept and freeze design tokens](https://github.com/leenusdarnal/guitarlab/issues/1) | Direction approved; contrast validation added | Hybrid direction documented; both themes must pass automated contrast checks |
 | M1.1 | [#2 — Bootstrap SvelteKit, Svelte 5 and TypeScript](https://github.com/leenusdarnal/guitarlab/issues/2) | Merged | Install, Svelte/type check, unit tests and production build passed in GitHub Actions |
-| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Build passed; preview pending | Worker-compatible production build passed; live preview and browser smoke test remain |
+| M1.2 | [#3 — Configure Cloudflare Worker and Wrangler](https://github.com/leenusdarnal/guitarlab/issues/3) | Build passed; preview pending | Worker build and local Wrangler smoke test passed; live preview and browser-level test remain |
 | M1.3 | [#4 — Implement approved visual system and responsive shell](https://github.com/leenusdarnal/guitarlab/issues/4) | Initial shell merged | Browser QA on desktop/mobile, keyboard and reduced motion remains |
 | M1.4 | [#5 — Add quality tooling and CI](https://github.com/leenusdarnal/guitarlab/issues/5) | Merged; core validation passed | Formatting, lint, Svelte/type-check, unit tests and Worker build passed. Audit job is informational/continue-on-error and reports moderate/low dev-tool advisories |
 | M1.5 | [#6 — Integrate curriculum integrity checks](https://github.com/leenusdarnal/guitarlab/issues/6) | Added to CI; validator passed | 52 Year 1 + 52 Year 2 + 48 Year 3 lessons validate |
@@ -87,5 +87,5 @@ Merged: [#21 — GuitarLab M1 application foundation](https://github.com/leenusd
 
 ## Immediate next actions
 
-1. Add a preview deployment path and complete a browser/Worker smoke test; no live preview URL is claimed yet.
+1. Configure a live Cloudflare preview deployment using the preserved CI build artifact, then complete browser-level verification; no live preview URL is claimed yet.
 2. Start M2.1 ([issue #7](https://github.com/leenusdarnal/guitarlab/issues/7)) with D1/Drizzle migrations and versioned domain tables.
