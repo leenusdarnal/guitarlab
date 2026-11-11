@@ -1,134 +1,117 @@
 # GuitarLab Learning Curriculum
 
-## Source and approach
+## Curriculum promise
 
-The Year 1 and Year 2 structures in this repository are distilled from the learner's curated *Complete Guitar Course – Curated Learning Path Edition*. The existing sequence is retained rather than replaced. Its weekly cards, Year 2 continuation, optional notation track and four Year 3+ routes remain the curriculum source of truth.
+GuitarLab provides a complete, self-contained learning route from first contact with the guitar through intermediate musicianship and optional advanced specialisation. Every weekly curriculum card now has a corresponding authored lesson with an explanation, guided demonstration, focused exercises, musical application, success criteria, corrections, accessible alternatives and retrieval prompts.
 
-The route is deliberately progress-based: a week may take more or less than seven days. Advance when the checkpoint is reliable, not because the calendar says so.
+The route is progress-based rather than calendar-bound. A numbered week is an ordering aid: it may take one session or several. Advance when the checkpoint is reliable, not because seven days have passed.
 
-## Five-layer learning system
+## Curriculum map
 
-1. **Main course:** follow the primary Udemy Complete Guitar Lessons System course in its intended sequence.
-2. **Numbered micro-lesson:** work on the learner's current small personal target; it may span several sessions and is not the same as a curriculum week.
-3. **Weekly card:** use the weekly objective, theory connection, practice piece and checkpoint as the broader structure.
-4. **One targeted helper:** use one relevant diagram, tutorial or reference only when needed.
-5. **Play, record, review:** apply the skill musically, then reflect on tone, timing, relaxed movement and understanding.
+| Stage | Scope | Main outcome |
+|---|---|---|
+| Year 1 | 52 weeks | Beginner foundations through an intermediate bridge: instrument setup, clean notes, reading TAB, chords, rhythm, fretboard, scales, blues, improvisation, ear learning, arranging and performance |
+| Year 2 | 52 weeks | Intermediate musicianship: fretboard fluency, triads, rhythm guitar, scale positions, blues, fingerstyle, ear transcription, harmony, jazz and independent practice |
+| Year 3+ | Four optional 12-week routes | Focused development in Rock & Blues, Fingerstyle & Acoustic, Jazz & Harmony or All-Round Musicianship |
 
-Numbered micro-lessons and the 52-week course cards are different layers. The app must not force their lesson numbers to match.
+## Year 1 — Beginner to intermediate bridge
 
-## Year 1: 52-week core path
+Machine-readable weekly outline: [year-1.json](../content/curriculum/year-1.json).
 
-Machine-readable records: [`content/curriculum/year-1.json`](../content/curriculum/year-1.json).
+Fully authored lesson content: [year-1-lessons.json](../content/curriculum/year-1-lessons.json).
 
-| Phase | Weeks | Theme |
+| Phase | Weeks | Coverage |
 |---|---:|---|
-| Beginner base | 1-12 | Setup, tuning, clean single notes, TAB and chord diagrams, first chords, rhythm, natural notes and Quarter 1 review |
-| Skills in context | 13-24 | Optional notation, picking, fingerstyle, major scale, shell chords, blues, expression, power/barre foundations and half-year assessment |
-| Early intermediate | 25-36 | Roots and octaves, triads, keys, capo/transposition, chord colour, sixteenth rhythm, legato and Quarter 2 review |
-| Intermediate bridge | 37-52 | Ear learning, songwriting, blues/rock/jazz vocabulary, sight-reading, position shifts, chord melody, composition and year-end performance |
+| Beginner base | 1–12 | Setup, tuning, clean notes, TAB and chord diagrams, open chords, pulse, rhythm and first review |
+| Skills in context | 13–24 | Optional notation, picking, fingerstyle, major scale, shell chords, blues, expression, power/barre foundations and mid-year assessment |
+| Early intermediate | 25–36 | Roots, octaves, triads, keys, capo/transposition, chord colour, sixteenth rhythm, legato, phrasing and review |
+| Intermediate bridge | 37–52 | Ear learning, songwriting, blues/rock/jazz vocabulary, sight-reading, position shifts, chord melody, composition and year-end performance |
 
-The Year 1 file preserves all 52 weekly titles, focus areas, observable checkpoints, practice pieces and starting BPM markers. BPM values are practice references, not required pass marks. Start 10-15 BPM below a marker when clean accuracy is not yet secure.
+The outline preserves stable week IDs, focus areas, observable checkpoints, practice examples and starting BPM references. Each weekly record maps to one fully authored lesson by its stable week ID. BPM values are starting references, not pass marks.
 
-## Year 2: structured intermediate development
+## Year 2 — Intermediate musicianship
 
-Machine-readable records: [`content/curriculum/year-2.json`](../content/curriculum/year-2.json).
+Machine-readable weekly outline: [year-2.json](../content/curriculum/year-2.json).
 
-The Year 2 route continues through nine strands: fretboard and triads (Weeks 1-6), rhythm guitar (7-11), scales and melody (12-16), blues (17-22), fingerstyle/acoustic arranging (23-28), repertoire and ear learning (29-34), harmony (35-39), jazz (40-45), and independent musicianship/performance (46-52).
+Fully authored lesson content: [year-2-lessons.json](../content/curriculum/year-2-lessons.json).
 
-It is a continuation, not a requirement for the first private MVP to unlock. The learner can choose a slower pace and repeat any checkpoint.
+The route covers fretboard and triads (Weeks 1–6), rhythm guitar (7–11), scales and melody (12–16), blues (17–22), fingerstyle and acoustic arranging (23–28), repertoire and ear learning (29–34), harmony (35–39), jazz (40–45), and independent musicianship and performance (46–52).
 
-## Year 3+ specialisation paths
+Year 2 is a structured next stage, not an automatic calendar unlock. The learner may repeat or split lessons and should choose progression based on readiness and musical goals.
 
-Machine-readable outlines: [`content/curriculum/year-3-specialisations.json`](../content/curriculum/year-3-specialisations.json).
+## Year 3+ — Optional specialisations
 
-Four optional 12-week routes are retained:
-- **Rock & Blues:** advanced lead technique, pentatonic vocabulary, bends, legato, riffs, phrasing and performance.
+Outline: [year-3-specialisations.json](../content/curriculum/year-3-specialisations.json).
+
+Fully authored content for all 48 specialist lessons: [year-3-specialisation-lessons.json](../content/curriculum/year-3-specialisation-lessons.json).
+
+Four optional 12-week routes are available:
+
+- **Rock & Blues:** lead technique, pentatonic vocabulary, bends, legato, riffs, phrasing and performance.
 - **Fingerstyle & Acoustic:** right-hand independence, arpeggios, alternating bass, chord melody, arrangement and dynamics.
-- **Jazz & Harmony:** jazz grips, swing, guide tones, ii-V-I, extensions, bossa, jazz blues and reharmonisation.
-- **All-Round Musician:** listening, ear intervals, sight reading, harmony, transposition, arranging, recording, songwriting and ensemble skills.
+- **Jazz & Harmony:** jazz grips, swing, guide tones, ii–V–I, extensions, bossa, jazz blues and reharmonisation.
+- **All-Round Musician:** listening, intervals, reading, harmony, transposition, arranging, recording, songwriting and ensemble skills.
 
-These pathways should become selectable extensions after the Year 2 capstone, not mandatory content in the initial release. The JSON records are outlines; detailed exercises and checkpoints can be authored when a path is selected.
+The routes are selectable extensions, not a mandatory fourth calendar year. Choose by interest and prerequisite skills.
 
-## Weekly rhythm and practice routine
+## The authored lesson format
 
-The curated route recommends a flexible five-day cycle:
-- Day 1: learn the new idea and practise slowly.
-- Day 2: build accuracy and clean tone.
-- Day 3: explain the theory in plain language and recall without looking.
-- Day 4: apply it to a song, progression or melody.
-- Day 5: record a milestone, assess and set one next target.
+Each of the 156 lesson records includes:
 
-Suggested daily session: 40 minutes, plus an optional five-minute recording/review:
-- 3 minutes: tune and prepare.
-- 7 minutes: warm-up and technique.
-- 10 minutes: main lesson segment.
-- 10 minutes: theory or chord practice.
-- 10 minutes: song, progression or melody.
-- Optional 5 minutes: record and review.
+1. Learner-facing objectives.
+2. A plain-language explanation and worked example.
+3. A guided demonstration with ordered steps and reference guidance.
+4. Lesson blocks for listening, concept learning, demonstration, musical application and retrieval.
+5. Focused practice, musical application and reflection exercises.
+6. Observable success criteria spanning accuracy, sound/time, control/comfort and understanding/transfer.
+7. Common mistakes paired with specific corrections.
+8. An accessible alternative that reduces complexity without removing the musical goal.
+9. Retrieval questions and an adaptive review suggestion.
+10. Flexible 10-, 20- and 40-minute practice options.
 
-The learner may shorten or lengthen this schedule. The app should save the actual duration and work completed, not assume that a timer proves skill.
+The schema and skill taxonomy are described in [Curriculum Content Model](CURRICULUM_CONTENT_MODEL.md). The evidence review and instructional rationale are in [Curriculum Research and Revision](CURRICULUM_RESEARCH.md).
 
-## Four checks before advancing
+## Spiral learning model
 
-A checkpoint is ready when the learner can demonstrate:
-1. **Sound:** notes/chords ring clearly and unwanted strings are controlled.
-2. **Time:** the pulse continues through changes and rests.
-3. **Understanding:** the learner can explain the idea in plain language.
-4. **Music:** the skill is applied to a progression, melody or song section.
+Six strands recur throughout the route:
 
-Do not require staff notation in the core route where TAB is specified as the main path; notation is an optional parallel track.
+- Sound, pulse and rhythm.
+- Ear, singing and audiation.
+- Technique, tone and comfort.
+- Fretboard and applied theory.
+- Repertoire and creativity.
+- Reflection and retrieval.
 
-## Learner continuity and privacy
+Pulse, listening and relaxed technique begin in Week 1. Ear training is integrated throughout rather than postponed to a single unit. New movements are first practised in a focused block, then mixed with familiar skills as they become stable. The curriculum does not force random interleaving for every task.
 
-The app maintains two independent progress dimensions:
-- weekly curriculum position and weekly checkpoint status;
-- numbered micro-lesson sequence and its individual status.
+## Flexible practice
 
-The learner's private baseline is deliberately excluded from this public curriculum file and from all public seed fixtures. It will be imported into the private local profile using the migration rules in [Learner Progress Migration](LEARNING_PROGRESS_MIGRATION.md). Do not mark a weekly card complete merely because a numbered micro-lesson was completed.
+The suggested full practice session is 40 minutes. Ten- and 20-minute sessions are also valid: they select fewer, higher-value tasks rather than rushing through the full plan. Custom durations are supported.
 
-## Resource roles
+A sustainable session can include preparation, a focused drill, a review item, musical application and a brief reflection. The learner may practise on any schedule and split a weekly lesson across multiple sessions. A timer records duration; it does not establish skill mastery.
 
-| Resource | Role in the learning system |
-|---|---|
-| Udemy Complete Guitar Lessons System | Primary teaching sequence; do not jump between competing courses |
-| GuitarTuna | Tuning and metronome helper |
-| JustinGuitar / National Guitar Academy | Targeted alternative explanations and reference only |
-| Songsterr | Interactive TAB when learning full songs |
-| Complete Guitar Book / Learn & Master Guitar workbook | Supporting reference, not a second competing syllabus |
-| Backing tracks | Musical application and later improvisation |
+## Checkpoints and mastery
 
-Keep only the currently relevant resources visible. Paid-course videos and protected tabs are linked, not copied into GuitarLab.
+A checkpoint should be demonstrated, not merely viewed. Review the following dimensions:
 
+- **Accuracy:** correct notes, strings, rhythm or chord changes.
+- **Sound and time:** clear tone, intentional rests and a continuous pulse.
+- **Control and comfort:** relaxed movement and suitable instrument setup.
+- **Understanding:** explain the idea in plain language and retrieve it without looking.
+- **Musical transfer:** use the skill in a phrase, progression or repertoire section.
 
-## Research-backed revision (curriculum v1.1.0)
+A single successful attempt is useful evidence, not proof of permanent mastery. Repeat demonstrations over time and in more than one musical context. Speed is secondary to accuracy and comfort. Stop an exercise if pain, numbness or tingling occurs; GuitarLab is an educational tool, not a medical service.
 
-The curriculum now uses a spiral learning model rather than treating each week as a sealed topic. The full evidence review and change rationale are in [Curriculum Research and Revision](CURRICULUM_RESEARCH.md), and the machine-readable teaching rules are in [learning-framework.json](../content/curriculum/learning-framework.json).
+## Starting fresh and learner privacy
 
-### What changes for the learner
+A new GuitarLab learner profile starts with no imported lesson completions, skill ratings, practice history or personal baseline from earlier chats or external systems. The default route begins at Year 1 Week 1. An optional placement activity may recommend a starting point based on a fresh demonstration, but it must not silently import or infer previous progress.
 
-- Pulse, listening, singing/humming, technique, fretboard awareness, musical application and reflection recur from the first week.
-- New movements are practised in a focused block first; familiar skills are mixed later. The app will not force random interleaving for every task because music-practice findings are mixed.
-- Ear training is no longer a late isolated topic. The dedicated Year 1 and Year 2 ear-learning weeks deepen a skill that has been present all along.
-- Short practice is valid. The 40-minute session is a suggested full session; 10- and 20-minute sessions select fewer, higher-value tasks rather than rushing through everything.
-- Tempo is increased only when an exercise-specific accuracy and comfort target is met. BPM is a starting reference, not a pass mark.
-- Reviews use delayed retrieval and learner evidence. Review dates are suggestions, not streak deadlines.
-- Checkpoints consider accuracy, sound, time, control/comfort, musical application and understanding. Speed alone is never mastery.
+The public repository stores generic curriculum content only. Personal practice records, recordings, confidence ratings and assessment history belong in private local application storage and must not be committed as source files, fixtures or screenshots.
 
-### Targeted data corrections in v1.1.0
+## Resources and copyright
 
-- Year 1 Week 6 now uses Em–G–D–A, all introduced in Weeks 4–5; the earlier Em–G–D–C loop introduced C before its dedicated teaching week.
-- Year 1 Week 11 now introduces open-string names, semitone relationships and selected landmarks instead of asking a beginner to map natural notes across all six strings in one week.
-- Year 1 Week 1 explicitly includes a pulse and listening activity.
-- Year 1 Week 12 review checkpoint now integrates tuning, pulse, chords and melody.
-- Year 2 Week 6 treats speed as secondary to accurate note-finding and triad recall.
-- Year 2 Week 20 makes bend target-pitch matching and comfortable execution explicit.
+Lessons are self-contained and do not require a specific paid course or a particular third-party platform. External material may be used as an optional demonstration or alternative explanation. GuitarLab links to third-party resources; it does not copy paid course videos, protected tabs, books or recordings without permission. Original GuitarLab examples and properly licensed or public-domain material are preferred.
 
-All existing Year 1 and Year 2 week IDs are preserved. The Year 3+ specialisations remain optional 12-week outlines.
+## Research-backed revision
 
-### Practice cadence
-
-The previous five-day weekly cycle is a suggestion, not a requirement. Learners may practise on any sustainable schedule and repeat or split weeks as needed. The product should encourage distributed practice and retrieval across sessions, but must not award progress simply for checking in on consecutive days.
-
-### Content quality boundary
-
-The 52-week records are curriculum outlines. A week becomes a fully authored lesson only when it has clear objectives, a concise explanation, a demonstration/reference, focused exercise, musical application, success criteria, common mistake/correction, accessible alternative and retrieval prompt. Add these details progressively without changing stable IDs or rewriting private learner history.
+The curriculum framework uses focused repetition for new movements, progressive mixed practice, adaptive retrieval, flexible session lengths and multi-dimensional assessment. Research findings and limitations are documented in [CURRICULUM_RESEARCH.md](CURRICULUM_RESEARCH.md). Review intervals and mastery thresholds remain transparent product heuristics rather than claims of scientifically optimal timing.
