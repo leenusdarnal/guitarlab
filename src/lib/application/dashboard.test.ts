@@ -66,7 +66,7 @@ function mastery(nextReviewAt: number, learnerId = profile.id): SkillMasteryReco
     learnerId,
     curriculumReleaseId: 'release-1',
     skillId: 'rhythm.pulse',
-    state: 'developing',
+    state: 'practising',
     evidenceCount: 1,
     confidence: 60,
     lastAssessmentId: 'attempt-1',
