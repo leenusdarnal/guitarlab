@@ -6,7 +6,7 @@ on:
     branches: [main, "feat/**", "chore/**"]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}
@@ -26,26 +26,7 @@ jobs:
           node-version: 22.18.0
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
-
-      - name: Preserve generated lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: guitarlab-package-lock
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Commit generated dependency lockfile
-        if: github.event_name == 'push' && github.ref_name == 'feat/m1-application-foundation'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          if ! git diff --cached --quiet; then
-            git commit -m "build: add reproducible npm lockfile"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
+        run: npm ci --no-audit --no-fund
 
       - name: Inspect dependency advisories
         shell: bash
