@@ -1,132 +1,143 @@
 # GuitarLab Curriculum Content Model
 
-## Versioning and hierarchy
+## Content hierarchy
 
-The curriculum is content, not UI. Store it as versioned data and render it through reusable lesson components.
+Curriculum content is versioned data, independent of the user interface and personal learner state.
 
 ```text
-Learning path
-  └── Phase
-       └── Week
-            └── Lesson
-                 ├── Concept and explanation
-                 ├── Demonstration / reference
-                 ├── Exercise(s)
-                 ├── Practice piece
-                 ├── Success checkpoint
-                 └── Reflection / next action
+Learning route
+  └── Stage / specialisation
+       └── Week card (stable curriculum ID)
+            └── Authored lesson (stable lesson ID)
+                 ├── Objectives and prerequisites
+                 ├── Explanation and worked example
+                 ├── Demonstration / reference guidance
+                 ├── Ordered lesson blocks
+                 ├── Focused exercises
+                 ├── Musical application
+                 ├── Success criteria
+                 ├── Common mistakes and corrections
+                 ├── Accessible alternative
+                 └── Retrieval and review guidance
 ```
 
-The initial machine-readable source lives in `content/curriculum/year-1.json` and `content/curriculum/year-2.json`. Each file has a stable `id`, semantic `version`, phase definitions and ordered week records. A week can be split into multiple learner sessions; the calendar week is a guide, not a forced completion deadline.
+## Source files and coverage
 
-## Curriculum record fields
+| File | Records | Role |
+|---|---:|---|
+| `content/curriculum/year-1.json` | 52 | Year 1 weekly outline and stable week IDs |
+| `content/curriculum/year-1-lessons.json` | 52 | Fully authored Year 1 lessons |
+| `content/curriculum/year-2.json` | 52 | Year 2 weekly outline and stable week IDs |
+| `content/curriculum/year-2-lessons.json` | 52 | Fully authored Year 2 lessons |
+| `content/curriculum/year-3-specialisations.json` | 4 routes × 12 weeks | Optional specialist route outline |
+| `content/curriculum/year-3-specialisation-lessons.json` | 48 | Fully authored specialist lessons |
+| `content/curriculum/learning-framework.json` | 1 framework | Spiral teaching, practice, review and assessment rules |
+
+Each authored lesson has its own stable ID and a `curriculumWeekId` that points to its outline record. The week ID is the source of truth for ordering and cross-file matching. Do not reuse an ID for a different skill or lesson.
+
+## Lesson record contract
+
+The lesson JSON files use `schemaVersion: 1` and their own semantic content version. Each lesson record contains:
 
 | Field | Meaning |
 |---|---|
-| `id` | Stable identifier, e.g. `y1-w04`; never reuse for a different skill |
-| `week` | Ordered week number within the path |
-| `phaseId` | Phase reference |
-| `title` | Learner-facing title |
-| `focus` | Main learning theme |
-| `checkpoint` | Observable finish line |
-| `practiceExercise` | Suggested musical application |
-| `startingTempoBpm` | Suggested starting benchmark; lower it when accuracy slips |
-| `objectives` | Future structured list of teachable outcomes |
-| `skillIds` | Links to the skills this week trains |
-| `resources` | Links to a course segment, reference or permitted example |
-| `optionalTracks` | Enrichment such as staff notation; never block the core route |
-| `reviewPolicy` | Review interval or retrieval practice guidance |
+| `id` | Stable authored lesson ID |
+| `curriculumId` | Parent curriculum |
+| `curriculumWeekId` | Matching stable weekly outline ID |
+| `week` / `route` | Position within the year or optional specialisation |
+| `title` / `focus` | Learner-facing title and learning focus |
+| `estimatedMinutes` | Planning estimate, never a completion rule |
+| `startingTempoBpm` | Optional starting reference; not a pass mark |
+| `learningObjectives` | Observable outcomes |
+| `prerequisites` | Explicit prerequisite IDs; empty means no hard gate |
+| `priorTopicsToRefresh` | Optional retrieval prompts that do not imply previous learner completion |
+| `explanation` | Key idea, plain-language description and worked example |
+| `demonstrationOrReference` | Guided demonstration and non-exclusive reference suggestion |
+| `lessonBlocks` | Ordered listen, explain, demonstrate, apply and retrieve blocks |
+| `exercises` | Typed instructions, time, success criterion and evidence type |
+| `musicalApplication` | Practice-piece prompt, steps and source/licensing policy |
+| `successCriteria` | Accuracy, sound/time, comfort and understanding/transfer |
+| `commonMistakesAndCorrections` | Paired mistake and corrective action |
+| `accessibleAlternative` | Lower-complexity path that preserves the learning intention |
+| `retrievalPrompt` | Questions for recall without looking |
+| `nextReviewSuggestion` | Adaptive review guidance and transparent heuristic intervals |
+| `practiceOptions` | Flexible 10-, 20- and 40-minute task selection |
+| `instructorNotes` | Pacing, tempo and mastery boundaries |
 
-The current JSON files provide the first eight fields. M4 may extend the schema with the remaining optional fields using a versioned migration; do not silently change field meaning.
+### Exercise types
+
+Current authoring uses recall, focused practice, musical application and reflection. The app may add types such as fretboard identification, chord formation, chord transition, rhythm, picking, ear training, theory quiz, song section and recording review, provided that the schema version and tests are updated deliberately.
+
+An exercise should always tell the learner what to do and how to recognise a successful attempt. State whether evidence is measured, observed/self-checked, self-reported or reviewed from a recording. Never claim that audio or timing was objectively assessed unless the relevant implemented tool has been validated.
+
+## Authoring principles
+
+1. **Self-contained teaching:** A learner can understand and practise the lesson without a required external paid course.
+2. **Hear, understand, do, apply, retrieve:** Begin with listening or observation, isolate the task, practise slowly, transfer it to music and recall the idea without looking.
+3. **Specific instructions:** Avoid vague directions such as "practise more". Identify the string, note/chord/form, movement or musical context wherever relevant.
+4. **Accuracy before speed:** Tempo is increased only when the quality target is met. If timing, tone or comfort drops, reduce tempo.
+5. **Focused then mixed practice:** Isolate unfamiliar movements, then combine them with known skills when stable.
+6. **Musical transfer:** Every lesson includes an application, not just a mechanical drill.
+7. **Accessible alternatives:** Reduce range, tempo, complexity or duration without presenting the alternative as failure.
+8. **Non-punitive review:** Use errors, hesitation, confidence and elapsed time as signals; a review date is not a deadline.
+9. **No false mastery:** Viewing, elapsed time, streaks or a single attempt do not establish stable skill.
+10. **Copyright-aware references:** Link to third-party resources; do not reproduce protected course material, tabs, books or recordings.
 
 ## Skill taxonomy
 
-Use stable skill IDs grouped into these domains:
+Use stable IDs grouped into these domains:
 
 | Domain | Example skill IDs | Evidence |
 |---|---|---|
-| Instrument foundations | `instrument.tuning`, `instrument.posture`, `instrument.fretting`, `instrument.clean-tone` | Correct tuning; relaxed setup; clean, separate notes |
-| Picking and coordination | `technique.alternate-picking`, `technique.string-crossing`, `technique.legato`, `technique.bends`, `technique.slides` | Correct strokes, even tone, string-crossing control, target-pitch accuracy |
+| Instrument foundations | `instrument.tuning`, `instrument.posture`, `instrument.fretting`, `instrument.clean-tone` | Correct tuning; relaxed setup; clean separate notes |
+| Picking and coordination | `technique.alternate-picking`, `technique.string-crossing`, `technique.legato`, `technique.bends`, `technique.slides` | Consistent strokes, even tone, string-crossing control, target-pitch accuracy |
 | Rhythm and groove | `rhythm.pulse`, `rhythm.subdivision`, `rhythm.strumming`, `rhythm.muting`, `rhythm.dynamics` | Pulse continuity, subdivision accuracy, clean starts/stops and rests |
 | Fretboard and notation | `fretboard.string-map`, `fretboard.natural-notes`, `fretboard.octaves`, `notation.tab`, `notation.staff` | Correct note/string/fret identification and phrase reading |
-| Chords and harmony | `harmony.open-chords`, `harmony.transitions`, `harmony.power-chords`, `harmony.barre-chords`, `harmony.triads`, `harmony.seventh-chords`, `harmony.voice-leading` | Clear chord tones, accurate changes, correct chord construction and progression |
-| Scales and lead | `lead.major-scale`, `lead.pentatonic`, `lead.arpeggios`, `lead.improvisation`, `lead.phrasing` | Accurate scale maps, chord-tone targeting, intentional motifs and resolution |
+| Chords and harmony | `harmony.open-chords`, `harmony.transitions`, `harmony.power-chords`, `harmony.barre-chords`, `harmony.triads`, `harmony.seventh-chords`, `harmony.voice-leading` | Clear chord tones, accurate changes, correct construction and progression |
+| Scales and lead | `lead.major-scale`, `lead.pentatonic`, `lead.arpeggios`, `lead.improvisation`, `lead.phrasing` | Accurate maps, chord-tone targeting, intentional motifs and resolution |
 | Fingerstyle and arranging | `fingerstyle.thumb-independence`, `fingerstyle.patterns`, `arrangement.song-form`, `arrangement.chord-melody` | Stable bass, balanced melody, coherent form and voice movement |
-| Ear and musicianship | `ear.pitch`, `ear.intervals`, `ear.rhythm`, `ear.melody-transcription` | Correct identification, singing, reproduction and transcription |
-| Repertoire and performance | `repertoire.song-learning`, `performance.recording`, `performance.recovery` | Complete sections, uninterrupted form, prepared endings and recovery |
+| Ear and musicianship | `ear.pitch`, `ear.intervals`, `ear.rhythm`, `ear.melody-transcription` | Identification, singing, reproduction and transcription |
+| Repertoire and performance | `repertoire.song-learning`, `performance.recording`, `performance.recovery` | Complete sections, continuity, prepared endings and recovery |
 
-Skill IDs are independent of week numbers. The same skill can be trained in many weeks and reviewed across multiple paths.
+Skill IDs are independent of week numbers. One skill can be trained and reviewed in many lessons.
 
-## Learner state
+## Learner progress and privacy
 
-A skill has one current state:
-- `not_started`
-- `learning`
-- `practising`
-- `stable`
-- `review_due`
+A new learner profile begins with no imported completions, mastery ratings, practice notes or assessment history. The default learning start is Year 1 Week 1. A fresh placement assessment may recommend a different starting point, but must create new evidence and must never import or infer progress from prior chats, private context or an external course.
 
-Lesson completion and skill mastery are separate. Viewing content does not automatically increase mastery.
+Public curriculum JSON contains generic lesson content only. Individual practice history, recordings, preferences, confidence and assessment attempts belong in private local storage. Do not commit personal learner data or private seed payloads.
 
-## Evidence types
+Lesson completion and skill mastery remain separate. The UI may show a completed content card while the linked skill remains in learning or practising state.
 
-- Chord: individual-string clarity checks and repeated clean formations.
-- Chord transition: clean changes per timed interval, with accuracy recorded separately from speed.
-- Picking: correct-string and down/up consistency.
-- Rhythm: pulse continuity and subdivision task results.
-- Fretboard: note-identification accuracy and response time.
-- Theory: retrieval and application questions.
-- Ear: interval, rhythm or melody responses.
-- Song: section completion, continuity, tempo and recovery.
-- Self-report: confidence/difficulty notes, clearly labelled as self-reported.
+## Evidence and assessment
 
-Do not label audio as objectively assessed unless an implemented, tested detector produced the measurement. Initial mastery can combine learner self-assessment, exercise outcomes and optional recordings reviewed by the learner.
+Evidence types:
 
-## Assessment history and review
+- `measured`: a validated tool measured the specific property.
+- `observed_or_self_checked`: learner or instructor observed the performance.
+- `self_reported`: learner confidence or perceived difficulty.
+- `recording_reviewed`: learner or instructor reviewed an audio/video recording.
 
-Assessment attempts are append-only evidence records. Recalculating current mastery must not delete prior attempts. Store:
-- skill ID and assessment type
-- timestamp and curriculum version
-- result / accuracy / achieved tempo where measurable
-- evidence source (self-report, quiz, timer, local audio tool, external review)
-- learner reflection and next practice target
+Assessment attempts are append-only. Store skill ID, assessment type, timestamp, curriculum version, result, evidence source and reflection. Recalculating current mastery must not delete prior attempts.
 
-Review scheduling should use failure/uncertainty and recent success rather than a punitive streak. A suggested review is not a deadline.
+Initial mastery guidance: seek more than one successful demonstration separated in time and at least one application beyond an isolated drill. Keep the rule visible and allow the learner to review or challenge a result.
 
-## Content and licensing
+## Review scheduling
 
-Course references store provider, title, URL, role and access notes. GuitarLab links to the learner's course and external references; it does not mirror paid videos or reproduce protected tabs, books or recordings without permission.
+Use adaptive spaced retrieval. Suggested starter prompts are the next practice session, about one week later and about one month later, but these are configurable product heuristics, not scientifically optimal fixed intervals. Review sooner after errors, hesitation or low confidence; extend the interval after confident retrieval on separate occasions. Bring stable skills back in new musical contexts.
 
+## Validation requirements
 
-## Expanded lesson authoring contract
+The curriculum validator should check:
 
-The present Year 1 and Year 2 records are valid weekly outlines. Do not pretend they are fully authored lesson scripts. Extend them gradually as individual lessons are prepared, using a backwards-compatible and explicitly versioned content schema.
+- JSON parsing and supported schema/content versions.
+- Expected lesson counts: 52 Year 1, 52 Year 2 and 48 Year 3 specialist lessons.
+- Unique lesson IDs, exercise IDs and stable week IDs.
+- Every authored lesson maps to exactly one outline week or one declared specialisation week.
+- Ordered week numbers and valid route/phase references.
+- Required fields, non-empty instructions and success criteria.
+- Allowed evidence and exercise types.
+- Sensible non-negative durations and positive BPM references when present.
+- No user-specific learner progress, recordings, tokens or private profile records in curriculum files.
 
-The next schema revision should distinguish:
-- `schemaVersion`: structural schema version used by validators and migrations;
-- `version`: semantic release version of the curriculum content itself.
-
-Recommended optional fields for a progressively authored week:
-
-| Field | Purpose |
-|---|---|
-| `learningObjectives` | Observable outcomes written from the learner's point of view |
-| `prerequisites` | Stable skill IDs or lesson IDs required before this activity |
-| `lessonBlocks` | Ordered teaching blocks such as explanation, diagram, demonstration link or recall prompt |
-| `exercises` | Typed practice instructions with targets, constraints and success criteria |
-| `resources` | Metadata and external links; no copied paid videos or protected tabs |
-| `reviewPolicy` | Suggested retrieval/review guidance based on evidence |
-| `estimatedMinutes` | Planning estimate, not a completion requirement |
-| `optionalTracks` | Enrichment that never blocks the core route |
-
-An exercise should contain a stable ID, title, type, instructions, linked skill IDs, target duration or repetitions, optional starting BPM, observable success criterion, evidence type and accessible alternative where appropriate. Suggested types include `recall`, `fretboard-identification`, `chord-formation`, `chord-transition`, `rhythm`, `picking`, `ear-training`, `theory-quiz`, `song-section` and `reflection`.
-
-A practice target must describe what the learner does and how they can tell whether it was successful. Avoid unsupported objective claims such as automatic tone or timing scores when no validated measurement exists. Identify learner self-assessment as self-reported evidence.
-
-### Content validation rules
-
-The M1 validation command should check JSON parsing, schema version, stable unique IDs, ordered week numbers, valid phase/skill references, allowed exercise types, sensible tempo values, required fields and safe resource URLs. It should not require all optional authoring fields to be present in the existing outline files. Each schema migration must have tests and must preserve existing curriculum IDs and progress references.
-
-### Practice recommendation provenance
-
-When the app recommends a lesson, skill or exercise, preserve the recommendation reason and the evidence used to produce it. The recommendation engine is deterministic in the first release; no external AI call or cloud dependency is required.
+Validation is a content integrity check, not a substitute for a guitarist/instructor review of musical accuracy. Updates to content do not silently change skill ID meaning or curriculum week IDs.
