@@ -131,7 +131,7 @@ export interface LessonProgressRepository {
   ): Promise<LessonProgressRecord | null>;
   create(progress: LessonProgressRecord): Promise<void>;
   /** Compare-and-set update: only an in-progress lesson may be changed. */
-  updateInProgress(progress: LessonProgressRecord): Promise<boolean>;
+  updateInProgress(progress: LessonProgressRecord, expectedRevision: number): Promise<boolean>;
   /**
    * Must persist the completed progress row and append its event atomically.
    * It must never create or update a skill mastery snapshot.
