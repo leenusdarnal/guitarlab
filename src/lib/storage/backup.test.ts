@@ -67,7 +67,9 @@ describe('learner backup contract', () => {
     });
   });
 
-  it('round-trips M4.2 checkpoint state while accepting older version-1 backups', () => {
+  it(
+    'round-trips M4.2 checkpoint state while accepting older version-1 backups',
+    () => {
     const older = makeBackup();
     expect(parseLearnerBackup(older)).toMatchObject({ success: true });
     const newer = makeBackup();
