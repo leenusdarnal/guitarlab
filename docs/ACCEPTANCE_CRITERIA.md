@@ -52,3 +52,15 @@ M1 may begin from the documented product and architecture requirements. Detailed
 - [ ] Add a repository licence only if the owner decides to grant reuse permissions; this is not required to begin private local-first development.
 
 The review is recorded in [Pre-Implementation Readiness](PRE_IMPLEMENTATION_READINESS.md). The checks above are documentation and data-shape checks; they do not represent application implementation, build or runtime test results.
+
+## Curriculum research and revision
+
+- [x] Screen 72 research results across eight Exa workstreams and review selected full-text sources.
+- [x] Preserve the existing 52-week Year 1 and Year 2 stable week IDs.
+- [x] Add a machine-readable spiral learning framework for rhythm, ear, technique, fretboard/theory, repertoire and reflection.
+- [x] Correct the Week 6 chord prerequisite mismatch and narrow the first fretboard checkpoint.
+- [x] Make pulse and listening recurring from Week 1; keep notation optional.
+- [x] Define flexible practice lengths, accuracy-first tempo progression, adaptive review and multi-dimensional assessment.
+- [x] Document evidence limitations and selected source bibliography.
+- [ ] Add automated schema validation and curriculum tests during M1.
+- [ ] Progressively author full lesson content; current weekly records remain outlines.
