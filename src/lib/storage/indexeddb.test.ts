@@ -185,7 +185,7 @@ describe('local learner profile persistence', () => {
     expect(second.preferences).toEqual(first.preferences);
   });
 
-  it('updates only in-progress lessons using the compound learner/release/lesson key', async () => {
+  it('guards lesson completion and completion events with the checkpoint revision', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
@@ -205,6 +205,7 @@ describe('local learner profile persistence', () => {
       updatedAt: 100
     };
     await repositories.progress.create(record);
+
     await expect(
       repositories.progress.updateInProgress(
         {
@@ -218,36 +219,75 @@ describe('local learner profile persistence', () => {
         0
       )
     ).resolves.toBe(true);
+
+    const event: LessonCompletionEventRecord = {
+      id: 'event-1',
+      progressId: record.id,
+      learnerId: profile.id,
+      curriculumReleaseId: 'curriculum-v1',
+      lessonId: record.lessonId,
+      completionSource: 'checkpoint',
+      completedAt: 300
+    };
+    await expect(
+      repositories.progress.completeWithEvent(
+        {
+          ...record,
+          revision: 2,
+          status: 'completed',
+          completedAt: 300,
+          updatedAt: 300
+        },
+        event,
+        1
+      )
+    ).resolves.toBeNull();
+
     await expect(
       repositories.progress.find(profile.id, 'curriculum-v1', 'y1-w01-lesson')
     ).resolves.toMatchObject({
-      completedBlockIds: ['guided-demo'],
+      status: 'in_progress',
       checkpointOutcome: 'needs_practice',
-      revision: 1,
-      updatedAt: 200
+      revision: 1
     });
-    await repositories.progress.completeWithEvent(
-      {
-        ...record,
-        revision: 1,
-        status: 'completed',
-        completedAt: 300,
-        updatedAt: 300
-      },
-      {
-        id: 'event-1',
-        progressId: record.id,
-        learnerId: profile.id,
-        curriculumReleaseId: 'curriculum-v1',
-        lessonId: record.lessonId,
-        completionSource: 'checkpoint',
-        completedAt: 300
-      }
-    );
+
     await expect(
       repositories.progress.updateInProgress(
-        { ...record, revision: 2, updatedAt: 400 },
-        0
+        {
+          ...record,
+          lastBlockId: 'guided-demo',
+          completedBlockIds: ['guided-demo'],
+          checkpointOutcome: 'achieved',
+          revision: 2,
+          updatedAt: 400
+        },
+        1
+      )
+    ).resolves.toBe(true);
+
+    const current = await repositories.progress.find(
+      profile.id,
+      'curriculum-v1',
+      'y1-w01-lesson'
+    );
+    expect(current?.checkpointOutcome).toBe('achieved');
+    const completed = await repositories.progress.completeWithEvent(
+      {
+        ...current!,
+        status: 'completed',
+        completedAt: 500,
+        updatedAt: 500,
+        revision: 3
+      },
+      { ...event, completedAt: 500 },
+      2
+    );
+    expect(completed?.status).toBe('completed');
+
+    await expect(
+      repositories.progress.updateInProgress(
+        { ...record, revision: 4, updatedAt: 600 },
+        2
       )
     ).resolves.toBe(false);
   });
