@@ -88,15 +88,15 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 
 ### M6 — Interactive music tools
 
-- [ ] Tuning-aware fretboard pitch model and standard E tuning (PR #45).
-- [ ] Interactive fretboard explorer, sharp/flat spelling, note finding and keyboard navigation (PR #45).
-- [ ] Persist handedness per learner profile and mirror only the diagram presentation (PR #45).
-- [ ] Chord diagrams and chord laboratory.
-- [ ] Chord-transition drills with clean-change quality tracked separately from speed.
-- [ ] Metronome and reference tones.
+- [x] Tuning-aware fretboard pitch model and standard E tuning (merged PR #45).
+- [x] Interactive fretboard explorer, sharp/flat spelling, note finding and keyboard navigation (merged PR #45).
+- [x] Persist handedness per learner profile and mirror only the diagram presentation (merged PR #45).
+- [ ] Chord diagrams and chord library (PR #46).
+- [ ] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
+- [ ] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
 - [ ] Chromatic tuner with explicit microphone permission.
 
-PR #45 is the first M6 slice. It establishes the music-domain calculations and a usable fretboard explorer; chord and metronome tools remain separate reviewable slices.
+PR #45 is merged and provides the tuning-aware fretboard explorer. PR #46 delivers the separate chord library and Web Audio metronome slices with their own browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
 
 ### M7 — Practice studio
 
