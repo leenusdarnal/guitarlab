@@ -1,5 +1,8 @@
 import type { PageServerLoad } from './$types';
-import { getCurriculumStats, listCurriculumRoutes } from '../../lib/server/curriculum/catalog';
+import {
+  getCurriculumStats,
+  listCurriculumRoutes
+} from '../../lib/server/curriculum/catalog';
 
 export const load: PageServerLoad = ({ setHeaders }) => {
   // This route contains only authored public curriculum metadata.
