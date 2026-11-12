@@ -247,7 +247,7 @@ try {
     `Browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and mobile layout.'
+    'Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and desktop/mobile offline layout.'
   );
 } catch (error) {
   console.error(error);
