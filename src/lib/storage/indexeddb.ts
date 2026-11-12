@@ -9,8 +9,7 @@ import {
   updateLessonProgress
 } from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
-import year1Curriculum from '../../../content/curriculum/year-1.json';
-import year1Lessons from '../../../content/curriculum/year-1-lessons.json';
+import year1DashboardIndex from '../../../content/curriculum/year-1-dashboard-index.json';
 import { systemRuntime } from '../repositories/contracts';
 import type {
   AssessmentAttemptRecord,
@@ -26,7 +25,7 @@ import type {
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 2;
+export const LOCAL_DATABASE_VERSION = 3;
 
 const stores = {
   metadata: 'metadata',
@@ -160,6 +159,10 @@ export function openLocalDatabase(
       }
       if (!sessions.indexNames.contains('byStatus')) {
         sessions.createIndex('byStatus', 'status');
+      }
+      // M7 practice creation must inspect only this learner's active/paused sessions.
+      if (!sessions.indexNames.contains('byLearnerStatus')) {
+        sessions.createIndex('byLearnerStatus', ['learnerId', 'status']);
       }
       // M7 session history needs an efficient learner/status/time lookup.
       if (!sessions.indexNames.contains('byLearnerStatusStartedAt')) {
@@ -442,16 +445,16 @@ export function createIndexedDbRepositories(
         async (tx) => {
           const store = tx.objectStore(stores.practiceSessions);
           // IndexedDB serializes read/write transactions across tabs.
-          const existing = await requestResult<PracticeSessionRecord[]>(
-            store.getAll()
-          );
-          if (
-            existing.some(
-              (row) =>
-                row.learnerId === session.learnerId &&
-                (row.status === 'in_progress' || row.status === 'paused')
+          const activeStatuses = store.index('byLearnerStatus');
+          const [inProgress, paused] = await Promise.all([
+            requestResult<PracticeSessionRecord[]>(
+              activeStatuses.getAll([session.learnerId, 'in_progress'])
+            ),
+            requestResult<PracticeSessionRecord[]>(
+              activeStatuses.getAll([session.learnerId, 'paused'])
             )
-          ) {
+          ]);
+          if (inProgress.length > 0 || paused.length > 0) {
             throw new Error(
               'Finish or resume your existing practice session before starting another.'
             );
@@ -703,8 +706,8 @@ export async function loadActiveLearnerDashboard() {
 
         return buildDashboardSnapshot({
           profile,
-          lessons: year1Lessons.lessons,
-          phases: year1Curriculum.phases,
+          lessons: year1DashboardIndex.lessons,
+          phases: year1DashboardIndex.phases,
           progress,
           mastery,
           practiceSessions,

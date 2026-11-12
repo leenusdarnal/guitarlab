@@ -40,11 +40,11 @@ Run the applicable checks on desktop Chrome/Edge and on physical iOS Safari and 
 
 ### 2. IndexedDB upgrade
 
-- [ ] If a pre-v2 local GuitarLab profile exists, open the app and allow the v1-to-v2 upgrade to complete.
+- [ ] If a pre-v3 local GuitarLab profile exists, open the app and allow the v1-to-v3 upgrade to complete.
 - [ ] Confirm the active learner and preferences are unchanged.
 - [ ] Confirm existing practice-session records remain available.
 - [ ] Confirm the app loads without a storage warning or uncaught browser error.
-- [ ] If there is no pre-v2 database on the device, record this check as **not applicable**; do not manufacture real learner data to simulate it. The seeded v1-to-v2 migration is covered by Chromium CI.
+- [ ] If there is no pre-v2 database on the device, record this check as **not applicable**; do not manufacture real learner data to simulate it. The seeded v1-to-v3 migration is covered by Chromium CI.
 
 ### 3. Offline app shell
 
