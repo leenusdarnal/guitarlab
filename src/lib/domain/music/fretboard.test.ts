@@ -11,7 +11,7 @@ import {
 
 describe('standard guitar fretboard', () => {
   it('uses standard E–A–D–G–B–E open-string pitches', () => {
-    const expected = [
+    const expected: ReadonlyArray<readonly [number, number, string, number]> = [
       [6, 40, 'E', 2],
       [5, 45, 'A', 2],
       [4, 50, 'D', 3],
