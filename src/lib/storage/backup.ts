@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { assessmentAttemptInputSchema } from '../domain/learning/assessment';
 import { skillMasteryUpdateSchema } from '../domain/learning/mastery';
 import { profilePreferencesSchema } from '../domain/profile/preferences';
+import { practiceEvidenceInputSchema } from '../domain/learning/practice-evidence';
 
 export const LEARNER_BACKUP_FORMAT = 'guitarlab-learner-backup' as const;
 export const LEARNER_BACKUP_VERSION = 1 as const;
@@ -96,7 +97,9 @@ export const learnerBackupRecordsSchema = z
     completionEvents: boundedRecords(lessonCompletionEventSchema),
     assessmentAttempts: boundedRecords(assessmentAttemptSchema),
     skillMastery: boundedRecords(skillMasterySchema),
-    practiceSessions: boundedRecords(practiceSessionSchema)
+    practiceSessions: boundedRecords(practiceSessionSchema),
+    // Optional for backwards compatibility with backups created before M7 evidence.
+    practiceEvidence: boundedRecords(practiceEvidenceInputSchema).optional()
   })
   .strict();
 
@@ -127,7 +130,8 @@ export const learnerBackupSchema = z
       ...records.completionEvents.map((record) => record.learnerId),
       ...records.assessmentAttempts.map((record) => record.learnerId),
       ...records.skillMastery.map((record) => record.learnerId),
-      ...records.practiceSessions.map((record) => record.learnerId)
+      ...records.practiceSessions.map((record) => record.learnerId),
+      ...(records.practiceEvidence ?? []).map((record) => record.learnerId)
     ];
 
     if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
@@ -153,7 +157,11 @@ export const learnerBackupSchema = z
             `${record.learnerId}:${record.curriculumReleaseId}:${record.skillId}`
         )
       ],
-      ['practiceSessions', records.practiceSessions.map((record) => record.id)]
+      ['practiceSessions', records.practiceSessions.map((record) => record.id)],
+      [
+        'practiceEvidence',
+        (records.practiceEvidence ?? []).map((record) => record.id)
+      ]
     ];
 
     for (const [collection, keys] of uniqueCollections) {
@@ -179,6 +187,22 @@ export const learnerBackupSchema = z
         path: ['records', 'completionEvents'],
         message:
           'Every completion event must reference an included progress record.'
+      });
+    }
+
+    const sessionIds = new Set(
+      records.practiceSessions.map((session) => session.id)
+    );
+    if (
+      (records.practiceEvidence ?? []).some(
+        (evidence) => !sessionIds.has(evidence.sessionId)
+      )
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['records', 'practiceEvidence'],
+        message:
+          'Every practice observation must reference an included practice session.'
       });
     }
 
@@ -269,6 +293,7 @@ export type RestorePreview = {
     assessmentAttempts: RecordChange;
     skillMastery: RecordChange;
     practiceSessions: RecordChange;
+    practiceEvidence: RecordChange;
   };
   totals: RecordChange;
 };
@@ -308,6 +333,11 @@ export function createRestorePreview(
     practiceSessions: compareRecords(
       incoming.records.practiceSessions,
       existing?.practiceSessions ?? [],
+      (record) => record.id
+    ),
+    practiceEvidence: compareRecords(
+      incoming.records.practiceEvidence ?? [],
+      existing?.practiceEvidence ?? [],
       (record) => record.id
     )
   };
