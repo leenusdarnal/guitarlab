@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type {
   LessonCompletionEventRecord,
-  LessonProgressRecord
+  LessonProgressRecord,
+  PracticeSessionRecord
 } from '../repositories/contracts';
 import {
   createEmptyLocalLearnerProfile,
@@ -116,15 +117,24 @@ class FakeStore {
     const fields =
       name === 'byLearnerReleaseLesson'
         ? ['learnerId', 'curriculumReleaseId', 'lessonId']
-        : ['learnerId', 'curriculumReleaseId', 'skillId'];
+        : name === 'byLearnerReleaseSkill'
+          ? ['learnerId', 'curriculumReleaseId', 'skillId']
+          : ['learnerId', 'status'];
+    const matches = (record: unknown, key: IDBValidKey) => {
+      const value = record as Record<string, unknown>;
+      const candidate = fields.map((field) => value[field]);
+      return JSON.stringify(candidate) === JSON.stringify(key);
+    };
     return {
       get: (key: IDBValidKey) =>
         this.tx().request(() =>
-          [...this.records.values()].find((record) => {
-            const value = record as Record<string, unknown>;
-            const candidate = fields.map((field) => value[field]);
-            return JSON.stringify(candidate) === JSON.stringify(key);
-          })
+          [...this.records.values()].find((record) => matches(record, key))
+        ),
+      getAll: (key: IDBValidKey) =>
+        this.tx().request(() =>
+          [...this.records.values()]
+            .filter((record) => matches(record, key))
+            .map((record) => structuredClone(record))
         )
     };
   }
@@ -310,7 +320,7 @@ describe('local learner profile persistence', () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
     const repository = createIndexedDbRepositories(database).practice;
-    const session = {
+    const session: PracticeSessionRecord = {
       id: 'session-1',
       learnerId: profile.id,
       primaryCurriculumReleaseId: null,
@@ -327,9 +337,34 @@ describe('local learner profile persistence', () => {
       createdAt: 100,
       updatedAt: 100
     };
+    await repository.create({
+      ...session,
+      id: 'session-history',
+      status: 'completed',
+      endedAt: 200
+    });
     await repository.create(session);
     await expect(
       repository.create({ ...session, id: 'session-2' })
+    ).rejects.toThrow(/existing practice session/i);
+
+    const pausedDatabase = makeDatabase();
+    const pausedProfile = await ensureActiveLearnerProfile(pausedDatabase);
+    const pausedRepository =
+      createIndexedDbRepositories(pausedDatabase).practice;
+    await pausedRepository.create({
+      ...session,
+      id: 'session-paused',
+      learnerId: pausedProfile.id,
+      status: 'paused',
+      activeStartedAt: null
+    });
+    await expect(
+      pausedRepository.create({
+        ...session,
+        id: 'session-after-paused',
+        learnerId: pausedProfile.id
+      })
     ).rejects.toThrow(/existing practice session/i);
   });
 

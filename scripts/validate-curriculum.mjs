@@ -13,13 +13,14 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const unique = (values) => new Set(values).size === values.length;
 const isText = (value) => typeof value === "string" && value.trim().length > 0;
 
-const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons] = await Promise.all([
+const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex] = await Promise.all([
   readJson("content/curriculum/year-1.json"),
   readJson("content/curriculum/year-2.json"),
   readJson("content/curriculum/year-3-specialisations.json"),
   readJson("content/curriculum/year-1-lessons.json"),
   readJson("content/curriculum/year-2-lessons.json"),
-  readJson("content/curriculum/year-3-specialisation-lessons.json")
+  readJson("content/curriculum/year-3-specialisation-lessons.json"),
+  readJson("content/curriculum/year-1-dashboard-index.json")
 ]);
 
 const checkOutline = (name, outline, expectedCount) => {
@@ -97,6 +98,23 @@ const validateLessons = (name, dataset, outline, expectedCount, isYear3 = false)
 validateLessons("Year 1 lessons", y1Lessons, y1, 52);
 validateLessons("Year 2 lessons", y2Lessons, y2, 52);
 validateLessons("Year 3 lessons", y3Lessons, y3, 48, true);
+
+const expectedDashboardLessons = y1Lessons.lessons.map((lesson) => ({
+  id: lesson.id,
+  week: lesson.week,
+  title: lesson.title,
+  focus: lesson.focus,
+  estimatedMinutes: lesson.estimatedMinutes
+}));
+check(
+  y1DashboardIndex.schemaVersion === 1 &&
+    y1DashboardIndex.outlineVersion === y1.version &&
+    y1DashboardIndex.contentVersion === y1Lessons.version &&
+    JSON.stringify(y1DashboardIndex.phases) === JSON.stringify(y1.phases) &&
+    JSON.stringify(y1DashboardIndex.lessons) ===
+      JSON.stringify(expectedDashboardLessons),
+  "Year 1 dashboard index is stale; run npm run curriculum:index"
+);
 
 if (failures.length) {
   console.error(`Curriculum validation failed with ${failures.length} issue(s):`);

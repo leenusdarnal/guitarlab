@@ -176,11 +176,15 @@ try {
         );
     });
     const upgraded =
-      database.version === 2 &&
+      database.version === 3 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
-        .indexNames.contains('byLearnerStatusStartedAt');
+        .indexNames.contains('byLearnerStatusStartedAt') &&
+      database
+        .transaction('practiceSessions')
+        .objectStore('practiceSessions')
+        .indexNames.contains('byLearnerStatus');
     database.close();
     return upgraded;
   });
@@ -222,21 +226,23 @@ try {
       practiceMinutes: profile?.preferences?.practiceMinutes ?? null,
       instrument: profile?.preferences?.instrument ?? null,
       migratedSessionId: migratedSession?.id ?? null,
-      sessionIndex: sessions.indexNames.contains('byLearnerStatusStartedAt')
+      sessionIndex: sessions.indexNames.contains('byLearnerStatusStartedAt'),
+      learnerStatusIndex: sessions.indexNames.contains('byLearnerStatus')
     };
     database.close();
     return result;
   });
   assert.equal(
     upgradeResult.version,
-    2,
-    'The existing v1 database should upgrade to v2'
+    3,
+    'The existing v1 database should upgrade to v3'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
   assert.equal(upgradeResult.instrument, 'acoustic');
   assert.equal(upgradeResult.migratedSessionId, 'legacy-session-001');
   assert.equal(upgradeResult.sessionIndex, true);
+  assert.equal(upgradeResult.learnerStatusIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
     'assessmentAttempts',
     'learnerProfiles',

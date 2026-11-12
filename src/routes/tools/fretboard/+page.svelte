@@ -534,7 +534,7 @@
   }
   .fret-numbers[data-frets='24'],
   .fret-row[data-frets='24'] {
-    min-width: 640px;
+    min-width: 700px;
   }
   .string-heading,
   .fret-number {
@@ -555,8 +555,8 @@
   }
   .fret-cell {
     display: flex;
-    min-width: 0;
-    min-height: 30px;
+    min-width: 24px;
+    min-height: 40px;
     align-items: center;
     justify-content: center;
     gap: 1px;

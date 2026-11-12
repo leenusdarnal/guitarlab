@@ -6,7 +6,7 @@ GuitarLab creates one active learner profile on the first client-side applicatio
 
 The initial profile starts empty. Instrument, handedness, tuning, starting point, goals, practice duration, availability and lesson-presentation preferences remain unset until the learner chooses them in onboarding. No lesson completion, assessment, mastery or practice session is created by first launch.
 
-## Database version 2
+## Database version 3
 
 The database is opened by `src/lib/storage/indexeddb.ts`. Its schema version is explicit and must be increased when a later release adds or changes stores or indexes.
 
@@ -20,7 +20,7 @@ The database is opened by `src/lib/storage/indexeddb.ts`. Its schema version is 
 | `skillMastery` | learner + release + skill | Derived evidence-based mastery snapshot |
 | `practiceSessions` | `id` | Planned and actual practice activity |
 
-Indexes support lookup by learner, learner/release/lesson, learner/release/skill, progress, practice status, and the composite learner/status/start-time session history query. Version 2 adds `byLearnerStatusStartedAt` to the existing `practiceSessions` store for the upcoming M7 session-history workflow. The v1-to-v2 upgrade is additive: it preserves the existing stores, active learner, preferences and practice-session records while adding the index. Completion writes are kept in one IndexedDB transaction with their event. Practice updates use a read/write transaction and only replace a record still marked `in_progress`.
+Indexes support lookup by learner, learner/release/lesson, learner/release/skill, progress, practice status, and the composite learner/status/start-time session history query. Version 2 adds `byLearnerStatusStartedAt` to the existing `practiceSessions` store for the upcoming M7 session-history workflow. The v1-to-v2 upgrade is additive and preserves existing stores and learner records while adding the practice-session history index. The v2-to-v3 upgrade adds the `byLearnerStatus` compound index used to find only the active learner's in-progress and paused sessions; it does not rewrite or remove existing records. Completion writes are kept in one IndexedDB transaction with their event. Practice updates use a read/write transaction and only replace a record still marked `in_progress`.
 
 ## Application boundary
 
@@ -31,7 +31,7 @@ Stored preferences are validated again when read. If the browser does not provid
 ## Migrations and recovery
 
 - Database upgrades are additive through IndexedDB's `onupgradeneeded` lifecycle.
-- The v1-to-v2 migration adds the practice-session composite index without replacing existing stores or records.
+- The v1-to-v2 migration adds the practice-session history index; the v2-to-v3 migration adds the learner/status lookup index. Both migrations are additive and preserve existing stores and records.
 - Existing stores are preserved when a later schema version is introduced.
 - The adapter closes connections on `versionchange` so another tab can perform an upgrade.
 - A blocked upgrade asks the learner to close other GuitarLab tabs.
@@ -54,7 +54,7 @@ The local database is not bound to D1, and no cloud sync route is introduced. Do
 ## Verification
 
 - Unit tests cover fresh-profile defaults, reuse of the active profile, validated preference updates and the absence of any automatic mastery record.
-- Chromium CI seeds a real v1 IndexedDB database, launches the app to trigger the v2 upgrade, and verifies that the active learner, preferences and existing practice-session record survive while the new composite index and all stores are present.
+- Chromium CI seeds a real v1 IndexedDB database, launches the app to trigger the v2 upgrade, and verifies that the active learner, preferences and existing practice-session record survive while both practice-session indexes and all stores are present.
 - Curriculum browser CI verifies cached-lesson offline reload and the unvisited-page fallback at desktop (1440px) and mobile (390px) viewport sizes.
 - Physical desktop/mobile browser checks, including iOS Safari and Android Chrome where available, remain manual acceptance tasks. Use the [manual acceptance runbook](MANUAL_ACCEPTANCE.md).
 - CI also runs formatting, lint, Svelte/TypeScript checks, unit tests, curriculum validation and the Cloudflare Worker build.

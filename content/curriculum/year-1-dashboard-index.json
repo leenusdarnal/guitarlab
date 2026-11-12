@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "outlineVersion": "1.1.0",
+  "contentVersion": "1.0.0",
+  "phases": [
+    {
+      "id": "beginner-base",
+      "title": "Beginner base",
+      "firstWeek": 1,
+      "lastWeek": 12,
+      "goal": "Setup, clean notes, reading basics, open chords, pulse and first review."
+    },
+    {
+      "id": "skills-in-context",
+      "title": "Skills in context",
+      "firstWeek": 13,
+      "lastWeek": 24,
+      "goal": "Picking, fingerstyle, scales, shell chords, blues, expressive technique and the mid-year test."
+    },
+    {
+      "id": "early-intermediate",
+      "title": "Early intermediate",
+      "firstWeek": 25,
+      "lastWeek": 36,
+      "goal": "Fretboard navigation, triads, harmony, rhythm subdivisions, legato and review."
+    },
+    {
+      "id": "intermediate-bridge",
+      "title": "Intermediate bridge",
+      "firstWeek": 37,
+      "lastWeek": 52,
+      "goal": "Ear learning, creative work, genre vocabulary, reading, performance and year-end assessment."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "y1-w01-lesson",
+      "week": 1,
+      "title": "Meet your guitar",
+      "focus": "Setup, posture, string names and tuning",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w02-lesson",
+      "week": 2,
+      "title": "Clear single notes",
+      "focus": "Fretting-hand basics, clean tone and relaxed pressure",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w03-lesson",
+      "week": 3,
+      "title": "Read guitar maps",
+      "focus": "Chord-box orientation, TAB lines and fret numbers",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w04-lesson",
+      "week": 4,
+      "title": "First chord shapes",
+      "focus": "Em and G; checking each string",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w05-lesson",
+      "week": 5,
+      "title": "Open chords A, D and E",
+      "focus": "Three essential open-chord shapes",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w06-lesson",
+      "week": 6,
+      "title": "First complete chord loop",
+      "focus": "Chord changes with pulse and a first musical phrase",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w07-lesson",
+      "week": 7,
+      "title": "Strum in time",
+      "focus": "Downstrokes, upstrokes and subdivisions",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w08-lesson",
+      "week": 8,
+      "title": "Optional notation: strings 1 and 2",
+      "focus": "Parallel track: first-position notes on high E and B",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w09-lesson",
+      "week": 9,
+      "title": "Add C, Am and Dm",
+      "focus": "Major/minor open chords and smooth transitions",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w10-lesson",
+      "week": 10,
+      "title": "Make rhythm musical",
+      "focus": "Accents, rests and dynamics",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w11-lesson",
+      "week": 11,
+      "title": "Your first music map",
+      "focus": "Open-string map, semitone steps and first fretboard landmarks",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w12-lesson",
+      "week": 12,
+      "title": "Quarter 1 review and recording",
+      "focus": "Consolidate tuning, reading, open chords and pulse",
+      "estimatedMinutes": 40
+    },
+    {
+      "id": "y1-w13-lesson",
+      "week": 13,
+      "title": "Optional notation: strings 3 and 4",
+      "focus": "Parallel track: extend staff-reading to G and D strings",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w14-lesson",
+      "week": 14,
+      "title": "Optional notation: low E and A landmarks",
+      "focus": "Parallel track: low-string fretboard landmarks",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w15-lesson",
+      "week": 15,
+      "title": "Pick control and clean tone",
+      "focus": "Alternate picking and string crossing",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w16-lesson",
+      "week": 16,
+      "title": "Fingerstyle foundation",
+      "focus": "Thumb and fingers as separate roles",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w17-lesson",
+      "week": 17,
+      "title": "Build the major scale",
+      "focus": "Whole-step/half-step formula and a small C major pattern",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w18-lesson",
+      "week": 18,
+      "title": "Shell chords: roots and guide tones",
+      "focus": "Three-note chord grips as a bridge to movable chords",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w19-lesson",
+      "week": 19,
+      "title": "Your first 12-bar blues",
+      "focus": "Blues form, dominant seventh colour and groove",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w20-lesson",
+      "week": 20,
+      "title": "Play with expression",
+      "focus": "Slides, bends, dynamics and phrasing",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w21-lesson",
+      "week": 21,
+      "title": "Movable power chords",
+      "focus": "Root-5 shapes, muting and rock rhythm",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w22-lesson",
+      "week": 22,
+      "title": "Approach barre chords safely",
+      "focus": "Partial barre shape and efficient pressure",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w23-lesson",
+      "week": 23,
+      "title": "Minor pentatonic box 1",
+      "focus": "Map the five notes and find the roots",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w24-lesson",
+      "week": 24,
+      "title": "Half-year playing test",
+      "focus": "Integrate chords, rhythm, melody and recording",
+      "estimatedMinutes": 40
+    },
+    {
+      "id": "y1-w25-lesson",
+      "week": 25,
+      "title": "Find roots and octaves",
+      "focus": "Fretboard navigation beyond open position",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w26-lesson",
+      "week": 26,
+      "title": "Triads on the top strings",
+      "focus": "Compact voicings and inversions",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w27-lesson",
+      "week": 27,
+      "title": "Chords in keys",
+      "focus": "Roman numerals and diatonic chord families",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w28-lesson",
+      "week": 28,
+      "title": "Capo and transposition",
+      "focus": "Move a song to a comfortable singing key",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w29-lesson",
+      "week": 29,
+      "title": "Suspended and seventh chords",
+      "focus": "Add colour tones without losing pulse",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w30-lesson",
+      "week": 30,
+      "title": "Sixteenth-note rhythm",
+      "focus": "Count subdivisions and control accents",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w31-lesson",
+      "week": 31,
+      "title": "Hammer-ons and pull-offs",
+      "focus": "Legato notes with consistent volume",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w32-lesson",
+      "week": 32,
+      "title": "Quarter 2 review",
+      "focus": "Revisit notes, chords, fingerstyle, scales and blues",
+      "estimatedMinutes": 40
+    },
+    {
+      "id": "y1-w33-lesson",
+      "week": 33,
+      "title": "Major pentatonic and phrasing",
+      "focus": "Contrast major and minor pentatonic colour",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w34-lesson",
+      "week": 34,
+      "title": "Improvise with motifs",
+      "focus": "Repeat, vary and resolve short melodic ideas",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w35-lesson",
+      "week": 35,
+      "title": "Arpeggios and chord tones",
+      "focus": "Outline harmony with notes of each chord",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w36-lesson",
+      "week": 36,
+      "title": "Three notes per string",
+      "focus": "Extend the scale beyond first position",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w37-lesson",
+      "week": 37,
+      "title": "Learn a melody by ear",
+      "focus": "Listen, sing, find and verify notes",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w38-lesson",
+      "week": 38,
+      "title": "Songwriting and arrangement",
+      "focus": "Create an original 4- or 8-bar section",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w39-lesson",
+      "week": 39,
+      "title": "Blues turnarounds",
+      "focus": "End a blues chorus and lead into the next cycle",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w40-lesson",
+      "week": 40,
+      "title": "Rock rhythm and muting",
+      "focus": "Palm muting, power-chord changes and silence",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w41-lesson",
+      "week": 41,
+      "title": "Jazz chord grips",
+      "focus": "Basic maj7, m7 and dominant 7 colour",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w42-lesson",
+      "week": 42,
+      "title": "The ii-V-I connection",
+      "focus": "Connect jazz chords with voice leading",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w43-lesson",
+      "week": 43,
+      "title": "Comping styles",
+      "focus": "Change the accompaniment rhythm without changing harmony",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w44-lesson",
+      "week": 44,
+      "title": "Quarter 3 review",
+      "focus": "Retest barre, triads, ear skills, 16ths and lead phrasing",
+      "estimatedMinutes": 40
+    },
+    {
+      "id": "y1-w45-lesson",
+      "week": 45,
+      "title": "Sight-read across strings",
+      "focus": "Read pitch and rhythm together",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w46-lesson",
+      "week": 46,
+      "title": "Move between positions",
+      "focus": "Connect two scale areas using a guide tone",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w47-lesson",
+      "week": 47,
+      "title": "Chord melody basics",
+      "focus": "Place melody notes above simple chord tones",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w48-lesson",
+      "week": 48,
+      "title": "Compose a complete study",
+      "focus": "Write an 8-bar piece with clear form",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w49-lesson",
+      "week": 49,
+      "title": "Dynamics and articulation",
+      "focus": "Control volume, note length and phrase endings",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w50-lesson",
+      "week": 50,
+      "title": "Repertoire polishing",
+      "focus": "Bring one complete piece close to performance-ready",
+      "estimatedMinutes": 30
+    },
+    {
+      "id": "y1-w51-lesson",
+      "week": 51,
+      "title": "Mock performance and transcription",
+      "focus": "Perform, listen back and reproduce one short phrase",
+      "estimatedMinutes": 40
+    },
+    {
+      "id": "y1-w52-lesson",
+      "week": 52,
+      "title": "Year-end playing test",
+      "focus": "Demonstrate rhythm, chords, reading, lead/fingerstyle and musicianship",
+      "estimatedMinutes": 40
+    }
+  ]
+}

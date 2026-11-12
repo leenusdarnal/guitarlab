@@ -32,13 +32,5 @@ export default tseslint.config(
         parser: tseslint.parser
       }
     }
-  },
-  {
-    files: ['**/*.svelte'],
-    languageOptions: {
-      parserOptions: {
-        parser: tseslint.parser
-      }
-    }
   }
 );

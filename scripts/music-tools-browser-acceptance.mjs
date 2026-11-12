@@ -144,6 +144,26 @@ try {
   });
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'networkidle' });
+  const firstFretCell = page.locator('.fret-cell').first();
+  await firstFretCell.waitFor();
+  const fretCellSize = await firstFretCell.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
+  assert.ok(
+    fretCellSize.width >= 24 && fretCellSize.height >= 40,
+    `Fretboard touch target is too small on mobile: ${JSON.stringify(fretCellSize)}`
+  );
+  await firstFretCell.focus();
+  await firstFretCell.press('ArrowRight');
+  assert.equal(
+    await page.evaluate(() =>
+      document.activeElement?.getAttribute('data-fret')
+    ),
+    '1',
+    'Fretboard arrow-key navigation should move to the adjacent fret'
+  );
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     page: document.documentElement.scrollWidth
