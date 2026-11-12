@@ -753,6 +753,29 @@ try {
   );
   await fretboardMobileContext.close();
 
+  // M7.1 Practice Studio: local start, reload recovery, elapsed-time save and history.
+  await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
+  await page.locator('#duration').fill('2');
+  await page.locator('#focus').fill('Browser acceptance scale drill');
+  await page.getByRole('button', { name: 'Start practice' }).click();
+  await page
+    .getByRole('heading', { name: 'Your session is in progress' })
+    .waitFor();
+  await page.reload({ waitUntil: 'networkidle' });
+  await page
+    .getByRole('heading', { name: 'Your session is in progress' })
+    .waitFor();
+  await page.getByText('Browser acceptance scale drill').first().waitFor();
+  await delay(1_200);
+  await page.getByRole('button', { name: 'Finish and save session' }).click();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'Elapsed session time is activity history' })
+    .waitFor();
+  await page.getByText('completed', { exact: true }).waitFor();
+  await page.getByText(/1 min 1 sec|1 min 2 sec/).waitFor();
+
   assert.deepEqual(
     pageErrors,
     [],
