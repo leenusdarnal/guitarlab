@@ -686,7 +686,9 @@ export async function finishPracticeSession(
     updatedAt: now
   };
 
-  if (!(await dependencies.practice.updateIfStatus(completed, current.status))) {
+  if (
+    !(await dependencies.practice.updateIfStatus(completed, current.status))
+  ) {
     throw new ConflictError('This practice session was already updated.');
   }
 

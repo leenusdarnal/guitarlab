@@ -366,7 +366,9 @@ export const practiceSessions = sqliteTable(
     learnerId: text('learner_id').notNull(),
     primaryCurriculumReleaseId: text('primary_curriculum_release_id'),
     primaryLessonId: text('primary_lesson_id'),
-    status: text('status', { enum: ['in_progress', 'paused', 'completed', 'abandoned'] })
+    status: text('status', {
+      enum: ['in_progress', 'paused', 'completed', 'abandoned']
+    })
       .notNull()
       .default('in_progress'),
     plannedMinutes: integer('planned_minutes'),

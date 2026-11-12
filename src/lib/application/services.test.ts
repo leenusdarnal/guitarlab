@@ -647,8 +647,18 @@ describe('M2.2 application service boundaries', () => {
 
   it('pauses and resumes active time without counting the paused interval', async () => {
     const session = await startPracticeSession(
-      { learnerId, plannedMinutes: 20, primaryCurriculumReleaseId: null, primaryLessonId: null, focus: 'Pause/resume test' },
-      { curriculum: harness.curriculumRepository, practice: harness.practiceRepository, runtime: harness.runtime }
+      {
+        learnerId,
+        plannedMinutes: 20,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        focus: 'Pause/resume test'
+      },
+      {
+        curriculum: harness.curriculumRepository,
+        practice: harness.practiceRepository,
+        runtime: harness.runtime
+      }
     );
     harness.setNow(session.startedAt + 5_500);
     const paused = await pausePracticeSession(

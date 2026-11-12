@@ -18,7 +18,7 @@ export type PracticeReview = {
 export type RecentPracticeSignal = {
   focus: string | null;
   difficulty: number | null;
-  status: 'in_progress' | 'paused' | 'completed' | 'abandoned';
+  status: 'in_progress' | 'completed' | 'abandoned';
   startedAt: number;
 };
 

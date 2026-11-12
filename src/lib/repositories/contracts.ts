@@ -172,10 +172,13 @@ export interface PracticeSessionRepository {
   create(session: PracticeSessionRecord): Promise<void>;
   findById(sessionId: string): Promise<PracticeSessionRecord | null>;
   /**
-   * Compare-and-set update: only an in_progress record may be changed.
-   * Returns false if another action already completed/abandoned the session.
+   * Compare-and-set update: only the expected active status may be changed.
+   * Returns false if another action already changed the session status.
    */
-  updateIfStatus(session: PracticeSessionRecord, expectedStatus: 'in_progress' | 'paused'): Promise<boolean>;
+  updateIfStatus(
+    session: PracticeSessionRecord,
+    expectedStatus: 'in_progress' | 'paused'
+  ): Promise<boolean>;
 }
 
 /** Injectable system boundary keeps use cases deterministic and testable. */
