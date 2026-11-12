@@ -1,6 +1,6 @@
 # GuitarLab optimization roadmap
 
-**Baseline:** `main` at `256971c3190949439369f018bd6fb7057dcbcbfd` (12 November 2026).  
+**Baseline:** `main` at `9a4d01452b8d6aaab3b3941140af7344955632e4` (12 November 2026).  
 **Scope:** incorporate findings from the targeted architecture, music-technology, UX and offline-readiness audit.
 
 This roadmap is intentionally incremental. Preserve the current SvelteKit / Svelte 5 / TypeScript / Cloudflare Workers architecture and local-first data model; do not replace the framework or introduce microservices.
@@ -14,7 +14,7 @@ This roadmap is intentionally incremental. Preserve the current SvelteKit / Svel
 - [x] Increase fretboard cell hit areas and add mobile touch/keyboard acceptance checks.
 - [x] Remove duplicate Svelte parser configuration from ESLint.
 - [ ] Capture a production bundle baseline and add a visual bundle report.
-- [ ] Add automated axe-core checks for dashboard, lesson reader and music tools.
+- [x] Add automated axe-core checks across dashboard, curriculum, lesson, onboarding, practice, settings and music tools (dark/light themes; desktop and 320px reflow).
 - [ ] Extend formatting checks to Svelte route components after normalizing existing Svelte file formatting.
 
 ### Curriculum payload result

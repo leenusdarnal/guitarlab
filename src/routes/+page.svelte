@@ -200,7 +200,7 @@
 
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
-    <a class="brand" href={resolve('/')} aria-label="GuitarLab home"><span class="brand-mark">G</span><span><strong>GuitarLab</strong><small>LEARN. PRACTISE. MASTER.</small></span></a>
+    <a class="brand" href={resolve('/')}><span class="brand-mark" aria-hidden="true">G</span><span><strong>GuitarLab</strong><small aria-hidden="true">LEARN. PRACTISE. MASTER.</small></span></a>
     <div class="nav-label">YOUR WORKSPACE</div>
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span aria-hidden="true">⌂</span> Today</a>
@@ -220,7 +220,7 @@
 
   <main class="main-area">
     <header class="topbar">
-      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation"><span aria-hidden="true">☰</span><strong>GuitarLab</strong></button>
+      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation — GuitarLab"><span aria-hidden="true">☰</span><strong>GuitarLab</strong></button>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions"><span class="status-pill"><i></i> Local-first learning</span><button class="icon-button" onclick={toggleTheme} aria-label="Toggle colour theme" title="Toggle theme">{theme === 'dark' ? '☼' : '☾'}</button><a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences">↗</a></div>
     </header>

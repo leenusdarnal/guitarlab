@@ -248,7 +248,7 @@
   .top span, .eyebrow { font-size: .72rem; letter-spacing: .12em; color: var(--muted, #aaa); }
   .intro { padding: 56px 0 28px; max-width: 660px; }
   .intro h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); line-height: 1.02; margin: 12px 0; }
-  .intro h1 em { color: var(--accent, #d5a65b); font-family: Georgia, serif; font-weight: 400; }
+  .intro h1 em { color: var(--primary, #96580f); font-family: Georgia, serif; font-weight: 400; }
   .intro > p:last-child, .muted { color: var(--muted, #aaa); line-height: 1.65; }
   .elapsed { font-size: clamp(2rem, 6vw, 3rem); font-variant-numeric: tabular-nums; font-weight: 700; margin: 18px 0; }
   .panel, .empty, .principle { border: 1px solid var(--border, #444); border-radius: 18px; padding: 24px; background: var(--surface, #222); }
@@ -257,9 +257,9 @@
   form { display: grid; gap: 10px; max-width: 520px; }
   label { font-size: .9rem; font-weight: 600; margin-top: 10px; }
   label span { font-weight: 400; color: var(--muted, #aaa); }
-  input { width: 100%; padding: 12px 14px; border: 1px solid var(--border, #666); border-radius: 9px; background: var(--background, #171715); color: inherit; font: inherit; }
+  input { width: 100%; padding: 12px 14px; border: 1px solid var(--border, #666); border-radius: 9px; background: var(--surface, #fffefa); color: var(--text, #24231f); font: inherit; }
   button { font: inherit; cursor: pointer; }
-  .primary { margin-top: 12px; padding: 12px 18px; border: 0; border-radius: 9px; background: var(--accent, #d5a65b); color: #171715; font-weight: 700; width: fit-content; }
+  .primary { margin-top: 12px; padding: 12px 18px; border: 0; border-radius: 9px; background: var(--primary, #96580f); color: var(--primary-ink, #fffaf0); font-weight: 700; width: fit-content; }
   .primary:disabled { opacity: .6; cursor: wait; }
   .session-actions { display: flex; flex-wrap: wrap; gap: 10px; }
   .secondary { background: transparent; border: 1px solid var(--border, #666); color: inherit; }
@@ -271,12 +271,12 @@
   li { display: flex; justify-content: space-between; gap: 18px; padding: 18px 4px; border-bottom: 1px solid var(--border, #444); }
   li p, .empty p, .principle p { color: var(--muted, #aaa); margin: 6px 0 0; line-height: 1.55; }
   .session-meta { display: grid; justify-items: end; gap: 6px; text-align: right; }
-  .session-meta .active { color: var(--accent, #d5a65b); }
+  .session-meta .active { color: var(--primary, #96580f); }
   .principle { margin-top: 28px; }
   .principle p { max-width: 700px; }
   .message { padding: 12px 16px; border-radius: 10px; background: var(--surface, #222); border: 1px solid var(--border, #555); }
   .error { border-color: #a65c52; color: #ffb5a9; }
-  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--accent, #d5a65b); outline-offset: 3px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--focus, #80510b); outline-offset: 3px; }
   @media (max-width: 600px) {
     .practice-page { padding: 20px 16px 48px; }
     .top span { max-width: 130px; text-align: right; }
