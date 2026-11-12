@@ -35,11 +35,7 @@ const OFFLINE_HTML = `<!doctype html>
   </main></body>
 </html>`;
 
-function isCacheableNavigation(
-  request: Request,
-  response: Response,
-  url: URL
-) {
+function isCacheableNavigation(request: Request, response: Response, url: URL) {
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
   if (url.origin !== worker.location.origin) return false;
   if (url.pathname.startsWith('/api/')) return false;
@@ -62,9 +58,7 @@ async function trimPageCache(cache: Cache) {
   const excess = pageRequests.length - MAX_CACHED_PAGES;
   if (excess > 0) {
     await Promise.all(
-      pageRequests
-        .slice(0, excess)
-        .map((request) => cache.delete(request))
+      pageRequests.slice(0, excess).map((request) => cache.delete(request))
     );
   }
 }
