@@ -54,7 +54,7 @@
       });
       focus = '';
       await refresh();
-      notice = 'Practice session started. Your elapsed time is tracked locally.';
+      notice = 'Practice session started. Elapsed session time is tracked locally.';
     } catch (cause) {
       error =
         cause instanceof Error
@@ -72,7 +72,7 @@
     try {
       await finishActivePracticeSession(activeSession.id);
       await refresh();
-      notice = 'Session saved. Time spent is activity history, not a skill assessment.';
+      notice = 'Session saved. Elapsed session time is activity history, not verified active practice or a skill assessment.';
     } catch (cause) {
       error =
         cause instanceof Error
@@ -115,8 +115,8 @@
     <p class="eyebrow">MILESTONE M7 · PRACTICE STUDIO</p>
     <h1>Make practice <em>count.</em></h1>
     <p>
-      Start a focused session, then save the time you actually practised. Your
-      record stays on this device.
+      Start a focused session, then save its elapsed duration. Your record stays
+      on this device.
     </p>
   </section>
 
@@ -214,8 +214,9 @@
   <aside class="principle">
     <strong>Practice time is not mastery.</strong>
     <p>
-      This first slice records session activity only. It does not award skill
-      levels, infer accuracy or claim that an exercise was performed correctly.
+      This first slice records wall-clock session duration only, including time
+      between reloads. It does not verify active playing, award skill levels,
+      infer accuracy or claim that an exercise was performed correctly.
       Exercise-level evidence and review scheduling will be added in subsequent
       M7 slices.
     </p>
