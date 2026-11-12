@@ -22,12 +22,18 @@ export class WebAudioMetronome {
   private beatIndex = 0;
   private bpm: number;
   private beatsPerBar: number;
+  private readonly onStateChange?: (running: boolean) => void;
 
   private readonly tickMilliseconds = 25;
   private readonly lookaheadSeconds = 0.1;
 
-  constructor(options?: { bpm?: number; beatsPerBar?: number }) {
+  constructor(options?: {
+    bpm?: number;
+    beatsPerBar?: number;
+    onStateChange?: (running: boolean) => void;
+  }) {
     this.bpm = validateMetronomeTempo(options?.bpm ?? 80);
+    this.onStateChange = options?.onStateChange;
     this.beatsPerBar = options?.beatsPerBar ?? 4;
     if (
       !Number.isInteger(this.beatsPerBar) ||
@@ -74,6 +80,7 @@ export class WebAudioMetronome {
     }
 
     this.running = true;
+    this.onStateChange?.(true);
     this.nextBeatTime = this.context.currentTime + 0.05;
     this.beatIndex = 0;
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
@@ -81,7 +88,9 @@ export class WebAudioMetronome {
   }
 
   stop(): void {
+    const wasRunning = this.running;
     this.running = false;
+    if (wasRunning) this.onStateChange?.(false);
     if (this.timer !== null) {
       clearTimeout(this.timer);
       this.timer = null;
@@ -189,7 +198,6 @@ export async function playReferenceTone(
         gain.disconnect();
         resolve();
       };
-      oscillator.onerror = () => reject(new Error('The reference tone could not be played.'));
       oscillator.start(startAt);
       oscillator.stop(endAt);
     });
