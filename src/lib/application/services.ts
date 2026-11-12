@@ -571,35 +571,75 @@ export async function startPracticeSession(
   return session;
 }
 
-const practiceSessionActionSchema = z.object({ learnerId: uuidSchema, sessionId: uuidSchema }).strict();
+const practiceSessionActionSchema = z
+  .object({ learnerId: uuidSchema, sessionId: uuidSchema })
+  .strict();
 
-export async function pausePracticeSession(input: unknown, dependencies: { practice: PracticeSessionRepository; runtime: ApplicationRuntime }): Promise<PracticeSessionRecord> {
+export async function pausePracticeSession(
+  input: unknown,
+  dependencies: {
+    practice: PracticeSessionRepository;
+    runtime: ApplicationRuntime;
+  }
+): Promise<PracticeSessionRecord> {
   const value = parseInput(practiceSessionActionSchema, input);
   const current = await dependencies.practice.findById(value.sessionId);
-  if (!current || current.learnerId !== value.learnerId) throw new NotFoundError('Practice session not found.');
-  if (current.status !== 'in_progress') throw new ConflictError('Only a running practice session can be paused.');
+  if (!current || current.learnerId !== value.learnerId) {
+    throw new NotFoundError('Practice session not found.');
+  }
+  if (current.status !== 'in_progress') {
+    throw new ConflictError('Only a running practice session can be paused.');
+  }
+
   const now = dependencies.runtime.now();
   const segmentStartedAt = current.activeStartedAt ?? current.startedAt;
-  if (now < segmentStartedAt) throw new InvalidStateError('The practice clock is earlier than the active segment start.');
+  if (now < segmentStartedAt) {
+    throw new InvalidStateError(
+      'The practice clock is earlier than the active segment start.'
+    );
+  }
+
   const paused: PracticeSessionRecord = {
     ...current,
     status: 'paused',
     activeStartedAt: null,
-    actualDurationSeconds: current.actualDurationSeconds + Math.floor((now - segmentStartedAt) / 1000),
+    actualDurationSeconds:
+      current.actualDurationSeconds +
+      Math.floor((now - segmentStartedAt) / 1000),
     updatedAt: now
   };
-  if (!(await dependencies.practice.updateIfStatus(paused, 'in_progress'))) throw new ConflictError('This practice session was already updated.');
+  if (!(await dependencies.practice.updateIfStatus(paused, 'in_progress'))) {
+    throw new ConflictError('This practice session was already updated.');
+  }
   return paused;
 }
 
-export async function resumePracticeSession(input: unknown, dependencies: { practice: PracticeSessionRepository; runtime: ApplicationRuntime }): Promise<PracticeSessionRecord> {
+export async function resumePracticeSession(
+  input: unknown,
+  dependencies: {
+    practice: PracticeSessionRepository;
+    runtime: ApplicationRuntime;
+  }
+): Promise<PracticeSessionRecord> {
   const value = parseInput(practiceSessionActionSchema, input);
   const current = await dependencies.practice.findById(value.sessionId);
-  if (!current || current.learnerId !== value.learnerId) throw new NotFoundError('Practice session not found.');
-  if (current.status !== 'paused') throw new ConflictError('Only a paused practice session can be resumed.');
+  if (!current || current.learnerId !== value.learnerId) {
+    throw new NotFoundError('Practice session not found.');
+  }
+  if (current.status !== 'paused') {
+    throw new ConflictError('Only a paused practice session can be resumed.');
+  }
+
   const now = dependencies.runtime.now();
-  const resumed: PracticeSessionRecord = { ...current, status: 'in_progress', activeStartedAt: now, updatedAt: now };
-  if (!(await dependencies.practice.updateIfStatus(resumed, 'paused'))) throw new ConflictError('This practice session was already updated.');
+  const resumed: PracticeSessionRecord = {
+    ...current,
+    status: 'in_progress',
+    activeStartedAt: now,
+    updatedAt: now
+  };
+  if (!(await dependencies.practice.updateIfStatus(resumed, 'paused'))) {
+    throw new ConflictError('This practice session was already updated.');
+  }
   return resumed;
 }
 
@@ -623,7 +663,11 @@ export async function finishPracticeSession(
   if (!current || current.learnerId !== value.learnerId) {
     throw new NotFoundError('Practice session not found.');
   }
-  if (current.status !== 'in_progress' && current.status !== 'paused') throw new ConflictError('Only an active or paused practice session can be completed.');
+  if (current.status !== 'in_progress' && current.status !== 'paused') {
+    throw new ConflictError(
+      'Only an active or paused practice session can be completed.'
+    );
+  }
 
   const now = dependencies.runtime.now();
   const segmentStartedAt = current.activeStartedAt ?? current.startedAt;
@@ -636,6 +680,7 @@ export async function finishPracticeSession(
   const completed: PracticeSessionRecord = {
     ...current,
     status: 'completed',
+    activeStartedAt: null,
     actualDurationSeconds: value.actualDurationSeconds,
     endedAt: now,
     updatedAt: now
