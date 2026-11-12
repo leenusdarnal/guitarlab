@@ -4,8 +4,6 @@
   import {
     finishActivePracticeSession,
     listActivePracticeSessions,
-    pauseActivePracticeSession,
-    resumeActivePracticeSession,
     startActivePracticeSession
   } from '../../lib/storage/practice';
   import type { PracticeSessionRecord } from '../../lib/repositories/contracts';
@@ -20,7 +18,7 @@
   let now = $state(Date.now());
 
   const activeSession = $derived(
-    sessions.find((session) => session.status === 'in_progress' || session.status === 'paused') ?? null
+    sessions.find((session) => session.status === 'in_progress') ?? null
   );
 
   async function refresh() {
@@ -66,24 +64,6 @@
     } finally {
       saving = false;
     }
-  }
-
-  async function togglePauseResume() {
-    if (!activeSession) return;
-    error = '';
-    saving = true;
-    try {
-      if (activeSession.status === 'paused') {
-        await resumeActivePracticeSession(activeSession.id);
-        notice = 'Session resumed. Paused time is excluded from active-session time.';
-      } else {
-        await pauseActivePracticeSession(activeSession.id);
-        notice = 'Session paused. Your accumulated active time has been saved.';
-      }
-      await refresh();
-    } catch (cause) {
-      error = cause instanceof Error ? cause.message : 'Could not update the practice session.';
-    } finally { saving = false; }
   }
 
   async function finishSession() {
@@ -150,17 +130,19 @@
     <section class="panel" aria-labelledby="session-heading">
       <p class="eyebrow">SESSION</p>
       {#if activeSession}
-        <h2 id="session-heading">{activeSession.status === 'paused' ? 'Your session is paused' : 'Your session is in progress'}</h2>
-        <p class="muted">Started {dateLabel(activeSession.startedAt)}. Paused intervals are excluded from the active-time total.</p>
-        <p class="elapsed" aria-live="off">{durationLabel(activeSession.actualDurationSeconds + (activeSession.status === 'in_progress' ? Math.max(0, Math.floor((now - (activeSession.activeStartedAt ?? activeSession.startedAt)) / 1000)) : 0))}</p>
+        <h2 id="session-heading">Your session is in progress</h2>
+        <p class="muted">
+          Started {dateLabel(activeSession.startedAt)}. You can return after a
+          reload; the original start time is retained.
+        </p>
+        <p class="elapsed" aria-live="off">{durationLabel(Math.max(0, Math.floor((now - activeSession.startedAt) / 1000)))}</p>
         {#if activeSession.focus}<p><strong>Focus:</strong> {activeSession.focus}</p>{/if}
         {#if activeSession.plannedMinutes}
           <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
         {/if}
-        <div class="session-actions">
-          <button class="primary" onclick={togglePauseResume} disabled={saving}>{saving ? 'Saving…' : activeSession.status === 'paused' ? 'Resume session' : 'Pause session'}</button>
-          <button class="primary secondary" onclick={finishSession} disabled={saving}>{saving ? 'Saving…' : 'Finish and save session'}</button>
-        </div>
+        <button class="primary" onclick={finishSession} disabled={saving}>
+          {saving ? 'Saving…' : 'Finish and save session'}
+        </button>
       {:else}
         <h2 id="session-heading">Start a practice session</h2>
         <form
@@ -215,7 +197,7 @@
               </div>
               <div class="session-meta">
                 <span class:active={session.status === 'in_progress'}>
-                  {session.status === 'in_progress' ? 'In progress' : session.status === 'paused' ? 'Paused' : session.status}
+                  {session.status === 'in_progress' ? 'In progress' : session.status}
                 </span>
                 <strong>
                   {session.status === 'completed'
@@ -233,7 +215,8 @@
   <aside class="principle">
     <strong>Practice time is not mastery.</strong>
     <p>
-      Active-time totals include only intervals between starting/resuming and pausing/finishing. They are self-reported session timing, not proof of playing. The app does not award skill levels,
+      This first slice records wall-clock session duration only, including time
+      between reloads. It does not verify active playing, award skill levels,
       infer accuracy or claim that an exercise was performed correctly.
       Exercise-level evidence and review scheduling will be added in subsequent
       M7 slices.
@@ -261,8 +244,6 @@
   button { font: inherit; cursor: pointer; }
   .primary { margin-top: 12px; padding: 12px 18px; border: 0; border-radius: 9px; background: var(--accent, #d5a65b); color: #171715; font-weight: 700; width: fit-content; }
   .primary:disabled { opacity: .6; cursor: wait; }
-  .session-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  .secondary { background: transparent; border: 1px solid var(--border, #666); color: inherit; }
   .history { margin-top: 38px; }
   .history-heading { display: flex; justify-content: space-between; align-items: end; margin-bottom: 14px; }
   .history-heading h2 { margin-bottom: 0; }

@@ -67,7 +67,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 |---|---|---|---|
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Complete — PRs #45 and #46 merged; Issue #15 closed | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone; unit and browser acceptance are included |
-| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | First slice implemented in feature PR | Practice Studio route, local session start/finish, elapsed-time persistence and session history. Route-specific Playwright start/reload/finish/history coverage is added; CI is pending. Pause/resume, exercise-level evidence, reflections and review scheduling remain pending |
+| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Initial slice merged — PR #50; M7.2 in progress | Local Practice Studio start/finish/history and reload recovery are merged. Current branch adds pause/resume, accumulated active-time accounting and transaction-serialized single-active-session creation. Exercise observations, reflections and review scheduling remain future slices |
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
 
@@ -104,3 +104,13 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 3. Deliver M7 practice sessions/evidence capture, then M8 ear training/theory/repertoire as separate reviewable slices.
 5. Complete M9 CSP/security, WCAG accessibility, privacy, performance, offline/PWA, environment-isolation and deployment rollback checks.
 6. Keep the preview deployment deferred until the exact-SHA gate, GitHub preview environment and credentials are configured; use synthetic data only. Keep production D1, authentication and cloud sync deferred until ownership, authorisation and conflict rules are implemented and reviewed.
+
+
+## M7.2 implementation slice (2026-11-12)
+
+- Branch: `feat/m7-pause-resume-active-time`, based on merged main commit `ee63b1a`.
+- Adds pause/resume and persists accumulated active time separately from wall-clock start time.
+- Paused intervals are excluded from displayed and completed duration.
+- Active-session creation is guarded inside an IndexedDB read/write transaction to prevent competing tabs from creating sessions simultaneously.
+- Browser acceptance covers pause, frozen timer, pause reload recovery, resume, active reload recovery and finish.
+- CI and PR review are pending; Issue #16 remains open.

@@ -245,3 +245,14 @@ Append or replace this section when work progresses:
 - **Fix committed:** `8746de96179574b1a28a5a73e9bd8349d486b3f9` (`fix(m7): handle numeric practice duration input`). The state is now `number | undefined`, blank maps to `null`, and supplied values are checked with `Number.isSafeInteger` plus the existing 1–180 minute bounds.
 - **Validation:** The full PR CI must be rechecked on the latest head; do not merge until browser acceptance and all required checks pass. The browser test exercises numeric duration entry, start, reload recovery, finish and history.
 - **Resume:** If CI still fails, inspect the latest `Browser acceptance tests` job log first; check the rendered alert text and browser runtime errors before changing selectors or weakening assertions.
+
+
+## Resume checkpoint — 2026-11-12 (M7.2 pause/resume slice)
+
+- **Main baseline:** `ee63b1ac04961a6d438275bbc379c6ade7a3b1e3` (PR #50 merged).
+- **Branch:** `feat/m7-pause-resume-active-time`.
+- **Scope:** pause/resume lifecycle, accumulated active-time accounting, transactional single-active-session enforcement across tabs, reload recovery and browser acceptance.
+- **Time semantics:** paused intervals are excluded; legacy in-progress rows without `activeStartedAt` fall back to `startedAt`; elapsed time remains activity metadata, never mastery evidence.
+- **P1 manual gate:** physical desktop/iOS/Android offline and backup/restore acceptance remains unverified and requires device evidence. Keep release sign-off open.
+- **Validation:** CI and PR review are pending; no merge or deployment is authorised by this checkpoint.
+- **Next exact task:** inspect CI and fix any type, formatting, persistence or browser acceptance failures; add a two-tab browser assertion if practical.

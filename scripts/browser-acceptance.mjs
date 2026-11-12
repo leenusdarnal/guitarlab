@@ -753,28 +753,30 @@ try {
   );
   await fretboardMobileContext.close();
 
-  // M7.1 Practice Studio: local start, reload recovery, elapsed-time save and history.
+  // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
   await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
-  await page
-    .getByRole('heading', { name: 'Start a practice session' })
-    .waitFor();
+  await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
   await page.locator('#duration').fill('2');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
-  await page
-    .getByRole('heading', { name: 'Your session is in progress' })
-    .waitFor();
+  await page.getByRole('heading', { name: 'Your session is in progress' }).waitFor();
+  await delay(1_200);
+  await page.getByRole('button', { name: 'Pause session' }).click();
+  await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  const pausedElapsed = await page.locator('.elapsed').innerText();
+  await delay(1_200);
+  assert.equal(await page.locator('.elapsed').innerText(), pausedElapsed, 'Paused time must not increase active time');
   await page.reload({ waitUntil: 'networkidle' });
-  await page
-    .getByRole('heading', { name: 'Your session is in progress' })
-    .waitFor();
+  await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  assert.equal(await page.locator('.elapsed').innerText(), pausedElapsed, 'Paused state and time must survive reload');
+  await page.getByRole('button', { name: 'Resume session' }).click();
+  await page.getByRole('heading', { name: 'Your session is in progress' }).waitFor();
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Your session is in progress' }).waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
   await page.getByRole('button', { name: 'Finish and save session' }).click();
-  await page
-    .getByRole('status')
-    .filter({ hasText: 'Elapsed session time is activity history' })
-    .waitFor();
+  await page.getByRole('status').filter({ hasText: 'Elapsed session time is activity history' }).waitFor();
   await page.getByText('completed', { exact: true }).waitFor();
   await page.getByText(/\d+ sec/).waitFor();
 
