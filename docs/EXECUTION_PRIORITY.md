@@ -3,7 +3,7 @@
 **Last verified:** 2026-11-12  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Baseline commit:** `e368f9f19276ee83eb6cec3d277d0addd000327c`  
+**Baseline commit:** `0780df6dbe9d2889a28c4bc802270995ff71197f`  
 **Document purpose:** Durable execution queue and restart checkpoint. Update this file after each meaningful implementation slice and before pausing work.
 
 > This is an execution plan, not a claim that every listed item has been re-audited. The first task on every resume is to refresh the live repository state and reconcile this document with the code, Issues, PRs and CI.
@@ -12,10 +12,11 @@
 
 ### Repository and delivery state
 
-- `main` points to `e368f9f19276ee83eb6cec3d277d0addd000327c`.
+- `main` points to `0780df6dbe9d2889a28c4bc802270995ff71197f` after merging documentation PR #48.
 - The latest observed CI run for that main commit is [GuitarLab CI #43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888), which completed successfully.
 - The successful main run used Node.js 22.23.5 and passed the three browser acceptance suites. Node 22 remains the current project baseline (`.nvmrc` / `package.json` engine is to be confirmed again during the next audit).
 - PRs #45 and #46 are merged. PR #46 completes the chord library and metronome work and closes Issue #15.
+- PR #48 is merged and adds this durable execution plan.
 - PR #47 (Node.js 26 / CI redesign) is **closed without merging**. Its branch and commits are not part of `main`. Keep its CI investigation deferred; do not reopen or cherry-pick it without a separate, controlled plan.
 - No Cloudflare preview or production deployment is authorised by this document. Production deployment remains deferred until explicit user approval.
 
@@ -34,7 +35,7 @@ These are repository-level implementation claims; physical-device acceptance and
 
 ### Known documentation / tracking drift
 
-The README and implementation tracker contain stale statements that conflict with merged repository history. Examples include PR #45 being described as under review, PR #46 tools being described as in progress, and older roadmap checkboxes that still show already-merged lesson progress or music tools as incomplete. Open Issues #1–#5, #9–#11 also appear to retain historical acceptance checkboxes despite substantial merged implementation.
+The README, roadmap and implementation tracker contain stale statements that conflict with merged repository history. Examples include PR #45 being described as under review, PR #46 tools being described as in progress, and older roadmap checkboxes that still show already-merged lesson progress or music tools as incomplete. Open Issues #1–#5, #9–#11 also appear to retain historical acceptance checkboxes despite substantial merged implementation. A documentation reconciliation is now in PR #49; it updates README, roadmap, tracker and this checkpoint. Issue checkboxes still require criterion-by-criterion review rather than automatic closure.
 
 **Do not assume an issue is still unimplemented solely because it is open.** Inspect its acceptance criteria against current code and merged PRs. Close or update issues only after confirming every criterion and recording any remaining manual QA.
 
@@ -194,13 +195,13 @@ This section is the hand-off state. Update it before pausing work.
 
 | Field | Current value |
 |---|---|
-| Last verified main SHA | `e368f9f19276ee83eb6cec3d277d0addd000327c` |
-| Latest observed successful main CI | [#43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888) |
-| Open implementation PR | None observed in the 2026-11-12 repository check; refresh on resume |
+| Last verified main SHA | `0780df6dbe9d2889a28c4bc802270995ff71197f` |
+| Latest observed successful code CI | [#43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888) on the pre-documentation code baseline; PR #48 documentation CI passed before merge. Verify a fresh main run on resume |
+| Open implementation PR | PR #49 documentation reconciliation; no application-code PR observed |
 | PR #47 | Closed, unmerged; deferred |
 | Current phase | P0 — baseline audit and documentation reconciliation |
-| Current task | Refresh live repository state, verify effective ruleset checks, reconcile README / roadmap / tracker with merged PR #45 and #46 |
-| Next task after P0 | P1 — complete physical-device offline and backup/restore acceptance |
+| Current task | Documentation reconciliation is in PR #49; review its CI and merge before starting P1 |
+| Next task after P0 | P1 — complete physical-device offline and backup/restore acceptance; preview HTTPS environment/credentials are a dependency and must not be provisioned without approval |
 | Production deployment | Deferred; explicit approval required |
 
 ### Status update template

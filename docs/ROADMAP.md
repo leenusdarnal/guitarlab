@@ -46,7 +46,7 @@ M1 foundation is merged in PR #21. Worker build and local smoke checks pass. Clo
 - [x] Test local migrations and data integrity.
 - [x] Implement an empty learner profile and browser-local IndexedDB repositories (PR #24).
 - [x] Implement local export, validated restore preview, transactional replacement and safe reset (PR #25).
-- [ ] Verify IndexedDB reload/offline restart/upgrade and backup round-trip/rollback in a real browser.
+- [ ] Complete physical-device IndexedDB reload/offline restart/upgrade and backup round-trip/rollback acceptance; automated Chromium migration and rollback coverage is merged (PRs #42–43).
 
 The D1 schema and migration are local/test foundations only. There is no production D1 database, learner-facing cloud route, authentication or cloud sync.
 
@@ -68,9 +68,9 @@ M3.1 is merged in PR #26 and M3.2 in PR #28. Advanced accessibility and offline 
 - [x] Curriculum overview and phase/week navigation across six routes.
 - [x] Self-contained lesson content, objectives, prerequisites and optional refreshers.
 - [x] Worked examples, demonstration steps, exercises, musical application, success criteria and accessible alternatives.
-- [ ] Interactive checkpoints, lesson completion events and resume behaviour (M4.2).
+- [x] Interactive checkpoints, lesson completion events and resume behaviour (PR #33).
 - [x] Load all 152 authored lessons with stable IDs and versioned content.
-- [ ] Record and restore learner progress against lesson blocks/checkpoints.
+- [x] Record and restore learner progress against lesson blocks/checkpoints (PR #33; automated browser acceptance merged).
 - [ ] Render lesson blocks according to per-profile presentation preferences while preserving authored learning outcomes and text fallbacks.
 
 M4.1 is merged in PR #29. The reader displays authored content but deliberately does not mark lessons complete or grant skill mastery. M4.2 is the next curriculum implementation slice.
@@ -78,8 +78,8 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 ### M5 — Learning state and synchronisation
 
 - [x] Local IndexedDB learner profile and repository foundation (delivered in M2.3).
-- [ ] Offline app-shell and selected-curriculum caching.
-- [ ] Reliable offline lesson/practice capture and recovery across browser restarts.
+- [x] Initial privacy-safe offline app shell and previously visited public lesson caching (PR #35); complete selected-curriculum pre-caching remains future work.
+- [ ] Complete offline lesson/practice capture and recovery across physical-device browser restarts; automated viewport acceptance is merged, manual device acceptance remains.
 - [x] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
@@ -91,12 +91,12 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 - [x] Tuning-aware fretboard pitch model and standard E tuning (merged PR #45).
 - [x] Interactive fretboard explorer, sharp/flat spelling, note finding and keyboard navigation (merged PR #45).
 - [x] Persist handedness per learner profile and mirror only the diagram presentation (merged PR #45).
-- [ ] Chord diagrams and chord library (PR #46).
-- [ ] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
-- [ ] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
+- [x] Chord diagrams and chord library (PR #46).
+- [x] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
+- [x] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
 - [ ] Chromatic tuner with explicit microphone permission.
 
-PR #45 is merged and provides the tuning-aware fretboard explorer. PR #46 delivers the separate chord library and Web Audio metronome slices with their own browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
+PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard explorer, open-chord library, alternating chord-change observations and Web Audio metronome, with unit and browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
 
 ### M7 — Practice studio
 
@@ -120,10 +120,10 @@ PR #45 is merged and provides the tuning-aware fretboard explorer. PR #46 delive
 
 ### M9 — Release hardening
 
-- [ ] PWA installability and offline asset strategy.
-- [ ] Accessibility and mobile usability audit.
-- [ ] Security and privacy review.
-- [ ] Backup/restore verification in a browser.
+- [ ] Full PWA installability and expanded offline curriculum strategy; initial privacy-safe app shell and previously visited page caching are implemented (PR #35).
+- [ ] Accessibility and physical-device mobile usability audit (automated responsive/offline viewport coverage is not a substitute).
+- [ ] Complete security, CSP and privacy review; baseline response-security headers and storage durability controls are implemented (PR #36).
+- [x] Automated Chromium backup/restore/rollback/reset verification (PR #42); [ ] physical-device backup/restore verification.
 - [ ] Performance and reliability checks.
 - [x] Curriculum validator integrated into the main application CI.
 - [ ] Explicit Cloudflare preview deployment and browser-level verification.
