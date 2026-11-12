@@ -440,9 +440,13 @@ export function createIndexedDbRepositories(
         [stores.practiceSessions],
         'readwrite',
         async (tx) => {
-          await requestResult(
-            tx.objectStore(stores.practiceSessions).add(session)
-          );
+          const store = tx.objectStore(stores.practiceSessions);
+          // IndexedDB serializes read/write transactions across tabs.
+          const existing = await requestResult<PracticeSessionRecord[]>(store.getAll());
+          if (existing.some((row) => row.learnerId === session.learnerId && (row.status === 'in_progress' || row.status === 'paused'))) {
+            throw new Error('Finish or resume your existing practice session before starting another.');
+          }
+          await requestResult(store.add(session));
         }
       );
     },
@@ -458,7 +462,7 @@ export function createIndexedDbRepositories(
           return value ?? null;
         }
       ),
-    updateIfInProgress: async (session) =>
+    updateIfStatus: async (session, expectedStatus) =>
       inTransaction(
         database,
         [stores.practiceSessions],
@@ -468,7 +472,7 @@ export function createIndexedDbRepositories(
           const current = await requestResult<
             PracticeSessionRecord | undefined
           >(store.get(session.id));
-          if (!current || current.status !== 'in_progress') return false;
+          if (!current || current.status !== expectedStatus) return false;
           await requestResult(store.put(session));
           return true;
         }
