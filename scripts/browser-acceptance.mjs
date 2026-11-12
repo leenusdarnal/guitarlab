@@ -96,7 +96,7 @@ try {
         sessions.createIndex('byLearnerId', 'learnerId');
         sessions.createIndex('byStatus', 'status');
 
-        database.transaction.objectStore('metadata').add({
+        request.transaction.objectStore('metadata').add({
           key: 'activeLearnerId',
           value: 'legacy-learner-001'
         });
