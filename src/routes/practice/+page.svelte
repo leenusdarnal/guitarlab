@@ -9,7 +9,7 @@
   import type { PracticeSessionRecord } from '../../lib/repositories/contracts';
 
   let sessions = $state<PracticeSessionRecord[]>([]);
-  let plannedMinutes = $state('20');
+  let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
   let loading = $state(true);
   let saving = $state(false);
@@ -38,10 +38,11 @@
   async function startSession() {
     error = '';
     notice = '';
-    const minutes = plannedMinutes.trim() === '' ? null : Number(plannedMinutes);
+    // Svelte number inputs bind as number | undefined, not strings.
+    const minutes = plannedMinutes ?? null;
     if (
       minutes !== null &&
-      (!Number.isInteger(minutes) || minutes < 1 || minutes > 180)
+      (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 180)
     ) {
       error = 'Choose a whole-number plan between 1 and 180 minutes, or leave it blank.';
       return;
