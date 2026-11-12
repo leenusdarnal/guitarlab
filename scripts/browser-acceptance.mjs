@@ -657,6 +657,102 @@ try {
     'Restoring the exported backup should recover the learner goals'
   );
 
+  // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
+  // Restore the desktop viewport after the earlier mobile navigation acceptance.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.getByRole('link', { name: 'Tools', exact: true }).click();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
+  await page.getByRole('link', { name: /Open explorer/ }).click();
+  await page.getByRole('heading', { name: 'Fretboard explorer.' }).waitFor();
+  assert.equal(
+    await page.locator('.fret-cell').count(),
+    78,
+    'The 12-fret explorer should show six strings and thirteen positions per string'
+  );
+  const highEOpen = page.getByRole('button', {
+    name: 'String 1, fret 0, E4'
+  });
+  await highEOpen.focus();
+  await highEOpen.press('ArrowRight');
+  assert.equal(
+    await page.evaluate(() =>
+      document.activeElement?.getAttribute('aria-label')
+    ),
+    'String 1, fret 1, F4',
+    'Arrow-key navigation should move one fret while preserving the string'
+  );
+  await page.getByRole('button', { name: 'String 6, fret 8, C3' }).click();
+  await page.locator('.note-detail').getByText('C3').waitFor();
+
+  await page.getByRole('button', { name: 'Find a note' }).click();
+  await page.locator('#target-note').selectOption('0');
+  assert.equal(
+    await page.locator('.fret-cell > span:not(.visually-hidden)').count(),
+    0,
+    'Find mode must hide every note label before the learner answers'
+  );
+  await page
+    .getByRole('button', { name: 'String 6, fret 0, position' })
+    .click();
+  assert.equal(
+    await page.locator('.fret-cell.is-target').count(),
+    0,
+    'An incorrect answer must not reveal any matching note positions'
+  );
+  await page.getByRole('status').filter({ hasText: 'Not quite.' }).waitFor();
+  await page
+    .getByRole('button', { name: 'String 6, fret 8, position' })
+    .click();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'Correct — C is at string 6, fret 8.' })
+    .waitFor();
+  assert.equal(
+    await page.locator('.fret-cell > span:not(.visually-hidden)').count(),
+    1,
+    'Only the correctly selected answer should reveal its note label'
+  );
+
+  await page.locator('.controls select').nth(0).selectOption('left');
+  const leftHandedOpenString = page.locator(
+    '.fret-cell[data-string="6"][data-fret="0"]'
+  );
+  assert.equal(
+    await leftHandedOpenString.getAttribute('data-display-column'),
+    '13',
+    'Left-handed orientation should mirror the nut to the opposite side'
+  );
+  await page
+    .getByRole('button', { name: 'Save this orientation to my profile' })
+    .click();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'Saved left-handed diagram orientation' })
+    .waitFor();
+
+  const fretboardMobileContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  const fretboardMobilePage = await fretboardMobileContext.newPage();
+  await fretboardMobilePage.goto(`${origin}/tools/fretboard`, {
+    waitUntil: 'networkidle'
+  });
+  await fretboardMobilePage
+    .getByRole('heading', { name: 'Fretboard explorer.' })
+    .waitFor();
+  const fretboardMobileLayout = await fretboardMobilePage.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth
+  }));
+  assert.ok(
+    fretboardMobileLayout.content <= fretboardMobileLayout.viewport,
+    `Mobile fretboard page overflows horizontally: ${JSON.stringify(fretboardMobileLayout)}`
+  );
+  await fretboardMobileContext.close();
+
   assert.deepEqual(
     pageErrors,
     [],
