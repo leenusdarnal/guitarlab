@@ -72,7 +72,9 @@ export class WebAudioMetronome {
 
   setBeatsPerBar(beats: number): void {
     if (!Number.isInteger(beats) || beats < 1 || beats > 12) {
-      throw new RangeError('Beats per bar must be a whole number from 1 to 12.');
+      throw new RangeError(
+        'Beats per bar must be a whole number from 1 to 12.'
+      );
     }
     if (beats !== this.beatsPerBar) {
       this.beatsPerBar = beats;
