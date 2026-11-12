@@ -53,9 +53,27 @@
       : null
   );
 
+  function readSavedTheme(): 'dark' | 'light' {
+    try {
+      return window.localStorage.getItem('guitarlab-theme') === 'light'
+        ? 'light'
+        : 'dark';
+    } catch {
+      // Theme persistence is optional; dashboard data must still load.
+      return 'dark';
+    }
+  }
+
+  function saveThemePreference(value: 'dark' | 'light') {
+    try {
+      window.localStorage.setItem('guitarlab-theme', value);
+    } catch {
+      // Keep the selected theme in memory when browser storage is unavailable.
+    }
+  }
+
   onMount(() => {
-    const stored = window.localStorage.getItem('guitarlab-theme');
-    if (stored === 'light' || stored === 'dark') theme = stored;
+    theme = readSavedTheme();
     document.documentElement.dataset.theme = theme;
     let active = true;
     void loadActiveLearnerDashboard()
@@ -133,7 +151,7 @@
   function toggleTheme() {
     theme = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem('guitarlab-theme', theme);
+    saveThemePreference(theme);
   }
   function formatDate(timestamp: number) {
     return new Date(timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });

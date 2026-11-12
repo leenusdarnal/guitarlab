@@ -1,6 +1,6 @@
 # GuitarLab Implementation Tracker
 
-**Last updated:** 2026-11-11  
+**Last updated:** 2026-11-12  
 **Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
@@ -13,19 +13,19 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | Product definition, architecture and curriculum | Complete | M0 documents; 152 authored lessons across six routes; versioned content contract and validator |
 | Visual direction and design tokens | Implemented | Approved hybrid direction; both-theme contrast validation runs in CI. Full component-level accessibility audit remains in M9 |
 | Application foundation | Merged | PR #21: SvelteKit, Svelte 5, TypeScript, Tailwind, Cloudflare adapter, responsive shell and onboarding |
-| Cloudflare runtime | Preview workflow merged | PR #32 adds an isolated public preview Worker and manually confirmed deploy workflow; configure GitHub Actions credentials and run with synthetic data only. Production is not configured |
-| CI quality gates | Passing on current main | PR #30 adds locked installs, changed-file Prettier checks and a required high/critical dependency audit; local D1, curriculum/design, lint/type, unit, Worker and Chromium checks pass. Issue #5 still tracks a controlled failing-check verification |
+| Cloudflare runtime | Preview workflow implemented; no deployment performed | PR #32 provides the isolated preview Worker. PR #36 adds an exact-current-`main` SHA gate and requires the latest successful application/curriculum and Node 26 checks before deployment. Preview environment credentials and a synthetic-data deployment remain unverified; production is unconfigured |
+| CI quality gates | Core checks passing; branch ruleset active | PR #30 adds locked installs, changed-file Prettier checks and a high/critical dependency audit. PR #36 pins Node 22.23.5 and adds Node 26.13.1 compatibility. The active main ruleset requires `Validate application and curriculum`; adding Node 26 compatibility as a required merge check and controlled failing-check verification remain follow-ups under Issue #5 |
 | M2.1 data schema | Merged | PR #22: versioned Drizzle schema, local D1 migration, 152 lesson metadata references, 34 stable skill IDs and database integrity tests |
 | M2.2 application boundary | Merged | PR #23: repository ports, validated use cases, typed errors and in-memory tests; no remote D1 access |
 | M2.3 local learner persistence | Merged; manual QA pending | PR #24: empty active profile and versioned IndexedDB stores/repositories. Verify browser reload, offline restart and storage upgrade behaviour |
 | M2.4 local backup and recovery | Merged; manual QA pending | PR #25: versioned export, strict restore preview, transactional replacement and typed-confirmation reset. Verify browser round-trip and rollback-under-failure |
 | M3 dashboard and planning | Merged | PR #26 dashboard and PR #28 explainable 10/20/40/custom practice planner; browser acceptance covers key planning journeys |
 | M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
-| M4.2 interactive lesson progress | Not started | Add checkpoint answers, progress persistence, completion and resume. Keep lesson completion separate from skill mastery |
+| M4.2 interactive lesson progress | Merged — PR #33; manual QA pending | Local section progress, checkpoint self-check, private next-practice note and explicit completion/resume. Lesson completion remains separate from skill mastery; Chromium coverage was added in the PR |
 | Music tools, practice studio and repertoire | Not started | M6–M8 issues #15–17 |
-| Release hardening | Not ready | Offline app shell, full accessibility/privacy review, backup QA, environment isolation, preview/production deployment and rollback verification remain |
+| Release hardening | Not ready | PR #35 adds the first offline app shell; desktop/mobile acceptance, backup QA, CSP, full accessibility/privacy review, environment isolation, preview deployment and rollback verification remain. PR #36 reliability/storage/deployment hardening is under review |
 
-**Repository state:** PR #29 is merged into `main`; its post-merge workflow passed. There are currently no open pull requests. No production Worker, production D1 database, authentication, cloud sync or live Cloudflare deployment is configured.
+**Repository state (2026-11-12):** PR #33 and the first offline app-shell slice in PR #35 are merged into `main`. The offline browser acceptance test checks previously visited lessons offline and the explicit fallback for an unvisited lesson; manual device acceptance remains open. PR #36 has been updated to include the latest `main` commit and contains the P1 reliability, storage-persistence and preview-deployment hardening; it remains under review pending its latest CI results. The active `main` ruleset requires pull requests and the `Validate application and curriculum` check. No preview or production deployment, production D1 database, authentication or cloud sync is configured.
 
 ## M1 — Application foundation
 
@@ -65,7 +65,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 | Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
-| M5 | Local-first state and optional sync | Partially implemented | IndexedDB and local backup/restore exist in M2.3/M2.4. Offline app-shell caching, outbox, conflict handling, authentication and cloud sync remain |
+| M5 | Local-first state and optional sync | Partially implemented | IndexedDB and local backup/restore exist in M2.3/M2.4. The first privacy-safe offline app shell merged in PR #35; only app assets and previously visited public pages are covered, so device acceptance remains. PR #36 adds explicit storage-persistence and quota safeguards; outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Not started | Music-tool domain and browser acceptance |
 | M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Not started | Session UI, pause/resume, exercise capture and review workflow |
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
@@ -90,9 +90,9 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Immediate next actions
 
-1. Complete PR #33 browser acceptance for checkpoint persistence, reload/resume, route-to-route navigation and explicit completion.
-2. Verify IndexedDB offline restart/schema upgrade and backup/restore round-trip, failed-restore rollback and safe reset in a real browser.
-3. Configure Cloudflare preview credentials and run the public preview workflow with synthetic learner data only.
-4. Implement and validate offline app-shell/curriculum caching before adding any account or sync service.
-5. Complete the essential music tools, practice session capture and musicianship/repertoire workflows.
-6. Complete the privacy, accessibility, performance, production-environment and rollback gates before a private production release.
+1. Complete PR #36 review and merge only after its latest application/curriculum and Node 26 checks pass; verify the required-check policy remains enforced on `main`.
+2. Complete desktop/mobile offline acceptance, then validate backup export/restore round-trip, failed-restore rollback, reset and IndexedDB upgrade behaviour. Add automated restore coverage where practical.
+3. Deliver M6 fretboard, chord library and metronome as small tested slices.
+4. Deliver M7 practice sessions/evidence capture, then M8 ear training/theory/repertoire as separate reviewable slices.
+5. Complete M9 CSP/security, WCAG accessibility, privacy, performance, offline/PWA, environment-isolation and deployment rollback checks.
+6. Keep the preview deployment deferred until the exact-SHA gate, GitHub preview environment and credentials are configured; use synthetic data only. Keep production D1, authentication and cloud sync deferred until ownership, authorisation and conflict rules are implemented and reviewed.

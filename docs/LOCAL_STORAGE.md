@@ -36,7 +36,15 @@ Stored preferences are validated again when read. If the browser does not provid
 - A blocked upgrade asks the learner to close other GuitarLab tabs.
 - Storage errors are surfaced; the application does not silently reset or overwrite the existing profile.
 
-The M2.4 implementation in draft PR #25 adds a versioned local JSON export, validated import preview, transactional replacement restore and typed-confirmation reset. It remains under CI and browser verification; until released, clearing browser site data or uninstalling a browser profile can remove local learner data. Keep a downloaded backup in a private safe location.
+The M2.4 implementation is merged in PR #25: versioned local JSON export, strict import validation and preview, transactional replacement restore, and typed-confirmation reset. Manual browser round-trip and rollback acceptance remains a release check. Clearing browser site data or uninstalling a browser profile can still remove local learner data; keep a downloaded backup in a private safe location.
+
+## Browser storage durability
+
+The Data & backups screen reports the browser's `navigator.storage.persisted()` result when available and displays an approximate usage/quota estimate from `navigator.storage.estimate()`. A learner can explicitly request persistent origin storage through `navigator.storage.persist()`; GuitarLab does not make this request automatically.
+
+A successful persistence grant reduces automatic eviction risk, but it is not a backup and does not prevent the learner, browser settings, device management or a device failure from removing local data. Some browsers do not expose the request API or may decline the request. The UI must describe these states honestly and keep export/restore available.
+
+Storage estimates are advisory and may be unavailable. Quota-exceeded and IndexedDB errors must remain visible and must never silently reset or overwrite existing learner data.
 
 ## Privacy and deployment
 
