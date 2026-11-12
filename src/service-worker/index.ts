@@ -3,13 +3,19 @@
 /// <reference lib="webworker" />
 /// <reference types="@sveltejs/kit" />
 
-import { build, files, prerendered, version } from '$service-worker';
+import { assets, immutable, prerendered } from '$app/manifest';
+import { version } from '$app/env';
+import { resolve } from '$app/paths';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
 const ASSET_CACHE = `${CACHE_PREFIX}-assets-${version}`;
 const PAGE_CACHE = `${CACHE_PREFIX}-pages-${version}`;
-const PRECACHE_URLS = [...build, ...files, ...prerendered];
+const PRECACHE_URLS = [
+  ...immutable.map((file) => resolve(file.path)),
+  ...assets.map((file) => resolve(file.path)),
+  ...prerendered.map((page) => resolve(page.path))
+];
 const MAX_CACHED_PAGES = 40;
 
 const OFFLINE_HTML = `<!doctype html>
