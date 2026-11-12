@@ -2,9 +2,9 @@
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
-    getLocalStoragePersistenceStatus,
-    requestLocalStoragePersistence,
-    type LocalStoragePersistenceStatus
+    getLearnerStoragePersistenceStatus,
+    requestLearnerStoragePersistence,
+    type LearnerStoragePersistenceStatus
   } from '../../../lib/storage/persistence';
   import { exportActiveLearnerBackup } from '../../../lib/storage/backup-storage';
   import {
@@ -24,7 +24,7 @@
   let selectedFileName = $state('');
   let restoreConfirmed = $state(false);
   let resetPhrase = $state('');
-  let storageStatus = $state<LocalStoragePersistenceStatus | null>(null);
+  let storageStatus = $state<LearnerStoragePersistenceStatus | null>(null);
   let isCheckingStorage = $state(true);
   let isRequestingPersistence = $state(false);
 
@@ -35,7 +35,7 @@
   async function refreshStorageStatus() {
     isCheckingStorage = true;
     try {
-      storageStatus = await getLocalStoragePersistenceStatus();
+      storageStatus = await getLearnerStoragePersistenceStatus();
     } finally {
       isCheckingStorage = false;
     }
@@ -44,7 +44,7 @@
   async function requestPersistentStorage() {
     isRequestingPersistence = true;
     try {
-      storageStatus = await requestLocalStoragePersistence();
+      storageStatus = await requestLearnerStoragePersistence();
       if (storageStatus.persisted) {
         showMessage('This browser has granted persistent storage. Keep exporting backups for recovery.');
       } else if (storageStatus.canRequest) {
