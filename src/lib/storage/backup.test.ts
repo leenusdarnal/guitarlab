@@ -135,9 +135,7 @@ describe('learner backup contract', () => {
       data: {
         records: {
           practiceEvidence: [{ repetitions: 20, cleanRepetitions: 15 }],
-          practiceSessions: [
-            { nextTarget: 'Repeat the scale at 72 BPM.' }
-          ]
+          practiceSessions: [{ nextTarget: 'Repeat the scale at 72 BPM.' }]
         }
       }
     });

@@ -879,12 +879,12 @@ try {
     .waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
-  await page.locator('#session-reflection').fill(
-    'The scale felt steadier when I kept my wrist relaxed.'
-  );
-  await page.locator('#next-target').fill(
-    'Repeat the G major scale at 72 BPM for three minutes.'
-  );
+  await page
+    .locator('#session-reflection')
+    .fill('The scale felt steadier when I kept my wrist relaxed.');
+  await page
+    .locator('#next-target')
+    .fill('Repeat the G major scale at 72 BPM for three minutes.');
   await page.getByRole('button', { name: 'Finish and save session' }).click();
   await page
     .getByRole('status')
