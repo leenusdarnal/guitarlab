@@ -33,7 +33,7 @@ const index = {
 
 await writeFile(
   resolve(root, 'content/curriculum/year-1-dashboard-index.json'),
-  `${JSON.stringify(index, null, 2)}\\n`,
+  JSON.stringify(index, null, 2) + String.fromCharCode(10),
   'utf8'
 );
 console.log(`Generated dashboard index for ${index.lessons.length} Year 1 lessons.`);
