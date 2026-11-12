@@ -226,7 +226,7 @@ try {
   }
 
   console.log(
-    'Accessibility browser acceptance passed: 10 representative routes in dark ' +
+    'Accessibility checks passed: 10 routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
       'narrow-screen reflow, and keyboard skip-link focus.'
   );
