@@ -19,7 +19,9 @@ function requestResult<T>(request: IDBRequest<T>): Promise<T> {
 }
 
 /** Read only the active learner's local practice history. */
-export async function listActivePracticeSessions(): Promise<PracticeSessionRecord[]> {
+export async function listActivePracticeSessions(): Promise<
+  PracticeSessionRecord[]
+> {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
@@ -95,7 +97,9 @@ export async function finishActivePracticeSession(
     if (!current || current.learnerId !== profile.id) {
       throw new Error('Practice session not found on this learner profile.');
     }
-    const elapsed = Math.floor((systemRuntime.now() - current.startedAt) / 1000);
+    const elapsed = Math.floor(
+      (systemRuntime.now() - current.startedAt) / 1000
+    );
     if (elapsed < 1 || elapsed > 43_200) {
       throw new Error(
         'A session must last between 1 second and 12 hours to be saved.'
