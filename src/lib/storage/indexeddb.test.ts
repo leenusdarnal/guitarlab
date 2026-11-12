@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type {
+  PracticeEvidenceRecord,
   LessonCompletionEventRecord,
   LessonProgressRecord,
   PracticeSessionRecord
@@ -119,7 +120,9 @@ class FakeStore {
         ? ['learnerId', 'curriculumReleaseId', 'lessonId']
         : name === 'byLearnerReleaseSkill'
           ? ['learnerId', 'curriculumReleaseId', 'skillId']
-          : ['learnerId', 'status'];
+          : name === 'byLearnerSession'
+            ? ['learnerId', 'sessionId']
+            : ['learnerId', 'status'];
     const matches = (record: unknown, key: IDBValidKey) => {
       const value = record as Record<string, unknown>;
       const candidate = fields.map((field) => value[field]);
@@ -168,7 +171,8 @@ function makeDatabase(): IDBDatabase {
       'skillMastery',
       new FakeStore(['learnerId', 'curriculumReleaseId', 'skillId'])
     ],
-    ['practiceSessions', new FakeStore('id')]
+    ['practiceSessions', new FakeStore('id')],
+    ['practiceEvidence', new FakeStore('id')]
   ]);
 
   return {
@@ -366,6 +370,59 @@ describe('local learner profile persistence', () => {
         learnerId: pausedProfile.id
       })
     ).rejects.toThrow(/existing practice session/i);
+  });
+
+  it('stores exercise observations as append-only, learner-owned session evidence', async () => {
+    const database = makeDatabase();
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const session: PracticeSessionRecord = {
+      id: '5d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+      learnerId: profile.id,
+      primaryCurriculumReleaseId: null,
+      primaryLessonId: null,
+      status: 'in_progress',
+      activeStartedAt: 100,
+      plannedMinutes: 20,
+      actualDurationSeconds: 0,
+      focus: 'Alternate picking',
+      difficulty: null,
+      reflection: null,
+      startedAt: 100,
+      endedAt: null,
+      createdAt: 100,
+      updatedAt: 100
+    };
+    await repositories.practice.create(session);
+    const observation: PracticeEvidenceRecord = {
+      id: '6d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+      learnerId: profile.id,
+      sessionId: session.id,
+      exerciseId: 'alternate-picking-eighth-notes',
+      repetitions: 12,
+      cleanRepetitions: 9,
+      tempoBpm: 72,
+      difficulty: 3,
+      recordedAt: 200
+    };
+
+    await repositories.practiceEvidence.append(observation);
+    await expect(
+      repositories.practiceEvidence.listBySession(profile.id, session.id)
+    ).resolves.toEqual([observation]);
+    await expect(
+      repositories.practiceEvidence.append(observation)
+    ).rejects.toThrow(/duplicate/i);
+    await expect(
+      repositories.practiceEvidence.append({
+        ...observation,
+        id: '7d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+        learnerId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+      })
+    ).rejects.toThrow(/owned by this learner/i);
+    expect(
+      await repositories.mastery.find(profile.id, 'curriculum-v1', 'rhythm-pulse')
+    ).toBeNull();
   });
 
   it('persists validated preferences without creating lesson or mastery records', async () => {

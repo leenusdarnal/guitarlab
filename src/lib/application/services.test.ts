@@ -11,6 +11,8 @@ import type {
   LessonCompletionEventRecord,
   LessonProgressRecord,
   LessonProgressRepository,
+  PracticeEvidenceRecord,
+  PracticeEvidenceRepository,
   PracticeSessionRecord,
   PracticeSessionRepository,
   SkillMasteryRecord,
@@ -27,6 +29,7 @@ import {
   getCurriculumLesson,
   listCurriculumLessons,
   recordAssessmentAttempt,
+  recordPracticeEvidence,
   startLessonProgress,
   updateLessonProgress,
   startPracticeSession,
@@ -92,6 +95,7 @@ function createHarness() {
   const attempts: AssessmentAttemptRecord[] = [];
   const masteryRows = new Map<string, SkillMasteryRecord>();
   const sessions = new Map<string, PracticeSessionRecord>();
+  const practiceEvidence: PracticeEvidenceRecord[] = [];
 
   const profileRepository: LearnerProfileRepository = {
     async create(profile) {
@@ -222,6 +226,17 @@ function createHarness() {
     }
   };
 
+  const practiceEvidenceRepository: PracticeEvidenceRepository = {
+    async append(record) {
+      practiceEvidence.push(record);
+    },
+    async listBySession(owner, sessionId) {
+      return practiceEvidence.filter(
+        (record) => record.learnerId === owner && record.sessionId === sessionId
+      );
+    }
+  };
+
   return {
     runtime,
     setNow,
@@ -231,13 +246,15 @@ function createHarness() {
     attempts,
     masteryRows,
     sessions,
+    practiceEvidence,
     profileRepository,
     curriculumRepository,
     skillRepository,
     progressRepository,
     assessmentRepository,
     masteryRepository,
-    practiceRepository
+    practiceRepository,
+    practiceEvidenceRepository
   };
 }
 
@@ -590,6 +607,72 @@ describe('M2.2 application service boundaries', () => {
     expect(snapshot.state).toBe('stable');
     expect(snapshot.evidenceCount).toBe(3);
     expect(snapshot.lastAssessmentId).toBe(harness.attempts[2].id);
+  });
+
+  it('appends validated exercise observations to an owned session without granting mastery', async () => {
+    const session = await startPracticeSession(
+      {
+        learnerId,
+        plannedMinutes: 20,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        focus: 'Alternate picking'
+      },
+      {
+        curriculum: harness.curriculumRepository,
+        practice: harness.practiceRepository,
+        runtime: harness.runtime
+      }
+    );
+    const submission = {
+      sessionId: session.id,
+      exerciseId: 'alternate-picking-eighth-notes',
+      repetitions: 20,
+      cleanRepetitions: 16,
+      tempoBpm: 80,
+      difficulty: 3
+    };
+    const saved = await recordPracticeEvidence(
+      { learnerId, submission },
+      {
+        practice: harness.practiceRepository,
+        evidence: harness.practiceEvidenceRepository,
+        runtime: harness.runtime
+      }
+    );
+
+    expect(saved).toMatchObject({
+      learnerId,
+      sessionId: session.id,
+      exerciseId: submission.exerciseId,
+      repetitions: 20,
+      cleanRepetitions: 16,
+      tempoBpm: 80,
+      difficulty: 3
+    });
+    expect(harness.practiceEvidence).toHaveLength(1);
+    expect(harness.masteryRows.size).toBe(0);
+    await expect(
+      recordPracticeEvidence(
+        { learnerId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', submission },
+        {
+          practice: harness.practiceRepository,
+          evidence: harness.practiceEvidenceRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(NotFoundError);
+    await expect(
+      recordPracticeEvidence(
+        { learnerId, submission: { ...submission, cleanRepetitions: 21 } },
+        {
+          practice: harness.practiceRepository,
+          evidence: harness.practiceEvidenceRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(ValidationError);
+    expect(harness.practiceEvidence).toHaveLength(1);
   });
 
   it('records actual practice duration but never creates mastery evidence', async () => {

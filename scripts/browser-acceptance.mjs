@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 3 &&
+      database.version === 4 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -184,7 +184,8 @@ try {
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
-        .indexNames.contains('byLearnerStatus');
+        .indexNames.contains('byLearnerStatus') &&
+      database.objectStoreNames.contains('practiceEvidence');
     database.close();
     return upgraded;
   });
@@ -234,8 +235,8 @@ try {
   });
   assert.equal(
     upgradeResult.version,
-    3,
-    'The existing v1 database should upgrade to v3'
+    4,
+    'The existing v1 database should upgrade to v4'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
@@ -249,6 +250,7 @@ try {
     'lessonCompletionEvents',
     'lessonProgress',
     'metadata',
+    'practiceEvidence',
     'practiceSessions',
     'skillMastery'
   ]);

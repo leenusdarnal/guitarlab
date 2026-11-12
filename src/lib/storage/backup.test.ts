@@ -96,6 +96,49 @@ describe('learner backup contract', () => {
     });
   });
 
+  it('accepts appended exercise observations and retains old version-1 backup compatibility', () => {
+    const backup = makeBackup();
+    expect(parseLearnerBackup(backup)).toMatchObject({ success: true });
+    backup.records.practiceSessions.push({
+      id: 'b1b1b1b1-1111-4111-8111-111111111111',
+      learnerId,
+      primaryCurriculumReleaseId: null,
+      primaryLessonId: null,
+      status: 'completed',
+      activeStartedAt: null,
+      plannedMinutes: 20,
+      actualDurationSeconds: 300,
+      focus: 'Alternate picking',
+      difficulty: null,
+      reflection: null,
+      startedAt: 1_800_000_000_000,
+      endedAt: 1_800_000_300_000,
+      createdAt: 1_800_000_000_000,
+      updatedAt: 1_800_000_300_000
+    });
+    backup.records.practiceEvidence = [{
+      id: 'c1c1c1c1-1111-4111-8111-111111111111',
+      learnerId,
+      sessionId: 'b1b1b1b1-1111-4111-8111-111111111111',
+      exerciseId: 'alternate-picking-eighth-notes',
+      repetitions: 20,
+      cleanRepetitions: 15,
+      tempoBpm: 80,
+      difficulty: 3,
+      recordedAt: 1_800_000_200_000
+    }];
+    expect(parseLearnerBackup(backup)).toMatchObject({
+      success: true,
+      data: { records: { practiceEvidence: [{ repetitions: 20, cleanRepetitions: 15 }] } }
+    });
+    const orphaned = structuredClone(backup);
+    orphaned.records.practiceEvidence![0].sessionId = 'd1d1d1d1-1111-4111-8111-111111111111';
+    expect(parseLearnerBackup(orphaned)).toMatchObject({
+      success: false,
+      message: expect.stringContaining('practiceEvidence')
+    });
+  });
+
   it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,

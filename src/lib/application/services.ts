@@ -3,6 +3,7 @@ import {
   assessmentAttemptInputSchema,
   type AssessmentAttemptInput
 } from '../domain/learning/assessment';
+import { practiceEvidenceInputSchema, practiceEvidenceSubmissionSchema } from '../domain/learning/practice-evidence';
 import {
   skillMasteryStateSchema,
   skillMasteryUpdateSchema
@@ -27,6 +28,8 @@ import type {
   LessonCompletionEventRecord,
   LessonProgressRecord,
   LessonProgressRepository,
+  PracticeEvidenceRecord,
+  PracticeEvidenceRepository,
   PracticeSessionRecord,
   PracticeSessionRepository,
   SkillMasteryRecord,
@@ -641,6 +644,41 @@ export async function resumePracticeSession(
     throw new ConflictError('This practice session was already updated.');
   }
   return resumed;
+}
+
+const recordPracticeEvidenceInputSchema = z
+  .object({
+    learnerId: uuidSchema,
+    submission: practiceEvidenceSubmissionSchema
+  })
+  .strict();
+
+/** Record a learner-entered exercise observation without changing skill mastery. */
+export async function recordPracticeEvidence(
+  input: unknown,
+  dependencies: {
+    practice: PracticeSessionRepository;
+    evidence: PracticeEvidenceRepository;
+    runtime: ApplicationRuntime;
+  }
+): Promise<PracticeEvidenceRecord> {
+  const value = parseInput(recordPracticeEvidenceInputSchema, input);
+  const session = await dependencies.practice.findById(value.submission.sessionId);
+  if (!session || session.learnerId !== value.learnerId) {
+    throw new NotFoundError('Practice session not found.');
+  }
+  if (session.status === 'abandoned') {
+    throw new InvalidStateError('Evidence cannot be added to an abandoned practice session.');
+  }
+
+  const record = parseInput(practiceEvidenceInputSchema, {
+    ...value.submission,
+    id: dependencies.runtime.newId(),
+    learnerId: value.learnerId,
+    recordedAt: dependencies.runtime.now()
+  });
+  await dependencies.evidence.append(record);
+  return record;
 }
 
 const finishPracticeInputSchema = z

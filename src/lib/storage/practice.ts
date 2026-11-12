@@ -1,5 +1,6 @@
 import {
   finishPracticeSession,
+  recordPracticeEvidence,
   pausePracticeSession,
   resumePracticeSession,
   startPracticeSession
@@ -10,7 +11,8 @@ import {
   openLocalDatabase
 } from './indexeddb';
 import { systemRuntime } from '../repositories/contracts';
-import type { PracticeSessionRecord } from '../repositories/contracts';
+import type { PracticeEvidenceRecord, PracticeSessionRecord } from '../repositories/contracts';
+import type { PracticeEvidenceSubmission } from '../domain/learning/practice-evidence';
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -69,6 +71,45 @@ export async function startActivePracticeSession(input: {
         runtime: systemRuntime
       }
     );
+  } finally {
+    database.close();
+  }
+}
+
+/** Append one validated observation to a session owned by the active learner. */
+export async function recordActivePracticeEvidence(
+  submission: PracticeEvidenceSubmission
+): Promise<PracticeEvidenceRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    return await recordPracticeEvidence(
+      { learnerId: profile.id, submission },
+      {
+        practice: repositories.practice,
+        evidence: repositories.practiceEvidence,
+        runtime: systemRuntime
+      }
+    );
+  } finally {
+    database.close();
+  }
+}
+
+/** List immutable observations for one of the active learner's sessions. */
+export async function listActivePracticeEvidence(
+  sessionId: string
+): Promise<PracticeEvidenceRecord[]> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const session = await repositories.practice.findById(sessionId);
+    if (!session || session.learnerId !== profile.id) {
+      throw new Error('Practice session not found on this learner profile.');
+    }
+    return repositories.practiceEvidence.listBySession(profile.id, sessionId);
   } finally {
     database.close();
   }

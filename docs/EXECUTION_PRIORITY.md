@@ -3,7 +3,7 @@
 **Last verified:** 2026-11-12  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Last verified main commit:** `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e`  
+**Last verified main commit:** `49afa10698c6e96a2c1ec01077da08ba5ddd0ffe`  
 **Document purpose:** Durable execution queue and restart checkpoint. Update this file after each meaningful implementation slice and before pausing work.
 
 > This is an execution plan, not a claim that every listed item has been re-audited. The first task on every resume is to refresh the live repository state and reconcile this document with the code, Issues, PRs and CI.
@@ -12,12 +12,12 @@
 
 ### Repository and delivery state
 
-- `main` points to `0780df6dbe9d2889a28c4bc802270995ff71197f` after merging documentation PR #48.
-- The latest observed CI run for that main commit is [GuitarLab CI #43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888), which completed successfully.
-- The successful main run used Node.js 22.23.5 and passed the three browser acceptance suites. Node 22 remains the current project baseline (`.nvmrc` / `package.json` engine is to be confirmed again during the next audit).
-- PRs #45 and #46 are merged. PR #46 completes the chord library and metronome work and closes Issue #15.
-- PR #48 is merged and adds this durable execution plan.
-- PR #47 (Node.js 26 / CI redesign) is **closed without merging**. Its branch and commits are not part of `main`. Keep its CI investigation deferred; do not reopen or cherry-pick it without a separate, controlled plan.
+- `main` points to `49afa10698c6e96a2c1ec01077da08ba5ddd0ffe` after merging PR #55 (automated axe accessibility coverage).
+- The latest observed main CI run is [GuitarLab CI #43246790446](https://github.com/leenusdarnal/guitarlab/actions/runs/43246790446), completed successfully. Both the application/curriculum and Node.js 26 compatibility jobs passed.
+- Canonical local development remains Node.js `22.23.5` (`.nvmrc`); the separate Node.js 26 compatibility job is supplemental and does not make PR #47 part of `main`.
+- PRs #45–#55 are merged except PR #47, which remains **closed without merging**. PR #54 delivered UI/navigation improvements; PR #55 added cross-route axe scans and 320px reflow checks.
+- There are no open pull requests at this checkpoint. Open product issues remain, including #16–#18 and manual acceptance follow-ups on #9/#10.
+- The active `Protect main branch` repository ruleset requires PRs and the `Validate application and curriculum` status check; it also blocks branch deletion and non-fast-forward updates.
 - No Cloudflare preview or production deployment is authorised by this document. Production deployment remains deferred until explicit user approval.
 
 ### Product capabilities evidenced in repository documentation and merged PRs
@@ -195,13 +195,15 @@ This section is the hand-off state. Update it before pausing work.
 
 | Field | Current value |
 |---|---|
-| Last verified main SHA | `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e` |
-| Latest observed successful code CI | [#43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888) on the pre-documentation code baseline; PR #48 documentation CI passed before merge. Verify a fresh main run on resume |
-| Open implementation PR | PR #49 documentation reconciliation; no application-code PR observed |
-| PR #47 | Closed, unmerged; deferred |
-| Current phase | P2 — Practice Studio implementation |
-| Current task | First M7 slice on `feat/m7-practice-evidence-contract`; review route/storage implementation and CI before merge |
-| Next task | Complete P1 physical-device acceptance separately; continue M7 with pause/resume and elapsed-time accounting after this slice is reviewed |
+| Last verified main SHA | `49afa10698c6e96a2c1ec01077da08ba5ddd0ffe` |
+| Latest successful main CI | [#43246790446](https://github.com/leenusdarnal/guitarlab/actions/runs/43246790446) — application/curriculum and Node 26 compatibility passed |
+| Open PRs at resume | None |
+| PR #47 | Closed without merge; explicitly deferred |
+| Main protection | Active repository ruleset; PR required; `Validate application and curriculum` required status check |
+| Current phase | P2 — Practice Studio evidence loop |
+| Current task | Append-only, learner-scoped exercise observation persistence and backup/restore support on `feat/m7-practice-evidence-persistence` |
+| Next task | Add Practice Studio exercise-entry UI and session reflection after this persistence slice is reviewed and merged |
+| Manual QA | Physical desktop/iOS/Android offline and backup acceptance remains unverified |
 | Production deployment | Deferred; explicit approval required |
 
 ### Status update template
@@ -257,3 +259,14 @@ Append or replace this section when work progresses:
 - **Validation:** Latest PR #51 CI run `43207060655` passed both required jobs (application/curriculum and Node.js 26), including the two-tab concurrency browser acceptance. PR remains open and unmerged.
 - **Review follow-ups:** paused status is preserved in dashboard/practice-plan read models and the two-tab concurrency assertion is now included. The unused server-side D1 schema remains intentionally unchanged until its migration is introduced. No outstanding code-level blocker was identified in the final review.
 - **Next exact task:** obtain explicit user approval before merging PR #51. Physical desktop/iOS/Android offline and backup/restore QA remains a separate release gate.
+
+
+## Resume checkpoint — 2026-11-12 (live baseline refresh before M7 evidence persistence)
+
+- **Verified main:** `49afa10698c6e96a2c1ec01077da08ba5ddd0ffe`; latest main CI [#43246790446](https://github.com/leenusdarnal/guitarlab/actions/runs/43246790446) passed.
+- **Open PRs:** none at resume. **PR #47:** closed without merge; remains deferred.
+- **Protection:** active `Protect main branch` ruleset requires pull requests and the `Validate application and curriculum` check.
+- **Completed since the previous checkpoint:** PR #50 session lifecycle; PR #51 pause/resume, active-time accounting and concurrency guard; PR #52 validated exercise-observation contract; PR #53 curriculum/practice lookup optimization; PR #54 UI/navigation improvements; PR #55 automated accessibility browser checks.
+- **Next implementation slice:** append-only learner-scoped practice observations in IndexedDB, with export/restore/reset and v1-to-v4 migration coverage. This is local practice activity evidence only, not mastery.
+- **Manual release gate:** physical desktop/iOS/Android offline, reload and backup/restore acceptance remains unverified and must not be marked complete without real-device evidence.
+- **Deferred:** Node 26 CI redesign from PR #47, Cloudflare preview/production deployment, production D1, accounts and cloud sync.

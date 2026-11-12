@@ -1,4 +1,5 @@
 import type { AssessmentAttemptInput } from '../domain/learning/assessment';
+import type { PracticeEvidenceInput } from '../domain/learning/practice-evidence';
 import type { SkillMasteryUpdate } from '../domain/learning/mastery';
 import type { ProfilePreferences } from '../domain/profile/preferences';
 
@@ -76,6 +77,8 @@ export type AssessmentAttemptRecord = AssessmentAttemptInput & {
 export type SkillMasteryRecord = SkillMasteryUpdate & {
   updatedAt: number;
 };
+
+export type PracticeEvidenceRecord = PracticeEvidenceInput;
 
 export type PracticeSessionRecord = {
   id: string;
@@ -166,6 +169,12 @@ export interface SkillMasteryRepository {
     skillId: string
   ): Promise<SkillMasteryRecord | null>;
   save(snapshot: SkillMasteryRecord): Promise<void>;
+}
+
+/** Append-only exercise observations, scoped to one learner and session. */
+export interface PracticeEvidenceRepository {
+  append(record: PracticeEvidenceRecord): Promise<void>;
+  listBySession(learnerId: string, sessionId: string): Promise<PracticeEvidenceRecord[]>;
 }
 
 export interface PracticeSessionRepository {

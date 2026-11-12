@@ -56,7 +56,49 @@ function makeSource(): LearnerBackupSource {
     completionEvents: [],
     assessmentAttempts: [],
     skillMastery: [],
-    practiceSessions: []
+    practiceSessions: [
+      {
+        id: 'b1b1b1b1-1111-4111-8111-111111111111',
+        learnerId,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        status: 'completed',
+        activeStartedAt: null,
+        plannedMinutes: 20,
+        actualDurationSeconds: 300,
+        focus: 'Alternate picking',
+        difficulty: null,
+        reflection: null,
+        startedAt: 100,
+        endedAt: 400,
+        createdAt: 100,
+        updatedAt: 400
+      }
+    ],
+    practiceEvidence: [
+      {
+        id: 'c1c1c1c1-1111-4111-8111-111111111111',
+        learnerId,
+        sessionId: 'b1b1b1b1-1111-4111-8111-111111111111',
+        exerciseId: 'alternate-picking-eighth-notes',
+        repetitions: 20,
+        cleanRepetitions: 15,
+        tempoBpm: 80,
+        difficulty: 3,
+        recordedAt: 200
+      },
+      {
+        id: 'd1d1d1d1-1111-4111-8111-111111111111',
+        learnerId: anotherLearnerId,
+        sessionId: 'b1b1b1b1-1111-4111-8111-111111111111',
+        exerciseId: 'outside-profile',
+        repetitions: 1,
+        cleanRepetitions: 1,
+        tempoBpm: null,
+        difficulty: null,
+        recordedAt: 200
+      }
+    ]
   };
 }
 
@@ -70,6 +112,8 @@ describe('local learner backup export builder', () => {
     expect(backup.records.profile.preferences.instrument).toBe('acoustic');
     expect(backup.records.lessonProgress).toHaveLength(1);
     expect(backup.records.lessonProgress[0].learnerId).toBe(learnerId);
+    expect(backup.records.practiceEvidence).toHaveLength(1);
+    expect(backup.records.practiceEvidence?.[0].learnerId).toBe(learnerId);
   });
 
   it('refuses to export when the active profile is missing', () => {

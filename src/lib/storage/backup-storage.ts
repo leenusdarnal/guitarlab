@@ -13,6 +13,7 @@ import type {
   LearnerProfileRecord,
   LessonCompletionEventRecord,
   LessonProgressRecord,
+  PracticeEvidenceRecord,
   PracticeSessionRecord,
   SkillMasteryRecord
 } from '../repositories/contracts';
@@ -24,6 +25,7 @@ export type LearnerBackupSource = {
   assessmentAttempts: AssessmentAttemptRecord[];
   skillMastery: SkillMasteryRecord[];
   practiceSessions: PracticeSessionRecord[];
+  practiceEvidence: PracticeEvidenceRecord[];
 };
 
 /** Build a portable snapshot from store rows, retaining only one learner's data. */
@@ -51,7 +53,8 @@ export function buildLearnerBackup(
       completionEvents: owned(source.completionEvents),
       assessmentAttempts: owned(source.assessmentAttempts),
       skillMastery: owned(source.skillMastery),
-      practiceSessions: owned(source.practiceSessions)
+      practiceSessions: owned(source.practiceSessions),
+      practiceEvidence: owned(source.practiceEvidence)
     }
   });
 }
@@ -88,14 +91,15 @@ export async function exportActiveLearnerBackup(
         'lessonCompletionEvents',
         'assessmentAttempts',
         'skillMastery',
-        'practiceSessions'
+        'practiceSessions',
+        'practiceEvidence'
       ],
       'readonly'
     );
     const completed = transactionResult(transaction);
 
     try {
-      const [profiles, lessonProgress, completionEvents, assessmentAttempts, skillMastery, practiceSessions] =
+      const [profiles, lessonProgress, completionEvents, assessmentAttempts, skillMastery, practiceSessions, practiceEvidence] =
         await Promise.all([
           requestResult<LearnerProfileRecord[]>(
             transaction.objectStore('learnerProfiles').getAll()
@@ -114,6 +118,9 @@ export async function exportActiveLearnerBackup(
           ),
           requestResult<PracticeSessionRecord[]>(
             transaction.objectStore('practiceSessions').getAll()
+          ),
+          requestResult<PracticeEvidenceRecord[]>(
+            transaction.objectStore('practiceEvidence').getAll()
           )
         ] as const);
 
@@ -124,7 +131,8 @@ export async function exportActiveLearnerBackup(
         completionEvents,
         assessmentAttempts,
         skillMastery,
-        practiceSessions
+        practiceSessions,
+        practiceEvidence
       });
     } catch (error) {
       await completed.catch(() => undefined);

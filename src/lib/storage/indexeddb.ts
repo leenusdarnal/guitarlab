@@ -14,6 +14,8 @@ import { systemRuntime } from '../repositories/contracts';
 import type {
   AssessmentAttemptRecord,
   AssessmentAttemptRepository,
+  PracticeEvidenceRecord,
+  PracticeEvidenceRepository,
   LearnerProfileRecord,
   LearnerProfileRepository,
   LessonProgressRecord,
@@ -25,7 +27,7 @@ import type {
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 3;
+export const LOCAL_DATABASE_VERSION = 4;
 
 const stores = {
   metadata: 'metadata',
@@ -34,7 +36,8 @@ const stores = {
   completionEvents: 'lessonCompletionEvents',
   assessmentAttempts: 'assessmentAttempts',
   mastery: 'skillMastery',
-  practiceSessions: 'practiceSessions'
+  practiceSessions: 'practiceSessions',
+  practiceEvidence: 'practiceEvidence'
 } as const;
 
 type MetadataRecord = { key: string; value: string };
@@ -172,6 +175,12 @@ export function openLocalDatabase(
           'startedAt'
         ]);
       }
+      if (!database.objectStoreNames.contains(stores.practiceEvidence)) {
+        const evidence = database.createObjectStore(stores.practiceEvidence, {
+          keyPath: 'id'
+        });
+        evidence.createIndex('byLearnerSession', ['learnerId', 'sessionId']);
+      }
     };
 
     request.onsuccess = () => {
@@ -255,6 +264,7 @@ export type IndexedDbRepositories = {
   assessments: AssessmentAttemptRepository;
   mastery: SkillMasteryRepository;
   practice: PracticeSessionRepository;
+  practiceEvidence: PracticeEvidenceRepository;
 };
 
 /** IndexedDB adapters implement the same ports used by the application layer. */
@@ -492,7 +502,50 @@ export function createIndexedDbRepositories(
       )
   };
 
-  return { profiles, progress, assessments, mastery, practice };
+  const practiceEvidence: PracticeEvidenceRepository = {
+    append: async (record) =>
+      inTransaction(
+        database,
+        [stores.practiceEvidence, stores.practiceSessions],
+        'readwrite',
+        async (tx) => {
+          const session = await requestResult<PracticeSessionRecord | undefined>(
+            tx.objectStore(stores.practiceSessions).get(record.sessionId)
+          );
+          if (
+            !session ||
+            session.learnerId !== record.learnerId ||
+            session.status === 'abandoned'
+          ) {
+            throw new Error('Practice evidence must reference a session owned by this learner.');
+          }
+          // add(), not put(), makes the repository append-only.
+          await requestResult(
+            tx.objectStore(stores.practiceEvidence).add(record)
+          );
+        }
+      ),
+    listBySession: (learnerId, sessionId) =>
+      inTransaction(
+        database,
+        [stores.practiceEvidence],
+        'readonly',
+        async (tx) => {
+          const records = await requestResult<PracticeEvidenceRecord[]>(
+            tx
+              .objectStore(stores.practiceEvidence)
+              .index('byLearnerSession')
+              .getAll([learnerId, sessionId])
+          );
+          return records.sort(
+            (left, right) =>
+              left.recordedAt - right.recordedAt || left.id.localeCompare(right.id)
+          );
+        }
+      )
+  };
+
+  return { profiles, progress, assessments, mastery, practice, practiceEvidence };
 }
 
 /** Entry point used only by client-side lifecycle hooks and user actions. */
