@@ -39,18 +39,23 @@
       : [...selectedChord.strings]
   );
   const cleanChangeObservation = $derived.by(() => {
+    // Svelte coerces values from type="number" inputs to numbers. Normalize
+    // before trimming so editing one field cannot break the derived view.
+    const cleanChangesValue = String(cleanChanges ?? '').trim();
+    const totalAttemptsValue = String(totalAttempts ?? '').trim();
+    const elapsedSecondsValue = String(elapsedSeconds ?? '').trim();
     if (
-      cleanChanges.trim() === '' ||
-      totalAttempts.trim() === '' ||
-      elapsedSeconds.trim() === ''
+      cleanChangesValue === '' ||
+      totalAttemptsValue === '' ||
+      elapsedSecondsValue === ''
     ) {
       return null;
     }
     try {
       return createChordTransitionObservation({
-        cleanChanges: Number(cleanChanges),
-        totalAttempts: Number(totalAttempts),
-        elapsedSeconds: Number(elapsedSeconds)
+        cleanChanges: Number(cleanChangesValue),
+        totalAttempts: Number(totalAttemptsValue),
+        elapsedSeconds: Number(elapsedSecondsValue)
       });
     } catch {
       return null;
