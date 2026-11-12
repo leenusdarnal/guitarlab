@@ -160,6 +160,22 @@ try {
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
+  await upgradePage.waitForFunction(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () =>
+        reject(request.error ?? new Error('Could not inspect IndexedDB version.'));
+    });
+    const upgraded =
+      database.version === 2 &&
+      database
+        .transaction('practiceSessions')
+        .objectStore('practiceSessions')
+        .indexNames.contains('byLearnerStatusStartedAt');
+    database.close();
+    return upgraded;
+  });
   const upgradeResult = await upgradePage.evaluate(async () => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
