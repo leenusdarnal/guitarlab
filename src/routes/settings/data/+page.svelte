@@ -1,5 +1,11 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import {
+    getLocalStoragePersistenceStatus,
+    requestLocalStoragePersistence,
+    type LocalStoragePersistenceStatus
+  } from '../../../lib/storage/persistence';
   import { exportActiveLearnerBackup } from '../../../lib/storage/backup-storage';
   import {
     resetActiveLearnerData,
@@ -18,6 +24,50 @@
   let selectedFileName = $state('');
   let restoreConfirmed = $state(false);
   let resetPhrase = $state('');
+  let storageStatus = $state<LocalStoragePersistenceStatus | null>(null);
+  let isCheckingStorage = $state(true);
+  let isRequestingPersistence = $state(false);
+
+  onMount(() => {
+    void refreshStorageStatus();
+  });
+
+  async function refreshStorageStatus() {
+    isCheckingStorage = true;
+    try {
+      storageStatus = await getLocalStoragePersistenceStatus();
+    } finally {
+      isCheckingStorage = false;
+    }
+  }
+
+  async function requestPersistentStorage() {
+    isRequestingPersistence = true;
+    try {
+      storageStatus = await requestLocalStoragePersistence();
+      if (storageStatus.persisted) {
+        showMessage('This browser has granted persistent storage. Keep exporting backups for recovery.');
+      } else if (storageStatus.canRequest) {
+        showMessage('The browser did not grant persistent storage. Your data remains best-effort; keep a downloaded backup.', true);
+      } else {
+        showMessage('This browser does not support a persistent-storage request. Keep a downloaded backup.', true);
+      }
+    } finally {
+      isRequestingPersistence = false;
+    }
+  }
+
+  function formatStorageBytes(bytes: number): string {
+    if (bytes < 1024) return `${Math.round(bytes)} B`;
+    const units = ['KB', 'MB', 'GB', 'TB'];
+    let value = bytes / 1024;
+    let unit = 0;
+    while (value >= 1024 && unit < units.length - 1) {
+      value /= 1024;
+      unit += 1;
+    }
+    return `${value.toFixed(value >= 10 ? 0 : 1)} ${units[unit]}`;
+  }
 
   function showMessage(value: string, error = false) {
     message = value;
@@ -154,6 +204,34 @@
       Export a portable copy of your learner profile, preferences, lesson progress,
       assessment evidence, skill snapshots and practice sessions.
     </p>
+    <section class="backup-panel" aria-labelledby="storage-protection-title">
+      <div class="backup-icon" aria-hidden="true">◈</div>
+      <div>
+        <h2 id="storage-protection-title">Browser storage protection</h2>
+        {#if isCheckingStorage}
+          <p role="status">Checking this browser's storage status…</p>
+        {:else if storageStatus?.persisted === true}
+          <p>Your browser has granted persistent storage, which reduces automatic eviction risk. Browser settings can still remove site data, so keep a backup.</p>
+        {:else if storageStatus?.persisted === false}
+          <p>Storage is currently best-effort and may be cleared by the browser under storage pressure. You can ask the browser to preserve this site's data.</p>
+        {:else}
+          <p>This browser does not report whether storage is persistent. Export a backup regularly and keep it somewhere private.</p>
+        {/if}
+        {#if storageStatus?.usageBytes !== null && storageStatus?.usageBytes !== undefined && storageStatus.quotaBytes !== null && storageStatus.quotaBytes !== undefined}
+          <p>Estimated storage used: {formatStorageBytes(storageStatus.usageBytes)} of {formatStorageBytes(storageStatus.quotaBytes)}.</p>
+        {/if}
+        <div class="planner-actions">
+          {#if storageStatus?.persisted !== true && storageStatus?.canRequest}
+            <button class="primary-button" type="button" onclick={requestPersistentStorage} disabled={isRequestingPersistence}>
+              {isRequestingPersistence ? 'Requesting…' : 'Request persistent storage'}
+            </button>
+          {/if}
+          <button class="planner-secondary" type="button" onclick={refreshStorageStatus} disabled={isCheckingStorage || isRequestingPersistence}>
+            Refresh status
+          </button>
+        </div>
+      </div>
+    </section>
 
     <section class="backup-panel" aria-labelledby="export-title">
       <div class="backup-icon" aria-hidden="true">↓</div>
