@@ -35,16 +35,23 @@ const OFFLINE_HTML = `<!doctype html>
   </main></body>
 </html>`;
 
-function isCacheableNavigation(request: Request, response: Response, url: URL) {
+function isCacheableNavigation(
+  request: Request,
+  response: Response,
+  url: URL
+) {
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
   if (url.origin !== worker.location.origin) return false;
   if (url.pathname.startsWith('/api/')) return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) {
+  if (!response.headers.get('content-type')?.includes('text/html')) return false;
   if (response.headers.has('set-cookie')) return false;
 
   const cacheControl =
+    response.headers.get('cache-control')?.toLowerCase() ?? '';
   return (
+    !cacheControl.includes('private') && !cacheControl.includes('no-store')
+  );
 }
 
 async function trimPageCache(cache: Cache) {
@@ -53,6 +60,10 @@ async function trimPageCache(cache: Cache) {
   const excess = pageRequests.length - MAX_CACHED_PAGES;
   if (excess > 0) {
     await Promise.all(
+      pageRequests
+        .slice(0, excess)
+        .map((request) => cache.delete(request))
+    );
   }
 }
 
@@ -68,6 +79,11 @@ worker.addEventListener('activate', (event: ExtendableEvent) => {
       await Promise.all(
         keys
           .filter(
+            (key) =>
+              key.startsWith(`${CACHE_PREFIX}-`) &&
+              key !== ASSET_CACHE &&
+              key !== PAGE_CACHE
+          )
           .map((key) => caches.delete(key))
       );
       await worker.clients.claim();
@@ -99,6 +115,9 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
           return new Response(OFFLINE_HTML, {
             status: 503,
             headers: {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'no-store'
+            }
           });
         }
       })()
@@ -109,6 +128,9 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   // The precache contains immutable app build assets and static files. Do not
   // runtime-cache API responses, learner data, audio input or arbitrary URLs.
   if (
+    url.pathname.startsWith('/_app/immutable/') ||
+    url.pathname.includes('.')
+  ) {
     event.respondWith(
       caches.match(request).then((cached) => cached ?? fetch(request))
     );
