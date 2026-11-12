@@ -166,8 +166,8 @@ Follow [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md) for the approve
 - [x] Persist accumulated active time and exclude paused intervals.
 - [x] Serialize session creation through a shared IndexedDB read/write transaction to prevent competing active sessions across tabs.
 - [x] Extend browser acceptance for pause, frozen timer, resume, reload recovery and completion.
-- [x] Pass full CI (PR #51 run `43204452773`); follow-up review hardening remains in progress.
-- [ ] Complete true two-tab concurrency browser acceptance before merge.
+- [x] Pass full CI (PR #51 run `43207060655`); the documentation checkpoint is being revalidated on the latest head.
+- [x] Complete true two-tab concurrency browser acceptance before merge.
 - [ ] Add exercise sequencing and append-only exercise observations in a later slice.
 
 Paused time is not counted as active time. Active time remains learner-reported session metadata and is not evidence of playing accuracy or skill mastery.
