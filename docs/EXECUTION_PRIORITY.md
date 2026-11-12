@@ -221,3 +221,18 @@ Append or replace this section when work progresses:
 ---
 
 **Source-of-truth hierarchy:** current code and tests on `main` → merged PR evidence → current GitHub Issues/Actions → this execution checkpoint → older chat summaries. If they conflict, inspect and reconcile rather than trusting the oldest status.
+
+
+## Resume checkpoint — 2026-11-12 (M7 first slice)
+
+- **Verified main baseline:** `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e` (merge of PR #49).
+- **Active implementation PR:** [#50 — local Practice Studio session flow](https://github.com/leenusdarnal/guitarlab/pull/50).
+- **Branch:** `feat/m7-practice-evidence-contract`.
+- **Implemented in this slice:** `/practice` route; dashboard desktop/mobile navigation; active learner-scoped IndexedDB session listing; session start with optional focus and planned duration; live elapsed display; finish using actual wall-clock duration; local session history; reload recovery for an in-progress session.
+- **Reused existing code:** application `startPracticeSession` / `finishPracticeSession` services, `PracticeSessionRepository`, IndexedDB v2 `practiceSessions` store and its learner index.
+- **Learning integrity:** duration is activity metadata only; no skill assessment or mastery is created. Planned minutes are kept separate from actual duration.
+- **Validation state:** existing application service tests cover lifecycle validation and the no-mastery invariant. PR-specific CI and browser acceptance have not yet been confirmed. Do not merge until the required CI passes and route-specific acceptance is added/passes.
+- **Known limitation:** active-session prevention is a read-before-create guard, not a cross-tab atomic lock. Fix this alongside pause/resume before treating concurrent-tab safety as complete.
+- **P1 still outstanding:** physical desktop/iOS/Android offline and backup/restore checks require real devices and must remain unverified until evidence is supplied.
+- **Next exact implementation:** add transactional single-active-session enforcement, pause/resume with accumulated active time, and interruption/reload tests. Then add exercise sequencing and immutable exercise observations; keep observations distinct from validated mastery assessments.
+- **Deferred:** PR #47 Node 26/CI redesign; Cloudflare preview/production deployment; production D1/auth/cloud sync. No deployment was performed.
