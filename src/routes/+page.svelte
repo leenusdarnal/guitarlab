@@ -162,6 +162,7 @@
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span aria-hidden="true">⌂</span> Today</a>
       <a class="nav-link" href={resolve('/learn')}><span aria-hidden="true">♫</span> Curriculum</a>
+      <a class="nav-link" href={resolve('/tools')}><span aria-hidden="true">♬</span> Music tools</a>
       <a class="nav-link" href="#learning-path"><span aria-hidden="true">▤</span> Learning path</a>
       <a class="nav-link" href="#reviews"><span aria-hidden="true">◷</span> Reviews</a>
       <a class="nav-link" href="#practice-history"><span aria-hidden="true">◉</span> Practice history</a>
@@ -184,6 +185,7 @@
       <nav class="mobile-menu" id="mobile-navigation" aria-label="Mobile navigation">
         <a href="#today" onclick={() => (menuOpen = false)}>Today</a>
         <a href={resolve('/learn')}>Curriculum</a>
+        <a href={resolve('/tools')}>Music tools</a>
         <a href="#learning-path" onclick={() => (menuOpen = false)}>Learning path</a>
         <a href="#reviews" onclick={() => (menuOpen = false)}>Reviews</a>
         <a href="#practice-history" onclick={() => (menuOpen = false)}>Practice history</a>
