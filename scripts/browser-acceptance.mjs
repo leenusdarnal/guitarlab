@@ -54,6 +54,7 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const upgradePage = await upgradeContext.newPage();
+  upgradePage.setDefaultTimeout(15_000);
   await upgradePage.goto(origin, { waitUntil: 'networkidle' });
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
@@ -264,6 +265,7 @@ try {
     });
   });
   const restrictedStoragePage = await restrictedStorageContext.newPage();
+  restrictedStoragePage.setDefaultTimeout(15_000);
   const restrictedStorageErrors = [];
   restrictedStoragePage.on('pageerror', (error) =>
     restrictedStorageErrors.push(error.message)
@@ -291,6 +293,7 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -740,6 +743,7 @@ try {
     viewport: { width: 390, height: 844 }
   });
   const fretboardMobilePage = await fretboardMobileContext.newPage();
+  fretboardMobilePage.setDefaultTimeout(15_000);
   await fretboardMobilePage.goto(`${origin}/tools/fretboard`, {
     waitUntil: 'networkidle'
   });

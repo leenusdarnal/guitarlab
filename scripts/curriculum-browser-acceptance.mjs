@@ -50,6 +50,7 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  page.setDefaultTimeout(15_000);
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -177,6 +178,7 @@ try {
       viewport: { width: device.width, height: device.height }
     });
     const offlinePage = await offlineContext.newPage();
+  offlinePage.setDefaultTimeout(15_000);
     const offlineErrors = [];
     offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
     await offlinePage.goto(origin, { waitUntil: 'networkidle' });
