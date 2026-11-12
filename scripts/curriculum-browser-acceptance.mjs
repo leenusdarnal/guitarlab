@@ -171,9 +171,7 @@ try {
   });
   const offlinePage = await offlineContext.newPage();
   const offlineErrors = [];
-  offlinePage.on('pageerror', (error) =>
-    offlineErrors.push(error.message)
-  );
+  offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
   await offlinePage.goto(origin, { waitUntil: 'networkidle' });
   await offlinePage.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
@@ -186,7 +184,9 @@ try {
   );
   const cachedLessonUrl = `${origin}/learn/y1-w01-lesson`;
   await offlinePage.goto(cachedLessonUrl, { waitUntil: 'networkidle' });
-  await offlinePage.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
+  await offlinePage
+    .getByRole('heading', { name: 'Meet your guitar' })
+    .waitFor();
   await offlineContext.setOffline(true);
   const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
     waitUntil: 'networkidle'
@@ -196,7 +196,9 @@ try {
     200,
     'A previously visited lesson should load offline'
   );
-  await offlinePage.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
+  await offlinePage
+    .getByRole('heading', { name: 'Meet your guitar' })
+    .waitFor();
   const uncachedLessonResponse = await offlinePage.goto(
     `${origin}/learn/y1-w03-lesson`,
     {
@@ -208,7 +210,9 @@ try {
     503,
     'An unvisited lesson should receive the explicit offline fallback'
   );
-  await offlinePage.getByRole('heading', { name: 'Keep your practice going.' }).waitFor();
+  await offlinePage
+    .getByRole('heading', { name: 'Keep your practice going.' })
+    .waitFor();
   assert.deepEqual(
     offlineErrors,
     [],
