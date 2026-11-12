@@ -113,4 +113,5 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - Paused intervals are excluded from displayed and completed duration.
 - Active-session creation is guarded inside an IndexedDB read/write transaction to prevent competing tabs from creating sessions simultaneously.
 - Browser acceptance covers pause, frozen timer, pause reload recovery, resume, active reload recovery and finish.
-- CI and PR review are pending; Issue #16 remains open.
+- PR #51 CI run `43204452773` passed both required jobs. PR remains open/unmerged; Issue #16 remains open.
+- Review follow-up: preserve paused status in dashboard read models, avoid changing the unused D1 schema without a migration, and add real two-tab concurrency browser acceptance before merge.

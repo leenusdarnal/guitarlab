@@ -366,9 +366,7 @@ export const practiceSessions = sqliteTable(
     learnerId: text('learner_id').notNull(),
     primaryCurriculumReleaseId: text('primary_curriculum_release_id'),
     primaryLessonId: text('primary_lesson_id'),
-    status: text('status', {
-      enum: ['in_progress', 'paused', 'completed', 'abandoned']
-    })
+    status: text('status', { enum: ['in_progress', 'completed', 'abandoned'] })
       .notNull()
       .default('in_progress'),
     plannedMinutes: integer('planned_minutes'),
@@ -419,7 +417,7 @@ export const practiceSessions = sqliteTable(
     check(
       'practice_sessions_status_timestamps_consistent',
       sql.raw(
-        "(status in ('in_progress', 'paused') and ended_at is null) or (status in ('completed', 'abandoned') and ended_at is not null)"
+        "(status = 'in_progress' and ended_at is null) or (status in ('completed', 'abandoned') and ended_at is not null)"
       )
     ),
     check(

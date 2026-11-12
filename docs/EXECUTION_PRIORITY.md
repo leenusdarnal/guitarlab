@@ -254,5 +254,6 @@ Append or replace this section when work progresses:
 - **Scope:** pause/resume lifecycle, accumulated active-time accounting, transactional single-active-session enforcement across tabs, reload recovery and browser acceptance.
 - **Time semantics:** paused intervals are excluded; legacy in-progress rows without `activeStartedAt` fall back to `startedAt`; elapsed time remains activity metadata, never mastery evidence.
 - **P1 manual gate:** physical desktop/iOS/Android offline and backup/restore acceptance remains unverified and requires device evidence. Keep release sign-off open.
-- **Validation:** CI and PR review are pending; no merge or deployment is authorised by this checkpoint.
-- **Next exact task:** inspect CI and fix any type, formatting, persistence or browser acceptance failures; add a two-tab browser assertion if practical.
+- **Validation:** Latest PR #51 CI run `43204452773` passed both required jobs (application/curriculum and Node.js 26). PR remains open and unmerged; this review follow-up is not merge approval.
+- **Review findings:** preserve the paused status in dashboard/practice-plan read models; keep the unused server-side D1 schema unchanged until its migration is intentionally introduced; add a true two-tab concurrency browser assertion before merge.
+- **Next exact task:** finish the two-tab acceptance test, rerun CI, then request explicit merge approval. Physical-device QA remains a separate release gate.
