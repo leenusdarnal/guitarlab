@@ -6,7 +6,7 @@ GuitarLab creates one active learner profile on the first client-side applicatio
 
 The initial profile starts empty. Instrument, handedness, tuning, starting point, goals, practice duration, availability and lesson-presentation preferences remain unset until the learner chooses them in onboarding. No lesson completion, assessment, mastery or practice session is created by first launch.
 
-## Database version 1
+## Database version 2
 
 The database is opened by `src/lib/storage/indexeddb.ts`. Its schema version is explicit and must be increased when a later release adds or changes stores or indexes.
 
@@ -20,7 +20,7 @@ The database is opened by `src/lib/storage/indexeddb.ts`. Its schema version is 
 | `skillMastery` | learner + release + skill | Derived evidence-based mastery snapshot |
 | `practiceSessions` | `id` | Planned and actual practice activity |
 
-Indexes support lookup by learner, learner/release/lesson, learner/release/skill, progress and practice status. Completion writes are kept in one IndexedDB transaction with their event. Practice updates use a read/write transaction and only replace a record still marked `in_progress`.
+Indexes support lookup by learner, learner/release/lesson, learner/release/skill, progress, practice status, and the composite learner/status/start-time session history query. Version 2 adds `byLearnerStatusStartedAt` to the existing `practiceSessions` store for the upcoming M7 session-history workflow. The v1-to-v2 upgrade is additive: it preserves the existing stores, active learner, preferences and practice-session records while adding the index. Completion writes are kept in one IndexedDB transaction with their event. Practice updates use a read/write transaction and only replace a record still marked `in_progress`.
 
 ## Application boundary
 
@@ -31,12 +31,13 @@ Stored preferences are validated again when read. If the browser does not provid
 ## Migrations and recovery
 
 - Database upgrades are additive through IndexedDB's `onupgradeneeded` lifecycle.
+- The v1-to-v2 migration adds the practice-session composite index without replacing existing stores or records.
 - Existing stores are preserved when a later schema version is introduced.
 - The adapter closes connections on `versionchange` so another tab can perform an upgrade.
 - A blocked upgrade asks the learner to close other GuitarLab tabs.
 - Storage errors are surfaced; the application does not silently reset or overwrite the existing profile.
 
-The M2.4 implementation is merged in PR #25: versioned local JSON export, strict import validation and preview, transactional replacement restore, and typed-confirmation reset. Manual browser round-trip and rollback acceptance remains a release check. Clearing browser site data or uninstalling a browser profile can still remove local learner data; keep a downloaded backup in a private safe location.
+The M2.4 implementation is merged in PR #25, with expanded Chromium recovery coverage merged in PR #42: versioned local JSON export, strict import validation and preview, transactional replacement restore, reset cancel/confirm, and restore into a clean profile. The browser suite also forces a unique-index violation to verify transaction rollback preserves the existing profile. Physical-device backup/restore acceptance remains a release check. Clearing browser site data or uninstalling a browser profile can still remove local learner data; keep a downloaded backup in a private safe location.
 
 ## Browser storage durability
 
@@ -52,4 +53,8 @@ The local database is not bound to D1, and no cloud sync route is introduced. Do
 
 ## Verification
 
-The M2.3 tests cover fresh-profile defaults, reuse of the active profile, validated preference updates and the absence of any automatic mastery record. CI remains responsible for formatting, lint, Svelte/TypeScript checks, unit tests, curriculum validation and the Cloudflare Worker build.
+- Unit tests cover fresh-profile defaults, reuse of the active profile, validated preference updates and the absence of any automatic mastery record.
+- Chromium CI seeds a real v1 IndexedDB database, launches the app to trigger the v2 upgrade, and verifies that the active learner, preferences and existing practice-session record survive while the new composite index and all stores are present.
+- Curriculum browser CI verifies cached-lesson offline reload and the unvisited-page fallback at desktop (1440px) and mobile (390px) viewport sizes.
+- Physical desktop/mobile browser checks, including iOS Safari and Android Chrome where available, remain manual acceptance tasks. Use the [manual acceptance runbook](MANUAL_ACCEPTANCE.md).
+- CI also runs formatting, lint, Svelte/TypeScript checks, unit tests, curriculum validation and the Cloudflare Worker build.
