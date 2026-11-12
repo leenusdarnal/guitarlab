@@ -66,6 +66,17 @@ try {
     152,
     'Every authored lesson should have a stable navigation link'
   );
+  assert.equal(
+    await page.locator('.route-jump a').count(),
+    6,
+    'Every learning route should have a quick-jump link'
+  );
+  await page.locator('.route-jump a[href="#route-year-2"]').click();
+  assert.equal(
+    new URL(page.url()).hash,
+    '#route-year-2',
+    'The Year 2 quick-jump link should navigate to its route'
+  );
   assert.match(await page.locator('.stats').innerText(), /52 Year 1 lessons/);
   assert.match(await page.locator('.stats').innerText(), /52 Year 2 lessons/);
   assert.match(
