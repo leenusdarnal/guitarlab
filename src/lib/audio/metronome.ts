@@ -180,7 +180,7 @@ export async function playReferenceTone(
       throw new Error('Audio is not ready. Tap the reference tone again.');
     }
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve) => {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
       const startAt = context.currentTime + 0.02;
