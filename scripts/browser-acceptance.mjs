@@ -55,6 +55,7 @@ try {
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
+  await upgradePage.getByText('Your first session is still ahead').waitFor();
   await upgradePage.evaluate(async () => {
     await new Promise((resolve, reject) => {
       const deletion = indexedDB.deleteDatabase('guitarlab-local');
