@@ -220,7 +220,7 @@
 
   <main class="main-area">
     <header class="topbar">
-      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label="GuitarLab navigation menu"><span aria-hidden="true">☰</span><strong>GuitarLab</strong></button>
+      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label="Toggle navigation — GuitarLab"><span aria-hidden="true">☰</span><strong>GuitarLab</strong></button>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions"><span class="status-pill"><i></i> Local-first learning</span><button class="icon-button" onclick={toggleTheme} aria-label="Toggle colour theme" title="Toggle theme">{theme === 'dark' ? '☼' : '☾'}</button><a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences">↗</a></div>
     </header>
