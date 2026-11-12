@@ -259,7 +259,10 @@
 
     <div class="board-scroll" aria-label="Scrollable fretboard diagram">
       <div class="fretboard" class:is-left-handed={handedness === 'left'}>
-        <div class="fret-label-row">
+        <div
+          class="fret-label-row"
+          style:grid-template-columns={`62px repeat(${maxFret + 1}, minmax(38px, 1fr))`}
+        >
           <span class="string-heading">STRING</span>
           {#each Array.from({ length: maxFret + 1 }, (_, fret) => fret) as fret}
             <span
