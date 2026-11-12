@@ -53,26 +53,42 @@ try {
 
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
-  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
 
   // The chord library is independently navigable and shows one complete shape.
   await page.getByRole('link', { name: /Open chord library/ }).click();
   await page.getByRole('heading', { name: 'Chord library.' }).waitFor();
   await page.getByLabel('Choose an open chord').selectOption('g-major');
   await page.getByRole('heading', { name: 'G', exact: true }).waitFor();
-  const chordDiagram = page.getByRole('img', { name: /G chord, right-handed view/ });
+  const chordDiagram = page.getByRole('img', {
+    name: /G chord, right-handed view/
+  });
   await chordDiagram.waitFor();
-  assert.match(await chordDiagram.getAttribute('aria-label'), /string 6: fret 3, finger 3/);
+  assert.match(
+    await chordDiagram.getAttribute('aria-label'),
+    /string 6: fret 3, finger 3/
+  );
   assert.match(await chordDiagram.getAttribute('aria-label'), /string 4: open/);
-  assert.match(await chordDiagram.getAttribute('aria-label'), /string 1: fret 3, finger 4/);
+  assert.match(
+    await chordDiagram.getAttribute('aria-label'),
+    /string 1: fret 3, finger 4/
+  );
 
   // The two-chord drill alternates targets and records outcomes separately.
   await page.getByLabel('First drill chord').selectOption('c-major');
   await page.getByLabel('Second drill chord').selectOption('g-major');
   await page.getByRole('button', { name: 'Start / reset drill' }).click();
-  await page.locator('.drill-target strong').getByText('C', { exact: true }).waitFor();
+  await page
+    .locator('.drill-target strong')
+    .getByText('C', { exact: true })
+    .waitFor();
   await page.getByRole('button', { name: 'Record clean change' }).click();
-  await page.locator('.drill-target strong').getByText('G', { exact: true }).waitFor();
+  await page
+    .locator('.drill-target strong')
+    .getByText('G', { exact: true })
+    .waitFor();
   await page.getByRole('button', { name: 'Record correction needed' }).click();
   await page.locator('.drill-target strong').getByText('C', { exact: true }).waitFor();
   await page.waitForTimeout(1100);
@@ -96,7 +112,9 @@ try {
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
 
   // Tempo and meter can be changed before audio begins.
-  const tempoSlider = page.getByRole('slider', { name: 'Tempo in beats per minute' });
+  const tempoSlider = page.getByRole('slider', {
+    name: 'Tempo in beats per minute'
+  });
   await tempoSlider.evaluate((input) => {
     input.value = '112';
     input.dispatchEvent(new Event('input', { bubbles: true }));
