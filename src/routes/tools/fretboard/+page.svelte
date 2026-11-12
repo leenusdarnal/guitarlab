@@ -7,6 +7,7 @@
     STANDARD_GUITAR_TUNING,
     findFretboardPositions,
     getDisplayFretColumn,
+    getNoteAtPosition,
     getFretboardLayout,
     type FretboardNote,
     type GuitarHandedness,
@@ -28,6 +29,8 @@
   let mode = $state<'explore' | 'find'>('explore');
   let targetPitchClass = $state(0);
   let selectedNote = $state<FretboardNote | null>(null);
+  let focusedStringNumber = $state(1);
+  let focusedFret = $state(0);
   let feedback = $state('');
   let savingHandedness = $state(false);
 
@@ -76,12 +79,22 @@
   function changeSpelling(event: Event) {
     spelling = (event.currentTarget as HTMLSelectElement)
       .value as NoteSpelling;
+    if (selectedNote) {
+      selectedNote = getNoteAtPosition(
+        selectedNote.stringNumber,
+        selectedNote.fret,
+        STANDARD_GUITAR_TUNING,
+        spelling
+      );
+    }
     feedback = '';
   }
 
   function changeMaxFret(event: Event) {
     maxFret = Number((event.currentTarget as HTMLSelectElement).value);
     selectedNote = null;
+    focusedStringNumber = 1;
+    focusedFret = 0;
     feedback = '';
   }
 
@@ -95,6 +108,38 @@
     targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
     selectedNote = null;
     feedback = '';
+  }
+
+  function handleFretboardKeydown(event: KeyboardEvent, note: FretboardNote) {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+      return;
+    }
+    event.preventDefault();
+
+    const currentColumn =
+      getDisplayFretColumn(note.fret, maxFret, handedness) - 1;
+    const nextColumn = Math.max(
+      0,
+      Math.min(
+        maxFret,
+        currentColumn + (event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0)
+      )
+    );
+    const nextString = Math.max(
+      1,
+      Math.min(
+        6,
+        note.stringNumber + (event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0)
+      )
+    );
+    const nextFret =
+      handedness === 'left' ? maxFret - nextColumn : nextColumn;
+
+    focusedStringNumber = nextString;
+    focusedFret = nextFret;
+    document
+      .getElementById(`fret-note-${nextString}-${nextFret}`)
+      ?.focus();
   }
 
   function selectFretboardNote(note: FretboardNote) {
@@ -253,7 +298,8 @@
       </div>
     {:else}
       <p class="activity-hint">
-        Select any position to see its note name, octave and pitch frequency.
+        Select any position to see its note name, octave and pitch frequency. Use
+        the arrow keys to move between strings and frets.
       </p>
     {/if}
 
@@ -296,13 +342,21 @@
                   class:selected={selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret}
                   class:correct={mode === 'find' && selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret && note.pitchClass === targetPitchClass}
                   style:grid-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
+                  id={`fret-note-${note.stringNumber}-${note.fret}`}
                   data-string={note.stringNumber}
                   data-fret={note.fret}
                   data-display-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
+                  tabindex={focusedStringNumber === note.stringNumber && focusedFret === note.fret ? 0 : -1}
+                  aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
                   aria-label={mode === 'find'
                     ? `String ${note.stringNumber}, fret ${note.fret}, position`
                     : `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`}
                   aria-pressed={selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret}
+                  onfocus={() => {
+                    focusedStringNumber = note.stringNumber;
+                    focusedFret = note.fret;
+                  }}
+                  onkeydown={(event) => handleFretboardKeydown(event, note)}
                   onclick={() => selectFretboardNote(note)}
                 >
                   {#if showNoteNames && mode === 'explore'}
