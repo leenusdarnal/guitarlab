@@ -90,7 +90,10 @@ try {
     .getByText('G', { exact: true })
     .waitFor();
   await page.getByRole('button', { name: 'Record correction needed' }).click();
-  await page.locator('.drill-target strong').getByText('C', { exact: true }).waitFor();
+  await page
+    .locator('.drill-target strong')
+    .getByText('C', { exact: true })
+    .waitFor();
   await page.waitForTimeout(1100);
   await page.getByRole('button', { name: 'Finish drill' }).click();
   assert.equal(await page.getByLabel('Clean changes').inputValue(), '1');
