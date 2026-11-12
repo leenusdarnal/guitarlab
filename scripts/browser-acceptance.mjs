@@ -829,6 +829,25 @@ try {
   await page
     .getByRole('heading', { name: 'Your session is in progress' })
     .waitFor();
+
+  // Reject impossible learner-entered counts before any observation is saved.
+  await page.locator('#exercise-name').fill('G major scale');
+  await page.locator('#repetitions').fill('8');
+  await page.locator('#clean-repetitions').fill('9');
+  await page.getByRole('button', { name: 'Save exercise observation' }).click();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Clean repetitions cannot exceed total repetitions.' })
+    .waitFor();
+
+  await page.locator('#clean-repetitions').fill('6');
+  await page.locator('#tempo-bpm').fill('72');
+  await page.locator('#exercise-difficulty').fill('3');
+  await page.getByRole('button', { name: 'Save exercise observation' }).click();
+  await page
+    .locator('.active-evidence-list')
+    .getByText('G major scale', { exact: true })
+    .waitFor();
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
   await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
@@ -841,6 +860,10 @@ try {
   );
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  await page
+    .locator('.active-evidence-list')
+    .getByText('G major scale', { exact: true })
+    .waitFor();
   assert.equal(
     await page.locator('.elapsed').innerText(),
     pausedElapsed,
@@ -856,12 +879,32 @@ try {
     .waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
+  await page.locator('#session-reflection').fill(
+    'The scale felt steadier when I kept my wrist relaxed.'
+  );
+  await page.locator('#next-target').fill(
+    'Repeat the G major scale at 72 BPM for three minutes.'
+  );
   await page.getByRole('button', { name: 'Finish and save session' }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'Elapsed session time is activity history' })
     .waitFor();
   await page.getByText('completed', { exact: true }).waitFor();
+  await page
+    .getByText('The scale felt steadier when I kept my wrist relaxed.')
+    .waitFor();
+  await page
+    .getByText('Repeat the G major scale at 72 BPM for three minutes.')
+    .waitFor();
+  await page
+    .getByRole('button', { name: 'Show exercise observations' })
+    .first()
+    .click();
+  await page
+    .locator('.history-evidence')
+    .getByText('G major scale', { exact: true })
+    .waitFor();
   await page.getByText(/\d+ sec/).waitFor();
 
   // Two tabs share the same IndexedDB database. Concurrent starts must
@@ -926,7 +969,7 @@ try {
     `Browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Browser acceptance passed: dashboard, fresh state, preference/theme persistence, explainable planner presets/custom validation, accept/dismiss/restore, mobile navigation and zero uncaught page errors.'
+    'Browser acceptance passed: learner preferences, practice evidence validation/persistence, reflection/next target, music tools and zero uncaught page errors.'
   );
 } catch (error) {
   console.error(error);
