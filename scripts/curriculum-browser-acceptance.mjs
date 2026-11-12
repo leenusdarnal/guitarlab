@@ -188,6 +188,11 @@ try {
     .getByRole('heading', { name: 'Meet your guitar' })
     .waitFor();
   await offlineContext.setOffline(true);
+  assert.equal(
+    await offlinePage.evaluate(() => navigator.onLine),
+    false,
+    'The browser context should report that it is offline'
+  );
   const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
     waitUntil: 'networkidle'
   });
