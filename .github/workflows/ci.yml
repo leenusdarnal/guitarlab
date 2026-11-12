@@ -3,7 +3,7 @@ name: GuitarLab CI
 on:
   pull_request:
   push:
-    branches: [main, "feat/**", "chore/**"]
+    branches: [main]
 
 permissions:
   contents: read
