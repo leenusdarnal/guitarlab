@@ -24,6 +24,7 @@
   let targetPitchClass = $state(0);
   let findMode = $state(false);
   let selectedPosition = $state<{ stringNumber: number; fret: number } | null>(null);
+  let focusedPosition = $state({ stringNumber: 1, fret: 0 });
   let feedback = $state('');
   let saveStatus = $state('');
   let profilePreferences = $state<ProfilePreferences | null>(null);
@@ -72,9 +73,25 @@
     return `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`;
   }
 
+  function changeTargetNote(event: Event) {
+    targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
+    selectedPosition = null;
+    feedback = '';
+  }
+
+  function changeMaxFret(event: Event) {
+    maxFret = Number((event.currentTarget as HTMLSelectElement).value);
+    if (focusedPosition.fret > maxFret) {
+      focusedPosition = { stringNumber: 1, fret: 0 };
+    }
+    selectedPosition = null;
+    feedback = '';
+  }
+
   function activateNote(note: FretboardNote) {
     if (findMode) {
       if (note.pitchClass !== targetPitchClass) {
+        selectedPosition = null;
         feedback = `Not quite. Find ${targetNoteName} on another position.`;
         return;
       }
@@ -109,6 +126,7 @@
       return;
     }
 
+    focusedPosition = { stringNumber: nextString, fret: nextFret };
     document
       .querySelector<HTMLButtonElement>(
         `.fret-cell[data-string="${nextString}"][data-fret="${nextFret}"]`
@@ -190,7 +208,7 @@
       </label>
       <label>
         <span>Fret range</span>
-        <select aria-label="Fret range" bind:value={maxFret}>
+        <select aria-label="Fret range" value={maxFret} onchange={changeMaxFret}>
           <option value={12}>Open to 12th fret</option>
           <option value={24}>Open to 24th fret</option>
         </select>
@@ -222,7 +240,7 @@
     {#if findMode}
       <div class="find-panel">
         <label for="target-note">Find this note</label>
-        <select id="target-note" bind:value={targetPitchClass}>
+        <select id="target-note" value={targetPitchClass} onchange={changeTargetNote}>
           {#each SHARP_NOTE_NAMES as noteName, index (index)}
             <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
@@ -256,6 +274,7 @@
         {#each fretboardRows as notes, rowIndex (rowIndex + 1)}
           <div
             class="fret-row"
+            role="group"
             data-frets={maxFret}
             style={`grid-template-columns: 34px repeat(${maxFret + 1}, minmax(0, 1fr));`}
             aria-label={`String ${rowIndex + 1}`}
@@ -268,12 +287,20 @@
               <button
                 class="fret-cell"
                 class:open-string={note.fret === 0}
-                class:is-target={findMode && note.pitchClass === targetPitchClass}
+                class:is-target={findMode && selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret && note.pitchClass === targetPitchClass}
                 class:is-selected={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
                 type="button"
                 aria-label={cellLabel(note)}
                 aria-pressed={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
                 aria-describedby={findMode ? undefined : 'keyboard-help'}
+                aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
+                tabindex={focusedPosition.stringNumber === note.stringNumber && focusedPosition.fret === note.fret ? 0 : -1}
+                onfocus={() => {
+                  focusedPosition = {
+                    stringNumber: note.stringNumber,
+                    fret: note.fret
+                  };
+                }}
                 data-string={note.stringNumber}
                 data-fret={note.fret}
                 data-display-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
@@ -281,7 +308,11 @@
                 onclick={() => activateNote(note)}
                 onkeydown={(event) => moveFocus(event, note)}
               >
-                <span>{note.noteName}</span><small>{note.octave}</small>
+                {#if !findMode || (selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret)}
+                  <span>{note.noteName}</span><small>{note.octave}</small>
+                {:else}
+                  <span class="visually-hidden">Position</span>
+                {/if}
               </button>
             {/each}
           </div>
