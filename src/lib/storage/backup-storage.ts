@@ -107,28 +107,28 @@ export async function exportActiveLearnerBackup(
         practiceSessions,
         practiceEvidence
       ] = await Promise.all([
-          requestResult<LearnerProfileRecord[]>(
-            transaction.objectStore('learnerProfiles').getAll()
-          ),
-          requestResult<LessonProgressRecord[]>(
-            transaction.objectStore('lessonProgress').getAll()
-          ),
-          requestResult<LessonCompletionEventRecord[]>(
-            transaction.objectStore('lessonCompletionEvents').getAll()
-          ),
-          requestResult<AssessmentAttemptRecord[]>(
-            transaction.objectStore('assessmentAttempts').getAll()
-          ),
-          requestResult<SkillMasteryRecord[]>(
-            transaction.objectStore('skillMastery').getAll()
-          ),
-          requestResult<PracticeSessionRecord[]>(
-            transaction.objectStore('practiceSessions').getAll()
-          ),
-          requestResult<PracticeEvidenceRecord[]>(
-            transaction.objectStore('practiceEvidence').getAll()
-          )
-        ] as const);
+        requestResult<LearnerProfileRecord[]>(
+          transaction.objectStore('learnerProfiles').getAll()
+        ),
+        requestResult<LessonProgressRecord[]>(
+          transaction.objectStore('lessonProgress').getAll()
+        ),
+        requestResult<LessonCompletionEventRecord[]>(
+          transaction.objectStore('lessonCompletionEvents').getAll()
+        ),
+        requestResult<AssessmentAttemptRecord[]>(
+          transaction.objectStore('assessmentAttempts').getAll()
+        ),
+        requestResult<SkillMasteryRecord[]>(
+          transaction.objectStore('skillMastery').getAll()
+        ),
+        requestResult<PracticeSessionRecord[]>(
+          transaction.objectStore('practiceSessions').getAll()
+        ),
+        requestResult<PracticeEvidenceRecord[]>(
+          transaction.objectStore('practiceEvidence').getAll()
+        )
+      ] as const);
 
       await completed;
       return buildLearnerBackup(active.id, exportedAt, {

@@ -71,28 +71,28 @@ async function readActiveRecords(
 
     const [profiles, progress, events, attempts, mastery, sessions, evidence] =
       await Promise.all([
-      requestResult<LearnerProfileRecord[]>(
-        transaction.objectStore('learnerProfiles').getAll()
-      ),
-      requestResult<LessonProgressRecord[]>(
-        transaction.objectStore('lessonProgress').getAll()
-      ),
-      requestResult<LessonCompletionEventRecord[]>(
-        transaction.objectStore('lessonCompletionEvents').getAll()
-      ),
-      requestResult<AssessmentAttemptRecord[]>(
-        transaction.objectStore('assessmentAttempts').getAll()
-      ),
-      requestResult<SkillMasteryRecord[]>(
-        transaction.objectStore('skillMastery').getAll()
-      ),
-      requestResult<PracticeSessionRecord[]>(
-        transaction.objectStore('practiceSessions').getAll()
-      ),
-      requestResult<PracticeEvidenceRecord[]>(
-        transaction.objectStore('practiceEvidence').getAll()
-      )
-    ]);
+        requestResult<LearnerProfileRecord[]>(
+          transaction.objectStore('learnerProfiles').getAll()
+        ),
+        requestResult<LessonProgressRecord[]>(
+          transaction.objectStore('lessonProgress').getAll()
+        ),
+        requestResult<LessonCompletionEventRecord[]>(
+          transaction.objectStore('lessonCompletionEvents').getAll()
+        ),
+        requestResult<AssessmentAttemptRecord[]>(
+          transaction.objectStore('assessmentAttempts').getAll()
+        ),
+        requestResult<SkillMasteryRecord[]>(
+          transaction.objectStore('skillMastery').getAll()
+        ),
+        requestResult<PracticeSessionRecord[]>(
+          transaction.objectStore('practiceSessions').getAll()
+        ),
+        requestResult<PracticeEvidenceRecord[]>(
+          transaction.objectStore('practiceEvidence').getAll()
+        )
+      ]);
     await completed;
 
     const profile = profiles.find((record) => record.id === metadata.value);
@@ -316,13 +316,13 @@ export async function resetActiveLearnerData(
           practiceRows,
           evidenceRows
         ] = await Promise.all([
-            requestResult<LessonProgressRecord[]>(progress.getAll()),
-            requestResult<LessonCompletionEventRecord[]>(events.getAll()),
-            requestResult<AssessmentAttemptRecord[]>(assessments.getAll()),
-            requestResult<SkillMasteryRecord[]>(mastery.getAll()),
-            requestResult<PracticeSessionRecord[]>(practice.getAll()),
-            requestResult<PracticeEvidenceRecord[]>(evidence.getAll())
-          ]);
+          requestResult<LessonProgressRecord[]>(progress.getAll()),
+          requestResult<LessonCompletionEventRecord[]>(events.getAll()),
+          requestResult<AssessmentAttemptRecord[]>(assessments.getAll()),
+          requestResult<SkillMasteryRecord[]>(mastery.getAll()),
+          requestResult<PracticeSessionRecord[]>(practice.getAll()),
+          requestResult<PracticeEvidenceRecord[]>(evidence.getAll())
+        ]);
 
         for (const record of progressRows) {
           if (record.learnerId === active.value)
