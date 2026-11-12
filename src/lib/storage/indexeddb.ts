@@ -163,10 +163,11 @@ export function openLocalDatabase(
       }
       // M7 session history needs an efficient learner/status/time lookup.
       if (!sessions.indexNames.contains('byLearnerStatusStartedAt')) {
-        sessions.createIndex(
-          'byLearnerStatusStartedAt',
-          ['learnerId', 'status', 'startedAt']
-        );
+        sessions.createIndex('byLearnerStatusStartedAt', [
+          'learnerId',
+          'status',
+          'startedAt'
+        ]);
       }
     };
 
