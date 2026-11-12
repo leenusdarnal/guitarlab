@@ -223,7 +223,7 @@
       <div class="find-panel">
         <label for="target-note">Find this note</label>
         <select id="target-note" bind:value={targetPitchClass}>
-          {#each SHARP_NOTE_NAMES as noteName, index}
+          {#each SHARP_NOTE_NAMES as noteName, index (index)}
             <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
         </select>
@@ -245,7 +245,7 @@
           aria-hidden="true"
         >
           <span class="string-heading">String</span>
-          {#each Array.from({ length: maxFret + 1 }, (_, fret) => fret) as fret}
+          {#each Array.from({ length: maxFret + 1 }, (_, fret) => fret) as fret (fret)}
             <span
               class="fret-number"
               style={`grid-column: ${getDisplayFretColumn(fret, maxFret, handedness) + 1};`}
