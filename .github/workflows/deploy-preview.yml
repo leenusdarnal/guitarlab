@@ -11,25 +11,77 @@ on:
 
 permissions:
   contents: read
+  checks: read
+  deployments: write
 
 concurrency:
   group: guitarlab-preview-deployment
   cancel-in-progress: false
 
 jobs:
+  verify-ci:
+    name: Verify CI for deployment commit
+    if: github.ref == 'refs/heads/main' && inputs.deploy_preview
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - name: Checkout the selected commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Ensure the selected commit is still the main tip
+        shell: bash
+        run: |
+          main_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [[ -z "$main_sha" || "$main_sha" != "$GITHUB_SHA" ]]; then
+            echo "The selected commit is no longer the current main branch tip."
+            echo "Selected: $GITHUB_SHA"
+            echo "Current main: $main_sha"
+            echo "Run the workflow again after main is stable."
+            exit 1
+          fi
+
+      - name: Require a successful CI check for this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100")"
+          if ! jq -e --arg sha "$GITHUB_SHA" '
+            any(
+              .check_runs[];
+              .head_sha == $sha
+              and .name == "Validate application and curriculum"
+              and .status == "completed"
+              and .conclusion == "success"
+            )
+          ' <<< "$checks" >/dev/null; then
+            echo "No successful GuitarLab CI check exists for $GITHUB_SHA."
+            echo "The preview Worker has not been changed."
+            exit 1
+          fi
+          echo "A successful GuitarLab CI check exists for $GITHUB_SHA."
+
   deploy-preview:
     name: Build and deploy preview Worker
+    needs: verify-ci
     if: github.ref == 'refs/heads/main' && inputs.deploy_preview
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    environment:
+      name: preview
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - name: Checkout main
+      - name: Checkout the verified commit
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.sha }}
 
       - name: Verify Cloudflare credentials are configured
         shell: bash
@@ -46,7 +98,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.18.0
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
