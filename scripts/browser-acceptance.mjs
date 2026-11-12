@@ -687,9 +687,19 @@ try {
 
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('#target-note').selectOption('0');
+  assert.equal(
+    await page.locator('.fret-cell > span:not(.visually-hidden)').count(),
+    0,
+    'Find mode must hide every note label before the learner answers'
+  );
   await page
     .getByRole('button', { name: 'String 6, fret 0, position' })
     .click();
+  assert.equal(
+    await page.locator('.fret-cell.is-target').count(),
+    0,
+    'An incorrect answer must not reveal any matching note positions'
+  );
   await page.getByRole('status').filter({ hasText: 'Not quite.' }).waitFor();
   await page
     .getByRole('button', { name: 'String 6, fret 8, position' })
@@ -698,6 +708,11 @@ try {
     .getByRole('status')
     .filter({ hasText: 'Correct — C is at string 6, fret 8.' })
     .waitFor();
+  assert.equal(
+    await page.locator('.fret-cell > span:not(.visually-hidden)').count(),
+    1,
+    'Only the correctly selected answer should reveal its note label'
+  );
 
   await page.locator('.controls select').nth(0).selectOption('left');
   const leftHandedOpenString = page.locator(
