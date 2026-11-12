@@ -44,7 +44,9 @@ function isCacheableNavigation(
   if (url.origin !== worker.location.origin) return false;
   if (url.pathname.startsWith('/api/')) return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) return false;
+  if (!response.headers.get('content-type')?.includes('text/html')) {
+    return false;
+  }
   if (response.headers.has('set-cookie')) return false;
 
   const cacheControl =
