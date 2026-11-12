@@ -74,6 +74,7 @@ The first offline app-shell implementation merged in [PR #35](https://github.com
 - [Curriculum content model and skill taxonomy](docs/CURRICULUM_CONTENT_MODEL.md)
 - [First-release scope](docs/RELEASE_SCOPE.md)
 - [Design direction](docs/DESIGN_DIRECTION.md)
+- [UI/UX audit and implementation priorities](docs/UI_UX_AUDIT.md)
 - [Implementation guidelines — design, personalisation and delivery](docs/IMPLEMENTATION_GUIDELINES.md)
 - [Fresh learner profile policy](docs/LEARNING_PROGRESS_MIGRATION.md)
 - [M0 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
