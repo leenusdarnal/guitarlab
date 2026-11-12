@@ -4,7 +4,7 @@
 
 GuitarLab is a local-first guitar-learning application under active development, built around a self-contained, authored three-year curriculum and deliberate practice.
 
-The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations. The current application includes learner onboarding and local profiles, a personalised dashboard and practice planner, local backup/restore, and a curriculum navigation and lesson reader. Interactive music tools, full lesson-progress capture, complete offline app-shell support and optional cloud synchronisation are later delivery slices. Every new learner starts fresh.
+The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations. The current application includes learner onboarding and local profiles, a personalised dashboard and practice planner, local backup/restore, a curriculum navigation and lesson reader, and locally persisted lesson checkpoints with completion/resume. The first offline app-shell slice is under review; full offline release acceptance, interactive music tools, the practice studio and musicianship features remain in delivery. Every new learner starts fresh.
 
 ## Product goals
 
@@ -49,7 +49,11 @@ The application uses the Cloudflare adapter and a full-stack Worker runtime. It 
 
 ## Development status
 
-The current `main` branch includes the application foundation ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)), the versioned D1/Drizzle schema and repository/application boundaries ([PRs #22–23](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), IndexedDB learner persistence and local backup/restore ([PRs #24–25](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), the learner dashboard and explainable practice planner ([PRs #26 and #28](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), and the six-route curriculum reader ([PR #29](https://github.com/leenusdarnal/guitarlab/pull/29)). The post-merge CI run for PR #29 passed, including local D1 migration/invariant checks, curriculum and design-token validation, format/lint/type checks, unit tests, Worker build/smoke tests and Chromium acceptance. **Still pending:** browser verification of backup/restore and offline recovery, M4.2 interactive checkpoints/completion/resume, explicit Cloudflare preview/production environment configuration, a live deployment workflow, production D1 provisioning (only when required), and authentication/cloud sync. No live Cloudflare deployment is claimed. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
+The current `main` branch includes the application foundation ([PR #21](https://github.com/leenusdarnal/guitarlab/pull/21)), the versioned D1/Drizzle schema and repository/application boundaries ([PRs #22–23](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), IndexedDB learner persistence and local backup/restore ([PRs #24–25](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), the learner dashboard and explainable practice planner ([PRs #26 and #28](https://github.com/leenusdarnal/guitarlab/pulls?q=is%3Apr+is%3Amerged)), the six-route curriculum reader ([PR #29](https://github.com/leenusdarnal/guitarlab/pull/29)), and persistent lesson checkpoints, completion and resume ([PR #33](https://github.com/leenusdarnal/guitarlab/pull/33)). The post-merge CI run for the current main commit passed the local D1, curriculum, design-token, lint/type, unit, Worker and Chromium checks.
+
+The first offline app-shell implementation is being reviewed in [PR #35](https://github.com/leenusdarnal/guitarlab/pull/35); it is not yet part of main and has not passed manual offline acceptance. Reliability, security-header, runtime and exact-commit preview-deployment hardening is in a separate implementation slice. No live production deployment is claimed.
+
+**Still pending:** offline installation and real-device verification, persistent-storage/backup resilience, interactive music tools, a complete practice studio, ear training/theory/repertoire, broader accessibility and privacy verification, production environment setup, authentication and cloud sync. See the [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
 
 - [System diagrams — architecture, learning loop, database and delivery](docs/DIAGRAMS.md)
 - [Data model and D1 migrations](docs/DATA_MODEL.md)
@@ -79,7 +83,7 @@ The current `main` branch includes the application foundation ([PR #21](https://
 
 ## Local development
 
-Requires Node.js 22.18 or newer.
+Use Node.js 22.23.5 as pinned in `.nvmrc`. CI also checks compatibility with Node.js 26.13.1.
 
 ```bash
 npm install
@@ -118,13 +122,14 @@ No open-source license has been selected yet. Until a license is added, the repo
 
 ### Cloudflare preview deployment
 
-A manually triggered preview deployment is provided by `.github/workflows/deploy-preview.yml`. It deploys the current `main` branch to the public Worker URL `https://guitarlab-preview.leenus-darnal.workers.dev`.
+A manually triggered preview deployment is provided by `.github/workflows/deploy-preview.yml`. It deploys to the public Worker URL `https://guitarlab-preview.leenus-darnal.workers.dev`.
 
 Before running it, configure these GitHub repository settings:
 
 - **Actions secret:** `CLOUDFLARE_API_TOKEN` — a Cloudflare API token permitted to deploy Workers scripts.
 - **Actions variable:** `CLOUDFLARE_ACCOUNT_ID` — the 32-character Cloudflare account ID.
+- **GitHub environment:** create an environment named `preview` and restrict its deployment branches to `main`. Add required reviewers when the release process needs an approval gate.
 
-Then open **GitHub → Actions → Deploy GuitarLab preview → Run workflow**, select `main`, and confirm the `deploy_preview` input. The workflow builds the app, validates the preview Wrangler configuration, deploys the Worker and smoke-tests the public URL.
+The workflow verifies that the selected commit is still the current `main` tip and that the exact commit has a successful `Validate application and curriculum` check run. It then checks out and builds that same SHA, validates the preview Wrangler configuration, deploys the Worker and smoke-tests the public URL. A stale commit or missing successful CI run stops before deployment.
 
-The preview configuration intentionally has **no D1 binding**: current learner-facing routes read authored curriculum bundled with the app, and no server-side code currently calls the D1 client. Learner preferences and practice data remain local in the browser. Do not put real private learner data or recordings into this public preview. Production hosting, custom-domain routing, authentication and cloud sync remain separate release decisions.
+Open **GitHub → Actions → Deploy GuitarLab preview → Run workflow**, select `main`, and confirm the `deploy_preview` input. The preview configuration intentionally has **no D1 binding**. Learner preferences and practice data remain in browser-local storage; use synthetic data only. Production hosting, custom-domain routing, authentication and cloud sync remain separate release decisions.
