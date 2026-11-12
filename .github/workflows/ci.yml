@@ -181,84 +181,45 @@ jobs:
           retention-days: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 7 || 1 }}
 
   browser-acceptance:
-    name: Application browser acceptance
+    name: Browser acceptance (application, music tools and curriculum)
     needs: build-validation
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-
       - name: Set up Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version-file: .nvmrc
           cache: npm
-
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
-
       - name: Restore Cloudflare build
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: guitarlab-cloudflare-preview
-
-      - name: Cache Playwright Chromium
+      - name: Cache Playwright Chromium headless shell
         id: playwright-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-chromium-1.56.1
-
+          key: ${{ runner.os }}-playwright-chromium-headless-shell-1.56.1
       - name: Install Playwright
         run: npm install --no-save --package-lock=false playwright@1.56.1
-
-      - name: Install Chromium
+      - name: Install Chromium headless shell
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium
-
-      - name: Browser acceptance tests
+        shell: bash
+        run: |
+          if ! timeout --signal=TERM --kill-after=30s 300s npx playwright install chromium --only-shell; then
+            echo "::error::Playwright Chromium headless-shell installation failed or exceeded the five-minute limit."
+            echo "Check the Playwright CDN/network availability and retry the workflow."
+            exit 1
+          fi
+      - name: Application browser acceptance tests
         run: npm run test:browser
       - name: Music tools browser acceptance tests
         run: npm run test:music-tools-browser
-
-  curriculum-browser-acceptance:
-    name: Curriculum browser acceptance
-    needs: build-validation
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
-
-      - name: Restore Cloudflare build
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
-        with:
-          name: guitarlab-cloudflare-preview
-
-      - name: Cache Playwright Chromium
-        id: playwright-cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-chromium-1.56.1
-
-      - name: Install Playwright
-        run: npm install --no-save --package-lock=false playwright@1.56.1
-
-      - name: Install Chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium
-
       - name: Curriculum browser acceptance tests
         run: npm run test:curriculum-browser
 
@@ -270,7 +231,6 @@ jobs:
       - data-validation
       - build-validation
       - browser-acceptance
-      - curriculum-browser-acceptance
     runs-on: ubuntu-24.04
     steps:
       - name: Require every validation job to pass
@@ -279,12 +239,11 @@ jobs:
           DATA_VALIDATION: ${{ needs.data-validation.result }}
           BUILD_VALIDATION: ${{ needs.build-validation.result }}
           BROWSER_ACCEPTANCE: ${{ needs.browser-acceptance.result }}
-          CURRICULUM_BROWSER_ACCEPTANCE: ${{ needs.curriculum-browser-acceptance.result }}
         shell: bash
         run: |
-          printf 'Fast checks: %s\nDatabase and curriculum: %s\nBuild and Worker smoke test: %s\nBrowser acceptance: %s\nCurriculum browser acceptance: %s\n' \
-            "$FAST_CHECKS" "$DATA_VALIDATION" "$BUILD_VALIDATION" "$BROWSER_ACCEPTANCE" "$CURRICULUM_BROWSER_ACCEPTANCE"
-          for result in "$FAST_CHECKS" "$DATA_VALIDATION" "$BUILD_VALIDATION" "$BROWSER_ACCEPTANCE" "$CURRICULUM_BROWSER_ACCEPTANCE"; do
+          printf 'Fast checks: %s\nDatabase and curriculum: %s\nBuild and Worker smoke test: %s\nCombined browser acceptance: %s\n' \
+            "$FAST_CHECKS" "$DATA_VALIDATION" "$BUILD_VALIDATION" "$BROWSER_ACCEPTANCE"
+          for result in "$FAST_CHECKS" "$DATA_VALIDATION" "$BUILD_VALIDATION" "$BROWSER_ACCEPTANCE"; do
             if [ "$result" != "success" ]; then
               echo "One or more required validation jobs did not pass."
               exit 1
