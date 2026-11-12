@@ -181,10 +181,21 @@ jobs:
           retention-days: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 7 || 1 }}
 
   browser-acceptance:
-    name: Browser acceptance (application, music tools and curriculum)
+    name: Browser acceptance (${{ matrix.suite }})
     needs: build-validation
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - suite: application
+            command: npm run test:browser
+          - suite: music-tools
+            command: npm run test:music-tools-browser
+          - suite: curriculum
+            command: npm run test:curriculum-browser
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -233,12 +244,14 @@ jobs:
           chmod +x "$browser"
           "$browser" --version
           echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$browser" >> "$GITHUB_ENV"
-      - name: Application browser acceptance tests
-        run: npm run test:browser
-      - name: Music tools browser acceptance tests
-        run: npm run test:music-tools-browser
-      - name: Curriculum browser acceptance tests
-        run: npm run test:curriculum-browser
+      - name: Run ${{ matrix.suite }} browser acceptance tests
+        timeout-minutes: 18
+        shell: bash
+        run: |
+          started=$SECONDS
+          trap 'status=$?; echo "Browser suite ${{ matrix.suite }} finished in $((SECONDS - started))s (exit $status)."; exit "$status"' EXIT
+          echo "Starting ${{ matrix.suite }} browser acceptance."
+          ${{ matrix.command }}
 
   validate:
     name: Validate application and curriculum
