@@ -66,7 +66,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | Slice | Work item | State | Evidence / remaining |
 |---|---|---|---|
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
-| M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | In progress — PR #45 | Adds tuning-aware pitch mapping, standard E tuning, sharp/flat spelling, frequency/octave, mirrored handedness, keyboard-accessible note selection and a note-finding activity. Chord library and metronome follow in separate slices |
+| M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Fretboard merged — PR #45; chord library/metronome in progress — PR #46 | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone. Keep #15 open until all acceptance criteria and browser checks are complete |
 | M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Not started | Session UI, pause/resume, exercise capture and review workflow |
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
@@ -91,7 +91,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 ## Immediate next actions
 
 1. Complete physical-device desktop/mobile offline and backup/restore QA using [the manual acceptance runbook](MANUAL_ACCEPTANCE.md); keep Issues #9, #10 and #18 open until evidence is recorded.
-2. Deliver M6.1 fretboard, chord library and metronome as small tested slices, starting with the fretboard domain and accessible interaction model.
+2. Finish M6.1 chord library and metronome in PR #46, including browser acceptance; keep issue #15 open until all tool acceptance criteria are met.
 3. Deliver M7 practice sessions/evidence capture, then M8 ear training/theory/repertoire as separate reviewable slices.
 5. Complete M9 CSP/security, WCAG accessibility, privacy, performance, offline/PWA, environment-isolation and deployment rollback checks.
 6. Keep the preview deployment deferred until the exact-SHA gate, GitHub preview environment and credentials are configured; use synthetic data only. Keep production D1, authentication and cloud sync deferred until ownership, authorisation and conflict rules are implemented and reviewed.
