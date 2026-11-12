@@ -178,7 +178,7 @@ try {
       viewport: { width: device.width, height: device.height }
     });
     const offlinePage = await offlineContext.newPage();
-  offlinePage.setDefaultTimeout(15_000);
+    offlinePage.setDefaultTimeout(15_000);
     const offlineErrors = [];
     offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
     await offlinePage.goto(origin, { waitUntil: 'networkidle' });
