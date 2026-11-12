@@ -1,7 +1,7 @@
 # GuitarLab UI/UX audit and implementation notes
 
-**Reviewed baseline:** `main` at `42c109180a41cd6f6694db15bad18c7018fdaa65` (12 November 2026).  
-**Implementation branch:** `chore/ui-ux-audit-improvements`  
+**Reviewed baseline:** `main` at `9a4d01452b8d6aaab3b3941140af7344955632e4` (12 November 2026).  
+**Implementation branch:** `chore/accessibility-axe-quality`  
 **Scope:** learner-facing interface, navigation, interaction feedback, responsive behaviour and accessibility. No backend, storage model, music-domain or deployment changes are included.
 
 ## Summary
@@ -34,7 +34,7 @@ This first slice addresses three shared interaction issues and one curriculum-na
 5. **Practice Studio focus.** Keep session state, timer and primary transport actions prominent; visually distinguish pause, resume and finish. Consider an optional low-distraction practice view without removing access to essential controls or status.
 6. **Music-tool ergonomics.** Continue mobile work on fretboard navigation (a movable visible fret window, explicit string/fret selection feedback and comfortable controls). Keep the 24-fret diagram's horizontal scrolling contained within the diagram, not the whole page.
 7. **Feedback consistency.** Standardise saved, saving, offline, error and disabled states across onboarding, data/backup, lesson progress, practice and tools. Messages should explain what was saved and whether learner progress changed.
-8. **Accessibility verification.** Add automated axe checks to representative dashboard, curriculum, lesson, onboarding, practice and tool pages; include keyboard-only, zoom/reflow, screen-reader landmark and colour-theme checks. The existing token contrast script is useful but does not prove component-level accessibility.
+8. **Accessibility verification.** CI now runs axe-core WCAG 2.0/2.1/2.2 A/AA and best-practice scans across 10 representative routes, in both saved themes and at desktop plus 320px widths. Serious and critical findings fail the check; moderate/minor findings and axe items requiring manual review are reported for follow-up. The suite also checks page reflow at 320px and the global keyboard skip link. Remaining work: manual screen-reader/landmark checks, 200% zoom, tablet/landscape coverage and assistive-technology acceptance.
 9. **Small-screen and touch testing.** Expand browser checks to 320px, 390px, tablet, landscape and 200% zoom. Conduct physical iOS Safari and Android Chrome testing before release sign-off.
 
 ## Validation plan
@@ -42,7 +42,7 @@ This first slice addresses three shared interaction issues and one curriculum-na
 - Browser acceptance verifies the skip link, direct-link theme application, mobile menu focus/Escape behaviour, and curriculum route jumping.
 - Existing dashboard, lesson, backup/restore, music-tool and curriculum browser acceptance suites remain in place.
 - Run formatting, lint, Svelte/TypeScript checks, unit tests, curriculum and design-token validation, and production Worker build in CI.
-- These browser checks are Chromium automation. They do not replace assistive-technology testing or physical-device acceptance.
+- Automated accessibility checks use axe-core in Chromium. They do not replace assistive-technology testing, 200% browser zoom checks or physical-device acceptance.
 
 ## Guardrails
 
