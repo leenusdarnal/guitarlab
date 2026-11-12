@@ -46,6 +46,208 @@ try {
 
   browser = await chromium.launch({ headless: true });
 
+  // Upgrade a real v1 learner database to v2 without losing learner-owned records.
+  const upgradeContext = await browser.newContext({
+    viewport: { width: 1440, height: 1000 }
+  });
+  const upgradePage = await upgradeContext.newPage();
+  await upgradePage.goto(origin, { waitUntil: 'networkidle' });
+  await upgradePage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
+  await upgradePage.getByText('Your first session is still ahead').waitFor();
+  await upgradePage.evaluate(async () => {
+    await new Promise((resolve, reject) => {
+      const deletion = indexedDB.deleteDatabase('guitarlab-local');
+      deletion.onsuccess = () => resolve(true);
+      deletion.onerror = () =>
+        reject(
+          deletion.error ?? new Error('Could not reset IndexedDB fixture.')
+        );
+      deletion.onblocked = () =>
+        reject(
+          new Error('IndexedDB fixture deletion was blocked by another tab.')
+        );
+    });
+    await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local', 1);
+      request.onupgradeneeded = () => {
+        const database = request.result;
+        database.createObjectStore('metadata', { keyPath: 'key' });
+        const profiles = database.createObjectStore('learnerProfiles', {
+          keyPath: 'id'
+        });
+        profiles.createIndex('byUpdatedAt', 'updatedAt');
+        const progress = database.createObjectStore('lessonProgress', {
+          keyPath: 'id'
+        });
+        progress.createIndex('byLearnerId', 'learnerId');
+        progress.createIndex(
+          'byLearnerReleaseLesson',
+          ['learnerId', 'curriculumReleaseId', 'lessonId'],
+          { unique: true }
+        );
+        const events = database.createObjectStore('lessonCompletionEvents', {
+          keyPath: 'id'
+        });
+        events.createIndex('byProgressId', 'progressId');
+        events.createIndex('byLearnerCompletedAt', [
+          'learnerId',
+          'completedAt'
+        ]);
+        const attempts = database.createObjectStore('assessmentAttempts', {
+          keyPath: 'id'
+        });
+        attempts.createIndex('byLearnerReleaseSkill', [
+          'learnerId',
+          'curriculumReleaseId',
+          'skillId'
+        ]);
+        const mastery = database.createObjectStore('skillMastery', {
+          keyPath: ['learnerId', 'curriculumReleaseId', 'skillId']
+        });
+        mastery.createIndex('byLearnerId', 'learnerId');
+        const sessions = database.createObjectStore('practiceSessions', {
+          keyPath: 'id'
+        });
+        sessions.createIndex('byLearnerId', 'learnerId');
+        sessions.createIndex('byStatus', 'status');
+
+        request.transaction.objectStore('metadata').add({
+          key: 'activeLearnerId',
+          value: 'legacy-learner-001'
+        });
+        profiles.add({
+          id: 'legacy-learner-001',
+          preferencesSchemaVersion: 1,
+          preferences: {
+            schemaVersion: 1,
+            instrument: 'acoustic',
+            handedness: 'right',
+            tuning: 'Standard E',
+            startingPoint: 'fresh-beginner',
+            goals: ['acoustic-fingerstyle'],
+            practiceMinutes: 20,
+            availableDays: [1, 3, 5],
+            lessonPresentation: 'balanced'
+          },
+          createdAt: 100,
+          updatedAt: 200,
+          lastActiveAt: null
+        });
+        sessions.add({
+          id: 'legacy-session-001',
+          learnerId: 'legacy-learner-001',
+          primaryCurriculumReleaseId: 'curriculum-v1',
+          primaryLessonId: 'y1-w01-lesson',
+          status: 'in_progress',
+          plannedMinutes: 20,
+          actualDurationSeconds: 0,
+          focus: 'fingerstyle basics',
+          difficulty: null,
+          reflection: null,
+          startedAt: 150,
+          endedAt: null,
+          createdAt: 150,
+          updatedAt: 150
+        });
+      };
+      request.onsuccess = () => {
+        request.result.close();
+        resolve(true);
+      };
+      request.onerror = () =>
+        reject(
+          request.error ?? new Error('Could not create v1 IndexedDB fixture.')
+        );
+    });
+  });
+  await upgradePage.reload({ waitUntil: 'networkidle' });
+  await upgradePage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
+  await upgradePage.waitForFunction(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () =>
+        reject(
+          request.error ?? new Error('Could not inspect IndexedDB version.')
+        );
+    });
+    const upgraded =
+      database.version === 2 &&
+      database
+        .transaction('practiceSessions')
+        .objectStore('practiceSessions')
+        .indexNames.contains('byLearnerStatusStartedAt');
+    database.close();
+    return upgraded;
+  });
+  const upgradeResult = await upgradePage.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () =>
+        reject(
+          request.error ?? new Error('Could not reopen upgraded IndexedDB.')
+        );
+    });
+    const transaction = database.transaction(
+      ['metadata', 'learnerProfiles', 'practiceSessions'],
+      'readonly'
+    );
+    const read = (request) =>
+      new Promise((resolve, reject) => {
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () =>
+          reject(request.error ?? new Error('IndexedDB read failed.'));
+      });
+    const sessions = transaction.objectStore('practiceSessions');
+    const [active, profile, migratedSession] = await Promise.all([
+      read(transaction.objectStore('metadata').get('activeLearnerId')),
+      read(
+        transaction.objectStore('learnerProfiles').get('legacy-learner-001')
+      ),
+      read(
+        sessions
+          .index('byLearnerStatusStartedAt')
+          .get(['legacy-learner-001', 'in_progress', 150])
+      )
+    ]);
+    const result = {
+      version: database.version,
+      stores: Array.from(database.objectStoreNames),
+      activeLearnerId: active?.value ?? null,
+      practiceMinutes: profile?.preferences?.practiceMinutes ?? null,
+      instrument: profile?.preferences?.instrument ?? null,
+      migratedSessionId: migratedSession?.id ?? null,
+      sessionIndex: sessions.indexNames.contains('byLearnerStatusStartedAt')
+    };
+    database.close();
+    return result;
+  });
+  assert.equal(
+    upgradeResult.version,
+    2,
+    'The existing v1 database should upgrade to v2'
+  );
+  assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
+  assert.equal(upgradeResult.practiceMinutes, 20);
+  assert.equal(upgradeResult.instrument, 'acoustic');
+  assert.equal(upgradeResult.migratedSessionId, 'legacy-session-001');
+  assert.equal(upgradeResult.sessionIndex, true);
+  assert.deepEqual(upgradeResult.stores.sort(), [
+    'assessmentAttempts',
+    'learnerProfiles',
+    'lessonCompletionEvents',
+    'lessonProgress',
+    'metadata',
+    'practiceSessions',
+    'skillMastery'
+  ]);
+  await upgradeContext.close();
+
   // Theme storage is optional: a blocked localStorage API must not block the dashboard.
   const restrictedStorageContext = await browser.newContext({
     viewport: { width: 1440, height: 1000 }

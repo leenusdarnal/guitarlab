@@ -26,7 +26,7 @@ import type {
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 1;
+export const LOCAL_DATABASE_VERSION = 2;
 
 const stores = {
   metadata: 'metadata',
@@ -148,12 +148,26 @@ export function openLocalDatabase(
         });
         mastery.createIndex('byLearnerId', 'learnerId');
       }
-      if (!database.objectStoreNames.contains(stores.practiceSessions)) {
-        const sessions = database.createObjectStore(stores.practiceSessions, {
-          keyPath: 'id'
-        });
+      const sessions = database.objectStoreNames.contains(
+        stores.practiceSessions
+      )
+        ? request.transaction!.objectStore(stores.practiceSessions)
+        : database.createObjectStore(stores.practiceSessions, {
+            keyPath: 'id'
+          });
+      if (!sessions.indexNames.contains('byLearnerId')) {
         sessions.createIndex('byLearnerId', 'learnerId');
+      }
+      if (!sessions.indexNames.contains('byStatus')) {
         sessions.createIndex('byStatus', 'status');
+      }
+      // M7 session history needs an efficient learner/status/time lookup.
+      if (!sessions.indexNames.contains('byLearnerStatusStartedAt')) {
+        sessions.createIndex('byLearnerStatusStartedAt', [
+          'learnerId',
+          'status',
+          'startedAt'
+        ]);
       }
     };
 

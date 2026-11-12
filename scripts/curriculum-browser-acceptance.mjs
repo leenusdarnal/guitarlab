@@ -165,65 +165,89 @@ try {
     `Curriculum page overflows horizontally: ${JSON.stringify(dimensions)}`
   );
 
-  // Offline app-shell acceptance: cache a lesson online, then reload it offline.
-  const offlineContext = await browser.newContext({
-    viewport: { width: 390, height: 844 }
-  });
-  const offlinePage = await offlineContext.newPage();
-  const offlineErrors = [];
-  offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
-  await offlinePage.goto(origin, { waitUntil: 'networkidle' });
-  await offlinePage.evaluate(async () => {
-    const registration = await navigator.serviceWorker.ready;
-    if (!registration.active) {
-      throw new Error('GuitarLab service worker is not active.');
-    }
-  });
-  await offlinePage.waitForFunction(
-    () => navigator.serviceWorker.controller !== null
-  );
-  const cachedLessonUrl = `${origin}/learn/y1-w01-lesson`;
-  await offlinePage.goto(cachedLessonUrl, { waitUntil: 'networkidle' });
-  await offlinePage
-    .getByRole('heading', { name: 'Meet your guitar' })
-    .waitFor();
-  await offlineContext.setOffline(true);
-  assert.equal(
-    await offlinePage.evaluate(() => navigator.onLine),
-    false,
-    'The browser context should report that it is offline'
-  );
-  const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
-    waitUntil: 'networkidle'
-  });
-  assert.equal(
-    cachedLessonResponse?.status(),
-    200,
-    'A previously visited lesson should load offline'
-  );
-  await offlinePage
-    .getByRole('heading', { name: 'Meet your guitar' })
-    .waitFor();
-  const uncachedLessonResponse = await offlinePage.goto(
-    `${origin}/learn/y1-w03-lesson`,
-    {
+  // Offline app-shell acceptance at desktop and mobile viewport sizes.
+  for (const device of [
+    { name: 'desktop', width: 1440, height: 1000 },
+    { name: 'mobile', width: 390, height: 844 }
+  ]) {
+    const offlineContext = await browser.newContext({
+      viewport: { width: device.width, height: device.height }
+    });
+    const offlinePage = await offlineContext.newPage();
+    const offlineErrors = [];
+    offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
+    await offlinePage.goto(origin, { waitUntil: 'networkidle' });
+    await offlinePage.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      if (!registration.active) {
+        throw new Error('GuitarLab service worker is not active.');
+      }
+    });
+    await offlinePage.waitForFunction(
+      () => navigator.serviceWorker.controller !== null
+    );
+
+    await offlinePage.goto(`${origin}/learn`, { waitUntil: 'networkidle' });
+    const layout = await offlinePage.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth
+    }));
+    assert.ok(
+      layout.content <= layout.viewport,
+      `${device.name} curriculum layout overflows horizontally: ${JSON.stringify(layout)}`
+    );
+
+    const cachedLessonUrl = `${origin}/learn/y1-w01-lesson`;
+    await offlinePage.goto(cachedLessonUrl, { waitUntil: 'networkidle' });
+    await offlinePage
+      .getByRole('heading', { name: 'Meet your guitar' })
+      .waitFor();
+    const lessonLayout = await offlinePage.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth
+    }));
+    assert.ok(
+      lessonLayout.content <= lessonLayout.viewport,
+      `${device.name} lesson layout overflows horizontally: ${JSON.stringify(lessonLayout)}`
+    );
+    await offlineContext.setOffline(true);
+    assert.equal(
+      await offlinePage.evaluate(() => navigator.onLine),
+      false,
+      `${device.name} browser context should report that it is offline`
+    );
+    const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
       waitUntil: 'networkidle'
-    }
-  );
-  assert.equal(
-    uncachedLessonResponse?.status(),
-    503,
-    'An unvisited lesson should receive the explicit offline fallback'
-  );
-  await offlinePage
-    .getByRole('heading', { name: 'Keep your practice going.' })
-    .waitFor();
-  assert.deepEqual(
-    offlineErrors,
-    [],
-    `Offline browser runtime errors: ${offlineErrors.join('; ')}`
-  );
-  await offlineContext.close();
+    });
+    assert.equal(
+      cachedLessonResponse?.status(),
+      200,
+      `${device.name}: a previously visited lesson should load offline`
+    );
+    await offlinePage
+      .getByRole('heading', { name: 'Meet your guitar' })
+      .waitFor();
+    const uncachedLessonResponse = await offlinePage.goto(
+      `${origin}/learn/y1-w03-lesson`,
+      {
+        waitUntil: 'networkidle'
+      }
+    );
+    assert.equal(
+      uncachedLessonResponse?.status(),
+      503,
+      `${device.name}: an unvisited lesson should receive the explicit offline fallback`
+    );
+    await offlinePage
+      .getByRole('heading', { name: 'Keep your practice going.' })
+      .waitFor();
+    assert.deepEqual(
+      offlineErrors,
+      [],
+      `${device.name} offline browser runtime errors: ${offlineErrors.join('; ')}`
+    );
+    await offlineContext.close();
+  }
 
   assert.deepEqual(
     pageErrors,
@@ -231,7 +255,7 @@ try {
     `Browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and mobile layout.'
+    'Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and desktop/mobile offline layout.'
   );
 } catch (error) {
   console.error(error);
