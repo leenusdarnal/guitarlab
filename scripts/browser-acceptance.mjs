@@ -658,9 +658,9 @@ try {
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
-  // The earlier mobile navigation check leaves this browser at a narrow viewport.
+  // Restore the desktop viewport after the earlier mobile navigation acceptance.
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(origin, { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: 'Toggle navigation' }).click();
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
