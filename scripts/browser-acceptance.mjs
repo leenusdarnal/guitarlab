@@ -668,6 +668,16 @@ try {
     78,
     'The 12-fret explorer should show six strings and thirteen positions per string'
   );
+  const highEOpen = page.getByRole('button', {
+    name: 'String 1, fret 0, E4'
+  });
+  await highEOpen.focus();
+  await highEOpen.press('ArrowRight');
+  assert.equal(
+    await page.evaluate(() => (document.activeElement as HTMLButtonElement)?.getAttribute('aria-label')),
+    'String 1, fret 1, F4',
+    'Arrow-key navigation should move one fret while preserving the string'
+  );
   await page.getByRole('button', { name: 'String 6, fret 8, C3' }).click();
   await page.locator('.note-detail').getByText('C3').waitFor();
 
