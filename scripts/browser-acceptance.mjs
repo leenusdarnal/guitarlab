@@ -52,7 +52,9 @@ try {
   });
   const restrictedStoragePage = await restrictedStorageContext.newPage();
   const restrictedStorageErrors = [];
-  restrictedStoragePage.on('pageerror', (error) => restrictedStorageErrors.push(error.message));
+  restrictedStoragePage.on('pageerror', (error) =>
+    restrictedStorageErrors.push(error.message)
+  );
   await restrictedStoragePage.goto(origin, { waitUntil: 'networkidle' });
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
@@ -81,9 +83,15 @@ try {
   const response = await page.request.get(origin);
   const securityHeaders = response.headers();
   assert.equal(securityHeaders['x-content-type-options'], 'nosniff');
-  assert.equal(securityHeaders['referrer-policy'], 'strict-origin-when-cross-origin');
+  assert.equal(
+    securityHeaders['referrer-policy'],
+    'strict-origin-when-cross-origin'
+  );
   assert.equal(securityHeaders['x-frame-options'], 'DENY');
-  assert.equal(securityHeaders['permissions-policy'], 'camera=(), microphone=(self), geolocation=()');
+  assert.equal(
+    securityHeaders['permissions-policy'],
+    'camera=(), microphone=(self), geolocation=()'
+  );
 
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Your journey begins with the foundations.' }).waitFor();
