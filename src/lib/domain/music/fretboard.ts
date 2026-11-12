@@ -81,14 +81,18 @@ function assertValidTuning(tuning: GuitarTuning): void {
       string.stringNumber > 6 ||
       stringNumbers.has(string.stringNumber)
     ) {
-      throw new RangeError('A guitar tuning must define each string number from 1 to 6 once.');
+      throw new RangeError(
+        'A guitar tuning must define each string number from 1 to 6 once.'
+      );
     }
     if (
       !Number.isInteger(string.openMidi) ||
       string.openMidi < 28 ||
       string.openMidi > 88
     ) {
-      throw new RangeError('Open-string MIDI pitches must be whole notes from 28 to 88.');
+      throw new RangeError(
+        'Open-string MIDI pitches must be whole notes from 28 to 88.'
+      );
     }
     stringNumbers.add(string.stringNumber);
   }
@@ -169,7 +173,9 @@ export function getDisplayFretColumn(
 ): number {
   assertValidFret(fret);
   if (!Number.isInteger(maxFret) || maxFret < fret || maxFret > 24) {
-    throw new RangeError('Maximum fret must be a whole number between the selected fret and 24.');
+    throw new RangeError(
+      'Maximum fret must be a whole number between the selected fret and 24.'
+    );
   }
 
   return handedness === 'left' ? maxFret - fret + 1 : fret + 1;
@@ -184,7 +190,7 @@ export function findFretboardPositions(
     throw new RangeError('Pitch class must be a whole number from 0 to 11.');
   }
 
-  return getFretboardLayout(maxFret, tuning).flat().filter(
-    (note) => note.pitchClass === pitchClass
-  );
+  return getFretboardLayout(maxFret, tuning)
+    .flat()
+    .filter((note) => note.pitchClass === pitchClass);
 }
