@@ -61,9 +61,13 @@ try {
       const deletion = indexedDB.deleteDatabase('guitarlab-local');
       deletion.onsuccess = () => resolve(true);
       deletion.onerror = () =>
-        reject(deletion.error ?? new Error('Could not reset IndexedDB fixture.'));
+        reject(
+          deletion.error ?? new Error('Could not reset IndexedDB fixture.')
+        );
       deletion.onblocked = () =>
-        reject(new Error('IndexedDB fixture deletion was blocked by another tab.'));
+        reject(
+          new Error('IndexedDB fixture deletion was blocked by another tab.')
+        );
     });
     await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local', 1);
@@ -153,7 +157,9 @@ try {
         resolve(true);
       };
       request.onerror = () =>
-        reject(request.error ?? new Error('Could not create v1 IndexedDB fixture.'));
+        reject(
+          request.error ?? new Error('Could not create v1 IndexedDB fixture.')
+        );
     });
   });
   await upgradePage.reload({ waitUntil: 'networkidle' });
@@ -165,7 +171,9 @@ try {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
       request.onerror = () =>
-        reject(request.error ?? new Error('Could not inspect IndexedDB version.'));
+        reject(
+          request.error ?? new Error('Could not inspect IndexedDB version.')
+        );
     });
     const upgraded =
       database.version === 2 &&
@@ -181,7 +189,9 @@ try {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
       request.onerror = () =>
-        reject(request.error ?? new Error('Could not reopen upgraded IndexedDB.'));
+        reject(
+          request.error ?? new Error('Could not reopen upgraded IndexedDB.')
+        );
     });
     const transaction = database.transaction(
       ['metadata', 'learnerProfiles', 'practiceSessions'],
@@ -196,13 +206,13 @@ try {
     const sessions = transaction.objectStore('practiceSessions');
     const [active, profile, migratedSession] = await Promise.all([
       read(transaction.objectStore('metadata').get('activeLearnerId')),
-      read(transaction.objectStore('learnerProfiles').get('legacy-learner-001')),
       read(
-        sessions.index('byLearnerStatusStartedAt').get([
-          'legacy-learner-001',
-          'in_progress',
-          150
-        ])
+        transaction.objectStore('learnerProfiles').get('legacy-learner-001')
+      ),
+      read(
+        sessions
+          .index('byLearnerStatusStartedAt')
+          .get(['legacy-learner-001', 'in_progress', 150])
       )
     ]);
     const result = {
@@ -217,7 +227,11 @@ try {
     database.close();
     return result;
   });
-  assert.equal(upgradeResult.version, 2, 'The existing v1 database should upgrade to v2');
+  assert.equal(
+    upgradeResult.version,
+    2,
+    'The existing v1 database should upgrade to v2'
+  );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
   assert.equal(upgradeResult.instrument, 'acoustic');
