@@ -171,13 +171,19 @@ try {
   });
   const offlinePage = await offlineContext.newPage();
   const offlineErrors = [];
-  offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
+  offlinePage.on('pageerror', (error) =>
+    offlineErrors.push(error.message)
+  );
   await offlinePage.goto(origin, { waitUntil: 'networkidle' });
   await offlinePage.evaluate(async () => {
     const registration = await navigator.serviceWorker.ready;
-    if (!registration.active) throw new Error('GuitarLab service worker is not active.');
+    if (!registration.active) {
+      throw new Error('GuitarLab service worker is not active.');
+    }
   });
-  await offlinePage.waitForFunction(() => navigator.serviceWorker.controller !== null);
+  await offlinePage.waitForFunction(
+    () => navigator.serviceWorker.controller !== null
+  );
   const cachedLessonUrl = `${origin}/learn/y1-w01-lesson`;
   await offlinePage.goto(cachedLessonUrl, { waitUntil: 'networkidle' });
   await offlinePage.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
@@ -185,14 +191,29 @@ try {
   const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
     waitUntil: 'networkidle'
   });
-  assert.equal(cachedLessonResponse?.status(), 200, 'A previously visited lesson should load offline');
+  assert.equal(
+    cachedLessonResponse?.status(),
+    200,
+    'A previously visited lesson should load offline'
+  );
   await offlinePage.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
-  const uncachedLessonResponse = await offlinePage.goto(`${origin}/learn/y1-w03-lesson`, {
-    waitUntil: 'networkidle'
-  });
-  assert.equal(uncachedLessonResponse?.status(), 503, 'An unvisited lesson should receive the explicit offline fallback');
+  const uncachedLessonResponse = await offlinePage.goto(
+    `${origin}/learn/y1-w03-lesson`,
+    {
+      waitUntil: 'networkidle'
+    }
+  );
+  assert.equal(
+    uncachedLessonResponse?.status(),
+    503,
+    'An unvisited lesson should receive the explicit offline fallback'
+  );
   await offlinePage.getByRole('heading', { name: 'Keep your practice going.' }).waitFor();
-  assert.deepEqual(offlineErrors, [], `Offline browser runtime errors: ${offlineErrors.join('; ')}`);
+  assert.deepEqual(
+    offlineErrors,
+    [],
+    `Offline browser runtime errors: ${offlineErrors.join('; ')}`
+  );
   await offlineContext.close();
 
   assert.deepEqual(
