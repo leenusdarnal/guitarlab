@@ -102,9 +102,21 @@ try {
   await page.getByText('50%', { exact: true }).waitFor();
 
   // Manual observations remain editable after a drill is finished.
-  await page.getByLabel('Clean changes').fill('7');
-  await page.getByLabel('Total attempts').fill('10');
-  await page.getByLabel('Elapsed seconds').fill('24');
+  await page
+    .locator('label.field')
+    .filter({ hasText: 'Clean changes' })
+    .locator('input')
+    .fill('7');
+  await page
+    .locator('label.field')
+    .filter({ hasText: 'Total attempts' })
+    .locator('input')
+    .fill('10');
+  await page
+    .locator('label.field')
+    .filter({ hasText: 'Elapsed seconds' })
+    .locator('input')
+    .fill('24');
   await page.getByText('70%', { exact: true }).waitFor();
   await page.getByText('24s', { exact: true }).waitFor();
   await page.getByLabel('Clean changes').fill('11');
