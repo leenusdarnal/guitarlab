@@ -35,30 +35,30 @@
       <a class="open-tool" href={resolve('/tools/fretboard')}>Open explorer <span aria-hidden="true">→</span></a>
     </article>
 
-    <article class="tool-row upcoming">
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">◇</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span>In development</span><span>Voicings · Clean changes</span></div>
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Voicings · Clean changes</span></div>
         <h2>Chord library</h2>
         <p>
-          Explore open chords and clear string states, then practise clean changes
-          without confusing accuracy with speed.
+          Explore five open chord shapes, identify muted and fretted strings, and
+          record clean changes separately from elapsed practice time.
         </p>
       </div>
-      <span class="tool-status">Coming next</span>
+      <a class="open-tool" href={resolve('/tools/chords')}>Open chord library <span aria-hidden="true">→</span></a>
     </article>
 
-    <article class="tool-row upcoming">
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">◷</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span>In development</span><span>Tempo · Pulse · Reference tones</span></div>
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Tempo · Pulse · Reference tones</span></div>
         <h2>Metronome</h2>
         <p>
-          Build a steady pulse with accessible tempo controls and locally generated
-          reference tones. Microphone permission will not be required.
+          Practise with a Web Audio metronome, adjustable tempo and meter, and a
+          separately triggered A4 reference tone.
         </p>
       </div>
-      <span class="tool-status">Coming next</span>
+      <a class="open-tool" href={resolve('/tools/metronome')}>Open metronome <span aria-hidden="true">→</span></a>
     </article>
   </section>
 
