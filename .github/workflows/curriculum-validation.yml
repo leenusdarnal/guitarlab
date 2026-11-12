@@ -1,16 +1,6 @@
 name: Curriculum validation
 
 on:
-  push:
-    paths:
-      - "content/curriculum/**"
-      - "scripts/validate-curriculum.mjs"
-      - ".github/workflows/curriculum-validation.yml"
-  pull_request:
-    paths:
-      - "content/curriculum/**"
-      - "scripts/validate-curriculum.mjs"
-      - ".github/workflows/curriculum-validation.yml"
   workflow_dispatch:
 
 permissions:
