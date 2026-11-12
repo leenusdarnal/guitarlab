@@ -154,7 +154,8 @@ export async function resumeActivePracticeSession(
 
 /** Complete the active learner's session using accumulated active time. */
 export async function finishActivePracticeSession(
-  sessionId: string
+  sessionId: string,
+  notes: { reflection?: string | null; nextTarget?: string | null } = {}
 ): Promise<PracticeSessionRecord> {
   const database = await openLocalDatabase();
   try {
@@ -177,7 +178,12 @@ export async function finishActivePracticeSession(
       );
     }
     return await finishPracticeSession(
-      { learnerId: profile.id, sessionId, actualDurationSeconds: elapsed },
+      {
+        learnerId: profile.id,
+        sessionId,
+        actualDurationSeconds: elapsed,
+        ...notes
+      },
       { practice: repositories.practice, runtime: systemRuntime }
     );
   } finally {

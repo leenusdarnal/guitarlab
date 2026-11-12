@@ -69,6 +69,7 @@ function makeSource(): LearnerBackupSource {
         focus: 'Alternate picking',
         difficulty: null,
         reflection: null,
+        nextTarget: 'Keep the G major scale even at 72 BPM.',
         startedAt: 100,
         endedAt: 400,
         createdAt: 100,
@@ -114,6 +115,9 @@ describe('local learner backup export builder', () => {
     expect(backup.records.lessonProgress[0].learnerId).toBe(learnerId);
     expect(backup.records.practiceEvidence).toHaveLength(1);
     expect(backup.records.practiceEvidence?.[0].learnerId).toBe(learnerId);
+    expect(backup.records.practiceSessions[0].nextTarget).toBe(
+      'Keep the G major scale even at 72 BPM.'
+    );
   });
 
   it('refuses to export when the active profile is missing', () => {
