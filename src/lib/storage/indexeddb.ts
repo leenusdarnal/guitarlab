@@ -442,9 +442,19 @@ export function createIndexedDbRepositories(
         async (tx) => {
           const store = tx.objectStore(stores.practiceSessions);
           // IndexedDB serializes read/write transactions across tabs.
-          const existing = await requestResult<PracticeSessionRecord[]>(store.getAll());
-          if (existing.some((row) => row.learnerId === session.learnerId && (row.status === 'in_progress' || row.status === 'paused'))) {
-            throw new Error('Finish or resume your existing practice session before starting another.');
+          const existing = await requestResult<PracticeSessionRecord[]>(
+            store.getAll()
+          );
+          if (
+            existing.some(
+              (row) =>
+                row.learnerId === session.learnerId &&
+                (row.status === 'in_progress' || row.status === 'paused')
+            )
+          ) {
+            throw new Error(
+              'Finish or resume your existing practice session before starting another.'
+            );
           }
           await requestResult(store.add(session));
         }

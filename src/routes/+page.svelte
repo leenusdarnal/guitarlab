@@ -45,7 +45,7 @@
           recentPractice: dashboard.recentPractice.map((session) => ({
             focus: session.focus,
             difficulty: session.difficulty,
-            status: session.status,
+            status: session.status === 'paused' ? 'in_progress' : session.status,
             startedAt: session.startedAt
           })),
           now: Date.now()

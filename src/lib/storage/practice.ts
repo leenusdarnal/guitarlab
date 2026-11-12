@@ -75,23 +75,37 @@ export async function startActivePracticeSession(input: {
 }
 
 /** Pause the current active segment and persist accumulated active time. */
-export async function pauseActivePracticeSession(sessionId: string): Promise<PracticeSessionRecord> {
+export async function pauseActivePracticeSession(
+  sessionId: string
+): Promise<PracticeSessionRecord> {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
-    return await pausePracticeSession({ learnerId: profile.id, sessionId }, { practice: repositories.practice, runtime: systemRuntime });
-  } finally { database.close(); }
+    return await pausePracticeSession(
+      { learnerId: profile.id, sessionId },
+      { practice: repositories.practice, runtime: systemRuntime }
+    );
+  } finally {
+    database.close();
+  }
 }
 
 /** Resume a paused session without counting the time spent paused. */
-export async function resumeActivePracticeSession(sessionId: string): Promise<PracticeSessionRecord> {
+export async function resumeActivePracticeSession(
+  sessionId: string
+): Promise<PracticeSessionRecord> {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
-    return await resumePracticeSession({ learnerId: profile.id, sessionId }, { practice: repositories.practice, runtime: systemRuntime });
-  } finally { database.close(); }
+    return await resumePracticeSession(
+      { learnerId: profile.id, sessionId },
+      { practice: repositories.practice, runtime: systemRuntime }
+    );
+  } finally {
+    database.close();
+  }
 }
 
 /** Complete the active learner's session using accumulated active time. */
@@ -108,7 +122,11 @@ export async function finishActivePracticeSession(
     }
     const now = systemRuntime.now();
     const segmentStartedAt = current.activeStartedAt ?? current.startedAt;
-    const elapsed = current.actualDurationSeconds + (current.status === 'in_progress' ? Math.floor((now - segmentStartedAt) / 1000) : 0);
+    const elapsed =
+      current.actualDurationSeconds +
+      (current.status === 'in_progress'
+        ? Math.floor((now - segmentStartedAt) / 1000)
+        : 0);
     if (elapsed < 1 || elapsed > 43_200) {
       throw new Error(
         'A session must last between 1 second and 12 hours to be saved.'

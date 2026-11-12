@@ -90,7 +90,9 @@ class FakeStore {
   }
 
   getAll() {
-    return this.tx().request(() => [...this.records.values()].map((value) => structuredClone(value)));
+    return this.tx().request(() =>
+      [...this.records.values()].map((value) => structuredClone(value))
+    );
   }
 
   add(value: Record<string, unknown>) {
@@ -309,13 +311,26 @@ describe('local learner profile persistence', () => {
     const profile = await ensureActiveLearnerProfile(database);
     const repository = createIndexedDbRepositories(database).practice;
     const session = {
-      id: 'session-1', learnerId: profile.id, primaryCurriculumReleaseId: null,
-      primaryLessonId: null, status: 'in_progress' as const, activeStartedAt: 100,
-      plannedMinutes: 20, actualDurationSeconds: 0, focus: null, difficulty: null,
-      reflection: null, startedAt: 100, endedAt: null, createdAt: 100, updatedAt: 100
+      id: 'session-1',
+      learnerId: profile.id,
+      primaryCurriculumReleaseId: null,
+      primaryLessonId: null,
+      status: 'in_progress' as const,
+      activeStartedAt: 100,
+      plannedMinutes: 20,
+      actualDurationSeconds: 0,
+      focus: null,
+      difficulty: null,
+      reflection: null,
+      startedAt: 100,
+      endedAt: null,
+      createdAt: 100,
+      updatedAt: 100
     };
     await repository.create(session);
-    await expect(repository.create({ ...session, id: 'session-2' })).rejects.toThrow(/existing practice session/i);
+    await expect(
+      repository.create({ ...session, id: 'session-2' })
+    ).rejects.toThrow(/existing practice session/i);
   });
 
   it('persists validated preferences without creating lesson or mastery records', async () => {
