@@ -36,4 +36,6 @@ await writeFile(
   JSON.stringify(index, null, 2) + String.fromCharCode(10),
   'utf8'
 );
-console.log(`Generated dashboard index for ${index.lessons.length} Year 1 lessons.`);
+console.log(
+  `Generated dashboard index for ${index.lessons.length} Year 1 lessons.`
+);

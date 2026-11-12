@@ -44,7 +44,7 @@ Run the applicable checks on desktop Chrome/Edge and on physical iOS Safari and 
 - [ ] Confirm the active learner and preferences are unchanged.
 - [ ] Confirm existing practice-session records remain available.
 - [ ] Confirm the app loads without a storage warning or uncaught browser error.
-- [ ] If there is no pre-v2 database on the device, record this check as **not applicable**; do not manufacture real learner data to simulate it. The seeded v1-to-v3 migration is covered by Chromium CI.
+- [ ] If there is no pre-v3 database on the device, record this check as **not applicable**; do not manufacture real learner data to simulate it. The seeded v1-to-v3 migration is covered by Chromium CI.
 
 ### 3. Offline app shell
 

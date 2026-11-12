@@ -32,5 +32,5 @@ export default tseslint.config(
         parser: tseslint.parser
       }
     }
-  },
+  }
 );

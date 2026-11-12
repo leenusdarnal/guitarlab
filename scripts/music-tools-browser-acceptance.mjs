@@ -158,7 +158,9 @@ try {
   await firstFretCell.focus();
   await firstFretCell.press('ArrowRight');
   assert.equal(
-    await page.evaluate(() => document.activeElement?.getAttribute('data-fret')),
+    await page.evaluate(() =>
+      document.activeElement?.getAttribute('data-fret')
+    ),
     '1',
     'Fretboard arrow-key navigation should move to the adjacent fret'
   );

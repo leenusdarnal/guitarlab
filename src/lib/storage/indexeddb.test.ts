@@ -350,7 +350,8 @@ describe('local learner profile persistence', () => {
 
     const pausedDatabase = makeDatabase();
     const pausedProfile = await ensureActiveLearnerProfile(pausedDatabase);
-    const pausedRepository = createIndexedDbRepositories(pausedDatabase).practice;
+    const pausedRepository =
+      createIndexedDbRepositories(pausedDatabase).practice;
     await pausedRepository.create({
       ...session,
       id: 'session-paused',
