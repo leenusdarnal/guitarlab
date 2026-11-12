@@ -215,9 +215,9 @@ jobs:
           browser_dir="$HOME/.cache/guitarlab/chrome-headless-shell"
           archive="$RUNNER_TEMP/chrome-headless-shell-linux64.zip"
           mkdir -p "$browser_dir"
-          curl --fail --location --silent --show-error \\
-            --retry 3 --retry-all-errors --connect-timeout 30 --max-time 300 \\
-            "https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip" \\
+          curl --fail --location --silent --show-error \
+            --retry 3 --retry-all-errors --connect-timeout 30 --max-time 300 \
+            "https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip" \
             --output "$archive"
           unzip -q "$archive" -d "$browser_dir"
           rm "$archive"
@@ -225,11 +225,12 @@ jobs:
         shell: bash
         run: |
           browser="$HOME/.cache/guitarlab/chrome-headless-shell/chrome-headless-shell-linux64/chrome-headless-shell"
-          if [ ! -x "$browser" ]; then
+          if [ ! -f "$browser" ]; then
             echo "::error::Cached Chromium headless-shell executable is missing or not executable."
             find "$HOME/.cache/guitarlab/chrome-headless-shell" -maxdepth 3 -type f -print
             exit 1
           fi
+          chmod +x "$browser"
           "$browser" --version
           echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$browser" >> "$GITHUB_ENV"
       - name: Application browser acceptance tests
