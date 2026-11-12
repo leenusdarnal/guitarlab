@@ -129,7 +129,11 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 - [ ] Explicit Cloudflare preview deployment and browser-level verification.
 - [ ] Private production deployment, smoke tests and rollback procedure.
 
-## M7 implementation note (2026-11-12)\n\nThe first slice adds `/practice`, a local IndexedDB-backed session flow and history. It reuses the existing application services and does not award mastery from time spent. See [the execution priority and resume plan](EXECUTION_PRIORITY.md) for the active branch, validation status and next slice.\n\n## Definition of done
+## M7 implementation note (2026-11-12)
+
+The first slice adds `/practice`, a local IndexedDB-backed session flow and history. It reuses the existing application services and does not award mastery from time spent. See [the execution priority and resume plan](EXECUTION_PRIORITY.md) for the active branch, validation status and next slice.
+
+## Definition of done
 
 A milestone is complete only when:
 - Its acceptance criteria are documented and met.
