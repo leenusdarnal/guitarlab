@@ -202,6 +202,14 @@ try {
     await offlinePage
       .getByRole('heading', { name: 'Meet your guitar' })
       .waitFor();
+    const lessonLayout = await offlinePage.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth
+    }));
+    assert.ok(
+      lessonLayout.content <= lessonLayout.viewport,
+      `${device.name} lesson layout overflows horizontally: ${JSON.stringify(lessonLayout)}`
+    );
     await offlineContext.setOffline(true);
     assert.equal(
       await offlinePage.evaluate(() => navigator.onLine),
