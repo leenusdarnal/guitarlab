@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     createChordTransitionObservation,
@@ -15,6 +15,20 @@
   let totalAttempts = $state('0');
   let elapsedSeconds = $state('0');
   let profileStatus = $state('');
+  let fromChordId = $state('c-major');
+  let toChordId = $state('g-major');
+  let drillTarget = $state<'from' | 'to'>('from');
+  let drillActive = $state(false);
+  let drillStartedAt: number | null = null;
+  let drillTimer: ReturnType<typeof setInterval> | null = null;
+
+  const fromChord = $derived(
+    OPEN_CHORDS.find((chord) => chord.id === fromChordId) ?? OPEN_CHORDS[0]
+  );
+  const toChord = $derived(
+    OPEN_CHORDS.find((chord) => chord.id === toChordId) ?? OPEN_CHORDS[1]
+  );
+  const nextDrillChord = $derived(drillTarget === 'from' ? fromChord : toChord);
 
   const selectedChord = $derived(
     OPEN_CHORDS.find((chord) => chord.id === selectedChordId) ?? OPEN_CHORDS[0]
@@ -66,6 +80,47 @@
     };
   });
 
+
+  function startDrill() {
+    if (fromChordId === toChordId) return;
+    if (drillTimer !== null) clearInterval(drillTimer);
+    cleanChanges = '0';
+    totalAttempts = '0';
+    elapsedSeconds = '0';
+    drillTarget = 'from';
+    selectedChordId = fromChordId;
+    drillStartedAt = Date.now();
+    drillActive = true;
+    drillTimer = setInterval(() => {
+      if (drillStartedAt !== null) {
+        elapsedSeconds = String(Math.floor((Date.now() - drillStartedAt) / 1000));
+      }
+    }, 250);
+  }
+
+  function recordChange(clean: boolean) {
+    if (!drillActive) return;
+    totalAttempts = String(Number(totalAttempts) + 1);
+    if (clean) cleanChanges = String(Number(cleanChanges) + 1);
+    drillTarget = drillTarget === 'from' ? 'to' : 'from';
+    selectedChordId = drillTarget === 'from' ? fromChordId : toChordId;
+  }
+
+  function finishDrill() {
+    if (drillStartedAt !== null) {
+      elapsedSeconds = String(Math.floor((Date.now() - drillStartedAt) / 1000));
+    }
+    if (drillTimer !== null) {
+      clearInterval(drillTimer);
+      drillTimer = null;
+    }
+    drillStartedAt = null;
+    drillActive = false;
+  }
+
+  onDestroy(() => {
+    if (drillTimer !== null) clearInterval(drillTimer);
+  });
 
   function stringDescription(string: ChordString): string {
     if (string.state === 'muted') return 'muted';
@@ -164,6 +219,63 @@
     {/if}
   </section>
 
+  <section class="panel drill-panel" aria-labelledby="drill-title">
+    <div class="eyebrow">CHORD-CHANGE DRILL</div>
+    <h2 id="drill-title">Move between two shapes.</h2>
+    <p class="section-description">
+      Choose two different chords, start the drill, and alternate between the
+      displayed target shapes. Record a clean change or one that needs correction.
+    </p>
+    <div class="drill-choices">
+      <label class="field">
+        <span>First chord</span>
+        <select bind:value={fromChordId} disabled={drillActive} aria-label="First drill chord">
+          {#each OPEN_CHORDS as chord (chord.id)}
+            <option value={chord.id}>{chord.name} · {chord.quality}</option>
+          {/each}
+        </select>
+      </label>
+      <label class="field">
+        <span>Second chord</span>
+        <select bind:value={toChordId} disabled={drillActive} aria-label="Second drill chord">
+          {#each OPEN_CHORDS as chord (chord.id)}
+            <option value={chord.id}>{chord.name} · {chord.quality}</option>
+          {/each}
+        </select>
+      </label>
+    </div>
+    {#if fromChordId === toChordId}
+      <p class="input-error" role="alert">Choose two different chords for a transition drill.</p>
+    {/if}
+    <div class="drill-target" aria-live="polite">
+      <span>{drillActive ? 'NEXT CHORD TO PLAY' : 'READY WHEN YOU ARE'}</span>
+      <strong>{drillActive ? nextDrillChord.name : `${fromChord.name} → ${toChord.name}`}</strong>
+      <p>{drillActive ? nextDrillChord.description : 'The target alternates after each recorded attempt.'}</p>
+    </div>
+    <div class="drill-actions">
+      {#if drillActive}
+        <button type="button" class="secondary-button" onclick={() => recordChange(true)}>
+          Record clean change
+        </button>
+        <button type="button" class="secondary-button" onclick={() => recordChange(false)}>
+          Record correction needed
+        </button>
+        <button type="button" class="finish-button" onclick={finishDrill}>
+          Finish drill
+        </button>
+      {:else}
+        <button
+          type="button"
+          class="primary-button"
+          onclick={startDrill}
+          disabled={fromChordId === toChordId}
+        >
+          Start / reset drill
+        </button>
+      {/if}
+    </div>
+  </section>
+
   <section class="panel observation-panel" aria-labelledby="observation-title">
     <div class="eyebrow">PRACTICE EVIDENCE</div>
     <h2 id="observation-title">Chord-change observation.</h2>
@@ -174,15 +286,15 @@
     <div class="observation-fields">
       <label class="field">
         <span>Clean changes</span>
-        <input type="number" min="0" max="10000" step="1" bind:value={cleanChanges} />
+        <input type="number" min="0" max="10000" step="1" bind:value={cleanChanges} disabled={drillActive} />
       </label>
       <label class="field">
         <span>Total attempts</span>
-        <input type="number" min="0" max="10000" step="1" bind:value={totalAttempts} />
+        <input type="number" min="0" max="10000" step="1" bind:value={totalAttempts} disabled={drillActive} />
       </label>
       <label class="field">
         <span>Elapsed seconds</span>
-        <input type="number" min="0" max="86400" step="1" bind:value={elapsedSeconds} />
+        <input type="number" min="0" max="86400" step="1" bind:value={elapsedSeconds} disabled={drillActive} />
       </label>
     </div>
     {#if cleanChangeObservation}
@@ -399,6 +511,74 @@
     color: var(--muted);
     font-size: 10px;
   }
+  .drill-panel h2 {
+    margin-bottom: 6px;
+  }
+  .drill-choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 18px 0;
+  }
+  .drill-target {
+    display: grid;
+    gap: 7px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-raised);
+  }
+  .drill-target > span {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .drill-target strong {
+    font: 500 28px / 1 Georgia, serif;
+  }
+  .drill-target p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .drill-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 14px;
+  }
+  .primary-button,
+  .secondary-button,
+  .finish-button {
+    min-height: 40px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .primary-button {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-ink);
+  }
+  .secondary-button,
+  .finish-button {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+  .finish-button {
+    color: var(--muted);
+  }
+  button:disabled,
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
   .observation-panel h2 {
     margin-bottom: 6px;
   }
@@ -476,8 +656,12 @@
       width: 30px;
       height: 30px;
     }
-    .observation-fields {
+    .observation-fields,
+    .drill-choices {
       grid-template-columns: 1fr;
+    }
+    .drill-actions > button {
+      flex: 1 1 100%;
     }
   }
 </style>

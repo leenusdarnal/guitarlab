@@ -66,7 +66,23 @@ try {
   assert.match(await chordDiagram.getAttribute('aria-label'), /string 4: open/);
   assert.match(await chordDiagram.getAttribute('aria-label'), /string 1: fret 3, finger 4/);
 
-  // Chord accuracy and elapsed time remain distinct observations.
+  // The two-chord drill alternates targets and records outcomes separately.
+  await page.getByLabel('First drill chord').selectOption('c-major');
+  await page.getByLabel('Second drill chord').selectOption('g-major');
+  await page.getByRole('button', { name: 'Start / reset drill' }).click();
+  await page.locator('.drill-target strong').getByText('C', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Record clean change' }).click();
+  await page.locator('.drill-target strong').getByText('G', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Record correction needed' }).click();
+  await page.locator('.drill-target strong').getByText('C', { exact: true }).waitFor();
+  await page.waitForTimeout(1100);
+  await page.getByRole('button', { name: 'Finish drill' }).click();
+  assert.equal(await page.getByLabel('Clean changes').inputValue(), '1');
+  assert.equal(await page.getByLabel('Total attempts').inputValue(), '2');
+  assert.ok(Number(await page.getByLabel('Elapsed seconds').inputValue()) >= 1);
+  await page.getByText('50%', { exact: true }).waitFor();
+
+  // Manual observations remain editable after a drill is finished.
   await page.getByLabel('Clean changes').fill('7');
   await page.getByLabel('Total attempts').fill('10');
   await page.getByLabel('Elapsed seconds').fill('24');
