@@ -2,7 +2,9 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { findCurriculumLesson, type CurriculumWeek } from '../../../lib/server/curriculum/catalog';
 
-export const load: PageServerLoad = ({ params }) => {
+export const load: PageServerLoad = ({ params, setHeaders }) => {
+  // Lesson bodies are authored public content; learner progress stays client-local.
+  setHeaders({ 'cache-control': 'public, max-age=0, must-revalidate' });
   const detail = findCurriculumLesson(params.lessonId);
   if (!detail) {
     error(404, {
