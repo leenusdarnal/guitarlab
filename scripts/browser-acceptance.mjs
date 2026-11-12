@@ -774,7 +774,7 @@ try {
     .filter({ hasText: 'Elapsed session time is activity history' })
     .waitFor();
   await page.getByText('completed', { exact: true }).waitFor();
-  await page.getByText(/\\d+ sec/).waitFor();
+  await page.getByText(/\d+ sec/).waitFor();
 
   assert.deepEqual(
     pageErrors,
