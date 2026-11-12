@@ -786,7 +786,9 @@ try {
     .getByRole('heading', { name: 'Your session is in progress' })
     .waitFor();
   await page.reload({ waitUntil: 'networkidle' });
-  await page.getByRole('heading', { name: 'Your session is in progress' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Your session is in progress' })
+    .waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
   await page.getByRole('button', { name: 'Finish and save session' }).click();
