@@ -164,20 +164,18 @@ try {
         request.onerror = () =>
           reject(request.error ?? new Error('IndexedDB read failed.'));
       });
-    const active = await read(
-      transaction.objectStore('metadata').get('activeLearnerId')
-    );
-    const profile = await read(
-      transaction.objectStore('learnerProfiles').get('legacy-learner-001')
-    );
     const sessions = transaction.objectStore('practiceSessions');
-    const migratedSession = await read(
-      sessions.index('byLearnerStatusStartedAt').get([
-        'legacy-learner-001',
-        'in_progress',
-        150
-      ])
-    );
+    const [active, profile, migratedSession] = await Promise.all([
+      read(transaction.objectStore('metadata').get('activeLearnerId')),
+      read(transaction.objectStore('learnerProfiles').get('legacy-learner-001')),
+      read(
+        sessions.index('byLearnerStatusStartedAt').get([
+          'legacy-learner-001',
+          'in_progress',
+          150
+        ])
+      )
+    ]);
     const result = {
       version: database.version,
       stores: Array.from(database.objectStoreNames),
