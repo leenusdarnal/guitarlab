@@ -84,8 +84,16 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
-            echo "A valid base commit is required for changed-file formatting checks."
-            exit 1
+            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+              # A newly created feature branch has an all-zero "before" SHA.
+              # Fetch the pushed commit and its parent so formatting can still
+              # compare only the files introduced by the branch.
+              git fetch --no-tags --depth=2 origin "$GITHUB_SHA"
+              BASE_SHA="$(git rev-parse "${GITHUB_SHA}^")"
+            else
+              echo "A valid base commit is required for changed-file formatting checks."
+              exit 1
+            fi
           fi
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           changed_files=()
