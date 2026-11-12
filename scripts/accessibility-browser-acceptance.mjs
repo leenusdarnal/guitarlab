@@ -6,7 +6,10 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
 const require = createRequire(import.meta.url);
-const axeSource = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
+const axeSource = await readFile(
+  require.resolve('axe-core/axe.min.js'),
+  'utf8'
+);
 const port = Number(process.env.GUITARLAB_ACCESSIBILITY_PREVIEW_PORT ?? 8789);
 const origin = 'http://127.0.0.1:' + port;
 const themes = ['dark', 'light'];
@@ -106,7 +109,9 @@ async function scanPage(page, route, theme, viewport) {
         ' affected nodes)'
     );
     for (const node of violation.nodes.slice(0, 5)) {
-      console.log('    ' + node.target.join(', ') + ' — ' + node.failureSummary);
+      console.log(
+        '    ' + node.target.join(', ') + ' — ' + node.failureSummary
+      );
     }
   }
 
@@ -114,7 +119,8 @@ async function scanPage(page, route, theme, viewport) {
     console.warn(
       '[axe] ' +
         warnings.length +
-        ' moderate/minor findings are reported for follow-up; serious and critical findings block CI.'
+        ' moderate/minor findings are reported for follow-up; ' +
+        'serious and critical findings block CI.'
     );
   }
   assert.equal(
@@ -200,7 +206,11 @@ try {
         /Skip to main content/,
         'The first keyboard stop should be the global skip link'
       );
-      assert.equal(firstFocus.visible, true, 'The skip link should be visible on focus');
+      assert.equal(
+        firstFocus.visible,
+        true,
+        'The skip link should be visible on focus'
+      );
       await page.keyboard.press('Enter');
       await page.waitForFunction(
         () => document.activeElement?.id === 'main-content'
@@ -216,7 +226,9 @@ try {
   }
 
   console.log(
-    'Accessibility browser acceptance passed: 10 representative routes in dark and light themes, WCAG A/AA axe scans at desktop and 320px, narrow-screen reflow, and keyboard skip-link focus.'
+    'Accessibility browser acceptance passed: 10 representative routes in dark ' +
+      'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
+      'narrow-screen reflow, and keyboard skip-link focus.'
   );
 } catch (error) {
   console.error(error);
