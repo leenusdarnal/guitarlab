@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-  getLocalStoragePersistenceStatus,
-  requestLocalStoragePersistence
+  getLearnerStoragePersistenceStatus,
+  requestLearnerStoragePersistence
 } from './persistence';
 
 describe('local learner storage persistence', () => {
@@ -12,7 +12,7 @@ describe('local learner storage persistence', () => {
       estimate: vi.fn().mockResolvedValue({ usage: 128, quota: 1024 })
     };
 
-    await expect(getLocalStoragePersistenceStatus(manager)).resolves.toEqual({
+    await expect(getLearnerStoragePersistenceStatus(manager)).resolves.toEqual({
       canRequest: true,
       persisted: true,
       usageBytes: 128,
@@ -27,7 +27,7 @@ describe('local learner storage persistence', () => {
       estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 4096 })
     };
 
-    const status = await requestLocalStoragePersistence(manager);
+    const status = await requestLearnerStoragePersistence(manager);
 
     expect(manager.persist).toHaveBeenCalledOnce();
     expect(status.persisted).toBe(false);
@@ -35,13 +35,13 @@ describe('local learner storage persistence', () => {
   });
 
   it('reports unsupported browser storage without throwing', async () => {
-    await expect(getLocalStoragePersistenceStatus(null)).resolves.toEqual({
+    await expect(getLearnerStoragePersistenceStatus(null)).resolves.toEqual({
       canRequest: false,
       persisted: null,
       usageBytes: null,
       quotaBytes: null
     });
-    await expect(requestLocalStoragePersistence(null)).resolves.toEqual({
+    await expect(requestLearnerStoragePersistence(null)).resolves.toEqual({
       canRequest: false,
       persisted: null,
       usageBytes: null,
@@ -56,7 +56,7 @@ describe('local learner storage persistence', () => {
       estimate: vi.fn().mockRejectedValue(new Error('unavailable'))
     };
 
-    await expect(requestLocalStoragePersistence(manager)).resolves.toEqual({
+    await expect(requestLearnerStoragePersistence(manager)).resolves.toEqual({
       canRequest: true,
       persisted: null,
       usageBytes: null,
