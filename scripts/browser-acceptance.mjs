@@ -674,7 +674,7 @@ try {
   await highEOpen.focus();
   await highEOpen.press('ArrowRight');
   assert.equal(
-    await page.evaluate(() => (document.activeElement as HTMLButtonElement)?.getAttribute('aria-label')),
+    await page.evaluate(() => (document.activeElement)?.getAttribute('aria-label')),
     'String 1, fret 1, F4',
     'Arrow-key navigation should move one fret while preserving the string'
   );
