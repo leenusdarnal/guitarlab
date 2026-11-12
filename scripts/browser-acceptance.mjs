@@ -392,9 +392,7 @@ try {
   await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
   await page.locator('#reset-confirm').fill('RESET');
   const acceptedResetDialog = page.waitForEvent('dialog');
-  await page
-    .getByRole('button', { name: 'Reset active learner data' })
-    .click();
+  await page.getByRole('button', { name: 'Reset active learner data' }).click();
   const acceptedDialog = await acceptedResetDialog;
   await acceptedDialog.accept();
   await page
