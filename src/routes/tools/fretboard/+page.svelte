@@ -6,42 +6,44 @@
     SHARP_NOTE_NAMES,
     STANDARD_GUITAR_TUNING,
     getDisplayFretColumn,
-    getNoteAtPosition,
     getFretboardLayout,
+    getNoteAtPosition,
     type FretboardNote,
     type GuitarHandedness,
     type NoteSpelling
   } from '$lib/domain/music/fretboard';
-  import type { ProfilePreferences } from '$lib/domain/profile/preferences';
   import {
     loadActiveLearnerProfile,
     saveActiveLearnerPreferences
   } from '$lib/storage/indexeddb';
+  import type { ProfilePreferences } from '$lib/domain/profile/preferences';
 
   let handedness = $state<GuitarHandedness>('right');
-  let profilePreferences = $state<ProfilePreferences | null>(null);
-  let profileLoading = $state(true);
-  let profileError = $state('');
   let spelling = $state<NoteSpelling>('sharp');
   let maxFret = $state(12);
-  let showNoteNames = $state(true);
-  let mode = $state<'explore' | 'find'>('explore');
   let targetPitchClass = $state(0);
-  let selectedNote = $state<FretboardNote | null>(null);
-  let focusedStringNumber = $state(1);
-  let focusedFret = $state(0);
+  let findMode = $state(false);
+  let selectedPosition = $state<{ stringNumber: number; fret: number } | null>(null);
   let feedback = $state('');
-  let savingHandedness = $state(false);
+  let saveStatus = $state('');
+  let profilePreferences = $state<ProfilePreferences | null>(null);
+  let isSaving = $state(false);
 
-  const noteNames = $derived(
-    spelling === 'flat' ? FLAT_NOTE_NAMES : SHARP_NOTE_NAMES
-  );
-  const targetNoteName = $derived(noteNames[targetPitchClass]);
-  const fretboard = $derived(
+  let fretboardRows = $derived(
     getFretboardLayout(maxFret, STANDARD_GUITAR_TUNING, spelling)
   );
-  const handednessIsSaved = $derived(
-    profilePreferences?.handedness === handedness
+  let targetNoteName = $derived(
+    (spelling === 'flat' ? FLAT_NOTE_NAMES : SHARP_NOTE_NAMES)[targetPitchClass]
+  );
+  let selectedNote = $derived(
+    selectedPosition
+      ? getNoteAtPosition(
+          selectedPosition.stringNumber,
+          selectedPosition.fret,
+          STANDARD_GUITAR_TUNING,
+          spelling
+        )
+      : null
   );
 
   onMount(() => {
@@ -56,127 +58,88 @@
       })
       .catch(() => {
         if (active) {
-          profileError =
-            'Your saved handedness could not be loaded. The fretboard is using its standard display orientation.';
+          saveStatus =
+            'Your saved orientation could not be loaded. You can still explore the fretboard and choose an orientation.';
         }
-      })
-      .finally(() => {
-        if (active) profileLoading = false;
       });
     return () => {
       active = false;
     };
   });
 
-  function changeHandedness(event: Event) {
-    handedness = (event.currentTarget as HTMLSelectElement)
-      .value as GuitarHandedness;
-    selectedNote = null;
-    feedback = '';
+  function cellLabel(note: FretboardNote): string {
+    if (findMode) return `String ${note.stringNumber}, fret ${note.fret}, position`;
+    return `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`;
   }
 
-  function changeSpelling(event: Event) {
-    spelling = (event.currentTarget as HTMLSelectElement)
-      .value as NoteSpelling;
-    if (selectedNote) {
-      selectedNote = getNoteAtPosition(
-        selectedNote.stringNumber,
-        selectedNote.fret,
-        STANDARD_GUITAR_TUNING,
-        spelling
-      );
-    }
-    feedback = '';
-  }
-
-  function changeMaxFret(event: Event) {
-    maxFret = Number((event.currentTarget as HTMLSelectElement).value);
-    selectedNote = null;
-    focusedStringNumber = 1;
-    focusedFret = 0;
-    feedback = '';
-  }
-
-  function selectMode(nextMode: 'explore' | 'find') {
-    mode = nextMode;
-    selectedNote = null;
-    feedback = '';
-  }
-
-  function chooseTargetNote(event: Event) {
-    targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
-    selectedNote = null;
-    feedback = '';
-  }
-
-  function handleFretboardKeydown(event: KeyboardEvent, note: FretboardNote) {
-    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+  function activateNote(note: FretboardNote) {
+    if (findMode) {
+      if (note.pitchClass !== targetPitchClass) {
+        feedback = `Not quite. Find ${targetNoteName} on another position.`;
+        return;
+      }
+      selectedPosition = {
+        stringNumber: note.stringNumber,
+        fret: note.fret
+      };
+      feedback = `Correct — ${targetNoteName} is at string ${note.stringNumber}, fret ${note.fret}.`;
       return;
     }
+
+    selectedPosition = {
+      stringNumber: note.stringNumber,
+      fret: note.fret
+    };
+    feedback = '';
+  }
+
+  function moveFocus(event: KeyboardEvent, note: FretboardNote) {
+    const rightward = event.key === 'ArrowRight';
+    const leftward = event.key === 'ArrowLeft';
+    const downward = event.key === 'ArrowDown';
+    const upward = event.key === 'ArrowUp';
+    if (!rightward && !leftward && !downward && !upward) return;
+
     event.preventDefault();
+    const visualDirection = rightward ? 1 : leftward ? -1 : 0;
+    const fretDirection = handedness === 'left' ? -visualDirection : visualDirection;
+    const nextFret = note.fret + fretDirection;
+    const nextString = note.stringNumber + (downward ? 1 : upward ? -1 : 0);
+    if (nextFret < 0 || nextFret > maxFret || nextString < 1 || nextString > 6) {
+      return;
+    }
 
-    const currentColumn =
-      getDisplayFretColumn(note.fret, maxFret, handedness) - 1;
-    const nextColumn = Math.max(
-      0,
-      Math.min(
-        maxFret,
-        currentColumn + (event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0)
-      )
-    );
-    const nextString = Math.max(
-      1,
-      Math.min(
-        6,
-        note.stringNumber + (event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0)
-      )
-    );
-    const nextFret =
-      handedness === 'left' ? maxFret - nextColumn : nextColumn;
-
-    focusedStringNumber = nextString;
-    focusedFret = nextFret;
     document
-      .getElementById(`fret-note-${nextString}-${nextFret}`)
+      .querySelector<HTMLButtonElement>(
+        `.fret-cell[data-string="${nextString}"][data-fret="${nextFret}"]`
+      )
       ?.focus();
   }
 
-  function selectFretboardNote(note: FretboardNote) {
-    if (mode === 'explore') {
-      selectedNote = note;
-      feedback = '';
-      return;
-    }
-
-    if (note.pitchClass === targetPitchClass) {
-      selectedNote = note;
-      feedback = `Correct — ${targetNoteName} is at string ${note.stringNumber}, fret ${note.fret}.`;
-    } else {
-      selectedNote = null;
-      feedback = `Not quite. String ${note.stringNumber}, fret ${note.fret} is ${note.noteName}${note.octave}. Keep looking for ${targetNoteName}.`;
-    }
+  function startFindMode() {
+    findMode = !findMode;
+    selectedPosition = null;
+    feedback = '';
   }
 
-  async function saveHandednessPreference() {
-    if (!profilePreferences || savingHandedness) return;
-    savingHandedness = true;
+  async function saveOrientation() {
+    isSaving = true;
+    saveStatus = '';
     try {
+      const preferences =
+        profilePreferences ?? (await loadActiveLearnerProfile()).preferences;
       const updated = await saveActiveLearnerPreferences({
-        ...profilePreferences,
+        ...preferences,
         handedness
       });
       profilePreferences = updated.preferences;
-      feedback = `Saved ${handedness}-handed diagram orientation to your learner profile.`;
+      saveStatus = `Saved ${handedness}-handed diagram orientation to your profile.`;
     } catch {
-      feedback =
-        'The diagram changed, but your handedness preference could not be saved. Your existing profile was left unchanged.';
+      saveStatus =
+        'The orientation could not be saved. Your current diagram remains available until you leave this page.';
     } finally {
-      savingHandedness = false;
+      isSaving = false;
     }
-  }
-
-  function isFretMarker(fret: number) {
-    return [3, 5, 7, 9, 12, 15, 17, 19, 21, 24].includes(fret);
   }
 </script>
 
@@ -184,7 +147,7 @@
   <title>Fretboard explorer — GuitarLab</title>
   <meta
     name="description"
-    content="Explore notes across all six strings and practise finding pitches on a standard-tuned guitar."
+    content="Explore guitar notes across six strings, practise note finding and choose a handedness-aware fretboard view."
   />
 </svelte:head>
 
@@ -192,196 +155,157 @@
   <a class="back-link" href={resolve('/tools')}>← Practice tools</a>
 
   <header class="page-heading">
-    <div class="eyebrow">MUSIC TOOLS · NOTES</div>
-    <h1>Fretboard <em>explorer.</em></h1>
+    <div class="eyebrow">THE PRACTICE WORKBENCH · NOTES &amp; PITCH</div>
+    <h1>Fretboard explorer.</h1>
     <p>
-      Learn where notes live across the neck. Pitch and string identity stay the
-      same when you mirror the diagram for a left-handed view.
+      Find your way across the strings one note at a time. The diagram keeps each
+      note's pitch and string identity unchanged when you switch its display
+      orientation.
     </p>
   </header>
 
-  <section class="setup-panel" aria-label="Fretboard settings">
-    <div class="setup-heading">
+  <section class="panel settings-panel" aria-labelledby="settings-title">
+    <div class="section-heading">
       <div>
-        <div class="eyebrow">YOUR INSTRUMENT VIEW</div>
-        <h2>Standard E tuning</h2>
+        <div class="eyebrow">YOUR VIEW</div>
+        <h2 id="settings-title">Fretboard settings</h2>
       </div>
-      <span class="tuning-tag">E · A · D · G · B · E</span>
+      <span class="local-label">Runs locally</span>
     </div>
 
     <div class="controls">
       <label>
-        Diagram orientation
-        <select value={handedness} onchange={changeHandedness}>
-          <option value="right">Standard / right-handed</option>
-          <option value="left">Mirrored / left-handed</option>
+        <span>Diagram orientation</span>
+        <select aria-label="Diagram orientation" bind:value={handedness}>
+          <option value="right">Right-handed</option>
+          <option value="left">Left-handed</option>
         </select>
       </label>
       <label>
-        Note spelling
-        <select value={spelling} onchange={changeSpelling}>
-          <option value="sharp">Sharps (C♯)</option>
-          <option value="flat">Flats (D♭)</option>
+        <span>Note spelling</span>
+        <select aria-label="Note spelling" bind:value={spelling}>
+          <option value="sharp">Sharps (♯)</option>
+          <option value="flat">Flats (♭)</option>
         </select>
       </label>
       <label>
-        Frets shown
-        <select value={maxFret} onchange={changeMaxFret}>
-          <option value={5}>Open to 5th fret</option>
+        <span>Fret range</span>
+        <select aria-label="Fret range" bind:value={maxFret}>
           <option value={12}>Open to 12th fret</option>
           <option value={24}>Open to 24th fret</option>
         </select>
       </label>
-      <label class="toggle-control">
-        <input type="checkbox" bind:checked={showNoteNames} />
-        Show note names
-      </label>
     </div>
 
-    {#if profileLoading}
-      <p class="profile-note" role="status">Loading your instrument preferences…</p>
-    {:else if profileError}
-      <p class="profile-note warning" role="alert">{profileError}</p>
-    {:else if handednessIsSaved}
-      <p class="profile-note">Using your saved {handedness}-handed diagram preference.</p>
-    {:else}
-      <div class="preference-save">
-        <p class="profile-note">
-          This is a diagram-only choice. Your learner profile has no saved handedness yet.
-        </p>
-        <button
-          type="button"
-          class="save-preference"
-          disabled={savingHandedness}
-          onclick={saveHandednessPreference}
-        >
-          {savingHandedness ? 'Saving…' : 'Save this orientation to my profile'}
-        </button>
-      </div>
+    <div class="preference-actions">
+      <p>Save the diagram orientation as a preference on this learner profile.</p>
+      <button class="secondary-button" type="button" onclick={saveOrientation} disabled={isSaving}>
+        {isSaving ? 'Saving…' : 'Save this orientation to my profile'}
+      </button>
+    </div>
+    {#if saveStatus}
+      <p class="save-status" role="status">{saveStatus}</p>
     {/if}
   </section>
 
-  <section class="explorer-panel" aria-labelledby="neck-title">
-    <div class="panel-heading">
+  <section class="panel explorer-panel" aria-labelledby="diagram-title">
+    <div class="section-heading">
       <div>
-        <div class="eyebrow">THE NECK</div>
-        <h2 id="neck-title">Find your place on the fretboard</h2>
+        <div class="eyebrow">STANDARD E TUNING</div>
+        <h2 id="diagram-title">Six strings, every note.</h2>
       </div>
-      <span class="neutral-tag">6 strings · {maxFret + 1} positions each</span>
+      <button class="primary-button" type="button" onclick={startFindMode} aria-pressed={findMode}>
+        {findMode ? 'Exit find mode' : 'Find a note'}
+      </button>
     </div>
 
-    <div class="mode-controls" role="group" aria-label="Fretboard activity">
-      <button
-        type="button"
-        class:active={mode === 'explore'}
-        aria-pressed={mode === 'explore'}
-        onclick={() => selectMode('explore')}
-      >Explore notes</button>
-      <button
-        type="button"
-        class:active={mode === 'find'}
-        aria-pressed={mode === 'find'}
-        onclick={() => selectMode('find')}
-      >Find a note</button>
-    </div>
-
-    {#if mode === 'find'}
-      <div class="find-prompt">
-        <label for="target-note">Find this note across the neck</label>
-        <select id="target-note" value={targetPitchClass} onchange={chooseTargetNote}>
-          {#each noteNames as noteName, pitchClass}
-            <option value={pitchClass}>{noteName}</option>
+    {#if findMode}
+      <div class="find-panel">
+        <label for="target-note">Find this note</label>
+        <select id="target-note" bind:value={targetPitchClass}>
+          {#each SHARP_NOTE_NAMES as noteName, index}
+            <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
         </select>
-        <p>Choose any matching position. More than one answer may be correct.</p>
+        <p>Choose any matching position. The exercise checks note identity, not speed.</p>
       </div>
     {:else}
-      <p class="activity-hint">
-        Select any position to see its note name, octave and pitch frequency. Use
-        the arrow keys to move between strings and frets.
+      <p class="diagram-hint" id="keyboard-help">
+        Select any position to see its note and pitch. Use the arrow keys to move
+        between neighbouring frets and strings.
       </p>
     {/if}
 
-    <div class="board-scroll" aria-label="Scrollable fretboard diagram">
-      <div class="fretboard" class:is-left-handed={handedness === 'left'}>
+    <div class="fretboard-scroll" tabindex="0" aria-label="Scrollable fretboard diagram">
+      <div class="fretboard">
         <div
-          class="fret-label-row"
-          style:grid-template-columns={`62px repeat(${maxFret + 1}, minmax(38px, 1fr))`}
+          class="fret-numbers"
+          data-frets={maxFret}
+          style={`grid-template-columns: 34px repeat(${maxFret + 1}, minmax(0, 1fr));`}
+          aria-hidden="true"
         >
-          <span class="string-heading">STRING</span>
+          <span class="string-heading">String</span>
           {#each Array.from({ length: maxFret + 1 }, (_, fret) => fret) as fret}
             <span
               class="fret-number"
-              class:nut-label={fret === 0}
-              style:grid-column={getDisplayFretColumn(fret, maxFret, handedness)}
-            >{fret === 0 ? 'NUT' : fret}</span>
+              style={`grid-column: ${getDisplayFretColumn(fret, maxFret, handedness) + 1};`}
+            >{fret === 0 ? 'Open' : fret}</span>
           {/each}
         </div>
 
-        {#each fretboard as stringNotes (stringNotes[0].stringNumber)}
+        {#each fretboardRows as notes, rowIndex (rowIndex + 1)}
           <div
-            class="string-row"
-            role="group"
-            aria-label={`String ${stringNotes[0].stringNumber}, ${stringNotes[0].noteName}${stringNotes[0].octave} open`}
+            class="fret-row"
+            data-frets={maxFret}
+            style={`grid-template-columns: 34px repeat(${maxFret + 1}, minmax(0, 1fr));`}
+            aria-label={`String ${rowIndex + 1}`}
           >
             <span class="string-label">
-              <strong>{stringNotes[0].stringNumber}</strong>
-              <small>{stringNotes[0].noteName}{stringNotes[0].octave}</small>
+              <strong>{notes[0].noteName}{notes[0].octave}</strong>
+              <small>{rowIndex + 1}</small>
             </span>
-            <div
-              class="fret-cells"
-              style:grid-template-columns={`repeat(${maxFret + 1}, minmax(38px, 1fr))`}
-            >
-              {#each stringNotes as note (note.fret)}
-                <button
-                  type="button"
-                  class="fret-cell"
-                  class:nut={note.fret === 0}
-                  class:marker={isFretMarker(note.fret)}
-                  class:selected={selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret}
-                  class:correct={mode === 'find' && selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret && note.pitchClass === targetPitchClass}
-                  style:grid-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
-                  id={`fret-note-${note.stringNumber}-${note.fret}`}
-                  data-string={note.stringNumber}
-                  data-fret={note.fret}
-                  data-display-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
-                  tabindex={focusedStringNumber === note.stringNumber && focusedFret === note.fret ? 0 : -1}
-                  aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
-                  aria-label={mode === 'find'
-                    ? `String ${note.stringNumber}, fret ${note.fret}, position`
-                    : `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`}
-                  aria-pressed={selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret}
-                  onfocus={() => {
-                    focusedStringNumber = note.stringNumber;
-                    focusedFret = note.fret;
-                  }}
-                  onkeydown={(event) => handleFretboardKeydown(event, note)}
-                  onclick={() => selectFretboardNote(note)}
-                >
-                  {#if showNoteNames && mode === 'explore'}
-                    <span>{note.noteName}</span>
-                  {:else if selectedNote?.stringNumber === note.stringNumber && selectedNote?.fret === note.fret}
-                    <span>{note.noteName}</span>
-                  {:else}
-                    <span class="visually-hidden">Select position</span>
-                  {/if}
-                </button>
-              {/each}
-            </div>
+            {#each notes as note (note.fret)}
+              <button
+                class="fret-cell"
+                class:open-string={note.fret === 0}
+                class:is-target={findMode && note.pitchClass === targetPitchClass}
+                class:is-selected={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
+                type="button"
+                aria-label={cellLabel(note)}
+                aria-pressed={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
+                aria-describedby={findMode ? undefined : 'keyboard-help'}
+                data-string={note.stringNumber}
+                data-fret={note.fret}
+                data-display-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
+                style={`grid-column: ${getDisplayFretColumn(note.fret, maxFret, handedness) + 1};`}
+                onclick={() => activateNote(note)}
+                onkeydown={(event) => moveFocus(event, note)}
+              >
+                <span>{note.noteName}</span><small>{note.octave}</small>
+              </button>
+            {/each}
           </div>
         {/each}
       </div>
     </div>
-    <p class="scroll-hint">On smaller screens, scroll sideways to reach higher frets.</p>
 
-    {#if selectedNote && mode === 'explore'}
+    <div class="legend" aria-label="Fretboard legend">
+      <span><i class="open-marker"></i> Open string</span>
+      <span><i class="target-marker"></i> Target note</span>
+      <span>String 1 is the highest pitch; string 6 is the lowest.</span>
+    </div>
+
+    {#if selectedNote && !findMode}
       <div class="note-detail" aria-live="polite">
         <div>
-          <div class="eyebrow">SELECTED POSITION</div>
+          <span class="eyebrow">SELECTED POSITION</span>
           <strong>{selectedNote.noteName}{selectedNote.octave}</strong>
+          <p>String {selectedNote.stringNumber} · Fret {selectedNote.fret}</p>
         </div>
-        <p>String {selectedNote.stringNumber} · Fret {selectedNote.fret}</p>
-        <p>{selectedNote.frequencyHz.toFixed(1)} Hz</p>
+        <div class="frequency">
+          <span>Frequency</span>
+          <strong>{selectedNote.frequencyHz.toFixed(2)} Hz</strong>
+        </div>
       </div>
     {/if}
 
@@ -390,442 +314,337 @@
     {/if}
   </section>
 
-  <section class="reference-panel">
-    <div class="eyebrow">HOW TO READ THE NECK</div>
-    <div class="reference-grid">
-      <p><strong>String numbers</strong><span>1 is the highest-pitched string; 6 is the lowest.</span></p>
-      <p><strong>Open position</strong><span>Fret 0 is the open string, before the first fret.</span></p>
-      <p><strong>Twelfth fret</strong><span>Each string repeats its open-string pitch one octave higher.</span></p>
-      <p><strong>Handedness</strong><span>Mirroring changes where frets appear, never the pitch or string number.</span></p>
-    </div>
-  </section>
-
-  <footer>
-    <a href={resolve('/tools')}>← All practice tools</a>
-    <a href={resolve('/onboarding')}>Learning preferences ↗</a>
-  </footer>
+  <p class="privacy-note">
+    No microphone permission is needed. Note positions and the find-a-note exercise
+    run in this browser; no learner data or audio is uploaded.
+  </p>
 </main>
 
 <style>
   .fretboard-page {
-    max-width: 1160px;
+    width: min(100% - 32px, 1040px);
     margin: 0 auto;
-    padding: 30px clamp(17px, 4vw, 48px) 64px;
+    padding: 30px 0 64px;
     color: var(--text);
   }
   .back-link {
     display: inline-block;
-    margin-bottom: 25px;
+    margin-bottom: 28px;
     color: var(--muted);
     font-size: 12px;
   }
   .page-heading {
-    max-width: 720px;
-    margin-bottom: 25px;
+    max-width: 700px;
+    padding-bottom: 22px;
   }
   .eyebrow {
     color: var(--muted);
     font-size: 9px;
     font-weight: 800;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.2px;
   }
   h1 {
-    margin: 11px 0;
-    font: 500 clamp(36px, 5vw, 56px) / 1.08 Georgia, serif;
-    letter-spacing: -1.6px;
+    margin: 10px 0;
+    font: 500 clamp(34px, 5vw, 54px) / 1.08 Georgia, serif;
+    letter-spacing: -1.5px;
   }
-  h1 em {
-    color: var(--primary);
-  }
-  .page-heading p {
-    max-width: 650px;
-    margin: 0;
+  .page-heading p,
+  .privacy-note {
+    max-width: 680px;
     color: var(--muted);
     font-size: 12px;
     line-height: 1.7;
   }
-  .setup-panel,
-  .explorer-panel,
-  .reference-panel {
-    margin-bottom: 15px;
-    padding: 21px;
+  .panel {
+    margin-top: 16px;
+    padding: clamp(16px, 3vw, 24px);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     background: var(--surface);
   }
-  .setup-heading,
-  .panel-heading {
+  .section-heading {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 14px;
+    margin-bottom: 18px;
   }
-  .setup-heading h2,
-  .panel-heading h2 {
-    margin: 7px 0 0;
-    font-size: 16px;
+  h2 {
+    margin: 6px 0 0;
+    font: 500 21px / 1.2 Georgia, serif;
   }
-  .tuning-tag,
-  .neutral-tag {
-    padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    color: var(--muted);
-    font-size: 9px;
-    white-space: nowrap;
+  .local-label {
+    color: var(--success);
+    font-size: 10px;
+    font-weight: 750;
   }
   .controls {
-    display: flex;
-    align-items: end;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
-    margin-top: 18px;
   }
   .controls label,
-  .find-prompt label {
+  .find-panel label {
     display: grid;
-    gap: 6px;
+    gap: 7px;
     color: var(--muted);
     font-size: 10px;
     font-weight: 700;
   }
   select {
-    min-height: 38px;
-    min-width: 145px;
-    padding: 7px 10px;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 9px;
     background: var(--surface-raised);
     color: var(--text);
     font-size: 11px;
   }
-  .toggle-control {
-    display: flex !important;
-    min-height: 38px;
-    align-items: center;
-    gap: 8px !important;
-    padding: 0 5px;
-  }
-  .toggle-control input {
-    accent-color: var(--primary);
-    width: 16px;
-    height: 16px;
-  }
-  .profile-note {
-    margin: 13px 0 0;
-    color: var(--muted);
-    font-size: 10px;
-    line-height: 1.6;
-  }
-  .profile-note.warning {
-    color: var(--warning);
-  }
-  .preference-save {
+  .preference-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 15px;
   }
-  .save-preference {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 11px;
-    background: var(--surface-raised);
-    color: var(--text);
-    font-size: 10px;
-    cursor: pointer;
-  }
-  .save-preference:disabled {
-    opacity: 0.6;
-    cursor: wait;
-  }
-  .panel-heading {
-    align-items: center;
-  }
-  .mode-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin: 18px 0 13px;
-  }
-  .mode-controls button {
-    padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface-raised);
-    color: var(--muted);
-    font-size: 10px;
-    cursor: pointer;
-  }
-  .mode-controls button.active {
-    border-color: var(--primary);
-    color: var(--text);
-    background: color-mix(in srgb, var(--primary) 12%, var(--surface));
-  }
-  .activity-hint,
-  .find-prompt p,
-  .scroll-hint {
+  .preference-actions p,
+  .find-panel p,
+  .diagram-hint {
+    margin: 0;
     color: var(--muted);
     font-size: 10px;
     line-height: 1.6;
   }
-  .find-prompt {
-    display: flex;
-    align-items: end;
-    flex-wrap: wrap;
-    gap: 12px;
+  .secondary-button,
+  .primary-button {
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .secondary-button {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
+  .primary-button {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-ink);
+  }
+  button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+  .save-status,
+  .feedback {
+    margin: 12px 0 0;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--text);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .diagram-hint {
+    margin: -6px 0 15px;
+  }
+  .find-panel {
+    display: grid;
+    grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+    align-items: center;
+    gap: 6px 14px;
+    margin: 0 0 15px;
     padding: 13px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--surface-raised);
   }
-  .find-prompt select {
-    min-width: 85px;
+  .find-panel select {
+    grid-column: 1;
   }
-  .find-prompt p {
-    flex-basis: 100%;
-    margin: 0;
+  .find-panel p {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
-  .board-scroll {
+  .fretboard-scroll {
+    width: 100%;
     overflow-x: auto;
-    overscroll-behavior-x: contain;
-    padding: 12px 0 4px;
+    overscroll-behavior-inline: contain;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--bg);
+    padding: 8px;
   }
   .fretboard {
-    min-width: max-content;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    background: color-mix(in srgb, var(--surface-raised) 70%, var(--surface));
-  }
-  .fret-label-row,
-  .string-row {
     display: grid;
-    grid-template-columns: 62px auto;
-    min-height: 48px;
+    gap: 4px;
+    min-width: 100%;
   }
-  .fret-label-row {
-    min-height: 34px;
-    background: var(--surface-raised);
-    border-bottom: 1px solid var(--border);
+  .fret-numbers,
+  .fret-row {
+    display: grid;
+    align-items: center;
+    gap: 2px;
+  }
+  .fret-numbers[data-frets='24'],
+  .fret-row[data-frets='24'] {
+    min-width: 640px;
   }
   .string-heading,
-  .string-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    border-right: 1px solid var(--border);
+  .fret-number {
     color: var(--muted);
-    font-size: 9px;
-  }
-  .string-heading {
     font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+    text-align: center;
   }
-  .string-label strong {
+  .string-label {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
     color: var(--text);
-    font-size: 11px;
+    font-size: 9px;
   }
   .string-label small {
     color: var(--muted);
     font-size: 8px;
   }
-  .fret-number {
-    display: grid;
-    min-width: 38px;
-    place-items: center;
-    color: var(--muted);
-    font-size: 9px;
-    border-right: 1px solid var(--border);
-  }
-  .fret-number.nut-label {
-    color: var(--primary);
-    font-size: 8px;
-    font-weight: 800;
-  }
-  .fret-cells {
-    display: grid;
-    min-width: 0;
-    background-image: linear-gradient(
-      to bottom,
-      transparent calc(50% - 1px),
-      color-mix(in srgb, var(--muted) 42%, transparent) calc(50% - 1px),
-      color-mix(in srgb, var(--muted) 42%, transparent) calc(50% + 1px),
-      transparent calc(50% + 1px)
-    );
-  }
-  .string-row + .string-row {
-    border-top: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
-  }
   .fret-cell {
-    position: relative;
-    display: grid;
-    min-width: 38px;
-    min-height: 48px;
-    place-items: center;
-    border: 0;
-    border-right: 1px solid var(--border);
-    background: transparent;
+    display: flex;
+    min-width: 0;
+    min-height: 30px;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    padding: 2px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
     color: var(--text);
+    font-size: clamp(7px, 1.8vw, 10px);
     cursor: pointer;
   }
-  .fret-cell.nut {
-    border-left: 4px solid var(--muted);
+  .fret-cell small {
+    color: var(--muted);
+    font-size: 7px;
   }
-  .is-left-handed .fret-cell.nut {
-    border-left: 0;
-    border-right: 4px solid var(--muted);
+  .fret-cell.open-string {
+    border-color: color-mix(in srgb, var(--primary) 65%, var(--border));
   }
-  .fret-cell.marker::before {
-    position: absolute;
-    z-index: 0;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--muted) 38%, transparent);
-    content: '';
+  .fret-cell.is-target {
+    background: color-mix(in srgb, var(--secondary) 22%, var(--surface));
   }
-  .fret-cell span {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    min-width: 25px;
-    min-height: 25px;
-    place-items: center;
-    border-radius: 50%;
-    background: var(--surface-raised);
-    font-size: 9px;
-    font-weight: 750;
-  }
-  .fret-cell.selected span,
-  .fret-cell.correct span {
-    background: var(--primary);
-    color: var(--primary-ink);
+  .fret-cell.is-selected {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
   }
   .fret-cell:focus-visible {
-    z-index: 2;
-    outline: 2px solid var(--focus);
-    outline-offset: -3px;
+    position: relative;
+    z-index: 1;
+    outline: 3px solid var(--focus);
+    outline-offset: 1px;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 9px;
+  }
+  .legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend i {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .open-marker {
+    border-color: var(--primary) !important;
+  }
+  .target-marker {
+    background: var(--secondary);
   }
   .note-detail {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 16px;
-    margin-top: 17px;
-    padding: 13px 15px;
+    margin-top: 16px;
+    padding: 15px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--surface-raised);
   }
+  .note-detail > div:first-child {
+    display: grid;
+    gap: 5px;
+  }
   .note-detail strong {
-    display: block;
-    margin-top: 4px;
-    color: var(--primary);
-    font: 500 24px Georgia, serif;
+    font: 500 25px / 1.1 Georgia, serif;
   }
   .note-detail p {
     margin: 0;
     color: var(--muted);
     font-size: 10px;
   }
-  .feedback {
-    margin: 13px 0 0;
-    color: var(--text);
-    font-size: 11px;
-    line-height: 1.6;
-  }
-  .reference-panel {
-    padding: 18px 21px;
-  }
-  .reference-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 13px;
-    margin-top: 14px;
-  }
-  .reference-grid p {
+  .frequency {
     display: grid;
     gap: 5px;
-    margin: 0;
+    text-align: right;
   }
-  .reference-grid strong {
-    font-size: 10px;
-  }
-  .reference-grid span {
+  .frequency span {
     color: var(--muted);
     font-size: 9px;
-    line-height: 1.6;
   }
-  footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 22px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
+  .frequency strong {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .privacy-note {
+    margin-top: 18px;
     font-size: 10px;
-    color: var(--muted);
   }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  button:focus-visible,
-  select:focus-visible,
   a:focus-visible {
-    outline: 2px solid var(--focus);
+    outline: 3px solid var(--focus);
     outline-offset: 3px;
   }
-  @media (max-width: 780px) {
-    .reference-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (max-width: 560px) {
+  @media (max-width: 640px) {
     .fretboard-page {
       padding-top: 22px;
     }
-    .setup-panel,
-    .explorer-panel,
-    .reference-panel {
-      padding: 15px;
-    }
-    .setup-heading,
-    .panel-heading {
-      align-items: flex-start;
-      flex-direction: column;
-    }
     .controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
     }
-    .controls label {
-      min-width: 0;
-    }
-    .controls select {
-      min-width: 0;
-      width: 100%;
-    }
-    .preference-save {
+    .preference-actions {
       align-items: flex-start;
       flex-direction: column;
     }
-    .reference-grid {
-      grid-template-columns: 1fr 1fr;
+    .section-heading {
+      align-items: flex-start;
     }
-    footer {
-      flex-direction: column;
+    .find-panel {
+      grid-template-columns: 1fr;
+    }
+    .find-panel p {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
     }
   }
 </style>
