@@ -37,12 +37,54 @@ try {
   assert.equal(ready, true, `Wrangler preview did not become ready.\n${serverOutput}`);
 
   browser = await chromium.launch({ headless: true });
+
+  // Theme storage is optional: a blocked localStorage API must not block the dashboard.
+  const restrictedStorageContext = await browser.newContext({
+    viewport: { width: 1440, height: 1000 }
+  });
+  await restrictedStorageContext.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      configurable: false,
+      get() {
+        throw new DOMException('Storage access is disabled', 'SecurityError');
+      }
+    });
+  });
+  const restrictedStoragePage = await restrictedStorageContext.newPage();
+  const restrictedStorageErrors = [];
+  restrictedStoragePage.on('pageerror', (error) => restrictedStorageErrors.push(error.message));
+  await restrictedStoragePage.goto(origin, { waitUntil: 'networkidle' });
+  await restrictedStoragePage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
+  await restrictedStoragePage
+    .getByRole('button', { name: 'Toggle colour theme' })
+    .click();
+  assert.equal(
+    await restrictedStoragePage.locator('html').getAttribute('data-theme'),
+    'light',
+    'The theme should still change in memory when localStorage is blocked'
+  );
+  assert.deepEqual(
+    restrictedStorageErrors,
+    [],
+    `Blocked localStorage caused browser errors: ${restrictedStorageErrors.join('; ')}`
+  );
+  await restrictedStorageContext.close();
+
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
   // Fresh learner: dashboard, curriculum phases and truthful empty states.
+  const response = await page.request.get(origin);
+  const securityHeaders = response.headers();
+  assert.equal(securityHeaders['x-content-type-options'], 'nosniff');
+  assert.equal(securityHeaders['referrer-policy'], 'strict-origin-when-cross-origin');
+  assert.equal(securityHeaders['x-frame-options'], 'DENY');
+  assert.equal(securityHeaders['permissions-policy'], 'camera=(), microphone=(self), geolocation=()');
+
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Your journey begins with the foundations.' }).waitFor();
   await page.getByRole('heading', { name: 'Year 1 learning path' }).waitFor();
