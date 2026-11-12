@@ -325,9 +325,9 @@ try {
   );
   await page.keyboard.press('Enter');
   assert.equal(
-    await page.locator('#main-content').evaluate(
-      (element) => element === document.activeElement
-    ),
+    await page
+      .locator('#main-content')
+      .evaluate((element) => element === document.activeElement),
     true,
     'The skip link should move focus to the main content container'
   );
