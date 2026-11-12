@@ -13,9 +13,9 @@ describe('open chord definitions', () => {
     for (const chord of OPEN_CHORDS) {
       expect(chordDefinitionSchema.safeParse(chord).success).toBe(true);
       expect(chord.strings).toHaveLength(6);
-      expect(
-        chord.strings.map((string) => string.stringNumber).sort()
-      ).toEqual([1, 2, 3, 4, 5, 6]);
+      expect(chord.strings.map((string) => string.stringNumber).sort()).toEqual(
+        [1, 2, 3, 4, 5, 6]
+      );
     }
   });
 
