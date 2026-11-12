@@ -101,7 +101,7 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 ### M7 — Practice studio
 
 - [ ] Custom practice routines.
-- [ ] Session timer and exercise sequence.
+- [ ] Session timer and exercise sequence with browser acceptance.
 - [ ] Practice journal and session history.
 - [ ] Tempo and repetition tracking with accuracy-first tempo ladders.
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
@@ -129,7 +129,7 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 - [ ] Explicit Cloudflare preview deployment and browser-level verification.
 - [ ] Private production deployment, smoke tests and rollback procedure.
 
-## Definition of done
+## M7 implementation note (2026-11-12)\n\nThe first slice adds `/practice`, a local IndexedDB-backed session flow and history. It reuses the existing application services and does not award mastery from time spent. See [the execution priority and resume plan](EXECUTION_PRIORITY.md) for the active branch, validation status and next slice.\n\n## Definition of done
 
 A milestone is complete only when:
 - Its acceptance criteria are documented and met.
