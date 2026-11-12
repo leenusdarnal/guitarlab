@@ -45,7 +45,7 @@
     isRequestingPersistence = true;
     try {
       storageStatus = await requestLearnerStoragePersistence();
-      if (storageStatus.persisted) {
+      if (storageStatus.persisted || storageStatus.requestGranted) {
         showMessage('This browser has granted persistent storage. Keep exporting backups for recovery.');
       } else if (storageStatus.canRequest) {
         showMessage('The browser did not grant persistent storage. Your data remains best-effort; keep a downloaded backup.', true);
@@ -212,8 +212,10 @@
           <p role="status">Checking this browser's storage status…</p>
         {:else if storageStatus?.persisted === true}
           <p>Your browser has granted persistent storage, which reduces automatic eviction risk. Browser settings can still remove site data, so keep a backup.</p>
-        {:else if storageStatus?.persisted === false}
+        {:else if storageStatus?.persisted === false && storageStatus.canRequest}
           <p>Storage is currently best-effort and may be cleared by the browser under storage pressure. You can ask the browser to preserve this site's data.</p>
+        {:else if storageStatus?.persisted === false}
+          <p>Storage is currently best-effort and this browser does not offer a persistence request. Export a backup regularly and keep it somewhere private.</p>
         {:else}
           <p>This browser does not report whether storage is persistent. Export a backup regularly and keep it somewhere private.</p>
         {/if}
