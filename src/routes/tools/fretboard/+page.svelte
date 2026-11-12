@@ -11,12 +11,12 @@
     type FretboardNote,
     type GuitarHandedness,
     type NoteSpelling
-  } from '$lib/domain/music/fretboard';
+  } from '../../../lib/domain/music/fretboard';
   import {
     loadActiveLearnerProfile,
     saveActiveLearnerPreferences
-  } from '$lib/storage/indexeddb';
-  import type { ProfilePreferences } from '$lib/domain/profile/preferences';
+  } from '../../../lib/storage/indexeddb';
+  import type { ProfilePreferences } from '../../../lib/domain/profile/preferences';
 
   let handedness = $state<GuitarHandedness>('right');
   let spelling = $state<NoteSpelling>('sharp');
