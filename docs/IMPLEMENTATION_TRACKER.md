@@ -71,7 +71,16 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
 
-## M7 first implementation slice (2026-11-12)\n\n- Feature branch: `feat/m7-practice-evidence-contract`.\n- Adds `/practice` with a local-first start/finish flow and session history.\n- Adds `src/lib/storage/practice.ts`, reusing the existing `startPracticeSession` / `finishPracticeSession` application services and IndexedDB repository.\n- The screen explicitly states that elapsed time is not mastery or accuracy evidence.\n- Existing application-service tests already cover invalid duration, successful completion, duplicate completion and no automatic mastery.\n- Not yet verified: full CI, route browser acceptance, pause/resume, exercise-level observations and manual device checks.\n\n## How progress is recorded
+## M7 first implementation slice (2026-11-12)
+
+- Feature branch: `feat/m7-practice-evidence-contract`.
+- Adds `/practice` with a local-first start/finish flow and session history.
+- Adds `src/lib/storage/practice.ts`, reusing the existing `startPracticeSession` / `finishPracticeSession` application services and IndexedDB repository.
+- The screen explicitly states that elapsed time is not mastery or accuracy evidence.
+- Existing application-service tests already cover invalid duration, successful completion, duplicate completion and no automatic mastery.
+- Not yet verified: full CI, route browser acceptance, pause/resume, exercise-level observations and manual device checks.
+
+## How progress is recorded
 
 1. Use one pull request per small implementation slice where practical; link it to its issue with `Closes #N` when all acceptance criteria are complete.
 2. Include CI results and manual verification evidence in the pull request description.
