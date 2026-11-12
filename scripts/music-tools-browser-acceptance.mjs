@@ -102,10 +102,10 @@ try {
   await page.getByText('50%', { exact: true }).waitFor();
 
   // Manual observations remain editable after a drill is finished.
-  const observationInputs = page.locator('input[type="number"]');
-  await observationInputs.nth(0).fill('7');
-  await observationInputs.nth(1).fill('10');
-  await observationInputs.nth(2).fill('24');
+  // Increase attempts first so the intermediate observation remains valid.
+  await page.getByLabel('Total attempts').fill('10');
+  await page.getByLabel('Clean changes').fill('7');
+  await page.getByLabel('Elapsed seconds').fill('24');
   await page.getByText('70%', { exact: true }).waitFor();
   await page.getByText('24s', { exact: true }).waitFor();
   await page.getByLabel('Clean changes').fill('11');
