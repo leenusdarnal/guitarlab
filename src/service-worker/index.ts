@@ -104,6 +104,17 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
     event.respondWith(
       (async () => {
         const pages = await caches.open(PAGE_CACHE);
+        if (!worker.navigator.onLine) {
+          const cached = await pages.match(request);
+          if (cached) return cached;
+          return new Response(OFFLINE_HTML, {
+            status: 503,
+            headers: {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'no-store'
+            }
+          });
+        }
         try {
           const response = await fetch(request);
           if (isCacheableNavigation(request, response, url)) {
