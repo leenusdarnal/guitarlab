@@ -421,7 +421,11 @@ describe('local learner profile persistence', () => {
       })
     ).rejects.toThrow(/owned by this learner/i);
     expect(
-      await repositories.mastery.find(profile.id, 'curriculum-v1', 'rhythm-pulse')
+      await repositories.mastery.find(
+        profile.id,
+        'curriculum-v1',
+        'rhythm-pulse'
+      )
     ).toBeNull();
   });
 

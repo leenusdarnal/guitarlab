@@ -174,7 +174,10 @@ export interface SkillMasteryRepository {
 /** Append-only exercise observations, scoped to one learner and session. */
 export interface PracticeEvidenceRepository {
   append(record: PracticeEvidenceRecord): Promise<void>;
-  listBySession(learnerId: string, sessionId: string): Promise<PracticeEvidenceRecord[]>;
+  listBySession(
+    learnerId: string,
+    sessionId: string
+  ): Promise<PracticeEvidenceRecord[]>;
 }
 
 export interface PracticeSessionRepository {

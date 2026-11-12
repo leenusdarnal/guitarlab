@@ -11,7 +11,10 @@ import {
   openLocalDatabase
 } from './indexeddb';
 import { systemRuntime } from '../repositories/contracts';
-import type { PracticeEvidenceRecord, PracticeSessionRecord } from '../repositories/contracts';
+import type {
+  PracticeEvidenceRecord,
+  PracticeSessionRecord
+} from '../repositories/contracts';
 import type { PracticeEvidenceSubmission } from '../domain/learning/practice-evidence';
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {

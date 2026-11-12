@@ -509,15 +509,17 @@ export function createIndexedDbRepositories(
         [stores.practiceEvidence, stores.practiceSessions],
         'readwrite',
         async (tx) => {
-          const session = await requestResult<PracticeSessionRecord | undefined>(
-            tx.objectStore(stores.practiceSessions).get(record.sessionId)
-          );
+          const session = await requestResult<
+            PracticeSessionRecord | undefined
+          >(tx.objectStore(stores.practiceSessions).get(record.sessionId));
           if (
             !session ||
             session.learnerId !== record.learnerId ||
             session.status === 'abandoned'
           ) {
-            throw new Error('Practice evidence must reference a session owned by this learner.');
+            throw new Error(
+              'Practice evidence must reference a session owned by this learner.'
+            );
           }
           // add(), not put(), makes the repository append-only.
           await requestResult(
@@ -539,13 +541,21 @@ export function createIndexedDbRepositories(
           );
           return records.sort(
             (left, right) =>
-              left.recordedAt - right.recordedAt || left.id.localeCompare(right.id)
+              left.recordedAt - right.recordedAt ||
+              left.id.localeCompare(right.id)
           );
         }
       )
   };
 
-  return { profiles, progress, assessments, mastery, practice, practiceEvidence };
+  return {
+    profiles,
+    progress,
+    assessments,
+    mastery,
+    practice,
+    practiceEvidence
+  };
 }
 
 /** Entry point used only by client-side lifecycle hooks and user actions. */

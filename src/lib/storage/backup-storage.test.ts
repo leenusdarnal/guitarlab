@@ -118,7 +118,11 @@ describe('local learner backup export builder', () => {
 
   it('refuses to export when the active profile is missing', () => {
     expect(() =>
-      buildLearnerBackup('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', 200, makeSource())
+      buildLearnerBackup(
+        'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+        200,
+        makeSource()
+      )
     ).toThrow('active learner profile could not be found');
   });
 });

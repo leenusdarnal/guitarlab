@@ -51,4 +51,6 @@ export const practiceEvidenceInputSchema = z
   });
 
 export type PracticeEvidenceInput = z.infer<typeof practiceEvidenceInputSchema>;
-export type PracticeEvidenceSubmission = z.infer<typeof practiceEvidenceSubmissionSchema>;
+export type PracticeEvidenceSubmission = z.infer<
+  typeof practiceEvidenceSubmissionSchema
+>;

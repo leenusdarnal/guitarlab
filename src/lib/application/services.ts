@@ -3,7 +3,10 @@ import {
   assessmentAttemptInputSchema,
   type AssessmentAttemptInput
 } from '../domain/learning/assessment';
-import { practiceEvidenceInputSchema, practiceEvidenceSubmissionSchema } from '../domain/learning/practice-evidence';
+import {
+  practiceEvidenceInputSchema,
+  practiceEvidenceSubmissionSchema
+} from '../domain/learning/practice-evidence';
 import {
   skillMasteryStateSchema,
   skillMasteryUpdateSchema
@@ -663,12 +666,16 @@ export async function recordPracticeEvidence(
   }
 ): Promise<PracticeEvidenceRecord> {
   const value = parseInput(recordPracticeEvidenceInputSchema, input);
-  const session = await dependencies.practice.findById(value.submission.sessionId);
+  const session = await dependencies.practice.findById(
+    value.submission.sessionId
+  );
   if (!session || session.learnerId !== value.learnerId) {
     throw new NotFoundError('Practice session not found.');
   }
   if (session.status === 'abandoned') {
-    throw new InvalidStateError('Evidence cannot be added to an abandoned practice session.');
+    throw new InvalidStateError(
+      'Evidence cannot be added to an abandoned practice session.'
+    );
   }
 
   const record = parseInput(practiceEvidenceInputSchema, {

@@ -1,7 +1,4 @@
-import {
-  createEmptyLocalLearnerProfile,
-  openLocalDatabase
-} from './indexeddb';
+import { createEmptyLocalLearnerProfile, openLocalDatabase } from './indexeddb';
 import {
   createRestorePreview,
   learnerBackupSchema,
@@ -37,7 +34,9 @@ function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
     request.onsuccess = () => resolve(request.result);
     request.onerror = () =>
-      reject(request.error ?? new Error('Local learner database request failed.'));
+      reject(
+        request.error ?? new Error('Local learner database request failed.')
+      );
   });
 }
 
@@ -45,13 +44,20 @@ function transactionResult(transaction: IDBTransaction): Promise<void> {
   return new Promise((resolve, reject) => {
     transaction.oncomplete = () => resolve();
     transaction.onabort = () =>
-      reject(transaction.error ?? new Error('Local learner data transaction aborted.'));
+      reject(
+        transaction.error ??
+          new Error('Local learner data transaction aborted.')
+      );
     transaction.onerror = () =>
-      reject(transaction.error ?? new Error('Local learner data transaction failed.'));
+      reject(
+        transaction.error ?? new Error('Local learner data transaction failed.')
+      );
   });
 }
 
-async function readActiveRecords(database: IDBDatabase): Promise<LearnerBackupRecords | null> {
+async function readActiveRecords(
+  database: IDBDatabase
+): Promise<LearnerBackupRecords | null> {
   const transaction = database.transaction([...storeNames], 'readonly');
   const completed = transactionResult(transaction);
   try {
@@ -63,7 +69,8 @@ async function readActiveRecords(database: IDBDatabase): Promise<LearnerBackupRe
       return null;
     }
 
-    const [profiles, progress, events, attempts, mastery, sessions, evidence] = await Promise.all([
+    const [profiles, progress, events, attempts, mastery, sessions, evidence] =
+      await Promise.all([
       requestResult<LearnerProfileRecord[]>(
         transaction.objectStore('learnerProfiles').getAll()
       ),
@@ -91,7 +98,9 @@ async function readActiveRecords(database: IDBDatabase): Promise<LearnerBackupRe
     const profile = profiles.find((record) => record.id === metadata.value);
     if (!profile) return null;
     if (profile.preferencesSchemaVersion !== 1) {
-      throw new Error('The active learner profile uses an unsupported preferences version.');
+      throw new Error(
+        'The active learner profile uses an unsupported preferences version.'
+      );
     }
     const backupProfile = {
       ...profile,
@@ -120,7 +129,9 @@ export type RestoreReview =
   | { success: true; backup: LearnerBackup; preview: RestorePreview };
 
 /** Read and validate a candidate file; this function never mutates IndexedDB. */
-export async function reviewLearnerBackup(contents: string): Promise<RestoreReview> {
+export async function reviewLearnerBackup(
+  contents: string
+): Promise<RestoreReview> {
   const parsed = parseLearnerBackupJson(contents);
   if (!parsed.success) return parsed;
 
@@ -146,7 +157,8 @@ export async function restoreLearnerBackup(
   untrustedBackup: unknown,
   confirmed: boolean
 ): Promise<void> {
-  if (!confirmed) throw new Error('Confirm the restore before replacing local data.');
+  if (!confirmed)
+    throw new Error('Confirm the restore before replacing local data.');
   const backup = learnerBackupSchema.parse(untrustedBackup);
   const database = await openLocalDatabase();
 
@@ -166,7 +178,15 @@ export async function restoreLearnerBackup(
       const active = await requestResult<ActiveMetadata | undefined>(
         metadataStore.get('activeLearnerId')
       );
-      const [profiles, progress, events, assessments, mastery, sessions, evidence] = await Promise.all([
+      const [
+        profiles,
+        progress,
+        events,
+        assessments,
+        mastery,
+        sessions,
+        evidence
+      ] = await Promise.all([
         requestResult<LearnerProfileRecord[]>(profileStore.getAll()),
         requestResult<LessonProgressRecord[]>(progressStore.getAll()),
         requestResult<LessonCompletionEventRecord[]>(eventStore.getAll()),
@@ -176,9 +196,11 @@ export async function restoreLearnerBackup(
         requestResult<PracticeEvidenceRecord[]>(evidenceStore.getAll())
       ]);
 
-      const replacedLearnerIds = new Set([active?.value, backup.learnerId].filter(
-        (value): value is string => Boolean(value)
-      ));
+      const replacedLearnerIds = new Set(
+        [active?.value, backup.learnerId].filter((value): value is string =>
+          Boolean(value)
+        )
+      );
 
       for (const profile of profiles) {
         if (replacedLearnerIds.has(profile.id)) {
@@ -261,8 +283,11 @@ export async function restoreLearnerBackup(
 }
 
 /** Reset only the active learner and create a fresh empty profile atomically. */
-export async function resetActiveLearnerData(confirmed: boolean): Promise<void> {
-  if (!confirmed) throw new Error('Confirm the reset before deleting local learner data.');
+export async function resetActiveLearnerData(
+  confirmed: boolean
+): Promise<void> {
+  if (!confirmed)
+    throw new Error('Confirm the reset before deleting local learner data.');
   const database = await openLocalDatabase();
 
   try {
@@ -283,8 +308,14 @@ export async function resetActiveLearnerData(confirmed: boolean): Promise<void> 
       );
 
       if (active) {
-        const [progressRows, eventRows, assessmentRows, masteryRows, practiceRows, evidenceRows] =
-          await Promise.all([
+        const [
+          progressRows,
+          eventRows,
+          assessmentRows,
+          masteryRows,
+          practiceRows,
+          evidenceRows
+        ] = await Promise.all([
             requestResult<LessonProgressRecord[]>(progress.getAll()),
             requestResult<LessonCompletionEventRecord[]>(events.getAll()),
             requestResult<AssessmentAttemptRecord[]>(assessments.getAll()),
@@ -294,10 +325,12 @@ export async function resetActiveLearnerData(confirmed: boolean): Promise<void> 
           ]);
 
         for (const record of progressRows) {
-          if (record.learnerId === active.value) await requestResult(progress.delete(record.id));
+          if (record.learnerId === active.value)
+            await requestResult(progress.delete(record.id));
         }
         for (const record of eventRows) {
-          if (record.learnerId === active.value) await requestResult(events.delete(record.id));
+          if (record.learnerId === active.value)
+            await requestResult(events.delete(record.id));
         }
         for (const record of assessmentRows) {
           if (record.learnerId === active.value) {
@@ -307,20 +340,29 @@ export async function resetActiveLearnerData(confirmed: boolean): Promise<void> 
         for (const record of masteryRows) {
           if (record.learnerId === active.value) {
             await requestResult(
-              mastery.delete([record.learnerId, record.curriculumReleaseId, record.skillId])
+              mastery.delete([
+                record.learnerId,
+                record.curriculumReleaseId,
+                record.skillId
+              ])
             );
           }
         }
         for (const record of practiceRows) {
-          if (record.learnerId === active.value) await requestResult(practice.delete(record.id));
+          if (record.learnerId === active.value)
+            await requestResult(practice.delete(record.id));
         }
         for (const record of evidenceRows) {
-          if (record.learnerId === active.value) await requestResult(evidence.delete(record.id));
+          if (record.learnerId === active.value)
+            await requestResult(evidence.delete(record.id));
         }
         await requestResult(profiles.delete(active.value));
       }
 
-      const fresh = createEmptyLocalLearnerProfile(crypto.randomUUID(), Date.now());
+      const fresh = createEmptyLocalLearnerProfile(
+        crypto.randomUUID(),
+        Date.now()
+      );
       await requestResult(profiles.add(fresh));
       await requestResult(
         metadata.put({ key: 'activeLearnerId', value: fresh.id })

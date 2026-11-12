@@ -158,7 +158,10 @@ export const learnerBackupSchema = z
         )
       ],
       ['practiceSessions', records.practiceSessions.map((record) => record.id)],
-      ['practiceEvidence', (records.practiceEvidence ?? []).map((record) => record.id)]
+      [
+        'practiceEvidence',
+        (records.practiceEvidence ?? []).map((record) => record.id)
+      ]
     ];
 
     for (const [collection, keys] of uniqueCollections) {
@@ -198,7 +201,8 @@ export const learnerBackupSchema = z
       context.addIssue({
         code: 'custom',
         path: ['records', 'practiceEvidence'],
-        message: 'Every practice observation must reference an included practice session.'
+        message:
+          'Every practice observation must reference an included practice session.'
       });
     }
 

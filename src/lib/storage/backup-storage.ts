@@ -1,7 +1,4 @@
-import {
-  openLocalDatabase,
-  ensureActiveLearnerProfile
-} from './indexeddb';
+import { openLocalDatabase, ensureActiveLearnerProfile } from './indexeddb';
 import {
   LEARNER_BACKUP_FORMAT,
   LEARNER_BACKUP_VERSION,
@@ -36,7 +33,9 @@ export function buildLearnerBackup(
 ): LearnerBackup {
   const profile = source.profiles.find((record) => record.id === learnerId);
   if (!profile) {
-    throw new Error('The active learner profile could not be found for export.');
+    throw new Error(
+      'The active learner profile could not be found for export.'
+    );
   }
 
   const owned = <T extends { learnerId: string }>(records: T[]) =>
@@ -99,8 +98,15 @@ export async function exportActiveLearnerBackup(
     const completed = transactionResult(transaction);
 
     try {
-      const [profiles, lessonProgress, completionEvents, assessmentAttempts, skillMastery, practiceSessions, practiceEvidence] =
-        await Promise.all([
+      const [
+        profiles,
+        lessonProgress,
+        completionEvents,
+        assessmentAttempts,
+        skillMastery,
+        practiceSessions,
+        practiceEvidence
+      ] = await Promise.all([
           requestResult<LearnerProfileRecord[]>(
             transaction.objectStore('learnerProfiles').getAll()
           ),
