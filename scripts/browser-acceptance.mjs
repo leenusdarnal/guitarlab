@@ -44,7 +44,10 @@ try {
     `Wrangler preview did not become ready.\n${serverOutput}`
   );
 
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({
+    headless: true,
+    executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined
+  });
 
   // Upgrade a real v1 learner database to v2 without losing learner-owned records.
   const upgradeContext = await browser.newContext({

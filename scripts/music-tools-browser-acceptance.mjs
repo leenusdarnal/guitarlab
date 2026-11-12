@@ -43,7 +43,10 @@ try {
     `Wrangler preview did not become ready.\n${output}`
   );
 
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({
+    headless: true,
+    executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined
+  });
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 }
   });

@@ -199,23 +199,39 @@ jobs:
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: guitarlab-cloudflare-preview
-      - name: Cache Playwright Chromium headless shell
-        id: playwright-cache
+      - name: Cache Chromium headless shell
+        id: chromium-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-chromium-headless-shell-1.56.1
+          path: ~/.cache/guitarlab/chrome-headless-shell
+          key: ${{ runner.os }}-chrome-headless-shell-141.0.7390.37
       - name: Install Playwright
         run: npm install --no-save --package-lock=false playwright@1.56.1
-      - name: Install Chromium headless shell
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+      - name: Download Chromium headless shell
+        if: steps.chromium-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
-          if ! timeout --signal=TERM --kill-after=30s 300s npx playwright install chromium --only-shell; then
-            echo "::error::Playwright Chromium headless-shell installation failed or exceeded the five-minute limit."
-            echo "Check the Playwright CDN/network availability and retry the workflow."
+          set -euo pipefail
+          browser_dir="$HOME/.cache/guitarlab/chrome-headless-shell"
+          archive="$RUNNER_TEMP/chrome-headless-shell-linux64.zip"
+          mkdir -p "$browser_dir"
+          curl --fail --location --silent --show-error \\
+            --retry 3 --retry-all-errors --connect-timeout 30 --max-time 300 \\
+            "https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.37/linux64/chrome-headless-shell-linux64.zip" \\
+            --output "$archive"
+          unzip -q "$archive" -d "$browser_dir"
+          rm "$archive"
+      - name: Verify Chromium and configure Playwright
+        shell: bash
+        run: |
+          browser="$HOME/.cache/guitarlab/chrome-headless-shell/chrome-headless-shell-linux64/chrome-headless-shell"
+          if [ ! -x "$browser" ]; then
+            echo "::error::Cached Chromium headless-shell executable is missing or not executable."
+            find "$HOME/.cache/guitarlab/chrome-headless-shell" -maxdepth 3 -type f -print
             exit 1
           fi
+          "$browser" --version
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$browser" >> "$GITHUB_ENV"
       - name: Application browser acceptance tests
         run: npm run test:browser
       - name: Music tools browser acceptance tests
