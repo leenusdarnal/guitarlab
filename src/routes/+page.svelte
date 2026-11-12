@@ -183,6 +183,7 @@
       <a class="nav-link" href={resolve('/tools')}><span aria-hidden="true">⌁</span> Tools</a>
       <a class="nav-link" href="#learning-path"><span aria-hidden="true">▤</span> Learning path</a>
       <a class="nav-link" href="#reviews"><span aria-hidden="true">◷</span> Reviews</a>
+      <a class="nav-link" href={resolve('/practice')}><span aria-hidden="true">◷</span> Practice Studio</a>
       <a class="nav-link" href="#practice-history"><span aria-hidden="true">◉</span> Practice history</a>
     </nav>
     <div class="sidebar-bottom">
@@ -206,6 +207,7 @@
         <a href={resolve('/tools')}>Tools</a>
         <a href="#learning-path" onclick={() => (menuOpen = false)}>Learning path</a>
         <a href="#reviews" onclick={() => (menuOpen = false)}>Reviews</a>
+        <a href={resolve('/practice')}>Practice Studio</a>
         <a href="#practice-history" onclick={() => (menuOpen = false)}>Practice history</a>
         <a href={resolve('/onboarding')}>Learning preferences</a>
         <a href={resolve('/settings/data')}>Data &amp; backups</a>

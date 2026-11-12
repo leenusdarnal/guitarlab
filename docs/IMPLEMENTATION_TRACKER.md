@@ -67,9 +67,18 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 |---|---|---|---|
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Complete — PRs #45 and #46 merged; Issue #15 closed | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone; unit and browser acceptance are included |
-| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Not started | Session UI, pause/resume, exercise capture and review workflow |
+| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | First slice implemented in feature PR | Practice Studio route, local session start/finish, elapsed-time persistence and session history. Route-specific Playwright start/reload/finish/history coverage is added; CI is pending. Pause/resume, exercise-level evidence, reflections and review scheduling remain pending |
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
+
+## M7 first implementation slice (2026-11-12)
+
+- Feature branch: `feat/m7-practice-evidence-contract`.
+- Adds `/practice` with a local-first start/finish flow and session history.
+- Adds `src/lib/storage/practice.ts`, reusing the existing `startPracticeSession` / `finishPracticeSession` application services and IndexedDB repository.
+- The screen explicitly states that elapsed time is not mastery or accuracy evidence.
+- Existing application-service tests already cover invalid duration, successful completion, duplicate completion and no automatic mastery.
+- Not yet verified: full CI, route browser acceptance, pause/resume, exercise-level observations and manual device checks.
 
 ## How progress is recorded
 

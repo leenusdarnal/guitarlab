@@ -3,7 +3,7 @@
 **Last verified:** 2026-11-12  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Baseline commit:** `0780df6dbe9d2889a28c4bc802270995ff71197f`  
+**Last verified main commit:** `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e`  
 **Document purpose:** Durable execution queue and restart checkpoint. Update this file after each meaningful implementation slice and before pausing work.
 
 > This is an execution plan, not a claim that every listed item has been re-audited. The first task on every resume is to refresh the live repository state and reconcile this document with the code, Issues, PRs and CI.
@@ -195,13 +195,13 @@ This section is the hand-off state. Update it before pausing work.
 
 | Field | Current value |
 |---|---|
-| Last verified main SHA | `0780df6dbe9d2889a28c4bc802270995ff71197f` |
+| Last verified main SHA | `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e` |
 | Latest observed successful code CI | [#43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888) on the pre-documentation code baseline; PR #48 documentation CI passed before merge. Verify a fresh main run on resume |
 | Open implementation PR | PR #49 documentation reconciliation; no application-code PR observed |
 | PR #47 | Closed, unmerged; deferred |
-| Current phase | P0 — baseline audit and documentation reconciliation |
-| Current task | Documentation reconciliation is in PR #49; review its CI and merge before starting P1 |
-| Next task after P0 | P1 — complete physical-device offline and backup/restore acceptance; preview HTTPS environment/credentials are a dependency and must not be provisioned without approval |
+| Current phase | P2 — Practice Studio implementation |
+| Current task | First M7 slice on `feat/m7-practice-evidence-contract`; review route/storage implementation and CI before merge |
+| Next task | Complete P1 physical-device acceptance separately; continue M7 with pause/resume and elapsed-time accounting after this slice is reviewed |
 | Production deployment | Deferred; explicit approval required |
 
 ### Status update template
@@ -221,3 +221,27 @@ Append or replace this section when work progresses:
 ---
 
 **Source-of-truth hierarchy:** current code and tests on `main` → merged PR evidence → current GitHub Issues/Actions → this execution checkpoint → older chat summaries. If they conflict, inspect and reconcile rather than trusting the oldest status.
+
+
+## Resume checkpoint — 2026-11-12 (M7 first slice)
+
+- **Verified main baseline:** `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e` (merge of PR #49).
+- **Active implementation PR:** [#50 — local Practice Studio session flow](https://github.com/leenusdarnal/guitarlab/pull/50).
+- **Branch:** `feat/m7-practice-evidence-contract`.
+- **Implemented in this slice:** `/practice` route; dashboard desktop/mobile navigation; active learner-scoped IndexedDB session listing; session start with optional focus and planned duration; live elapsed display; finish using actual wall-clock duration; local session history; reload recovery for an in-progress session.
+- **Reused existing code:** application `startPracticeSession` / `finishPracticeSession` services, `PracticeSessionRepository`, IndexedDB v2 `practiceSessions` store and its learner index.
+- **Learning integrity:** duration is wall-clock session elapsed time (including time between reloads), not verified active playing; it is activity metadata only and creates no skill assessment or mastery. Planned minutes are kept separate from elapsed duration.
+- **Validation state:** existing application service tests cover lifecycle validation and the no-mastery invariant. A route-specific Playwright flow is now added to `scripts/browser-acceptance.mjs` for start → reload recovery → finish → history. Latest observed head run [#43193353005](https://github.com/leenusdarnal/guitarlab/actions/runs/43193353005) is in progress at Playwright installation; re-check the current PR head and required check before merging.
+- **Known limitation:** active-session prevention is a read-before-create guard, not a cross-tab atomic lock. Fix this alongside pause/resume before treating concurrent-tab safety as complete. The timer remains wall-clock elapsed time, not verified active playing.
+- **P1 still outstanding:** physical desktop/iOS/Android offline and backup/restore checks require real devices and must remain unverified until evidence is supplied.
+- **CI correction:** first primary CI attempt failed only at changed-file Prettier for `src/lib/storage/practice.ts` (two line wraps); those exact formatting changes were applied. No validation assertion was weakened. A new CI run was triggered for the corrected head.
+- **Next exact implementation:** add transactional single-active-session enforcement, pause/resume with accumulated active time, and interruption/reload tests. Then add exercise sequencing and immutable exercise observations; keep observations distinct from validated mastery assessments.
+- **Deferred:** PR #47 Node 26/CI redesign; Cloudflare preview/production deployment; production D1/auth/cloud sync. No deployment was performed.
+
+
+### PR #50 browser acceptance fix — 2026-11-12
+
+- **Root cause:** Svelte's `<input type="number">` `bind:value` supplies a numeric value (or `undefined` when empty), but the Practice Studio start handler called `plannedMinutes.trim()` as if it were a string. This raised a caught `TypeError` before the start service ran, leaving the page in its idle state and causing the browser test to time out waiting for the active-session heading.
+- **Fix committed:** `8746de96179574b1a28a5a73e9bd8349d486b3f9` (`fix(m7): handle numeric practice duration input`). The state is now `number | undefined`, blank maps to `null`, and supplied values are checked with `Number.isSafeInteger` plus the existing 1–180 minute bounds.
+- **Validation:** The full PR CI must be rechecked on the latest head; do not merge until browser acceptance and all required checks pass. The browser test exercises numeric duration entry, start, reload recovery, finish and history.
+- **Resume:** If CI still fails, inspect the latest `Browser acceptance tests` job log first; check the rendered alert text and browser runtime errors before changing selectors or weakening assertions.
