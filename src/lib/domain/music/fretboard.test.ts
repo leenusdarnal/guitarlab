@@ -22,7 +22,13 @@ describe('standard guitar fretboard', () => {
 
     for (const [stringNumber, midi, noteName, octave] of expected) {
       const note = getNoteAtPosition(stringNumber, 0);
-      expect(note).toMatchObject({ stringNumber, fret: 0, midi, noteName, octave });
+      expect(note).toMatchObject({
+        stringNumber,
+        fret: 0,
+        midi,
+        noteName,
+        octave
+      });
     }
   });
 
@@ -44,7 +50,9 @@ describe('standard guitar fretboard', () => {
     expect(flat.noteName).toBe(FLAT_NOTE_NAMES[5]);
     expect(flat.midi).toBe(sharp.midi);
     expect(getNoteAtPosition(6, 2).noteName).toBe('F♯');
-    expect(getNoteAtPosition(6, 2, STANDARD_GUITAR_TUNING, 'flat').noteName).toBe('G♭');
+    expect(
+      getNoteAtPosition(6, 2, STANDARD_GUITAR_TUNING, 'flat').noteName
+    ).toBe('G♭');
   });
 
   it('supports a tuning-specific open-string pitch without changing string identity', () => {
@@ -53,9 +61,7 @@ describe('standard guitar fretboard', () => {
       id: 'drop-d',
       name: 'Drop D',
       strings: STANDARD_GUITAR_TUNING.strings.map((string) =>
-        string.stringNumber === 6
-          ? { ...string, openMidi: 38 }
-          : string
+        string.stringNumber === 6 ? { ...string, openMidi: 38 } : string
       )
     };
 
@@ -92,8 +98,16 @@ describe('standard guitar fretboard', () => {
 
     expect(positions.length).toBeGreaterThan(0);
     expect(positions.every((position) => position.pitchClass === 0)).toBe(true);
-    expect(positions.some((position) => position.stringNumber === 6 && position.fret === 8)).toBe(true);
-    expect(positions.some((position) => position.stringNumber === 1 && position.fret === 8)).toBe(true);
+    expect(
+      positions.some(
+        (position) => position.stringNumber === 6 && position.fret === 8
+      )
+    ).toBe(true);
+    expect(
+      positions.some(
+        (position) => position.stringNumber === 1 && position.fret === 8
+      )
+    ).toBe(true);
   });
 
   it('mirrors only the display column for left-handed presentation', () => {
