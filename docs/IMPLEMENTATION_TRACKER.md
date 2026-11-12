@@ -23,9 +23,9 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
 | M4.2 interactive lesson progress | Merged — PR #33; manual QA pending | Local section progress, checkpoint self-check, private next-practice note and explicit completion/resume. Lesson completion remains separate from skill mastery; Chromium coverage was added in the PR |
 | Music tools, practice studio and repertoire | Not started | M6–M8 issues #15–17 |
-| Release hardening | Not ready | PR #35 adds the first offline app shell; desktop/mobile acceptance, CSP, full accessibility/privacy review, environment isolation, preview deployment and rollback verification remain. PR #36 reliability/storage/deployment hardening is merged. Automated M2.4 restore/rollback browser acceptance is being added in PR #37; manual real-device QA remains |
+| Release hardening | Not ready | PR #35 adds the first offline app shell; desktop/mobile acceptance, CSP, full accessibility/privacy review, environment isolation, preview deployment and rollback verification remain. PR #36 reliability/storage/deployment hardening is merged. Automated M2.4 restore/rollback browser acceptance is being added in PR #42; manual real-device QA remains |
 
-**Repository state (2026-11-12):** PRs #33, #35 and #36 are merged into `main`. PR #35 adds the first offline app shell; its Chromium acceptance test checks previously visited lessons offline and the explicit fallback for unvisited lessons, while manual device acceptance remains open. PR #36 adds P1 reliability, browser-storage durability, security-header and exact-SHA preview-gate hardening. PR #37 adds automated backup import, failure-rollback and reset acceptance; CI and manual verification are pending. The active `main` ruleset requires pull requests and the `Validate application and curriculum` check. No preview or production deployment, production D1 database, authentication or cloud sync is configured.
+**Repository state (2026-11-12):** PRs #33, #35 and #36 are merged into `main`. PR #35 adds the first offline app shell; its Chromium acceptance test checks previously visited lessons offline and the explicit fallback for unvisited lessons, while manual device acceptance remains open. PR #36 adds P1 reliability, browser-storage durability, security-header and exact-SHA preview-gate hardening. PR #42 adds automated backup import, failure-rollback and reset acceptance; CI and manual verification are pending. The active `main` ruleset requires pull requests and the `Validate application and curriculum` check. No preview or production deployment, production D1 database, authentication or cloud sync is configured.
 
 ## M1 — Application foundation
 
@@ -45,7 +45,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M2.1 | [#7 — Versioned domain model and D1/Drizzle migrations](https://github.com/leenusdarnal/guitarlab/issues/7) | Merged — PR #22 | Local migration and database invariants pass; no production D1 resource |
 | M2.2 | [#8 — Repository interfaces and application services](https://github.com/leenusdarnal/guitarlab/issues/8) | Merged — PR #23 | Storage-independent ports, Zod validation, typed safe errors and application tests |
 | M2.3 | [#9 — Empty learner profile and IndexedDB](https://github.com/leenusdarnal/guitarlab/issues/9) | Merged — PR #24 | Browser reload/offline restart and IndexedDB upgrade verification remain |
-| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Merged — PR #25; expanded browser QA in PR #37 | PR #37 adds invalid/unsupported import, explicit confirmation, IndexedDB transaction rollback, reset cancel/confirm and restore-to-clean-profile browser coverage. Real-browser/manual QA remains to be verified |
+| M2.4 | [#10 — Export, restore preview and safe reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Merged — PR #25; expanded browser QA in PR #42 | PR #42 adds invalid/unsupported import, explicit confirmation, IndexedDB transaction rollback, reset cancel/confirm and restore-to-clean-profile browser coverage. Real-browser/manual QA remains to be verified |
 
 ## M3 — Learning dashboard and practice planning
 
@@ -90,7 +90,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Immediate next actions
 
-1. Complete PR #37 backup/restore browser acceptance and merge only after the current CI run passes; keep Issue #10 open until real-device/manual verification is complete.
+1. Complete PR #42 backup/restore browser acceptance and merge only after the current CI run passes; keep Issue #10 open until real-device/manual verification is complete.
 2. Complete desktop/mobile offline acceptance and IndexedDB upgrade checks; retain the automated CI rollback and restore coverage as regression protection.
 3. Deliver M6 fretboard, chord library and metronome as small tested slices.
 4. Deliver M7 practice sessions/evidence capture, then M8 ear training/theory/repertoire as separate reviewable slices.
