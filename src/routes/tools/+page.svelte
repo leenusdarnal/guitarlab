@@ -32,6 +32,7 @@
   let beatsPerBar = $state(4);
   let metronome = $state<WebAudioMetronome | null>(null);
   let isMetronomeRunning = $state(false);
+  let isStartingMetronome = $state(false);
   let isPlayingReference = $state(false);
   let audioError = $state('');
 
@@ -94,6 +95,7 @@
   }
 
   async function toggleMetronome() {
+    if (isStartingMetronome) return;
     audioError = '';
     if (isMetronomeRunning) {
       metronome?.stop();
@@ -101,7 +103,16 @@
       return;
     }
 
-    const player = metronome ?? new WebAudioMetronome({ bpm: tempo, beatsPerBar });
+    isStartingMetronome = true;
+    const player =
+      metronome ??
+      new WebAudioMetronome({
+        bpm: tempo,
+        beatsPerBar,
+        onStateChange: (running) => {
+          isMetronomeRunning = running;
+        }
+      });
     player.setTempo(tempo);
     player.setBeatsPerBar(beatsPerBar);
     metronome = player;
@@ -116,6 +127,8 @@
         error instanceof Error
           ? error.message
           : 'The metronome could not start in this browser.';
+    } finally {
+      isStartingMetronome = false;
     }
   }
 
@@ -209,7 +222,7 @@
 
     {#if selectedFretNote}
       <div class="selected-note" role="status" aria-live="polite">
-        **Selected:** {selectedFretNote.name}{selectedFretNote.octave}
+        <strong>Selected:</strong> {selectedFretNote.name}{selectedFretNote.octave}
         · String {selectedFretNote.stringNumber}
         · Fret {selectedFretNote.fret}
         · {selectedFretNote.frequencyHz.toFixed(1)} Hz
@@ -337,9 +350,10 @@
         type="button"
         class="primary-button"
         aria-pressed={isMetronomeRunning}
+        disabled={isStartingMetronome}
         onclick={toggleMetronome}
       >
-        {isMetronomeRunning ? 'Stop metronome' : 'Start metronome'}
+        {isStartingMetronome ? 'Starting…' : isMetronomeRunning ? 'Stop metronome' : 'Start metronome'}
       </button>
       <button
         type="button"
