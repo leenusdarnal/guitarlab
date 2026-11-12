@@ -4,11 +4,12 @@ export type StorageManagerPort = {
   estimate?: () => Promise<{ usage?: number; quota?: number }>;
 };
 
-export type LocalStoragePersistenceStatus = {
+export type LearnerStoragePersistenceStatus = {
   canRequest: boolean;
   persisted: boolean | null;
   usageBytes: number | null;
   quotaBytes: number | null;
+  requestGranted: boolean | null;
 };
 
 function getBrowserStorageManager(): StorageManagerPort | null {
@@ -28,15 +29,16 @@ function finiteBytes(value: number | undefined): number | null {
 }
 
 /** Read the browser's current storage persistence and quota information. */
-export async function getLocalStoragePersistenceStatus(
+export async function getLearnerStoragePersistenceStatus(
   manager: StorageManagerPort | null = getBrowserStorageManager()
-): Promise<LocalStoragePersistenceStatus> {
+): Promise<LearnerStoragePersistenceStatus> {
   if (!manager) {
     return {
       canRequest: false,
       persisted: null,
       usageBytes: null,
-      quotaBytes: null
+      quotaBytes: null,
+      requestGranted: null
     };
   }
 
@@ -65,21 +67,26 @@ export async function getLocalStoragePersistenceStatus(
     canRequest: typeof manager.persist === 'function',
     persisted,
     usageBytes,
-    quotaBytes
+    quotaBytes,
+    requestGranted: null
   };
 }
 
 /** Request persistent origin storage only when explicitly invoked by the learner. */
-export async function requestLocalStoragePersistence(
+export async function requestLearnerStoragePersistence(
   manager: StorageManagerPort | null = getBrowserStorageManager()
-): Promise<LocalStoragePersistenceStatus> {
-  if (!manager?.persist) return getLocalStoragePersistenceStatus(manager);
+): Promise<LearnerStoragePersistenceStatus> {
+  if (!manager?.persist) return getLearnerStoragePersistenceStatus(manager);
 
+  let requestGranted: boolean | null = null;
   try {
-    await manager.persist();
+    requestGranted = await manager.persist();
   } catch {
     // The browser may deny or reject this request; data remains best-effort.
   }
 
-  return getLocalStoragePersistenceStatus(manager);
+  return {
+    ...(await getLearnerStoragePersistenceStatus(manager)),
+    requestGranted
+  };
 }
