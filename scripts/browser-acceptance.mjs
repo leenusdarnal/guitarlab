@@ -660,7 +660,9 @@ try {
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
-  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
   await page.getByRole('link', { name: /Open explorer/ }).click();
   await page.getByRole('heading', { name: 'Fretboard explorer.' }).waitFor();
   assert.equal(
@@ -674,7 +676,9 @@ try {
   await highEOpen.focus();
   await highEOpen.press('ArrowRight');
   assert.equal(
-    await page.evaluate(() => (document.activeElement)?.getAttribute('aria-label')),
+    await page.evaluate(() =>
+      document.activeElement?.getAttribute('aria-label')
+    ),
     'String 1, fret 1, F4',
     'Arrow-key navigation should move one fret while preserving the string'
   );
@@ -683,12 +687,13 @@ try {
 
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('#target-note').selectOption('0');
-  await page.getByRole('button', { name: 'String 6, fret 0, position' }).click();
   await page
-    .getByRole('status')
-    .filter({ hasText: 'Not quite.' })
-    .waitFor();
-  await page.getByRole('button', { name: 'String 6, fret 8, position' }).click();
+    .getByRole('button', { name: 'String 6, fret 0, position' })
+    .click();
+  await page.getByRole('status').filter({ hasText: 'Not quite.' }).waitFor();
+  await page
+    .getByRole('button', { name: 'String 6, fret 8, position' })
+    .click();
   await page
     .getByRole('status')
     .filter({ hasText: 'Correct — C is at string 6, fret 8.' })
