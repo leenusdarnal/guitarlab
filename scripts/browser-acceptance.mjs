@@ -799,6 +799,44 @@ try {
   await page.getByText('completed', { exact: true }).waitFor();
   await page.getByText(/\d+ sec/).waitFor();
 
+  // Two tabs share the same IndexedDB database. Concurrent starts must
+  // serialize so exactly one tab can create the learner's active session.
+  const competingPage = await page.context().newPage();
+  await Promise.all([
+    page.goto(`${origin}/practice`, { waitUntil: 'networkidle' }),
+    competingPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' })
+  ]);
+  await Promise.all([
+    page.getByRole('heading', { name: 'Start a practice session' }).waitFor(),
+    competingPage.getByRole('heading', { name: 'Start a practice session' }).waitFor()
+  ]);
+  await Promise.all([
+    page.locator('#duration').fill('2'),
+    competingPage.locator('#duration').fill('2')
+  ]);
+  await Promise.all([
+    page.locator('#focus').fill('Concurrent tab A'),
+    competingPage.locator('#focus').fill('Concurrent tab B')
+  ]);
+  await Promise.all([
+    page.getByRole('button', { name: 'Start practice' }).click(),
+    competingPage.getByRole('button', { name: 'Start practice' }).click()
+  ]);
+  const activeTabResults = await Promise.all([
+    page.getByRole('heading', { name: 'Your session is in progress' }).waitFor({ timeout: 5_000 }).then(() => true).catch(() => false),
+    competingPage.getByRole('heading', { name: 'Your session is in progress' }).waitFor({ timeout: 5_000 }).then(() => true).catch(() => false)
+  ]);
+  assert.equal(activeTabResults.filter(Boolean).length, 1, 'Exactly one tab may start an active practice session');
+  await Promise.all([
+    page.reload({ waitUntil: 'networkidle' }),
+    competingPage.reload({ waitUntil: 'networkidle' })
+  ]);
+  await Promise.all([
+    page.getByRole('heading', { name: 'Your session is in progress' }).waitFor(),
+    competingPage.getByRole('heading', { name: 'Your session is in progress' }).waitFor()
+  ]);
+  await competingPage.close();
+
   assert.deepEqual(
     pageErrors,
     [],
