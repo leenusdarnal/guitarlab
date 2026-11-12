@@ -9,6 +9,3 @@ export const load: PageServerLoad = ({ setHeaders }) => {
     stats: getCurriculumStats()
   };
 };
-  routes: listCurriculumRoutes(),
-  stats: getCurriculumStats()
-});
