@@ -51,7 +51,19 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const upgradePage = await upgradeContext.newPage();
+  await upgradePage.goto(origin, { waitUntil: 'networkidle' });
+  await upgradePage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
   await upgradePage.evaluate(async () => {
+    await new Promise((resolve, reject) => {
+      const deletion = indexedDB.deleteDatabase('guitarlab-local');
+      deletion.onsuccess = () => resolve(true);
+      deletion.onerror = () =>
+        reject(deletion.error ?? new Error('Could not reset IndexedDB fixture.'));
+      deletion.onblocked = () =>
+        reject(new Error('IndexedDB fixture deletion was blocked by another tab.'));
+    });
     await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local', 1);
       request.onupgradeneeded = () => {
@@ -143,7 +155,7 @@ try {
         reject(request.error ?? new Error('Could not create v1 IndexedDB fixture.'));
     });
   });
-  await upgradePage.goto(origin, { waitUntil: 'networkidle' });
+  await upgradePage.reload({ waitUntil: 'networkidle' });
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
