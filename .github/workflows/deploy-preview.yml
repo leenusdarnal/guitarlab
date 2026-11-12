@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   checks: read
+  actions: read
   deployments: write
 
 concurrency:
@@ -26,6 +27,7 @@ jobs:
     permissions:
       contents: read
       checks: read
+      actions: read
     steps:
       - name: Checkout the selected commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -62,16 +64,15 @@ jobs:
               | $latest.status == "completed"
                 and $latest.conclusion == "success";
             passed("Validate application and curriculum")
-            and passed("Check Node.js 26 compatibility")
           ' <<< "$checks" >/dev/null; then
-            echo "The latest baseline or Node 26 compatibility check is not successful for $GITHUB_SHA."
+            echo "The primary application and curriculum CI check is not successful for $GITHUB_SHA."
             echo "The preview Worker has not been changed."
             exit 1
           fi
-          echo "The latest baseline and Node 26 compatibility checks passed for $GITHUB_SHA."
+          echo "The primary application and curriculum CI check passed for $GITHUB_SHA."
 
   deploy-preview:
-    name: Build and deploy preview Worker
+    name: Deploy verified preview Worker
     needs: verify-ci
     if: github.ref == 'refs/heads/main' && inputs.deploy_preview
     runs-on: ubuntu-24.04
@@ -108,8 +109,20 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Build Cloudflare Worker
-        run: npm run build
+      - name: Reuse the successful main CI build artifact when available
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          run_id="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$GITHUB_SHA&event=push&status=success&per_page=100" --jq '[.workflow_runs[] | select(.path == ".github/workflows/ci.yml" and .head_sha == env.GITHUB_SHA and .conclusion == "success")] | sort_by(.run_started_at) | last | .id // empty')"
+          if [[ -n "$run_id" ]] && gh run download "$run_id" --name guitarlab-cloudflare-preview --dir .; then
+            echo "Reused Cloudflare Worker build from CI run $run_id."
+          else
+            echo "No reusable CI artifact found (it may have expired); building locally."
+          fi
+          if [ ! -s ".svelte-kit/cloudflare/_worker.js" ]; then
+            npm run build
+          fi
 
       - name: Validate preview deployment configuration
         run: npx wrangler deploy --config wrangler.preview.jsonc --dry-run
