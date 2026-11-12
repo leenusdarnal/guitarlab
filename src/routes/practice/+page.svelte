@@ -19,7 +19,7 @@
   let activeEvidence = $state<PracticeEvidenceRecord[]>([]);
   let historyEvidenceSessionId = $state<string | null>(null);
   let historyEvidence = $state<PracticeEvidenceRecord[]>([]);
-  let historyEvidenceLoading = $state(false);
+  let historyEvidenceLoadingSessionId = $state<string | null>(null);
 
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
@@ -231,17 +231,25 @@
     }
 
     historyEvidenceSessionId = sessionId;
-    historyEvidenceLoading = true;
+    historyEvidence = [];
+    historyEvidenceLoadingSessionId = sessionId;
     try {
-      historyEvidence = await listActivePracticeEvidence(sessionId);
+      const observations = await listActivePracticeEvidence(sessionId);
+      if (historyEvidenceSessionId === sessionId) {
+        historyEvidence = observations;
+      }
     } catch (cause) {
-      error =
-        cause instanceof Error
-          ? cause.message
-          : 'Could not load this session’s exercise observations.';
-      historyEvidence = [];
+      if (historyEvidenceSessionId === sessionId) {
+        error =
+          cause instanceof Error
+            ? cause.message
+            : 'Could not load this session’s exercise observations.';
+        historyEvidence = [];
+      }
     } finally {
-      historyEvidenceLoading = false;
+      if (historyEvidenceLoadingSessionId === sessionId) {
+        historyEvidenceLoadingSessionId = null;
+      }
     }
   }
 
@@ -256,7 +264,7 @@
       });
       await refresh();
       notice =
-        'Session saved. Duration is activity history, not verified playing or a skill assessment.';
+        'Session saved. Elapsed session time is activity history, not verified active practice or a skill assessment.';
       reflection = '';
       nextTarget = '';
     } catch (cause) {
@@ -640,7 +648,7 @@
 
               {#if historyEvidenceSessionId === session.id}
                 <div class="history-evidence">
-                  {#if historyEvidenceLoading}
+                  {#if historyEvidenceLoadingSessionId === session.id}
                     <p class="muted" role="status">Loading observations…</p>
                   {:else if historyEvidence.length > 0}
                     <ul class="evidence-list">
