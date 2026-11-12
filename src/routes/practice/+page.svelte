@@ -15,6 +15,7 @@
   let saving = $state(false);
   let error = $state('');
   let notice = $state('');
+  let now = $state(Date.now());
 
   const activeSession = $derived(
     sessions.find((session) => session.status === 'in_progress') ?? null
@@ -25,11 +26,13 @@
   }
 
   onMount(() => {
+    const clock = window.setInterval(() => (now = Date.now()), 1000);
     void refresh()
       .catch(() => {
         error = 'Your local practice history could not be loaded. Check browser storage and try again.';
       })
       .finally(() => (loading = false));
+    return () => window.clearInterval(clock);
   });
 
   async function startSession() {
@@ -131,6 +134,7 @@
           Started {dateLabel(activeSession.startedAt)}. You can return after a
           reload; the original start time is retained.
         </p>
+        <p class="elapsed" aria-live="off">{durationLabel(Math.max(0, Math.floor((now - activeSession.startedAt) / 1000)))}</p>
         {#if activeSession.focus}<p><strong>Focus:</strong> {activeSession.focus}</p>{/if}
         {#if activeSession.plannedMinutes}
           <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
@@ -227,6 +231,7 @@
   .intro h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); line-height: 1.02; margin: 12px 0; }
   .intro h1 em { color: var(--accent, #d5a65b); font-family: Georgia, serif; font-weight: 400; }
   .intro > p:last-child, .muted { color: var(--muted, #aaa); line-height: 1.65; }
+  .elapsed { font-size: clamp(2rem, 6vw, 3rem); font-variant-numeric: tabular-nums; font-weight: 700; margin: 18px 0; }
   .panel, .empty, .principle { border: 1px solid var(--border, #444); border-radius: 18px; padding: 24px; background: var(--surface, #222); }
   h2 { font-size: 1.45rem; margin: 8px 0 14px; }
   h3 { margin: 0 0 8px; }
