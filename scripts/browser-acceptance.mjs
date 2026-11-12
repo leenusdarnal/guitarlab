@@ -302,9 +302,7 @@ try {
   // Change the profile after export so rollback and restore have observable outcomes.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
   await page.getByRole('radio', { name: '40 min' }).check();
-  await page
-    .getByRole('button', { name: /Save my preferences/ })
-    .click();
+  await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'saved privately on this device' })
@@ -402,7 +400,8 @@ try {
   await page
     .getByRole('status')
     .filter({
-      hasText: 'Your active learner data has been reset. A fresh empty profile is ready.'
+      hasText:
+        'Your active learner data has been reset. A fresh empty profile is ready.'
     })
     .waitFor();
 
@@ -422,9 +421,7 @@ try {
     )
     .waitFor();
   await page.locator('.confirm-choice input').check();
-  await page
-    .getByRole('button', { name: 'Restore this backup' })
-    .click();
+  await page.getByRole('button', { name: 'Restore this backup' }).click();
   await page
     .getByRole('status')
     .filter({
