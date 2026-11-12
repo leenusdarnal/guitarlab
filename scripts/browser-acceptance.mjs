@@ -753,7 +753,7 @@ try {
   );
   await fretboardMobileContext.close();
 
-  // M7.1 Practice Studio: local start, reload recovery, elapsed-time save and history.
+  // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
   await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
   await page
     .getByRole('heading', { name: 'Start a practice session' })
@@ -761,6 +761,27 @@ try {
   await page.locator('#duration').fill('2');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
+  await page
+    .getByRole('heading', { name: 'Your session is in progress' })
+    .waitFor();
+  await delay(1_200);
+  await page.getByRole('button', { name: 'Pause session' }).click();
+  await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  const pausedElapsed = await page.locator('.elapsed').innerText();
+  await delay(1_200);
+  assert.equal(
+    await page.locator('.elapsed').innerText(),
+    pausedElapsed,
+    'Paused time must not increase active time'
+  );
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  assert.equal(
+    await page.locator('.elapsed').innerText(),
+    pausedElapsed,
+    'Paused state and time must survive reload'
+  );
+  await page.getByRole('button', { name: 'Resume session' }).click();
   await page
     .getByRole('heading', { name: 'Your session is in progress' })
     .waitFor();
@@ -777,6 +798,62 @@ try {
     .waitFor();
   await page.getByText('completed', { exact: true }).waitFor();
   await page.getByText(/\d+ sec/).waitFor();
+
+  // Two tabs share the same IndexedDB database. Concurrent starts must
+  // serialize so exactly one tab can create the learner's active session.
+  const competingPage = await page.context().newPage();
+  await Promise.all([
+    page.goto(`${origin}/practice`, { waitUntil: 'networkidle' }),
+    competingPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' })
+  ]);
+  await Promise.all([
+    page.getByRole('heading', { name: 'Start a practice session' }).waitFor(),
+    competingPage
+      .getByRole('heading', { name: 'Start a practice session' })
+      .waitFor()
+  ]);
+  await Promise.all([
+    page.locator('#duration').fill('2'),
+    competingPage.locator('#duration').fill('2')
+  ]);
+  await Promise.all([
+    page.locator('#focus').fill('Concurrent tab A'),
+    competingPage.locator('#focus').fill('Concurrent tab B')
+  ]);
+  await Promise.all([
+    page.getByRole('button', { name: 'Start practice' }).click(),
+    competingPage.getByRole('button', { name: 'Start practice' }).click()
+  ]);
+  const activeTabResults = await Promise.all([
+    page
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .waitFor({ timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false),
+    competingPage
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .waitFor({ timeout: 5_000 })
+      .then(() => true)
+      .catch(() => false)
+  ]);
+  assert.equal(
+    activeTabResults.filter(Boolean).length,
+    1,
+    'Exactly one tab may start an active practice session'
+  );
+  await Promise.all([
+    page.reload({ waitUntil: 'networkidle' }),
+    competingPage.reload({ waitUntil: 'networkidle' })
+  ]);
+  await Promise.all([
+    page
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .waitFor(),
+    competingPage
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .waitFor()
+  ]);
+  await competingPage.close();
 
   assert.deepEqual(
     pageErrors,

@@ -346,7 +346,7 @@
           <article class="panel" id="practice-history">
             <div class="panel-heading"><div><div class="eyebrow">RECENT EVIDENCE</div><h2>Practice history</h2></div><span class="neutral-tag">Latest 3</span></div>
             {#if dashboard.recentPractice.length > 0}
-              <ul class="session-list">{#each dashboard.recentPractice as session (session.id)}<li><span class="session-mark" aria-hidden="true">◉</span><span class="session-copy"><strong>{session.focus ?? 'Practice session'}</strong><small>{formatDate(session.startedAt)}</small></span><span class="session-duration">{formatDuration(session.actualDurationSeconds)}</span></li>{/each}</ul>
+              <ul class="session-list">{#each dashboard.recentPractice as session (session.id)}<li><span class="session-mark" aria-hidden="true">◉</span><span class="session-copy"><strong>{session.focus ?? 'Practice session'}</strong><small>{formatDate(session.startedAt)}{session.status === 'paused' ? ' · Paused' : session.status === 'in_progress' ? ' · In progress' : ''}</small></span><span class="session-duration">{formatDuration(session.actualDurationSeconds)}</span></li>{/each}</ul>
             {:else}
               <div class="empty-state"><span class="empty-symbol" aria-hidden="true">○</span><div><strong>Your first session is still ahead</strong><p>Completed practice sessions will appear here. Time spent practising is separate from skill assessments.</p></div></div>
             {/if}

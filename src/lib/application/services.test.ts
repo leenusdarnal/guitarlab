@@ -22,6 +22,8 @@ import {
   completeLesson,
   createEmptyLearnerProfile,
   finishPracticeSession,
+  pausePracticeSession,
+  resumePracticeSession,
   getCurriculumLesson,
   listCurriculumLessons,
   recordAssessmentAttempt,
@@ -212,9 +214,9 @@ function createHarness() {
     async findById(id) {
       return sessions.get(id) ?? null;
     },
-    async updateIfInProgress(session) {
+    async updateIfStatus(session, expectedStatus) {
       const current = sessions.get(session.id);
-      if (!current || current.status !== 'in_progress') return false;
+      if (!current || current.status !== expectedStatus) return false;
       sessions.set(session.id, session);
       return true;
     }
@@ -641,6 +643,47 @@ describe('M2.2 application service boundaries', () => {
         { practice: harness.practiceRepository, runtime: harness.runtime }
       )
     ).rejects.toBeInstanceOf(ConflictError);
+  });
+
+  it('pauses and resumes active time without counting the paused interval', async () => {
+    const session = await startPracticeSession(
+      {
+        learnerId,
+        plannedMinutes: 20,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        focus: 'Pause/resume test'
+      },
+      {
+        curriculum: harness.curriculumRepository,
+        practice: harness.practiceRepository,
+        runtime: harness.runtime
+      }
+    );
+    harness.setNow(session.startedAt + 5_500);
+    const paused = await pausePracticeSession(
+      { learnerId, sessionId: session.id },
+      { practice: harness.practiceRepository, runtime: harness.runtime }
+    );
+    expect(paused.status).toBe('paused');
+    expect(paused.actualDurationSeconds).toBe(5);
+    expect(paused.activeStartedAt).toBeNull();
+
+    harness.setNow(session.startedAt + 60_000);
+    const resumed = await resumePracticeSession(
+      { learnerId, sessionId: session.id },
+      { practice: harness.practiceRepository, runtime: harness.runtime }
+    );
+    expect(resumed.status).toBe('in_progress');
+    expect(resumed.activeStartedAt).toBe(session.startedAt + 60_000);
+    harness.setNow(session.startedAt + 63_200);
+    const completed = await finishPracticeSession(
+      { learnerId, sessionId: session.id, actualDurationSeconds: 8 },
+      { practice: harness.practiceRepository, runtime: harness.runtime }
+    );
+    expect(completed.status).toBe('completed');
+    expect(completed.actualDurationSeconds).toBe(8);
+    expect(harness.masteryRows.size).toBe(0);
   });
 
   it('returns typed, user-safe errors without leaking unknown storage exceptions', () => {
