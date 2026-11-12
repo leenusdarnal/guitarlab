@@ -52,21 +52,23 @@ jobs:
         run: |
           checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100")"
           if ! jq -e --arg sha "$GITHUB_SHA" '
-            def passed($name): any(
-              .check_runs[];
-              .head_sha == $sha
-              and .name == $name
-              and .status == "completed"
-              and .conclusion == "success"
-            );
+            def passed($name):
+              ([
+                .check_runs[]
+                | select(.head_sha == $sha and .name == $name)
+              ]
+              | sort_by(.started_at // .created_at // "")
+              | last // {}) as $latest
+              | $latest.status == "completed"
+                and $latest.conclusion == "success";
             passed("Validate application and curriculum")
             and passed("Check Node.js 26 compatibility")
           ' <<< "$checks" >/dev/null; then
-            echo "The baseline or Node 26 compatibility CI check is not successful for $GITHUB_SHA."
+            echo "The latest baseline or Node 26 compatibility check is not successful for $GITHUB_SHA."
             echo "The preview Worker has not been changed."
             exit 1
           fi
-          echo "A successful GuitarLab CI check exists for $GITHUB_SHA."
+          echo "The latest baseline and Node 26 compatibility checks passed for $GITHUB_SHA."
 
   deploy-preview:
     name: Build and deploy preview Worker
