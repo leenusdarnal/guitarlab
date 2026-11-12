@@ -3,7 +3,7 @@
 **Last verified:** 2026-11-12  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Last verified main commit:** `1f2e8e9bf4ba2c2164ef76c09336254a0f83303d`  
+**Last verified main commit:** `961c3a1dc9d13397d4e5b107a281f46e41996f6a`  
 **Document purpose:** Durable execution queue and restart checkpoint. Update this file after each meaningful implementation slice and before pausing work.
 
 > This is an execution plan, not a claim that every listed item has been re-audited. The first task on every resume is to refresh the live repository state and reconcile this document with the code, Issues, PRs and CI.
@@ -195,14 +195,14 @@ This section is the hand-off state. Update it before pausing work.
 
 | Field | Current value |
 |---|---|
-| Last verified main SHA | `1f2e8e9bf4ba2c2164ef76c09336254a0f83303d` |
-| Latest successful main CI | [#43258018206](https://github.com/leenusdarnal/guitarlab/actions/runs/43258018206) — application/curriculum and Node 26 compatibility passed |
-| Open PRs at resume | None before the current focused UI slice |
+| Last verified main SHA | `961c3a1dc9d13397d4e5b107a281f46e41996f6a` |
+| Latest successful main CI | [#43262064561](https://github.com/leenusdarnal/guitarlab/actions/runs/43262064561) — application/curriculum and Node 26 compatibility passed |
+| Open PRs at resume | None before this focused history-filter slice |
 | PR #47 | Closed without merge; explicitly deferred |
 | Main protection | Active repository ruleset; PR required; `Validate application and curriculum` required status check |
 | Current phase | P2 — Practice Studio evidence loop |
-| Current task | Add learner-facing exercise observation capture/history and optional session reflection/next target on `feat/m7-practice-studio-evidence-ui` |
-| Next task | Add review scheduling/history filters and explicit evidence-to-mastery rules in separate slices |
+| Current task | Add search by focus/reflection/next target, status and date-range filters on `feat/m7-practice-history-filters` |
+| Next task | Define inspectable, learner-correctable skill-state rules; review scheduling already exists via assessment `nextReviewAt` |
 | Manual QA | Physical desktop/iOS/Android offline and backup acceptance remains unverified |
 | Production deployment | Deferred; explicit approval required |
 
@@ -280,5 +280,17 @@ Append or replace this section when work progresses:
 - **Current focused slice:** `feat/m7-practice-studio-evidence-ui` adds capture/display of learner-entered repetitions, clean repetitions, tempo and difficulty; session reflection and next target are optional and must survive backup export/restore.
 - **Learning integrity:** elapsed time is activity metadata; clean repetitions, repetitions, tempo and difficulty remain separate self-reported observations. Nothing in this slice grants mastery or computes an automatic accuracy score.
 - **Next after merge:** build review scheduling and history filtering as another small PR; only then connect evidence to explicit, correctable skill-state rules.
+- **Manual release gate:** physical desktop/iOS/Android offline, reload and backup/restore acceptance remains unverified.
+- **Deferred:** PR #47 Node 26/CI redesign, Cloudflare preview/production deployment, production D1, accounts and cloud sync.
+
+
+## Resume checkpoint — 2026-11-12 (PR #57 merged; history filtering next)
+
+- **Verified main:** `961c3a1dc9d13397d4e5b107a281f46e41996f6a`; post-merge CI [#43262064561](https://github.com/leenusdarnal/guitarlab/actions/runs/43262064561) passed both required Node 22 application/curriculum and Node 26 compatibility jobs, including all browser suites.
+- **Protection:** main remains protected; pull requests and `Validate application and curriculum` are required.
+- **Merged:** PR #56 persists append-only learner-scoped observations and includes them in backup/restore; PR #57 adds Practice Studio capture, session reflection, next target and readable evidence history.
+- **Current slice:** search by session focus/reflection/next target, exact session status and last 7/30/90 days. Filters operate on already loaded device-local session records and do not mutate them.
+- **Review flow:** assessment-driven `nextReviewAt` already powers the dashboard's due-review panel. Do not duplicate or replace that scheduler in this slice.
+- **Next after merge:** define transparent, inspectable and learner-correctable skill-state rules that consume assessment/evidence data without conflating elapsed time with mastery.
 - **Manual release gate:** physical desktop/iOS/Android offline, reload and backup/restore acceptance remains unverified.
 - **Deferred:** PR #47 Node 26/CI redesign, Cloudflare preview/production deployment, production D1, accounts and cloud sync.
