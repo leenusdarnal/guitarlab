@@ -47,6 +47,28 @@ describe('standard guitar fretboard', () => {
     expect(getNoteAtPosition(6, 2, STANDARD_GUITAR_TUNING, 'flat').noteName).toBe('G♭');
   });
 
+  it('supports a tuning-specific open-string pitch without changing string identity', () => {
+    const dropD = {
+      ...STANDARD_GUITAR_TUNING,
+      id: 'drop-d',
+      name: 'Drop D',
+      strings: STANDARD_GUITAR_TUNING.strings.map((string) =>
+        string.stringNumber === 6
+          ? { ...string, openMidi: 38 }
+          : string
+      )
+    };
+
+    expect(getNoteAtPosition(6, 0, dropD)).toMatchObject({
+      stringNumber: 6,
+      fret: 0,
+      midi: 38,
+      noteName: 'D',
+      octave: 2
+    });
+    expect(getNoteAtPosition(5, 0, dropD).noteName).toBe('A');
+  });
+
   it('calculates concert A4 at 440 Hz', () => {
     expect(getNoteAtPosition(1, 5)).toMatchObject({
       midi: 69,
