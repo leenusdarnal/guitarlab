@@ -237,3 +237,11 @@ Append or replace this section when work progresses:
 - **CI correction:** first primary CI attempt failed only at changed-file Prettier for `src/lib/storage/practice.ts` (two line wraps); those exact formatting changes were applied. No validation assertion was weakened. A new CI run was triggered for the corrected head.
 - **Next exact implementation:** add transactional single-active-session enforcement, pause/resume with accumulated active time, and interruption/reload tests. Then add exercise sequencing and immutable exercise observations; keep observations distinct from validated mastery assessments.
 - **Deferred:** PR #47 Node 26/CI redesign; Cloudflare preview/production deployment; production D1/auth/cloud sync. No deployment was performed.
+
+
+### PR #50 browser acceptance fix — 2026-11-12
+
+- **Root cause:** Svelte's `<input type="number">` `bind:value` supplies a numeric value (or `undefined` when empty), but the Practice Studio start handler called `plannedMinutes.trim()` as if it were a string. This raised a caught `TypeError` before the start service ran, leaving the page in its idle state and causing the browser test to time out waiting for the active-session heading.
+- **Fix committed:** `8746de96179574b1a28a5a73e9bd8349d486b3f9` (`fix(m7): handle numeric practice duration input`). The state is now `number | undefined`, blank maps to `null`, and supplied values are checked with `Number.isSafeInteger` plus the existing 1–180 minute bounds.
+- **Validation:** The full PR CI must be rechecked on the latest head; do not merge until browser acceptance and all required checks pass. The browser test exercises numeric duration entry, start, reload recovery, finish and history.
+- **Resume:** If CI still fails, inspect the latest `Browser acceptance tests` job log first; check the rendered alert text and browser runtime errors before changing selectors or weakening assertions.
