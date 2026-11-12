@@ -13,8 +13,8 @@
     "deploy": "wrangler deploy",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\"",
-    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\"",
+    "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\\\" \\\"scripts/accessibility-browser-acceptance.mjs\"",
+    "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\\\" \\\"scripts/accessibility-browser-acceptance.mjs\"",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs",
@@ -28,7 +28,8 @@
     "test:browser": "node scripts/browser-acceptance.mjs",
     "test:curriculum-browser": "node scripts/curriculum-browser-acceptance.mjs",
     "test:music-tools-browser": "node scripts/music-tools-browser-acceptance.mjs",
-    "curriculum:index": "node scripts/generate-curriculum-index.mjs"
+    "curriculum:index": "node scripts/generate-curriculum-index.mjs",
+    "test:accessibility": "node scripts/accessibility-browser-acceptance.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
