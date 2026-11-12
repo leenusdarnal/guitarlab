@@ -378,11 +378,13 @@ try {
   assert.equal(await resetButton.isDisabled(), true);
   await resetInput.fill('RESET');
   await resetButton.scrollIntoViewIfNeeded();
-  const cancelledResetDialog = page.waitForEvent('dialog');
+  let cancelledDialogMessage = '';
+  page.once('dialog', async (dialog) => {
+    cancelledDialogMessage = dialog.message();
+    await dialog.dismiss();
+  });
   await resetButton.click();
-  const cancelledDialog = await cancelledResetDialog;
-  assert.match(cancelledDialog.message(), /Reset GuitarLab learner data/);
-  await cancelledDialog.dismiss();
+  assert.match(cancelledDialogMessage, /Reset GuitarLab learner data/);
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
   assert.equal(
@@ -394,10 +396,13 @@ try {
   await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
   await page.locator('#reset-confirm').fill('RESET');
   await resetButton.scrollIntoViewIfNeeded();
-  const acceptedResetDialog = page.waitForEvent('dialog');
+  let acceptedDialogMessage = '';
+  page.once('dialog', async (dialog) => {
+    acceptedDialogMessage = dialog.message();
+    await dialog.accept();
+  });
   await page.getByRole('button', { name: 'Reset active learner data' }).click();
-  const acceptedDialog = await acceptedResetDialog;
-  await acceptedDialog.accept();
+  assert.match(acceptedDialogMessage, /Reset GuitarLab learner data/);
   await page
     .getByRole('status')
     .filter({
