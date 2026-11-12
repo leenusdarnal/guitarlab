@@ -48,7 +48,9 @@ export class WebAudioMetronome {
       this.beatsPerBar < 1 ||
       this.beatsPerBar > 12
     ) {
-      throw new RangeError('Beats per bar must be a whole number from 1 to 12.');
+      throw new RangeError(
+        'Beats per bar must be a whole number from 1 to 12.'
+      );
     }
   }
 
