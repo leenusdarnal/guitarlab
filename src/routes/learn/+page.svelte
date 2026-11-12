@@ -30,6 +30,11 @@
       <a href={resolve('/')}>Return to dashboard</a>
     </section>
   {:else}
+    <nav class="route-jump" aria-label="Jump to a learning path">
+      {#each data.routes as route (route.id)}
+        <a href={'#route-' + route.id}>{route.title}</a>
+      {/each}
+    </nav>
     <section class="routes" aria-label="Available learning paths">
       {#each data.routes as route (route.id)}
         <article class="route-card" id={'route-' + route.id}>
