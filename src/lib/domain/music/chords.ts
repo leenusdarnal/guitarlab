@@ -1,47 +1,58 @@
 import { z } from 'zod';
 
 export const chordStringSchema = z.discriminatedUnion('state', [
-  z.object({
-    stringNumber: z.number().int().min(1).max(6),
-    state: z.literal('muted'),
-    fret: z.null(),
-    finger: z.null()
-  }).strict(),
-  z.object({
-    stringNumber: z.number().int().min(1).max(6),
-    state: z.literal('open'),
-    fret: z.literal(0),
-    finger: z.null()
-  }).strict(),
-  z.object({
-    stringNumber: z.number().int().min(1).max(6),
-    state: z.literal('fretted'),
-    fret: z.number().int().min(1).max(24),
-    finger: z.number().int().min(1).max(4)
-  }).strict()
+  z
+    .object({
+      stringNumber: z.number().int().min(1).max(6),
+      state: z.literal('muted'),
+      fret: z.null(),
+      finger: z.null()
+    })
+    .strict(),
+  z
+    .object({
+      stringNumber: z.number().int().min(1).max(6),
+      state: z.literal('open'),
+      fret: z.literal(0),
+      finger: z.null()
+    })
+    .strict(),
+  z
+    .object({
+      stringNumber: z.number().int().min(1).max(6),
+      state: z.literal('fretted'),
+      fret: z.number().int().min(1).max(24),
+      finger: z.number().int().min(1).max(4)
+    })
+    .strict()
 ]);
 
 export type ChordString = z.infer<typeof chordStringSchema>;
 
-export const chordDefinitionSchema = z.object({
-  id: z.string().min(1).max(64),
-  name: z.string().min(1).max(12),
-  quality: z.enum(['Major', 'Minor']),
-  description: z.string().min(1).max(240),
-  strings: z.array(chordStringSchema).length(6)
-}).strict().superRefine((chord, context) => {
+export const chordDefinitionSchema = z
+  .object({
+    id: z.string().min(1).max(64),
+    name: z.string().min(1).max(12),
+    quality: z.enum(['Major', 'Minor']),
+    description: z.string().min(1).max(240),
+    strings: z.array(chordStringSchema).length(6)
+  })
+  .strict()
+  .superRefine((chord, context) => {
   const stringNumbers = chord.strings
     .map((string) => string.stringNumber)
     .sort((left, right) => left - right);
 
-  if (stringNumbers.some((stringNumber, index) => stringNumber !== index + 1)) {
-    context.addIssue({
-      code: 'custom',
-      path: ['strings'],
-      message: 'A chord must define strings 1 through 6 exactly once.'
-    });
-  }
-});
+    if (
+      stringNumbers.some((stringNumber, index) => stringNumber !== index + 1)
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['strings'],
+        message: 'A chord must define strings 1 through 6 exactly once.'
+      });
+    }
+  });
 
 export type ChordDefinition = z.infer<typeof chordDefinitionSchema>;
 
@@ -84,7 +95,8 @@ const chordDefinitions = [
     id: 'g-major',
     name: 'G',
     quality: 'Major',
-    description: 'A full open G major shape with the low and high E strings fretted.',
+    description:
+      'A full open G major shape with the low and high E strings fretted.',
     strings: [
       fretted(6, 3, 3),
       fretted(5, 2, 1),
@@ -98,7 +110,8 @@ const chordDefinitions = [
     id: 'd-major',
     name: 'D',
     quality: 'Major',
-    description: 'A bright D major shape. Avoid striking the two muted bass strings.',
+    description:
+      'A bright D major shape. Avoid striking the two muted bass strings.',
     strings: [
       muted(6),
       muted(5),
