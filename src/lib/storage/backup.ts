@@ -83,6 +83,7 @@ const practiceSessionSchema = z
     focus: z.string().max(1000).nullable(),
     difficulty: z.number().int().min(1).max(5).nullable(),
     reflection: z.string().max(2000).nullable(),
+    nextTarget: z.string().max(1000).nullable().optional(),
     startedAt: timestamp,
     endedAt: timestamp.nullable(),
     createdAt: timestamp,

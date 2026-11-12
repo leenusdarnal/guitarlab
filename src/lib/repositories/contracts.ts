@@ -93,6 +93,8 @@ export type PracticeSessionRecord = {
   focus: string | null;
   difficulty: number | null;
   reflection: string | null;
+  /** Learner-selected next practice target; optional for pre-M7 rows. */
+  nextTarget?: string | null;
   startedAt: number;
   endedAt: number | null;
   createdAt: number;

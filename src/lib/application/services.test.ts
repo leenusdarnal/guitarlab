@@ -707,7 +707,9 @@ describe('M2.2 application service boundaries', () => {
       {
         learnerId,
         sessionId: session.id,
-        actualDurationSeconds: 1_200
+        actualDurationSeconds: 1_200,
+        reflection: 'Keep the wrist relaxed through the chord changes.',
+        nextTarget: 'Repeat G–C–D at 60 BPM for three minutes.'
       },
       { practice: harness.practiceRepository, runtime: harness.runtime }
     );
@@ -715,6 +717,12 @@ describe('M2.2 application service boundaries', () => {
     expect(completed.status).toBe('completed');
     expect(completed.plannedMinutes).toBe(20);
     expect(completed.actualDurationSeconds).toBe(1_200);
+    expect(completed.reflection).toBe(
+      'Keep the wrist relaxed through the chord changes.'
+    );
+    expect(completed.nextTarget).toBe(
+      'Repeat G–C–D at 60 BPM for three minutes.'
+    );
     expect(harness.masteryRows.size).toBe(0);
     await expect(
       finishPracticeSession(

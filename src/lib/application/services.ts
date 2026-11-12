@@ -692,7 +692,9 @@ const finishPracticeInputSchema = z
   .object({
     learnerId: uuidSchema,
     sessionId: uuidSchema,
-    actualDurationSeconds: z.number().int().min(1).max(43_200)
+    actualDurationSeconds: z.number().int().min(1).max(43_200),
+    reflection: z.string().max(2_000).nullable().optional(),
+    nextTarget: z.string().max(1_000).nullable().optional()
   })
   .strict();
 
@@ -727,6 +729,14 @@ export async function finishPracticeSession(
     status: 'completed',
     activeStartedAt: null,
     actualDurationSeconds: value.actualDurationSeconds,
+    reflection:
+      value.reflection === undefined
+        ? (current.reflection ?? null)
+        : value.reflection?.trim() || null,
+    nextTarget:
+      value.nextTarget === undefined
+        ? (current.nextTarget ?? null)
+        : value.nextTarget?.trim() || null,
     endedAt: now,
     updatedAt: now
   };

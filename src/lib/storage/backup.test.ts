@@ -111,6 +111,7 @@ describe('learner backup contract', () => {
       focus: 'Alternate picking',
       difficulty: null,
       reflection: null,
+      nextTarget: 'Repeat the scale at 72 BPM.',
       startedAt: 1_800_000_000_000,
       endedAt: 1_800_000_300_000,
       createdAt: 1_800_000_000_000,
@@ -133,7 +134,8 @@ describe('learner backup contract', () => {
       success: true,
       data: {
         records: {
-          practiceEvidence: [{ repetitions: 20, cleanRepetitions: 15 }]
+          practiceEvidence: [{ repetitions: 20, cleanRepetitions: 15 }],
+          practiceSessions: [{ nextTarget: 'Repeat the scale at 72 BPM.' }]
         }
       }
     });
