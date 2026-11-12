@@ -269,6 +269,189 @@ try {
   assert.equal(backup.version, 1);
   assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
 
+  // Invalid JSON and unsupported backup versions must be rejected without preview.
+  const backupInput = page.locator('input[type="file"]');
+  await backupInput.setInputFiles({
+    name: 'invalid.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from('{')
+  });
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'The selected file is not valid JSON.' })
+    .waitFor();
+
+  await backupInput.setInputFiles({
+    name: 'unsupported-version.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify({ ...backup, version: 99 }))
+  });
+  const unsupportedBackupMessage = page.locator('.status-message');
+  await unsupportedBackupMessage.waitFor({ state: 'visible' });
+  assert.match(
+    await unsupportedBackupMessage.innerText(),
+    /version/i,
+    'Unsupported backup versions should have an actionable validation message'
+  );
+  assert.equal(
+    await page.getByRole('heading', { name: 'Restore preview' }).count(),
+    0,
+    'Invalid backups must not display a restore confirmation'
+  );
+
+  // Change the profile after export so rollback and restore have observable outcomes.
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.getByRole('radio', { name: '40 min' }).check();
+  await page
+    .getByRole('button', { name: /Save my preferences/ })
+    .click();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'saved privately on this device' })
+    .waitFor();
+
+  // Force a unique IndexedDB index violation after the restore transaction has begun.
+  // The whole replacement must roll back, leaving the current 40-minute profile intact.
+  const rollbackProbe = {
+    learnerId: backup.learnerId,
+    curriculumReleaseId: 'curriculum-v1',
+    lessonId: 'restore-transaction-rollback-probe',
+    status: 'in_progress',
+    lastBlockId: null,
+    startedAt: Date.now(),
+    completedAt: null,
+    updatedAt: Date.now()
+  };
+  const rollbackBackup = {
+    ...backup,
+    records: {
+      ...backup.records,
+      lessonProgress: [
+        {
+          ...rollbackProbe,
+          id: '11111111-1111-4111-8111-111111111111'
+        },
+        {
+          ...rollbackProbe,
+          id: '22222222-2222-4222-8222-222222222222'
+        }
+      ]
+    }
+  };
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'transaction-rollback.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(rollbackBackup))
+  });
+  await page.getByRole('heading', { name: 'Restore preview' }).waitFor();
+  const restoreButton = page.getByRole('button', {
+    name: 'Restore this backup'
+  });
+  assert.equal(
+    await restoreButton.isDisabled(),
+    true,
+    'Restore must remain disabled until the learner confirms replacement'
+  );
+  await page.locator('.confirm-choice input').check();
+  await restoreButton.click();
+  await page
+    .getByRole('status')
+    .filter({
+      hasText:
+        'Restore failed. The database transaction was rolled back and the existing learner data was preserved.'
+    })
+    .waitFor();
+
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  assert.equal(
+    await page.getByRole('radio', { name: '40 min' }).isChecked(),
+    true,
+    'A failed restore must preserve the existing learner profile'
+  );
+
+  // Reset is gated by both the typed phrase and the browser confirmation dialog.
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  const resetInput = page.locator('#reset-confirm');
+  const resetButton = page.getByRole('button', {
+    name: 'Reset active learner data'
+  });
+  assert.equal(await resetButton.isDisabled(), true);
+  await resetInput.fill('RESET');
+  const cancelledResetDialog = page.waitForEvent('dialog');
+  await resetButton.click();
+  const cancelledDialog = await cancelledResetDialog;
+  assert.match(cancelledDialog.message(), /Reset GuitarLab learner data/);
+  await cancelledDialog.dismiss();
+
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  assert.equal(
+    await page.getByRole('radio', { name: '40 min' }).isChecked(),
+    true,
+    'Dismissing the reset confirmation must preserve learner data'
+  );
+
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.locator('#reset-confirm').fill('RESET');
+  const acceptedResetDialog = page.waitForEvent('dialog');
+  await page
+    .getByRole('button', { name: 'Reset active learner data' })
+    .click();
+  const acceptedDialog = await acceptedResetDialog;
+  await acceptedDialog.accept();
+  await page
+    .getByRole('status')
+    .filter({
+      hasText: 'Your active learner data has been reset. A fresh empty profile is ready.'
+    })
+    .waitFor();
+
+  // Restore the downloaded backup into a new, empty learner profile.
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  assert.equal(
+    await page.getByRole('radio', { name: '20 min' }).isChecked(),
+    false,
+    'Reset should create a fresh profile with no assumed practice duration'
+  );
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.locator('input[type="file"]').setInputFiles(downloadPath);
+  await page.getByRole('heading', { name: 'Restore preview' }).waitFor();
+  await page
+    .getByText(
+      'This backup belongs to a different learner profile and will replace the active profile.'
+    )
+    .waitFor();
+  await page.locator('.confirm-choice input').check();
+  await page
+    .getByRole('button', { name: 'Restore this backup' })
+    .click();
+  await page
+    .getByRole('status')
+    .filter({
+      hasText:
+        'Restore completed. Your learner profile and local learning records have been replaced.'
+    })
+    .waitFor();
+
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  assert.equal(
+    await page.getByRole('radio', { name: '20 min' }).isChecked(),
+    true,
+    'Restoring the exported backup into a clean profile should recover preferences'
+  );
+  assert.equal(
+    await page.getByRole('radio', { name: 'Acoustic guitar' }).isChecked(),
+    true,
+    'Restoring the exported backup should recover the instrument preference'
+  );
+  assert.equal(
+    await page
+      .getByRole('checkbox', { name: 'Acoustic & fingerstyle' })
+      .isChecked(),
+    true,
+    'Restoring the exported backup should recover the learner goals'
+  );
+
   assert.deepEqual(
     pageErrors,
     [],
