@@ -755,7 +755,9 @@ try {
 
   // M7.1 Practice Studio: local start, reload recovery, elapsed-time save and history.
   await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
-  await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
+    .waitFor();
   await page.locator('#duration').fill('2');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
