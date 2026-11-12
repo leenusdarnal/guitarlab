@@ -39,9 +39,9 @@ export const chordDefinitionSchema = z
   })
   .strict()
   .superRefine((chord, context) => {
-  const stringNumbers = chord.strings
-    .map((string) => string.stringNumber)
-    .sort((left, right) => left - right);
+    const stringNumbers = chord.strings
+      .map((string) => string.stringNumber)
+      .sort((left, right) => left - right);
 
     if (
       stringNumbers.some((stringNumber, index) => stringNumber !== index + 1)
