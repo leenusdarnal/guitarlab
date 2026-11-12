@@ -200,7 +200,7 @@
 
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
-    <a class="brand" href={resolve('/')} aria-label="GuitarLab home"><span class="brand-mark" aria-hidden="true">G</span><span><strong>GuitarLab</strong><small aria-hidden="true">LEARN. PRACTISE. MASTER.</small></span></a>
+    <a class="brand" href={resolve('/')}><span class="brand-mark" aria-hidden="true">G</span><span><strong>GuitarLab</strong><small aria-hidden="true">LEARN. PRACTISE. MASTER.</small></span></a>
     <div class="nav-label">YOUR WORKSPACE</div>
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span aria-hidden="true">⌂</span> Today</a>
