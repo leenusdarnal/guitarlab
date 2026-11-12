@@ -86,6 +86,7 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -376,6 +377,7 @@ try {
   });
   assert.equal(await resetButton.isDisabled(), true);
   await resetInput.fill('RESET');
+  await resetButton.scrollIntoViewIfNeeded();
   const cancelledResetDialog = page.waitForEvent('dialog');
   await resetButton.click();
   const cancelledDialog = await cancelledResetDialog;
@@ -391,6 +393,7 @@ try {
 
   await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
   await page.locator('#reset-confirm').fill('RESET');
+  await resetButton.scrollIntoViewIfNeeded();
   const acceptedResetDialog = page.waitForEvent('dialog');
   await page.getByRole('button', { name: 'Reset active learner data' }).click();
   const acceptedDialog = await acceptedResetDialog;
