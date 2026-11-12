@@ -178,7 +178,7 @@ jobs:
             wrangler.jsonc
           if-no-files-found: error
           include-hidden-files: true
-          retention-days: 1
+          retention-days: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 7 || 1 }}
 
   browser-acceptance:
     name: Application browser acceptance
