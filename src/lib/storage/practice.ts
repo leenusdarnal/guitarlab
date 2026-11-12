@@ -1,5 +1,7 @@
 import {
   finishPracticeSession,
+  pausePracticeSession,
+  resumePracticeSession,
   startPracticeSession
 } from '../application/services';
 import {
@@ -49,19 +51,6 @@ export async function startActivePracticeSession(input: {
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
-    const existing = await requestResult<PracticeSessionRecord[]>(
-      database
-        .transaction(['practiceSessions'], 'readonly')
-        .objectStore('practiceSessions')
-        .index('byLearnerId')
-        .getAll(IDBKeyRange.only(profile.id))
-    );
-    if (existing.some((session) => session.status === 'in_progress')) {
-      throw new Error(
-        'Finish your active practice session before starting another.'
-      );
-    }
-
     return await startPracticeSession(
       {
         learnerId: profile.id,
@@ -85,7 +74,27 @@ export async function startActivePracticeSession(input: {
   }
 }
 
-/** Complete the active learner's session using elapsed wall-clock time. */
+/** Pause the current active segment and persist accumulated active time. */
+export async function pauseActivePracticeSession(sessionId: string): Promise<PracticeSessionRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    return await pausePracticeSession({ learnerId: profile.id, sessionId }, { practice: repositories.practice, runtime: systemRuntime });
+  } finally { database.close(); }
+}
+
+/** Resume a paused session without counting the time spent paused. */
+export async function resumeActivePracticeSession(sessionId: string): Promise<PracticeSessionRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    return await resumePracticeSession({ learnerId: profile.id, sessionId }, { practice: repositories.practice, runtime: systemRuntime });
+  } finally { database.close(); }
+}
+
+/** Complete the active learner's session using accumulated active time. */
 export async function finishActivePracticeSession(
   sessionId: string
 ): Promise<PracticeSessionRecord> {
@@ -97,9 +106,9 @@ export async function finishActivePracticeSession(
     if (!current || current.learnerId !== profile.id) {
       throw new Error('Practice session not found on this learner profile.');
     }
-    const elapsed = Math.floor(
-      (systemRuntime.now() - current.startedAt) / 1000
-    );
+    const now = systemRuntime.now();
+    const segmentStartedAt = current.activeStartedAt ?? current.startedAt;
+    const elapsed = current.actualDurationSeconds + (current.status === 'in_progress' ? Math.floor((now - segmentStartedAt) / 1000) : 0);
     if (elapsed < 1 || elapsed > 43_200) {
       throw new Error(
         'A session must last between 1 second and 12 hours to be saved.'

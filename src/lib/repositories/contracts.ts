@@ -82,7 +82,9 @@ export type PracticeSessionRecord = {
   learnerId: string;
   primaryCurriculumReleaseId: string | null;
   primaryLessonId: string | null;
-  status: 'in_progress' | 'completed' | 'abandoned';
+  status: 'in_progress' | 'paused' | 'completed' | 'abandoned';
+  /** Start timestamp for the currently running segment; absent on legacy rows. */
+  activeStartedAt?: number | null;
   plannedMinutes: number | null;
   actualDurationSeconds: number;
   focus: string | null;
@@ -173,7 +175,7 @@ export interface PracticeSessionRepository {
    * Compare-and-set update: only an in_progress record may be changed.
    * Returns false if another action already completed/abandoned the session.
    */
-  updateIfInProgress(session: PracticeSessionRecord): Promise<boolean>;
+  updateIfStatus(session: PracticeSessionRecord, expectedStatus: 'in_progress' | 'paused'): Promise<boolean>;
 }
 
 /** Injectable system boundary keeps use cases deterministic and testable. */
