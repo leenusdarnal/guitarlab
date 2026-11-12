@@ -16,7 +16,8 @@ describe('local learner storage persistence', () => {
       canRequest: true,
       persisted: true,
       usageBytes: 128,
-      quotaBytes: 1024
+      quotaBytes: 1024,
+      requestGranted: null
     });
   });
 
@@ -31,6 +32,7 @@ describe('local learner storage persistence', () => {
 
     expect(manager.persist).toHaveBeenCalledOnce();
     expect(status.persisted).toBe(false);
+    expect(status.requestGranted).toBe(false);
     expect(status.canRequest).toBe(true);
   });
 
@@ -39,13 +41,15 @@ describe('local learner storage persistence', () => {
       canRequest: false,
       persisted: null,
       usageBytes: null,
-      quotaBytes: null
+      quotaBytes: null,
+      requestGranted: null
     });
     await expect(requestLearnerStoragePersistence(null)).resolves.toEqual({
       canRequest: false,
       persisted: null,
       usageBytes: null,
-      quotaBytes: null
+      quotaBytes: null,
+      requestGranted: null
     });
   });
 
@@ -60,7 +64,8 @@ describe('local learner storage persistence', () => {
       canRequest: true,
       persisted: null,
       usageBytes: null,
-      quotaBytes: null
+      quotaBytes: null,
+      requestGranted: null
     });
   });
 });
