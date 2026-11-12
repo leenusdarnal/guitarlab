@@ -283,7 +283,7 @@ export async function resetActiveLearnerData(confirmed: boolean): Promise<void> 
       );
 
       if (active) {
-        const [progressRows, eventRows, assessmentRows, masteryRows, practiceRows] =
+        const [progressRows, eventRows, assessmentRows, masteryRows, practiceRows, evidenceRows] =
           await Promise.all([
             requestResult<LessonProgressRecord[]>(progress.getAll()),
             requestResult<LessonCompletionEventRecord[]>(events.getAll()),

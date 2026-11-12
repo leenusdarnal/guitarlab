@@ -10,8 +10,14 @@ const observationFields = {
   difficulty: z.number().int().min(1).max(5).nullable()
 };
 
-function enforceObservationInvariants<T extends z.ZodTypeAny>(schema: T) {
-  return schema.superRefine((value: z.infer<T>, context) => {
+/** Fields supplied by a learner when recording one exercise observation. */
+export const practiceEvidenceSubmissionSchema = z
+  .object({
+    sessionId: uuid,
+    ...observationFields
+  })
+  .strict()
+  .superRefine((value, context) => {
     if (value.cleanRepetitions > value.repetitions) {
       context.addIssue({
         code: 'custom',
@@ -20,29 +26,29 @@ function enforceObservationInvariants<T extends z.ZodTypeAny>(schema: T) {
       });
     }
   });
-}
-
-/** Fields supplied by a learner when recording one exercise observation. */
-export const practiceEvidenceSubmissionSchema = enforceObservationInvariants(
-  z.object({
-    sessionId: uuid,
-    ...observationFields
-  }).strict()
-);
 
 /**
  * An append-only learner-entered observation about one exercise in a session.
  * This is activity evidence, not an assessment or a skill-mastery decision.
  */
-export const practiceEvidenceInputSchema = enforceObservationInvariants(
-  z.object({
+export const practiceEvidenceInputSchema = z
+  .object({
     id: uuid,
     learnerId: uuid,
     sessionId: uuid,
     ...observationFields,
     recordedAt: z.number().int().nonnegative()
-  }).strict()
-);
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (value.cleanRepetitions > value.repetitions) {
+      context.addIssue({
+        code: 'custom',
+        path: ['cleanRepetitions'],
+        message: 'Clean repetitions cannot exceed total repetitions.'
+      });
+    }
+  });
 
 export type PracticeEvidenceInput = z.infer<typeof practiceEvidenceInputSchema>;
 export type PracticeEvidenceSubmission = z.infer<typeof practiceEvidenceSubmissionSchema>;
