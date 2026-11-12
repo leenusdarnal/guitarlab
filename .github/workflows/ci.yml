@@ -57,8 +57,8 @@ jobs:
           console.log(`Dependency audit passed: no high/critical advisories; moderate/low advisories: ${advisoryCount}.`);
           NODE
 
-      - name: Install Playwright for browser acceptance
-        run: npm install --no-save --package-lock=false playwright@1.56.1
+      - name: Install Playwright and axe-core for browser acceptance
+        run: npm install --no-save --package-lock=false playwright@1.56.1 axe-core@4.14.0
 
       - name: Install Chromium for browser acceptance
         run: npx playwright install chromium
@@ -102,7 +102,8 @@ jobs:
               src/lib/*.ts|src/app.d.ts|*.js|*.json|*.ts|wrangler*.jsonc|\
               scripts/generate-curriculum-index.mjs|scripts/validate-design-tokens.mjs|scripts/finalize-db-migration.mjs|\
               scripts/test-local-db.mjs|scripts/browser-acceptance.mjs|\
-              scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs)
+              scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs|\
+              scripts/accessibility-browser-acceptance.mjs)
                 changed_files+=("$file")
                 ;;
             esac
@@ -165,6 +166,10 @@ jobs:
       - name: Music tools browser acceptance tests
         if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         run: npm run test:music-tools-browser
+
+      - name: Accessibility browser acceptance tests
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        run: npm run test:accessibility
 
       - name: Curriculum browser acceptance tests
         run: npm run test:curriculum-browser
