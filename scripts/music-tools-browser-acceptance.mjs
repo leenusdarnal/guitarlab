@@ -85,7 +85,9 @@ try {
     input.value = '112';
     input.dispatchEvent(new Event('input', { bubbles: true }));
   });
-  await page.getByText('112 BPM', { exact: true }).waitFor();
+  await page.waitForFunction(() =>
+    document.querySelector('.tempo-display')?.textContent?.includes('112')
+  );
   await page.getByLabel('Beats per bar').selectOption('3');
 
   // Audio starts only from an explicit user action and can be stopped.

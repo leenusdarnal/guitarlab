@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     createChordTransitionObservation,
@@ -66,9 +66,6 @@
     };
   });
 
-  onDestroy(() => {
-    // No audio resources are created on the chord page.
-  });
 
   function stringDescription(string: ChordString): string {
     if (string.state === 'muted') return 'muted';
