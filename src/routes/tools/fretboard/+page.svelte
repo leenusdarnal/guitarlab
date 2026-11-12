@@ -5,7 +5,6 @@
     FLAT_NOTE_NAMES,
     SHARP_NOTE_NAMES,
     STANDARD_GUITAR_TUNING,
-    findFretboardPositions,
     getDisplayFretColumn,
     getNoteAtPosition,
     getFretboardLayout,
