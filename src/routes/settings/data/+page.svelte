@@ -220,13 +220,23 @@
         {#if storageStatus?.usageBytes !== null && storageStatus?.usageBytes !== undefined && storageStatus.quotaBytes !== null && storageStatus.quotaBytes !== undefined}
           <p>Estimated storage used: {formatStorageBytes(storageStatus.usageBytes)} of {formatStorageBytes(storageStatus.quotaBytes)}.</p>
         {/if}
-        <div class="planner-actions">
+        <div class="storage-actions">
           {#if storageStatus?.persisted !== true && storageStatus?.canRequest}
-            <button class="primary-button" type="button" onclick={requestPersistentStorage} disabled={isRequestingPersistence}>
+            <button
+              class="primary-button"
+              type="button"
+              onclick={requestPersistentStorage}
+              disabled={isRequestingPersistence}
+            >
               {isRequestingPersistence ? 'Requesting…' : 'Request persistent storage'}
             </button>
           {/if}
-          <button class="planner-secondary" type="button" onclick={refreshStorageStatus} disabled={isCheckingStorage || isRequestingPersistence}>
+          <button
+            class="file-picker"
+            type="button"
+            onclick={refreshStorageStatus}
+            disabled={isCheckingStorage || isRequestingPersistence}
+          >
             Refresh status
           </button>
         </div>
@@ -363,6 +373,7 @@
   h2{font-size:15px;margin:2px 0 7px}.backup-panel p{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 14px}
   .primary-button,.danger-button{border:0;border-radius:10px;padding:13px 17px;font-weight:750;font-size:12px;cursor:pointer}.primary-button{background:var(--primary);color:var(--primary-ink)}.primary-button:disabled,.danger-button:disabled{opacity:.45;cursor:not-allowed}.primary-button span{padding-left:12px}
   .section{border-top:1px solid var(--border);padding-top:25px;margin-top:30px}.file-picker{display:inline-flex;align-items:center;position:relative;overflow:hidden;border:1px solid var(--border);border-radius:10px;padding:12px 15px;font-size:12px;font-weight:650;cursor:pointer;background:var(--surface-raised)}.file-picker input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.file-name{font-size:11px;color:var(--muted);margin:10px 0}
+  .storage-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.storage-actions button:disabled{opacity:.45;cursor:not-allowed}
   .preview{border:1px solid var(--border);border-radius:13px;padding:18px;margin-top:18px}.preview h3{font-size:14px;margin:0 0 8px}.preview .section-copy{font-size:12px}
   table{width:100%;border-collapse:collapse;font-size:11px;margin:15px 0}th,td{padding:9px 7px;border-bottom:1px solid var(--border);text-align:right}th:first-child,td:first-child{text-align:left;text-transform:capitalize}thead{color:var(--muted)}.total-row{font-weight:750}
   .confirm-choice{display:flex;gap:10px;align-items:flex-start;font-size:11px;line-height:1.6;margin:16px 0}.confirm-choice input{accent-color:var(--primary);margin-top:2px}
