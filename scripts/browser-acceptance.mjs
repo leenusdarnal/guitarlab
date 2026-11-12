@@ -290,6 +290,22 @@ try {
   );
   await restrictedStorageContext.close();
 
+  // Saved theme preferences apply when a learner opens a nested route directly.
+  const savedThemeContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  await savedThemeContext.addInitScript(() => {
+    window.localStorage.setItem('guitarlab-theme', 'light');
+  });
+  const savedThemePage = await savedThemeContext.newPage();
+  await savedThemePage.goto(origin + '/tools/fretboard', {
+    waitUntil: 'networkidle'
+  });
+  await savedThemePage.waitForFunction(
+    () => document.documentElement.dataset.theme === 'light'
+  );
+  await savedThemeContext.close();
+
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 }
   });
@@ -297,6 +313,24 @@ try {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
+
+  // Keyboard users can skip persistent notices and move directly to page content.
+  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.keyboard.press('Tab');
+  const skipLink = page.getByRole('link', { name: 'Skip to main content' });
+  assert.equal(
+    await skipLink.evaluate((element) => element === document.activeElement),
+    true,
+    'The skip link should be the first keyboard stop'
+  );
+  await page.keyboard.press('Enter');
+  assert.equal(
+    await page.locator('#main-content').evaluate(
+      (element) => element === document.activeElement
+    ),
+    true,
+    'The skip link should move focus to the main content container'
+  );
 
   // Fresh learner: dashboard, curriculum phases and truthful empty states.
   const response = await page.request.get(origin);
@@ -443,8 +477,31 @@ try {
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: 'Toggle navigation' }).click();
-  const mobileNavigation = page.getByRole('navigation', {
+  const mobileMenuButton = page.getByRole('button', {
+    name: 'Toggle navigation'
+  });
+  await mobileMenuButton.click();
+  let mobileNavigation = page.getByRole('navigation', {
+    name: 'Mobile navigation'
+  });
+  const todayLink = mobileNavigation.getByRole('link', { name: 'Today' });
+  await todayLink.waitFor();
+  assert.equal(
+    await todayLink.evaluate((element) => element === document.activeElement),
+    true,
+    'Opening mobile navigation should focus its first link'
+  );
+  await page.keyboard.press('Escape');
+  await mobileNavigation.waitFor({ state: 'detached' });
+  assert.equal(
+    await mobileMenuButton.evaluate(
+      (element) => element === document.activeElement
+    ),
+    true,
+    'Escape should close mobile navigation and restore focus to its trigger'
+  );
+  await mobileMenuButton.click();
+  mobileNavigation = page.getByRole('navigation', {
     name: 'Mobile navigation'
   });
   await mobileNavigation.getByRole('link', { name: 'Learning path' }).click();
