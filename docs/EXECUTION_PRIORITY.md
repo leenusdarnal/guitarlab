@@ -3,7 +3,7 @@
 **Last verified:** 2026-11-12  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Baseline commit:** `0780df6dbe9d2889a28c4bc802270995ff71197f`  
+**Last verified main commit:** `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e`  
 **Document purpose:** Durable execution queue and restart checkpoint. Update this file after each meaningful implementation slice and before pausing work.
 
 > This is an execution plan, not a claim that every listed item has been re-audited. The first task on every resume is to refresh the live repository state and reconcile this document with the code, Issues, PRs and CI.
@@ -195,13 +195,13 @@ This section is the hand-off state. Update it before pausing work.
 
 | Field | Current value |
 |---|---|
-| Last verified main SHA | `0780df6dbe9d2889a28c4bc802270995ff71197f` |
+| Last verified main SHA | `9ea94efc10b6d229ba8d414e6f41e7cb35a3183e` |
 | Latest observed successful code CI | [#43173177888](https://github.com/leenusdarnal/guitarlab/actions/runs/43173177888) on the pre-documentation code baseline; PR #48 documentation CI passed before merge. Verify a fresh main run on resume |
 | Open implementation PR | PR #49 documentation reconciliation; no application-code PR observed |
 | PR #47 | Closed, unmerged; deferred |
-| Current phase | P0 — baseline audit and documentation reconciliation |
-| Current task | Documentation reconciliation is in PR #49; review its CI and merge before starting P1 |
-| Next task after P0 | P1 — complete physical-device offline and backup/restore acceptance; preview HTTPS environment/credentials are a dependency and must not be provisioned without approval |
+| Current phase | P2 — Practice Studio implementation |
+| Current task | First M7 slice on `feat/m7-practice-evidence-contract`; review route/storage implementation and CI before merge |
+| Next task | Complete P1 physical-device acceptance separately; continue M7 with pause/resume and elapsed-time accounting after this slice is reviewed |
 | Production deployment | Deferred; explicit approval required |
 
 ### Status update template
