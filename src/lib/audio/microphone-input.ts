@@ -118,8 +118,7 @@ export class MicrophoneInput {
       return Promise.reject(normalizeMicrophoneError(error));
     }
 
-    let pending: Promise<void>;
-    pending = this.open(streamPromise, session, generation).finally(() => {
+    const pending = this.open(streamPromise, session, generation).finally(() => {
       if (this.startPromise === pending) this.startPromise = null;
     });
     this.startPromise = pending;
