@@ -15,7 +15,7 @@
 - Post-merge main CI was triggered as run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh its final result before treating the merge as fully validated on main.
 - M7.1 practice sessions/evidence/history/skill-state UI is delivered by PRs #50–59.
 - M8.1 ear training includes pulse, pitch and contour (PR #61) plus interval recognition (PR #67).
-- Open product issues include #16–18; reconcile their acceptance criteria and statuses. Issue #68 and #20 are introduced by the research-integration work.
+- Open product issues include #17 and #18; Issue #16 is closed as completed. Research follow-ups are tracked in Issues #68 and #69.
 - Cloudflare production deployment remains deferred. Do not provision production D1, enable authentication/cloud sync or deploy production without explicit approval.
 
 ## 2. Priority order
@@ -26,7 +26,7 @@
 2. Update Issue #16 based on merged M7.1 evidence and close it only if all five acceptance criteria are confirmed.
 3. Update Issue #17 to show pulse/pitch/contour and interval work as implemented while keeping theory recall, CAGED/triads and repertoire open.
 4. Extend Issue #18 with cross-browser audio, microphone privacy, licence and physical-device acceptance.
-5. Create focused Issues #19 (audio/pitch recognition) and #69 (adaptive practice/analytics).
+5. Create focused Issues #68 (audio/pitch recognition) and #69 (adaptive practice/analytics).
 6. Verify the documentation PR's CI and merge it before feature implementation.
 
 **Exit criteria:** one consistent, current source of truth; every new research finding has an adopt/adapt/defer decision and a GitHub execution home.
@@ -126,7 +126,7 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | Post-merge main CI | Run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh result |
 | Current work | Research integration documentation and GitHub issue reconciliation |
 | Next engineering task | Audit shared audio and music-theory foundations |
-| M7.1 | Implemented in PRs #50–59; reconcile/close Issue #16 |
+| M7.1 | Complete in PRs #50–59; Issue #16 closed |
 | M8.1 | PRs #61 and #67 merged; Issue #17 remains open |
 | M9 | Physical-device and release acceptance remains open under Issue #18 |
 | Deferred | Production deployment, production D1, authentication, cloud sync, PR #47 CI redesign |
