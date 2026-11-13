@@ -38,6 +38,7 @@ class FakeSource {
 }
 
 class FakeAudioContext {
+  sampleRate = 48_000;
   analyser = new FakeAnalyser();
   source = new FakeSource();
   createAnalyser = vi.fn(() => this.analyser as unknown as AnalyserNode);
@@ -91,6 +92,7 @@ describe('MicrophoneInput', () => {
       video: false
     });
     expect(input.isRunning).toBe(true);
+    expect(input.sampleRate).toBe(48_000);
     expect(context.analyser.fftSize).toBe(4_096);
     expect(context.analyser.smoothingTimeConstant).toBe(0);
 
@@ -118,6 +120,7 @@ describe('MicrophoneInput', () => {
     expect(context.source.disconnect).toHaveBeenCalledOnce();
     expect(session.close).toHaveBeenCalledOnce();
     expect(input.isRunning).toBe(false);
+    expect(input.sampleRate).toBeNull();
     expect(() => input.readSamples(new Float32Array(32))).toThrow(
       MicrophoneInputError
     );
