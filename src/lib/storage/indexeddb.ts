@@ -194,7 +194,9 @@ export function openLocalDatabase(
           'startedAt'
         ]);
       }
-      const evidence = database.objectStoreNames.contains(stores.practiceEvidence)
+      const evidence = database.objectStoreNames.contains(
+        stores.practiceEvidence
+      )
         ? request.transaction!.objectStore(stores.practiceEvidence)
         : database.createObjectStore(stores.practiceEvidence, {
             keyPath: 'id'
@@ -808,9 +810,8 @@ export async function loadActiveLearnerDashboard() {
   }
 }
 
-
 /**
- * Build recommendations from the active learner's local evidence and only
+ * Build recommendations/ from the active learner's local evidence and only
  * the explicitly mapped skills reached in the Year 1 dashboard route.
  * This is a read-only view; it never writes mastery or assessment records.
  */
@@ -888,10 +889,9 @@ export async function loadActiveAdaptivePracticeSnapshot(
         const reachedLessonIds = new Set(
           progress
             .filter(
-              (record) =>
-                record.status === 'completed' ||
-                record.status === 'in_progress'
-            )
+            (record) =>
+              record.status === 'completed' || record.status === 'in_progress'
+          )
             .map((record) => record.lessonId)
         );
         if (dashboard.nextLesson) {
