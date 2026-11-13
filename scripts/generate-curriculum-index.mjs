@@ -32,9 +32,22 @@ const index = {
   }))
 };
 
+const serializedIndex = JSON.stringify(index, null, 2).replace(
+  /("skillIds": )\\[\\n([\\s\\S]*?)\\n\\s+\\]/g,
+  (_match, property, values) =>
+    property +
+    '[' +
+    values
+      .split('\\n')
+      .map((value) => value.trim().replace(/,$/, ''))
+      .filter(Boolean)
+      .join(', ') +
+    ']'
+);
+
 await writeFile(
   resolve(root, 'content/curriculum/year-1-dashboard-index.json'),
-  JSON.stringify(index, null, 2) + String.fromCharCode(10),
+  serializedIndex + String.fromCharCode(10),
   'utf8'
 );
 console.log(
