@@ -279,11 +279,11 @@ try {
     'Tuner should request microphone permission once after explicit Start'
   );
   // Missing devices receive a distinct, actionable message.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   await page.evaluate(() => {
     window.__guitarLabMicErrorName = 'NotFoundError';
   });
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
-  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   await page.getByRole('button', { name: 'Start tuner' }).click();
   await page
     .getByRole('alert')
@@ -296,13 +296,13 @@ try {
   );
 
   // Unsupported browser APIs fail safely without requesting permission.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
   await page.evaluate(() => {
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
       value: undefined
     });
   });
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: 'Start tuner' }).click();
   await page
     .getByRole('alert')
