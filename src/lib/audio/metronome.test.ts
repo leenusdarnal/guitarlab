@@ -287,6 +287,20 @@ describe('playReferenceTone audio lifecycle', () => {
   });
 
 
+
+  it('propagates AudioContext construction failures', async () => {
+    class ThrowingAudioContext {
+      constructor() {
+        throw new Error('context construction failed');
+      }
+    }
+    vi.stubGlobal('AudioContext', ThrowingAudioContext);
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow(
+      'context construction failed'
+    );
+  });
+
   it('closes the context when AudioContext resume rejects', async () => {
     installAudioEnvironment();
     FakeAudioContext.onCreate = (context) => {
