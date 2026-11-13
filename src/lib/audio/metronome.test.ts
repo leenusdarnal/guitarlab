@@ -244,7 +244,7 @@ describe('WebAudioMetronome audio lifecycle', () => {
 
     await expect(metronome.start()).rejects.toThrow('permission denied');
     expect(metronome.isRunning).toBe(false);
-    expect(context.close).not.toHaveBeenCalled();
+    expect(context.close).toHaveBeenCalledOnce();
     await metronome.dispose();
   });
 
