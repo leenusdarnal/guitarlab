@@ -1010,7 +1010,10 @@ try {
       request.onerror = () => reject(request.error);
     });
     const active = await new Promise((resolve, reject) => {
-      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
       request.onsuccess = () => resolve(request.result?.value);
       request.onerror = () => reject(request.error);
     });
@@ -1068,19 +1071,32 @@ try {
     database.close();
     return { active };
   });
-  assert.ok(skillFixture.active, 'The skill-state fixture needs an active learner');
+  assert.ok(
+    skillFixture.active,
+    'The skill-state fixture needs an active learner'
+  );
   await page.goto(`${origin}/skills`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Skill states, explained.' }).waitFor();
   await page.getByRole('heading', { name: 'Chord Transition' }).waitFor();
   await page.getByText('No assessment has been recorded for this skill yet.').waitFor();
   await page.locator('#corrected-state').selectOption('stable');
-  await page.locator('#correction-note').fill('I feel confident, but this is not assessed.');
+  await page
+    .locator('#correction-note')
+    .fill('I feel confident, but this is not assessed.');
   await page.getByRole('button', { name: 'Save correction' }).click();
-  await page.getByRole('alert').filter({ hasText: 'Stable mastery requires the latest assessment' }).waitFor();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Stable mastery requires the latest assessment' })
+    .waitFor();
   await page.locator('#corrected-state').selectOption('practising');
-  await page.locator('#correction-note').fill('I can change between these chords slowly, but not reliably at tempo.');
+  await page
+    .locator('#correction-note')
+    .fill('I can change between these chords slowly, but not reliably at tempo.');
   await page.getByRole('button', { name: 'Save correction' }).click();
-  await page.getByRole('status').filter({ hasText: 'Your correction has been saved on this device.' }).waitFor();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'Your correction has been saved on this device.' })
+    .waitFor();
   const correctedSnapshot = await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
@@ -1088,12 +1104,17 @@ try {
       request.onerror = () => reject(request.error);
     });
     const learnerId = await new Promise((resolve, reject) => {
-      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
       request.onsuccess = () => resolve(request.result?.value);
       request.onerror = () => reject(request.error);
     });
     const row = await new Promise((resolve, reject) => {
-      const request = database.transaction('skillMastery').objectStore('skillMastery')
+      const request = database
+        .transaction('skillMastery')
+        .objectStore('skillMastery')
         .get([learnerId, 'curriculum-v1', 'chord-transition']);
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
@@ -1107,7 +1128,9 @@ try {
     correctedSnapshot.correctionNote,
     'I can change between these chords slowly, but not reliably at tempo.'
   );
-  await page.getByRole('button', { name: 'Alternate Picking' }).click();
+  await page
+    .getByRole('button', { name: 'Alternate Picking' })
+    .click();
   await page.getByText('The latest assessment was passed.').waitFor();
 
   assert.deepEqual(
