@@ -21,8 +21,6 @@ export function waitForPlaybackCompletion(
   }
 
   return new Promise((resolve) => {
-    let timeout: ReturnType<typeof setTimeout>;
-
     const cleanup = () => {
       signal.removeEventListener('abort', abort);
     };
@@ -32,12 +30,12 @@ export function waitForPlaybackCompletion(
       resolve();
     };
 
+    const timeout = setTimeout(finish, durationMilliseconds);
+
     const abort = () => {
       clearTimeout(timeout);
       finish();
     };
-
-    timeout = setTimeout(finish, durationMilliseconds);
     signal.addEventListener('abort', abort, { once: true });
 
     // Handle an abort that occurs between the initial check and listener setup.
