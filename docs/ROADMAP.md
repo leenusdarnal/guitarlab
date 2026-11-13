@@ -94,29 +94,36 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 - [x] Chord diagrams and chord library (PR #46).
 - [x] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
 - [x] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
-- [ ] Chromatic tuner with explicit microphone permission.
+- [ ] Chromatic tuner with explicit microphone permission; tracked in [Issue #68](https://github.com/leenusdarnal/guitarlab/issues/68) after shared audio and pitch-detection design.
 
 PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard explorer, open-chord library, alternating chord-change observations and Web Audio metronome, with unit and browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
 
 ### M7 — Practice studio
 
-- [ ] Custom practice routines.
-- [ ] Session timer and exercise sequence with browser acceptance.
-- [ ] Practice journal and session history.
-- [ ] Tempo and repetition tracking with accuracy-first tempo ladders.
+- [ ] Custom practice routines and reusable exercise sequences.
+- [x] Local session lifecycle, timer, pause/resume and recovery (PRs #50–51).
+- [x] Practice observations, exercise logging, reflection and next target (PRs #56–57).
+- [x] Searchable/filterable session history (PR #58).
+- [x] Explainable skill states and learner corrections with provenance (PR #59).
+- [ ] Accuracy-first tempo ladders and richer per-item performance trends.
+- [ ] Adaptive practice recommendations and learning analytics (planned in [Issue #69](https://github.com/leenusdarnal/guitarlab/issues/69)).
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
-- [ ] Quick session reflection and one next target with minimal friction.
-- [ ] Skill assessments and review scheduling.
+
+M7.1's core evidence loop is implemented in PRs #50–59. Do not infer mastery from time, lesson completion or repetitions. Adaptive selection and analytics are a distinct follow-up, not a reason to duplicate the existing skill-state engine.
 
 ### M8 — Musicianship and repertoire
 
-- [ ] Music theory reference and exercises.
-- [ ] Ear-training exercises.
-- [ ] Progressive scale, interval, triad and CAGED fretboard modes.
-- [ ] Song library and bookmark management.
-- [ ] TAB/notation viewer for permitted content.
+- [ ] Music theory reference and recall exercises (name / sound / use).
+- [x] Ear-training foundations: pulse, pitch and melodic contour (PR #61).
+- [x] Interval recognition: unison, minor third, major third and perfect fifth (PR #67).
+- [ ] Chord-movement listening and progressive interval coverage.
+- [ ] Progressive scale, triad, inversion and CAGED fretboard modes using the shared music-theory domain.
+- [ ] Song library, bookmarks, section structure and practice targets.
+- [ ] TAB/notation viewer only for original, public-domain or properly licensed content.
 - [ ] Song section loops and practice targets.
 - [ ] Optional Midee MIDI-visualiser reference link after licence and mobile usability recheck.
+
+PR #61 and PR #67 deliver the first local, generated-audio listening exercises. Theory recall, broader interval coverage, connected fretboard theory and the copyright-safe repertoire workspace remain open.
 
 ### M9 — Release hardening
 
@@ -124,10 +131,14 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 - [ ] Accessibility and physical-device mobile usability audit (automated responsive/offline viewport coverage is not a substitute).
 - [ ] Complete security, CSP and privacy review; baseline response-security headers and storage durability controls are implemented (PR #36).
 - [x] Automated Chromium backup/restore/rollback/reset verification (PR #42); [ ] physical-device backup/restore verification.
-- [ ] Performance and reliability checks.
+- [ ] Cross-browser audio timing, lifecycle and interaction acceptance (in addition to existing Chromium coverage).
+- [ ] Performance and reliability checks, including audio startup/stop and resource cleanup.
+- [ ] Third-party dependency and licence register; review all optional integrations before adoption.
 - [x] Curriculum validator integrated into the main application CI.
 - [ ] Explicit Cloudflare preview deployment and browser-level verification.
 - [ ] Private production deployment, smoke tests and rollback procedure.
+
+Release hardening remains open under [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18). No production deployment is authorised by this roadmap.
 
 ## M7 implementation note (2026-11-12)
 

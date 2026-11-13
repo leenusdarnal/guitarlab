@@ -194,11 +194,13 @@ Use wrangler.jsonc with explicit environment-specific bindings. Local and previe
 
 ## 8. Audio capability boundaries
 
-- Metronome and reference tones use Web Audio API.
-- Tuner begins with single-note pitch estimation, confidence display and reference tone.
-- Ear training uses generated tones and user responses.
-- Request microphone permission only when the learner starts a tuner/recording feature.
-- Handle permission denial, unsupported APIs, noisy input and silence.
+- Metronome, reference tones and ear-training examples use the Web Audio API and remain locally generated.
+- Reuse a shared browser audio-session lifecycle where it removes duplicated AudioContext creation, scheduling, stop and disposal logic; keep feature-specific exercise logic in its domain module.
+- Microphone input is opt-in. Request permission only after a clear learner action and only for a feature that needs capture.
+- Process microphone samples locally by default. Do not upload, persist or log raw audio or microphone-derived personal data.
+- Single-note pitch detection must expose confidence, reject silence/noisy input, and track stable notes to avoid repeated detections from one sustained note.
+- Unsupported APIs and denied permissions must produce safe, accessible fallback states; they must not block non-microphone learning tools.
+- Validate pitch detection against deterministic synthetic signals and representative real guitar recordings. Document device/environment limits and avoid unsupported accuracy claims.
 - Automatic polyphonic chord recognition and objective performance grading remain out of scope until validated on representative instruments, devices and environments.
 
 ## 9. Quality, observability and delivery
@@ -223,7 +225,7 @@ Use structured, privacy-safe logs with request IDs and error categories. Never l
 | M2 | D1, Drizzle, migrations, validation, repository interfaces | Fresh DB migration and repository tests pass |
 | M3–M4 | Dashboard, curriculum and lesson engine | Resume and progress flows work with local persistence |
 | M5 | IndexedDB, outbox, export/restore, optional auth/sync | Offline/reconnect and idempotent import tests pass |
-| M6–M8 | Audio and music feature modules | Accuracy, accessibility and permission tests pass |
+| M6–M8 | Audio and music feature modules | Accuracy, accessibility, permission, content-rights and cross-browser tests pass |
 | M9 | PWA, security, performance and production deployment | Release checklist and smoke tests pass |
 
 ## 11. Explicit non-goals and accepted trade-offs
