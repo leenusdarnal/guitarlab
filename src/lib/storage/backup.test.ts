@@ -150,7 +150,8 @@ describe('learner backup contract', () => {
 
   it('keeps learner correction provenance in new backups and accepts legacy mastery rows', () => {
     const legacy = makeBackup();
-    legacy.records.skillMastery = [{
+    legacy.records.skillMastery = [
+      {
       learnerId,
       curriculumReleaseId: 'curriculum-v1',
       skillId: 'alternate-picking',
@@ -160,12 +161,14 @@ describe('learner backup contract', () => {
       lastAssessmentId: null,
       lastAssessedAt: null,
       nextReviewAt: null,
-      updatedAt: 1_800_000_000_000
-    }];
+        updatedAt: 1_800_000_000_000
+      }
+    ];
     expect(parseLearnerBackup(legacy)).toMatchObject({ success: true });
 
     const corrected = makeBackup();
-    corrected.records.skillMastery = [{
+    corrected.records.skillMastery = [
+      {
       learnerId,
       curriculumReleaseId: 'curriculum-v1',
       skillId: 'alternate-picking',
@@ -177,17 +180,20 @@ describe('learner backup contract', () => {
       nextReviewAt: null,
       decisionSource: 'learner',
       correctionNote: 'I can play it slowly but not consistently yet.',
-      updatedAt: 1_800_000_000_000
-    }];
+        updatedAt: 1_800_000_000_000
+      }
+    ];
     const parsed = parseLearnerBackupJson(JSON.stringify(corrected));
     expect(parsed).toMatchObject({
       success: true,
       data: {
         records: {
-          skillMastery: [{
-            decisionSource: 'learner',
-            correctionNote: 'I can play it slowly but not consistently yet.'
-          }]
+          skillMastery: [
+            {
+              decisionSource: 'learner',
+              correctionNote: 'I can play it slowly but not consistently yet.'
+            }
+          ]
         }
       }
     });
