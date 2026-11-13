@@ -78,9 +78,13 @@ describe('estimatePitch', () => {
   });
 
   it('supports a lower guitar-frequency bound when the window is long enough', () => {
-    const result = estimatePitch(makeTone(55, 0.6, SAMPLE_RATE, 8_192), SAMPLE_RATE, {
-      minFrequencyHz: 40
-    });
+    const result = estimatePitch(
+      makeTone(55, 0.6, SAMPLE_RATE, 8_192),
+      SAMPLE_RATE,
+      {
+        minFrequencyHz: 40
+      }
+    );
 
     expect(result.status).toBe('detected');
     if (result.status !== 'detected') return;
