@@ -277,6 +277,23 @@ try {
     1,
     'Tuner should request microphone permission once after explicit Start'
   );
+  // The guided note-recognition exercise also defers microphone permission.
+  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: /Open exercise/ }).click();
+  await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    1,
+    'Note-recognition must not request microphone permission on page load'
+  );
+  await page.getByRole('button', { name: 'Start exercise' }).click();
+  await page.getByRole('alert').getByText(/Microphone permission was denied/).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    2,
+    'Note-recognition should request microphone permission once after explicit Start'
+  );
+
   await page.setViewportSize({ width: 390, height: 844 });
   const tunerDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
