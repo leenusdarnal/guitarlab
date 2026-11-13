@@ -186,14 +186,15 @@ export class MicrophoneInput {
       }
 
       const source = context.createMediaStreamSource(stream);
+      this.stream = stream;
+      this.source = source;
+
       const analyser = context.createAnalyser();
+      this.analyser = analyser;
       analyser.fftSize = this.fftSize;
       analyser.smoothingTimeConstant = 0;
       source.connect(analyser);
 
-      this.stream = stream;
-      this.source = source;
-      this.analyser = analyser;
       for (const track of stream.getTracks()) {
         const onEnded = () => {
           if (this.state === 'running') void this.stop();
@@ -205,8 +206,13 @@ export class MicrophoneInput {
     } catch (error) {
       // Promise.all may reject before getUserMedia settles. Stop a late stream
       // as soon as the browser eventually returns it.
-      if (stream) stopStreamTracks(stream);
-      else void streamPromise.then(stopStreamTracks, () => undefined);
+      if (stream && this.stream === stream) {
+        this.releaseCapture();
+      } else if (stream) {
+        stopStreamTracks(stream);
+      } else {
+        void streamPromise.then(stopStreamTracks, () => undefined);
+      }
       if (this.session === session) this.session = null;
       if (generation === this.generation && this.state !== 'disposed') {
         this.state = 'idle';
