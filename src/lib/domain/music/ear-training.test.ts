@@ -51,6 +51,28 @@ describe('ear-training exercise model', () => {
     expect(new Set(level.tones.map((tone) => tone.frequencyHz)).size).toBe(1);
   });
 
+  it('creates reproducible interval recognition challenges', () => {
+    const expected = [
+      ['unison', 440],
+      ['minor_third', 440 * Math.pow(2, 3 / 12)],
+      ['major_third', 440 * Math.pow(2, 4 / 12)],
+      ['perfect_fifth', 440 * Math.pow(2, 7 / 12)]
+    ] as const;
+    expected.forEach(([answer, secondFrequency], sequence) => {
+      const exercise = createEarTrainingExercise('interval', sequence);
+      expect(exercise.answer).toBe(answer);
+      expect(exercise.tones).toHaveLength(2);
+      expect(exercise.tones[0].frequencyHz).toBe(440);
+      expect(exercise.tones[1].frequencyHz).toBeCloseTo(secondFrequency);
+      expect(exercise.choices.map((choice) => choice.value)).toEqual([
+        'unison',
+        'minor_third',
+        'major_third',
+        'perfect_fifth'
+      ]);
+    });
+  });
+
   it('rejects invalid sequence values and unsupported exercise kinds', () => {
     expect(() => createEarTrainingExercise('pulse', -1)).toThrow(RangeError);
     expect(() => createEarTrainingExercise('pitch', 1.5)).toThrow(RangeError);
