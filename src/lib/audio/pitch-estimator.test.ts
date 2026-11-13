@@ -56,13 +56,10 @@ describe('estimatePitch', () => {
   });
 
   it('treats deterministic broadband noise as uncertain', () => {
-    const samples = Float32Array.from(
-      { length: WINDOW_SIZE },
-      (_, index) => {
-        const value = Math.sin(index * 12.9898) * 43_758.5453;
-        return ((value - Math.floor(value)) * 2 - 1) * 0.3;
-      }
-    );
+    const samples = Float32Array.from({ length: WINDOW_SIZE }, (_, index) => {
+      const value = Math.sin(index * 12.9898) * 43_758.5453;
+      return ((value - Math.floor(value)) * 2 - 1) * 0.3;
+    });
 
     expect(estimatePitch(samples, SAMPLE_RATE).status).toBe('uncertain');
   });
@@ -77,7 +74,7 @@ describe('estimatePitch', () => {
     const samples = makeTone(440);
     samples[100] = Number.NaN;
 
-    expect(estimatePitch(samples).status).toBe('uncertain');
+    expect(estimatePitch(samples, SAMPLE_RATE).status).toBe('uncertain');
   });
 
   it('supports a lower guitar-frequency bound when the window is long enough', () => {
