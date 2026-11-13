@@ -16,7 +16,7 @@ This is a justified opportunity for a small shared audio foundation, but not a r
 |---|---|---|---|
 | Metronome | `src/lib/audio/metronome.ts` — `WebAudioMetronome` | One context owned by each metronome instance; created lazily on start | Lookahead scheduler uses a 25 ms timer and 100 ms audio-clock window. `stop()` clears the timer and visibility listener. `dispose()` closes the owned context. Individual oscillator/gain nodes disconnect on `ended`. |
 | Reference tone | `src/lib/audio/metronome.ts` — `playReferenceTone()` | Creates a fresh context for each call | Schedules one oscillator/gain pair, waits for `ended`, disconnects nodes and closes the context in `finally`. |
-| Ear training | `src/routes/tools/ear-training/+page.svelte` — `playExercise()` | One context retained by the page component and lazily created after learner action | Schedules each exercise tone using oscillator/gain pairs; nodes disconnect on `ended`. The context closes in Svelte `onDestroy`. A browser timer keeps the playing state until the final tone should have ended. |
+| Ear training | `src/routes/tools/ear-training/+page.svelte` — `playExercise()` | One context retained by the page component and lazily created after learner action | Schedules each exercise tone using oscillator/gain pairs; nodes disconnect on `ended`. The context closes in Svelte `onDestroy`. An abortable completion wait is cleared on teardown; hiding the document aborts playback and closes the page-owned context. The next explicit play creates a fresh context. |
 | Microphone/tuner | No implementation found in the current repository tree | None | No `getUserMedia`, `MediaStream`, analyser or pitch detector found in the inspected audio feature files/tree. |
 
 ## Findings and risks
@@ -37,15 +37,15 @@ This is a justified opportunity for a small shared audio foundation, but not a r
 ### 3. Stop and teardown semantics need explicit tests
 
 - Metronome `stop()` stops future scheduling but already queued lookahead oscillators can still play for their short scheduled duration. Confirm and document the intended maximum tail before deciding whether active source nodes need explicit cancellation.
-- Ear-training `onDestroy` closes its context, but the completion `window.setTimeout` is not explicitly cancelled. Add a lifecycle test and make sure unmount cannot leave stale UI work or unhandled errors.
-- Ear training does not currently add a page-visibility stop policy. Decide whether hidden-tab playback should stop, matching the metronome, and test the chosen behaviour.
+- Ear-training teardown now aborts its completion wait before closing the page-owned context, so unmount does not leave the completion timer pending or update stale component state.
+- Ear training now follows the metronome's hidden-tab policy: a `visibilitychange` to `hidden` aborts playback, closes the page-owned context and clears the playing state. A later learner action creates a fresh context.
 - Reference tone closes its one-shot context in `finally`, which is a useful ownership pattern to preserve.
 
 ### 4. Existing test coverage is incomplete at the Web Audio boundary
 
 - `src/lib/audio/metronome.test.ts` covers tempo/meter validation and invalid reference-tone arguments.
-- Browser acceptance verifies metronome start/stop, reference-tone playback, ear-training playback and answers.
-- Current unit tests do not exercise AudioContext creation/resume/close, scheduled source cancellation, context failure, visibility changes or ear-training teardown.
+- Browser acceptance verifies metronome start/stop, reference-tone playback, ear-training playback and answers; it now also covers ear-training interruption on tab hide and route teardown.
+- `src/lib/audio/playback-lifecycle.test.ts` verifies normal completion, abort-driven timer cleanup, already-aborted signals and invalid durations. Actual AudioContext creation/resume/close remains covered by the metronome tests only; reference-tone and ear-training Web Audio context boundaries still need dedicated deterministic seams.
 - Add deterministic fake-Web-Audio tests before refactoring; retain browser acceptance for actual browser integration.
 
 ### 5. Microphone capability is a new feature, not a refactor of existing capture
