@@ -153,13 +153,13 @@ try {
   await page.getByText('Not quite — give it another listen.').waitFor();
   await page.getByRole('button', { name: 'Try again' }).click();
   await page.getByRole('button', { name: 'Steady pulse' }).click();
-  await page.getByText('That's right.').waitFor();
+  await page.getByText("That's right.").waitFor();
   await page.getByRole('button', { name: 'Next exercise' }).click();
 
   await page.getByRole('button', { name: 'High / low' }).click();
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'First note' }).click();
-  await page.getByText('That's right.').waitFor();
+  await page.getByText("That's right.").waitFor();
   await page.getByRole('button', { name: 'Next exercise' }).click();
 
   await page.getByRole('button', { name: 'Melodic contour' }).click();
