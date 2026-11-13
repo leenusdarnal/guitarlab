@@ -39,10 +39,7 @@
       "title": "Meet your guitar",
       "focus": "Setup, posture, string names and tuning",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "instrument.tuning",
-        "instrument.posture"
-      ]
+      "skillIds": ["instrument.tuning", "instrument.posture"]
     },
     {
       "id": "y1-w02-lesson",
@@ -50,10 +47,7 @@
       "title": "Clear single notes",
       "focus": "Fretting-hand basics, clean tone and relaxed pressure",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ]
+      "skillIds": ["harmony.triads", "harmony.voice-leading"]
     },
     {
       "id": "y1-w03-lesson",
@@ -61,9 +55,7 @@
       "title": "Read guitar maps",
       "focus": "Chord-box orientation, TAB lines and fret numbers",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "notation.tab"
-      ]
+      "skillIds": ["notation.tab"]
     },
     {
       "id": "y1-w04-lesson",
@@ -71,9 +63,7 @@
       "title": "First chord shapes",
       "focus": "Em and G; checking each string",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w05-lesson",
@@ -81,9 +71,7 @@
       "title": "Open chords A, D and E",
       "focus": "Three essential open-chord shapes",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w06-lesson",
@@ -91,10 +79,7 @@
       "title": "First complete chord loop",
       "focus": "Chord changes with pulse and a first musical phrase",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.transitions"
-      ]
+      "skillIds": ["harmony.open-chords", "harmony.transitions"]
     },
     {
       "id": "y1-w07-lesson",
@@ -102,11 +87,7 @@
       "title": "Strum in time",
       "focus": "Downstrokes, upstrokes and subdivisions",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ]
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"]
     },
     {
       "id": "y1-w08-lesson",
@@ -114,9 +95,7 @@
       "title": "Optional notation: strings 1 and 2",
       "focus": "Parallel track: first-position notes on high E and B",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "notation.tab"
-      ]
+      "skillIds": ["notation.tab"]
     },
     {
       "id": "y1-w09-lesson",
@@ -124,10 +103,7 @@
       "title": "Add C, Am and Dm",
       "focus": "Major/minor open chords and smooth transitions",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ]
+      "skillIds": ["harmony.triads", "harmony.voice-leading"]
     },
     {
       "id": "y1-w10-lesson",
@@ -135,10 +111,7 @@
       "title": "Make rhythm musical",
       "focus": "Accents, rests and dynamics",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision"
-      ]
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision"]
     },
     {
       "id": "y1-w11-lesson",
@@ -146,10 +119,7 @@
       "title": "Your first music map",
       "focus": "Open-string map, semitone steps and first fretboard landmarks",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ]
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"]
     },
     {
       "id": "y1-w12-lesson",
@@ -157,11 +127,7 @@
       "title": "Quarter 1 review and recording",
       "focus": "Consolidate tuning, reading, open chords and pulse",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w13-lesson",
@@ -169,9 +135,7 @@
       "title": "Optional notation: strings 3 and 4",
       "focus": "Parallel track: extend staff-reading to G and D strings",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "notation.tab"
-      ]
+      "skillIds": ["notation.tab"]
     },
     {
       "id": "y1-w14-lesson",
@@ -179,9 +143,7 @@
       "title": "Optional notation: low E and A landmarks",
       "focus": "Parallel track: low-string fretboard landmarks",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "notation.tab"
-      ]
+      "skillIds": ["notation.tab"]
     },
     {
       "id": "y1-w15-lesson",
@@ -189,10 +151,7 @@
       "title": "Pick control and clean tone",
       "focus": "Alternate picking and string crossing",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "technique.alternate-picking",
-        "technique.string-crossing"
-      ]
+      "skillIds": ["technique.alternate-picking", "technique.string-crossing"]
     },
     {
       "id": "y1-w16-lesson",
@@ -200,10 +159,7 @@
       "title": "Fingerstyle foundation",
       "focus": "Thumb and fingers as separate roles",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ]
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"]
     },
     {
       "id": "y1-w17-lesson",
@@ -211,10 +167,7 @@
       "title": "Build the major scale",
       "focus": "Whole-step/half-step formula and a small C major pattern",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ]
+      "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
     {
       "id": "y1-w18-lesson",
@@ -222,9 +175,7 @@
       "title": "Shell chords: roots and guide tones",
       "focus": "Three-note chord grips as a bridge to movable chords",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w19-lesson",
@@ -232,10 +183,7 @@
       "title": "Your first 12-bar blues",
       "focus": "Blues form, dominant seventh colour and groove",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ]
+      "skillIds": ["lead.pentatonic", "lead.phrasing"]
     },
     {
       "id": "y1-w20-lesson",
@@ -243,10 +191,7 @@
       "title": "Play with expression",
       "focus": "Slides, bends, dynamics and phrasing",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ]
+      "skillIds": ["harmony.triads", "harmony.voice-leading"]
     },
     {
       "id": "y1-w21-lesson",
@@ -254,10 +199,7 @@
       "title": "Movable power chords",
       "focus": "Root-5 shapes, muting and rock rhythm",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.power-chords"
-      ]
+      "skillIds": ["harmony.open-chords", "harmony.power-chords"]
     },
     {
       "id": "y1-w22-lesson",
@@ -265,10 +207,7 @@
       "title": "Approach barre chords safely",
       "focus": "Partial barre shape and efficient pressure",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.barre-chords"
-      ]
+      "skillIds": ["harmony.open-chords", "harmony.barre-chords"]
     },
     {
       "id": "y1-w23-lesson",
@@ -276,10 +215,7 @@
       "title": "Minor pentatonic box 1",
       "focus": "Map the five notes and find the roots",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ]
+      "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
     {
       "id": "y1-w24-lesson",
@@ -287,11 +223,7 @@
       "title": "Half-year playing test",
       "focus": "Integrate chords, rhythm, melody and recording",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w25-lesson",
@@ -299,11 +231,7 @@
       "title": "Find roots and octaves",
       "focus": "Fretboard navigation beyond open position",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes",
-        "fretboard.octaves"
-      ]
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes", "fretboard.octaves"]
     },
     {
       "id": "y1-w26-lesson",
@@ -311,10 +239,7 @@
       "title": "Triads on the top strings",
       "focus": "Compact voicings and inversions",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.triads"
-      ]
+      "skillIds": ["harmony.open-chords", "harmony.triads"]
     },
     {
       "id": "y1-w27-lesson",
@@ -322,9 +247,7 @@
       "title": "Chords in keys",
       "focus": "Roman numerals and diatonic chord families",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w28-lesson",
@@ -332,10 +255,7 @@
       "title": "Capo and transposition",
       "focus": "Move a song to a comfortable singing key",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ]
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"]
     },
     {
       "id": "y1-w29-lesson",
@@ -343,10 +263,7 @@
       "title": "Suspended and seventh chords",
       "focus": "Add colour tones without losing pulse",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.seventh-chords"
-      ]
+      "skillIds": ["harmony.open-chords", "harmony.seventh-chords"]
     },
     {
       "id": "y1-w30-lesson",
@@ -354,10 +271,7 @@
       "title": "Sixteenth-note rhythm",
       "focus": "Count subdivisions and control accents",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision"
-      ]
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision"]
     },
     {
       "id": "y1-w31-lesson",
@@ -365,11 +279,7 @@
       "title": "Hammer-ons and pull-offs",
       "focus": "Legato notes with consistent volume",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "technique.alternate-picking",
-        "technique.string-crossing",
-        "technique.legato"
-      ]
+      "skillIds": ["technique.alternate-picking", "technique.string-crossing", "technique.legato"]
     },
     {
       "id": "y1-w32-lesson",
@@ -377,11 +287,7 @@
       "title": "Quarter 2 review",
       "focus": "Revisit notes, chords, fingerstyle, scales and blues",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w33-lesson",
@@ -389,10 +295,7 @@
       "title": "Major pentatonic and phrasing",
       "focus": "Contrast major and minor pentatonic colour",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ]
+      "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
     {
       "id": "y1-w34-lesson",
@@ -400,10 +303,7 @@
       "title": "Improvise with motifs",
       "focus": "Repeat, vary and resolve short melodic ideas",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ]
+      "skillIds": ["arrangement.song-form", "lead.phrasing"]
     },
     {
       "id": "y1-w35-lesson",
@@ -411,9 +311,7 @@
       "title": "Arpeggios and chord tones",
       "focus": "Outline harmony with notes of each chord",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w36-lesson",
@@ -421,10 +319,7 @@
       "title": "Three notes per string",
       "focus": "Extend the scale beyond first position",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ]
+      "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
     {
       "id": "y1-w37-lesson",
@@ -432,12 +327,7 @@
       "title": "Learn a melody by ear",
       "focus": "Listen, sing, find and verify notes",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "ear.pitch",
-        "ear.rhythm",
-        "ear.melody-transcription",
-        "ear.intervals"
-      ]
+      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"]
     },
     {
       "id": "y1-w38-lesson",
@@ -445,10 +335,7 @@
       "title": "Songwriting and arrangement",
       "focus": "Create an original 4- or 8-bar section",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ]
+      "skillIds": ["arrangement.song-form", "lead.phrasing"]
     },
     {
       "id": "y1-w39-lesson",
@@ -456,10 +343,7 @@
       "title": "Blues turnarounds",
       "focus": "End a blues chorus and lead into the next cycle",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ]
+      "skillIds": ["lead.pentatonic", "lead.phrasing"]
     },
     {
       "id": "y1-w40-lesson",
@@ -467,11 +351,7 @@
       "title": "Rock rhythm and muting",
       "focus": "Palm muting, power-chord changes and silence",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.muting"
-      ]
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.muting"]
     },
     {
       "id": "y1-w41-lesson",
@@ -479,9 +359,7 @@
       "title": "Jazz chord grips",
       "focus": "Basic maj7, m7 and dominant 7 colour",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w42-lesson",
@@ -489,9 +367,7 @@
       "title": "The ii-V-I connection",
       "focus": "Connect jazz chords with voice leading",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w43-lesson",
@@ -499,11 +375,7 @@
       "title": "Comping styles",
       "focus": "Change the accompaniment rhythm without changing harmony",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ]
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"]
     },
     {
       "id": "y1-w44-lesson",
@@ -511,11 +383,7 @@
       "title": "Quarter 3 review",
       "focus": "Retest barre, triads, ear skills, 16ths and lead phrasing",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w45-lesson",
@@ -523,9 +391,7 @@
       "title": "Sight-read across strings",
       "focus": "Read pitch and rhythm together",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "notation.tab"
-      ]
+      "skillIds": ["notation.tab"]
     },
     {
       "id": "y1-w46-lesson",
@@ -533,10 +399,7 @@
       "title": "Move between positions",
       "focus": "Connect two scale areas using a guide tone",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ]
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"]
     },
     {
       "id": "y1-w47-lesson",
@@ -544,9 +407,7 @@
       "title": "Chord melody basics",
       "focus": "Place melody notes above simple chord tones",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "harmony.open-chords"
-      ]
+      "skillIds": ["harmony.open-chords"]
     },
     {
       "id": "y1-w48-lesson",
@@ -554,10 +415,7 @@
       "title": "Compose a complete study",
       "focus": "Write an 8-bar piece with clear form",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ]
+      "skillIds": ["arrangement.song-form", "lead.phrasing"]
     },
     {
       "id": "y1-w49-lesson",
@@ -565,10 +423,7 @@
       "title": "Dynamics and articulation",
       "focus": "Control volume, note length and phrase endings",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ]
+      "skillIds": ["arrangement.song-form", "lead.phrasing"]
     },
     {
       "id": "y1-w50-lesson",
@@ -576,11 +431,7 @@
       "title": "Repertoire polishing",
       "focus": "Bring one complete piece close to performance-ready",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w51-lesson",
@@ -588,11 +439,7 @@
       "title": "Mock performance and transcription",
       "focus": "Perform, listen back and reproduce one short phrase",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     },
     {
       "id": "y1-w52-lesson",
@@ -600,11 +447,7 @@
       "title": "Year-end playing test",
       "focus": "Demonstrate rhythm, chords, reading, lead/fingerstyle and musicianship",
       "estimatedMinutes": 40,
-      "skillIds": [
-        "repertoire.song-learning",
-        "performance.recording",
-        "performance.recovery"
-      ]
+      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
     }
   ]
 }
