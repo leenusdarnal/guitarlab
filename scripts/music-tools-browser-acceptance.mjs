@@ -291,7 +291,7 @@ try {
     .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    2,
+    1,
     'A missing device should be reported after one explicit capture request'
   );
 
@@ -310,7 +310,7 @@ try {
     .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    2,
+    0,
     'Unsupported microphone APIs must not invoke getUserMedia'
   );
 
@@ -336,7 +336,7 @@ try {
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    2,
+    0,
     'Note-recognition must not request microphone permission on page load'
   );
   await page.getByRole('button', { name: 'Start exercise' }).click();
@@ -346,7 +346,7 @@ try {
     .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    3,
+    1,
     'Note-recognition should request microphone permission once after explicit Start'
   );
 
