@@ -167,7 +167,9 @@ function validateOptions(
     options.maxFrequencyHz <= options.minFrequencyHz ||
     options.maxFrequencyHz >= sampleRate / 2
   ) {
-    throw new RangeError('Pitch frequency bounds must be valid and below Nyquist.');
+    throw new RangeError(
+      'Pitch frequency bounds must be valid and below Nyquist.'
+    );
   }
   if (!Number.isFinite(options.minRms) || options.minRms < 0) {
     throw new RangeError('Minimum RMS must be a finite non-negative number.');
