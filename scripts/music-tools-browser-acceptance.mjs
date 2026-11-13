@@ -148,7 +148,9 @@ try {
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).click();
-  await page.getByRole('button', { name: 'Listen to example' }).waitFor({ state: 'visible' });
+  await page
+    .getByRole('button', { name: 'Listen to example' })
+    .waitFor({ state: 'visible' });
   await page.getByRole('button', { name: 'Uneven pulse' }).click();
   await page.getByText('Not quite — give it another listen.').waitFor();
   await page.getByRole('button', { name: 'Try again' }).click();
