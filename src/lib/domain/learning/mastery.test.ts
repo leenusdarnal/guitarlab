@@ -61,5 +61,4 @@ describe('skill mastery state validation', () => {
       }).success
     ).toBe(false);
   });
-
 });
