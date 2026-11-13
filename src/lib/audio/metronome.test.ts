@@ -287,7 +287,6 @@ describe('playReferenceTone audio lifecycle', () => {
   });
 
 
-
   it('propagates AudioContext construction failures', async () => {
     class ThrowingAudioContext {
       constructor() {
@@ -371,7 +370,9 @@ describe('playReferenceTone audio lifecycle', () => {
 
     const playback = playReferenceTone(440, 500);
     const context = FakeAudioContext.instances[0];
-    await expect(playback).rejects.toThrow('destination connection failed');
+    await expect(playback).rejects.toThrow(
+      'destination connection failed'
+    );
     expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
     expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
     expect(context.close).toHaveBeenCalledOnce();
@@ -418,5 +419,4 @@ describe('playReferenceTone audio lifecycle', () => {
     expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
     expect(context.close).toHaveBeenCalledOnce();
   });
-
 });
