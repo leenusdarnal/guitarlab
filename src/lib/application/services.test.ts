@@ -22,6 +22,7 @@ import type {
 } from '../repositories/contracts';
 import {
   completeLesson,
+  correctSkillMasteryState,
   createEmptyLearnerProfile,
   finishPracticeSession,
   pausePracticeSession,
@@ -607,6 +608,82 @@ describe('M2.2 application service boundaries', () => {
     expect(snapshot.state).toBe('stable');
     expect(snapshot.evidenceCount).toBe(3);
     expect(snapshot.lastAssessmentId).toBe(harness.attempts[2].id);
+  });
+
+  it('persists learner-corrected skill state with an explanation', async () => {
+    await recordAssessmentAttempt(
+      {
+        learnerId,
+        submission: {
+          curriculumReleaseId: releaseId,
+          skillId,
+          lessonId,
+          assessmentKind: 'checkpoint',
+          evidenceType: 'observed_or_self_checked',
+          outcome: 'passed',
+          score: null,
+          evidenceSummary: null,
+          evidence: {}
+        }
+      },
+      {
+        curriculum: harness.curriculumRepository,
+        skills: harness.skillRepository,
+        assessments: harness.assessmentRepository,
+        runtime: harness.runtime
+      }
+    );
+
+    const corrected = await correctSkillMasteryState(
+      {
+        learnerId,
+        releaseId,
+        skillId,
+        state: 'practising',
+        confidence: 55,
+        nextReviewAt: null,
+        note: 'I can pass slowly, but not yet at the target tempo.'
+      },
+      {
+        curriculum: harness.curriculumRepository,
+        skills: harness.skillRepository,
+        assessments: harness.assessmentRepository,
+        mastery: harness.masteryRepository,
+        runtime: harness.runtime
+      }
+    );
+
+    expect(corrected).toMatchObject({
+      state: 'practising',
+      decisionSource: 'learner',
+      correctionNote: 'I can pass slowly, but not yet at the target tempo.',
+      evidenceCount: 1,
+      lastAssessmentId: harness.attempts[0].id
+    });
+
+    await expect(
+      correctSkillMasteryState(
+        {
+          learnerId,
+          releaseId,
+          skillId,
+          state: 'stable',
+          confidence: 80,
+          nextReviewAt: null,
+          note: 'I feel confident.'
+        },
+        {
+          curriculum: harness.curriculumRepository,
+          skills: harness.skillRepository,
+          assessments: {
+            ...harness.assessmentRepository,
+            listBySkill: async () => []
+          },
+          mastery: harness.masteryRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(InvalidStateError);
   });
 
   it('appends validated exercise observations to an owned session without granting mastery', async () => {
