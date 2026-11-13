@@ -118,9 +118,11 @@ export class MicrophoneInput {
       return Promise.reject(normalizeMicrophoneError(error));
     }
 
-    const pending = this.open(streamPromise, session, generation).finally(() => {
-      if (this.startPromise === pending) this.startPromise = null;
-    });
+    const pending = this.open(streamPromise, session, generation).finally(
+      () => {
+        if (this.startPromise === pending) this.startPromise = null;
+      }
+    );
     this.startPromise = pending;
     return pending;
   }
