@@ -287,7 +287,10 @@ try {
     'Note-recognition must not request microphone permission on page load'
   );
   await page.getByRole('button', { name: 'Start exercise' }).click();
-  await page.getByRole('alert').getByText(/Microphone permission was denied/).waitFor();
+  await page
+    .getByRole('alert')
+    .getByText(/Microphone permission was denied/)
+    .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     2,
