@@ -33,12 +33,12 @@ const index = {
 };
 
 const serializedIndex = JSON.stringify(index, null, 2).replace(
-  /("skillIds": )\\[\\n([\\s\\S]*?)\\n\\s+\\]/g,
+  /("skillIds": )\[\n([\s\S]*?)\n\s+\]/g,
   (_match, property, values) =>
     property +
     '[' +
     values
-      .split('\\n')
+      .split('\n')
       .map((value) => value.trim().replace(/,$/, ''))
       .filter(Boolean)
       .join(', ') +
