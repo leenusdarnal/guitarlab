@@ -94,7 +94,7 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 - [x] Chord diagrams and chord library (PR #46).
 - [x] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
 - [x] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
-- [ ] Chromatic tuner with explicit microphone permission; tracked in [Issue #19](https://github.com/leenusdarnal/guitarlab/issues/19) after shared audio and pitch-detection design.
+- [ ] Chromatic tuner with explicit microphone permission; tracked in [Issue #68](https://github.com/leenusdarnal/guitarlab/issues/19) after shared audio and pitch-detection design.
 
 PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard explorer, open-chord library, alternating chord-change observations and Web Audio metronome, with unit and browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
 
@@ -106,7 +106,7 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 - [x] Searchable/filterable session history (PR #58).
 - [x] Explainable skill states and learner corrections with provenance (PR #59).
 - [ ] Accuracy-first tempo ladders and richer per-item performance trends.
-- [ ] Adaptive practice recommendations and learning analytics (planned in [Issue #20](https://github.com/leenusdarnal/guitarlab/issues/20)).
+- [ ] Adaptive practice recommendations and learning analytics (planned in [Issue #69](https://github.com/leenusdarnal/guitarlab/issues/20)).
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
 
 M7.1's core evidence loop is implemented in PRs #50–59. Do not infer mastery from time, lesson completion or repetitions. Adaptive selection and analytics are a distinct follow-up, not a reason to duplicate the existing skill-state engine.
