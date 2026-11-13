@@ -55,7 +55,9 @@ beforeEach(() => {
     now: () => now,
     newId: () => {
       sequence += 1;
-      return sequence === 1 ? evidenceId : `5d3b7a3e-7a5e-4a63-9e6b-0c4e9f2d8a1${sequence}`;
+      return sequence === 1
+        ? evidenceId
+        : `5d3b7a3e-7a5e-4a63-9e6b-0c4e9f2d8a1${sequence}`;
     }
   };
   practice = {
