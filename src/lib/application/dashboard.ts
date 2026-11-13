@@ -11,6 +11,8 @@ export type DashboardLesson = {
   title: string;
   focus: string;
   estimatedMinutes: number;
+  /** Explicit catalogue references authored on the lesson. */
+  skillIds?: string[];
 };
 
 export type DashboardPhase = {
