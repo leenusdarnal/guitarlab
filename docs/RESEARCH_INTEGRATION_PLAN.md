@@ -15,8 +15,8 @@ This document records decisions and sequencing. It does not claim that deferred 
 | Finding from comparable projects | GuitarLab decision | Integration point |
 |---|---|---|
 | Per-item accuracy, weak-item selection and difficulty adjustment | Adopt a small, explainable rules-based approach first; measure it before considering predictive models | M7 adaptive practice |
-| Stable pitch tracking, microphone session management and local audio processing | Adopt the engineering patterns, not copied code; add permission, noise and confidence handling | M6 audio capability / new Issue #19 |
-| FFT/chroma, silence rejection and confidence thresholds | Use as design/evaluation references; validate with synthetic signals and real guitar recordings before claiming accuracy | Issue #19 |
+| Stable pitch tracking, microphone session management and local audio processing | Adopt the engineering patterns, not copied code; add permission, noise and confidence handling | M6 audio capability / new Issue #68 |
+| FFT/chroma, silence rejection and confidence thresholds | Use as design/evaluation references; validate with synthetic signals and real guitar recordings before claiming accuracy | Issue #68 |
 | CAGED, triads, inversions and connected fretboard positions | Integrate through shared theory functions and progressive learning modes | M8 theory/fretboard |
 | Enharmonic spelling and theory consistency | Keep one canonical note/interval/scale/chord model | Shared music domain |
 | Cross-browser audio timing and interaction tests | Extend Playwright coverage across supported browsers and add audio lifecycle tests | M9 release quality |
@@ -118,7 +118,7 @@ A research finding is incorporated only when:
 - [Issue #16](https://github.com/leenusdarnal/guitarlab/issues/16) — M7.1 practice sessions/evidence loop.
 - [Issue #17](https://github.com/leenusdarnal/guitarlab/issues/17) — M8.1 ear training, theory and repertoire.
 - [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18) — M9.1 release hardening.
-- Issue #19 — shared audio and microphone pitch recognition.
-- Issue #20 — adaptive practice recommendations and learning analytics.
+- Issue #68 — shared audio and microphone pitch recognition.
+- Issue #69 — adaptive practice recommendations and learning analytics.
 
 GitHub Issues and merged PRs are the execution records. This document is the research-decision record, not a substitute for current code or CI evidence.
