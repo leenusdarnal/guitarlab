@@ -10,7 +10,6 @@
     "dev": "vite dev",
     "build": "wrangler types && vite build",
     "preview": "wrangler dev",
-    "deploy": "wrangler deploy",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\" \"scripts/accessibility-browser-acceptance.mjs\" \"scripts/install-git-hooks.mjs\"",
@@ -30,7 +29,9 @@
     "test:music-tools-browser": "node scripts/music-tools-browser-acceptance.mjs",
     "curriculum:index": "node scripts/generate-curriculum-index.mjs",
     "test:accessibility": "node scripts/accessibility-browser-acceptance.mjs",
-    "prepare": "node scripts/install-git-hooks.mjs"
+    "prepare": "node scripts/install-git-hooks.mjs",
+    "deploy:preview:dry-run": "wrangler deploy --config wrangler.preview.jsonc --dry-run",
+    "deploy:preview": "wrangler deploy --config wrangler.preview.jsonc"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
