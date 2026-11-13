@@ -62,7 +62,7 @@ const NOTE_NAMES = [
  * switch/release hysteresis. It does not retain audio samples.
  */
 export class StableNoteTracker {
-  private readonly options: typeof DEFAULT_OPTIONS;
+  private readonly options: Required<StableNoteTrackerOptions>;
   private activeNote: StableNote | null = null;
   private candidateMidiNote: number | null = null;
   private candidateFrames = 0;
