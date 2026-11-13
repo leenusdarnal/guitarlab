@@ -236,7 +236,9 @@ try {
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'Playing example…' }).waitFor();
   await page.getByRole('link', { name: 'Practice tools' }).click();
-  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).waitFor();
