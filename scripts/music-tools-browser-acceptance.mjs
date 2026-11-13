@@ -182,6 +182,28 @@ try {
   await page.getByRole('button', { name: 'Rising' }).click();
   await page.getByText("That's right.").waitFor();
 
+  await page.getByRole('button', { name: 'Intervals' }).click();
+  await page.getByRole('heading', { name: 'How far apart were the two notes?' }).waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Same note (unison)' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Minor third' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Major third' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Perfect fifth' }).click();
+  await page.getByText("That's right.").waitFor();
+
   await page.setViewportSize({ width: 390, height: 844 });
   const earTrainingDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
