@@ -48,6 +48,21 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  await page.addInitScript(() => {
+    window.__guitarLabMicRequests = 0;
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: async () => {
+          window.__guitarLabMicRequests += 1;
+          throw new DOMException(
+            'Permission denied for acceptance test',
+            'NotAllowedError'
+          );
+        }
+      }
+    });
+  });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
@@ -243,6 +258,35 @@ try {
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).waitFor();
 
+  // The chromatic tuner must not request microphone access on page load.
+  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: /Open tuner/ }).click();
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    0,
+    'Tuner must defer microphone permission until the learner presses Start'
+  );
+  await page.getByRole('button', { name: 'Start tuner' }).click();
+  await page
+    .getByRole('alert')
+    .getByText(/Microphone permission was denied/)
+    .waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    1,
+    'Tuner should request microphone permission once after explicit Start'
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  const tunerDimensions = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    page: document.documentElement.scrollWidth
+  }));
+  assert.ok(
+    tunerDimensions.page <= tunerDimensions.viewport,
+    `Tuner page overflows horizontally on mobile: ${JSON.stringify(tunerDimensions)}`
+  );
+
   await page.setViewportSize({ width: 390, height: 844 });
   const earTrainingDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
@@ -288,7 +332,7 @@ try {
     `Music tools browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Music-tools browser acceptance passed: chord library and drill, metronome, reference tone, ear-training playback interruption/teardown, fretboard keyboard access and mobile layout.'
+    'Music-tools browser acceptance passed: chord library and drill, metronome, reference tone, ear-training playback interruption/teardown, tuner permission deferral/denial, fretboard keyboard access and mobile layout.'
   );
 } catch (error) {
   console.error(error);

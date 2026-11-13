@@ -55,6 +55,7 @@ export class MicrophoneInput {
   private startPromise: Promise<void> | null = null;
   private generation = 0;
   private state: 'idle' | 'starting' | 'running' | 'disposed' = 'idle';
+  private currentSampleRate: number | null = null;
 
   constructor(options: MicrophoneInputOptions = {}) {
     this.getUserMedia = options.getUserMedia ?? browserGetUserMedia;
@@ -76,6 +77,11 @@ export class MicrophoneInput {
 
   get isRunning(): boolean {
     return this.state === 'running';
+  }
+
+  /** Actual AudioContext sample rate for pitch estimation. */
+  get sampleRate(): number | null {
+    return this.currentSampleRate;
   }
 
   /**
@@ -205,6 +211,7 @@ export class MicrophoneInput {
         track.addEventListener('ended', onEnded);
         this.trackEndHandlers.set(track, onEnded);
       }
+      this.currentSampleRate = context.sampleRate;
       this.state = 'running';
     } catch (error) {
       // Promise.all may reject before getUserMedia settles. Stop a late stream
@@ -242,6 +249,7 @@ export class MicrophoneInput {
     }
     this.source = null;
     this.analyser = null;
+    this.currentSampleRate = null;
 
     const stream = this.stream;
     this.stream = null;
