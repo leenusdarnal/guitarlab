@@ -11,7 +11,9 @@ export function waitForPlaybackCompletion(
   signal: AbortSignal
 ): Promise<void> {
   if (!Number.isFinite(durationMilliseconds) || durationMilliseconds < 0) {
-    throw new RangeError('Playback duration must be a finite non-negative number.');
+    throw new RangeError(
+      'Playback duration must be a finite non-negative number.'
+    );
   }
 
   if (signal.aborted) {
