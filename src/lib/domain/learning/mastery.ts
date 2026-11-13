@@ -29,10 +29,18 @@ export const skillMasteryUpdateSchema = z
   .strict()
   .superRefine((value, context) => {
     if (value.decisionSource === 'learner' && !value.correctionNote) {
-      context.addIssue({ code: 'custom', path: ['correctionNote'], message: 'A learner correction needs a short explanation.' });
+      context.addIssue({
+        code: 'custom',
+        path: ['correctionNote'],
+        message: 'A learner correction needs a short explanation.'
+      });
     }
     if (value.decisionSource !== 'learner' && value.correctionNote) {
-      context.addIssue({ code: 'custom', path: ['correctionNote'], message: 'A correction note is only valid for a learner correction.' });
+      context.addIssue({
+        code: 'custom',
+        path: ['correctionNote'],
+        message: 'A correction note is only valid for a learner correction.'
+      });
     }
     if (
       value.state === 'stable' &&
