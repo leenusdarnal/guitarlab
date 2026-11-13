@@ -21,9 +21,7 @@ describe('synthetic pitch benchmark', () => {
       'decaying-pluck-g3',
       'digital-silence'
     ]);
-    expect(Array.from(first[7].samples)).toEqual(
-      Array.from(second[7].samples)
-    );
+    expect(Array.from(first[7].samples)).toEqual(Array.from(second[7].samples));
   });
 
   it('meets per-fixture frequency error budgets', () => {
@@ -59,8 +57,9 @@ describe('synthetic pitch benchmark', () => {
       confidence: 0.96,
       rms: 0.2
     };
-    const events = Array.from({ length: 20 }, (_, frame) =>
-      tracker.update(estimate, frame * 30).event
+    const events = Array.from(
+      { length: 20 },
+      (_, frame) => tracker.update(estimate, frame * 30).event
     );
 
     expect(events.filter((event) => event === 'note-on')).toHaveLength(1);
