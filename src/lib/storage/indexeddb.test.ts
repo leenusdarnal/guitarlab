@@ -120,9 +120,13 @@ class FakeStore {
         ? ['learnerId', 'curriculumReleaseId', 'lessonId']
         : name === 'byLearnerReleaseSkill'
           ? ['learnerId', 'curriculumReleaseId', 'skillId']
-          : name === 'byLearnerSession'
-            ? ['learnerId', 'sessionId']
-            : ['learnerId', 'status'];
+          : name === 'byLearnerRelease'
+            ? ['learnerId', 'curriculumReleaseId']
+            : name === 'byLearnerSession'
+              ? ['learnerId', 'sessionId']
+              : name === 'byLearnerId'
+                ? ['learnerId']
+                : ['learnerId', 'status'];
     const matches = (record: unknown, key: IDBValidKey) => {
       const value = record as Record<string, unknown>;
       const candidate = fields.map((field) => value[field]);
