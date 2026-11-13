@@ -1,6 +1,6 @@
-export type EarTrainingKind = 'pulse' | 'pitch' | 'contour';
+export type EarTrainingKind = 'pulse' | 'pitch' | 'contour' | 'interval';
 export type EarTrainingAnswer =
-  'steady' | 'uneven' | 'first' | 'second' | 'rising' | 'falling' | 'level';
+  'steady' | 'uneven' | 'first' | 'second' | 'rising' | 'falling' | 'level' | 'unison' | 'minor_third' | 'major_third' | 'perfect_fifth';
 
 export interface EarTrainingTone {
   frequencyHz: number;
@@ -26,6 +26,13 @@ const pulseChoices = [
 const pitchChoices = [
   { value: 'first', label: 'First note' },
   { value: 'second', label: 'Second note' }
+] as const;
+
+const intervalChoices = [
+  { value: 'unison', label: 'Same note (unison)' },
+  { value: 'minor_third', label: 'Minor third' },
+  { value: 'major_third', label: 'Major third' },
+  { value: 'perfect_fifth', label: 'Perfect fifth' }
 ] as const;
 
 const contourChoices = [
@@ -99,6 +106,30 @@ export function createEarTrainingExercise(
       explanation: firstIsHigher
         ? 'The first note had the higher frequency.'
         : 'The second note had the higher frequency.'
+    };
+  }
+
+  if (kind === 'interval') {
+    const intervals = [
+      { semitones: 0, answer: 'unison', label: 'unison', explanation: 'Both notes have the same pitch.' },
+      { semitones: 3, answer: 'minor_third', label: 'minor third', explanation: 'The second note is three semitones above the first.' },
+      { semitones: 4, answer: 'major_third', label: 'major third', explanation: 'The second note is four semitones above the first.' },
+      { semitones: 7, answer: 'perfect_fifth', label: 'perfect fifth', explanation: 'The second note is seven semitones above the first.' }
+    ] as const;
+    const interval = intervals[sequence % intervals.length];
+    const firstFrequency = 440;
+    const secondFrequency = firstFrequency * Math.pow(2, interval.semitones / 12);
+    return {
+      kind,
+      prompt: 'How far apart were the two notes?',
+      visualHint: 'Listen to the distance between the first note and the second. Compare the sound as a whole; you do not need to name either note.',
+      tones: [
+        { frequencyHz: firstFrequency, startMilliseconds: 0, durationMilliseconds: 360 },
+        { frequencyHz: secondFrequency, startMilliseconds: 620, durationMilliseconds: 360 }
+      ],
+      choices: intervalChoices,
+      answer: interval.answer,
+      explanation: interval.explanation
     };
   }
 
