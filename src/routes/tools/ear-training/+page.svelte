@@ -136,6 +136,7 @@
     <button type="button" class:active={kind === 'pulse'} aria-pressed={kind === 'pulse'} onclick={() => selectKind('pulse')}>Pulse</button>
     <button type="button" class:active={kind === 'pitch'} aria-pressed={kind === 'pitch'} onclick={() => selectKind('pitch')}>High / low</button>
     <button type="button" class:active={kind === 'contour'} aria-pressed={kind === 'contour'} onclick={() => selectKind('contour')}>Melodic contour</button>
+    <button type="button" class:active={kind === 'interval'} aria-pressed={kind === 'interval'} onclick={() => selectKind('interval')}>Intervals</button>
   </nav>
 
   <section class="panel exercise-panel" aria-labelledby="exercise-title">
