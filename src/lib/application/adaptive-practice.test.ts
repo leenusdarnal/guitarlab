@@ -10,7 +10,11 @@ import { buildAdaptivePracticeSnapshot } from './adaptive-practice';
 const skills: SkillRecord[] = [
   { id: 'rhythm.pulse', category: 'rhythm', displayName: 'Pulse' },
   { id: 'ear.intervals', category: 'ear', displayName: 'Intervals' },
-  { id: 'fretting.clean-tone', category: 'technique', displayName: 'Clean tone' }
+  {
+    id: 'fretting.clean-tone',
+    category: 'technique',
+    displayName: 'Clean tone'
+  }
 ];
 
 function attempt(
@@ -91,8 +95,12 @@ describe('buildAdaptivePracticeSnapshot', () => {
       'ear.intervals',
       'fretting.clean-tone'
     ]);
-    expect(result.recommendations[0].reasonCodes).toContain('assessment_needs_practice');
-    expect(result.recommendations[1].reasonCodes).toContain('assessment_inconclusive');
+    expect(result.recommendations[0].reasonCodes).toContain(
+      'assessment_needs_practice'
+    );
+    expect(result.recommendations[1].reasonCodes).toContain(
+      'assessment_inconclusive'
+    );
     expect(result.recommendations[2].reasonCodes).toContain('review_overdue');
   });
 
@@ -107,11 +115,17 @@ describe('buildAdaptivePracticeSnapshot', () => {
       ],
       now: 300
     });
-    const analytics = result.skillAnalytics.find((item) => item.skillId === 'rhythm.pulse');
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'rhythm.pulse'
+    );
     expect(analytics?.accuracyEvidenceStatus).toBe('insufficient_evidence');
     expect(analytics?.measuredScoreMean).toBeNull();
-    const exercise = result.recommendations.find((item) => item.targetId === 'scale-box-1');
-    expect(exercise?.reasonCodes).toEqual(['repeated_self_reported_difficulty']);
+    const exercise = result.recommendations.find(
+      (item) => item.targetId === 'scale-box-1'
+    );
+    expect(exercise?.reasonCodes).toEqual([
+      'repeated_self_reported_difficulty'
+    ]);
     expect(exercise?.evidenceType).toBe('learner_observation');
   });
 
@@ -141,8 +155,10 @@ describe('buildAdaptivePracticeSnapshot', () => {
       practiceEvidence: [],
       now: 200
     });
-    expect(result.skillAnalytics.find((item) => item.skillId === 'ear.intervals')?.accuracyEvidenceStatus)
-      .toBe('insufficient_evidence');
+    expect(
+      result.skillAnalytics.find((item) => item.skillId === 'ear.intervals')
+        ?.accuracyEvidenceStatus
+    ).toBe('insufficient_evidence');
     expect(result.categoryCoverage).toEqual([
       { category: 'ear', totalSkills: 1, assessedSkills: 0, coverage: 0 },
       { category: 'rhythm', totalSkills: 1, assessedSkills: 1, coverage: 1 },
@@ -163,7 +179,11 @@ describe('buildAdaptivePracticeSnapshot', () => {
       'fretting.clean-tone',
       'rhythm.pulse'
     ]);
-    expect(result.recommendations.every((item) => item.reasonCodes.includes('not_yet_assessed'))).toBe(true);
+    expect(
+      result.recommendations.every((item) =>
+        item.reasonCodes.includes('not_yet_assessed')
+      )
+    ).toBe(true);
   });
 
   it('does not mutate the supplied evidence arrays', () => {
