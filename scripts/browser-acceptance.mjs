@@ -1082,9 +1082,13 @@ try {
   await page
     .getByRole('heading', { name: 'Skill states, explained.' })
     .waitFor();
-  await page.getByRole('button', { name: /Chord Transition/ }).waitFor();
+  const chordTransitionChoice = page.getByRole('button', {
+    name: /Chord Transition/
+  });
+  await chordTransitionChoice.waitFor();
+  await chordTransitionChoice.click();
   await page
-    .getByText('No assessment has been recorded for this skill yet.')
+    .getByText(/No assessment has been recorded for this skill yet/)
     .waitFor();
   await page.locator('#corrected-state').selectOption('stable');
   await page
