@@ -206,6 +206,41 @@ try {
   await page.getByRole('button', { name: 'Perfect fifth' }).click();
   await page.getByText("That's right.").waitFor();
 
+  // Hiding the tab stops the exercise and releases its page-owned audio context.
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await page.getByRole('button', { name: 'Playing example…' }).waitFor();
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      value: 'hidden'
+    });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('button')].some(
+      (button) =>
+        button.textContent?.includes('Listen to example') &&
+        button instanceof HTMLButtonElement &&
+        !button.disabled
+    )
+  );
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      value: 'visible'
+    });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+
+  // Navigating away during playback aborts the completion timer and closes the context.
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await page.getByRole('button', { name: 'Playing example…' }).waitFor();
+  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  await page.getByRole('link', { name: /Open ear training/ }).click();
+  await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).waitFor();
+
   await page.setViewportSize({ width: 390, height: 844 });
   const earTrainingDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
