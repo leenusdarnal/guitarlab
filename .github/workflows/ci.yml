@@ -3,7 +3,7 @@ name: GuitarLab CI
 on:
   pull_request:
   push:
-    branches: [main, "feat/**", "chore/**"]
+    branches: [main]
 
 permissions:
   contents: read
@@ -103,7 +103,7 @@ jobs:
               scripts/generate-curriculum-index.mjs|scripts/validate-design-tokens.mjs|scripts/finalize-db-migration.mjs|\
               scripts/test-local-db.mjs|scripts/browser-acceptance.mjs|\
               scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs|\
-              scripts/accessibility-browser-acceptance.mjs)
+              scripts/accessibility-browser-acceptance.mjs|scripts/install-git-hooks.mjs)
                 changed_files+=("$file")
                 ;;
             esac
