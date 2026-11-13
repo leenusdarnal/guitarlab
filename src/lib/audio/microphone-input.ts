@@ -286,7 +286,9 @@ function normalizeMicrophoneError(error: unknown): MicrophoneInputError {
         ? String(error.name)
         : '';
   const message =
-    error instanceof Error ? error.message : 'Unable to start microphone input.';
+    error instanceof Error
+      ? error.message
+      : 'Unable to start microphone input.';
 
   switch (name) {
     case 'NotAllowedError':
