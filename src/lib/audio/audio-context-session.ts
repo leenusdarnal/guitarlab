@@ -34,7 +34,11 @@ export class AudioContextSession {
     } catch (error) {
       // A failed session must not retain a suspended or unusable context.
       try {
-        await this.close();
+        if (this.context === context) {
+          await this.close();
+        } else if (context.state !== 'closed') {
+          await context.close();
+        }
       } catch {
         // Preserve the original resume/readiness error.
       }
