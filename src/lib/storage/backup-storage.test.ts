@@ -113,7 +113,10 @@ describe('local learner backup export builder', () => {
     expect(backup.records.profile.preferences.instrument).toBe('acoustic');
     expect(backup.records.lessonProgress).toHaveLength(1);
     expect(backup.records.lessonProgress[0].learnerId).toBe(learnerId);
-    expect(backup.records.skillMastery[0]).toMatchObject({ decisionSource: 'learner', correctionNote: 'I can play it slowly but not consistently yet.' });
+    expect(backup.records.skillMastery[0]).toMatchObject({
+      decisionSource: 'learner',
+      correctionNote: 'I can play it slowly but not consistently yet.'
+    });
     expect(backup.records.practiceEvidence).toHaveLength(1);
     expect(backup.records.practiceEvidence?.[0].learnerId).toBe(learnerId);
     expect(backup.records.practiceSessions[0].nextTarget).toBe(
