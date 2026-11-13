@@ -860,7 +860,7 @@ export async function correctActiveSkillState(input: {
     if (!existing) {
       throw new Error('This skill has no saved learning state to correct yet.');
     }
-    return correctSkillMasteryState(
+    return await correctSkillMasteryState(
       {
         learnerId: profile.id,
         releaseId: existing.curriculumReleaseId,
