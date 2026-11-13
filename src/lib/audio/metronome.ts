@@ -25,6 +25,7 @@ export function validateMetronomeTempo(bpm: number): number {
 export class WebAudioMetronome {
   private context: AudioContext | null = null;
   private timer: ReturnType<typeof setTimeout> | null = null;
+  private readonly scheduledOscillators = new Set<OscillatorNode>();
   private running = false;
   private nextBeatTime = 0;
   private beatIndex = 0;
@@ -116,6 +117,15 @@ export class WebAudioMetronome {
       clearTimeout(this.timer);
       this.timer = null;
     }
+    for (const oscillator of this.scheduledOscillators) {
+      try {
+        // Cancel clicks already queued inside the lookahead window as well.
+        oscillator.stop();
+      } catch {
+        // A source may have ended between scheduling and stop().
+      }
+    }
+    this.scheduledOscillators.clear();
     document.removeEventListener(
       'visibilitychange',
       this.handleVisibilityChange
@@ -168,7 +178,9 @@ export class WebAudioMetronome {
     gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.06);
     oscillator.connect(gain);
     gain.connect(context.destination);
+    this.scheduledOscillators.add(oscillator);
     oscillator.onended = () => {
+      this.scheduledOscillators.delete(oscillator);
       oscillator.disconnect();
       gain.disconnect();
     };
