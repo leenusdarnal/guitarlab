@@ -14,8 +14,12 @@
     PracticeEvidenceRecord,
     PracticeSessionRecord
   } from '../../lib/repositories/contracts';
+  import { filterPracticeSessions } from '../../lib/application/practice-history';
 
   let sessions = $state<PracticeSessionRecord[]>([]);
+  let historyQuery = $state('');
+  let historyStatus = $state<'all' | PracticeSessionRecord['status']>('all');
+  let historyDateRange = $state<'all' | '7' | '30' | '90'>('all');
   let activeEvidence = $state<PracticeEvidenceRecord[]>([]);
   let historyEvidenceSessionId = $state<string | null>(null);
   let historyEvidence = $state<PracticeEvidenceRecord[]>([]);
@@ -40,6 +44,15 @@
   let evidenceError = $state('');
   let evidenceNotice = $state('');
   let now = $state(Date.now());
+
+  const filteredSessions = $derived(
+    filterPracticeSessions(sessions, {
+      query: historyQuery,
+      status: historyStatus,
+      dateRange: historyDateRange,
+      now
+    })
+  );
 
   const activeSession = $derived(
     sessions.find(
@@ -86,6 +99,12 @@
       .finally(() => (loading = false));
     return () => window.clearInterval(clock);
   });
+
+  function clearHistoryFilters() {
+    historyQuery = '';
+    historyStatus = 'all';
+    historyDateRange = 'all';
+  }
 
   async function startSession() {
     error = '';
@@ -605,8 +624,50 @@
           </p>
         </div>
       {:else}
+        <div class="history-filters" aria-label="Filter practice history">
+          <div class="history-search">
+            <label for="history-search">Search your notes</label>
+            <input
+              id="history-search"
+              type="search"
+              bind:value={historyQuery}
+              placeholder="Focus, reflection or next target"
+            />
+          </div>
+          <div>
+            <label for="history-status">Session status</label>
+            <select id="history-status" bind:value={historyStatus}>
+              <option value="all">All statuses</option>
+              <option value="in_progress">In progress</option>
+              <option value="paused">Paused</option>
+              <option value="completed">Completed</option>
+              <option value="abandoned">Abandoned</option>
+            </select>
+          </div>
+          <div>
+            <label for="history-date-range">Date range</label>
+            <select id="history-date-range" bind:value={historyDateRange}>
+              <option value="all">All time</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+        </div>
+        <div class="history-result-count" role="status" aria-live="polite">
+          Showing {filteredSessions.length} of {sessions.length} sessions
+        </div>
+        {#if filteredSessions.length === 0}
+          <div class="empty" role="status">
+            <h3>No sessions match these filters.</h3>
+            <p>Try another search or clear the filters to see your full history.</p>
+            <button class="text-button" type="button" onclick={clearHistoryFilters}>
+              Clear filters
+            </button>
+          </div>
+        {:else}
         <ul class="history-list">
-          {#each sessions as session (session.id)}
+          {#each filteredSessions as session (session.id)}
             <li class="history-item">
               <div class="history-main">
                 <strong>{session.focus || 'Practice session'}</strong>
@@ -683,6 +744,7 @@
             </li>
           {/each}
         </ul>
+        {/if}
       {/if}
     </section>
   {/if}
@@ -940,6 +1002,43 @@
     margin-bottom: 14px;
   }
 
+  .history-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    gap: 12px;
+    margin: 18px 0 10px;
+  }
+
+  .history-filters > div {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+  }
+
+  .history-filters label {
+    margin-top: 0;
+    font-size: 0.82rem;
+  }
+
+  .history-filters input,
+  .history-filters select {
+    min-width: 0;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border, #666);
+    border-radius: 9px;
+    background: var(--surface, #fffefa);
+    color: var(--text, #24231f);
+    font: inherit;
+  }
+
+  .history-result-count {
+    color: var(--muted, #aaa);
+    font-size: 0.82rem;
+    margin: 8px 0 12px;
+  }
+
+
   .history-heading h2 {
     margin-top: 8px;
   }
@@ -1065,6 +1164,10 @@
       justify-content: start;
       text-align: left;
       white-space: normal;
+    }
+
+    .history-filters {
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .history-item {
