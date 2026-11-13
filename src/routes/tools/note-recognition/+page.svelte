@@ -7,7 +7,6 @@
   } from '../../../lib/audio/microphone-input';
   import { estimatePitch } from '../../../lib/audio/pitch-estimator';
   import { StableNoteTracker } from '../../../lib/audio/stable-note-tracker';
-  import type { StableNoteUpdate } from '../../../lib/audio/stable-note-tracker';
 
   const targets = [
     { midiNote: 40, noteName: 'E2', stringName: '6th · Low E' },
@@ -17,13 +16,6 @@
     { midiNote: 59, noteName: 'B3', stringName: '2nd · B' },
     { midiNote: 64, noteName: 'E4', stringName: '1st · High E' }
   ] as const;
-  const emptyResult: StableNoteUpdate = {
-    status: 'none',
-    event: null,
-    note: null,
-    candidateMidiNote: null,
-    consecutiveFrames: 0
-  };
   const tracker = new StableNoteTracker({
     confirmationFrames: 3,
     releaseFrames: 4,
