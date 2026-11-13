@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { AudioContextSession } from './audio-context-session';
 import {
   MAX_METRONOME_BPM,
   MIN_METRONOME_BPM,
@@ -238,11 +239,15 @@ describe('WebAudioMetronome audio lifecycle', () => {
     const metronome = new WebAudioMetronome();
     const context = new FakeAudioContext();
     context.resume.mockRejectedValueOnce(new Error('permission denied'));
-    (metronome as unknown as { context: FakeAudioContext }).context = context;
+    (
+      metronome as unknown as { audioSession: AudioContextSession }
+    ).audioSession = new AudioContextSession(
+      () => context as unknown as AudioContext
+    );
 
     await expect(metronome.start()).rejects.toThrow('permission denied');
     expect(metronome.isRunning).toBe(false);
-    expect(context.close).not.toHaveBeenCalled();
+    expect(context.close).toHaveBeenCalledOnce();
     await metronome.dispose();
   });
 

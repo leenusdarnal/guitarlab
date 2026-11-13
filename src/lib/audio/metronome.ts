@@ -25,7 +25,11 @@ export function validateMetronomeTempo(bpm: number): number {
  * Web Audio's clock determines when each click is actually played.
  */
 export class WebAudioMetronome {
-  private context: AudioContext | null = null;
+  private readonly audioSession = new AudioContextSession();
+
+  private get context(): AudioContext | null {
+    return this.audioSession.currentContext;
+  }
   private timer: ReturnType<typeof setTimeout> | null = null;
   private readonly scheduledOscillators = new Set<OscillatorNode>();
   private running = false;
@@ -87,25 +91,13 @@ export class WebAudioMetronome {
 
   async start(): Promise<void> {
     if (this.running) return;
-    if (typeof AudioContext === 'undefined') {
-      throw new Error('Web Audio is not available in this browser.');
-    }
-
-    if (!this.context || this.context.state === 'closed') {
-      this.context = new AudioContext();
-    }
-    if (this.context.state === 'suspended') {
-      await this.context.resume();
-    }
-    if (this.context.state !== 'running') {
-      throw new Error(
-        'Audio is not ready. Tap start again to enable the metronome.'
-      );
-    }
+    const context = await this.audioSession.resume(
+      'Audio is not ready. Tap start again to enable the metronome.'
+    );
 
     this.running = true;
     this.onStateChange?.(true);
-    this.nextBeatTime = this.context.currentTime + 0.05;
+    this.nextBeatTime = context.currentTime + 0.05;
     this.beatIndex = 0;
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
     this.schedule();
@@ -136,10 +128,7 @@ export class WebAudioMetronome {
 
   async dispose(): Promise<void> {
     this.stop();
-    if (this.context && this.context.state !== 'closed') {
-      await this.context.close();
-    }
-    this.context = null;
+    await this.audioSession.close();
   }
 
   private readonly handleVisibilityChange = () => {
