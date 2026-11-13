@@ -62,6 +62,19 @@
     </article>
 
     <article class="tool-row available">
+      <div class="tool-symbol" aria-hidden="true">♪</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Microphone · Open strings · Pitch</span></div>
+        <h2>Note recognition</h2>
+        <p>
+          Play each of the six standard open strings and get immediate, confidence-aware
+          feedback from local pitch recognition. Microphone access starts only after Start.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/note-recognition')}>Open exercise <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">♫</div>
       <div class="tool-copy">
         <div class="tool-meta"><span class="available-label">Available now</span><span>Listening · Pulse · Pitch · Intervals</span></div>
