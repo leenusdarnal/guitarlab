@@ -148,6 +148,51 @@ describe('learner backup contract', () => {
     });
   });
 
+  it('keeps learner correction provenance in new backups and accepts legacy mastery rows', () => {
+    const legacy = makeBackup();
+    legacy.records.skillMastery = [{
+      learnerId,
+      curriculumReleaseId: 'curriculum-v1',
+      skillId: 'alternate-picking',
+      state: 'learning',
+      evidenceCount: 0,
+      confidence: null,
+      lastAssessmentId: null,
+      lastAssessedAt: null,
+      nextReviewAt: null,
+      updatedAt: 1_800_000_000_000
+    }];
+    expect(parseLearnerBackup(legacy)).toMatchObject({ success: true });
+
+    const corrected = makeBackup();
+    corrected.records.skillMastery = [{
+      learnerId,
+      curriculumReleaseId: 'curriculum-v1',
+      skillId: 'alternate-picking',
+      state: 'practising',
+      evidenceCount: 2,
+      confidence: 65,
+      lastAssessmentId: null,
+      lastAssessedAt: null,
+      nextReviewAt: null,
+      decisionSource: 'learner',
+      correctionNote: 'I can play it slowly but not consistently yet.',
+      updatedAt: 1_800_000_000_000
+    }];
+    const parsed = parseLearnerBackupJson(JSON.stringify(corrected));
+    expect(parsed).toMatchObject({
+      success: true,
+      data: {
+        records: {
+          skillMastery: [{
+            decisionSource: 'learner',
+            correctionNote: 'I can play it slowly but not consistently yet.'
+          }]
+        }
+      }
+    });
+  });
+
   it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,
