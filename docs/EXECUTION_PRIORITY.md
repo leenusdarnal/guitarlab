@@ -294,3 +294,13 @@ Append or replace this section when work progresses:
 - **Next after merge:** define transparent, inspectable and learner-correctable skill-state rules that consume assessment/evidence data without conflating elapsed time with mastery.
 - **Manual release gate:** physical desktop/iOS/Android offline, reload and backup/restore acceptance remains unverified.
 - **Deferred:** PR #47 Node 26/CI redesign, Cloudflare preview/production deployment, production D1, accounts and cloud sync.
+
+
+## Resume checkpoint — 2026-11-13 (PR #58 merged)
+
+- **Main baseline:** `9dbb69ef4181a7f1605da61ed3139b4741843c83`.
+- **Merged:** PR #58 searchable and filterable Practice Studio history.
+- **Current task:** `feat/m7-transparent-skill-state` — implement deterministic, inspectable skill-state rules and learner corrections.
+- **Implemented so far:** state explanation engine; explicit learner correction service with required note and source metadata; domain/application tests; `docs/SKILL_STATE_RULES.md`.
+- **Remaining:** learner-facing review/correction screen, browser acceptance, backup compatibility checks and full CI.
+- **Release gate:** physical-device offline and backup/restore acceptance remains open; deployment remains deferred.
