@@ -152,15 +152,15 @@ describe('learner backup contract', () => {
     const legacy = makeBackup();
     legacy.records.skillMastery = [
       {
-      learnerId,
-      curriculumReleaseId: 'curriculum-v1',
-      skillId: 'alternate-picking',
-      state: 'learning',
-      evidenceCount: 0,
-      confidence: null,
-      lastAssessmentId: null,
-      lastAssessedAt: null,
-      nextReviewAt: null,
+        learnerId,
+        curriculumReleaseId: 'curriculum-v1',
+        skillId: 'alternate-picking',
+        state: 'learning',
+        evidenceCount: 0,
+        confidence: null,
+        lastAssessmentId: null,
+        lastAssessedAt: null,
+        nextReviewAt: null,
         updatedAt: 1_800_000_000_000
       }
     ];
@@ -169,17 +169,17 @@ describe('learner backup contract', () => {
     const corrected = makeBackup();
     corrected.records.skillMastery = [
       {
-      learnerId,
-      curriculumReleaseId: 'curriculum-v1',
-      skillId: 'alternate-picking',
-      state: 'practising',
-      evidenceCount: 2,
-      confidence: 65,
-      lastAssessmentId: null,
-      lastAssessedAt: null,
-      nextReviewAt: null,
-      decisionSource: 'learner',
-      correctionNote: 'I can play it slowly but not consistently yet.',
+        learnerId,
+        curriculumReleaseId: 'curriculum-v1',
+        skillId: 'alternate-picking',
+        state: 'practising',
+        evidenceCount: 2,
+        confidence: 65,
+        lastAssessmentId: null,
+        lastAssessedAt: null,
+        nextReviewAt: null,
+        decisionSource: 'learner',
+        correctionNote: 'I can play it slowly but not consistently yet.',
         updatedAt: 1_800_000_000_000
       }
     ];
