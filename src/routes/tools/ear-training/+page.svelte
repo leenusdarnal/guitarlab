@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
+  import { AudioContextSession } from '../../../lib/audio/audio-context-session';
   import { resolve } from '$app/paths';
   import {
     createEarTrainingExercise,
@@ -16,18 +17,22 @@
   let audioError = $state('');
   let correctCount = $state(0);
   let attemptCount = $state(0);
-  let audioContext: AudioContext | null = null;
   let playbackAbortController: AbortController | null = null;
+  const audioSession = new AudioContextSession(() => {
+    if (typeof AudioContext === 'undefined') {
+      throw new Error(
+        'Audio playback is not available in this browser. You can still read the visual instructions.'
+      );
+    }
+    return new AudioContext();
+  });
 
   const exercise = $derived(createEarTrainingExercise(kind, sequence));
 
   onDestroy(() => {
     playbackAbortController?.abort();
     playbackAbortController = null;
-    if (audioContext && audioContext.state !== 'closed') {
-      void audioContext.close();
-    }
-    audioContext = null;
+    void audioSession.close();
   });
 
   function stopPlaybackForHiddenPage(controller: AbortController) {
@@ -36,11 +41,7 @@
     playbackAbortController = null;
     isPlaying = false;
 
-    const context = audioContext;
-    audioContext = null;
-    if (context && context.state !== 'closed') {
-      void context.close();
-    }
+    void audioSession.close();
   }
 
   function selectKind(nextKind: EarTrainingKind) {
@@ -66,16 +67,10 @@
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     try {
-      if (typeof AudioContext === 'undefined') {
-        throw new Error('Audio playback is not available in this browser. You can still read the visual instructions.');
-      }
-      audioContext ??= new AudioContext();
-      const context = audioContext;
-      if (context.state === 'suspended') await context.resume();
+      const context = await audioSession.resume(
+        'Audio is not ready. Press listen again to enable playback.'
+      );
       if (controller.signal.aborted) return;
-      if (context.state !== 'running') {
-        throw new Error('Audio is not ready. Press listen again to enable playback.');
-      }
 
       const startAt = context.currentTime + 0.06;
       for (const tone of exercise.tones) {
