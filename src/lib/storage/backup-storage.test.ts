@@ -55,7 +55,22 @@ function makeSource(): LearnerBackupSource {
     ],
     completionEvents: [],
     assessmentAttempts: [],
-    skillMastery: [{ learnerId, curriculumReleaseId: 'curriculum-v1', skillId: 'alternate-picking', state: 'practising', evidenceCount: 2, confidence: 65, lastAssessmentId: null, lastAssessedAt: null, nextReviewAt: null, decisionSource: 'learner', correctionNote: 'I can play it slowly but not consistently yet.', updatedAt: 200 }],
+    skillMastery: [
+      {
+        learnerId,
+        curriculumReleaseId: 'curriculum-v1',
+        skillId: 'alternate-picking',
+        state: 'practising',
+        evidenceCount: 2,
+        confidence: 65,
+        lastAssessmentId: null,
+        lastAssessedAt: null,
+        nextReviewAt: null,
+        decisionSource: 'learner',
+        correctionNote: 'I can play it slowly but not consistently yet.',
+        updatedAt: 200
+      }
+    ],
     practiceSessions: [
       {
         id: 'b1b1b1b1-1111-4111-8111-111111111111',
