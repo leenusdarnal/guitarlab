@@ -83,10 +83,7 @@ export class StableNoteTracker {
       throw new RangeError('Timestamp must be a finite non-negative number.');
     }
 
-    if (
-      this.lastTimestampMs !== null &&
-      timestampMs < this.lastTimestampMs
-    ) {
+    if (this.lastTimestampMs !== null && timestampMs < this.lastTimestampMs) {
       throw new RangeError('Timestamps must be monotonic.');
     }
 
@@ -128,8 +125,16 @@ export class StableNoteTracker {
       ) {
         this.resetCandidate();
         if (midiNote === this.activeNote.midiNote) {
-          pushLimited(this.activeFrequencies, estimate.frequencyHz, this.options.smoothingWindow);
-          pushLimited(this.activeConfidences, estimate.confidence, this.options.smoothingWindow);
+          pushLimited(
+            this.activeFrequencies,
+            estimate.frequencyHz,
+            this.options.smoothingWindow
+          );
+          pushLimited(
+            this.activeConfidences,
+            estimate.confidence,
+            this.options.smoothingWindow
+          );
           this.activeNote = this.makeNote(
             this.activeNote.midiNote,
             this.activeFrequencies,
@@ -148,8 +153,16 @@ export class StableNoteTracker {
     }
 
     this.candidateFrames += 1;
-    pushLimited(this.candidateFrequencies, estimate.frequencyHz, this.options.smoothingWindow);
-    pushLimited(this.candidateConfidences, estimate.confidence, this.options.smoothingWindow);
+    pushLimited(
+      this.candidateFrequencies,
+      estimate.frequencyHz,
+      this.options.smoothingWindow
+    );
+    pushLimited(
+      this.candidateConfidences,
+      estimate.confidence,
+      this.options.smoothingWindow
+    );
 
     if (this.candidateFrames < this.options.confirmationFrames) {
       return this.result(
@@ -232,8 +245,14 @@ export class StableNoteTracker {
   }
 
   private validateOptions(): void {
-    const { confirmationFrames, releaseFrames, maxGapMs, smoothingWindow, minConfidence, switchThresholdSemitones } =
-      this.options;
+    const {
+      confirmationFrames,
+      releaseFrames,
+      maxGapMs,
+      smoothingWindow,
+      minConfidence,
+      switchThresholdSemitones
+    } = this.options;
     if (!Number.isInteger(confirmationFrames) || confirmationFrames < 1) {
       throw new RangeError('Confirmation frames must be a positive integer.');
     }
@@ -241,12 +260,18 @@ export class StableNoteTracker {
       throw new RangeError('Release frames must be a positive integer.');
     }
     if (!Number.isFinite(maxGapMs) || maxGapMs <= 0) {
-      throw new RangeError('Maximum frame gap must be a positive finite number.');
+      throw new RangeError(
+        'Maximum frame gap must be a positive finite number.'
+      );
     }
     if (!Number.isInteger(smoothingWindow) || smoothingWindow < 1) {
       throw new RangeError('Smoothing window must be a positive integer.');
     }
-    if (!Number.isFinite(minConfidence) || minConfidence < 0 || minConfidence > 1) {
+    if (
+      !Number.isFinite(minConfidence) ||
+      minConfidence < 0 ||
+      minConfidence > 1
+    ) {
       throw new RangeError('Minimum confidence must be between 0 and 1.');
     }
     if (
@@ -254,7 +279,9 @@ export class StableNoteTracker {
       switchThresholdSemitones <= 0 ||
       switchThresholdSemitones > 1
     ) {
-      throw new RangeError('Switch threshold must be greater than 0 and at most 1 semitone.');
+      throw new RangeError(
+        'Switch threshold must be greater than 0 and at most 1 semitone.'
+      );
     }
   }
 }
