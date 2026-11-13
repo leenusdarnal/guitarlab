@@ -286,7 +286,7 @@ try {
     `Music tools browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Chord and metronome browser acceptance passed: chord states, separate accuracy/time observations, tempo/meter, start/stop, reference tone and mobile layout.'
+    'Music-tools browser acceptance passed: chord library and drill, metronome, reference tone, ear-training playback interruption/teardown, fretboard keyboard access and mobile layout.'
   );
 } catch (error) {
   console.error(error);
