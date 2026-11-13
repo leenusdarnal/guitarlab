@@ -897,6 +897,45 @@ try {
   await page
     .getByText('Repeat the G major scale at 72 BPM for three minutes.')
     .waitFor();
+
+  // Practice history filters search only learner-authored focus and notes.
+  const historySearch = page.locator('#history-search');
+  await historySearch.fill('Browser acceptance scale drill');
+  await page
+    .getByText('Browser acceptance scale drill', { exact: true })
+    .waitFor();
+  await historySearch.fill('wrist relaxed');
+  await page
+    .getByText('The scale felt steadier when I kept my wrist relaxed.')
+    .waitFor();
+  await historySearch.fill('Repeat the G major scale');
+  await page
+    .getByText('Repeat the G major scale at 72 BPM for three minutes.')
+    .waitFor();
+  await historySearch.fill('no matching session text');
+  await page
+    .getByRole('heading', { name: 'No sessions match these filters.' })
+    .waitFor();
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await page.locator('#history-status').selectOption('paused');
+  await page
+    .getByRole('heading', { name: 'No sessions match these filters.' })
+    .waitFor();
+  await page.locator('#history-status').selectOption('completed');
+  await page.locator('#history-date-range').selectOption('7');
+  await page
+    .getByText('Browser acceptance scale drill', { exact: true })
+    .waitFor();
+  await page.locator('#history-date-range').selectOption('30');
+  await page
+    .getByText('Browser acceptance scale drill', { exact: true })
+    .waitFor();
+  await page.locator('#history-date-range').selectOption('90');
+  await page
+    .getByText('Browser acceptance scale drill', { exact: true })
+    .waitFor();
+  await page.locator('#history-date-range').selectOption('all');
+
   await page
     .getByRole('button', { name: 'Show exercise observations' })
     .first()
