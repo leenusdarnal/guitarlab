@@ -33,16 +33,15 @@ const index = {
 };
 
 const serializedIndex = JSON.stringify(index, null, 2).replace(
-  /("skillIds": )\[\n([\s\S]*?)\n\s+\]/g,
-  (_match, property, values) =>
-    property +
-    '[' +
-    values
+  /("skillIds": )\[\n([\s\S]*?)\n(\s+)\]/g,
+  (match, property, values) => {
+    const items = values
       .split('\n')
       .map((value) => value.trim().replace(/,$/, ''))
-      .filter(Boolean)
-      .join(', ') +
-    ']'
+      .filter(Boolean);
+    const inline = property + '[' + items.join(', ') + ']';
+    return inline.length <= 80 ? inline : match;
+  }
 );
 
 await writeFile(
