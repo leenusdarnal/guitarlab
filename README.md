@@ -55,6 +55,7 @@ The first offline app-shell implementation merged in [PR #35](https://github.com
 
 **Still pending:** physical-device offline and backup/restore acceptance; fuller PWA/offline behavior; the complete Practice Studio and evidence loop; ear training, theory and repertoire; broader accessibility, CSP and privacy verification; performance and rollback checks; preview-environment verification; production environment setup, authentication and cloud sync. The fretboard explorer ([PR #45](https://github.com/leenusdarnal/guitarlab/pull/45)), chord library and alternating chord-change drill, and Web Audio metronome ([PR #46](https://github.com/leenusdarnal/guitarlab/pull/46)) are merged. See the [execution priority and resume plan](docs/EXECUTION_PRIORITY.md), [implementation tracker](docs/IMPLEMENTATION_TRACKER.md), [manual acceptance runbook](docs/MANUAL_ACCEPTANCE.md), [data model](docs/DATA_MODEL.md) and [system diagrams](docs/DIAGRAMS.md).
 
+- [Cloudflare deployment plan — preview/production architecture, release gates and resume instructions](docs/CLOUDFLARE_DEPLOYMENT_PLAN.md)
 - [Manual acceptance runbook — physical desktop/mobile, offline and backup/restore](docs/MANUAL_ACCEPTANCE.md)
 - [System diagrams — architecture, learning loop, database and delivery](docs/DIAGRAMS.md)
 - [Data model and D1 migrations](docs/DATA_MODEL.md)
