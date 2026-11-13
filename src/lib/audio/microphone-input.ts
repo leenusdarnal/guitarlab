@@ -68,7 +68,9 @@ export class MicrophoneInput {
       this.fftSize > 32_768 ||
       (this.fftSize & (this.fftSize - 1)) !== 0
     ) {
-      throw new RangeError('Analyser FFT size must be a power of two from 32 to 32768.');
+      throw new RangeError(
+        'Analyser FFT size must be a power of two from 32 to 32768.'
+      );
     }
   }
 
@@ -128,7 +130,7 @@ export class MicrophoneInput {
    * Copy the latest time-domain samples into a caller-owned buffer.
    * The buffer remains owned by the caller; this class does not retain it.
    */
-  readSamples(target: Float32Array): Float32Array {
+  readSamples(target: Float32Array<ArrayBuffer>): Float32Array<ArrayBuffer> {
     if (this.state !== 'running' || !this.analyser) {
       throw new MicrophoneInputError(
         'Microphone capture is not running.',
