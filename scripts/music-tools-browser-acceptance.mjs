@@ -55,7 +55,10 @@ try {
       value: {
         getUserMedia: async () => {
           window.__guitarLabMicRequests += 1;
-          throw new DOMException('Permission denied for acceptance test', 'NotAllowedError');
+          throw new DOMException(
+            'Permission denied for acceptance test',
+            'NotAllowedError'
+          );
         }
       }
     });
@@ -265,7 +268,10 @@ try {
     'Tuner must defer microphone permission until the learner presses Start'
   );
   await page.getByRole('button', { name: 'Start tuner' }).click();
-  await page.getByRole('alert').getByText(/Microphone permission was denied/).waitFor();
+  await page
+    .getByRole('alert')
+    .getByText(/Microphone permission was denied/)
+    .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     1,
