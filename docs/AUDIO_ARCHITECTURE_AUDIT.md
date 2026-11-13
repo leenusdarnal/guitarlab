@@ -68,8 +68,9 @@ This is a justified opportunity for a small shared audio foundation, but not a r
 
 ### A. Characterise current behaviour
 - Add fake AudioContext tests for the metronome and reference tone.
-- Add ear-training playback lifecycle tests, including component teardown during playback.
-- Record the short scheduled-click tail and choose hidden-tab behaviour.
+- [x] Add ear-training playback lifecycle coverage for abortable completion waits and component teardown during playback.
+- [x] Align ear-training hidden-tab behaviour with the metronome: abort playback and close the page-owned context.
+- [ ] Record the short scheduled-click tail and decide whether queued metronome clicks need explicit cancellation.
 
 ### B. Extract the minimal shared playback layer
 - Introduce an explicitly owned audio-session factory.
