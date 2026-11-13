@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
+  import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
   import { resolve } from '$app/paths';
   import {
     createEarTrainingExercise,
@@ -16,15 +17,31 @@
   let correctCount = $state(0);
   let attemptCount = $state(0);
   let audioContext: AudioContext | null = null;
+  let playbackAbortController: AbortController | null = null;
 
   const exercise = $derived(createEarTrainingExercise(kind, sequence));
 
   onDestroy(() => {
+    playbackAbortController?.abort();
+    playbackAbortController = null;
     if (audioContext && audioContext.state !== 'closed') {
       void audioContext.close();
     }
     audioContext = null;
   });
+
+  function stopPlaybackForHiddenPage(controller: AbortController) {
+    if (playbackAbortController !== controller) return;
+    controller.abort();
+    playbackAbortController = null;
+    isPlaying = false;
+
+    const context = audioContext;
+    audioContext = null;
+    if (context && context.state !== 'closed') {
+      void context.close();
+    }
+  }
 
   function selectKind(nextKind: EarTrainingKind) {
     if (isPlaying) return;
@@ -39,20 +56,31 @@
     if (isPlaying) return;
     audioError = '';
     isPlaying = true;
+    const controller = new AbortController();
+    playbackAbortController = controller;
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        stopPlaybackForHiddenPage(controller);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     try {
       if (typeof AudioContext === 'undefined') {
         throw new Error('Audio playback is not available in this browser. You can still read the visual instructions.');
       }
       audioContext ??= new AudioContext();
-      if (audioContext.state === 'suspended') await audioContext.resume();
-      if (audioContext.state !== 'running') {
+      const context = audioContext;
+      if (context.state === 'suspended') await context.resume();
+      if (controller.signal.aborted) return;
+      if (context.state !== 'running') {
         throw new Error('Audio is not ready. Press listen again to enable playback.');
       }
 
-      const startAt = audioContext.currentTime + 0.06;
+      const startAt = context.currentTime + 0.06;
       for (const tone of exercise.tones) {
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
         const toneStart = startAt + tone.startMilliseconds / 1_000;
         const toneEnd = toneStart + tone.durationMilliseconds / 1_000;
         oscillator.type = 'sine';
@@ -62,7 +90,7 @@
         gain.gain.setValueAtTime(0.18, toneEnd - 0.035);
         gain.gain.exponentialRampToValueAtTime(0.0001, toneEnd);
         oscillator.connect(gain);
-        gain.connect(audioContext.destination);
+        gain.connect(context.destination);
         oscillator.onended = () => {
           oscillator.disconnect();
           gain.disconnect();
@@ -74,16 +102,20 @@
       const lastTone = exercise.tones[exercise.tones.length - 1];
       const totalMilliseconds =
         lastTone.startMilliseconds + lastTone.durationMilliseconds + 80;
-      await new Promise<void>((resolvePromise) =>
-        window.setTimeout(resolvePromise, totalMilliseconds)
-      );
+      await waitForPlaybackCompletion(totalMilliseconds, controller.signal);
     } catch (error) {
-      audioError =
-        error instanceof Error
-          ? error.message
-          : 'The listening example could not be played.';
+      if (!controller.signal.aborted) {
+        audioError =
+          error instanceof Error
+            ? error.message
+            : 'The listening example could not be played.';
+      }
     } finally {
-      isPlaying = false;
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (playbackAbortController === controller) {
+        playbackAbortController = null;
+        isPlaying = false;
+      }
     }
   }
 
