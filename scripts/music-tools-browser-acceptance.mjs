@@ -50,14 +50,15 @@ try {
   const page = await context.newPage();
   await page.addInitScript(() => {
     window.__guitarLabMicRequests = 0;
+    window.__guitarLabMicErrorName = 'NotAllowedError';
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
       value: {
         getUserMedia: async () => {
           window.__guitarLabMicRequests += 1;
           throw new DOMException(
-            'Permission denied for acceptance test',
-            'NotAllowedError'
+            'Microphone failure for acceptance test',
+            window.__guitarLabMicErrorName
           );
         }
       }
@@ -277,13 +278,65 @@ try {
     1,
     'Tuner should request microphone permission once after explicit Start'
   );
+  // Missing devices receive a distinct, actionable message.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  await page.evaluate(() => {
+    window.__guitarLabMicErrorName = 'NotFoundError';
+  });
+  await page.getByRole('button', { name: 'Start tuner' }).click();
+  await page
+    .getByRole('alert')
+    .getByText(/No microphone was found/)
+    .waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    1,
+    'A missing device should be reported after one explicit capture request'
+  );
+
+  // Unsupported browser APIs fail safely without requesting permission.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: undefined
+    });
+  });
+  await page.getByRole('button', { name: 'Start tuner' }).click();
+  await page
+    .getByRole('alert')
+    .getByText(/not supported in this browser or context/i)
+    .waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarLabMicRequests),
+    0,
+    'Unsupported microphone APIs must not invoke getUserMedia'
+  );
+
+  // Restore the controlled device stub before checking the other microphone feature.
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'mediaDevices', {
+      configurable: true,
+      value: {
+        getUserMedia: async () => {
+          window.__guitarLabMicRequests += 1;
+          throw new DOMException(
+            'Microphone failure for acceptance test',
+            'NotAllowedError'
+          );
+        }
+      }
+    });
+  });
+
   // The guided note-recognition exercise also defers microphone permission.
   await page.getByRole('link', { name: 'Practice tools' }).click();
   await page.getByRole('link', { name: /Open exercise/ }).click();
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    1,
+    0,
     'Note-recognition must not request microphone permission on page load'
   );
   await page.getByRole('button', { name: 'Start exercise' }).click();
@@ -293,10 +346,12 @@ try {
     .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    2,
+    1,
     'Note-recognition should request microphone permission once after explicit Start'
   );
 
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   const tunerDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
@@ -307,6 +362,9 @@ try {
     `Tuner page overflows horizontally on mobile: ${JSON.stringify(tunerDimensions)}`
   );
 
+  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: /Open ear training/ }).click();
+  await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   const earTrainingDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
@@ -352,7 +410,7 @@ try {
     `Music tools browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Music-tools browser acceptance passed: chord library and drill, metronome, reference tone, ear-training playback interruption/teardown, tuner permission deferral/denial, fretboard keyboard access and mobile layout.'
+    'Music-tools browser acceptance passed: chord library and drill, metronome, reference tone, ear-training playback interruption/teardown, tuner permission deferral and failure states, tuner/ear-training mobile layout, and fretboard keyboard access.'
   );
 } catch (error) {
   console.error(error);
