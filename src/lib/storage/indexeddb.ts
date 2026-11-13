@@ -806,8 +806,6 @@ export async function loadActiveSkillStateReview(): Promise<ActiveSkillStateRevi
       async (transaction) => {
         const masteryRequest = transaction.objectStore(stores.mastery)
           .index('byLearnerId').getAll(IDBKeyRange.only(profile.id));
-        const attemptsRequest = transaction.objectStore(stores.assessmentAttempts)
-          .index('byLearnerReleaseSkill');
         const mastery = await requestResult<SkillMasteryRecord[]>(masteryRequest);
         const attempts = await requestResult<AssessmentAttemptRecord[]>(
           transaction.objectStore(stores.assessmentAttempts).getAll()
