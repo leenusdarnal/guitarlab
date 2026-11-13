@@ -438,9 +438,27 @@ const masteryDecisionSchema = z
     skillId: skillIdSchema,
     state: skillMasteryStateSchema,
     confidence: z.number().int().min(0).max(100).nullable(),
-    nextReviewAt: z.number().int().nonnegative().nullable()
+    nextReviewAt: z.number().int().nonnegative().nullable(),
+    decisionSource: z.enum(['evidence', 'learner']).default('evidence'),
+    correctionNote: z.string().trim().min(1).max(500).nullable().optional()
   })
-  .strict();
+  .strict()
+  .superRefine((value, context) => {
+    if (value.decisionSource === 'learner' && !value.correctionNote) {
+      context.addIssue({
+        code: 'custom',
+        path: ['correctionNote'],
+        message: 'A learner correction needs a short explanation.'
+      });
+    }
+    if (value.decisionSource !== 'learner' && value.correctionNote) {
+      context.addIssue({
+        code: 'custom',
+        path: ['correctionNote'],
+        message: 'A correction note is only valid for a learner correction.'
+      });
+    }
+  });
 
 export async function updateSkillMasteryFromEvidence(
   input: unknown,
@@ -498,7 +516,9 @@ export async function updateSkillMasteryFromEvidence(
     confidence: value.confidence,
     lastAssessmentId: latest?.id ?? null,
     lastAssessedAt: latest?.assessedAt ?? null,
-    nextReviewAt: value.nextReviewAt
+    nextReviewAt: value.nextReviewAt,
+    decisionSource: value.decisionSource,
+    correctionNote: value.correctionNote ?? null
   });
 
   const record: SkillMasteryRecord = {
@@ -507,6 +527,45 @@ export async function updateSkillMasteryFromEvidence(
   };
   await dependencies.mastery.save(record);
   return record;
+}
+
+const learnerSkillCorrectionSchema = z
+  .object({
+    learnerId: uuidSchema,
+    releaseId: releaseIdSchema,
+    skillId: skillIdSchema,
+    state: skillMasteryStateSchema,
+    confidence: z.number().int().min(0).max(100).nullable(),
+    nextReviewAt: z.number().int().nonnegative().nullable(),
+    note: z.string().trim().min(1).max(500)
+  })
+  .strict();
+
+/** Save a learner-authored correction while retaining the assessment safety gate. */
+export async function correctSkillMasteryState(
+  input: unknown,
+  dependencies: {
+    curriculum: CurriculumRepository;
+    skills: SkillRepository;
+    assessments: AssessmentAttemptRepository;
+    mastery: SkillMasteryRepository;
+    runtime: ApplicationRuntime;
+  }
+): Promise<SkillMasteryRecord> {
+  const value = parseInput(learnerSkillCorrectionSchema, input);
+  return updateSkillMasteryFromEvidence(
+    {
+      learnerId: value.learnerId,
+      releaseId: value.releaseId,
+      skillId: value.skillId,
+      state: value.state,
+      confidence: value.confidence,
+      nextReviewAt: value.nextReviewAt,
+      decisionSource: 'learner',
+      correctionNote: value.note
+    },
+    dependencies
+  );
 }
 
 const startPracticeInputSchema = z
