@@ -1,6 +1,6 @@
 # Transparent skill-state rules
 
-**Status:** implementation slice in progress  
+**Status:** learner-facing implementation added; CI/browser acceptance in progress  
 **Scope:** local learner skill-state explanation and explicit learner correction
 
 ## Evidence boundary
@@ -30,6 +30,10 @@ A learner may correct a suggested state to a less advanced state when their real
 ## Transparency contract
 
 Every explanation returns the suggested state, a stable rule identifier, evidence count, latest outcome and assessment timestamp, review timestamp, and a learner-readable reason. The function is pure and does not persist or mutate records.
+
+## Learner interface
+
+The `/skills` screen lists saved skill snapshots, shows the assessment-based explanation and evidence metadata, and provides a learner correction form. Corrections require a note, are saved to local IndexedDB, retain the learner provenance and cannot bypass the latest-passed assessment gate for `stable`. The dashboard and mobile navigation link to the screen. Browser acceptance seeds local assessment/mastery records, checks the explanation, verifies the stable-state guard, saves a correction and inspects the persisted provenance.
 
 ## Deliberate non-goals
 
