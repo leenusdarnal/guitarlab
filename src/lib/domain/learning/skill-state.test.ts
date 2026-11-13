@@ -37,7 +37,9 @@ const stable: SkillMasteryRecord = {
 
 describe('explainSkillState', () => {
   it('does not infer progress from practice when there are no assessments', () => {
-    expect(explainSkillState({ attempts: [], current: null, now: 100 })).toMatchObject({
+    expect(
+      explainSkillState({ attempts: [], current: null, now: 100 })
+    ).toMatchObject({
       state: 'not_started',
       evidenceCount: 0,
       rule: 'no-assessments'
@@ -45,7 +47,9 @@ describe('explainSkillState', () => {
   });
 
   it('explains a passed latest assessment as a stable suggestion', () => {
-    expect(explainSkillState({ attempts: [baseAttempt], current: null, now: 100 })).toMatchObject({
+    expect(
+      explainSkillState({ attempts: [baseAttempt], current: null, now: 100 })
+    ).toMatchObject({
       state: 'stable',
       latestOutcome: 'passed',
       rule: 'latest-passed'
