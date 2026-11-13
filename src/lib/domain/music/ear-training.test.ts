@@ -26,9 +26,13 @@ describe('ear-training exercise model', () => {
     const first = createEarTrainingExercise('pitch', 0);
     const second = createEarTrainingExercise('pitch', 1);
     expect(first.answer).toBe('first');
-    expect(first.tones[0].frequencyHz).toBeGreaterThan(first.tones[1].frequencyHz);
+    expect(first.tones[0].frequencyHz).toBeGreaterThan(
+      first.tones[1].frequencyHz
+    );
     expect(second.answer).toBe('second');
-    expect(second.tones[1].frequencyHz).toBeGreaterThan(second.tones[0].frequencyHz);
+    expect(second.tones[1].frequencyHz).toBeGreaterThan(
+      second.tones[0].frequencyHz
+    );
   });
 
   it('creates rising, falling and level melodic contours', () => {
@@ -38,16 +42,20 @@ describe('ear-training exercise model', () => {
     expect(rising.answer).toBe('rising');
     expect(falling.answer).toBe('falling');
     expect(level.answer).toBe('level');
-    expect(rising.tones[0].frequencyHz).toBeLessThan(rising.tones[2].frequencyHz);
-    expect(falling.tones[0].frequencyHz).toBeGreaterThan(falling.tones[2].frequencyHz);
+    expect(rising.tones[0].frequencyHz).toBeLessThan(
+      rising.tones[2].frequencyHz
+    );
+    expect(falling.tones[0].frequencyHz).toBeGreaterThan(
+      falling.tones[2].frequencyHz
+    );
     expect(new Set(level.tones.map((tone) => tone.frequencyHz)).size).toBe(1);
   });
 
   it('rejects invalid sequence values and unsupported exercise kinds', () => {
     expect(() => createEarTrainingExercise('pulse', -1)).toThrow(RangeError);
     expect(() => createEarTrainingExercise('pitch', 1.5)).toThrow(RangeError);
-    expect(() =>
-      createEarTrainingExercise('rhythm' as never)
-    ).toThrow(RangeError);
+    expect(() => createEarTrainingExercise('rhythm' as never)).toThrow(
+      RangeError
+    );
   });
 });
