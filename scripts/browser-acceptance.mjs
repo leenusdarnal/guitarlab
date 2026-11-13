@@ -1019,7 +1019,10 @@ try {
     });
     const now = Date.now();
     const passedAttemptId = 'aaaaaaaa-1111-4111-8111-111111111111';
-    const transaction = database.transaction(['assessmentAttempts', 'skillMastery'], 'readwrite');
+    const transaction = database.transaction(
+      ['assessmentAttempts', 'skillMastery'],
+      'readwrite'
+    );
     transaction.objectStore('assessmentAttempts').add({
       id: passedAttemptId,
       learnerId: active,
@@ -1076,9 +1079,13 @@ try {
     'The skill-state fixture needs an active learner'
   );
   await page.goto(`${origin}/skills`, { waitUntil: 'networkidle' });
-  await page.getByRole('heading', { name: 'Skill states, explained.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Skill states, explained.' })
+    .waitFor();
   await page.getByRole('heading', { name: 'Chord Transition' }).waitFor();
-  await page.getByText('No assessment has been recorded for this skill yet.').waitFor();
+  await page
+    .getByText('No assessment has been recorded for this skill yet.')
+    .waitFor();
   await page.locator('#corrected-state').selectOption('stable');
   await page
     .locator('#correction-note')
@@ -1091,7 +1098,9 @@ try {
   await page.locator('#corrected-state').selectOption('practising');
   await page
     .locator('#correction-note')
-    .fill('I can change between these chords slowly, but not reliably at tempo.');
+    .fill(
+      'I can change between these chords slowly, but not reliably at tempo.'
+    );
   await page.getByRole('button', { name: 'Save correction' }).click();
   await page
     .getByRole('status')
@@ -1128,9 +1137,7 @@ try {
     correctedSnapshot.correctionNote,
     'I can change between these chords slowly, but not reliably at tempo.'
   );
-  await page
-    .getByRole('button', { name: 'Alternate Picking' })
-    .click();
+  await page.getByRole('button', { name: 'Alternate Picking' }).click();
   await page.getByText('The latest assessment was passed.').waitFor();
 
   assert.deepEqual(
