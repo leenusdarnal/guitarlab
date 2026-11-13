@@ -15,7 +15,7 @@
 - Post-merge main CI was triggered as run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh its final result before treating the merge as fully validated on main.
 - M7.1 practice sessions/evidence/history/skill-state UI is delivered by PRs #50–59.
 - M8.1 ear training includes pulse, pitch and contour (PR #61) plus interval recognition (PR #67).
-- Open product issues include #16–18; reconcile their acceptance criteria and statuses. Issue #19 and #20 are introduced by the research-integration work.
+- Open product issues include #16–18; reconcile their acceptance criteria and statuses. Issue #68 and #20 are introduced by the research-integration work.
 - Cloudflare production deployment remains deferred. Do not provision production D1, enable authentication/cloud sync or deploy production without explicit approval.
 
 ## 2. Priority order
@@ -26,7 +26,7 @@
 2. Update Issue #16 based on merged M7.1 evidence and close it only if all five acceptance criteria are confirmed.
 3. Update Issue #17 to show pulse/pitch/contour and interval work as implemented while keeping theory recall, CAGED/triads and repertoire open.
 4. Extend Issue #18 with cross-browser audio, microphone privacy, licence and physical-device acceptance.
-5. Create focused Issues #19 (audio/pitch recognition) and #20 (adaptive practice/analytics).
+5. Create focused Issues #19 (audio/pitch recognition) and #69 (adaptive practice/analytics).
 6. Verify the documentation PR's CI and merge it before feature implementation.
 
 **Exit criteria:** one consistent, current source of truth; every new research finding has an adopt/adapt/defer decision and a GitHub execution home.
@@ -41,7 +41,7 @@
 
 **Exit criteria:** a file-level refactor plan, dependency map and tests that protect existing audio/music behaviour.
 
-### P2 — Adaptive practice and learning analytics (Issue #20)
+### P2 — Adaptive practice and learning analytics (Issue #69)
 
 1. Inspect the existing daily practice planner and skill-state rules.
 2. Define a small deterministic prioritisation model using assessment accuracy, recent evidence, review due dates and coverage gaps.
@@ -52,7 +52,7 @@
 
 **Exit criteria:** recommendations are reproducible, explainable, dismissible/correctable and covered by domain/browser tests; practice time alone never grants mastery.
 
-### P3 — Shared audio and microphone pitch recognition (Issue #19)
+### P3 — Shared audio and microphone pitch recognition (Issue #68)
 
 1. Implement reusable audio-session lifecycle only where the audit shows duplication.
 2. Add explicit microphone permission and device capability handling.
