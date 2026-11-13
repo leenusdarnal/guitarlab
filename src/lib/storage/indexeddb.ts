@@ -10,6 +10,12 @@ import {
   updateLessonProgress
 } from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
+import { buildAdaptivePracticeSnapshot } from '../application/adaptive-practice';
+import type { AdaptivePracticeSnapshot } from '../application/adaptive-practice';
+import {
+  ACTIVE_CURRICULUM_RELEASE_ID,
+  listSkillsForLessons
+} from '../application/skill-catalog';
 import { explainSkillState } from '../domain/learning/skill-state';
 import type { SkillStateExplanation } from '../domain/learning/skill-state';
 import year1DashboardIndex from '../../../content/curriculum/year-1-dashboard-index.json';
@@ -30,7 +36,7 @@ import type {
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 4;
+export const LOCAL_DATABASE_VERSION = 5;
 
 const stores = {
   metadata: 'metadata',
@@ -137,14 +143,24 @@ export function openLocalDatabase(
           'completedAt'
         ]);
       }
-      if (!database.objectStoreNames.contains(stores.assessmentAttempts)) {
-        const attempts = database.createObjectStore(stores.assessmentAttempts, {
-          keyPath: 'id'
-        });
+      const attempts = database.objectStoreNames.contains(
+        stores.assessmentAttempts
+      )
+        ? request.transaction!.objectStore(stores.assessmentAttempts)
+        : database.createObjectStore(stores.assessmentAttempts, {
+            keyPath: 'id'
+          });
+      if (!attempts.indexNames.contains('byLearnerReleaseSkill')) {
         attempts.createIndex('byLearnerReleaseSkill', [
           'learnerId',
           'curriculumReleaseId',
           'skillId'
+        ]);
+      }
+      if (!attempts.indexNames.contains('byLearnerRelease')) {
+        attempts.createIndex('byLearnerRelease', [
+          'learnerId',
+          'curriculumReleaseId'
         ]);
       }
       if (!database.objectStoreNames.contains(stores.mastery)) {
@@ -178,11 +194,16 @@ export function openLocalDatabase(
           'startedAt'
         ]);
       }
-      if (!database.objectStoreNames.contains(stores.practiceEvidence)) {
-        const evidence = database.createObjectStore(stores.practiceEvidence, {
-          keyPath: 'id'
-        });
+      const evidence = database.objectStoreNames.contains(stores.practiceEvidence)
+        ? request.transaction!.objectStore(stores.practiceEvidence)
+        : database.createObjectStore(stores.practiceEvidence, {
+            keyPath: 'id'
+          });
+      if (!evidence.indexNames.contains('byLearnerSession')) {
         evidence.createIndex('byLearnerSession', ['learnerId', 'sessionId']);
+      }
+      if (!evidence.indexNames.contains('byLearnerId')) {
+        evidence.createIndex('byLearnerId', 'learnerId');
       }
     };
 
@@ -782,6 +803,112 @@ export async function loadActiveLearnerDashboard() {
       }
     );
     return snapshot;
+  } finally {
+    database.close();
+  }
+}
+
+
+/**
+ * Build recommendations from the active learner's local evidence and only
+ * the explicitly mapped skills reached in the Year 1 dashboard route.
+ * This is a read-only view; it never writes mastery or assessment records.
+ */
+export async function loadActiveAdaptivePracticeSnapshot(
+  now = Date.now()
+): Promise<AdaptivePracticeSnapshot> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    return await inTransaction(
+      database,
+      [
+        stores.progress,
+        stores.assessmentAttempts,
+        stores.mastery,
+        stores.practiceSessions,
+        stores.practiceEvidence
+      ],
+      'readonly',
+      async (transaction) => {
+        const progressRequest = transaction
+          .objectStore(stores.progress)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const attemptsRequest = transaction
+          .objectStore(stores.assessmentAttempts)
+          .index('byLearnerRelease')
+          .getAll([profile.id, ACTIVE_CURRICULUM_RELEASE_ID]);
+        const masteryRequest = transaction
+          .objectStore(stores.mastery)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const sessionsRequest = transaction
+          .objectStore(stores.practiceSessions)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const evidenceRequest = transaction
+          .objectStore(stores.practiceEvidence)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+
+        const [
+          allProgress,
+          attempts,
+          allMastery,
+          practiceSessions,
+          practiceEvidence
+        ] = await Promise.all([
+          requestResult<LessonProgressRecord[]>(progressRequest),
+          requestResult<AssessmentAttemptRecord[]>(attemptsRequest),
+          requestResult<SkillMasteryRecord[]>(masteryRequest),
+          requestResult<PracticeSessionRecord[]>(sessionsRequest),
+          requestResult<PracticeEvidenceRecord[]>(evidenceRequest)
+        ]);
+
+        const progress = allProgress.filter(
+          (record) =>
+            record.learnerId === profile.id &&
+            record.curriculumReleaseId === ACTIVE_CURRICULUM_RELEASE_ID
+        );
+        const mastery = allMastery.filter(
+          (record) =>
+            record.learnerId === profile.id &&
+            record.curriculumReleaseId === ACTIVE_CURRICULUM_RELEASE_ID
+        );
+        const dashboard = buildDashboardSnapshot({
+          profile,
+          lessons: year1DashboardIndex.lessons,
+          phases: year1DashboardIndex.phases,
+          progress,
+          mastery,
+          practiceSessions,
+          now
+        });
+        const reachedLessonIds = new Set(
+          progress
+            .filter(
+              (record) =>
+                record.status === 'completed' ||
+                record.status === 'in_progress'
+            )
+            .map((record) => record.lessonId)
+        );
+        if (dashboard.nextLesson) {
+          reachedLessonIds.add(dashboard.nextLesson.id);
+        }
+
+        return buildAdaptivePracticeSnapshot({
+          learnerId: profile.id,
+          curriculumReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
+          skills: listSkillsForLessons([...reachedLessonIds]),
+          attempts,
+          mastery,
+          practiceEvidence,
+          now
+        });
+      }
+    );
   } finally {
     database.close();
   }
