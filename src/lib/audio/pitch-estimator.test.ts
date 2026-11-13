@@ -64,6 +64,13 @@ describe('estimatePitch', () => {
     expect(estimatePitch(samples, SAMPLE_RATE).status).toBe('uncertain');
   });
 
+  it('does not classify out-of-band 60 Hz electrical hum as a guitar note', () => {
+    const samples = makeTone(60, 0.35);
+    const result = estimatePitch(samples, SAMPLE_RATE);
+
+    expect(result.status).not.toBe('detected');
+  });
+
   it('rejects a buffer that is too short for the requested range', () => {
     expect(estimatePitch(new Float32Array(32), SAMPLE_RATE).status).toBe(
       'insufficient-data'
