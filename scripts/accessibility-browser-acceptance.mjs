@@ -23,7 +23,8 @@ const routes = [
   '/tools',
   '/tools/fretboard',
   '/tools/chords',
-  '/tools/metronome'
+  '/tools/metronome',
+  '/tools/ear-training'
 ];
 const wcagTags = [
   'wcag2a',
@@ -226,7 +227,7 @@ try {
   }
 
   console.log(
-    'Accessibility checks passed: 10 routes in dark ' +
+    'Accessibility checks passed: 11 routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
       'narrow-screen reflow, and keyboard skip-link focus.'
   );
