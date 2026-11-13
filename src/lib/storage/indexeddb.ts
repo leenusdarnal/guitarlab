@@ -787,7 +787,6 @@ export async function loadActiveLearnerDashboard() {
   }
 }
 
-
 export type ActiveSkillStateReview = {
   skillId: string;
   mastery: SkillMasteryRecord;
@@ -810,9 +809,8 @@ export async function loadActiveSkillStateReview(): Promise<
           .objectStore(stores.mastery)
           .index('byLearnerId')
           .getAll(IDBKeyRange.only(profile.id));
-        const mastery = await requestResult<SkillMasteryRecord[]>(
-          masteryRequest
-        );
+        const mastery =
+          await requestResult<SkillMasteryRecord[]>(masteryRequest);
         const attempts = await requestResult<AssessmentAttemptRecord[]>(
           transaction.objectStore(stores.assessmentAttempts).getAll()
         );
