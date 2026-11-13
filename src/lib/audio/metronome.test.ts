@@ -248,7 +248,6 @@ describe('WebAudioMetronome audio lifecycle', () => {
   });
 });
 
-
 describe('playReferenceTone audio lifecycle', () => {
   it('resumes an owned context, schedules the requested tone, and closes after playback', async () => {
     installAudioEnvironment();
