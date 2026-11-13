@@ -266,10 +266,10 @@ Verify domain ownership, DNS, Worker routing and TLS/HTTPS. The previous Vercel 
 | ID | Task | Priority | Status |
 |---|---|---|---|
 | CF-01 | Complete repository deployment and data-flow audit | Critical | Repository code audit complete; settings verification remains pending |
-| CF-02 | Verify Cloudflare Workers, routes, bindings and production resource | Critical | Partially verified — one preview Worker found; no D1 DB or production Worker found in inspected account |
+| CF-02 | Verify Cloudflare Workers, routes, bindings and production resource | Critical | Connected account rechecked: one preview Worker, no production Worker, no D1 databases and no custom Worker domains; account scope limitation remains |
 | CF-03 | Decide whether remote D1 is required; provision only if approved | Critical | Decision pending |
-| CF-04 | Align environment configuration with the selected data architecture | Critical | Pending — default deploy script needs an explicit environment target |
-| CF-05 | Verify preview secrets and variables | High | Pending verification |
+| CF-04 | Align environment configuration with the selected data architecture | Critical | In progress — environment-explicit preview scripts and workflow integration prepared in PR |
+| CF-05 | Verify preview secrets and variables | High | Blocked on authorized GitHub environment settings access; values not exposed |
 | CF-06 | Validate preview build and deployment workflow | Critical | Partially complete |
 | CF-07 | Complete preview browser and application acceptance | Critical | Pending |
 | CF-08 | Verify production Worker and production configuration | Critical | Pending |
@@ -377,3 +377,31 @@ The repository audit was extended after PR #64 merged. Main branch at the time o
 6. Keep production deployment and remote migrations blocked until separately approved.
 
 CF-01 repository code audit is complete. CF-02 and CF-05 still require environment/resource verification. No live Cloudflare resources, databases, secrets, migrations or deployments were changed during this audit.
+
+
+## 11. CF-02 verification update — 13 November 2026
+
+The connected Cloudflare account was rechecked after PR #65:
+
+- Exactly one Worker script is listed: `guitarlab-preview`.
+- No production Worker named `guitarlab` is present in this connected account's Worker script listing.
+- The account-level D1 database listing returned an empty result.
+- The Worker custom-domain listing returned an empty result; the Worker script metadata also reports no attached routes.
+- The preview Worker has one observed deployment, with 100% traffic assigned to version `5f9f1397-d117-43d9-95b7-87151e18206a`.
+- The deployed Worker settings show an `ASSETS` binding only; no D1 binding is present. Observability and invocation logs are enabled.
+
+These findings describe only the Cloudflare account available to the connected integration. They do not prove that a production Worker cannot exist in another account or zone.
+
+The GitHub integration cannot read Actions environment secrets or variables. The presence of `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the `preview` environment therefore remains unverified. Do not attempt a preview deployment until an authorized operator verifies those settings in GitHub.
+
+## 12. CF-04 environment-explicit deployment change
+
+The default `npm run deploy` command previously invoked plain `wrangler deploy`, which selects the default `wrangler.jsonc` configuration. That config names the Worker `guitarlab` and contains a local-only all-zero D1 placeholder. The generic command has been removed in the proposed change.
+
+The proposed package scripts are:
+
+- `npm run deploy:preview:dry-run` — validates only `wrangler.preview.jsonc`.
+- `npm run deploy:preview` — targets only `wrangler.preview.jsonc`.
+- No production deployment script is introduced until the production target and release gates are verified and separately approved.
+
+The manual preview workflow is updated to call these named scripts, keeping the config selection in one place. This change does not run a deployment and does not modify Cloudflare resources. Merge only after CI passes.
