@@ -169,6 +169,8 @@ describe('WebAudioMetronome audio lifecycle', () => {
 
     expect(metronome.isRunning).toBe(false);
     expect(vi.getTimerCount()).toBe(0);
+    const oscillator = FakeAudioContext.instances[0].oscillators[0];
+    expect(oscillator.stop).toHaveBeenCalledTimes(2);
     expect(documentMock.removeEventListener).toHaveBeenCalledWith(
       'visibilitychange',
       expect.any(Function)
@@ -176,6 +178,28 @@ describe('WebAudioMetronome audio lifecycle', () => {
     expect(context.close).not.toHaveBeenCalled();
     await metronome.dispose();
     expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('cancels clicks already queued in the lookahead window when stopped', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome();
+
+    await metronome.start();
+    const context = FakeAudioContext.instances[0];
+    const oscillator = context.oscillators[0];
+    const gain = context.gains[0];
+
+    expect(oscillator.stop).toHaveBeenCalledOnce();
+    metronome.stop();
+
+    expect(oscillator.stop).toHaveBeenCalledTimes(2);
+    expect(context.close).not.toHaveBeenCalled();
+
+    oscillator.onended?.();
+    expect(oscillator.disconnect).toHaveBeenCalledOnce();
+    expect(gain.disconnect).toHaveBeenCalledOnce();
+    await metronome.dispose();
   });
 
   it('stops when the document becomes hidden', async () => {
