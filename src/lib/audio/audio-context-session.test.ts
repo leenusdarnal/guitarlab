@@ -108,4 +108,31 @@ describe('AudioContextSession', () => {
     );
     expect(session.currentContext).toBeNull();
   });
+  it('does not close a replacement session when an older resume finishes late', async () => {
+    const first = new FakeAudioContext();
+    const second = new FakeAudioContext();
+    let finishFirstResume: (() => void) | undefined;
+    first.resume.mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishFirstResume = resolve;
+        })
+    );
+    const contexts = [first, second];
+    const session = new AudioContextSession(
+      () => contexts.shift() as unknown as AudioContext
+    );
+
+    const firstResume = session.resume();
+    await session.close();
+    await expect(session.resume()).resolves.toBe(second);
+
+    finishFirstResume?.();
+    await expect(firstResume).rejects.toThrow(
+      'Audio is not ready. Tap the audio control again.'
+    );
+    expect(second.close).not.toHaveBeenCalled();
+    expect(session.currentContext).toBe(second);
+  });
+
 });
