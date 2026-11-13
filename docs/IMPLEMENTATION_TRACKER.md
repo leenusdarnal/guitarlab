@@ -22,7 +22,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M3 dashboard and planning | Merged | PR #26 dashboard and PR #28 explainable 10/20/40/custom practice planner; browser acceptance covers key planning journeys |
 | M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
 | M4.2 interactive lesson progress | Merged — PR #33; manual QA pending | Local section progress, checkpoint self-check, private next-practice note and explicit completion/resume. Lesson completion remains separate from skill mastery; Chromium coverage was added in the PR |
-| Music tools, practice studio and repertoire | M6.1 tools merged; M7/M8 pending | PR #45 and PR #46 deliver the tuning-aware fretboard, chord library, chord-change drill and metronome. The chromatic tuner, complete Practice Studio, ear training/theory and repertoire remain future work |
+| Music tools, practice studio and repertoire | M6.1 and M7.1 merged; M8.1 underway | PRs #45–46 deliver fretboard, chords and metronome. PRs #50–59 deliver Practice Studio and transparent skill states. M8.1 slice 1 adds pulse, pitch comparison and melodic contour exercises with locally generated audio; interval recognition, theory recall and repertoire remain subsequent slices |
 | Release hardening | Not ready | PR #35 adds the first offline app shell; PR #36 adds P1 reliability/security-header/storage-persistence and exact-SHA preview-gate hardening; PR #42 adds backup/restore/rollback/reset browser coverage; PR #43 adds IndexedDB v1-to-v2 upgrade and desktop/mobile offline browser acceptance. Physical-device acceptance, CSP, full accessibility/privacy review, environment isolation, preview deployment and rollback verification remain |
 
 **Repository state (2026-11-12):** PRs #33, #35, #36, #42, #43, #45 and #46 are merged into `main`. PR #42's Chromium suite verifies invalid/unsupported backup rejection, failed-restore transaction rollback, reset cancel/confirm and restore-to-clean-profile. PR #43 upgrades IndexedDB v1 to v2 without losing the active learner, preferences or existing practice session, and checks cached/uncached offline navigation at desktop and mobile viewport sizes. Both PR checks and the PR #43 post-merge `main` CI run passed. Physical-device QA remains open and is documented in [the manual acceptance runbook](MANUAL_ACCEPTANCE.md). The active `main` ruleset requires pull requests and the `Validate application and curriculum` check. No preview or production deployment, production D1 database, authentication or cloud sync is configured.
@@ -79,6 +79,16 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - The screen explicitly states that elapsed time is not mastery or accuracy evidence.
 - Existing application-service tests already cover invalid duration, successful completion, duplicate completion and no automatic mastery.
 - Not yet verified: full CI, route browser acceptance, pause/resume, exercise-level observations and manual device checks.
+
+## M8.1 first implementation slice (2026-11-13)
+
+- Branch: `feat/m8-ear-training-foundation`, based on main commit `1022677028607902608300f918e825e70d5cc17c`.
+- Adds deterministic, framework-independent listening exercise definitions for steady/uneven pulse, two-note high/low comparison and rising/falling/level melodic contour.
+- Adds `/tools/ear-training` with explicit user-triggered Web Audio playback, visible task instructions, replay, answer feedback, retry and next-exercise flow.
+- Audio is synthesized locally; no microphone, recording, remote audio asset or copyrighted sample is used.
+- Adds unit coverage and extends music-tool browser acceptance for correct/incorrect/retry paths; adds the route to both-theme desktop/320px axe scans.
+- This slice does not change lesson progress, practice evidence or skill mastery.
+- Remaining in Issue #17: interval recognition, music-theory recall and repertoire workspace.
 
 ## How progress is recorded
 
