@@ -27,7 +27,8 @@ const index = {
     week: lesson.week,
     title: lesson.title,
     focus: lesson.focus,
-    estimatedMinutes: lesson.estimatedMinutes
+    estimatedMinutes: lesson.estimatedMinutes,
+    skillIds: [...lesson.skillIds]
   }))
 };
 
