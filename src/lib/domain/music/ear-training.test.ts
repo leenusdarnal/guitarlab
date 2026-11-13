@@ -65,7 +65,10 @@ describe('ear-training exercise model', () => {
       expect(exercise.tones[0].frequencyHz).toBe(440);
       expect(exercise.tones[1].frequencyHz).toBeCloseTo(secondFrequency);
       expect(exercise.choices.map((choice) => choice.value)).toEqual([
-        'unison', 'minor_third', 'major_third', 'perfect_fifth'
+        'unison',
+        'minor_third',
+        'major_third',
+        'perfect_fifth'
       ]);
     });
   });
