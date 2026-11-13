@@ -64,16 +64,16 @@ export function estimatePitch(
   }
   const rms = Math.sqrt(squaredLevel / samples.length);
 
-  if (rms < config.minRms) {
-    return { status: 'silence', confidence: 0, rms };
-  }
-
   const minLag = Math.max(2, Math.floor(sampleRate / config.maxFrequencyHz));
   const requestedMaxLag = Math.ceil(sampleRate / config.minFrequencyHz);
   // At least two complete comparisons must remain for every candidate lag.
   const maxLag = Math.min(requestedMaxLag, Math.floor(samples.length / 2));
   if (maxLag <= minLag + 1) {
     return { status: 'insufficient-data', confidence: 0, rms };
+  }
+
+  if (rms < config.minRms) {
+    return { status: 'silence', confidence: 0, rms };
   }
 
   const difference = new Float64Array(maxLag + 1);
