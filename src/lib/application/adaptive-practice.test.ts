@@ -141,7 +141,9 @@ describe('buildAdaptivePracticeSnapshot', () => {
       practiceEvidence: [],
       now: 400
     });
-    const analytics = result.skillAnalytics.find((item) => item.skillId === 'rhythm.pulse');
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'rhythm.pulse'
+    );
     expect(analytics?.measuredScoreMean).toBe(90);
     expect(analytics?.measuredScoreSpread).toBe(10);
     expect(analytics?.accuracyEvidenceStatus).toBe('available');
