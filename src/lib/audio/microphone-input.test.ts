@@ -1,8 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import {
-  MicrophoneInput,
-  MicrophoneInputError
-} from './microphone-input';
+import { MicrophoneInput, MicrophoneInputError } from './microphone-input';
 
 class FakeTrack {
   stop = vi.fn();
