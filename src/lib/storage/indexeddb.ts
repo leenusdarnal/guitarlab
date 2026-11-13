@@ -795,7 +795,9 @@ export type ActiveSkillStateReview = {
 };
 
 /** Read existing learner skill snapshots and explain each from its assessment history. */
-export async function loadActiveSkillStateReview(): Promise<ActiveSkillStateReview[]> {
+export async function loadActiveSkillStateReview(): Promise<
+  ActiveSkillStateReview[]
+> {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
@@ -804,9 +806,13 @@ export async function loadActiveSkillStateReview(): Promise<ActiveSkillStateRevi
       [stores.mastery, stores.assessmentAttempts],
       'readonly',
       async (transaction) => {
-        const masteryRequest = transaction.objectStore(stores.mastery)
-          .index('byLearnerId').getAll(IDBKeyRange.only(profile.id));
-        const mastery = await requestResult<SkillMasteryRecord[]>(masteryRequest);
+        const masteryRequest = transaction
+          .objectStore(stores.mastery)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const mastery = await requestResult<SkillMasteryRecord[]>(
+          masteryRequest
+        );
         const attempts = await requestResult<AssessmentAttemptRecord[]>(
           transaction.objectStore(stores.assessmentAttempts).getAll()
         );
@@ -887,7 +893,11 @@ export async function correctActiveSkillState(input: {
           findForRelease: async (releaseId, skillId) =>
             releaseId === existing.curriculumReleaseId &&
             skillId === existing.skillId
-              ? { id: skillId, category: 'learner-skill', displayName: skillId }
+              ? {
+                  id: skillId,
+                  category: 'learner-skill',
+                  displayName: skillId
+                }
               : null
         },
         assessments: repositories.assessments,
