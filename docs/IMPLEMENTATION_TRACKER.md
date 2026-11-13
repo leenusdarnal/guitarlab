@@ -1,6 +1,6 @@
 # GuitarLab Implementation Tracker
 
-**Last updated:** 2026-11-12  
+**Last updated:** 2026-11-13  
 **Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
@@ -67,7 +67,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 |---|---|---|---|
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Complete — PRs #45 and #46 merged; Issue #15 closed | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone; unit and browser acceptance are included |
-| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Session lifecycle PRs #50–51, evidence contract #52, local persistence #56 and Practice Studio capture/notes #57 merged; history filters in progress | Practice observations are persisted per learner/session, included in backup/restore and captured/displayed in Practice Studio. Sessions support optional reflection and one next target. This slice adds search, status and date-range filters to the local history. Assessment-driven next-review scheduling already feeds the dashboard; inspectable/correctable skill-state rules remain a separate follow-up |
+| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | PRs #50–57 merged; searchable/filterable history merged in PR #58 | Local sessions, pause/resume, append-only practice observations, reflection/next target, backup/restore and searchable history are merged. Assessment review scheduling remains unchanged. Transparent state explanations and learner corrections are in the current implementation slice |
 | M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
 
@@ -115,3 +115,16 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - Browser acceptance covers pause, frozen timer, pause reload recovery, resume, active reload recovery and finish.
 - PR #51 CI run `43207060655` passed both required jobs, including the two-tab browser acceptance. A documentation-only reconciliation commit is being revalidated on the latest head. PR remains open/unmerged; Issue #16 remains open.
 - Review follow-up: paused status is preserved in dashboard read models; two-tab concurrency browser acceptance is included and passes. The unused D1 schema remains unchanged intentionally until its migration is introduced.
+
+
+## Resume checkpoint — 2026-11-13 (PR #58 merged; skill-state rules underway)
+
+- **Verified main:** `9dbb69ef4181a7f1605da61ed3139b4741843c83` (PR #58 merged; searchable/filterable Practice Studio history).
+- **Active branch:** `feat/m7-transparent-skill-state`.
+- **Current implementation:** pure, deterministic `explainSkillState` rule engine with human-readable reasons and explicit rule IDs; learner correction application service requires a note and records `decisionSource: learner` plus `correctionNote` on the mastery snapshot.
+- **Safety invariant:** stable still requires the latest assessment for the exact learner/release/skill to be passed. Practice duration, lesson completion and self-reported practice observations remain excluded from mastery.
+- **Tests added:** state mapping, deterministic latest-attempt selection, due-review precedence, correction metadata validation, and application-service learner correction.
+- **Documentation:** `docs/SKILL_STATE_RULES.md`.
+- **Remaining in this slice:** verify formatting/type/tests/CI; build learner-facing skill-state review and correction UI with browser acceptance; verify backup compatibility for correction metadata; update tracker with PR and CI evidence.
+- **Manual release gate:** physical desktop/iOS/Android offline, reload and backup/restore acceptance remains unverified.
+- **Deferred:** PR #47 CI redesign, Cloudflare preview/production deployment, production D1, accounts and cloud sync.
