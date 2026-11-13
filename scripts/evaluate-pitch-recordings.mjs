@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { estimatePitch } from '../src/lib/audio/pitch-estimator.ts';
 import { StableNoteTracker } from '../src/lib/audio/stable-note-tracker.ts';
 
@@ -212,12 +211,6 @@ async function main() {
 
   const pitched = results.filter((result) => result.segmentType === 'pitched-note');
   const quiet = results.filter((result) => result.segmentType === 'silence-or-noise');
-  const allErrors = pitched.flatMap((result) => {
-    const values = [];
-    if (result.medianAbsoluteCentsError !== null) values.push(result.medianAbsoluteCentsError);
-    if (result.p95AbsoluteCentsError !== null) values.push(result.p95AbsoluteCentsError);
-    return values;
-  });
   const report = {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
