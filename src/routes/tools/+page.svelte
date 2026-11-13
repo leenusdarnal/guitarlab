@@ -17,7 +17,7 @@
     <h1>Tools for your <em>practice.</em></h1>
     <p>
       Clear, focused tools that help connect the fretboard, harmony and rhythm to
-      the music you are learning. Everything here works without microphone access.
+      the music you are learning. Microphone access is optional and only used by the tuner after you press Start.
     </p>
   </header>
 
