@@ -21,7 +21,7 @@
 
 ## 2. Priority order
 
-### P0 — Complete research integration documentation (completed)
+### P0 — Reconcile legacy milestone tracking and research plan (completed)
 
 1. [x] Merge the research-integration plan and reconcile roadmap, tracker, architecture and execution checkpoint (PR #70).
 2. [x] Close Issue #16 after verifying all five M7.1 acceptance criteria against merged PRs #50–59.
@@ -34,7 +34,7 @@
 
 ### P1 — Audio lifecycle regression tests and shared foundation (Issue #68)
 
-**Completed audit:** `docs/AUDIO_ARCHITECTURE_AUDIT.md` inventories metronome, reference-tone and ear-training context ownership; confirms no microphone/tuner capture exists; records duplicated oscillator/gain setup and teardown risks.
+**Completed audit:** `docs/AUDIO_ARCHITECTURE_AUDIT.md` inventories metronome, reference-tone and ear-training context ownership; confirms no microphone/tuner capture exists; records duplicated oscillator/gain setup and teardown risks. Issue #68's architecture-audit acceptance criterion is checked.
 
 1. Add fake-Web-Audio tests for context creation/resume/close, error handling and node cleanup.
 2. Add ear-training teardown/visibility tests and characterize the metronome's already-scheduled click tail.
