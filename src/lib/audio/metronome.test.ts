@@ -112,7 +112,9 @@ describe('Web Audio metronome configuration', () => {
 
   it('rejects invalid time signature counts', () => {
     expect(() => new WebAudioMetronome({ beatsPerBar: 0 })).toThrow(RangeError);
-    expect(() => new WebAudioMetronome({ beatsPerBar: 13 })).toThrow(\n      RangeError\n    );
+    expect(() => new WebAudioMetronome({ beatsPerBar: 13 })).toThrow(
+      RangeError
+    );
     expect(() => new WebAudioMetronome().setBeatsPerBar(0)).toThrow(RangeError);
   });
 
