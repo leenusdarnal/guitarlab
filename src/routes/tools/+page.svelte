@@ -49,6 +49,19 @@
     </article>
 
     <article class="tool-row available">
+      <div class="tool-symbol" aria-hidden="true">♯</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Chromatic · Microphone · Pitch</span></div>
+        <h2>Chromatic tuner</h2>
+        <p>
+          Tune one string at a time with confidence-aware pitch detection and a clear
+          flat-to-sharp meter. Microphone access starts only when you choose Start.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/tuner')}>Open tuner <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">♫</div>
       <div class="tool-copy">
         <div class="tool-meta"><span class="available-label">Available now</span><span>Listening · Pulse · Pitch · Intervals</span></div>
@@ -76,8 +89,8 @@
   </section>
 
   <p class="privacy-note">
-    GuitarLab's music tools calculate and play locally in your browser. They do not
-    upload learner data or request microphone access.
+    GuitarLab's music tools process locally in your browser. The tuner requests microphone
+    access only after you press Start; raw audio is never uploaded or stored.
   </p>
 </main>
 
