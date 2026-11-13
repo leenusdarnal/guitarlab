@@ -183,7 +183,9 @@ try {
   await page.getByText("That's right.").waitFor();
 
   await page.getByRole('button', { name: 'Intervals' }).click();
-  await page.getByRole('heading', { name: 'How far apart were the two notes?' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'How far apart were the two notes?' })
+    .waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await waitForEarAudio();
   await page.getByRole('button', { name: 'Same note (unison)' }).click();
