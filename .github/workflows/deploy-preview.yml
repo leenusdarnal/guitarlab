@@ -112,10 +112,10 @@ jobs:
         run: npm run build
 
       - name: Validate preview deployment configuration
-        run: npx wrangler deploy --config wrangler.preview.jsonc --dry-run
+        run: npm run deploy:preview:dry-run
 
       - name: Deploy preview Worker
-        run: npx wrangler deploy --config wrangler.preview.jsonc
+        run: npm run deploy:preview
 
       - name: Smoke-test deployed preview
         shell: bash
