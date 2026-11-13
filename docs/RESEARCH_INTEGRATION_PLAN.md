@@ -118,7 +118,7 @@ A research finding is incorporated only when:
 - [Issue #16](https://github.com/leenusdarnal/guitarlab/issues/16) — M7.1 practice sessions/evidence loop.
 - [Issue #17](https://github.com/leenusdarnal/guitarlab/issues/17) — M8.1 ear training, theory and repertoire.
 - [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18) — M9.1 release hardening.
-- Issue #68 — shared audio and microphone pitch recognition.
-- Issue #69 — adaptive practice recommendations and learning analytics.
+- [Issue #68 — shared audio and microphone pitch recognition](https://github.com/leenusdarnal/guitarlab/issues/68).
+- [Issue #69 — adaptive practice recommendations and learning analytics](https://github.com/leenusdarnal/guitarlab/issues/69).
 
 GitHub Issues and merged PRs are the execution records. This document is the research-decision record, not a substitute for current code or CI evidence.
