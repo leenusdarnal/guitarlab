@@ -265,10 +265,10 @@ Verify domain ownership, DNS, Worker routing and TLS/HTTPS. The previous Vercel 
 
 | ID | Task | Priority | Status |
 |---|---|---|---|
-| CF-01 | Complete repository deployment and data-flow audit | Critical | In progress |
-| CF-02 | Verify Cloudflare Workers, routes, bindings and production resource | Critical | Partially verified |
+| CF-01 | Complete repository deployment and data-flow audit | Critical | Repository code audit complete; settings verification remains pending |
+| CF-02 | Verify Cloudflare Workers, routes, bindings and production resource | Critical | Partially verified — one preview Worker found; no D1 DB or production Worker found in inspected account |
 | CF-03 | Decide whether remote D1 is required; provision only if approved | Critical | Decision pending |
-| CF-04 | Align environment configuration with the selected data architecture | Critical | Pending |
+| CF-04 | Align environment configuration with the selected data architecture | Critical | Pending — default deploy script needs an explicit environment target |
 | CF-05 | Verify preview secrets and variables | High | Pending verification |
 | CF-06 | Validate preview build and deployment workflow | Critical | Partially complete |
 | CF-07 | Complete preview browser and application acceptance | Critical | Pending |
@@ -329,3 +329,51 @@ The preview Worker exists and responds, but this does not establish full applica
 **Do not create databases, modify live Cloudflare resources, run remote migrations, deploy preview or deploy production without the applicable explicit approval.**
 
 Execution order: audit → verify resources → decide persistence architecture → prepare environment configuration → validate preview → prepare production → obtain approval → deploy production → monitor.
+
+
+## 10. CF-01 audit update — 13 November 2026
+
+The repository audit was extended after PR #64 merged. Main branch at the time of this review was `ac82086e9e47bc920b178c6c134dd51eedfba74c`.
+
+### Database and application data-flow
+
+- Drizzle has one committed migration: `drizzle/migrations/0000_overrated_star_brand.sql`, with one journal entry.
+- The migration defines 10 tables, 14 triggers, 152 curriculum lesson metadata rows and 34 skill identifiers.
+- The schema includes learner profiles, lesson progress/completion, assessment evidence, mastery snapshots and practice sessions. It does not include user identity or authentication/session tables.
+- The migration finalizer fingerprints the six authored curriculum JSON files and prevents silently rewriting the seeded curriculum release. It adds immutable curriculum and append-only evidence guards.
+- CI successfully generated/finalized the migration, applied it to local-only D1 and ran the local D1 invariant tests.
+- `src/lib/server/db/index.ts` exports a request-scoped Drizzle client factory, but the inspected server route loaders do not use it. The only server page loaders found are the public curriculum listing and lesson reader; neither accesses D1. The repository tree contains no `+server.ts` API routes.
+- Learner persistence is implemented through IndexedDB adapters and browser-local storage. The README and data-model document explicitly say no learner-facing D1 data route or cloud sync is enabled.
+- `src/app.d.ts` declares a `DB: D1Database` platform binding even though the preview configuration intentionally omits it. This is currently a type declaration, not evidence of runtime DB use. Keep it under review and avoid adding D1-dependent code until the environment contract is explicit.
+
+**Conclusion:** Remote D1 provisioning is not a prerequisite for deploying the current local-first application. Do not create preview or production databases unless a separately approved cloud-sync scope requires them.
+
+### Deployment command safety
+
+- `package.json` currently defines `deploy: wrangler deploy`.
+- The default `wrangler.jsonc` names the Worker `guitarlab` and includes the all-zero local D1 placeholder ID.
+- Running the generic `npm run deploy` with Cloudflare credentials could target the production-named Worker using the default configuration. This command was not run.
+- Before any deployment is authorized, replace ambiguous deployment commands with explicit environment-specific commands/configuration, and make accidental production deployment difficult or impossible.
+- The existing preview GitHub Actions workflow is safer: manual dispatch with an explicit boolean confirmation, main-tip SHA verification, exact-SHA CI checks, the `preview` GitHub environment, configuration dry-run and preview deployment.
+- The preview workflow rebuilds the selected commit; it does not promote the CI artifact. The CI workflow uploads a one-day artifact containing the Worker build and `wrangler.jsonc`, while the preview deployment workflow rebuilds using `wrangler.preview.jsonc`. Decide whether to promote a single tested artifact or retain a reproducible exact-SHA rebuild and document that choice.
+- The post-deploy preview smoke test checks that HTML contains `GuitarLab`; it does not execute the deployed app's full browser acceptance suite.
+
+### GitHub controls and CI
+
+- An active repository ruleset named **Protect main branch** targets `refs/heads/main`.
+- It blocks branch deletion and non-fast-forward updates, requires pull requests, and requires the `Validate application and curriculum` status check with strict up-to-date checks.
+- The ruleset currently does not require the separate `Check Node.js 26 compatibility` status for merging. The preview workflow independently requires both named checks before deploying.
+- PR #64 merged successfully. The subsequent main CI run completed successfully: application/curriculum validation and Node.js 26 compatibility both passed, including local D1 migration/invariant checks, build, local Worker smoke test, browser acceptance, music-tool browser acceptance, accessibility and curriculum browser acceptance.
+- The linked GitHub integration could not read the repository's branch-protection endpoint directly, but the repository ruleset endpoint was readable and confirmed the active ruleset.
+- The existence and values of GitHub environment secrets/variables were not independently verified through the available read-only repository API. Secret values must never be exposed in documentation or logs. Verify the `preview` environment and its secret/variable configuration before attempting a preview deployment.
+
+### Remaining verification and next work
+
+1. Verify GitHub `preview` environment configuration and secret/variable presence without exposing values.
+2. Reconfirm Cloudflare Worker/version/route inventory before any deployment action.
+3. Decide whether this release remains local-first (recommended based on current implementation) or introduces authenticated cloud sync as a separate milestone.
+4. Make deployment scripts and Wrangler configuration environment-explicit.
+5. Run full acceptance against the deployed preview, not only the local Worker.
+6. Keep production deployment and remote migrations blocked until separately approved.
+
+CF-01 repository code audit is complete. CF-02 and CF-05 still require environment/resource verification. No live Cloudflare resources, databases, secrets, migrations or deployments were changed during this audit.
