@@ -14,7 +14,9 @@ class FakeAudioContext {
 describe('AudioContextSession', () => {
   it('creates its context lazily and reuses it while running', async () => {
     const context = new FakeAudioContext();
-    const createContext = vi.fn(() => context);
+    const createContext = vi.fn(
+      () => context as unknown as AudioContext
+    );
     const session = new AudioContextSession(createContext);
 
     expect(createContext).not.toHaveBeenCalled();
@@ -33,7 +35,9 @@ describe('AudioContextSession', () => {
   it('closes and releases the context when resume rejects', async () => {
     const context = new FakeAudioContext();
     context.resume.mockRejectedValueOnce(new Error('resume denied'));
-    const session = new AudioContextSession(() => context);
+    const session = new AudioContextSession(
+      () => context as unknown as AudioContext
+    );
 
     await expect(session.resume()).rejects.toThrow('resume denied');
 
@@ -45,7 +49,9 @@ describe('AudioContextSession', () => {
   it('closes and releases a context that remains suspended', async () => {
     const context = new FakeAudioContext();
     context.resume.mockImplementationOnce(async () => {});
-    const session = new AudioContextSession(() => context);
+    const session = new AudioContextSession(
+      () => context as unknown as AudioContext
+    );
 
     await expect(session.resume('reference tone is not ready')).rejects.toThrow(
       'reference tone is not ready'
@@ -58,7 +64,10 @@ describe('AudioContextSession', () => {
   it('closes an owned context once and creates a fresh context on the next resume', async () => {
     const first = new FakeAudioContext();
     const second = new FakeAudioContext();
-    const createContext = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second);
+    const contexts = [first, second];
+    const createContext = vi.fn(
+      () => contexts.shift() as unknown as AudioContext
+    );
     const session = new AudioContextSession(createContext);
 
     await session.resume();
@@ -77,12 +86,17 @@ describe('AudioContextSession', () => {
   it('replaces a context that was closed externally', async () => {
     const first = new FakeAudioContext();
     const second = new FakeAudioContext();
-    first.state = 'closed';
-    const createContext = vi.fn().mockReturnValueOnce(first).mockReturnValueOnce(second);
+    const contexts = [first, second];
+    const createContext = vi.fn(
+      () => contexts.shift() as unknown as AudioContext
+    );
     const session = new AudioContextSession(createContext);
 
+    await session.resume();
+    first.state = 'closed';
+
     await expect(session.resume()).resolves.toBe(second);
-    expect(createContext).toHaveBeenCalledOnce();
+    expect(createContext).toHaveBeenCalledTimes(2);
     expect(second.resume).toHaveBeenCalledOnce();
   });
 
@@ -91,7 +105,9 @@ describe('AudioContextSession', () => {
       throw new Error('context construction failed');
     });
 
-    await expect(session.resume()).rejects.toThrow('context construction failed');
+    await expect(session.resume()).rejects.toThrow(
+      'context construction failed'
+    );
     expect(session.currentContext).toBeNull();
   });
 });
