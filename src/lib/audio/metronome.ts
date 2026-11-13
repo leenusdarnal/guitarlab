@@ -1,3 +1,5 @@
+import { AudioContextSession } from './audio-context-session';
+
 export const MIN_METRONOME_BPM = 40;
 export const MAX_METRONOME_BPM = 240;
 
@@ -212,16 +214,11 @@ export async function playReferenceTone(
       'Reference tone duration must be between 100 and 5,000 ms.'
     );
   }
-  if (typeof AudioContext === 'undefined') {
-    throw new Error('Web Audio is not available in this browser.');
-  }
-
-  const context = new AudioContext();
+  const session = new AudioContextSession();
   try {
-    if (context.state === 'suspended') await context.resume();
-    if (context.state !== 'running') {
-      throw new Error('Audio is not ready. Tap the reference tone again.');
-    }
+    const context = await session.resume(
+      'Audio is not ready. Tap the reference tone again.'
+    );
 
     let oscillator: OscillatorNode | null = null;
     let gain: GainNode | null = null;
@@ -267,6 +264,6 @@ export async function playReferenceTone(
       }
     });
   } finally {
-    await context.close();
+    await session.close();
   }
 }
