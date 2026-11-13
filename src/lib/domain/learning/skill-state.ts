@@ -104,7 +104,7 @@ export function explainSkillState(input: {
   return {
     state: 'learning',
     reason:
-        'The latest assessment was inconclusive, so there is not enough evidence to call this skill stable.',
+      'The latest assessment was inconclusive, so there is not enough evidence to call this skill stable.',
     evidenceCount: attempts.length,
     latestOutcome: latest.outcome,
     latestAssessedAt: latest.assessedAt,
