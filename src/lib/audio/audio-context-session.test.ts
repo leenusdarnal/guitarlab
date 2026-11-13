@@ -134,5 +134,4 @@ describe('AudioContextSession', () => {
     expect(second.close).not.toHaveBeenCalled();
     expect(session.currentContext).toBe(second);
   });
-
 });
