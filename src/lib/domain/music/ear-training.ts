@@ -1,5 +1,6 @@
 export type EarTrainingKind = 'pulse' | 'pitch' | 'contour';
-export type EarTrainingAnswer = 'steady' | 'uneven' | 'first' | 'second' | 'rising' | 'falling' | 'level';
+export type EarTrainingAnswer =
+  'steady' | 'uneven' | 'first' | 'second' | 'rising' | 'falling' | 'level';
 
 export interface EarTrainingTone {
   frequencyHz: number;
@@ -35,7 +36,9 @@ const contourChoices = [
 
 function assertSequence(sequence: number): void {
   if (!Number.isInteger(sequence) || sequence < 0 || sequence > 100_000) {
-    throw new RangeError('Exercise sequence must be a whole number from 0 to 100,000.');
+    throw new RangeError(
+      'Exercise sequence must be a whole number from 0 to 100,000.'
+    );
   }
 }
 
@@ -55,7 +58,8 @@ export function createEarTrainingExercise(
     return {
       kind,
       prompt: 'Listen to the four beats. Is the pulse even?',
-      visualHint: 'Count four beats and notice whether the spaces between them stay the same.',
+      visualHint:
+        'Count four beats and notice whether the spaces between them stay the same.',
       tones: starts.map((startMilliseconds) => ({
         frequencyHz: 880,
         startMilliseconds,
@@ -76,10 +80,19 @@ export function createEarTrainingExercise(
     return {
       kind,
       prompt: 'Which of the two notes sounded higher?',
-      visualHint: 'Listen to both notes. Higher pitch sounds brighter; lower pitch sounds deeper.',
+      visualHint:
+        'Listen to both notes. Higher pitch sounds brighter; lower pitch sounds deeper.',
       tones: [
-        { frequencyHz: firstFrequency, startMilliseconds: 0, durationMilliseconds: 320 },
-        { frequencyHz: secondFrequency, startMilliseconds: 560, durationMilliseconds: 320 }
+        {
+          frequencyHz: firstFrequency,
+          startMilliseconds: 0,
+          durationMilliseconds: 320
+        },
+        {
+          frequencyHz: secondFrequency,
+          startMilliseconds: 560,
+          durationMilliseconds: 320
+        }
       ],
       choices: pitchChoices,
       answer: firstIsHigher ? 'first' : 'second',
@@ -97,11 +110,13 @@ export function createEarTrainingExercise(
         : contour === 1
           ? [659.25, 523.25, 440]
           : [523.25, 523.25, 523.25];
-    const answer = contour === 0 ? 'rising' : contour === 1 ? 'falling' : 'level';
+    const answer =
+      contour === 0 ? 'rising' : contour === 1 ? 'falling' : 'level';
     return {
       kind,
       prompt: 'Follow the three notes. What shape did the melody make?',
-      visualHint: 'Listen from the first note to the last and follow the direction of the pitch.',
+      visualHint:
+        'Listen from the first note to the last and follow the direction of the pitch.',
       tones: frequencies.map((frequencyHz, index) => ({
         frequencyHz,
         startMilliseconds: index * 460,
