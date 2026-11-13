@@ -124,7 +124,7 @@ No open-source license has been selected yet. Until a license is added, the repo
 
 ### Cloudflare preview deployment
 
-A manually triggered preview deployment is provided by `.github/workflows/deploy-preview.yml`. It deploys to the public Worker URL `https://guitarlab-preview.leenus-darnal.workers.dev`.
+A manually triggered preview deployment is provided by `.github/workflows/deploy-preview.yml`. It deploys to the public Worker URL `https://guitarlab-preview.leenusdarnal.workers.dev`.
 
 Before running it, configure these GitHub repository settings:
 

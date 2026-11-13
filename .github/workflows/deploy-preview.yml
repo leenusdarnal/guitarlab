@@ -120,7 +120,7 @@ jobs:
       - name: Smoke-test deployed preview
         shell: bash
         run: |
-          url="https://guitarlab-preview.leenus-darnal.workers.dev/"
+          url="https://guitarlab-preview.leenusdarnal.workers.dev/"
           for attempt in $(seq 1 12); do
             if curl --silent --show-error --fail "$url" --output "$RUNNER_TEMP/guitarlab-preview.html"; then
               if grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-preview.html"; then
