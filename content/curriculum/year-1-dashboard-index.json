@@ -127,7 +127,11 @@
       "title": "Quarter 1 review and recording",
       "focus": "Consolidate tuning, reading, open chords and pulse",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w13-lesson",
@@ -223,7 +227,11 @@
       "title": "Half-year playing test",
       "focus": "Integrate chords, rhythm, melody and recording",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w25-lesson",
@@ -231,7 +239,11 @@
       "title": "Find roots and octaves",
       "focus": "Fretboard navigation beyond open position",
       "estimatedMinutes": 30,
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes", "fretboard.octaves"]
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes",
+        "fretboard.octaves"
+      ]
     },
     {
       "id": "y1-w26-lesson",
@@ -279,7 +291,11 @@
       "title": "Hammer-ons and pull-offs",
       "focus": "Legato notes with consistent volume",
       "estimatedMinutes": 30,
-      "skillIds": ["technique.alternate-picking", "technique.string-crossing", "technique.legato"]
+      "skillIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing",
+        "technique.legato"
+      ]
     },
     {
       "id": "y1-w32-lesson",
@@ -287,7 +303,11 @@
       "title": "Quarter 2 review",
       "focus": "Revisit notes, chords, fingerstyle, scales and blues",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w33-lesson",
@@ -327,7 +347,12 @@
       "title": "Learn a melody by ear",
       "focus": "Listen, sing, find and verify notes",
       "estimatedMinutes": 30,
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"]
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y1-w38-lesson",
@@ -383,7 +408,11 @@
       "title": "Quarter 3 review",
       "focus": "Retest barre, triads, ear skills, 16ths and lead phrasing",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w45-lesson",
@@ -431,7 +460,11 @@
       "title": "Repertoire polishing",
       "focus": "Bring one complete piece close to performance-ready",
       "estimatedMinutes": 30,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w51-lesson",
@@ -439,7 +472,11 @@
       "title": "Mock performance and transcription",
       "focus": "Perform, listen back and reproduce one short phrase",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     },
     {
       "id": "y1-w52-lesson",
@@ -447,7 +484,11 @@
       "title": "Year-end playing test",
       "focus": "Demonstrate rhythm, chords, reading, lead/fingerstyle and musicianship",
       "estimatedMinutes": 40,
-      "skillIds": ["repertoire.song-learning", "performance.recording", "performance.recovery"]
+      "skillIds": [
+        "repertoire.song-learning",
+        "performance.recording",
+        "performance.recovery"
+      ]
     }
   ]
 }
