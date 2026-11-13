@@ -247,3 +247,40 @@ describe('WebAudioMetronome audio lifecycle', () => {
     expect(metronome.isRunning).toBe(false);
   });
 });
+
+
+describe('playReferenceTone audio lifecycle', () => {
+  it('resumes an owned context, schedules the requested tone, and closes after playback', async () => {
+    installAudioEnvironment();
+
+    const playback = playReferenceTone(523.25, 500);
+    await Promise.resolve();
+
+    const context = FakeAudioContext.instances[0];
+    expect(FakeAudioContext.instances).toHaveLength(1);
+    expect(context.resume).toHaveBeenCalledOnce();
+    expect(context.state).toBe('running');
+    expect(context.oscillators).toHaveLength(1);
+    expect(context.gains).toHaveLength(1);
+
+    const oscillator = context.oscillators[0];
+    const gain = context.gains[0];
+    expect(oscillator.type).toBe('sine');
+    expect(oscillator.frequency.setValueAtTime).toHaveBeenCalledWith(
+      523.25,
+      expect.any(Number)
+    );
+    expect(oscillator.start).toHaveBeenCalledOnce();
+    expect(oscillator.stop).toHaveBeenCalledOnce();
+    expect(oscillator.connect).toHaveBeenCalledWith(gain);
+    expect(gain.connect).toHaveBeenCalledWith(context.destination);
+
+    oscillator.onended?.();
+    await playback;
+
+    expect(oscillator.disconnect).toHaveBeenCalledOnce();
+    expect(gain.disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+    expect(context.state).toBe('closed');
+  });
+});
