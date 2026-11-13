@@ -281,6 +281,7 @@ describe('playReferenceTone audio lifecycle', () => {
 
     const playback = playReferenceTone(523.25, 500);
     await Promise.resolve();
+    await Promise.resolve();
 
     const context = FakeAudioContext.instances[0];
     expect(FakeAudioContext.instances).toHaveLength(1);
