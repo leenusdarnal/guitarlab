@@ -32,13 +32,17 @@
 
 **Exit criteria met:** the research plan, roadmap, tracker, architecture notes and focused GitHub issues are merged; every finding has an adopt/adapt/defer decision and an execution home.
 
-### P1 — Audit shared audio and music-theory foundations
+### P1 — Audio lifecycle regression tests and shared foundation (Issue #68)
 
-1. Map existing AudioContext ownership and lifecycle in metronome, ear training and tuner-related modules.
-2. Identify duplicate scheduling, permission, cleanup and error-handling logic.
-3. Audit note spelling, intervals, scales, chords and fretboard mapping for duplicated calculations.
-4. Document the smallest shared interfaces before refactoring.
-5. Do not change user-facing behaviour in the audit-only slice.
+**Completed audit:** `docs/AUDIO_ARCHITECTURE_AUDIT.md` inventories metronome, reference-tone and ear-training context ownership; confirms no microphone/tuner capture exists; records duplicated oscillator/gain setup and teardown risks.
+
+1. Add fake-Web-Audio tests for context creation/resume/close, error handling and node cleanup.
+2. Add ear-training teardown/visibility tests and characterize the metronome's already-scheduled click tail.
+3. Introduce a feature-owned audio-session factory and tone voice helper only where the tests support the extraction; no global singleton.
+4. Keep feature-specific scheduling separate and preserve the metronome lookahead clock.
+5. Audit note spelling, intervals, scales, chords and fretboard mapping as a separate music-theory task.
+
+**Exit criteria:** lifecycle behaviour is deterministic and regression-tested; no user-facing timing/sound regression; permission/capture remains opt-in and separate.
 
 **Exit criteria:** a file-level refactor plan, dependency map and tests that protect existing audio/music behaviour.
 
