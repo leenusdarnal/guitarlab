@@ -180,7 +180,6 @@ describe('WebAudioMetronome audio lifecycle', () => {
     expect(context.close).toHaveBeenCalledOnce();
   });
 
-
   it('cancels clicks already queued in the lookahead window when stopped', async () => {
     installAudioEnvironment();
     vi.useFakeTimers();
