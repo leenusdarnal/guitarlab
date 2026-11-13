@@ -55,7 +55,7 @@ function makeSource(): LearnerBackupSource {
     ],
     completionEvents: [],
     assessmentAttempts: [],
-    skillMastery: [],
+    skillMastery: [{ learnerId, curriculumReleaseId: 'curriculum-v1', skillId: 'alternate-picking', state: 'practising', evidenceCount: 2, confidence: 65, lastAssessmentId: null, lastAssessedAt: null, nextReviewAt: null, decisionSource: 'learner', correctionNote: 'I can play it slowly but not consistently yet.', updatedAt: 200 }],
     practiceSessions: [
       {
         id: 'b1b1b1b1-1111-4111-8111-111111111111',
@@ -113,6 +113,7 @@ describe('local learner backup export builder', () => {
     expect(backup.records.profile.preferences.instrument).toBe('acoustic');
     expect(backup.records.lessonProgress).toHaveLength(1);
     expect(backup.records.lessonProgress[0].learnerId).toBe(learnerId);
+    expect(backup.records.skillMastery[0]).toMatchObject({ decisionSource: 'learner', correctionNote: 'I can play it slowly but not consistently yet.' });
     expect(backup.records.practiceEvidence).toHaveLength(1);
     expect(backup.records.practiceEvidence?.[0].learnerId).toBe(learnerId);
     expect(backup.records.practiceSessions[0].nextTarget).toBe(
