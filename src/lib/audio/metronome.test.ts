@@ -176,7 +176,7 @@ describe('WebAudioMetronome audio lifecycle', () => {
       'visibilitychange',
       expect.any(Function)
     );
-    expect(context.close).toHaveBeenCalledOnce();
+    expect(context.close).not.toHaveBeenCalled();
     await metronome.dispose();
     expect(context.close).toHaveBeenCalledOnce();
   });
