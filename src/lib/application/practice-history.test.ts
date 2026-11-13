@@ -97,17 +97,14 @@ describe('Practice Studio history filters', () => {
     ['7', ['focus', 'paused']],
     ['30', ['focus', 'reflection', 'paused']],
     ['90', ['focus', 'reflection', 'target', 'paused']]
-  ] as const)(
-    'applies the rolling %s-day window',
-    (dateRange, expected) => {
-      expect(
-        filterPracticeSessions(records, {
-          ...defaults,
-          dateRange
-        }).map((item) => item.id)
-      ).toEqual(expected);
-    }
-  );
+  ] as const)('applies the rolling %s-day window', (dateRange, expected) => {
+    expect(
+      filterPracticeSessions(records, {
+        ...defaults,
+        dateRange
+      }).map((item) => item.id)
+    ).toEqual(expected);
+  });
 
   it('combines search, status and date filters', () => {
     expect(
