@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   MAX_METRONOME_BPM,
   MIN_METRONOME_BPM,
@@ -6,6 +6,87 @@ import {
   validateMetronomeTempo,
   WebAudioMetronome
 } from './metronome';
+
+type AudioEventHandler = (() => void) | null;
+
+class FakeAudioParam {
+  setValueAtTime = vi.fn();
+  exponentialRampToValueAtTime = vi.fn();
+}
+
+class FakeAudioNode {
+  connect = vi.fn();
+  disconnect = vi.fn();
+}
+
+class FakeOscillator extends FakeAudioNode {
+  type = 'sine';
+  frequency = new FakeAudioParam();
+  onended: AudioEventHandler = null;
+  start = vi.fn();
+  stop = vi.fn();
+}
+
+class FakeGain extends FakeAudioNode {
+  gain = new FakeAudioParam();
+}
+
+class FakeAudioContext {
+  static instances: FakeAudioContext[] = [];
+  state: AudioContextState = 'suspended';
+  currentTime = 1;
+  destination = new FakeAudioNode();
+  oscillators: FakeOscillator[] = [];
+  gains: FakeGain[] = [];
+  resume = vi.fn(async () => {
+    this.state = 'running';
+  });
+  close = vi.fn(async () => {
+    this.state = 'closed';
+  });
+  createOscillator = vi.fn(() => {
+    const oscillator = new FakeOscillator();
+    this.oscillators.push(oscillator);
+    return oscillator;
+  });
+  createGain = vi.fn(() => {
+    const gain = new FakeGain();
+    this.gains.push(gain);
+    return gain;
+  });
+
+  constructor() {
+    FakeAudioContext.instances.push(this);
+  }
+}
+
+function installAudioEnvironment() {
+  FakeAudioContext.instances = [];
+  const listeners = new Map<string, EventListener>();
+  const documentMock = {
+    visibilityState: 'visible',
+    addEventListener: vi.fn((type: string, listener: EventListener) => {
+      listeners.set(type, listener);
+    }),
+    removeEventListener: vi.fn((type: string, listener: EventListener) => {
+      if (listeners.get(type) === listener) listeners.delete(type);
+    })
+  };
+  vi.stubGlobal('AudioContext', FakeAudioContext);
+  vi.stubGlobal('document', documentMock);
+  return {
+    documentMock,
+    dispatchVisibilityChange() {
+      listeners.get('visibilitychange')?.(new Event('visibilitychange'));
+    }
+  };
+}
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 describe('Web Audio metronome configuration', () => {
   it('accepts tempos within the supported range', () => {
@@ -42,5 +123,127 @@ describe('Web Audio metronome configuration', () => {
     await expect(playReferenceTone(440, 99)).rejects.toThrow(RangeError);
     await expect(playReferenceTone(20_001)).rejects.toThrow(RangeError);
     await expect(playReferenceTone(440, 5_001)).rejects.toThrow(RangeError);
+  });
+});
+
+describe('WebAudioMetronome audio lifecycle', () => {
+  it('creates and resumes its context only when start is requested', async () => {
+    installAudioEnvironment();
+    const onStateChange = vi.fn();
+    const metronome = new WebAudioMetronome({ onStateChange });
+
+    expect(FakeAudioContext.instances).toHaveLength(0);
+    await metronome.start();
+
+    expect(FakeAudioContext.instances).toHaveLength(1);
+    expect(FakeAudioContext.instances[0].resume).toHaveBeenCalledOnce();
+    expect(metronome.isRunning).toBe(true);
+    expect(onStateChange).toHaveBeenLastCalledWith(true);
+    await metronome.dispose();
+  });
+
+  it('does not create duplicate contexts or schedulers when started twice', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome();
+
+    await metronome.start();
+    await metronome.start();
+
+    expect(FakeAudioContext.instances).toHaveLength(1);
+    expect(FakeAudioContext.instances[0].resume).toHaveBeenCalledOnce();
+    await metronome.dispose();
+  });
+
+  it('stops scheduling and removes its visibility listener without closing the context', async () => {
+    const { documentMock } = installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome();
+
+    await metronome.start();
+    const context = FakeAudioContext.instances[0];
+    metronome.stop();
+
+    expect(metronome.isRunning).toBe(false);
+    expect(vi.getTimerCount()).toBe(0);
+    expect(documentMock.removeEventListener).toHaveBeenCalledWith(
+      'visibilitychange',
+      expect.any(Function)
+    );
+    expect(context.close).not.toHaveBeenCalled();
+    await metronome.dispose();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('stops when the document becomes hidden', async () => {
+    const environment = installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome();
+
+    await metronome.start();
+    environment.documentMock.visibilityState = 'hidden';
+    environment.dispatchVisibilityChange();
+
+    expect(metronome.isRunning).toBe(false);
+    expect(vi.getTimerCount()).toBe(0);
+    await metronome.dispose();
+  });
+
+  it('closes the owned context on dispose and creates a fresh one on the next start', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome();
+
+    await metronome.start();
+    const firstContext = FakeAudioContext.instances[0];
+    await metronome.dispose();
+
+    expect(firstContext.close).toHaveBeenCalledOnce();
+    await metronome.start();
+
+    expect(FakeAudioContext.instances).toHaveLength(2);
+    expect(metronome.isRunning).toBe(true);
+    await metronome.dispose();
+  });
+
+  it('reports a resume failure and leaves the metronome stopped', async () => {
+    installAudioEnvironment();
+    const metronome = new WebAudioMetronome();
+    const context = new FakeAudioContext();
+    context.resume.mockRejectedValueOnce(new Error('permission denied'));
+    (metronome as unknown as { context: FakeAudioContext }).context = context;
+
+    await expect(metronome.start()).rejects.toThrow('permission denied');
+    expect(metronome.isRunning).toBe(false);
+    expect(context.close).not.toHaveBeenCalled();
+    await metronome.dispose();
+  });
+
+  it('disconnects scheduled oscillator and gain nodes when a click ends', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const metronome = new WebAudioMetronome({ bpm: 40 });
+
+    await metronome.start();
+    const context = FakeAudioContext.instances[0];
+    expect(context.oscillators.length).toBeGreaterThan(0);
+    const oscillator = context.oscillators[0];
+    const gain = context.gains[0];
+
+    oscillator.onended?.();
+
+    expect(oscillator.disconnect).toHaveBeenCalledOnce();
+    expect(gain.disconnect).toHaveBeenCalledOnce();
+    await metronome.dispose();
+  });
+
+  it('rejects start when Web Audio is unavailable', async () => {
+    vi.stubGlobal('AudioContext', undefined);
+    const metronome = new WebAudioMetronome();
+
+    await expect(metronome.start()).rejects.toThrow(
+      'Web Audio is not available in this browser.'
+    );
+    expect(metronome.isRunning).toBe(false);
   });
 });
