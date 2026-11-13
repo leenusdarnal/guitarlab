@@ -147,7 +147,15 @@ try {
   await page.getByRole('link', { name: 'Practice tools' }).click();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
+  const waitForEarAudio = () =>
+    page.waitForFunction(() => {
+      const button = [...document.querySelectorAll('button')].find((item) =>
+        item.textContent?.includes('Listen to example')
+      );
+      return button instanceof HTMLButtonElement && !button.disabled;
+    });
   await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
   await page
     .getByRole('button', { name: 'Listen to example' })
     .waitFor({ state: 'visible' });
@@ -160,12 +168,14 @@ try {
 
   await page.getByRole('button', { name: 'High / low' }).click();
   await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
   await page.getByRole('button', { name: 'First note' }).click();
   await page.getByText("That's right.").waitFor();
   await page.getByRole('button', { name: 'Next exercise' }).click();
 
   await page.getByRole('button', { name: 'Melodic contour' }).click();
   await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
   await page.getByRole('button', { name: 'Falling' }).click();
   await page.getByText('Not quite — give it another listen.').waitFor();
   await page.getByRole('button', { name: 'Try again' }).click();
