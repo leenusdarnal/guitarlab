@@ -103,7 +103,9 @@ export function buildAdaptivePracticeSnapshot(input: {
   const recommendations: AdaptivePracticeRecommendation[] = [];
   const skillAnalytics: SkillAnalytics[] = [];
 
-  for (const skill of [...input.skills].sort((a, b) => a.id.localeCompare(b.id))) {
+  for (const skill of [...input.skills].sort((a, b) =>
+    a.id.localeCompare(b.id)
+  )) {
     const attempts = orderedAttempts(attemptsBySkill.get(skill.id) ?? []);
     const latest = attempts.at(-1) ?? null;
     const currentMastery = masteryBySkill.get(skill.id) ?? null;
@@ -146,7 +148,8 @@ export function buildAdaptivePracticeSnapshot(input: {
     ) {
       reasonCodes.push('review_overdue');
       priority = 70;
-      explanation = 'This previously assessed skill has reached its review date.';
+      explanation =
+        'This previously assessed skill has reached its review date.';
     } else if (!latest) {
       reasonCodes.push('not_yet_assessed');
       priority = 30;
@@ -181,7 +184,8 @@ export function buildAdaptivePracticeSnapshot(input: {
       (a, b) => a.recordedAt - b.recordedAt || a.id.localeCompare(b.id)
     );
     const repeatedDifficulty = ordered.filter(
-      (observation) => observation.difficulty !== null && observation.difficulty >= 4
+      (observation) =>
+        observation.difficulty !== null && observation.difficulty >= 4
     );
     if (repeatedDifficulty.length < 2) continue;
     const latest = ordered.at(-1)!;
