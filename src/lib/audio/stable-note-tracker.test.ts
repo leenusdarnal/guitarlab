@@ -35,7 +35,9 @@ describe('StableNoteTracker', () => {
     tracker.update(detected(440), 30);
     expect(tracker.update(detected(440), 60).event).toBe('note-on');
     for (let frame = 3; frame < 20; frame += 1) {
-      expect(tracker.update(detected(440 + (frame % 2)), frame * 30).event).toBeNull();
+      expect(
+        tracker.update(detected(440 + (frame % 2)), frame * 30).event
+      ).toBeNull();
     }
   });
 
@@ -114,8 +116,12 @@ describe('StableNoteTracker', () => {
   });
 
   it('validates options and monotonic timestamps', () => {
-    expect(() => new StableNoteTracker({ confirmationFrames: 0 })).toThrow(RangeError);
-    expect(() => new StableNoteTracker({ minConfidence: 2 })).toThrow(RangeError);
+    expect(() => new StableNoteTracker({ confirmationFrames: 0 })).toThrow(
+      RangeError
+    );
+    expect(() => new StableNoteTracker({ minConfidence: 2 })).toThrow(
+      RangeError
+    );
     const tracker = new StableNoteTracker();
     tracker.update(detected(440), 30);
     expect(() => tracker.update(detected(440), 20)).toThrow(RangeError);
