@@ -22,10 +22,18 @@ export const skillMasteryUpdateSchema = z
     confidence: z.number().int().min(0).max(100).nullable(),
     lastAssessmentId: z.string().uuid().nullable(),
     lastAssessedAt: z.number().int().nonnegative().nullable(),
-    nextReviewAt: z.number().int().nonnegative().nullable()
+    nextReviewAt: z.number().int().nonnegative().nullable(),
+    decisionSource: z.enum(['evidence', 'learner']).optional(),
+    correctionNote: z.string().trim().min(1).max(500).nullable().optional()
   })
   .strict()
   .superRefine((value, context) => {
+    if (value.decisionSource === 'learner' && !value.correctionNote) {
+      context.addIssue({ code: 'custom', path: ['correctionNote'], message: 'A learner correction needs a short explanation.' });
+    }
+    if (value.decisionSource !== 'learner' && value.correctionNote) {
+      context.addIssue({ code: 'custom', path: ['correctionNote'], message: 'A correction note is only valid for a learner correction.' });
+    }
     if (
       value.state === 'stable' &&
       (value.evidenceCount < 1 || !value.lastAssessmentId)
