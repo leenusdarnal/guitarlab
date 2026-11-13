@@ -6,6 +6,14 @@
 
 GitHub Issues remain the execution records. A task is complete only when its code is merged and its stated checks pass. Manual acceptance checks are called out separately; merging an implementation slice does not silently mark those checks complete.
 
+## Issue reconciliation checkpoint — 2026-11-13
+
+- **Closed as implemented:** Issue #1 (approved design direction/tokens), Issue #4 (application shell) and Issue #11 (learner dashboard/learning-path overview). Their bodies now contain checked acceptance criteria and merged-code/test evidence.
+- **Partially complete; intentionally open:** Issue #3 (local/preview Worker runtime is verified; production environment definition remains deferred) and Issue #5 (CI is operational; controlled failure/recovery verification remains).
+- **Implemented; physical-device QA remains:** Issue #9 (IndexedDB profile/migration and browser acceptance) and Issue #10 (backup/restore transaction and browser acceptance). Their remaining desktop/physical-mobile checks are explicit.
+- **Feature work still open:** Issue #17 (theory/repertoire), Issue #18 (release hardening), Issue #68 (shared audio/pitch recognition) and Issue #69 (adaptive practice/analytics).
+- No open PRs at reconciliation time; latest verified `main` SHA before this documentation branch was `29625fe9b69263a10550587458724d9baccbf382`, with main CI run [#43436739225](https://github.com/leenusdarnal/guitarlab/actions/runs/43436739225) successful.
+
 ## Current status
 
 | Area | Status | Evidence / next action |
