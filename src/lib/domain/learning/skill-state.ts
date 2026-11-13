@@ -1,8 +1,7 @@
 import type { AssessmentAttemptRecord, SkillMasteryRecord } from '../../repositories/contracts';
-import type { SkillMasteryState } from './mastery';
 
 export type SkillStateExplanation = {
-  state: SkillMasteryState;
+  state: SkillMasteryRecord['state'];
   reason: string;
   evidenceCount: number;
   latestOutcome: AssessmentAttemptRecord['outcome'] | null;
