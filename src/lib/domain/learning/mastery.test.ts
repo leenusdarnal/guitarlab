@@ -36,4 +36,29 @@ describe('skill mastery state validation', () => {
       }).success
     ).toBe(true);
   });
+  it('requires a learner explanation for a corrected state', () => {
+    const corrected = {
+      ...base,
+      state: 'practising',
+      decisionSource: 'learner'
+    };
+    expect(skillMasteryUpdateSchema.safeParse(corrected).success).toBe(false);
+    expect(
+      skillMasteryUpdateSchema.safeParse({
+        ...corrected,
+        correctionNote: 'I need more time at the target tempo.'
+      }).success
+    ).toBe(true);
+  });
+
+  it('does not allow correction notes on evidence-derived state', () => {
+    expect(
+      skillMasteryUpdateSchema.safeParse({
+        ...base,
+        state: 'learning',
+        decisionSource: 'evidence',
+        correctionNote: 'This should not be attached.'
+      }).success
+    ).toBe(false);
+  });
 });

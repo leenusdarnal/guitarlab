@@ -5,10 +5,13 @@ import {
 } from '../domain/profile/preferences';
 import {
   completeLesson,
+  correctSkillMasteryState,
   updateLearnerPreferences,
   updateLessonProgress
 } from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
+import { explainSkillState } from '../domain/learning/skill-state';
+import type { SkillStateExplanation } from '../domain/learning/skill-state';
 import year1DashboardIndex from '../../../content/curriculum/year-1-dashboard-index.json';
 import { systemRuntime } from '../repositories/contracts';
 import type {
@@ -779,6 +782,127 @@ export async function loadActiveLearnerDashboard() {
       }
     );
     return snapshot;
+  } finally {
+    database.close();
+  }
+}
+
+export type ActiveSkillStateReview = {
+  skillId: string;
+  mastery: SkillMasteryRecord;
+  explanation: SkillStateExplanation;
+};
+
+/** Read existing learner skill snapshots and explain each from its assessment history. */
+export async function loadActiveSkillStateReview(): Promise<
+  ActiveSkillStateReview[]
+> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const records = await inTransaction(
+      database,
+      [stores.mastery, stores.assessmentAttempts],
+      'readonly',
+      async (transaction) => {
+        const masteryRequest = transaction
+          .objectStore(stores.mastery)
+          .index('byLearnerId')
+          .getAll(IDBKeyRange.only(profile.id));
+        const mastery =
+          await requestResult<SkillMasteryRecord[]>(masteryRequest);
+        const attempts = await requestResult<AssessmentAttemptRecord[]>(
+          transaction.objectStore(stores.assessmentAttempts).getAll()
+        );
+        return { mastery, attempts };
+      }
+    );
+    return records.mastery
+      .filter((record) => record.learnerId === profile.id)
+      .map((mastery) => {
+        const attempts = records.attempts.filter(
+          (attempt) =>
+            attempt.learnerId === profile.id &&
+            attempt.curriculumReleaseId === mastery.curriculumReleaseId &&
+            attempt.skillId === mastery.skillId
+        );
+        return {
+          skillId: mastery.skillId,
+          mastery,
+          explanation: explainSkillState({
+            attempts,
+            current: mastery,
+            now: Date.now()
+          })
+        };
+      })
+      .sort((left, right) => left.skillId.localeCompare(right.skillId));
+  } finally {
+    database.close();
+  }
+}
+
+/** Persist a learner correction locally; only an already-known skill snapshot can be corrected. */
+export async function correctActiveSkillState(input: {
+  skillId: string;
+  state: SkillMasteryRecord['state'];
+  note: string;
+}): Promise<SkillMasteryRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const existing = await repositories.mastery.find(
+      profile.id,
+      'curriculum-v1',
+      input.skillId
+    );
+    if (!existing) {
+      throw new Error('This skill has no saved learning state to correct yet.');
+    }
+    return await correctSkillMasteryState(
+      {
+        learnerId: profile.id,
+        releaseId: existing.curriculumReleaseId,
+        skillId: existing.skillId,
+        state: input.state,
+        confidence: existing.confidence,
+        nextReviewAt: existing.nextReviewAt,
+        note: input.note
+      },
+      {
+        curriculum: {
+          findRelease: async (releaseId) =>
+            releaseId === existing.curriculumReleaseId
+              ? {
+                  id: releaseId,
+                  version: releaseId,
+                  schemaVersion: 1,
+                  contentHash: 'local',
+                  publishedAt: 0,
+                  status: 'published'
+                }
+              : null,
+          listLessons: async () => [],
+          findLesson: async () => null
+        },
+        skills: {
+          listForRelease: async () => [],
+          findForRelease: async (releaseId, skillId) =>
+            releaseId === existing.curriculumReleaseId &&
+            skillId === existing.skillId
+              ? {
+                  id: skillId,
+                  category: 'learner-skill',
+                  displayName: skillId
+                }
+              : null
+        },
+        assessments: repositories.assessments,
+        mastery: repositories.mastery,
+        runtime: systemRuntime
+      }
+    );
   } finally {
     database.close();
   }

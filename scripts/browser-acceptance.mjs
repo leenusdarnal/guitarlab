@@ -1002,6 +1002,152 @@ try {
   ]);
   await competingPage.close();
 
+  // M7 skill-state transparency: explanations and learner corrections persist locally.
+  const skillFixture = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const active = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const now = Date.now();
+    const passedAttemptId = 'aaaaaaaa-1111-4111-8111-111111111111';
+    const transaction = database.transaction(
+      ['assessmentAttempts', 'skillMastery'],
+      'readwrite'
+    );
+    transaction.objectStore('assessmentAttempts').add({
+      id: passedAttemptId,
+      learnerId: active,
+      curriculumReleaseId: 'curriculum-v1',
+      skillId: 'alternate-picking',
+      lessonId: null,
+      assessmentKind: 'guided_self_check',
+      evidenceType: 'observed_or_self_checked',
+      outcome: 'passed',
+      score: 85,
+      evidenceSummary: 'Consistent alternate picking at target tempo.',
+      evidence: {},
+      assessedAt: now,
+      recordedAt: now
+    });
+    transaction.objectStore('skillMastery').put({
+      learnerId: active,
+      curriculumReleaseId: 'curriculum-v1',
+      skillId: 'alternate-picking',
+      state: 'stable',
+      evidenceCount: 1,
+      confidence: 85,
+      lastAssessmentId: passedAttemptId,
+      lastAssessedAt: now,
+      nextReviewAt: now + 86400000,
+      decisionSource: 'evidence',
+      correctionNote: null,
+      updatedAt: now
+    });
+    transaction.objectStore('skillMastery').put({
+      learnerId: active,
+      curriculumReleaseId: 'curriculum-v1',
+      skillId: 'chord-transition',
+      state: 'not_started',
+      evidenceCount: 0,
+      confidence: null,
+      lastAssessmentId: null,
+      lastAssessedAt: null,
+      nextReviewAt: null,
+      decisionSource: 'evidence',
+      correctionNote: null,
+      updatedAt: now
+    });
+    await new Promise((resolve, reject) => {
+      transaction.oncomplete = resolve;
+      transaction.onerror = () => reject(transaction.error);
+      transaction.onabort = () => reject(transaction.error);
+    });
+    database.close();
+    return { active };
+  });
+  assert.ok(
+    skillFixture.active,
+    'The skill-state fixture needs an active learner'
+  );
+  await page.goto(`${origin}/skills`, { waitUntil: 'networkidle' });
+  await page
+    .getByRole('heading', { name: 'Skill states, explained.' })
+    .waitFor();
+  const chordTransitionChoice = page.getByRole('button', {
+    name: /Chord Transition/
+  });
+  await chordTransitionChoice.waitFor();
+  await chordTransitionChoice.click();
+  await page
+    .getByText(/No assessment has been recorded for this skill yet/)
+    .waitFor();
+  await page.locator('#corrected-state').selectOption('stable');
+  await page
+    .locator('#correction-note')
+    .fill('I feel confident, but this is not assessed.');
+  await page.getByRole('button', { name: 'Save correction' }).click();
+  const stableGuardAlert = page.getByRole('alert');
+  await stableGuardAlert.waitFor();
+  const stableGuardMessage = await stableGuardAlert.textContent();
+  assert.match(
+    stableGuardMessage ?? '',
+    /Stable mastery requires the latest assessment/,
+    `Expected the stable-mastery safety message, received: ${stableGuardMessage}`
+  );
+  await page.locator('#corrected-state').selectOption('practising');
+  await page
+    .locator('#correction-note')
+    .fill(
+      'I can change between these chords slowly, but not reliably at tempo.'
+    );
+  await page.getByRole('button', { name: 'Save correction' }).click();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'Your correction has been saved on this device.' })
+    .waitFor();
+  const correctedSnapshot = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const row = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('skillMastery')
+        .objectStore('skillMastery')
+        .get([learnerId, 'curriculum-v1', 'chord-transition']);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return row;
+  });
+  assert.equal(correctedSnapshot.state, 'practising');
+  assert.equal(correctedSnapshot.decisionSource, 'learner');
+  assert.equal(
+    correctedSnapshot.correctionNote,
+    'I can change between these chords slowly, but not reliably at tempo.'
+  );
+  await page.getByRole('button', { name: 'Alternate Picking' }).click();
+  await page.getByText('The latest assessment was passed.').waitFor();
+
   assert.deepEqual(
     pageErrors,
     [],

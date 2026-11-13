@@ -207,6 +207,7 @@
       <a class="nav-link" href={resolve('/learn')}><span aria-hidden="true">♫</span> Curriculum</a>
       <a class="nav-link" href={resolve('/tools')}><span aria-hidden="true">⌁</span> Tools</a>
       <a class="nav-link" href="#learning-path"><span aria-hidden="true">▤</span> Learning path</a>
+      <a class="nav-link" href={resolve('/skills')}><span aria-hidden="true">◈</span> Skill states</a>
       <a class="nav-link" href="#reviews"><span aria-hidden="true">◷</span> Reviews</a>
       <a class="nav-link" href={resolve('/practice')}><span aria-hidden="true">◷</span> Practice Studio</a>
       <a class="nav-link" href="#practice-history"><span aria-hidden="true">◉</span> Practice history</a>
@@ -231,6 +232,7 @@
         <a href={resolve('/learn')} onclick={closeMobileMenu}>Curriculum</a>
         <a href={resolve('/tools')} onclick={closeMobileMenu}>Tools</a>
         <a href="#learning-path" onclick={closeMobileMenu}>Learning path</a>
+        <a href={resolve('/skills')} onclick={closeMobileMenu}>Skill states</a>
         <a href="#reviews" onclick={closeMobileMenu}>Reviews</a>
         <a href={resolve('/practice')} onclick={closeMobileMenu}>Practice Studio</a>
         <a href="#practice-history" onclick={closeMobileMenu}>Practice history</a>
