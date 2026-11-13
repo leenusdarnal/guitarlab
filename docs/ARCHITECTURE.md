@@ -194,6 +194,8 @@ Use wrangler.jsonc with explicit environment-specific bindings. Local and previe
 
 ## 8. Audio capability boundaries
 
+The current ownership inventory and migration sequence are recorded in [AUDIO_ARCHITECTURE_AUDIT.md](AUDIO_ARCHITECTURE_AUDIT.md).
+
 - Metronome, reference tones and ear-training examples use the Web Audio API and remain locally generated.
 - Reuse a shared browser audio-session lifecycle where it removes duplicated AudioContext creation, scheduling, stop and disposal logic; keep feature-specific exercise logic in its domain module.
 - Microphone input is opt-in. Request permission only after a clear learner action and only for a feature that needs capture.
