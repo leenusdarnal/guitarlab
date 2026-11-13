@@ -100,7 +100,7 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - Comparative findings are mapped in [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md).
 - New work is tracked separately: Issue #68 (shared audio and pitch recognition) and Issue #69 (adaptive practice and analytics).
 - M7.1 is complete in merged PRs #50–59. M8.1 is partially implemented by PRs #61 and #67. M9 physical-device and release acceptance remains open.
-- No microphone capture, adaptive engine, production deployment or cloud sync is claimed as implemented by this checkpoint.
+- No microphone capture or adaptive engine is claimed as implemented by this checkpoint. Production deployment and cloud sync remain deferred.
 
 ## How progress is recorded
 

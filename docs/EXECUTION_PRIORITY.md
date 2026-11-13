@@ -3,7 +3,7 @@
 **Last updated:** 2026-11-13
 **Repository:** `leenusdarnal/guitarlab`
 **Default branch:** `main`
-**Verified baseline:** `3b9d76301d09b70a48035fab66ef8b7cec6388f7` (PR #67 merged)
+**Verified baseline:** `06439a3a573ac8dd5388d5f1c8c5770767c2fad2` (PR #70 merged; PR #67 and research integration are on main)
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
 ## 1. Latest verified checkpoint
@@ -12,7 +12,8 @@
 - The PR required formatting fixes and a missing Intervals selector was discovered by browser acceptance; both were corrected before merge.
 - PR #67 final checks passed: primary application/curriculum validation and Node.js 26 compatibility. The primary job included formatting, lint, type/Svelte checks, unit tests, production build, Worker smoke test, core browser acceptance, music-tools browser acceptance and accessibility browser acceptance.
 - Merge commit: `3b9d76301d09b70a48035fab66ef8b7cec6388f7`.
-- Post-merge main CI was triggered as run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh its final result before treating the merge as fully validated on main.
+- PR #67 post-merge main CI [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239) passed.
+- Research integration documentation PR #70 merged as `06439a3a573ac8dd5388d5f1c8c5770767c2fad2`; post-merge main CI [#43436043487](https://github.com/leenusdarnal/guitarlab/actions/runs/43436043487) is the current verification run.
 - M7.1 practice sessions/evidence/history/skill-state UI is delivered by PRs #50–59.
 - M8.1 ear training includes pulse, pitch and contour (PR #61) plus interval recognition (PR #67).
 - Open product issues include #17 and #18; Issue #16 is closed as completed. Research follow-ups are tracked in Issues #68 and #69.
@@ -20,16 +21,16 @@
 
 ## 2. Priority order
 
-### P0 — Complete research integration documentation
+### P0 — Complete research integration documentation (completed)
 
-1. Merge the research-integration plan and reconcile the roadmap, implementation tracker, architecture notes and execution checkpoint.
-2. Update Issue #16 based on merged M7.1 evidence and close it only if all five acceptance criteria are confirmed.
-3. Update Issue #17 to show pulse/pitch/contour and interval work as implemented while keeping theory recall, CAGED/triads and repertoire open.
-4. Extend Issue #18 with cross-browser audio, microphone privacy, licence and physical-device acceptance.
-5. Create focused Issues #68 (audio/pitch recognition) and #69 (adaptive practice/analytics).
-6. Verify the documentation PR's CI and merge it before feature implementation.
+1. [x] Merge the research-integration plan and reconcile roadmap, tracker, architecture and execution checkpoint (PR #70).
+2. [x] Close Issue #16 after verifying all five M7.1 acceptance criteria against merged PRs #50–59.
+3. [x] Update Issue #17 with completed PR #61/#67 work and remaining theory/repertoire scope.
+4. [x] Extend Issue #18 with cross-browser audio, microphone privacy, licence and physical-device acceptance.
+5. [x] Create focused Issues #68 (audio/pitch recognition) and #69 (adaptive practice/analytics).
+6. [x] Verify PR #70 CI and merge it.
 
-**Exit criteria:** one consistent, current source of truth; every new research finding has an adopt/adapt/defer decision and a GitHub execution home.
+**Exit criteria met:** the research plan, roadmap, tracker, architecture notes and focused GitHub issues are merged; every finding has an adopt/adapt/defer decision and an execution home.
 
 ### P1 — Audit shared audio and music-theory foundations
 
@@ -124,8 +125,8 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | Last verified main SHA | `3b9d76301d09b70a48035fab66ef8b7cec6388f7` |
 | PR #67 | Merged |
 | Post-merge main CI | Run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh result |
-| Current work | Research integration documentation and GitHub issue reconciliation |
-| Next engineering task | Audit shared audio and music-theory foundations |
+| Current work | Research integration merged; verify post-merge main CI run #43436043487 |
+| Next engineering task | Audit shared audio and music-theory foundations (Issue #68), then plan adaptive learning (Issue #69) |
 | M7.1 | Complete in PRs #50–59; Issue #16 closed |
 | M8.1 | PRs #61 and #67 merged; Issue #17 remains open |
 | M9 | Physical-device and release acceptance remains open under Issue #18 |
