@@ -109,6 +109,8 @@ npm run preview
 
 M2.1 adds the D1 schema and Wrangler local binding, but no learner-facing data route or cloud sync is enabled. Run `npm run db:setup:local` to generate/verify the versioned migration, apply it to Wrangler's local D1 and run the database invariant tests. The all-zero database ID in `wrangler.jsonc` is a local placeholder. Never use `--remote` or a production database for these checks.
 
+Deployment commands are environment-explicit: use `npm run deploy:preview:dry-run` to validate the preview target and `npm run deploy:preview` only when preview deployment has been explicitly authorized. The ambiguous `npm run deploy` command has been removed. There is intentionally no production deploy script until a production Worker, configuration, protected release environment and approval gate have been verified and approved. Do not deploy with the default `wrangler.jsonc`; it is the local development configuration.
+
 Never commit API tokens, Cloudflare credentials, private recordings or personal learning data.
 
 ## Privacy and copyright
