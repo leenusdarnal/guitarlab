@@ -21,7 +21,7 @@
 
 ## 2. Priority order
 
-### P0 — Complete research integration documentation <badge></badge>
+### P0 — Complete research integration documentation (completed)
 
 1. [x] Merge the research-integration plan and reconcile roadmap, tracker, architecture and execution checkpoint (PR #70).
 2. [x] Close Issue #16 after verifying all five M7.1 acceptance criteria against merged PRs #50–59.
