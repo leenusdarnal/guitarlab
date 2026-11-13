@@ -67,9 +67,11 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 |---|---|---|---|
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Complete — PRs #45 and #46 merged; Issue #15 closed | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone; unit and browser acceptance are included |
-| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | PRs #50–58 merged; transparent skill-state UI in PR #59 | Local sessions, pause/resume, append-only practice observations, reflection/next target, backup/restore and searchable history are merged. PR #59 adds assessment-based explanations, a learner correction screen at `/skills`, required correction notes, persisted provenance and a guard against self-awarding stable mastery. CI/browser acceptance is the remaining gate; physical-device QA remains separate |
-| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Not started | Accessible ear/theory drills and copyright-safe repertoire workspace |
-| M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Offline, backup, accessibility, privacy, security, performance, deploy and rollback checks |
+| M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Complete — PRs #50–59 merged | Local sessions, pause/resume, append-only exercise observations, reflection/next target, searchable history and explainable/correctable skill states. Adaptive selection and richer analytics are a separate planned follow-up in Issue #20 |
+| M7.2 | [#20 — Adaptive practice and learning analytics](https://github.com/leenusdarnal/guitarlab/issues/20) | Planned | Explainable weak-skill prioritisation, per-item accuracy, review selection, fretboard coverage and progress trends; preserve existing mastery rules |
+| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | In progress — PRs #61 and #67 merged | Pulse, pitch, contour and four interval classes are implemented with local audio; theory recall, broader intervals, connected fretboard theory and copyright-safe repertoire remain |
+| M6.2 | [#19 — Shared audio and microphone pitch recognition](https://github.com/leenusdarnal/guitarlab/issues/19) | Planned | Audit/reuse shared audio lifecycle, opt-in microphone capture, confidence-aware pitch detection, stable-note tracking, tuner and realistic benchmarks |
+| M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Physical-device offline/backup QA, CSP, WCAG accessibility, privacy, cross-browser audio, licensing, performance, deployment and rollback checks |
 
 ## M7 first implementation slice (2026-11-12)
 
@@ -90,6 +92,16 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - This slice does not change lesson progress, practice evidence or skill mastery.
 - Remaining in Issue #17: interval recognition, music-theory recall and repertoire workspace.
 
+## Research integration checkpoint — 2026-11-13
+
+- PR #67 merged as `3b9d76301d09b70a48035fab66ef8b7cec6388f7`; it adds interval recognition for unison, minor third, major third and perfect fifth.
+- The PR's first rerun exposed a missing learner-facing Intervals tab in the browser acceptance journey. The tab and tools-hub metadata were added before merge.
+- The final PR checks passed: formatting, lint, type/Svelte checks, unit tests, production build, Cloudflare Worker smoke test, core browser acceptance, music-tools browser acceptance, accessibility browser acceptance and Node.js 26 compatibility.
+- Comparative findings are mapped in [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md).
+- New work is tracked separately: Issue #19 (shared audio and pitch recognition) and Issue #20 (adaptive practice and analytics).
+- M7.1 is complete in merged PRs #50–59. M8.1 is partially implemented by PRs #61 and #67. M9 physical-device and release acceptance remains open.
+- No microphone capture, adaptive engine, production deployment or cloud sync is claimed as implemented by this checkpoint.
+
 ## How progress is recorded
 
 1. Use one pull request per small implementation slice where practical; link it to its issue with `Closes #N` when all acceptance criteria are complete.
@@ -109,11 +121,13 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Immediate next actions
 
-1. Complete physical-device desktop/mobile offline and backup/restore QA using [the manual acceptance runbook](MANUAL_ACCEPTANCE.md); keep Issues #9, #10 and #18 open until evidence is recorded.
-2. M6.1 fretboard, chord library and metronome are merged in PRs #45–46; Issue #15 is complete. Keep the chromatic tuner as a separately scoped future feature.
-3. Deliver M7 practice sessions/evidence capture, then M8 ear training/theory/repertoire as separate reviewable slices.
-5. Complete M9 CSP/security, WCAG accessibility, privacy, performance, offline/PWA, environment-isolation and deployment rollback checks.
-6. Keep the preview deployment deferred until the exact-SHA gate, GitHub preview environment and credentials are configured; use synthetic data only. Keep production D1, authentication and cloud sync deferred until ownership, authorisation and conflict rules are implemented and reviewed.
+1. Verify the post-merge `main` CI run for PR #67 and record the result.
+2. Merge the research-integration documentation and issue-mapping PR; keep this research decision record as the source for adopted/adapted/deferred findings.
+3. Start the M7.2 adaptive practice issue (#20) only after a short audit of the existing practice planner, assessment evidence and skill-state rules.
+4. Start the audio capability audit in Issue #19 before implementing microphone capture; do not duplicate metronome/ear-training audio lifecycle code.
+5. Continue Issue #17 with theory recall and connected triad/CAGED learning; keep TAB/repertoire content rights-safe.
+6. Complete physical-device offline and backup/restore QA using [the manual acceptance runbook](MANUAL_ACCEPTANCE.md), plus CSP/WCAG/privacy and cross-browser audio checks under Issue #18.
+7. Keep Cloudflare production deployment, production D1, authentication and cloud sync deferred until their explicit security and operational gates are satisfied.
 
 
 ## M7.2 implementation slice (2026-11-12)
