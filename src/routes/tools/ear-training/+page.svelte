@@ -116,7 +116,7 @@
   <title>Ear training — GuitarLab</title>
   <meta
     name="description"
-    content="Practise pulse, pitch direction and melodic contour with locally generated listening exercises."
+    content="Practise pulse, pitch, melodic contour and interval recognition with locally generated listening exercises."
   />
 </svelte:head>
 
@@ -127,7 +127,7 @@
     <div class="eyebrow">THE PRACTICE WORKBENCH · LISTENING</div>
     <h1>Train your <em>ear.</em></h1>
     <p>
-      Short listening challenges build awareness of pulse, pitch and melody.
+      Short listening challenges build awareness of pulse, pitch, melody and intervals.
       Every example is generated in your browser when you ask to hear it.
     </p>
   </header>
@@ -140,7 +140,7 @@
 
   <section class="panel exercise-panel" aria-labelledby="exercise-title">
     <div class="exercise-meta">
-      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : 'MELODY SHAPE'}</span>
+      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : kind === 'contour' ? 'MELODY SHAPE' : 'INTERVAL RECOGNITION'}</span>
       <span class="score" aria-label="Session score">{correctCount} correct · {attemptCount} attempts</span>
     </div>
     <h2 id="exercise-title">{exercise.prompt}</h2>
@@ -148,7 +148,7 @@
 
     <div class="listening-card">
       <div class="sound-symbol" aria-hidden="true">{kind === 'pulse' ? '♩' : kind === 'pitch' ? '♪' : '♫'}</div>
-      <p>{kind === 'pulse' ? 'Four beats' : kind === 'pitch' ? 'Two notes' : 'Three notes'}</p>
+      <p>{kind === 'pulse' ? 'Four beats' : kind === 'pitch' ? 'Two notes' : kind === 'contour' ? 'Three notes' : 'Two notes · interval'}</p>
       <button type="button" class="primary-button" onclick={playExercise} disabled={isPlaying}>
         {isPlaying ? 'Playing example…' : 'Listen to example'}
       </button>
@@ -156,7 +156,7 @@
     </div>
 
     <fieldset class="answer-fieldset" disabled={selectedAnswer !== null}>
-      <legend>{kind === 'pulse' ? 'How did the beats feel?' : kind === 'pitch' ? 'Which note was higher?' : 'Which way did the melody move?'}</legend>
+      <legend>{kind === 'pulse' ? 'How did the beats feel?' : kind === 'pitch' ? 'Which note was higher?' : kind === 'contour' ? 'Which way did the melody move?' : 'What was the distance between the notes?'}</legend>
       <div class="answer-options" class:three-options={exercise.choices.length === 3}>
         {#each exercise.choices as choice (choice.value)}
           <button
@@ -196,6 +196,7 @@
     <ul>
       <li>Use headphones or a comfortable speaker volume if available.</li>
       <li>Listen to the whole example before choosing an answer.</li>
+      <li>For intervals, compare the distance between notes rather than trying to name their absolute pitches.</li>
       <li>Replay as often as you need; this exercise is about noticing, not speed.</li>
       <li>Visual instructions and answer labels are provided, so the task is not explained by sound alone.</li>
     </ul>
