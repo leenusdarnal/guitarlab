@@ -243,12 +243,10 @@ try {
       migratedSessionId: migratedSession?.id ?? null,
       sessionIndex: sessions.indexNames.contains('byLearnerStatusStartedAt'),
       learnerStatusIndex: sessions.indexNames.contains('byLearnerStatus'),
-      assessmentReleaseIndex: assessmentAttempts.indexNames.contains(
-        'byLearnerRelease'
-      ),
-      practiceEvidenceLearnerIndex: practiceEvidence.indexNames.contains(
-        'byLearnerId'
-      )
+      assessmentReleaseIndex:
+        assessmentAttempts.indexNames.contains('byLearnerRelease'),
+      practiceEvidenceLearnerIndex:
+        practiceEvidence.indexNames.contains('byLearnerId')
     };
     database.close();
     return result;
