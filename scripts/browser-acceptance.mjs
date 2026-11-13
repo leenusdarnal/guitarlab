@@ -1095,10 +1095,14 @@ try {
     .locator('#correction-note')
     .fill('I feel confident, but this is not assessed.');
   await page.getByRole('button', { name: 'Save correction' }).click();
-  await page
-    .getByRole('alert')
-    .filter({ hasText: 'Stable mastery requires the latest assessment' })
-    .waitFor();
+  const stableGuardAlert = page.getByRole('alert');
+  await stableGuardAlert.waitFor();
+  const stableGuardMessage = await stableGuardAlert.textContent();
+  assert.match(
+    stableGuardMessage ?? '',
+    /Stable mastery requires the latest assessment/,
+    `Expected the stable-mastery safety message, received: ${stableGuardMessage}`
+  );
   await page.locator('#corrected-state').selectOption('practising');
   await page
     .locator('#correction-note')
