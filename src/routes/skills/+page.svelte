@@ -206,7 +206,7 @@
             </p>
             <label for="corrected-state">Your state</label>
             <select id="corrected-state" bind:value={selectedState}>
-              {#each states as state}
+              {#each states as state (state)}
                 <option value={state}>{stateLabel(state)}</option>
               {/each}
             </select>
