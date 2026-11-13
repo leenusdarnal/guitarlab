@@ -33,6 +33,7 @@ class FakeGain extends FakeAudioNode {
 
 class FakeAudioContext {
   static instances: FakeAudioContext[] = [];
+  static onCreate: ((context: FakeAudioContext) => void) | null = null;
   state: AudioContextState = 'suspended';
   currentTime = 1;
   destination = new FakeAudioNode();
@@ -57,6 +58,7 @@ class FakeAudioContext {
 
   constructor() {
     FakeAudioContext.instances.push(this);
+    FakeAudioContext.onCreate?.(this);
   }
 }
 
@@ -86,6 +88,7 @@ afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
+  FakeAudioContext.onCreate = null;
 });
 
 describe('Web Audio metronome configuration', () => {
@@ -281,5 +284,136 @@ describe('playReferenceTone audio lifecycle', () => {
     expect(gain.disconnect).toHaveBeenCalledOnce();
     expect(context.close).toHaveBeenCalledOnce();
     expect(context.state).toBe('closed');
+  });
+
+  it('propagates AudioContext construction failures', async () => {
+    class ThrowingAudioContext {
+      constructor() {
+        throw new Error('context construction failed');
+      }
+    }
+    vi.stubGlobal('AudioContext', ThrowingAudioContext);
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow(
+      'context construction failed'
+    );
+  });
+
+  it('closes the context when AudioContext resume rejects', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.resume.mockRejectedValueOnce(new Error('resume denied'));
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('resume denied');
+
+    expect(context.close).toHaveBeenCalledOnce();
+    expect(context.state).toBe('closed');
+  });
+
+  it('closes the context when resume does not make the context run', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.resume.mockImplementationOnce(async () => {});
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('Audio is not ready');
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('closes the context when oscillator creation fails', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.createOscillator.mockImplementationOnce(() => {
+        throw new Error('oscillator unavailable');
+      });
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('oscillator unavailable');
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects the oscillator and closes the context when gain creation fails', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.createGain.mockImplementationOnce(() => {
+        throw new Error('gain unavailable');
+      });
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('gain unavailable');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when destination connection fails', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.createGain.mockImplementationOnce(() => {
+        const gain = new FakeGain();
+        gain.connect.mockImplementationOnce(() => {
+          throw new Error('destination connection failed');
+        });
+        context.gains.push(gain);
+        return gain;
+      });
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('destination connection failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when oscillator start fails', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.createOscillator.mockImplementationOnce(() => {
+        const oscillator = new FakeOscillator();
+        oscillator.start.mockImplementationOnce(() => {
+          throw new Error('start failed');
+        });
+        context.oscillators.push(oscillator);
+        return oscillator;
+      });
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('start failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when oscillator stop fails', async () => {
+    installAudioEnvironment();
+    FakeAudioContext.onCreate = (context) => {
+      context.createOscillator.mockImplementationOnce(() => {
+        const oscillator = new FakeOscillator();
+        oscillator.stop.mockImplementationOnce(() => {
+          throw new Error('stop failed');
+        });
+        context.oscillators.push(oscillator);
+        return oscillator;
+      });
+    };
+
+    const playback = playReferenceTone(440, 500);
+    const context = FakeAudioContext.instances[0];
+    await expect(playback).rejects.toThrow('stop failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
   });
 });

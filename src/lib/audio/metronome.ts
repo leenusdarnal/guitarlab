@@ -211,26 +211,48 @@ export async function playReferenceTone(
       throw new Error('Audio is not ready. Tap the reference tone again.');
     }
 
-    await new Promise<void>((resolve) => {
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      const startAt = context.currentTime + 0.02;
-      const endAt = startAt + durationMilliseconds / 1_000;
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(frequencyHz, startAt);
-      gain.gain.setValueAtTime(0.0001, startAt);
-      gain.gain.exponentialRampToValueAtTime(0.2, startAt + 0.01);
-      gain.gain.setValueAtTime(0.2, endAt - 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001, endAt);
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.onended = () => {
-        oscillator.disconnect();
-        gain.disconnect();
-        resolve();
-      };
-      oscillator.start(startAt);
-      oscillator.stop(endAt);
+    let oscillator: OscillatorNode | null = null;
+    let gain: GainNode | null = null;
+    let nodesDisconnected = false;
+    const disconnectNodes = () => {
+      if (nodesDisconnected) return;
+      nodesDisconnected = true;
+      try {
+        oscillator?.disconnect();
+      } catch {
+        // Preserve the original playback error while attempting all cleanup.
+      }
+      try {
+        gain?.disconnect();
+      } catch {
+        // Preserve the original playback error while attempting all cleanup.
+      }
+    };
+
+    await new Promise<void>((resolve, reject) => {
+      try {
+        oscillator = context.createOscillator();
+        gain = context.createGain();
+        const startAt = context.currentTime + 0.02;
+        const endAt = startAt + durationMilliseconds / 1_000;
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequencyHz, startAt);
+        gain.gain.setValueAtTime(0.0001, startAt);
+        gain.gain.exponentialRampToValueAtTime(0.2, startAt + 0.01);
+        gain.gain.setValueAtTime(0.2, endAt - 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, endAt);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.onended = () => {
+          disconnectNodes();
+          resolve();
+        };
+        oscillator.start(startAt);
+        oscillator.stop(endAt);
+      } catch (error) {
+        disconnectNodes();
+        reject(error);
+      }
     });
   } finally {
     await context.close();
