@@ -45,9 +45,9 @@ describe('playback completion lifecycle', () => {
   it('rejects invalid playback durations', () => {
     const controller = new AbortController();
 
-    expect(() =>
-      waitForPlaybackCompletion(-1, controller.signal)
-    ).toThrow(RangeError);
+    expect(() => waitForPlaybackCompletion(-1, controller.signal)).toThrow(
+      RangeError
+    );
     expect(() =>
       waitForPlaybackCompletion(Number.NaN, controller.signal)
     ).toThrow(RangeError);
