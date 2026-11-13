@@ -13,14 +13,15 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const unique = (values) => new Set(values).size === values.length;
 const isText = (value) => typeof value === "string" && value.trim().length > 0;
 
-const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex] = await Promise.all([
+const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog] = await Promise.all([
   readJson("content/curriculum/year-1.json"),
   readJson("content/curriculum/year-2.json"),
   readJson("content/curriculum/year-3-specialisations.json"),
   readJson("content/curriculum/year-1-lessons.json"),
   readJson("content/curriculum/year-2-lessons.json"),
   readJson("content/curriculum/year-3-specialisation-lessons.json"),
-  readJson("content/curriculum/year-1-dashboard-index.json")
+  readJson("content/curriculum/year-1-dashboard-index.json"),
+  readJson("content/curriculum/skill-catalog.json")
 ]);
 
 const checkOutline = (name, outline, expectedCount) => {
@@ -99,12 +100,43 @@ validateLessons("Year 1 lessons", y1Lessons, y1, 52);
 validateLessons("Year 2 lessons", y2Lessons, y2, 52);
 validateLessons("Year 3 lessons", y3Lessons, y3, 48, true);
 
+
+const categoryIds = (skillCatalog.categories ?? []).map((category) => category.id);
+const catalogSkills = skillCatalog.skills ?? [];
+const catalogSkillIds = catalogSkills.map((skill) => skill.id);
+const authoredLessons = [
+  ...(y1Lessons.lessons ?? []),
+  ...(y2Lessons.lessons ?? []),
+  ...(y3Lessons.lessons ?? [])
+];
+const authoredSkillIds = new Set(
+  authoredLessons.flatMap((lesson) => lesson.skillIds ?? [])
+);
+check(skillCatalog.schemaVersion === 1, "Skill catalogue: unsupported schemaVersion");
+check(isText(skillCatalog.version), "Skill catalogue: missing version");
+check(skillCatalog.curriculumReleaseId === "curriculum-v1", "Skill catalogue: unexpected curriculum release key");
+check(unique(categoryIds), "Skill catalogue: duplicate category IDs");
+check(unique(catalogSkillIds), "Skill catalogue: duplicate skill IDs");
+for (const category of skillCatalog.categories ?? []) {
+  check(isText(category.displayName) && isText(category.description), `Skill category ${category.id}: missing display metadata`);
+}
+for (const skill of catalogSkills) {
+  check(isText(skill.id) && isText(skill.displayName) && isText(skill.description), `Skill ${skill.id}: missing canonical metadata`);
+  check(categoryIds.includes(skill.category), `Skill ${skill.id}: unknown category ${skill.category}`);
+  check(skill.id.split(".")[0] === skill.category, `Skill ${skill.id}: category must match the ID namespace`);
+  check(authoredSkillIds.has(skill.id), `Skill ${skill.id}: catalogue entry is not referenced by an authored lesson`);
+}
+for (const skillId of authoredSkillIds) {
+  check(catalogSkillIds.includes(skillId), `Authored lesson skill ID ${skillId}: missing from canonical skill catalogue`);
+}
+
 const expectedDashboardLessons = y1Lessons.lessons.map((lesson) => ({
   id: lesson.id,
   week: lesson.week,
   title: lesson.title,
   focus: lesson.focus,
-  estimatedMinutes: lesson.estimatedMinutes
+  estimatedMinutes: lesson.estimatedMinutes,
+  skillIds: [...lesson.skillIds]
 }));
 check(
   y1DashboardIndex.schemaVersion === 1 &&
