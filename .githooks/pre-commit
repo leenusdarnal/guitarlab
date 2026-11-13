@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mapfile -d '' -t staged_files < <(git diff --cached --name-only --diff-filter=ACMR -z)
+staged_files=()
+while IFS= read -r -d '' file; do
+  staged_files+=("$file")
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
 
 if (("${#staged_files[@]}" == 0)); then
   exit 0
