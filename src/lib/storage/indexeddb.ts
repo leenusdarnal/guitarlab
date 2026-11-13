@@ -889,9 +889,9 @@ export async function loadActiveAdaptivePracticeSnapshot(
         const reachedLessonIds = new Set(
           progress
             .filter(
-            (record) =>
-              record.status === 'completed' || record.status === 'in_progress'
-          )
+              (record) =>
+                record.status === 'completed' || record.status === 'in_progress'
+            )
             .map((record) => record.lessonId)
         );
         if (dashboard.nextLesson) {
