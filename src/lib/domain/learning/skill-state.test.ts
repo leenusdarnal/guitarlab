@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import type { AssessmentAttemptRecord, SkillMasteryRecord } from '../../repositories/contracts';
+import type {
+  AssessmentAttemptRecord,
+  SkillMasteryRecord
+} from '../../repositories/contracts';
 import { explainSkillState } from './skill-state';
 
 const learnerId = '6d1a32df-2cbd-4930-b594-32ed2f8a44e2';
@@ -50,8 +53,20 @@ describe('explainSkillState', () => {
   });
 
   it('uses the latest assessment rather than array order', () => {
-    const later = { ...baseAttempt, id: '9e35fc81-dc90-4fe7-9c5e-93a84170f0e2', outcome: 'needs_practice' as const, assessedAt: 300, recordedAt: 300 };
-    expect(explainSkillState({ attempts: [later, baseAttempt], current: null, now: 400 })).toMatchObject({
+    const later = {
+      ...baseAttempt,
+      id: '9e35fc81-dc90-4fe7-9c5e-93a84170f0e2',
+      outcome: 'needs_practice' as const,
+      assessedAt: 300,
+      recordedAt: 300
+    };
+    expect(
+      explainSkillState({
+        attempts: [later, baseAttempt],
+        current: null,
+        now: 400
+      })
+    ).toMatchObject({
       state: 'practising',
       latestOutcome: 'needs_practice',
       rule: 'latest-needs-practice'
@@ -60,14 +75,18 @@ describe('explainSkillState', () => {
 
   it('keeps inconclusive evidence in learning rather than stable', () => {
     const attempt = { ...baseAttempt, outcome: 'inconclusive' as const };
-    expect(explainSkillState({ attempts: [attempt], current: null, now: 100 })).toMatchObject({
+    expect(
+      explainSkillState({ attempts: [attempt], current: null, now: 100 })
+    ).toMatchObject({
       state: 'learning',
       rule: 'latest-inconclusive'
     });
   });
 
   it('marks an existing stable state review due when its date arrives', () => {
-    expect(explainSkillState({ attempts: [baseAttempt], current: stable, now: 200 })).toMatchObject({
+    expect(
+      explainSkillState({ attempts: [baseAttempt], current: stable, now: 200 })
+    ).toMatchObject({
       state: 'review_due',
       nextReviewAt: 200,
       rule: 'review-date-reached'
@@ -75,7 +94,9 @@ describe('explainSkillState', () => {
   });
 
   it('does not mark a stable skill review due before its review date', () => {
-    expect(explainSkillState({ attempts: [baseAttempt], current: stable, now: 199 })).toMatchObject({
+    expect(
+      explainSkillState({ attempts: [baseAttempt], current: stable, now: 199 })
+    ).toMatchObject({
       state: 'stable',
       rule: 'latest-passed'
     });
