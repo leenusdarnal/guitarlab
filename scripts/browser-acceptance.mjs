@@ -1082,7 +1082,7 @@ try {
   await page
     .getByRole('heading', { name: 'Skill states, explained.' })
     .waitFor();
-  await page.getByRole('heading', { name: 'Chord Transition' }).waitFor();
+  await page.getByRole('button', { name: /Chord Transition/ }).waitFor();
   await page
     .getByText('No assessment has been recorded for this skill yet.')
     .waitFor();
