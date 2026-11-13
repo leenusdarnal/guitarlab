@@ -14,9 +14,7 @@ class FakeAudioContext {
 describe('AudioContextSession', () => {
   it('creates its context lazily and reuses it while running', async () => {
     const context = new FakeAudioContext();
-    const createContext = vi.fn(
-      () => context as unknown as AudioContext
-    );
+    const createContext = vi.fn(() => context as unknown as AudioContext);
     const session = new AudioContextSession(createContext);
 
     expect(createContext).not.toHaveBeenCalled();
