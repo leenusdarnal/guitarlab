@@ -282,4 +282,102 @@ describe('playReferenceTone audio lifecycle', () => {
     expect(context.close).toHaveBeenCalledOnce();
     expect(context.state).toBe('closed');
   });
+
+  it('closes the context when AudioContext resume rejects', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.resume.mockRejectedValueOnce(new Error('resume denied'));
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('resume denied');
+
+    expect(context.close).toHaveBeenCalledOnce();
+    expect(context.state).toBe('closed');
+  });
+
+  it('closes the context when resume does not make the context run', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.resume.mockImplementationOnce(async () => {});
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('Audio is not ready');
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('closes the context when oscillator creation fails', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.createOscillator.mockImplementationOnce(() => {
+      throw new Error('oscillator unavailable');
+    });
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('oscillator unavailable');
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects the oscillator and closes the context when gain creation fails', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.createGain.mockImplementationOnce(() => {
+      throw new Error('gain unavailable');
+    });
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('gain unavailable');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when destination connection fails', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.createGain.mockImplementationOnce(() => {
+      const gain = new FakeGain();
+      gain.connect.mockImplementationOnce(() => {
+        throw new Error('destination connection failed');
+      });
+      context.gains.push(gain);
+      return gain;
+    });
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('destination connection failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when oscillator start fails', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.createOscillator.mockImplementationOnce(() => {
+      const oscillator = new FakeOscillator();
+      oscillator.start.mockImplementationOnce(() => {
+        throw new Error('start failed');
+      });
+      context.oscillators.push(oscillator);
+      return oscillator;
+    });
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('start failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
+  it('disconnects both nodes and closes the context when oscillator stop fails', async () => {
+    installAudioEnvironment();
+    const context = FakeAudioContext.instances[0];
+    context.createOscillator.mockImplementationOnce(() => {
+      const oscillator = new FakeOscillator();
+      oscillator.stop.mockImplementationOnce(() => {
+        throw new Error('stop failed');
+      });
+      context.oscillators.push(oscillator);
+      return oscillator;
+    });
+
+    await expect(playReferenceTone(440, 500)).rejects.toThrow('stop failed');
+    expect(context.oscillators[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.gains[0].disconnect).toHaveBeenCalledOnce();
+    expect(context.close).toHaveBeenCalledOnce();
+  });
+
 });
