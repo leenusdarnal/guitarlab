@@ -254,5 +254,4 @@ describe('buildAdaptivePracticeSnapshot', () => {
       )
     ).toBe(false);
   });
-
 });
