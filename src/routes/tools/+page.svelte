@@ -54,7 +54,7 @@
         <div class="tool-meta"><span class="available-label">Available now</span><span>Listening · Pulse · Pitch</span></div>
         <h2>Ear training</h2>
         <p>
-          Practise steady pulse, high and low pitch, and melodic contour with
+          Practise steady pulse, high and low pitch, melodic contour and intervals with
           short audio examples generated locally in your browser.
         </p>
       </div>
