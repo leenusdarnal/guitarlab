@@ -248,7 +248,8 @@ describe('learner backup contract', () => {
       evidenceType: 'measured' as const,
       outcome: 'passed' as const,
       score: 100,
-      evidenceSummary: 'Both open-string pitches in this test fixture were identified correctly.',
+      evidenceSummary:
+        'Both open-string pitches in this test fixture were identified correctly.',
       evidence: {
         source: 'learner-selected-pitch-options',
         scoringRuleVersion: 'two-item-round-trip-test-v1',
@@ -297,8 +298,14 @@ describe('learner backup contract', () => {
                 passThreshold: 100
               },
               itemEvidence: [
-                { itemId: 'standard-tuning.string-6-open-pitch', response: 'E2' },
-                { itemId: 'standard-tuning.string-5-open-pitch', response: 'A2' }
+                {
+                  itemId: 'standard-tuning.string-6-open-pitch',
+                  response: 'E2'
+                },
+                {
+                  itemId: 'standard-tuning.string-5-open-pitch',
+                  response: 'A2'
+                }
               ]
             }
           ]
