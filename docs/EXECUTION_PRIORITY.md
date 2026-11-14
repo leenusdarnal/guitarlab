@@ -118,8 +118,8 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
 | PR #102 branch checks | Application/curriculum validation, Node.js 26 and curriculum validator passed |
 | Post-merge main CI | Run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570); refresh result |
-| Current implementation branch | `feat/m7-adaptive-recommendation-feedback` |
-| Next engineering task | Append-only adaptive recommendation dismiss/correct feedback (Issue #69) |
+| Current implementation branch | `feat/m7-adaptive-recommendation-feedback`; PR [#103](https://github.com/leenusdarnal/guitarlab/pull/103) open, CI pending |
+| Current engineering task | Append-only adaptive recommendation dismiss/correct feedback implemented in PR #103; merge after required checks pass |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
 | Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
 | M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |
