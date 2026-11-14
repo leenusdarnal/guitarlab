@@ -19,8 +19,7 @@ import {
 } from '../application/skill-catalog';
 import {
   listAuthoredPracticeDimensions,
-  listAuthoredPracticeScopes,
-  PRACTICE_TAXONOMY_VERSION
+  listAuthoredPracticeScopeSnapshots
 } from '../application/practice-taxonomy';
 import { explainSkillState } from '../domain/learning/skill-state';
 import type { SkillStateExplanation } from '../domain/learning/skill-state';
@@ -1005,9 +1004,8 @@ export async function loadActiveAdaptivePracticeSnapshot(
           attempts,
           mastery,
           practiceEvidence,
-          authoredPracticeScopes: listAuthoredPracticeScopes(),
+          authoredPracticeTaxonomies: listAuthoredPracticeScopeSnapshots(),
           authoredPracticeDimensions: listAuthoredPracticeDimensions(),
-          practiceTaxonomyVersion: PRACTICE_TAXONOMY_VERSION,
           now
         });
       }
