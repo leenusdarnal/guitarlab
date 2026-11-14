@@ -382,8 +382,8 @@ export type AssessmentSubmission = z.input<typeof assessmentSubmissionSchema>;
 export async function recordAssessmentAttempt(
   input: { learnerId: string; submission: unknown },
   dependencies: {
-    curriculum: CurriculumRepository;
-    skills: SkillRepository;
+    curriculum: Pick<CurriculumRepository, 'findLesson'>;
+    skills: Pick<SkillRepository, 'findForRelease'>;
     assessments: AssessmentAttemptRepository;
     runtime: ApplicationRuntime;
   }
