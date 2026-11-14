@@ -144,8 +144,8 @@ A fresh count across the 152 current lesson records gives:
 
 | Measure | Current result | Remaining interpretation |
 |---|---:|---|
-| Generic learning objective 2 | 140/152 | 12 lessons remediated; 140 still use the original generic sentence |
-| Generic learning objective 3 | 140/152 | 12 lessons remediated; 140 still use the original generic sentence |
+| Generic learning objective 2 | 108/152 | 44 lessons remediated; 108 still use the original generic sentence |
+| Generic learning objective 3 | 108/152 | 44 lessons remediated; 108 still use the original generic sentence |
 | Each of the three formerly repeated criteria | 140 occurrences each | Retained in the 140 lessons not yet rewritten; the 12 Rock & Blues lessons have task-specific criteria |
 | Distinct `explanation.keyIdea` texts | 25 | Increased from the initial 13 as route-specific explanations were added |
 | Year 3+ specialist generic objective 2 | 36/48 | The 12 Rock & Blues lessons are specific; 36 lessons across the other three routes remain generic |
@@ -209,7 +209,7 @@ These changes are content and mapping improvements, not validated grading rubric
 
 ## 12. Current remediation state after Jazz & Harmony batch 1 (2026-11-14)
 
-Release `curriculum-v1.0.5` now includes task-specific authoring for Jazz & Harmony Weeks 1–4. The lessons use concrete seventh-chord voicings, swing-subdivision practice, guide-tone connections and ii–V–I transfer between C and F. Four stable lesson IDs were retained, and the four generic `harmony.open-chords` mappings were replaced by evidence-aligned seventh-chord, voice-leading or rhythm mappings using existing skill identifiers only.
+Release `curriculum-v1.0.6` now includes task-specific authoring for Jazz & Harmony Weeks 1–8. Weeks 5–8 add chord-extension spellings and partial voicings, an integrated comping review, a bossa-inspired two-layer starter pattern and a 12-bar jazz-blues form with one explicit variation. Stable lesson IDs and all 34 skill identifiers are retained; only evidence-aligned mapping changes are introduced.
 
 A fresh source scan across all 152 authored lessons gives:
 
@@ -220,6 +220,6 @@ A fresh source scan across all 152 authored lessons gives:
 | Year 3+ specialist lessons with task-specific objectives/checkpoints | 28/48 | Rock & Blues and Fingerstyle & Acoustic are complete; Jazz & Harmony Weeks 1–4 are complete |
 | Year 3+ specialist lessons still using generic objectives | 20/48 | Jazz & Harmony Weeks 5–12 (8) and All-Round Musician Weeks 1–12 (12) remain |
 | Year 1 / Year 2 lessons with task-specific authoring | 12/104 | 92 Year 1 / Year 2 lessons remain outside the representative pilot |
-| Lesson-to-skill associations | 389 | All 34 stable skill IDs remain represented |
+| Lesson-to-skill associations | 391 | All 34 stable skill IDs remain represented |
 
-The next route batch is Jazz & Harmony Weeks 5–8. Continue to keep assessment profiles in draft, preserve immutable release records and learner evidence, and avoid universal numeric pass thresholds.
+Jazz & Harmony Weeks 5–8 are now authored in v1.0.6; the next route batch is Weeks 9–12. Assessment profiles remain draft, immutable release records and learner evidence are preserved, and no universal numeric pass thresholds are introduced.
