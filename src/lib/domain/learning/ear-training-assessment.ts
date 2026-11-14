@@ -98,7 +98,6 @@ export function scoreIntervalRecognitionResponse(
   };
 }
 
-
 /**
  * Score only the learner's explicit steady/uneven selection against the
  * deterministic, browser-generated four-beat pattern. This is a supporting
