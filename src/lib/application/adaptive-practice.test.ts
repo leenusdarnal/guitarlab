@@ -513,7 +513,13 @@ describe('buildAdaptivePracticeSnapshot', () => {
       practiceEvidence: [
         linked('linked-a1', 'lesson-a', 'exercise-a', 100),
         linked('linked-a2', 'lesson-a', 'exercise-a', 110),
-        linked('linked-b', 'lesson-b', 'exercise-b', 120, '00000000-0000-4000-8000-000000000003'),
+        linked(
+          'linked-b',
+          'lesson-b',
+          'exercise-b',
+          120,
+          '00000000-0000-4000-8000-000000000003'
+        ),
         observation('legacy-free-text', 'exercise-a', 130, 130),
         {
           ...linked('stale-version', 'lesson-a', 'exercise-a', 140),
