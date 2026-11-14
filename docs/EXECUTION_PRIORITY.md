@@ -9,7 +9,7 @@
 ## 1. Latest verified checkpoint
 
 - PR #102, Jazz & Harmony Weeks 5–8, merged to `main` as `de9b0f3992c258e5dfdc840e48fb45da47276bd2`.
-- PR #102's final branch checks passed: application/curriculum validation, Node.js 26 compatibility and the dedicated curriculum validator. Post-merge curriculum validation run [#43579576618](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576618) passed. The post-merge application CI run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570) must be refreshed before the next merge.
+- PR #102's final branch checks passed: application/curriculum validation, Node.js 26 compatibility and the dedicated curriculum validator. Post-merge curriculum validation run [#43579576618](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576618) passed. The post-merge application CI run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570) passed.
 - Curriculum v1.0.6 preserves all 152 lesson IDs and 34 canonical skill IDs. Task-specific authoring now covers 44/152 lessons overall and 32/48 Year 3+ specialist lessons; 391 mapping links are retained.
 - Audio implementation Issue #68 is closed. PRs #73–80 added lifecycle tests, explicit session ownership and deterministic teardown; PRs #81–86 added pitch estimation, explicit microphone capture, stable-note tracking, tuner, note-recognition exercises and synthetic benchmarks; PRs #90–91 expanded synthetic validation and added a local real-recording evaluator.
 - Remaining audio evidence is isolated in [Issue #89](https://github.com/leenusdarnal/guitarlab/issues/89): a consented real-guitar corpus, physical-device/browser measurements and resource-cleanup acceptance. Mocked browser tests and synthetic fixtures are not hardware evidence.
@@ -24,7 +24,7 @@
 
 1. [x] Review PR #102's curriculum, migration, fingerprint, local-D1 invariants and required checks.
 2. [x] Merge PR #102 after all required PR checks passed.
-3. [ ] Refresh post-merge application CI result for run #43579576570.
+3. [x] Verify post-merge application CI result for run #43579576570 — passed.
 4. [ ] Update tracker, roadmap, audio audit and M7.2 curriculum/practice audits to reflect merged PRs and current issue states.
 
 **Exit criteria:** the current main SHA, CI evidence, curriculum progress and issue owners agree across docs and GitHub.
@@ -117,7 +117,7 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | Last verified main SHA | `de9b0f3992c258e5dfdc840e48fb45da47276bd2` |
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
 | PR #102 branch checks | Application/curriculum validation, Node.js 26 and curriculum validator passed |
-| Post-merge main CI | Run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570); refresh result |
+| Post-merge main CI | Run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570); passed |
 | Current implementation branch | `feat/m7-adaptive-recommendation-feedback`; PR [#103](https://github.com/leenusdarnal/guitarlab/pull/103) open, CI pending |
 | Current engineering task | Append-only adaptive recommendation dismiss/correct feedback implemented in PR #103; merge after required checks pass |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
