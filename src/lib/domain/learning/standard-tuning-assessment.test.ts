@@ -23,9 +23,9 @@ describe('standard tuning assessment', () => {
       'standard-tuning.string-2-open-pitch',
       'standard-tuning.string-1-open-pitch'
     ]);
-    expect(standardTuningAssessment.items.map((item) => item.correctAnswer)).toEqual([
-      'E2', 'A2', 'D3', 'G3', 'B3', 'E4'
-    ]);
+    expect(
+      standardTuningAssessment.items.map((item) => item.correctAnswer)
+    ).toEqual(['E2', 'A2', 'D3', 'G3', 'B3', 'E4']);
   });
 
   it('scores a complete six-item response and preserves item provenance', () => {
@@ -45,9 +45,13 @@ describe('standard tuning assessment', () => {
         decisionScope: 'supporting_probe'
       }
     });
-    expect(result.itemEvidence.every(
-      (item) => item.outcome === 'correct' && item.responseSource === 'learner_selected_option'
-    )).toBe(true);
+    expect(
+      result.itemEvidence.every(
+        (item) =>
+          item.outcome === 'correct' &&
+          item.responseSource === 'learner_selected_option'
+      )
+    ).toBe(true);
   });
 
   it('requires five of six correct for a pass and does not infer mastery', () => {
@@ -76,7 +80,9 @@ describe('standard tuning assessment', () => {
       score: 0,
       outcome: 'needs_practice'
     });
-    expect(result.itemEvidence.every((item) => item.outcome === 'incorrect')).toBe(true);
+    expect(
+      result.itemEvidence.every((item) => item.outcome === 'incorrect')
+    ).toBe(true);
   });
 
   it('keeps missing responses inconclusive and score unavailable', () => {
