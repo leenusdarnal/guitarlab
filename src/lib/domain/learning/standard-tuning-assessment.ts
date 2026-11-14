@@ -130,6 +130,12 @@ export function scoreStandardTuningAssessment(
       definitionId: standardTuningAssessment.definitionId,
       definitionVersion: standardTuningAssessment.definitionVersion,
       scoringRuleVersion: standardTuningAssessment.scoringRuleVersion,
+      itemCount: standardTuningAssessment.items.length,
+      passThreshold: Math.round(
+        (standardTuningAssessment.passThreshold /
+          standardTuningAssessment.items.length) *
+          100
+      ),
       decisionScope: 'supporting_probe'
     },
     itemEvidence,
