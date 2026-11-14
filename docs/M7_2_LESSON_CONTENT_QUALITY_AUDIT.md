@@ -1,6 +1,6 @@
 # M7.2 — Authored Lesson Content Quality Audit
 
-**Status:** Dataset-level quality scan complete; 12 Rock & Blues lessons remediated; 36 Year 3+ specialist lessons and broader curriculum remediations remain open  
+**Status:** Dataset-level quality scan complete; Rock & Blues and Fingerstyle & Acoustic routes complete; Jazz & Harmony Weeks 1–4 remediated; 20 Year 3+ specialist lessons and broader curriculum remediations remain open  
 **Scope:** 152 authored lessons across Year 1, Year 2 and Year 3+  
 **Purpose:** Find structural weaknesses that can make lessons appear complete while leaving learners with generic objectives or non-discriminating assessment criteria.
 
@@ -205,3 +205,21 @@ The mapping decision register records a first batch of 25 lesson rows; 127 rows 
 These changes are content and mapping improvements, not validated grading rubrics. All 34 assessment profiles remain draft; numeric cut scores, automated pass/fail decisions and automatic mastery carry-forward remain disabled. Previous release rows and learner evidence remain attached to their original releases.
 
 **Next batch:** Jazz & Harmony Weeks 1–12. Preserve jazz-specific harmonic, rhythmic, ear-training and improvisation intent; use existing skill identifiers and require an explicit evidence-backed decision before introducing any new identifier.
+
+
+## 12. Current remediation state after Jazz & Harmony batch 1 (2026-11-14)
+
+Release `curriculum-v1.0.5` now includes task-specific authoring for Jazz & Harmony Weeks 1–4. The lessons use concrete seventh-chord voicings, swing-subdivision practice, guide-tone connections and ii–V–I transfer between C and F. Four stable lesson IDs were retained, and the four generic `harmony.open-chords` mappings were replaced by evidence-aligned seventh-chord, voice-leading or rhythm mappings using existing skill identifiers only.
+
+A fresh source scan across all 152 authored lessons gives:
+
+| Measure | Current result | Remaining interpretation |
+|---|---:|---|
+| Generic learning objective 2 | 112/152 | 40 lessons now use task-specific objectives; 112 remain generic |
+| Generic learning objective 3 | 112/152 | Same 40 remediated lessons |
+| Year 3+ specialist lessons with task-specific objectives/checkpoints | 28/48 | Rock & Blues and Fingerstyle & Acoustic are complete; Jazz & Harmony Weeks 1–4 are complete |
+| Year 3+ specialist lessons still using generic objectives | 20/48 | Jazz & Harmony Weeks 5–12 (8) and All-Round Musician Weeks 1–12 (12) remain |
+| Year 1 / Year 2 lessons with task-specific authoring | 12/104 | 92 Year 1 / Year 2 lessons remain outside the representative pilot |
+| Lesson-to-skill associations | 389 | All 34 stable skill IDs remain represented |
+
+The next route batch is Jazz & Harmony Weeks 5–8. Continue to keep assessment profiles in draft, preserve immutable release records and learner evidence, and avoid universal numeric pass thresholds.
