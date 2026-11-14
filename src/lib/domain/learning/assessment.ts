@@ -95,7 +95,7 @@ export const assessmentEvidenceSchema = z
  * Structured assessment evidence. Audio and recording blobs are deliberately
  * excluded: this contract stores a summary and small metadata only.
  */
-export const assessmentAttemptInputSchema = z
+const assessmentAttemptObjectSchema = z
   .object({
     id: z.string().uuid(),
     learnerId: z.string().uuid(),
@@ -112,72 +112,93 @@ export const assessmentAttemptInputSchema = z
     itemEvidence: z.array(assessmentItemEvidenceSchema).min(1).max(100).optional(),
     assessedAt: z.number().int().nonnegative()
   })
-  .strict()
-  .superRefine((attempt, context) => {
-    if (Boolean(attempt.assessmentInstrument) !== Boolean(attempt.itemEvidence)) {
+  .strict();
+
+type AssessmentAttemptValidationFields = Pick<
+  z.output<typeof assessmentAttemptObjectSchema>,
+  'outcome' | 'score' | 'assessmentInstrument' | 'itemEvidence'
+>;
+
+function validateAssessmentAttemptEvidence(
+  attempt: AssessmentAttemptValidationFields,
+  context: z.RefinementCtx
+): void {
+  if (Boolean(attempt.assessmentInstrument) !== Boolean(attempt.itemEvidence)) {
+    context.addIssue({
+      code: 'custom',
+      path: ['itemEvidence'],
+      message: 'Instrument provenance and item evidence must be recorded together.'
+    });
+  }
+  if (attempt.itemEvidence && attempt.assessmentInstrument) {
+    const itemIds = attempt.itemEvidence.map((item) => item.itemId);
+    if (new Set(itemIds).size !== itemIds.length) {
       context.addIssue({
         code: 'custom',
         path: ['itemEvidence'],
-        message: 'Instrument provenance and item evidence must be recorded together.'
+        message: 'An assessment attempt cannot contain duplicate item IDs.'
       });
     }
-    if (attempt.itemEvidence && attempt.assessmentInstrument) {
-      const itemIds = attempt.itemEvidence.map((item) => item.itemId);
-      if (new Set(itemIds).size !== itemIds.length) {
-        context.addIssue({
-          code: 'custom',
-          path: ['itemEvidence'],
-          message: 'An assessment attempt cannot contain duplicate item IDs.'
-        });
-      }
 
-      if (attempt.itemEvidence.length !== attempt.assessmentInstrument!.itemCount) {
-        context.addIssue({
-          code: 'custom',
-          path: ['itemEvidence'],
-          message: 'The item evidence count must match the authored assessment definition.'
-        });
-      }
+    if (attempt.itemEvidence.length !== attempt.assessmentInstrument.itemCount) {
+      context.addIssue({
+        code: 'custom',
+        path: ['itemEvidence'],
+        message: 'The item evidence count must match the authored assessment definition.'
+      });
+    }
 
-      const hasInconclusiveItem = attempt.itemEvidence.some(
-        (item) => item.outcome === 'inconclusive'
+    const hasInconclusiveItem = attempt.itemEvidence.some(
+      (item) => item.outcome === 'inconclusive'
+    );
+    if (
+      hasInconclusiveItem &&
+      (attempt.outcome !== 'inconclusive' || attempt.score !== null)
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['outcome'],
+        message:
+          'Attempts with inconclusive item evidence must have an inconclusive outcome and no score.'
+      });
+    }
+    if (!hasInconclusiveItem) {
+      const correctCount = attempt.itemEvidence.filter(
+        (item) => item.outcome === 'correct'
+      ).length;
+      const expectedScore = Math.round(
+        (correctCount / attempt.assessmentInstrument.itemCount) * 100
       );
+      const expectedOutcome =
+        expectedScore >= attempt.assessmentInstrument.passThreshold
+          ? 'passed'
+          : 'needs_practice';
       if (
-        hasInconclusiveItem &&
-        (attempt.outcome !== 'inconclusive' || attempt.score !== null)
+        attempt.score !== expectedScore ||
+        attempt.outcome !== expectedOutcome
       ) {
         context.addIssue({
           code: 'custom',
-          path: ['outcome'],
+          path: ['score'],
           message:
-            'Attempts with inconclusive item evidence must have an inconclusive outcome and no score.'
+            'The score and attempt outcome must match the recorded item outcomes and versioned pass threshold.'
         });
       }
-      if (!hasInconclusiveItem) {
-        const correctCount = attempt.itemEvidence.filter(
-          (item) => item.outcome === 'correct'
-        ).length;
-        const expectedScore = Math.round(
-          (correctCount / attempt.assessmentInstrument!.itemCount) * 100
-        );
-        const expectedOutcome =
-          expectedScore >= attempt.assessmentInstrument!.passThreshold
-            ? 'passed'
-            : 'needs_practice';
-        if (
-          attempt.score !== expectedScore ||
-          attempt.outcome !== expectedOutcome
-        ) {
-          context.addIssue({
-            code: 'custom',
-            path: ['score'],
-            message:
-              'The score and attempt outcome must match the recorded item outcomes and versioned pass threshold.'
-          });
-        }
-      }
     }
-  });
+  }
+}
+
+export const assessmentAttemptInputSchema =
+  assessmentAttemptObjectSchema.superRefine(validateAssessmentAttemptEvidence);
+
+export const assessmentAttemptSubmissionSchema =
+  assessmentAttemptObjectSchema
+    .omit({
+      id: true,
+      learnerId: true,
+      assessedAt: true
+    })
+    .superRefine(validateAssessmentAttemptEvidence);
 
 export type AssessmentAttemptInput = z.infer<
   typeof assessmentAttemptInputSchema
