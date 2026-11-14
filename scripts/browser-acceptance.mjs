@@ -733,7 +733,11 @@ try {
     database.close();
     return rows.filter((record) => record.learnerId === learnerId);
   });
-  assert.deepEqual(feedbackAfterReset, [], 'Reset removes feedback owned by the active learner');
+  assert.deepEqual(
+    feedbackAfterReset,
+    [],
+    'Reset removes feedback owned by the active learner'
+  );
 
   // Restore the downloaded backup into a new, empty learner profile.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
