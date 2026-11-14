@@ -151,7 +151,7 @@ The next implementation should:
 
 ### Current sequence
 
-- [x] Trace the assessment capture path and identify the missing learner-facing producer (PR #106 audit; historical finding).
+- [x] Trace the assessment capture path and identify the missing learner-facing producer (this follow-up audit; PR #106's unmerged branch is superseded by this update).
 - [x] Add the first objectively scored, learner-facing item evidence producer (PR #107).
 - [x] Extend objective item capture to interval listening (PR #108).
 - [x] Extend objective item capture to Pulse listening (PR #109).
