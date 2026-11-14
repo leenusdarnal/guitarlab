@@ -121,7 +121,6 @@ export async function recordActiveStandardTuningAssessment(
   }
 }
 
-
 /** Load the most recent saved attempt for this authored assessment, if any. */
 export async function loadLatestActiveStandardTuningAssessment(): Promise<AssessmentAttemptRecord | null> {
   const database = await openLocalDatabase();
