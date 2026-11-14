@@ -38,3 +38,9 @@
 ## 5. Next review
 
 Continue the 152-lesson register in curriculum order. Apply the same evidence standard: mappings are retained when the lesson actually teaches, practises, or assesses the skill. A generic objective template or broad category label is not sufficient evidence by itself.
+
+## Update — curriculum-v1.0.2
+
+- Year 1 Week 20's unsupported triad/voice-leading associations have been corrected to `lead.phrasing` and `technique.bends` after its expression task was rewritten with explicit phrasing and bend outcomes.
+- Year 1 Week 2 remains unresolved: the clean-fretting outcome has no precise existing skill ID. The prior two harmony mappings were not changed; obtain a curriculum-owner decision before removing them or proposing a new narrowly defined skill.
+- The mapping register records the remaining Year 1 Week 31 legato/picking question. No inference was made from title similarity alone.

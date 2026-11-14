@@ -76,7 +76,7 @@ describe('versioned authored curriculum catalogue', () => {
   it('returns the complete authored lesson by its stable ID and version', () => {
     const result = findCurriculumLesson('y1-w01-lesson');
     expect(result?.route.id).toBe('year-1');
-    expect(result?.route.contentVersion).toBe('1.0.0');
+    expect(result?.route.contentVersion).toBe('1.0.1');
     expect(result?.lesson).toMatchObject({
       id: 'y1-w01-lesson',
       curriculumWeekId: 'y1-w01',
@@ -91,6 +91,7 @@ describe('versioned authored curriculum catalogue', () => {
     const result = findCurriculumLesson('y3-jazz-harmony-w01-lesson');
     expect(result?.route.id).toBe('jazz-harmony');
     expect(result?.week.id).toBe('y3-jazz-harmony-w01');
+    expect(result?.route.contentVersion).toBe('1.0.1');
     expect(result?.lesson.route).toBe('jazz-harmony');
   });
 

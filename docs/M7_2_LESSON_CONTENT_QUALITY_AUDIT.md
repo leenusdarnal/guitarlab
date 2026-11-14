@@ -182,3 +182,26 @@ The remaining specialist routes are:
 The original repeated criteria and generic objectives are not resolved curriculum-wide. Do not promote the advisory duplication diagnostic to a blocking global threshold yet. Continue small, route-level authoring batches and recalculate the audit after each release.
 
 **Next batch:** Jazz & Harmony Weeks 1–12. Preserve jazz-specific harmonic, rhythmic, ear-training and improvisation intent; map only to existing skill identifiers unless a separately reviewed catalogue change is justified. Use the same lesson contract: three distinct objectives, concrete demonstration and worked example, task-matched application/checkpoint, five task-specific criteria, corrective feedback, accessible alternatives, retrieval and delayed transfer guidance.
+
+
+## 11. Current remediation state after Year 1 / Year 2 pilot (2026-11-14)
+
+Release `curriculum-v1.0.4` carries the representative Year 1 / Year 2 authoring pilot onto the completed Year 3 baseline. Twelve Year 1 / Year 2 lessons now have task-specific objectives, checkpoints, worked examples, practice stages, corrections, five task-specific criteria and accessible alternatives. The batch also records 13 high-confidence mapping decisions (four pilot mappings retained/reviewed and nine additional correction sets), without adding or deleting skill identifiers.
+
+A fresh scan across all 152 lessons in the combined curriculum gives:
+
+| Measure | Current result | Remaining interpretation |
+|---|---:|---|
+| Generic learning objective 2 | 116/152 | 36 lessons now use task-specific objectives; 116 remain generic |
+| Generic learning objective 3 | 116/152 | Same 36 rewritten lessons; 116 remain generic |
+| Each of the three formerly repeated success criteria | 116 occurrences each | Retained in the 116 lessons not yet rewritten; task-specific criteria now supplement the 36 remediated lessons |
+| Distinct `explanation.keyIdea` texts | 49 | Increased from the initial 13 as route-specific explanations were added |
+| Year 1 / Year 2 lessons with task-specific authoring | 12/104 | 92 Year 1 / Year 2 lessons remain outside the authored pilot |
+| Year 3+ specialist lessons with task-specific objectives/checkpoints | 24/48 | Rock & Blues and Fingerstyle & Acoustic are complete; Jazz & Harmony and All-Round Musician remain |
+| Lesson-to-skill associations | 387 | All 34 stable skill IDs remain represented; 10 high-confidence associations were removed or corrected against lesson tasks |
+
+The mapping decision register records a first batch of 25 lesson rows; 127 rows still require a full mapping disposition. The quantitative coverage audit is refreshed in `M7_2_PROGRESS_AND_COVERAGE_AUDIT.md`, but prerequisite, retention and transfer review remains open.
+
+These changes are content and mapping improvements, not validated grading rubrics. All 34 assessment profiles remain draft; numeric cut scores, automated pass/fail decisions and automatic mastery carry-forward remain disabled. Previous release rows and learner evidence remain attached to their original releases.
+
+**Next batch:** Jazz & Harmony Weeks 1–12. Preserve jazz-specific harmonic, rhythmic, ear-training and improvisation intent; use existing skill identifiers and require an explicit evidence-backed decision before introducing any new identifier.

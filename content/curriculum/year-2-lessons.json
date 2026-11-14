@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "id": "guitarlab-year-2-authored-lessons",
   "title": "Year 2 — Intermediate musicianship",
   "sourceCurriculumId": "year-2-intermediate",
@@ -219,10 +219,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Find and name every natural note to fret 5",
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -452,10 +449,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Find octave roots on E/A, A/D and D/G strings",
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -685,10 +679,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12",
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -709,28 +700,30 @@
       "week": 4,
       "route": "core",
       "title": "Triad inversions",
-      "focus": "Major triads in root position and inversions",
+      "focus": "Major triad root position and inversions on the top string set",
       "estimatedMinutes": 30,
       "startingTempoBpm": 66,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: major triads in root position and inversions.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Explain the difference between root position and triad inversions.",
+        "Play the three inversions of the selected major triad on the top string set.",
+        "Identify the root and the lowest chord tone in each voicing, then connect the shapes in a short progression."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "A chord is a group of notes heard together. Its name describes the root and quality; a guitar shape is one way to arrange those notes. Check the intended strings individually before adding rhythm, and listen for how the chord functions in the progression.",
-        "plainLanguage": "This lesson focuses on major triads in root position and inversions. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "C-F-G top-string triad cycle"
+        "keyIdea": "A triad inversion reorders the same root, third and fifth so a different chord tone is lowest. Identifying the lowest note helps name the inversion and connects fretboard shapes to harmonic function.",
+        "plainLanguage": "Keep the same three chord tones, change which one is lowest, and name the inversion. Do not confuse a triad inversion with a new chord quality.",
+        "workedExample": "Use the C major triad references on the top string set. Play root position, then move the notes to place the third and fifth as the lowest chord tone in turn."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of major triads in root position and inversions from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use GuitarLab's original chord, fretboard or rhythm examples and demonstrate the exact task described here. Keep the task adaptable to the learner's instrument, experience and comfort; do not rely on copied commercial tabs or recordings.",
         "steps": [
-          "Name the chord and identify its root; use the stated chord map or a diagram as a starting point.",
-          "Place fingers close to the fret wires and keep excluded strings muted or untouched.",
-          "Pick each intended string separately, correct any buzzing or muted note, then strum a slow pulse."
+          "Name the root, third and fifth of the selected major triad.",
+          "Play the root-position voicing on the top string set and identify the lowest chord tone.",
+          "Revoice the same three notes so the third becomes the lowest note; name the first inversion.",
+          "Revoice the same notes so the fifth becomes the lowest note; name the second inversion.",
+          "Move between the three voicings while listening for the same major quality."
         ]
       },
       "lessonBlocks": [
@@ -738,41 +731,40 @@
           "id": "y2-w04-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to the same three chord tones in different orders. The chord quality stays major even though the lowest note and the voicing change."
         },
         {
           "id": "y2-w04-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "A chord is a group of notes heard together. Its name describes the root and quality; a guitar shape is one way to arrange those notes. Check the intended strings individually before adding rhythm, and listen for how the chord functions in the progression."
+          "content": "A triad inversion reorders the same root, third and fifth so a different chord tone is lowest. Identifying the lowest note helps name the inversion and connects fretboard shapes to harmonic function."
         },
         {
           "id": "y2-w04-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Name the chord and identify its root; use the stated chord map or a diagram as a starting point.",
-            "Place fingers close to the fret wires and keep excluded strings muted or untouched.",
-            "Pick each intended string separately, correct any buzzing or muted note, then strum a slow pulse.",
-            "Work on this week's target: C-F-G top-string triad cycle. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Name the root, third and fifth of the selected major triad.",
+            "Play the root-position voicing on the top string set and identify the lowest chord tone.",
+            "Revoice the same three notes so the third becomes the lowest note; name the first inversion.",
+            "Revoice the same notes so the fifth becomes the lowest note; name the second inversion.",
+            "Move between the three voicings while listening for the same major quality."
           ]
         },
         {
           "id": "y2-w04-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to C-F-G top-string triad cycle. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "A C–F–G top-string triad cycle using the selected inversion sequence. Choose one major triad and play its three inversions in order. Name the lowest chord tone before each voicing. Apply the same inversion sequence to the next chord in the C–F–G cycle."
         },
         {
           "id": "y2-w04-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the root of the chord you practised?",
-            "What changed in the sound when the chord quality or voicing changed?"
+            "What are the three chord tones in a major triad?",
+            "Which chord tone is lowest in first inversion?",
+            "How can you tell an inversion from a different chord quality?"
           ]
         }
       ],
@@ -783,11 +775,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Say the root, third and fifth of the selected major triad.",
+            "Explain what 'lowest chord tone' means in a guitar voicing.",
+            "Identify which string set is used for the task."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner can state the task, target and one listening or movement feature before practising.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -796,11 +788,12 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Form each chord or voicing in the lesson. Arpeggiate the intended strings, correct one issue at a time, then change to the next shape without squeezing.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Play the root-position voicing and name the lowest chord tone.",
+            "Play first inversion and identify the third as the lowest chord tone.",
+            "Play second inversion and identify the fifth as the lowest chord tone.",
+            "Move between the three voicings slowly while keeping the notes clear."
           ],
-          "successCriterion": "Every intended chord tone is clear, excluded strings are controlled, and the learner can identify the chord name, root or quality.",
+          "successCriterion": "The learner plays all three voicings, keeps the same triad quality and correctly identifies the lowest chord tone in each position.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -809,11 +802,11 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: C-F-G top-string triad cycle.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Choose one major triad and play its three inversions in order.",
+            "Name the lowest chord tone before each voicing.",
+            "Apply the same inversion sequence to the next chord in the C–F–G cycle."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Play three inversions on the top string set",
+          "successCriterion": "The learner connects the voicings in time and can explain how the lowest chord tone changes while the triad quality stays the same.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -822,60 +815,64 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Which chord tone was lowest in root position?",
+            "What changes when you move to first or second inversion?",
+            "How did the voicings connect in the progression?"
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner can recall the three inversion labels and identify the lowest chord tone without a shape prompt.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "C-F-G top-string triad cycle",
+        "prompt": "A C–F–G top-string triad cycle using the selected inversion sequence.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Choose one major triad and play its three inversions in order.",
+          "Name the lowest chord tone before each voicing.",
+          "Apply the same inversion sequence to the next chord in the C–F–G cycle."
         ],
-        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
+        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire. Link to commercial song tabs rather than reproducing them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised."
+          "dimension": "triad-structure",
+          "criterion": "Identifies the root, third and fifth of the selected major triad."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "root-position",
+          "criterion": "Plays and identifies the root-position voicing."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "first-inversion",
+          "criterion": "Places the third as the lowest chord tone and names first inversion."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "second-inversion",
+          "criterion": "Places the fifth as the lowest chord tone and names second inversion."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Play three inversions on the top string set"
+          "dimension": "connection",
+          "criterion": "Moves between inversions without losing the selected triad's identity."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Strumming before checking the strings individually.",
-          "correction": "Arpeggiate each string and isolate the one that needs adjustment."
+          "mistake": "Changing one of the chord tones while trying to invert the shape.",
+          "correction": "Keep the same three note names and change only their order/voicing."
         },
         {
-          "mistake": "Changing several fingers randomly or squeezing harder to hide a poor angle.",
-          "correction": "Move one finger at a time, round the fingertips and reduce pressure after the shape is stable."
+          "mistake": "Naming the inversion from the shape label alone.",
+          "correction": "Identify the lowest sounding chord tone and use it to name the inversion."
+        },
+        {
+          "mistake": "Letting muted or extra strings obscure the triad.",
+          "correction": "Sound each target string separately before playing the voicing together."
         }
       ],
-      "accessibleAlternative": "Practise a two- or three-note shell/partial voicing first, or use a slower chord-change cycle with fewer changes per minute.",
+      "accessibleAlternative": "Work with two inversions first or name the lowest chord tone from a written note list before playing. Add the third voicing when the first two are clear.",
       "retrievalPrompt": [
-        "What is the root of the chord you practised?",
-        "What changed in the sound when the chord quality or voicing changed?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What are the three chord tones in a major triad?",
+        "Which chord tone is lowest in first inversion?",
+        "How can you tell an inversion from a different chord quality?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -912,11 +909,8 @@
         "tempoGuidance": "The outline tempo of 66 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Play three inversions on the top string set",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.triads"
-      ],
+      "checkpoint": "Play three inversions of a major triad on the top string set, name the root and identify which chord tone is in the bass of each voicing.",
+      "skillIds": ["harmony.triads"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -926,7 +920,7 @@
         {
           "kind": "lesson-application",
           "label": "This week's example",
-          "content": "C-F-G top-string triad cycle Success target: Play three inversions on the top string set"
+          "content": "A C–F–G top-string triad cycle using the selected inversion sequence. Success target: Play three inversions of a major triad on the top string set, name the root and identify which chord tone is in the bass of each voicing."
         }
       ]
     },
@@ -1141,10 +1135,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move Am, Dm and Em triads between close positions",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.triads"
-      ],
+      "skillIds": ["harmony.open-chords", "harmony.triads"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1598,10 +1589,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Name roots while changing power chords",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.power-chords"
-      ],
+      "skillIds": ["harmony.open-chords", "harmony.power-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2061,10 +2049,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move F, G and A barres with short relaxed holds",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.barre-chords"
-      ],
+      "skillIds": ["harmony.open-chords", "harmony.barre-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2289,10 +2274,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play Bm, C#m and Dm as movable shapes",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.barre-chords"
-      ],
+      "skillIds": ["harmony.open-chords", "harmony.barre-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2746,10 +2728,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play one position evenly in two keys",
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ],
+      "skillIds": ["lead.major-scale", "lead.pentatonic"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2979,10 +2958,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Practise a scale in thirds without changing pulse",
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ],
+      "skillIds": ["lead.major-scale", "lead.pentatonic"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3212,10 +3188,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Shift between two scale patterns with a target note",
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3445,10 +3418,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play scale notes then end phrases on chord tones",
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ],
+      "skillIds": ["lead.major-scale", "lead.pentatonic"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3912,11 +3882,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep swung eighths even through 12 bars",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4146,11 +4112,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play A7-D7-E7 in 12-bar form",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -4375,10 +4337,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Create two motifs over A blues",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ],
+      "skillIds": ["lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4608,11 +4567,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing",
-        "technique.bends"
-      ],
+      "skillIds": ["lead.pentatonic", "lead.phrasing", "technique.bends"],
       "workedExamples": [
         {
           "kind": "form-reference",
@@ -4837,10 +4792,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a turnaround with correct form timing",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ],
+      "skillIds": ["lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5304,10 +5256,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Repeat a Travis-style pattern slowly",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5537,10 +5486,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep thumb steady across chord changes",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5770,10 +5716,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play melody notes louder without rushing bass",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -5998,11 +5941,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Integrate one muted accent per bar",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.muting"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.muting"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -6227,10 +6166,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Arrange two sections using fingerstyle and strumming",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -6689,10 +6625,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Map the form of one song before learning it",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["arrangement.song-form"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6708,28 +6641,30 @@
       "week": 30,
       "route": "core",
       "title": "Learn by ear: rhythm",
-      "focus": "Transcribe strumming accents and rests",
+      "focus": "Hear and transcribe strumming accents, attacks and rests",
       "estimatedMinutes": 30,
       "startingTempoBpm": 68,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: transcribe strumming accents and rests.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Listen to an original groove and identify its pulse and meter before playing.",
+        "Recall the attack pattern, accents and rests by clapping and counting the heard rhythm.",
+        "Write or speak a four-bar rhythmic transcription and verify it against the original groove."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "Ear learning follows a repeatable loop: listen, sing or hum, identify contour or rhythm, find a possible note on the instrument, then verify by listening again. Work on a short fragment before joining it into a longer phrase.",
-        "plainLanguage": "This lesson focuses on transcribe strumming accents and rests. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Clap and reproduce an 8-beat groove"
+        "keyIdea": "Rhythm transcription focuses on when sounds occur, how they group around the beat and where silence is intentional. Pitch naming is a separate task; here the evidence is the rhythmic pattern, accents and rests.",
+        "plainLanguage": "Find the beat first, clap the attacks and silences, then write the pattern. Check the groove only after you have made your own transcription.",
+        "workedExample": "Listen to an original eight-beat strumming groove. Count 1-and-2-and-3-and-4-and, mark each attack, identify an accent and show one rest."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of transcribe strumming accents and rests from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use GuitarLab's original chord, fretboard or rhythm examples and demonstrate the exact task described here. Keep the task adaptable to the learner's instrument, experience and comfort; do not rely on copied commercial tabs or recordings.",
         "steps": [
-          "Listen to a short phrase several times without touching the guitar.",
-          "Hum the rhythm and contour; note whether it rises, falls or repeats.",
-          "Find the first note, work through the phrase a small interval at a time and compare your attempt with the reference."
+          "Listen to the original groove twice and tap the underlying beat.",
+          "Count the subdivisions aloud and clap only the attacks you hear.",
+          "Mark the accents and rests separately from the steady pulse.",
+          "Write or speak the rhythm for four bars using the agreed count or notation symbols.",
+          "Replay the groove and compare the attacks, accents and rests with your transcription."
         ]
       },
       "lessonBlocks": [
@@ -6737,41 +6672,40 @@
           "id": "y2-w30-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to the groove without the guitar. Tap the beat, then notice which subdivisions contain a strum, an accent or a rest."
         },
         {
           "id": "y2-w30-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Ear learning follows a repeatable loop: listen, sing or hum, identify contour or rhythm, find a possible note on the instrument, then verify by listening again. Work on a short fragment before joining it into a longer phrase."
+          "content": "Rhythm transcription focuses on when sounds occur, how they group around the beat and where silence is intentional. Pitch naming is a separate task; here the evidence is the rhythmic pattern, accents and rests."
         },
         {
           "id": "y2-w30-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Listen to a short phrase several times without touching the guitar.",
-            "Hum the rhythm and contour; note whether it rises, falls or repeats.",
-            "Find the first note, work through the phrase a small interval at a time and compare your attempt with the reference.",
-            "Work on this week's target: Clap and reproduce an 8-beat groove. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Listen to the original groove twice and tap the underlying beat.",
+            "Count the subdivisions aloud and clap only the attacks you hear.",
+            "Mark the accents and rests separately from the steady pulse.",
+            "Write or speak the rhythm for four bars using the agreed count or notation symbols.",
+            "Replay the groove and compare the attacks, accents and rests with your transcription."
           ]
         },
         {
           "id": "y2-w30-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Clap and reproduce an 8-beat groove. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "An original four-bar strumming-rhythm transcription task. Listen to the groove twice before writing anything. Clap the attacks and speak the count underneath. Write or speak the four-bar pattern, including accents and rests. Replay once, compare and make a specific correction."
         },
         {
           "id": "y2-w30-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What are the steps in your listen-sing-find-verify loop?",
-            "Which part of the phrase was hardest to hear accurately?"
+            "What was the underlying beat pattern?",
+            "Where did the groove place its accents and rests?",
+            "What changed after you checked the transcription against the source?"
           ]
         }
       ],
@@ -6782,11 +6716,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Tap the beat while the groove plays.",
+            "Count the subdivisions for the selected meter.",
+            "Identify one accent and one place where no strum occurs."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner can state the task, target and one listening or movement feature before practising.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -6795,11 +6729,12 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Use a short original phrase of three to eight notes. Sing it, clap its rhythm, locate it on one string and play it back without the reference.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Clap the rhythm without the guitar and keep the beat audible or counted.",
+            "Write the first bar's attacks, accents and rests.",
+            "Extend the pattern to four bars, noting repetitions or changes.",
+            "Replay the groove after the transcription and correct one timing or grouping error."
           ],
-          "successCriterion": "The learner reproduces the contour and rhythm, locates the notes with a deliberate checking process and can explain what was uncertain.",
+          "successCriterion": "The learner preserves the beat grouping and attack/rest pattern in the transcription and can identify the accent locations.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -6808,11 +6743,12 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Clap and reproduce an 8-beat groove.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Listen to the groove twice before writing anything.",
+            "Clap the attacks and speak the count underneath.",
+            "Write or speak the four-bar pattern, including accents and rests.",
+            "Replay once, compare and make a specific correction."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Write a four-bar rhythm after listening",
+          "successCriterion": "The four-bar rhythm representation preserves the heard attacks, accents and rests closely enough to be performed back with the intended grouping.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -6821,60 +6757,65 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Which accent or rest was easiest to miss?",
+            "How did counting the beat help you transcribe the subdivisions?",
+            "What did you correct after replaying the groove?"
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner identifies one transcription error and a listening or counting strategy for the next task.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Clap and reproduce an 8-beat groove",
+        "prompt": "An original four-bar strumming-rhythm transcription task.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Listen to the groove twice before writing anything.",
+          "Clap the attacks and speak the count underneath.",
+          "Write or speak the four-bar pattern, including accents and rests.",
+          "Replay once, compare and make a specific correction."
         ],
-        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
+        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire. Link to commercial song tabs rather than reproducing them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed."
+          "dimension": "pulse",
+          "criterion": "Identifies and maintains the underlying beat while listening."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "attack-pattern",
+          "criterion": "Records the order and placement of the heard rhythmic attacks."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "accent",
+          "criterion": "Identifies the intended accented beats or subdivisions."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "rest",
+          "criterion": "Represents the intentional rests or skipped attacks."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Write a four-bar rhythm after listening"
+          "dimension": "verification",
+          "criterion": "Checks the transcription against the source and identifies a specific correction."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Guessing notes before remembering the sound.",
-          "correction": "Sing and isolate the first note; compare small fragments rather than guessing."
+          "mistake": "Writing the strumming pattern before identifying the beat.",
+          "correction": "Tap the beat and say the count before recording individual attacks."
         },
         {
-          "mistake": "Trying to transcribe a long phrase all at once.",
-          "correction": "Work one beat or two notes at a time, then join the fragments."
+          "mistake": "Treating every silent subdivision as a lost beat.",
+          "correction": "Keep counting through the rest; silence does not remove the pulse."
+        },
+        {
+          "mistake": "Trying to transcribe pitch when the task is rhythm.",
+          "correction": "Focus on attack timing, accents and rests; leave note names out of this exercise."
         }
       ],
-      "accessibleAlternative": "Start with high/low/repeated contour and rhythm only; use a familiar reference pitch or a slowed recording.",
+      "accessibleAlternative": "Start with an eight-beat phrase and use spoken syllables or clapping symbols instead of staff notation. Extend to four bars after the rhythm is understood.",
       "retrievalPrompt": [
-        "What are the steps in your listen-sing-find-verify loop?",
-        "Which part of the phrase was hardest to hear accurately?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What was the underlying beat pattern?",
+        "Where did the groove place its accents and rests?",
+        "What changed after you checked the transcription against the source?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -6911,13 +6852,8 @@
         "tempoGuidance": "The outline tempo of 68 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Write a four-bar rhythm after listening",
-      "skillIds": [
-        "ear.pitch",
-        "ear.rhythm",
-        "ear.melody-transcription",
-        "ear.intervals"
-      ],
+      "checkpoint": "Write or speak a four-bar rhythm after listening, preserving its beat grouping, accents and rests.",
+      "skillIds": ["ear.rhythm"],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -6927,7 +6863,7 @@
         {
           "kind": "lesson-application",
           "label": "This week's example",
-          "content": "Clap and reproduce an 8-beat groove Success target: Write a four-bar rhythm after listening"
+          "content": "An original four-bar strumming-rhythm transcription task. Success target: Write or speak a four-bar rhythm after listening, preserving its beat grouping, accents and rests."
         }
       ]
     },
@@ -7607,9 +7543,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep the top voice connected through chord changes",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -8058,10 +7992,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play and sing unison, thirds, fifths and octaves",
-      "skillIds": [
-        "harmony.open-chords",
-        "ear.intervals"
-      ],
+      "skillIds": ["ear.intervals"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8286,10 +8217,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Name chord tones before finding a shape",
-      "skillIds": [
-        "harmony.open-chords",
-        "harmony.seventh-chords"
-      ],
+      "skillIds": ["harmony.seventh-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8514,9 +8442,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Compare basic triad and extended version",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8741,9 +8667,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep melody common tones where possible",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9202,11 +9126,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep 2 and 4 in the body while comping",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9436,9 +9356,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Track the third and seventh through the sequence",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -9658,11 +9576,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep bass pulse stable and chord attacks quiet",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9892,10 +9806,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Leave space and use chord tones at changes",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -10120,10 +10031,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep chord changes clear through a jazz blues",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ],
+      "skillIds": ["lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -10582,10 +10490,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Use maintenance, growth and repertoire slots",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -11035,10 +10940,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Plan opening, development and ending",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -11263,10 +11165,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Record the same 8-bar progression in two styles with different dynamics",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -11287,28 +11186,30 @@
       "week": 50,
       "route": "core",
       "title": "Recording craft",
-      "focus": "Balance levels and capture a clean one-take performance",
+      "focus": "Record, review and recover through a one-take performance",
       "estimatedMinutes": 30,
       "startingTempoBpm": 70,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: balance levels and capture a clean one-take performance.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Prepare a short repertoire excerpt with a clear start, transitions and ending.",
+        "Record one uninterrupted take and use playback to identify one audible strength and one specific improvement.",
+        "Demonstrate a planned recovery point so a small slip does not stop the performance."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "A performance is a complete musical journey, not a collection of perfect fragments. Preparation includes a clear count-in, reliable transitions, an intentional ending and a recovery plan if a note is missed.",
-        "plainLanguage": "This lesson focuses on balance levels and capture a clean one-take performance. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Record a 60-second repertoire excerpt"
+        "keyIdea": "Recording craft combines preparation, complete performance and targeted review. A useful recording captures the form from start to ending; recovery planning helps maintain continuity after a slip, while playback supports one focused next action.",
+        "plainLanguage": "Choose the excerpt, plan its transitions, record one complete take and review it for one priority. If a note is missed, keep the pulse and rejoin at the next planned point.",
+        "workedExample": "Record a 60-second excerpt. Before the take, mark the two hardest transitions and one safe re-entry point; after playback, select one timing, noise or dynamic issue to address."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of balance levels and capture a clean one-take performance from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use GuitarLab's original chord, fretboard or rhythm examples and demonstrate the exact task described here. Keep the task adaptable to the learner's instrument, experience and comfort; do not rely on copied commercial tabs or recordings.",
         "steps": [
-          "Choose a piece or excerpt with a beginning, middle and ending.",
-          "Mark the two hardest transitions and practise each in a short loop before running the full piece.",
-          "Record one uninterrupted take, listen back for one priority and make a short retake only after targeted practice."
+          "Choose a piece or excerpt with a clear beginning, middle and ending.",
+          "Mark the two hardest transitions and identify a safe re-entry point after a likely slip.",
+          "Check tuning, unwanted string noise and recording level before pressing record.",
+          "Record one uninterrupted take with a count-in and intentional ending; keep the pulse after a small mistake.",
+          "Listen back once and choose one evidence-based improvement target."
         ]
       },
       "lessonBlocks": [
@@ -11316,41 +11217,40 @@
           "id": "y2-w50-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to a complete take as a musical whole. Notice the count-in, section transitions and ending, not only isolated correct notes."
         },
         {
           "id": "y2-w50-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "A performance is a complete musical journey, not a collection of perfect fragments. Preparation includes a clear count-in, reliable transitions, an intentional ending and a recovery plan if a note is missed."
+          "content": "Recording craft combines preparation, complete performance and targeted review. A useful recording captures the form from start to ending; recovery planning helps maintain continuity after a slip, while playback supports one focused next action."
         },
         {
           "id": "y2-w50-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Choose a piece or excerpt with a beginning, middle and ending.",
-            "Mark the two hardest transitions and practise each in a short loop before running the full piece.",
-            "Record one uninterrupted take, listen back for one priority and make a short retake only after targeted practice.",
-            "Work on this week's target: Record a 60-second repertoire excerpt. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Choose a piece or excerpt with a clear beginning, middle and ending.",
+            "Mark the two hardest transitions and identify a safe re-entry point after a likely slip.",
+            "Check tuning, unwanted string noise and recording level before pressing record.",
+            "Record one uninterrupted take with a count-in and intentional ending; keep the pulse after a small mistake.",
+            "Listen back once and choose one evidence-based improvement target."
           ]
         },
         {
           "id": "y2-w50-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Record a 60-second repertoire excerpt. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "A one-take 60-second repertoire recording followed by a focused review. Give a count-in and record the full excerpt without stopping for a small error. Keep the pulse and use the planned re-entry point if needed. Listen back and identify one strength and one specific issue related to tuning, noise, timing or dynamics. Choose one practice action for the next take."
         },
         {
           "id": "y2-w50-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "Where is your planned recovery point?",
-            "What one improvement did you hear or notice in the performance?"
+            "What was your planned recovery point?",
+            "What strength did you hear in the complete take?",
+            "What single action will you take into the next session?"
           ]
         }
       ],
@@ -11361,11 +11261,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Choose the excerpt and mark its section order.",
+            "Name one difficult transition and one recovery point.",
+            "Check tuning and recording level before the take."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner can state the task, target and one listening or movement feature before practising.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -11374,11 +11274,12 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Perform the selected excerpt from count-in to ending without stopping. If a mistake occurs, keep the pulse and rejoin at the next safe point.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Practise the two hardest transitions as short loops, then stop looping and prepare for a complete run.",
+            "Record one uninterrupted take from count-in to ending.",
+            "Listen back for tuning, unwanted noise, timing and dynamic balance; select one issue to address.",
+            "Repeat only the section needed to practise the selected improvement."
           ],
-          "successCriterion": "The learner completes the form, maintains the pulse or recovers musically, and identifies one specific strength and one next target.",
+          "successCriterion": "The learner records the full excerpt, maintains continuity or recovers after a slip, and identifies one specific strength and next target from playback.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -11387,11 +11288,12 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Record a 60-second repertoire excerpt.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Give a count-in and record the full excerpt without stopping for a small error.",
+            "Keep the pulse and use the planned re-entry point if needed.",
+            "Listen back and identify one strength and one specific issue related to tuning, noise, timing or dynamics.",
+            "Choose one practice action for the next take."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Check tuning, noise, timing and dynamic balance",
+          "successCriterion": "The learner completes the take, uses a recovery strategy if needed and records one specific review observation and next practice action.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -11400,60 +11302,65 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Where was the planned recovery point, and did you use it?",
+            "What was the clearest strength in the recording?",
+            "Which one change should guide the next practice session?"
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner uses playback evidence to select one improvement rather than changing several things at once.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Record a 60-second repertoire excerpt",
+        "prompt": "A one-take 60-second repertoire recording followed by a focused review.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Give a count-in and record the full excerpt without stopping for a small error.",
+          "Keep the pulse and use the planned re-entry point if needed.",
+          "Listen back and identify one strength and one specific issue related to tuning, noise, timing or dynamics.",
+          "Choose one practice action for the next take."
         ],
-        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
+        "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire. Link to commercial song tabs rather than reproducing them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The learner completes the form, maintains the pulse or recovers musically, and identifies one specific strength and one next target from the recording."
+          "dimension": "repertoire-form",
+          "criterion": "Performs the selected excerpt with its main sections and transitions intact."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "recording-process",
+          "criterion": "Captures a complete take with a clear count-in and intentional ending."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "recovery",
+          "criterion": "Maintains the pulse and re-enters at a musically appropriate point after a slip."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "review",
+          "criterion": "Identifies an audible strength and one evidence-based improvement from playback."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Check tuning, noise, timing and dynamic balance"
+          "dimension": "next-action",
+          "criterion": "Chooses a concrete practice action tied to the review finding."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Stopping every time a note is missed.",
-          "correction": "Practise re-entry points and keep counting through small errors."
+          "mistake": "Stopping the recording after every small mistake.",
+          "correction": "Keep the pulse and rejoin at the planned recovery point; review the take afterwards."
         },
         {
-          "mistake": "Changing many things at once after listening to a recording.",
-          "correction": "Choose one observable target per review take, such as timing, transition or dynamics."
+          "mistake": "Changing several things after playback.",
+          "correction": "Choose one observable target such as timing, transition, noise or dynamic balance."
+        },
+        {
+          "mistake": "Recording before checking the setup.",
+          "correction": "Check tuning, noise and level before the count-in."
         }
       ],
-      "accessibleAlternative": "Record a shorter section or audio-only take; use a click count-in and mark the form on paper.",
+      "accessibleAlternative": "Record a shorter excerpt or use audio-only capture if video is distracting or inaccessible. A learner may describe the review aloud or in writing and still complete the self-review task.",
       "retrievalPrompt": [
-        "Where is your planned recovery point?",
-        "What one improvement did you hear or notice in the performance?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What was your planned recovery point?",
+        "What strength did you hear in the complete take?",
+        "What single action will you take into the next session?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -11490,7 +11397,7 @@
         "tempoGuidance": "The outline tempo of 70 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Check tuning, noise, timing and dynamic balance",
+      "checkpoint": "Record a 60-second repertoire excerpt from count-in to ending, then review tuning, unwanted noise, timing and dynamic balance and identify one recovery point.",
       "skillIds": [
         "repertoire.song-learning",
         "performance.recording",
@@ -11505,7 +11412,7 @@
         {
           "kind": "lesson-application",
           "label": "This week's example",
-          "content": "Record a 60-second repertoire excerpt Success target: Check tuning, noise, timing and dynamic balance"
+          "content": "A one-take 60-second repertoire recording followed by a focused review. Success target: Record a 60-second repertoire excerpt from count-in to ending, then review tuning, unwanted noise, timing and dynamic balance and identify one recovery point."
         }
       ]
     },

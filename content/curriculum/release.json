@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "curriculum-v1.0.3",
-  "version": "1.0.3",
-  "parentReleaseId": "curriculum-v1.0.2",
-  "publishedAt": "2026-11-14T06:17:10.108Z",
+  "id": "curriculum-v1.0.4",
+  "version": "1.0.4",
+  "parentReleaseId": "curriculum-v1.0.3",
+  "publishedAt": "2026-11-14T07:10:00.000Z",
   "changeType": "content_patch",
-  "summary": "Complete task-specific authoring for the Year 3 Fingerstyle & Acoustic route across Weeks 1–12, with reviewed mappings to the existing skill catalogue.",
+  "summary": "Improve a representative Year 1 and Year 2 authoring batch and apply evidence-backed lesson-to-skill mapping corrections while preserving the completed Year 3 specialist routes.",
   "compatibility": {
     "skillIdsUnchanged": true,
     "lessonIdsUnchanged": true,
     "mappingsUnchanged": false,
-    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1 and curriculum-v1.0.2. New progress is recorded against curriculum-v1.0.3; no automatic migration or mastery carry-forward is performed."
+    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1, curriculum-v1.0.2 and curriculum-v1.0.3. New progress is recorded against curriculum-v1.0.4; no automatic migration or mastery carry-forward is performed."
   }
 }
