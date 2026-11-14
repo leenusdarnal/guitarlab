@@ -103,7 +103,9 @@ export const learnerBackupRecordsSchema = z
     // Optional for backwards compatibility with backups created before M7 evidence.
     practiceEvidence: boundedRecords(practiceEvidenceInputSchema).optional(),
     // Optional so existing version-1 backups remain importable.
-    adaptiveRecommendationFeedback: boundedRecords(adaptiveRecommendationFeedbackSchema).optional()
+    adaptiveRecommendationFeedback: boundedRecords(
+      adaptiveRecommendationFeedbackSchema
+    ).optional()
   })
   .strict();
 
@@ -136,7 +138,9 @@ export const learnerBackupSchema = z
       ...records.skillMastery.map((record) => record.learnerId),
       ...records.practiceSessions.map((record) => record.learnerId),
       ...(records.practiceEvidence ?? []).map((record) => record.learnerId),
-      ...(records.adaptiveRecommendationFeedback ?? []).map((record) => record.learnerId)
+      ...(records.adaptiveRecommendationFeedback ?? []).map(
+        (record) => record.learnerId
+      )
     ];
 
     if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
@@ -169,7 +173,9 @@ export const learnerBackupSchema = z
       ],
       [
         'adaptiveRecommendationFeedback',
-        (records.adaptiveRecommendationFeedback ?? []).map((record) => record.id)
+        (records.adaptiveRecommendationFeedback ?? []).map(
+          (record) => record.id
+        )
       ]
     ];
 
