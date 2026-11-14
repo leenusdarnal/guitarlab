@@ -28,7 +28,15 @@ type AuthoredLesson = {
 };
 
 export type AuthoredPracticeScope = PracticeScopeRecord &
-  Pick<AuthoredLesson, 'curriculumId' | 'curriculumWeekId' | 'week' | 'route' | 'focus' | 'estimatedMinutes'> & {
+  Pick<
+    AuthoredLesson,
+    | 'curriculumId'
+    | 'curriculumWeekId'
+    | 'week'
+    | 'route'
+    | 'focus'
+    | 'estimatedMinutes'
+  > & {
     lessonTitle: string;
     exerciseTitle: string;
   };
