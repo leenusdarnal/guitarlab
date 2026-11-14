@@ -7550,11 +7550,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
