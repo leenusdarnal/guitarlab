@@ -676,7 +676,12 @@ describe('buildAdaptivePracticeSnapshot', () => {
           practiceTaxonomyVersion: '0.1.0'
         },
         {
-          ...observation('new-version', 'same exercise after taxonomy update', 5, 150),
+          ...observation(
+            'new-version',
+            'same exercise after taxonomy update',
+            5,
+            150
+          ),
           sessionId: '00000000-0000-4000-8000-000000000003',
           curriculumReleaseId: 'curriculum-v1.0.6',
           lessonId: 'lesson-a',
