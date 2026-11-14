@@ -53,6 +53,8 @@ describe('assessment attempt validation', () => {
     expect(
       assessmentAttemptInputSchema.safeParse({
         ...valid,
+        outcome: 'inconclusive',
+        score: null,
         ...objectiveEvidence
       }).success
     ).toBe(true);
@@ -96,6 +98,17 @@ describe('assessment attempt validation', () => {
             responseSource: 'no_response'
           }
         ]
+      }).success
+    ).toBe(false);
+  });
+
+  it('rejects scored attempt outcomes when one or more item results are inconclusive', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'passed',
+        score: 100,
+        ...objectiveEvidence
       }).success
     ).toBe(false);
   });
