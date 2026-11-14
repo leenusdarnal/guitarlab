@@ -102,12 +102,21 @@ const originalLessonCount = runSql(
 const currentLessonCount = runSql(
   "SELECT COUNT(*) AS lessonCount FROM curriculum_lessons WHERE release_id = 'curriculum-v1.0.1';"
 );
-assert.equal(Number(findValue(parseOutput(originalLessonCount.stdout), 'lessonCount')), 152);
-assert.equal(Number(findValue(parseOutput(currentLessonCount.stdout), 'lessonCount')), 152);
+assert.equal(
+  Number(findValue(parseOutput(originalLessonCount.stdout), 'lessonCount')),
+  152
+);
+assert.equal(
+  Number(findValue(parseOutput(currentLessonCount.stdout), 'lessonCount')),
+  152
+);
 const currentSkillCount = runSql(
   "SELECT COUNT(*) AS skillCount FROM curriculum_release_skills WHERE release_id = 'curriculum-v1.0.1';"
 );
-assert.equal(Number(findValue(parseOutput(currentSkillCount.stdout), 'skillCount')), 34);
+assert.equal(
+  Number(findValue(parseOutput(currentSkillCount.stdout), 'skillCount')),
+  34
+);
 
 runSql(
   'INSERT INTO learner_profiles (id, created_at, updated_at) VALUES (' +
@@ -145,12 +154,14 @@ runSql(
     ');'
 );
 const versionedProgressResult = runSql(
-  "SELECT COUNT(*) AS progressCount FROM lesson_progress WHERE learner_id = " +
+  'SELECT COUNT(*) AS progressCount FROM lesson_progress WHERE learner_id = ' +
     learner +
     " AND ((curriculum_release_id = 'curriculum-v1' AND lesson_id = 'y1-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.1' AND lesson_id = 'y3-rock-blues-w01-lesson'));"
 );
 assert.equal(
-  Number(findValue(parseOutput(versionedProgressResult.stdout), 'progressCount')),
+  Number(
+    findValue(parseOutput(versionedProgressResult.stdout), 'progressCount')
+  ),
   2,
   'Learner progress must be independently stored against both immutable releases.'
 );
