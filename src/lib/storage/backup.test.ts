@@ -208,7 +208,7 @@ describe('learner backup contract', () => {
       recommendationId: 'skill:rhythm.pulse',
       targetType: 'skill' as const,
       targetId: 'rhythm.pulse',
-      reasonCodes: ['assessment_needs_practice'],
+      reasonCodes: ['assessment_needs_practice'] as const,
       action: 'correct' as const,
       correction: 'too_difficult' as const,
       createdAt: 300
