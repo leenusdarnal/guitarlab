@@ -1,5 +1,7 @@
 import { recordAssessmentAttempt } from '../application/services';
 import {
+  intervalRecognitionAssessment,
+  pulseRecognitionAssessment,
   scoreIntervalRecognitionResponse,
   scorePulseRecognitionResponse,
   type ScoredEarTrainingResponse
@@ -229,7 +231,11 @@ export async function recordActiveIntervalRecognitionAssessment(
   response: EarTrainingAnswer
 ): Promise<AssessmentAttemptRecord> {
   const scored = scoreIntervalRecognitionResponse(exercise, response);
-  return recordActiveEarTrainingProbe('ear.intervals', 'interval', scored);
+  return recordActiveEarTrainingProbe(
+    intervalRecognitionAssessment.skillId,
+    'interval',
+    scored
+  );
 }
 
 /** Append a supporting-probe outcome for the pulse-recognition exercise. */
@@ -238,5 +244,9 @@ export async function recordActivePulseRecognitionAssessment(
   response: EarTrainingAnswer
 ): Promise<AssessmentAttemptRecord> {
   const scored = scorePulseRecognitionResponse(exercise, response);
-  return recordActiveEarTrainingProbe('ear.rhythm', 'pulse', scored);
+  return recordActiveEarTrainingProbe(
+    pulseRecognitionAssessment.skillId,
+    'pulse',
+    scored
+  );
 }
