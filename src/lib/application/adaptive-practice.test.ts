@@ -550,18 +550,18 @@ describe('buildAdaptivePracticeSnapshot', () => {
         }
       ],
       authoredPracticeDimensions: [
-        { category: 'topic', id: 'topic.tuning', label: 'Tuning' },
+        {
+          category: 'fret_position',
+          id: 'position.open',
+          label: 'Open position'
+        },
+        { category: 'string', id: '1', label: 'High E' },
         {
           category: 'technique',
           id: 'technique.strumming',
           label: 'Strumming'
         },
-        { category: 'string', id: '1', label: 'High E' },
-        {
-          category: 'fret_position',
-          id: 'position.open',
-          label: 'Open position'
-        }
+        { category: 'topic', id: 'topic.tuning', label: 'Tuning' }
       ],
       practiceTaxonomyVersion: '0.1.0',
       now: 200
