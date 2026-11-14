@@ -398,6 +398,48 @@ describe('buildAdaptivePracticeSnapshot', () => {
     }
   });
 
+  it('does not let a later response to a different item refresh a repeated-miss signal', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'miss-1',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'miss-2',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'major_third',
+          'incorrect',
+          200
+        ),
+        itemAttempt(
+          'other-item-correct',
+          'ear.intervals',
+          'interval-recognition.minor-third',
+          'minor_third',
+          'correct',
+          300
+        )
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 400
+    });
+    const recommendation = result.recommendations.find(
+      (item) => item.targetId === 'ear.intervals'
+    );
+    expect(recommendation?.reasonCodes).toContain('repeated_item_incorrect');
+    expect(recommendation?.latestEvidenceAt).toBe(200);
+  });
+
   it('does not combine matching item IDs across different instrument versions or scoring rules', () => {
     const result = buildAdaptivePracticeSnapshot({
       learnerId: '00000000-0000-4000-8000-000000000001',
