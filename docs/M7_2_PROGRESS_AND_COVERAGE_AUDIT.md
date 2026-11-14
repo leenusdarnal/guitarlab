@@ -1,10 +1,10 @@
 # M7.2 — Curriculum Skill Progression and Coverage Audit
 
 **Status:** Quantitative progression scan complete; pedagogical sequencing review in progress  
-**Release reviewed:** `curriculum-v1.0.4`  
+**Release reviewed:** `curriculum-v1.0.5`  
 **Source:** All 152 authored lessons across Year 1, Year 2 and four Year 3+ specialist routes  
 **Catalogue:** 34 stable skill IDs across 12 categories  
-**Current mapping links:** 387 (397 on the current Year 3 baseline before the Year 1 / Year 2 mapping corrections in batch 1)
+**Current mapping links:** 389 (all 152 lessons and 34 stable skill identifiers remain represented)
 
 ## 1. Method and limitations
 
@@ -16,39 +16,39 @@ A high count is not proof of over-teaching, and a low count is not automatically
 
 | Skill ID | Year 1 | Year 2 | Year 3+ | Total |
 |---|---:|---:|---:|---:|
-| `arrangement.song-form` | 4 | 5 | 8 | 17 |
-| `ear.intervals` | 1 | 4 | 2 | 7 |
+| `arrangement.song-form` | 4 | 5 | 9 | 18 |
+| `ear.intervals` | 1 | 4 | 3 | 8 |
 | `ear.melody-transcription` | 1 | 3 | 3 | 7 |
-| `ear.pitch` | 1 | 3 | 3 | 7 |
-| `ear.rhythm` | 1 | 4 | 3 | 8 |
-| `fingerstyle.patterns` | 1 | 3 | 3 | 7 |
-| `fingerstyle.thumb-independence` | 1 | 3 | 3 | 7 |
+| `ear.pitch` | 1 | 3 | 4 | 8 |
+| `ear.rhythm` | 1 | 4 | 4 | 9 |
+| `fingerstyle.patterns` | 1 | 3 | 11 | 15 |
+| `fingerstyle.thumb-independence` | 1 | 3 | 6 | 10 |
 | `fretboard.natural-notes` | 4 | 4 | 1 | 9 |
 | `fretboard.octaves` | 1 | 0 | 0 | 1 |
-| `fretboard.string-map` | 4 | 4 | 1 | 9 |
+| `fretboard.string-map` | 4 | 4 | 2 | 10 |
 | `harmony.barre-chords` | 1 | 2 | 0 | 3 |
-| `harmony.open-chords` | 8 | 7 | 9 | 24 |
+| `harmony.open-chords` | 8 | 7 | 8 | 23 |
 | `harmony.power-chords` | 1 | 1 | 0 | 2 |
-| `harmony.seventh-chords` | 2 | 1 | 0 | 3 |
-| `harmony.transitions` | 1 | 0 | 0 | 1 |
-| `harmony.triads` | 3 | 3 | 5 | 11 |
-| `harmony.voice-leading` | 4 | 2 | 5 | 11 |
-| `instrument.posture` | 1 | 0 | 1 | 2 |
+| `harmony.seventh-chords` | 2 | 1 | 6 | 9 |
+| `harmony.transitions` | 1 | 0 | 1 | 2 |
+| `harmony.triads` | 3 | 3 | 2 | 8 |
+| `harmony.voice-leading` | 4 | 2 | 10 | 16 |
+| `instrument.posture` | 1 | 0 | 2 | 3 |
 | `instrument.tuning` | 1 | 0 | 1 | 2 |
-| `lead.major-scale` | 3 | 3 | 1 | 7 |
-| `lead.pentatonic` | 6 | 7 | 3 | 16 |
-| `lead.phrasing` | 7 | 8 | 8 | 23 |
+| `lead.major-scale` | 3 | 3 | 2 | 8 |
+| `lead.pentatonic` | 6 | 7 | 8 | 21 |
+| `lead.phrasing` | 7 | 8 | 14 | 29 |
 | `notation.tab` | 5 | 0 | 1 | 6 |
-| `performance.recording` | 7 | 11 | 11 | 29 |
+| `performance.recording` | 7 | 11 | 12 | 30 |
 | `performance.recovery` | 7 | 11 | 11 | 29 |
-| `repertoire.song-learning` | 7 | 11 | 11 | 29 |
-| `rhythm.muting` | 1 | 2 | 0 | 3 |
-| `rhythm.pulse` | 5 | 6 | 4 | 15 |
+| `repertoire.song-learning` | 7 | 11 | 10 | 28 |
+| `rhythm.muting` | 1 | 2 | 6 | 9 |
+| `rhythm.pulse` | 5 | 6 | 13 | 24 |
 | `rhythm.strumming` | 2 | 5 | 3 | 10 |
-| `rhythm.subdivision` | 5 | 6 | 4 | 15 |
-| `technique.alternate-picking` | 2 | 0 | 1 | 3 |
-| `technique.bends` | 1 | 1 | 1 | 3 |
-| `technique.legato` | 1 | 0 | 1 | 2 |
+| `rhythm.subdivision` | 5 | 6 | 5 | 16 |
+| `technique.alternate-picking` | 2 | 0 | 2 | 4 |
+| `technique.bends` | 1 | 1 | 3 | 5 |
+| `technique.legato` | 1 | 0 | 3 | 4 |
 | `technique.string-crossing` | 2 | 0 | 1 | 3 |
 
 ## 3. Coverage signals requiring curriculum decisions
@@ -57,7 +57,7 @@ A high count is not proof of over-teaching, and a low count is not automatically
 
 - `fretboard.octaves` has one mapped lesson (Year 1 W25) and no explicit Year 2 or Year 3+ revisit.
 - `harmony.transitions` appears twice (Year 1 W6 and one Year 3+ lesson); later chord-change practice may exist, but it is not consistently identified as a distinct transition skill.
-- Power chords (2), seventh chords (6), barre chords (3), bends (5), muting (9) and legato (4) have low mapped occurrence counts. Some will be intentionally route-specific; add a revisit only when it strengthens the pathway's actual learning goal.
+- Power chords (2), seventh chords (9), barre chords (3), bends (5), muting (9) and legato (4) have low mapped occurrence counts. Some will be intentionally route-specific; add a revisit only when it strengthens the pathway's actual learning goal.
 
 ### Missing middle-level bridges
 
@@ -68,7 +68,7 @@ A high count is not proof of over-teaching, and a low count is not automatically
 ### High-frequency skills needing better evidence distinctions
 
 - `performance.recording`, `performance.recovery` and `repertoire.song-learning` occur 30, 29 and 28 times respectively. This may be appropriate for review and capstone lessons, but each such lesson should show the recording, recovery or repertoire evidence it expects.
-- `harmony.open-chords` remains mapped to 26 lessons after the first corrections. The focused review still indicates that some occurrences refer to other chord families or use open-position voicings only as examples. Continue lesson-level review rather than treating all chord examples as open-chord assessment.
+- `harmony.open-chords` remains mapped to 23 lessons after the first corrections. The focused review still indicates that some occurrences refer to other chord families or use open-position voicings only as examples. Continue lesson-level review rather than treating all chord examples as open-chord assessment.
 
 ## 4. Progression patterns worth preserving
 
