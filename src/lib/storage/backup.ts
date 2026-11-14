@@ -3,6 +3,7 @@ import { assessmentAttemptInputSchema } from '../domain/learning/assessment';
 import { skillMasteryUpdateSchema } from '../domain/learning/mastery';
 import { profilePreferencesSchema } from '../domain/profile/preferences';
 import { practiceEvidenceInputSchema } from '../domain/learning/practice-evidence';
+import { adaptiveRecommendationFeedbackSchema } from '../domain/learning/adaptive-recommendation-feedback';
 
 export const LEARNER_BACKUP_FORMAT = 'guitarlab-learner-backup' as const;
 export const LEARNER_BACKUP_VERSION = 1 as const;
@@ -100,7 +101,9 @@ export const learnerBackupRecordsSchema = z
     skillMastery: boundedRecords(skillMasterySchema),
     practiceSessions: boundedRecords(practiceSessionSchema),
     // Optional for backwards compatibility with backups created before M7 evidence.
-    practiceEvidence: boundedRecords(practiceEvidenceInputSchema).optional()
+    practiceEvidence: boundedRecords(practiceEvidenceInputSchema).optional(),
+    // Optional so existing version-1 backups remain importable.
+    adaptiveRecommendationFeedback: boundedRecords(adaptiveRecommendationFeedbackSchema).optional()
   })
   .strict();
 
@@ -132,7 +135,8 @@ export const learnerBackupSchema = z
       ...records.assessmentAttempts.map((record) => record.learnerId),
       ...records.skillMastery.map((record) => record.learnerId),
       ...records.practiceSessions.map((record) => record.learnerId),
-      ...(records.practiceEvidence ?? []).map((record) => record.learnerId)
+      ...(records.practiceEvidence ?? []).map((record) => record.learnerId),
+      ...(records.adaptiveRecommendationFeedback ?? []).map((record) => record.learnerId)
     ];
 
     if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
@@ -162,6 +166,10 @@ export const learnerBackupSchema = z
       [
         'practiceEvidence',
         (records.practiceEvidence ?? []).map((record) => record.id)
+      ],
+      [
+        'adaptiveRecommendationFeedback',
+        (records.adaptiveRecommendationFeedback ?? []).map((record) => record.id)
       ]
     ];
 
@@ -295,6 +303,7 @@ export type RestorePreview = {
     skillMastery: RecordChange;
     practiceSessions: RecordChange;
     practiceEvidence: RecordChange;
+    adaptiveRecommendationFeedback: RecordChange;
   };
   totals: RecordChange;
 };
@@ -339,6 +348,11 @@ export function createRestorePreview(
     practiceEvidence: compareRecords(
       incoming.records.practiceEvidence ?? [],
       existing?.practiceEvidence ?? [],
+      (record) => record.id
+    ),
+    adaptiveRecommendationFeedback: compareRecords(
+      incoming.records.adaptiveRecommendationFeedback ?? [],
+      existing?.adaptiveRecommendationFeedback ?? [],
       (record) => record.id
     )
   };
