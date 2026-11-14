@@ -308,7 +308,12 @@ describe('resolveAdaptiveRecommendationFeedback', () => {
         recommendations: [{ ...recommendation, latestEvidenceAt: 201 }],
         feedback: [dismissed]
       })
-    ).toEqual([{ recommendation: { ...recommendation, latestEvidenceAt: 201 }, feedback: null }]);
+    ).toEqual([
+      {
+        recommendation: { ...recommendation, latestEvidenceAt: 201 },
+        feedback: null
+      }
+    ]);
   });
 
   it('hides confident or irrelevant corrections without changing the recommendation model', () => {
@@ -335,8 +340,18 @@ describe('resolveAdaptiveRecommendationFeedback', () => {
   });
 
   it('uses deterministic latest-feedback ordering when timestamps tie', () => {
-    const older = feedback('dismiss', null, 200, '00000000-0000-4000-8000-000000000010');
-    const newer = feedback('correct', 'too_difficult', 200, '00000000-0000-4000-8000-000000000011');
+    const older = feedback(
+      'dismiss',
+      null,
+      200,
+      '00000000-0000-4000-8000-000000000010'
+    );
+    const newer = feedback(
+      'correct',
+      'too_difficult',
+      200,
+      '00000000-0000-4000-8000-000000000011'
+    );
     expect(
       resolveAdaptiveRecommendationFeedback({
         recommendations: [recommendation],
