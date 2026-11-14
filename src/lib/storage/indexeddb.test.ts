@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type {
+  AdaptiveRecommendationFeedbackRecord,
   PracticeEvidenceRecord,
   LessonCompletionEventRecord,
   LessonProgressRecord,
@@ -8,7 +9,8 @@ import type {
 import {
   createEmptyLocalLearnerProfile,
   createIndexedDbRepositories,
-  ensureActiveLearnerProfile
+  ensureActiveLearnerProfile,
+  LOCAL_DATABASE_VERSION
 } from './indexeddb';
 
 type FakeRequest<T> = {
@@ -176,7 +178,8 @@ function makeDatabase(): IDBDatabase {
       new FakeStore(['learnerId', 'curriculumReleaseId', 'skillId'])
     ],
     ['practiceSessions', new FakeStore('id')],
-    ['practiceEvidence', new FakeStore('id')]
+    ['practiceEvidence', new FakeStore('id')],
+    ['adaptiveRecommendationFeedback', new FakeStore('id')]
   ]);
 
   return {
@@ -374,6 +377,45 @@ describe('local learner profile persistence', () => {
         learnerId: pausedProfile.id
       })
     ).rejects.toThrow(/existing practice session/i);
+  });
+
+  it('stores adaptive recommendation feedback as append-only learner-owned records', async () => {
+    const database = makeDatabase();
+    const profile = await ensureActiveLearnerProfile(database);
+    const repository = createIndexedDbRepositories(database).adaptiveRecommendationFeedback;
+    const record: AdaptiveRecommendationFeedbackRecord = {
+      id: '6d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+      learnerId: profile.id,
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      recommendationId: 'skill:rhythm.pulse',
+      targetType: 'skill',
+      targetId: 'rhythm.pulse',
+      reasonCodes: ['assessment_needs_practice'],
+      action: 'correct',
+      correction: 'too_difficult',
+      createdAt: 200
+    };
+
+    expect(LOCAL_DATABASE_VERSION).toBe(6);
+    await repository.append(record);
+    await expect(
+      repository.listByLearnerRelease(profile.id, 'curriculum-v1.0.6')
+    ).resolves.toEqual([record]);
+    await expect(repository.append(record)).rejects.toThrow(/duplicate/i);
+    await expect(
+      repository.append({
+        ...record,
+        id: '7d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+        learnerId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+      })
+    ).rejects.toThrow(/saved learner profile/i);
+    expect(
+      await createIndexedDbRepositories(database).mastery.find(
+        profile.id,
+        'curriculum-v1.0.6',
+        'rhythm.pulse'
+      )
+    ).toBeNull();
   });
 
   it('stores exercise observations as append-only, learner-owned session evidence', async () => {
