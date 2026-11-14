@@ -91,7 +91,7 @@ describe('versioned authored curriculum catalogue', () => {
     const result = findCurriculumLesson('y3-jazz-harmony-w01-lesson');
     expect(result?.route.id).toBe('jazz-harmony');
     expect(result?.week.id).toBe('y3-jazz-harmony-w01');
-    expect(result?.route.contentVersion).toBe('1.0.1');
+    expect(result?.route.contentVersion).toBe('1.0.3');
     expect(result?.lesson.route).toBe('jazz-harmony');
   });
 
