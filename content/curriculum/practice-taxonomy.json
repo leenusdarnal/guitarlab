@@ -1,1 +1,266 @@
-{"schemaVersion":1,"version":"0.1.0","curriculumReleaseId":"curriculum-v1.0.6","authoringPolicy":"Only tag dimensions directly stated by the authored exercise instructions or success criterion. Omit unknown string, fret and position details; never infer them from a lesson title, skill name or generic exercise template.","topics":[{"id":"instrument.standard-tuning","label":"Standard tuning","description":"Name and tune the six standard open strings."},{"id":"notation.tab-reading","label":"TAB reading","description":"Translate authored tablature into string and fret actions."},{"id":"harmony.open-chord-voicings","label":"Open chord voicings","description":"Form and check the explicitly named open-position chord shapes."},{"id":"rhythm.eighth-note-subdivision","label":"Eighth-note subdivision","description":"Maintain even eighth-note subdivisions and continuous strumming motion."},{"id":"fretboard.natural-note-landmarks","label":"Natural-note landmarks","description":"Locate natural notes using stated string and fret references."},{"id":"lead.a-minor-pentatonic-box-1","label":"A minor pentatonic box 1","description":"Navigate the named A minor pentatonic box-1 pattern."},{"id":"harmony.triad-voicings","label":"Triad voicings","description":"Identify and play C, F and G triads on the named top three strings."}],"techniques":[{"id":"technique.down-up-strumming","label":"Down-up strumming","description":"Alternate downstrokes and upstrokes while preserving hand motion."},{"id":"technique.alternate-picking","label":"Alternate picking","description":"Maintain a down-up pick sequence through a note cell."},{"id":"technique.string-crossing","label":"String crossing","description":"Plan and execute a picking-hand transition between adjacent strings."},{"id":"technique.legato","label":"Legato articulation","description":"Use hammer-ons and pull-offs without re-picking every note."}],"fretPositions":[{"id":"position.open-position","label":"Open position","description":"An exercise explicitly authored around named open-position chord shapes."},{"id":"position.first-position","label":"First position","description":"An exercise explicitly assigned to first-position notes on named strings."},{"id":"position.pentatonic-box-1","label":"Pentatonic box 1","description":"The explicitly named box-1 fingering area; no numeric fret range is assumed by this tag."}],"strings":[{"number":1,"label":"High E"},{"number":2,"label":"B"},{"number":3,"label":"G"},{"number":4,"label":"D"},{"number":5,"label":"A"},{"number":6,"label":"Low E"}],"exerciseScopes":[{"lessonId":"y1-w01-lesson","exerciseId":"y1-w01-lesson-focus","topicIds":["instrument.standard-tuning"],"techniqueIds":[],"stringNumbers":[1,2,3,4,5,6],"fretPositionIds":[],"sourceEvidence":"The exercise explicitly says to tune and play all six strings."},{"lessonId":"y1-w03-lesson","exerciseId":"y1-w03-lesson-focus","topicIds":["notation.tab-reading"],"techniqueIds":[],"stringNumbers":[],"fretPositionIds":[],"sourceEvidence":"The exercise explicitly asks the learner to say each string and fret in a selected TAB phrase; no fixed string or fret range is authored."},{"lessonId":"y1-w04-lesson","exerciseId":"y1-w04-lesson-focus","topicIds":["harmony.open-chord-voicings"],"techniqueIds":[],"stringNumbers":[1,2,3,4,5,6],"fretPositionIds":["position.open-position"],"sourceEvidence":"The exercise names Em and G open-position shapes and requires a separate check of strings 6 through 1."},{"lessonId":"y1-w07-lesson","exerciseId":"y1-w07-lesson-focus","topicIds":["rhythm.eighth-note-subdivision"],"techniqueIds":["technique.down-up-strumming"],"stringNumbers":[],"fretPositionIds":[],"sourceEvidence":"The exercise explicitly specifies eight down-up strokes, eighth-note counting and a skipped string contact."},{"lessonId":"y1-w08-lesson","exerciseId":"y1-w08-lesson-focus","topicIds":["notation.tab-reading"],"techniqueIds":[],"stringNumbers":[1,2],"fretPositionIds":["position.first-position"],"sourceEvidence":"The lesson explicitly scopes the parallel notation track to first-position notes on high E and B strings."},{"lessonId":"y1-w11-lesson","exerciseId":"y1-w11-lesson-focus","topicIds":["fretboard.natural-note-landmarks"],"techniqueIds":[],"stringNumbers":[5,6],"fretPositionIds":[],"fretRange":{"minFret":0,"maxFret":5},"sourceEvidence":"The exercise names low E and A strings and asks for natural notes within the first five frets, including open-string references."},{"lessonId":"y1-w15-lesson","exerciseId":"y1-w15-lesson-focus","topicIds":[],"techniqueIds":["technique.alternate-picking","technique.string-crossing"],"stringNumbers":[],"fretPositionIds":[],"sourceEvidence":"The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."},{"lessonId":"y1-w23-lesson","exerciseId":"y1-w23-lesson-focus","topicIds":["lead.a-minor-pentatonic-box-1"],"techniqueIds":[],"stringNumbers":[1,2,3,4,5,6],"fretPositionIds":["position.pentatonic-box-1"],"sourceEvidence":"The exercise explicitly names A minor pentatonic box 1 and requires the shape to be played from low E to high E and back."},{"lessonId":"y1-w26-lesson","exerciseId":"y1-w26-lesson-focus","topicIds":["harmony.triad-voicings"],"techniqueIds":[],"stringNumbers":[1,2,3],"fretPositionIds":[],"sourceEvidence":"The lesson explicitly identifies the top three strings as G, B and high E and locates the C, F and G triad task there."},{"lessonId":"y1-w31-lesson","exerciseId":"y1-w31-lesson-music","topicIds":[],"techniqueIds":["technique.legato"],"stringNumbers":[1],"fretPositionIds":[],"sourceEvidence":"The musical-application exercise is explicitly a high-E legato cell and the checkpoint requires hammer-ons and pull-offs without re-picking."}]}
+{
+  "schemaVersion": 1,
+  "version": "0.1.0",
+  "curriculumReleaseId": "curriculum-v1.0.6",
+  "authoringPolicy": "Only tag dimensions directly stated by the authored exercise instructions or success criterion. Omit unknown string, fret and position details; never infer them from a lesson title, skill name or generic exercise template.",
+  "topics": [
+    {
+      "id": "instrument.standard-tuning",
+      "label": "Standard tuning",
+      "description": "Name and tune the six standard open strings."
+    },
+    {
+      "id": "notation.tab-reading",
+      "label": "TAB reading",
+      "description": "Translate authored tablature into string and fret actions."
+    },
+    {
+      "id": "harmony.open-chord-voicings",
+      "label": "Open chord voicings",
+      "description": "Form and check the explicitly named open-position chord shapes."
+    },
+    {
+      "id": "rhythm.eighth-note-subdivision",
+      "label": "Eighth-note subdivision",
+      "description": "Maintain even eighth-note subdivisions and continuous strumming motion."
+    },
+    {
+      "id": "fretboard.natural-note-landmarks",
+      "label": "Natural-note landmarks",
+      "description": "Locate natural notes using stated string and fret references."
+    },
+    {
+      "id": "lead.a-minor-pentatonic-box-1",
+      "label": "A minor pentatonic box 1",
+      "description": "Navigate the named A minor pentatonic box-1 pattern."
+    },
+    {
+      "id": "harmony.triad-voicings",
+      "label": "Triad voicings",
+      "description": "Identify and play C, F and G triads on the named top three strings."
+    }
+  ],
+  "techniques": [
+    {
+      "id": "technique.down-up-strumming",
+      "label": "Down-up strumming",
+      "description": "Alternate downstrokes and upstrokes while preserving hand motion."
+    },
+    {
+      "id": "technique.alternate-picking",
+      "label": "Alternate picking",
+      "description": "Maintain a down-up pick sequence through a note cell."
+    },
+    {
+      "id": "technique.string-crossing",
+      "label": "String crossing",
+      "description": "Plan and execute a picking-hand transition between adjacent strings."
+    },
+    {
+      "id": "technique.legato",
+      "label": "Legato articulation",
+      "description": "Use hammer-ons and pull-offs without re-picking every note."
+    }
+  ],
+  "fretPositions": [
+    {
+      "id": "position.open-position",
+      "label": "Open position",
+      "description": "An exercise explicitly authored around named open-position chord shapes."
+    },
+    {
+      "id": "position.first-position",
+      "label": "First position",
+      "description": "An exercise explicitly assigned to first-position notes on named strings."
+    },
+    {
+      "id": "position.pentatonic-box-1",
+      "label": "Pentatonic box 1",
+      "description": "The explicitly named box-1 fingering area; no numeric fret range is assumed by this tag."
+    }
+  ],
+  "strings": [
+    {
+      "number": 1,
+      "label": "High E"
+    },
+    {
+      "number": 2,
+      "label": "B"
+    },
+    {
+      "number": 3,
+      "label": "G"
+    },
+    {
+      "number": 4,
+      "label": "D"
+    },
+    {
+      "number": 5,
+      "label": "A"
+    },
+    {
+      "number": 6,
+      "label": "Low E"
+    }
+  ],
+  "exerciseScopes": [
+    {
+      "lessonId": "y1-w01-lesson",
+      "exerciseId": "y1-w01-lesson-focus",
+      "topicIds": [
+        "instrument.standard-tuning"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "fretPositionIds": [],
+      "sourceEvidence": "The exercise explicitly says to tune and play all six strings."
+    },
+    {
+      "lessonId": "y1-w03-lesson",
+      "exerciseId": "y1-w03-lesson-focus",
+      "topicIds": [
+        "notation.tab-reading"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [],
+      "fretPositionIds": [],
+      "sourceEvidence": "The exercise explicitly asks the learner to say each string and fret in a selected TAB phrase; no fixed string or fret range is authored."
+    },
+    {
+      "lessonId": "y1-w04-lesson",
+      "exerciseId": "y1-w04-lesson-focus",
+      "topicIds": [
+        "harmony.open-chord-voicings"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "fretPositionIds": [
+        "position.open-position"
+      ],
+      "sourceEvidence": "The exercise names Em and G open-position shapes and requires a separate check of strings 6 through 1."
+    },
+    {
+      "lessonId": "y1-w07-lesson",
+      "exerciseId": "y1-w07-lesson-focus",
+      "topicIds": [
+        "rhythm.eighth-note-subdivision"
+      ],
+      "techniqueIds": [
+        "technique.down-up-strumming"
+      ],
+      "stringNumbers": [],
+      "fretPositionIds": [],
+      "sourceEvidence": "The exercise explicitly specifies eight down-up strokes, eighth-note counting and a skipped string contact."
+    },
+    {
+      "lessonId": "y1-w08-lesson",
+      "exerciseId": "y1-w08-lesson-focus",
+      "topicIds": [
+        "notation.tab-reading"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        1,
+        2
+      ],
+      "fretPositionIds": [
+        "position.first-position"
+      ],
+      "sourceEvidence": "The lesson explicitly scopes the parallel notation track to first-position notes on high E and B strings."
+    },
+    {
+      "lessonId": "y1-w11-lesson",
+      "exerciseId": "y1-w11-lesson-focus",
+      "topicIds": [
+        "fretboard.natural-note-landmarks"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        5,
+        6
+      ],
+      "fretPositionIds": [],
+      "fretRange": {
+        "minFret": 0,
+        "maxFret": 5
+      },
+      "sourceEvidence": "The exercise names low E and A strings and asks for natural notes within the first five frets, including open-string references."
+    },
+    {
+      "lessonId": "y1-w15-lesson",
+      "exerciseId": "y1-w15-lesson-focus",
+      "topicIds": [],
+      "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
+      "stringNumbers": [],
+      "fretPositionIds": [],
+      "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
+    },
+    {
+      "lessonId": "y1-w23-lesson",
+      "exerciseId": "y1-w23-lesson-focus",
+      "topicIds": [
+        "lead.a-minor-pentatonic-box-1"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "fretPositionIds": [
+        "position.pentatonic-box-1"
+      ],
+      "sourceEvidence": "The exercise explicitly names A minor pentatonic box 1 and requires the shape to be played from low E to high E and back."
+    },
+    {
+      "lessonId": "y1-w26-lesson",
+      "exerciseId": "y1-w26-lesson-focus",
+      "topicIds": [
+        "harmony.triad-voicings"
+      ],
+      "techniqueIds": [],
+      "stringNumbers": [
+        1,
+        2,
+        3
+      ],
+      "fretPositionIds": [],
+      "sourceEvidence": "The lesson explicitly identifies the top three strings as G, B and high E and locates the C, F and G triad task there."
+    },
+    {
+      "lessonId": "y1-w31-lesson",
+      "exerciseId": "y1-w31-lesson-music",
+      "topicIds": [],
+      "techniqueIds": [
+        "technique.legato"
+      ],
+      "stringNumbers": [
+        1
+      ],
+      "fretPositionIds": [],
+      "sourceEvidence": "The musical-application exercise is explicitly a high-E legato cell and the checkpoint requires hammer-ons and pull-offs without re-picking."
+    }
+  ]
+}
