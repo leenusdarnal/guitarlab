@@ -80,6 +80,8 @@ const mastery: SkillMasteryRecord[] = [
 describe('buildAdaptivePracticeSnapshot', () => {
   it('prioritises needs-practice, then inconclusive, then due reviews, then unseen skills', () => {
     const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts: [
         attempt('a1', 'rhythm.pulse', 'needs_practice', 300),
@@ -106,6 +108,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
 
   it('does not call self-reported clean repetitions verified accuracy', () => {
     const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts: [],
       mastery: [],
@@ -131,6 +135,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
 
   it('uses measured scored attempts only for accuracy and score spread', () => {
     const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts: [
         attempt('a1', 'rhythm.pulse', 'passed', 100, 80, 'measured'),
@@ -151,6 +157,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
 
   it('distinguishes missing assessment evidence from a poor score and computes topic coverage', () => {
     const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts: [attempt('a1', 'rhythm.pulse', 'passed', 100, null)],
       mastery: [],
@@ -170,6 +178,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
 
   it('uses stable tie-breaking and never recommends an expired review as overdue before its timestamp', () => {
     const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts: [],
       mastery: [{ ...mastery[0], nextReviewAt: 501 }],
@@ -192,6 +202,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
     const attempts = [attempt('a1', 'rhythm.pulse', 'needs_practice', 100)];
     const before = structuredClone(attempts);
     buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
       skills,
       attempts,
       mastery: [],
@@ -199,5 +211,47 @@ describe('buildAdaptivePracticeSnapshot', () => {
       now: 200
     });
     expect(attempts).toEqual(before);
+  });
+  it('ignores assessment, mastery and practice evidence owned by another learner or release', () => {
+    const otherLearner = '00000000-0000-4000-8000-000000000099';
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        attempt('a1', 'rhythm.pulse', 'needs_practice', 100),
+        {
+          ...attempt('a2', 'rhythm.pulse', 'passed', 200),
+          learnerId: otherLearner
+        },
+        {
+          ...attempt('a3', 'rhythm.pulse', 'passed', 300),
+          curriculumReleaseId: 'curriculum-v2'
+        }
+      ],
+      mastery: [
+        ...mastery,
+        { ...mastery[0], learnerId: otherLearner, state: 'stable' }
+      ],
+      practiceEvidence: [
+        observation('o1', 'learner-owned-exercise', 4, 100),
+        {
+          ...observation('o2', 'other-learners-exercise', 5, 200),
+          learnerId: otherLearner
+        }
+      ],
+      now: 400
+    });
+
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'rhythm.pulse'
+    );
+    expect(analytics?.assessmentCount).toBe(1);
+    expect(analytics?.latestOutcome).toBe('needs_practice');
+    expect(
+      result.recommendations.some(
+        (item) => item.targetId === 'other-learners-exercise'
+      )
+    ).toBe(false);
   });
 });

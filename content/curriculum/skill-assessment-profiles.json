@@ -1,0 +1,933 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0",
+  "status": "draft",
+  "curriculumReleaseId": "curriculum-v1",
+  "skillCatalogVersion": "1.0.0",
+  "scoringPolicy": "No universal cut scores, numeric mastery thresholds, or automated pass/fail decisions are approved in this draft.",
+  "feedbackPolicy": "Feedback should identify the task or process criterion, invite learner interpretation, and support a next-step decision. Do not use a single real-time score as proof of retained learning.",
+  "profiles": [
+    {
+      "skillId": "arrangement.song-form",
+      "status": "draft",
+      "assessmentMode": "creation_and_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies the functional sections and their order in a musical example."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Creates or performs a coherent section sequence with clear transitions."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Explains one arrangement choice in relation to the intended musical effect."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "arrangement_artifact",
+        "learner_explanation"
+      ],
+      "retentionProbe": "After a delay, outline the form of a previously studied piece without consulting the lesson.",
+      "transferProbe": "Map or arrange the sections of an unfamiliar short piece.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Do not require one conventional song form; judge coherence against the learner's stated intent and musical context."
+    },
+    {
+      "skillId": "ear.intervals",
+      "status": "draft",
+      "assessmentMode": "aural_recognition",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies the target interval from a controlled listening prompt."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Distinguishes interval direction and reproduces or locates the interval accurately."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Recognises the interval in a second key or musical context."
+        }
+      ],
+      "evidenceTypes": ["aural_response", "instrument_or_voice_response"],
+      "retentionProbe": "Repeat a short interval-identification set in a later session without immediate answer cues.",
+      "transferProbe": "Identify the same interval relationships in a different register or key.",
+      "humanReviewRequired": false,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Do not infer absolute-pitch ability from relative-interval tasks; specify the reference note and interval set."
+    },
+    {
+      "skillId": "ear.melody-transcription",
+      "status": "draft",
+      "assessmentMode": "aural_transcription",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Captures the pitch sequence of a heard phrase with a playable guitar or notation representation."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Preserves the phrase's rhythmic contour and note order."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Checks and corrects the transcription against the source after an independent attempt."
+        }
+      ],
+      "evidenceTypes": [
+        "transcription_artifact",
+        "performance_recording",
+        "learner_explanation"
+      ],
+      "retentionProbe": "Reproduce or transcribe a previously studied short phrase after a delay without replaying it during the attempt.",
+      "transferProbe": "Transcribe an unfamiliar phrase of similar length and difficulty.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Record replay limits, notation support, phrase length and whether pitch, rhythm or both are being assessed."
+    },
+    {
+      "skillId": "ear.pitch",
+      "status": "draft",
+      "assessmentMode": "aural_and_pitch_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Matches or identifies a target pitch relative to a stated reference."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains the target pitch sufficiently for the task and notices drift."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Repeats pitch matching with a different reference or register."
+        }
+      ],
+      "evidenceTypes": [
+        "aural_response",
+        "instrument_or_voice_response",
+        "measured_pitch_if_validated"
+      ],
+      "retentionProbe": "Match a new reference pitch in a later session without seeing a pitch display.",
+      "transferProbe": "Match the pitch on a different string or with the voice rather than the original response method.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "This profile assesses pitch matching, not absolute-pitch naming; any cents tolerance needs task-specific validation."
+    },
+    {
+      "skillId": "ear.rhythm",
+      "status": "draft",
+      "assessmentMode": "aural_rhythm_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies the beat pattern and relevant subdivisions in a heard example."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Reproduces the rhythmic pattern with the intended accents and rests."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Maintains the pattern against a pulse in a second tempo or starting point."
+        }
+      ],
+      "evidenceTypes": [
+        "aural_response",
+        "clapped_or_played_performance",
+        "performance_recording"
+      ],
+      "retentionProbe": "Recall and reproduce a short rhythm in a later session without hearing it immediately beforehand.",
+      "transferProbe": "Reproduce a related rhythm at a different tempo or on a different musical texture.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Separate rhythm-pattern recognition from timing precision; do not score one as proof of the other."
+    },
+    {
+      "skillId": "fingerstyle.patterns",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Uses the intended thumb/finger assignment for the selected pattern."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains the pattern's order and pulse over a complete cycle."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Applies the pattern to a different chord or harmonic context without losing the pattern."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation",
+        "learner_reflection"
+      ],
+      "retentionProbe": "Play a practised pattern in a later session without following a visual fingering prompt.",
+      "transferProbe": "Apply the same pattern to a different chord progression or string set.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Pattern difficulty and tempo should be appropriate to the learner and the particular arrangement."
+    },
+    {
+      "skillId": "fingerstyle.thumb-independence",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Maintains the intended bass/thumb pulse while fingers play the upper notes."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Keeps bass and treble roles distinct without unintended interruptions."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Adapts the upper-note pattern while the thumb role remains stable."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Perform the bass pattern with a familiar treble variation after a delay and without a prompt.",
+      "transferProbe": "Keep the thumb pattern steady while changing the treble-note sequence.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Do not mistake a slow fixed pattern for independence; test coordination under a controlled variation."
+    },
+    {
+      "skillId": "fretboard.natural-notes",
+      "status": "draft",
+      "assessmentMode": "fretboard_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Locates requested natural notes on the specified strings and fret range."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Names the note accurately and explains or demonstrates the location strategy."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Repeats the task from a different starting string or fret."
+        }
+      ],
+      "evidenceTypes": ["fretboard_task", "written_or_spoken_response"],
+      "retentionProbe": "Complete a short note-location recall task after a delay without a reference chart.",
+      "transferProbe": "Locate the same note names in an unpractised neck position.",
+      "humanReviewRequired": false,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "State the fretboard range and tuning; do not generalise a small position task to full-neck fluency."
+    },
+    {
+      "skillId": "fretboard.octaves",
+      "status": "draft",
+      "assessmentMode": "fretboard_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Locates an octave-equivalent note from a given reference note."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Uses an appropriate octave shape or interval relationship accurately."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Transfers the octave relationship to another string pair or neck position."
+        }
+      ],
+      "evidenceTypes": [
+        "fretboard_task",
+        "performance_recording",
+        "learner_explanation"
+      ],
+      "retentionProbe": "Find octave partners for a small set of reference notes after a delay.",
+      "transferProbe": "Find octave equivalents using a different string pair or starting position.",
+      "humanReviewRequired": false,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify standard tuning assumptions and which octave shapes are in scope."
+    },
+    {
+      "skillId": "fretboard.string-map",
+      "status": "draft",
+      "assessmentMode": "fretboard_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Names the open strings or specified string/fret locations correctly."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maps a requested note to a valid location within the stated range."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Uses the map to find a note from a different starting point."
+        }
+      ],
+      "evidenceTypes": ["fretboard_task", "written_or_spoken_response"],
+      "retentionProbe": "Complete a short string-and-fret recall task in a later session.",
+      "transferProbe": "Locate a target note on a string or position not used in the original practice task.",
+      "humanReviewRequired": false,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Distinguish open-string naming from comprehensive note-location fluency."
+    },
+    {
+      "skillId": "harmony.barre-chords",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Forms the specified barre shape with the intended chord tones."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Produces the required strings clearly while controlling unwanted noise."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Changes to or from the shape in time within a short progression."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Form and play the same barre family after a delay without a diagram prompt.",
+      "transferProbe": "Move the shape to a different root or progression position.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Adapt expectations for hand size, instrument setup, partial-barre alternatives and physical comfort."
+    },
+    {
+      "skillId": "harmony.open-chords",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Forms the specified open-position chord with the intended fretted and open notes."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Sounds the required strings clearly and controls unintended muted or buzzing strings."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Changes between selected open chords while maintaining the task's pulse."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Play a previously learned open-chord sequence after a delay without a chord diagram.",
+      "transferProbe": "Use the chord shapes in a different progression or strumming/fingerstyle context.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "The identifier is reused widely; record chord family, voicing and context in the task rather than assuming all open-chord tasks are equivalent."
+    },
+    {
+      "skillId": "harmony.power-chords",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Forms the required root-and-fifth shape at the specified position."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Mutes non-target strings and produces a controlled chord attack."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Moves between power-chord roots while maintaining the intended rhythm."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Play a short power-chord movement after a delay without a shape diagram.",
+      "transferProbe": "Transpose the movement to another root or string set.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify root string, octave, muting and rhythmic context."
+    },
+    {
+      "skillId": "harmony.seventh-chords",
+      "status": "draft",
+      "assessmentMode": "recognition_and_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies or constructs the specified seventh-chord quality from its formula or sound."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Selects a valid voicing containing the required chord tones."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Performs the voicing in a progression with the intended harmonic function."
+        }
+      ],
+      "evidenceTypes": [
+        "written_or_spoken_response",
+        "performance_recording",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Identify or play the target chord quality in a later session without a formula prompt.",
+      "transferProbe": "Construct or select the chord quality in a different key or progression.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Name the chord qualities assessed; do not treat one voicing as proof of broad seventh-chord fluency."
+    },
+    {
+      "skillId": "harmony.transitions",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Moves between the specified chord shapes with accurate fingering."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains a continuous pulse through the change."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Produces the intended chord tones without avoidable gaps or excess noise."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Repeat a short chord-change sequence after a delay without visual prompts.",
+      "transferProbe": "Apply the movement strategy to a new chord pair or progression.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Record the chord pair, tempo and musical context; raw changes-per-minute is not sufficient evidence on its own."
+    },
+    {
+      "skillId": "harmony.triads",
+      "status": "draft",
+      "assessmentMode": "recognition_and_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies or constructs the requested triad quality and chord tones."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Plays a valid triad voicing or inversion on the stated string set."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Connects the voicing to a progression or musical phrase."
+        }
+      ],
+      "evidenceTypes": [
+        "written_or_spoken_response",
+        "performance_recording",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Identify or play a previously studied triad/inversion after a delay.",
+      "transferProbe": "Play the same triad quality in a different inversion, key or string set.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify chord quality, inversion, key and string set; do not equate memorising one grip with triad understanding."
+    },
+    {
+      "skillId": "harmony.voice-leading",
+      "status": "draft",
+      "assessmentMode": "performance_and_harmonic_explanation",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies the voices or chord tones being connected between successive chords."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Uses common tones or small movements where appropriate to the intended progression."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Performs the progression with coherent voice movement and musical continuity."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "written_or_spoken_response",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Re-create a previously studied voice-leading path after a delay without a fretboard diagram.",
+      "transferProbe": "Connect a related progression using a different key or voicing.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "The best movement depends on the progression, range, style and intended voicing; avoid a single universal shape."
+    },
+    {
+      "skillId": "instrument.posture",
+      "status": "draft",
+      "assessmentMode": "observed_setup",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Supports the instrument securely with a stable, comfortable playing position."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains workable access for both hands without avoidable gripping or strain."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Can sustain the setup through a short playing task and identify any discomfort."
+        }
+      ],
+      "evidenceTypes": [
+        "teacher_observation",
+        "learner_reflection",
+        "performance_video"
+      ],
+      "retentionProbe": "Set up independently at the start of a later session and self-check comfort.",
+      "transferProbe": "Use the setup in both seated and standing contexts where relevant.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Use inclusive ergonomic guidance; body size, mobility, instrument type and accessibility needs affect the appropriate setup."
+    },
+    {
+      "skillId": "instrument.tuning",
+      "status": "draft",
+      "assessmentMode": "instrument_tuning",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies the reference or target tuning before adjustment."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Adjusts the required strings toward the intended pitches without unsafe over-tightening."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Rechecks strings and verifies the tuning by a suitable method."
+        }
+      ],
+      "evidenceTypes": [
+        "measured_pitch_if_validated",
+        "instrument_or_voice_response",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Tune the instrument at a later session without step-by-step assistance.",
+      "transferProbe": "Verify tuning using a different reference method or a small tuning deviation.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify standard or alternate tuning and reference pitch; any automatic tuner tolerance must be calibrated and tested."
+    },
+    {
+      "skillId": "lead.major-scale",
+      "status": "draft",
+      "assessmentMode": "performance_and_theory_response",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Plays the specified major-scale pattern with the correct note order."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Identifies the tonic and explains the whole-step/half-step structure relevant to the task."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Uses the pattern in a short phrase or in a second position/key."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "written_or_spoken_response"],
+      "retentionProbe": "Play and name a previously learned major-scale fragment after a delay.",
+      "transferProbe": "Apply the formula or pattern in a different key or fretboard position.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify key, register, position and whether the task assesses formula knowledge, fingering or musical application."
+    },
+    {
+      "skillId": "lead.pentatonic",
+      "status": "draft",
+      "assessmentMode": "performance_and_musical_application",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Plays the specified major or minor pentatonic pattern with accurate note sequence."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Identifies the tonal centre and distinguishes the intended major/minor context."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Uses the pattern to create a coherent short phrase over a suitable backing or progression."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "written_or_spoken_response",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Play a previously learned pentatonic shape after a delay without a fretboard prompt.",
+      "transferProbe": "Use the pattern in a different key, position or backing progression.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify major vs minor, tonic, box/position and whether the criterion is scale recall or improvisational application."
+    },
+    {
+      "skillId": "lead.phrasing",
+      "status": "draft",
+      "assessmentMode": "expressive_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Shapes a phrase with intentional timing, dynamics, articulation and space."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Creates a recognisable beginning, development and ending for the musical idea."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Explains one expressive choice and its intended effect."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "learner_reflection",
+        "teacher_or_peer_review"
+      ],
+      "retentionProbe": "Perform a short phrase after a delay and describe an intentional expressive choice.",
+      "transferProbe": "Shape a new phrase over a different progression or style while retaining a clear musical intention.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Do not impose one stylistic interpretation; use context-sensitive descriptors and more than one acceptable musical solution."
+    },
+    {
+      "skillId": "notation.tab",
+      "status": "draft",
+      "assessmentMode": "notation_reading",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Interprets string and fret information accurately from the supplied tablature."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Preserves note order and any specified rhythmic or articulation symbols."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Performs or explains a short excerpt using the notation."
+        }
+      ],
+      "evidenceTypes": ["notation_response", "performance_recording"],
+      "retentionProbe": "Read a short previously studied tab excerpt after a delay without the lesson explanation.",
+      "transferProbe": "Read an unfamiliar excerpt containing the same notation features.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "State whether rhythm notation, bends, slides, legato or other symbols are included; tab alone may omit rhythm."
+    },
+    {
+      "skillId": "performance.recording",
+      "status": "draft",
+      "assessmentMode": "recording_and_reflection",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Creates a usable recording of the specified performance task."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Identifies an audible strength and a specific improvement opportunity from playback."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Uses the review to choose a concrete next practice action."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "learner_reflection"],
+      "retentionProbe": "Repeat the recording/review process in a later session and compare the same stated criterion.",
+      "transferProbe": "Apply the recording-and-review method to a different song, exercise or performance goal.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Separate the ability to operate recording tools from the musical quality of the recorded performance."
+    },
+    {
+      "skillId": "performance.recovery",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Recognises a slip or interruption without abandoning the musical task."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Re-enters at a musically appropriate point and restores pulse or form."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Maintains continuity after recovery and reflects on the chosen recovery strategy."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation",
+        "learner_reflection"
+      ],
+      "retentionProbe": "Demonstrate recovery after a controlled interruption in a later session.",
+      "transferProbe": "Recover from a different type of slip or interruption in an unfamiliar short passage.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Assess the recovery behaviour, not the presence of the deliberately introduced mistake; allow different valid recovery strategies."
+    },
+    {
+      "skillId": "repertoire.song-learning",
+      "status": "draft",
+      "assessmentMode": "repertoire_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Performs the agreed section or song with its main form and transitions intact."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains continuity, pulse and the musical features required for the chosen level."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Identifies what is secure and what needs further learning using specific evidence."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_or_peer_review",
+        "learner_reflection"
+      ],
+      "retentionProbe": "Perform the agreed passage after a meaningful delay without immediate rehearsal or prompts.",
+      "transferProbe": "Perform the piece in a new context such as a different starting point, accompaniment or ensemble role.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify repertoire, section, permitted prompts, memory expectations and stylistic context; avoid equating song completion with mastery of every related skill."
+    },
+    {
+      "skillId": "rhythm.muting",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Controls unwanted ringing from non-target strings during the task."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Produces intended muted/percussive sounds or rests when required."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Maintains rhythmic placement while switching between sounding and muted notes."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Repeat a muted rhythm pattern in a later session without a muting reminder.",
+      "transferProbe": "Apply noise control or intentional muting in a different chord shape or rhythmic pattern.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Separate muting unwanted noise from creating intentional percussive sounds; they are related but distinct outcomes."
+    },
+    {
+      "skillId": "rhythm.pulse",
+      "status": "draft",
+      "assessmentMode": "timed_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Maintains a consistent beat through the defined playing task."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Keeps the pulse through rests, changes or simplified passages."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Recovers the beat after a deliberate pause or entry cue."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "timing_measurement_if_validated",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Perform a short pulse task in a later session without a continuous metronome cue.",
+      "transferProbe": "Maintain the pulse at a new tempo or within a different rhythmic texture.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify duration, tempo and allowed metronome support; do not equate metronome synchronisation with all aspects of musical time."
+    },
+    {
+      "skillId": "rhythm.strumming",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Uses the intended downstroke/upstroke pattern for the task."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Places accents, rests and chord attacks in the correct rhythmic locations."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Maintains a steady accompaniment through the full progression."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Play the pattern in a later session without a stroke-direction prompt.",
+      "transferProbe": "Apply the same rhythmic pattern to a different chord progression or song context.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify pattern, meter, tempo and whether muting/dynamics are part of the assessed task."
+    },
+    {
+      "skillId": "rhythm.subdivision",
+      "status": "draft",
+      "assessmentMode": "rhythm_response_and_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Identifies or counts the requested subdivisions relative to the beat."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Performs the subdivision with consistent placement and grouping."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Moves between two specified subdivision patterns without losing the pulse."
+        }
+      ],
+      "evidenceTypes": [
+        "spoken_or_clapped_response",
+        "performance_recording",
+        "timing_measurement_if_validated"
+      ],
+      "retentionProbe": "Count or play the same subdivision family in a later session without a spoken prompt.",
+      "transferProbe": "Apply the subdivision to a different rhythmic pattern or tempo.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Name the subdivisions in scope and distinguish counting/recognition from instrument execution."
+    },
+    {
+      "skillId": "technique.alternate-picking",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Uses the intended alternating down-up stroke sequence for the exercise."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains even attack, timing and pick depth over the phrase."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Plans string crossings without unintended resets or loss of pulse."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Perform a familiar alternate-picking cell after a delay without verbal stroke cues.",
+      "transferProbe": "Use the picking sequence on a different string set, pattern or tempo.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Strict alternation is a task-specific technique choice; do not penalise a musically valid alternative unless the task explicitly trains alternate picking."
+    },
+    {
+      "skillId": "technique.bends",
+      "status": "draft",
+      "assessmentMode": "expressive_pitch_performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Bends toward the specified target pitch with controlled intonation."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Sustains the target and controls the release or return."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Integrates the bend into a phrase with suitable timing and articulation."
+        }
+      ],
+      "evidenceTypes": [
+        "performance_recording",
+        "pitch_measurement_if_validated",
+        "teacher_observation"
+      ],
+      "retentionProbe": "Repeat a previously learned bend target in a later session without a visual pitch cue.",
+      "transferProbe": "Bend to a different interval or on another string while retaining pitch control.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify target interval, string, fret and context; automated pitch tracking must account for vibrato, attack and instrument range."
+    },
+    {
+      "skillId": "technique.legato",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Executes the specified hammer-on or pull-off with a clear intended pitch change."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Balances note volume and timing across picked and unpicked notes."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Maintains pulse and articulation through a short legato phrase."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Play a familiar hammer-on/pull-off cell after a delay without a fingering prompt.",
+      "transferProbe": "Apply the legato movement to a different string or phrase pattern.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "State whether slides are included; the catalogue description currently centres on hammer-ons and pull-offs."
+    },
+    {
+      "skillId": "technique.string-crossing",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Targets the intended next string accurately during the phrase."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Maintains timing and even note attack across string changes."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Controls unwanted contact or ringing while crossing adjacent or non-adjacent strings."
+        }
+      ],
+      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "retentionProbe": "Repeat a two-string crossing sequence in a later session without a picking-path prompt.",
+      "transferProbe": "Apply the technique to a new string order or a wider skip pattern.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "Specify pick/finger technique, string order and whether string-skipping is included; do not infer motion efficiency solely from audio."
+    }
+  ]
+}

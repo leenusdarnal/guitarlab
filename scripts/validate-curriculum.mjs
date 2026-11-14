@@ -13,14 +13,16 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const unique = (values) => new Set(values).size === values.length;
 const isText = (value) => typeof value === "string" && value.trim().length > 0;
 
-const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex] = await Promise.all([
+const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog, skillAssessmentProfiles] = await Promise.all([
   readJson("content/curriculum/year-1.json"),
   readJson("content/curriculum/year-2.json"),
   readJson("content/curriculum/year-3-specialisations.json"),
   readJson("content/curriculum/year-1-lessons.json"),
   readJson("content/curriculum/year-2-lessons.json"),
   readJson("content/curriculum/year-3-specialisation-lessons.json"),
-  readJson("content/curriculum/year-1-dashboard-index.json")
+  readJson("content/curriculum/year-1-dashboard-index.json"),
+  readJson("content/curriculum/skill-catalog.json"),
+  readJson("content/curriculum/skill-assessment-profiles.json")
 ]);
 
 const checkOutline = (name, outline, expectedCount) => {
@@ -99,12 +101,94 @@ validateLessons("Year 1 lessons", y1Lessons, y1, 52);
 validateLessons("Year 2 lessons", y2Lessons, y2, 52);
 validateLessons("Year 3 lessons", y3Lessons, y3, 48, true);
 
+
+const categoryIds = (skillCatalog.categories ?? []).map((category) => category.id);
+const catalogSkills = skillCatalog.skills ?? [];
+const catalogSkillIds = catalogSkills.map((skill) => skill.id);
+const authoredLessons = [
+  ...(y1Lessons.lessons ?? []),
+  ...(y2Lessons.lessons ?? []),
+  ...(y3Lessons.lessons ?? [])
+];
+const authoredSkillIds = new Set(
+  authoredLessons.flatMap((lesson) => lesson.skillIds ?? [])
+);
+check(skillCatalog.schemaVersion === 1, "Skill catalogue: unsupported schemaVersion");
+check(isText(skillCatalog.version), "Skill catalogue: missing version");
+check(skillCatalog.curriculumReleaseId === "curriculum-v1", "Skill catalogue: unexpected curriculum release key");
+check(unique(categoryIds), "Skill catalogue: duplicate category IDs");
+check(unique(catalogSkillIds), "Skill catalogue: duplicate skill IDs");
+for (const category of skillCatalog.categories ?? []) {
+  check(isText(category.displayName) && isText(category.description), `Skill category ${category.id}: missing display metadata`);
+}
+for (const skill of catalogSkills) {
+  check(isText(skill.id) && isText(skill.displayName) && isText(skill.description), `Skill ${skill.id}: missing canonical metadata`);
+  check(categoryIds.includes(skill.category), `Skill ${skill.id}: unknown category ${skill.category}`);
+  check(skill.id.split(".")[0] === skill.category, `Skill ${skill.id}: category must match the ID namespace`);
+  check(authoredSkillIds.has(skill.id), `Skill ${skill.id}: catalogue entry is not referenced by an authored lesson`);
+}
+for (const skillId of authoredSkillIds) {
+  check(catalogSkillIds.includes(skillId), `Authored lesson skill ID ${skillId}: missing from canonical skill catalogue`);
+}
+
+const assessmentProfiles = skillAssessmentProfiles.profiles ?? [];
+const assessmentProfileIds = assessmentProfiles.map((profile) => profile.skillId);
+const assessmentModes = new Set([
+  "creation_and_performance", "aural_recognition", "aural_transcription",
+  "aural_and_pitch_response", "aural_rhythm_response", "performance",
+  "fretboard_response", "recognition_and_performance", "observed_setup",
+  "instrument_tuning", "performance_and_theory_response",
+  "performance_and_musical_application", "expressive_performance",
+  "notation_reading", "recording_and_reflection", "repertoire_performance",
+  "timed_performance", "performance_and_harmonic_explanation",
+  "rhythm_response_and_performance", "expressive_pitch_performance",
+  "aural_response"
+]);
+const evidenceTypes = new Set([
+  "performance_recording", "arrangement_artifact", "learner_explanation",
+  "aural_response", "instrument_or_voice_response", "transcription_artifact",
+  "measured_pitch_if_validated", "clapped_or_played_performance",
+  "teacher_observation", "fretboard_task", "written_or_spoken_response",
+  "notation_response", "performance_video", "teacher_or_peer_review",
+  "learner_reflection", "timing_measurement_if_validated",
+  "spoken_or_clapped_response", "pitch_measurement_if_validated"
+]);
+check(skillAssessmentProfiles.schemaVersion === 1, "Skill assessment profiles: unsupported schemaVersion");
+check(isText(skillAssessmentProfiles.version), "Skill assessment profiles: missing version");
+check(skillAssessmentProfiles.status === "draft", "Skill assessment profiles must remain draft until approved");
+check(skillAssessmentProfiles.curriculumReleaseId === skillCatalog.curriculumReleaseId, "Skill assessment profiles: curriculum release mismatch");
+check(skillAssessmentProfiles.skillCatalogVersion === skillCatalog.version, "Skill assessment profiles: skill catalogue version mismatch");
+check(isText(skillAssessmentProfiles.scoringPolicy) && isText(skillAssessmentProfiles.feedbackPolicy), "Skill assessment profiles: missing policy guidance");
+check(assessmentProfiles.length === catalogSkills.length, "Skill assessment profiles: expected one profile for every canonical skill");
+check(unique(assessmentProfileIds), "Skill assessment profiles: duplicate skill profile IDs");
+for (const profile of assessmentProfiles) {
+  check(catalogSkillIds.includes(profile.skillId), `Skill assessment profile ${profile.skillId}: unknown catalogue skill`);
+  check(profile.status === "draft", `Skill assessment profile ${profile.skillId}: profile must remain draft until reviewed`);
+  check(assessmentModes.has(profile.assessmentMode), `Skill assessment profile ${profile.skillId}: unknown assessment mode`);
+  check(Array.isArray(profile.criteria) && profile.criteria.length >= 2 && unique(profile.criteria.map((criterion) => criterion.id)), `Skill assessment profile ${profile.skillId}: needs at least two uniquely identified criteria`);
+  for (const criterion of profile.criteria ?? []) {
+    check(isText(criterion.id) && isText(criterion.descriptor), `Skill assessment profile ${profile.skillId}: incomplete criterion`);
+  }
+  check(Array.isArray(profile.evidenceTypes) && profile.evidenceTypes.length > 0 && unique(profile.evidenceTypes), `Skill assessment profile ${profile.skillId}: missing or duplicate evidence types`);
+  for (const type of profile.evidenceTypes ?? []) {
+    check(evidenceTypes.has(type), `Skill assessment profile ${profile.skillId}: unsupported evidence type ${type}`);
+  }
+  check(isText(profile.retentionProbe) && isText(profile.transferProbe), `Skill assessment profile ${profile.skillId}: missing retention or transfer probe`);
+  check(typeof profile.humanReviewRequired === "boolean", `Skill assessment profile ${profile.skillId}: missing human-review flag`);
+  check(profile.automatedDecisionStatus === "not_approved", `Skill assessment profile ${profile.skillId}: automated decisions are not approved`);
+  check(isText(profile.cautions), `Skill assessment profile ${profile.skillId}: missing assessment caution`);
+}
+for (const skillId of catalogSkillIds) {
+  check(assessmentProfileIds.includes(skillId), `Skill ${skillId}: missing draft assessment profile`);
+}
+
 const expectedDashboardLessons = y1Lessons.lessons.map((lesson) => ({
   id: lesson.id,
   week: lesson.week,
   title: lesson.title,
   focus: lesson.focus,
-  estimatedMinutes: lesson.estimatedMinutes
+  estimatedMinutes: lesson.estimatedMinutes,
+  skillIds: [...lesson.skillIds]
 }));
 check(
   y1DashboardIndex.schemaVersion === 1 &&
@@ -122,4 +206,53 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log("Curriculum validation passed: 52 Year 1 + 52 Year 2 + 48 Year 3 lessons.");
+}
+
+const countText = (values) => {
+  const counts = new Map();
+  for (const value of values) {
+    if (isText(value)) counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+  return [...counts.entries()].sort((left, right) => right[1] - left[1]);
+};
+const lessonCount = authoredLessons.length;
+const qualityAdvisories = [];
+const secondObjective = countText(authoredLessons.map((lesson) => lesson.learningObjectives?.[1]))[0];
+const thirdObjective = countText(authoredLessons.map((lesson) => lesson.learningObjectives?.[2]))[0];
+const repeatedCriterion = countText(
+  authoredLessons.flatMap((lesson) => (lesson.successCriteria ?? []).map((criterion) => criterion.criterion))
+)[0];
+const keyIdeaCount = new Set(authoredLessons.map((lesson) => lesson.explanation?.keyIdea).filter(isText)).size;
+
+if (secondObjective && secondObjective[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`learning objective 2 repeats in ${secondObjective[1]}/${lessonCount} lessons`);
+}
+if (thirdObjective && thirdObjective[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`learning objective 3 repeats in ${thirdObjective[1]}/${lessonCount} lessons`);
+}
+if (repeatedCriterion && repeatedCriterion[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`one success criterion is shared by ${repeatedCriterion[1]}/${lessonCount} lessons`);
+}
+if (keyIdeaCount <= Math.ceil(lessonCount * 0.2)) {
+  qualityAdvisories.push(`only ${keyIdeaCount} distinct key-idea explanations exist across ${lessonCount} lessons`);
+}
+const specialistLessons = y3Lessons.lessons ?? [];
+const genericSpecialistCheckpointCount = specialistLessons.filter((lesson) =>
+  /^Demonstrate .+ in a short musical example, explain the key choice and identify one next improvement\.$/i.test(lesson.checkpoint ?? "")
+).length;
+const genericSpecialistWorkedExampleCount = specialistLessons.filter((lesson) =>
+  (lesson.workedExamples ?? []).some((example) =>
+    /^Create or perform an original 4- to 8-bar example demonstrating .+\.$/i.test(example.content ?? "")
+  )
+).length;
+if (specialistLessons.length > 0 && genericSpecialistCheckpointCount >= Math.ceil(specialistLessons.length * 0.8)) {
+  qualityAdvisories.push(`generic specialist capstone checkpoint template appears in ${genericSpecialistCheckpointCount}/${specialistLessons.length} Year 3+ lessons`);
+}
+if (specialistLessons.length > 0 && genericSpecialistWorkedExampleCount >= Math.ceil(specialistLessons.length * 0.8)) {
+  qualityAdvisories.push(`generic 4–8 bar worked-example template appears in ${genericSpecialistWorkedExampleCount}/${specialistLessons.length} Year 3+ lessons`);
+}
+if (qualityAdvisories.length) {
+  console.warn("Curriculum quality advisory (non-blocking):");
+  for (const advisory of qualityAdvisories) console.warn(`- ${advisory}`);
+  console.warn("These signals require human review; they do not fail curriculum validation.");
 }

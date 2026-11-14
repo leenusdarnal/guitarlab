@@ -11,6 +11,8 @@ export type DashboardLesson = {
   title: string;
   focus: string;
   estimatedMinutes: number;
+  /** Explicit catalogue references authored on the lesson. */
+  skillIds?: string[];
 };
 
 export type DashboardPhase = {
@@ -31,11 +33,13 @@ export type DashboardSnapshot = {
   nextLesson: DashboardLesson | null;
   nextLessonIsInProgress: boolean;
   currentPhase: string | null;
-  phases: Array<DashboardPhase & {
-    completedLessons: number;
-    totalLessons: number;
-    isCurrent: boolean;
-  }>;
+  phases: Array<
+    DashboardPhase & {
+      completedLessons: number;
+      totalLessons: number;
+      isCurrent: boolean;
+    }
+  >;
   dueReviews: Array<{
     skillId: string;
     state: string;
@@ -64,7 +68,8 @@ export function buildDashboardSnapshot(input: {
   );
   const lessonIds = new Set(orderedLessons.map((lesson) => lesson.id));
   const learnerProgress = input.progress.filter(
-    (record) => record.learnerId === profile.id && lessonIds.has(record.lessonId)
+    (record) =>
+      record.learnerId === profile.id && lessonIds.has(record.lessonId)
   );
   const completedIds = new Set(
     learnerProgress
@@ -139,7 +144,8 @@ export function buildDashboardSnapshot(input: {
     completedLessons: completedIds.size,
     totalLessons: orderedLessons.length,
     nextLesson,
-    nextLessonIsInProgress: nextLesson !== null && inProgressIds.has(nextLesson.id),
+    nextLessonIsInProgress:
+      nextLesson !== null && inProgressIds.has(nextLesson.id),
     currentPhase,
     phases: phaseSummaries,
     dueReviews,

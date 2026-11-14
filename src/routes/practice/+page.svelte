@@ -15,6 +15,12 @@
     PracticeSessionRecord
   } from '../../lib/repositories/contracts';
   import { filterPracticeSessions } from '../../lib/application/practice-history';
+  import { getSkillCategoryDisplayName } from '../../lib/application/skill-catalog';
+  import type {
+    AdaptivePracticeRecommendation,
+    AdaptivePracticeSnapshot
+  } from '../../lib/application/adaptive-practice';
+  import { loadActiveAdaptivePracticeSnapshot } from '../../lib/storage/indexeddb';
 
   let sessions = $state<PracticeSessionRecord[]>([]);
   let historyQuery = $state('');
@@ -24,6 +30,9 @@
   let historyEvidenceSessionId = $state<string | null>(null);
   let historyEvidence = $state<PracticeEvidenceRecord[]>([]);
   let historyEvidenceLoadingSessionId = $state<string | null>(null);
+  let adaptiveSnapshot = $state<AdaptivePracticeSnapshot | null>(null);
+  let adaptiveLoading = $state(true);
+  let adaptiveError = $state('');
 
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
@@ -60,6 +69,9 @@
         session.status === 'in_progress' || session.status === 'paused'
     ) ?? null
   );
+  const adaptiveRecommendations = $derived(
+    adaptiveSnapshot?.recommendations.slice(0, 6) ?? []
+  );
 
   async function loadActiveEvidence(sessionId: string) {
     activeEvidenceLoading = true;
@@ -76,6 +88,20 @@
     }
   }
 
+  async function refreshAdaptivePractice() {
+    adaptiveLoading = true;
+    adaptiveError = '';
+    try {
+      adaptiveSnapshot = await loadActiveAdaptivePracticeSnapshot();
+    } catch {
+      adaptiveSnapshot = null;
+      adaptiveError =
+        'Adaptive practice suggestions could not be loaded from local learner records.';
+    } finally {
+      adaptiveLoading = false;
+    }
+  }
+
   async function refresh() {
     sessions = await listActivePracticeSessions();
     const current = sessions.find(
@@ -87,6 +113,7 @@
     } else {
       activeEvidence = [];
     }
+    await refreshAdaptivePractice();
   }
 
   onMount(() => {
@@ -231,6 +258,7 @@
       tempoBpm = undefined;
       exerciseDifficulty = undefined;
       await loadActiveEvidence(activeSession.id);
+      await refreshAdaptivePractice();
       evidenceNotice = 'Exercise observation saved on this device.';
     } catch (cause) {
       evidenceError =
@@ -296,6 +324,19 @@
     }
   }
 
+
+  function adaptiveEvidenceLabel(
+    recommendation: AdaptivePracticeRecommendation
+  ) {
+    if (recommendation.evidenceType === 'assessment') {
+      return `${recommendation.evidenceCount} assessment(s)`;
+    }
+    if (recommendation.evidenceType === 'learner_observation') {
+      return `${recommendation.evidenceCount} learner notes`;
+    }
+    return 'No assessment yet';
+  }
+
   function durationLabel(seconds: number) {
     const minutes = Math.floor(seconds / 60);
     const remaining = seconds % 60;
@@ -340,6 +381,67 @@
     <p>
       Track a session, record what you worked on and choose one useful next
       target. Your private practice record stays on this device.
+    </p>
+  </section>
+
+  <section class="adaptive-panel" aria-labelledby="adaptive-heading">
+    <div class="adaptive-heading">
+      <div>
+        <p class="eyebrow">EVIDENCE-AWARE GUIDANCE</p>
+        <h2 id="adaptive-heading">Suggested focus</h2>
+        <p class="muted">
+          Suggestions use the skills introduced by your current Year 1 learning
+          route, your assessment history and repeated learner-entered exercise
+          difficulty. They do not change your skill states.
+        </p>
+      </div>
+      <span class="catalog-version">Skill catalogue v1.0.0</span>
+    </div>
+
+    {#if adaptiveLoading}
+      <p class="muted" role="status">Loading your learning evidence…</p>
+    {:else if adaptiveError}
+      <p class="message error" role="alert">{adaptiveError}</p>
+    {:else if adaptiveRecommendations.length > 0}
+      <ol class="adaptive-list">
+        {#each adaptiveRecommendations as recommendation (recommendation.id)}
+          <li>
+            <div>
+              <span class="recommendation-type">
+                {recommendation.targetType === 'skill' ? 'SKILL' : 'EXERCISE'}
+              </span>
+              <strong>{recommendation.title}</strong>
+              <p>{recommendation.explanation}</p>
+            </div>
+            <span class="recommendation-evidence">
+              {adaptiveEvidenceLabel(recommendation)}
+            </span>
+          </li>
+        {/each}
+      </ol>
+    {:else}
+      <p class="empty-inline">
+        No current priority has been identified. Continue your next lesson or
+        record an assessment when you are ready.
+      </p>
+    {/if}
+
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.categoryCoverage.length > 0}
+      <div class="adaptive-coverage">
+        <p class="eyebrow">ASSESSMENT COVERAGE FOR SKILLS REACHED SO FAR</p>
+        <div class="coverage-list">
+          {#each adaptiveSnapshot.categoryCoverage as category (category.category)}
+            <span>
+              <strong>{getSkillCategoryDisplayName(category.category)}</strong>
+              {category.assessedSkills} of {category.totalSkills} assessed
+            </span>
+          {/each}
+        </div>
+      </div>
+    {/if}
+    <p class="adaptive-footnote">
+      Assessment coverage is not a mastery score. Exercise difficulty is
+      self-reported; repetitions are never treated as verified accuracy.
     </p>
   </section>
 
@@ -821,6 +923,116 @@
     margin: 18px 0;
   }
 
+  .adaptive-panel {
+    margin: 18px 0 24px;
+    border: 1px solid var(--border, #444);
+    border-radius: 18px;
+    padding: 22px 24px;
+    background: var(--surface, #222);
+  }
+
+  .adaptive-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 18px;
+  }
+
+  .adaptive-heading h2 {
+    margin: 7px 0;
+  }
+
+  .adaptive-heading .muted,
+  .adaptive-footnote {
+    max-width: 720px;
+    color: var(--muted, #aaa);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .catalog-version,
+  .recommendation-type,
+  .recommendation-evidence {
+    color: var(--muted, #aaa);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .adaptive-list {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+  }
+
+  .adaptive-list li {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px solid var(--border, #444);
+    padding: 13px 0;
+  }
+
+  .adaptive-list li > div {
+    min-width: 0;
+  }
+
+  .adaptive-list strong {
+    display: block;
+    margin: 3px 0;
+    font-size: 0.95rem;
+  }
+
+  .adaptive-list p {
+    margin: 4px 0 0;
+    color: var(--muted, #aaa);
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  .recommendation-type {
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+
+  .recommendation-evidence {
+    padding-top: 4px;
+    text-align: right;
+  }
+
+  .adaptive-coverage {
+    border-top: 1px solid var(--border, #444);
+    padding-top: 15px;
+    margin-top: 6px;
+  }
+
+  .coverage-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .coverage-list span {
+    padding: 8px 10px;
+    border: 1px solid var(--border, #444);
+    border-radius: 9px;
+    color: var(--muted, #aaa);
+    font-size: 0.8rem;
+  }
+
+  .coverage-list strong {
+    color: var(--text, #fff);
+    margin-right: 5px;
+  }
+
+  .adaptive-footnote {
+    margin: 15px 0 0;
+    font-size: 0.78rem;
+  }
+
   .panel,
   .empty,
   .principle {
@@ -1144,10 +1356,20 @@
       padding: 40px 0 22px;
     }
 
+    .adaptive-panel,
     .panel,
     .empty,
     .principle {
       padding: 18px;
+    }
+
+    .adaptive-heading,
+    .adaptive-list li {
+      display: grid;
+    }
+
+    .recommendation-evidence {
+      text-align: left;
     }
 
     .field-grid {

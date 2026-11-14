@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 4 &&
+      database.version === 5 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -185,7 +185,15 @@ try {
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
         .indexNames.contains('byLearnerStatus') &&
-      database.objectStoreNames.contains('practiceEvidence');
+      database.objectStoreNames.contains('practiceEvidence') &&
+      database
+        .transaction('assessmentAttempts')
+        .objectStore('assessmentAttempts')
+        .indexNames.contains('byLearnerRelease') &&
+      database
+        .transaction('practiceEvidence')
+        .objectStore('practiceEvidence')
+        .indexNames.contains('byLearnerId');
     database.close();
     return upgraded;
   });
@@ -209,6 +217,12 @@ try {
           reject(request.error ?? new Error('IndexedDB read failed.'));
       });
     const sessions = transaction.objectStore('practiceSessions');
+    const assessmentAttempts = database
+      .transaction('assessmentAttempts')
+      .objectStore('assessmentAttempts');
+    const practiceEvidence = database
+      .transaction('practiceEvidence')
+      .objectStore('practiceEvidence');
     const [active, profile, migratedSession] = await Promise.all([
       read(transaction.objectStore('metadata').get('activeLearnerId')),
       read(
@@ -228,15 +242,19 @@ try {
       instrument: profile?.preferences?.instrument ?? null,
       migratedSessionId: migratedSession?.id ?? null,
       sessionIndex: sessions.indexNames.contains('byLearnerStatusStartedAt'),
-      learnerStatusIndex: sessions.indexNames.contains('byLearnerStatus')
+      learnerStatusIndex: sessions.indexNames.contains('byLearnerStatus'),
+      assessmentReleaseIndex:
+        assessmentAttempts.indexNames.contains('byLearnerRelease'),
+      practiceEvidenceLearnerIndex:
+        practiceEvidence.indexNames.contains('byLearnerId')
     };
     database.close();
     return result;
   });
   assert.equal(
     upgradeResult.version,
-    4,
-    'The existing v1 database should upgrade to v4'
+    5,
+    'The existing v1 database should upgrade to v5'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
@@ -244,6 +262,8 @@ try {
   assert.equal(upgradeResult.migratedSessionId, 'legacy-session-001');
   assert.equal(upgradeResult.sessionIndex, true);
   assert.equal(upgradeResult.learnerStatusIndex, true);
+  assert.equal(upgradeResult.assessmentReleaseIndex, true);
+  assert.equal(upgradeResult.practiceEvidenceLearnerIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
     'assessmentAttempts',
     'learnerProfiles',

@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "curriculumReleaseId": "curriculum-v1",
+  "categories": [
+    {
+      "id": "arrangement",
+      "displayName": "Arrangement",
+      "description": "Shape musical sections, form and arrangement."
+    },
+    {
+      "id": "ear",
+      "displayName": "Ear",
+      "description": "Listen, identify, sing and transcribe musical sounds."
+    },
+    {
+      "id": "fingerstyle",
+      "displayName": "Fingerstyle",
+      "description": "Coordinate fingerstyle patterns and thumb independence."
+    },
+    {
+      "id": "fretboard",
+      "displayName": "Fretboard",
+      "description": "Locate notes, strings and octave relationships on the guitar."
+    },
+    {
+      "id": "harmony",
+      "displayName": "Harmony",
+      "description": "Build, connect and navigate chord structures."
+    },
+    {
+      "id": "instrument",
+      "displayName": "Instrument setup",
+      "description": "Prepare and handle the instrument comfortably and reliably."
+    },
+    {
+      "id": "lead",
+      "displayName": "Lead playing",
+      "description": "Develop scales, melodic vocabulary and phrasing."
+    },
+    {
+      "id": "notation",
+      "displayName": "Notation",
+      "description": "Read guitar tablature and related notation."
+    },
+    {
+      "id": "performance",
+      "displayName": "Performance",
+      "description": "Record, review and recover during musical performance."
+    },
+    {
+      "id": "repertoire",
+      "displayName": "Repertoire",
+      "description": "Learn, retain and perform musical material."
+    },
+    {
+      "id": "rhythm",
+      "displayName": "Rhythm",
+      "description": "Maintain pulse, subdivide time and shape rhythmic accompaniment."
+    },
+    {
+      "id": "technique",
+      "displayName": "Technique",
+      "description": "Develop controlled picking, legato and expressive articulation."
+    }
+  ],
+  "skills": [
+    {
+      "id": "arrangement.song-form",
+      "category": "arrangement",
+      "displayName": "Song form and arrangement",
+      "description": "Organise musical ideas into sections and shape a coherent arrangement."
+    },
+    {
+      "id": "ear.intervals",
+      "category": "ear",
+      "displayName": "Interval recognition",
+      "description": "Hear, compare and identify the distance or relationship between pitches."
+    },
+    {
+      "id": "ear.melody-transcription",
+      "category": "ear",
+      "displayName": "Melody transcription by ear",
+      "description": "Listen to a melody and work out its notes on the guitar."
+    },
+    {
+      "id": "ear.pitch",
+      "category": "ear",
+      "displayName": "Pitch recognition and matching",
+      "description": "Recognise, sing or match a target pitch."
+    },
+    {
+      "id": "ear.rhythm",
+      "category": "ear",
+      "displayName": "Rhythm recognition by ear",
+      "description": "Hear, recall and reproduce rhythmic patterns."
+    },
+    {
+      "id": "fingerstyle.patterns",
+      "category": "fingerstyle",
+      "displayName": "Fingerstyle patterns",
+      "description": "Play and vary repeating fingerstyle picking patterns."
+    },
+    {
+      "id": "fingerstyle.thumb-independence",
+      "category": "fingerstyle",
+      "displayName": "Fingerstyle thumb independence",
+      "description": "Maintain an independent thumb role while the fingers play other notes."
+    },
+    {
+      "id": "fretboard.natural-notes",
+      "category": "fretboard",
+      "displayName": "Natural notes on the fretboard",
+      "description": "Locate and name natural notes across guitar strings and positions."
+    },
+    {
+      "id": "fretboard.octaves",
+      "category": "fretboard",
+      "displayName": "Fretboard octave shapes",
+      "description": "Find octave relationships and use them to navigate the neck."
+    },
+    {
+      "id": "fretboard.string-map",
+      "category": "fretboard",
+      "displayName": "String and fretboard mapping",
+      "description": "Relate string names, fret positions and note locations."
+    },
+    {
+      "id": "harmony.barre-chords",
+      "category": "harmony",
+      "displayName": "Barre chords",
+      "description": "Form and move barre-chord shapes with controlled pressure."
+    },
+    {
+      "id": "harmony.open-chords",
+      "category": "harmony",
+      "displayName": "Open chord shapes",
+      "description": "Form open-position chords and check their intended notes."
+    },
+    {
+      "id": "harmony.power-chords",
+      "category": "harmony",
+      "displayName": "Power chords",
+      "description": "Form movable root-and-fifth power-chord shapes."
+    },
+    {
+      "id": "harmony.seventh-chords",
+      "category": "harmony",
+      "displayName": "Seventh chords",
+      "description": "Build and play seventh-chord shapes and sounds."
+    },
+    {
+      "id": "harmony.transitions",
+      "category": "harmony",
+      "displayName": "Chord transitions",
+      "description": "Move between chord shapes smoothly and in time."
+    },
+    {
+      "id": "harmony.triads",
+      "category": "harmony",
+      "displayName": "Triads and inversions",
+      "description": "Build and navigate three-note chord voicings and inversions."
+    },
+    {
+      "id": "harmony.voice-leading",
+      "category": "harmony",
+      "displayName": "Voice leading",
+      "description": "Connect chords by moving individual notes efficiently."
+    },
+    {
+      "id": "instrument.posture",
+      "category": "instrument",
+      "displayName": "Instrument posture and setup",
+      "description": "Use a comfortable, stable guitar position and relaxed playing setup."
+    },
+    {
+      "id": "instrument.tuning",
+      "category": "instrument",
+      "displayName": "Instrument tuning",
+      "description": "Tune the guitar and identify its standard open-string pitches."
+    },
+    {
+      "id": "lead.major-scale",
+      "category": "lead",
+      "displayName": "Major scale patterns",
+      "description": "Understand and play major-scale patterns and note sequences."
+    },
+    {
+      "id": "lead.pentatonic",
+      "category": "lead",
+      "displayName": "Pentatonic scale patterns",
+      "description": "Map and play major or minor pentatonic scale patterns."
+    },
+    {
+      "id": "lead.phrasing",
+      "category": "lead",
+      "displayName": "Melodic phrasing",
+      "description": "Shape short melodic ideas using timing, dynamics, articulation and space."
+    },
+    {
+      "id": "notation.tab",
+      "category": "notation",
+      "displayName": "Guitar tablature reading",
+      "description": "Interpret string and fret information in guitar tablature."
+    },
+    {
+      "id": "performance.recording",
+      "category": "performance",
+      "displayName": "Recording and performance review",
+      "description": "Capture a performance and use playback to review the result."
+    },
+    {
+      "id": "performance.recovery",
+      "category": "performance",
+      "displayName": "Performance recovery",
+      "description": "Recover from slips or interruptions and continue a musical performance."
+    },
+    {
+      "id": "repertoire.song-learning",
+      "category": "repertoire",
+      "displayName": "Song learning and repertoire",
+      "description": "Learn, retain and perform songs or other complete musical material."
+    },
+    {
+      "id": "rhythm.muting",
+      "category": "rhythm",
+      "displayName": "Muting and rhythmic space",
+      "description": "Control unwanted string noise and use muted sounds or rests intentionally."
+    },
+    {
+      "id": "rhythm.pulse",
+      "category": "rhythm",
+      "displayName": "Steady pulse",
+      "description": "Maintain a consistent beat while playing or resting."
+    },
+    {
+      "id": "rhythm.strumming",
+      "category": "rhythm",
+      "displayName": "Strumming and comping patterns",
+      "description": "Play accompaniment patterns with controlled downstrokes, upstrokes and accents."
+    },
+    {
+      "id": "rhythm.subdivision",
+      "category": "rhythm",
+      "displayName": "Rhythmic subdivision",
+      "description": "Count and perform divisions of the beat with controlled timing."
+    },
+    {
+      "id": "technique.alternate-picking",
+      "category": "technique",
+      "displayName": "Alternate picking",
+      "description": "Coordinate alternating downstrokes and upstrokes."
+    },
+    {
+      "id": "technique.bends",
+      "category": "technique",
+      "displayName": "Pitch bends",
+      "description": "Bend notes towards an intended pitch with control."
+    },
+    {
+      "id": "technique.legato",
+      "category": "technique",
+      "displayName": "Legato articulation",
+      "description": "Connect notes using hammer-ons, pull-offs and smooth articulation."
+    },
+    {
+      "id": "technique.string-crossing",
+      "category": "technique",
+      "displayName": "String crossing",
+      "description": "Move the picking hand between strings with control and economy."
+    }
+  ]
+}
