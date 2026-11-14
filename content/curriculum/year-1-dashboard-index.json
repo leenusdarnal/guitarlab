@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "outlineVersion": "1.1.0",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.0.1",
   "phases": [
     {
       "id": "beginner-base",
@@ -61,7 +61,11 @@
       "id": "y1-w04-lesson",
       "week": 4,
       "title": "First chord shapes",
-      "focus": "Em and G; checking each string",
+      "focus": [
+        "Form Em, pick strings 6 through 1 separately and correct one unclear note.",
+        "Form G and repeat the same six-string check.",
+        "Alternate Em and G after four counted beats; keep the strumming hand moving during the change."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["harmony.open-chords"]
     },
@@ -85,7 +89,11 @@
       "id": "y1-w07-lesson",
       "week": 7,
       "title": "Strum in time",
-      "focus": "Downstrokes, upstrokes and subdivisions",
+      "focus": [
+        "Play eight evenly spaced down-up strokes on muted strings while saying the count.",
+        "Repeat and skip the string contact on the selected '&' while keeping the hand's motion.",
+        "Add one chord and preserve the same timing; lower the tempo if the subdivision becomes uneven."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"]
     },
@@ -117,7 +125,11 @@
       "id": "y1-w11-lesson",
       "week": 11,
       "title": "Your first music map",
-      "focus": "Open-string map, semitone steps and first fretboard landmarks",
+      "focus": [
+        "Find E, F, G and A on the low E string and say the fret number for each.",
+        "Find A, B, C and D on the A string and say the fret number for each.",
+        "Choose a note name and locate it on both strings, explaining the fret movement used."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["fretboard.string-map", "fretboard.natural-notes"]
     },
@@ -153,7 +165,11 @@
       "id": "y1-w15-lesson",
       "week": 15,
       "title": "Pick control and clean tone",
-      "focus": "Alternate picking and string crossing",
+      "focus": [
+        "Play a four-note D–U–D–U cell on one string.",
+        "Repeat on two strings, planning the crossing before the first note on the new string.",
+        "Record or listen to one pass and identify whether timing, volume or pick depth changed at the crossing."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["technique.alternate-picking", "technique.string-crossing"]
     },
@@ -161,7 +177,11 @@
       "id": "y1-w16-lesson",
       "week": 16,
       "title": "Fingerstyle foundation",
-      "focus": "Thumb and fingers as separate roles",
+      "focus": [
+        "Loop the thumb part alone until the bass spacing is steady.",
+        "Add one treble note at a time while the thumb continues its pulse.",
+        "Change the treble-note order and keep the bass role unchanged."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"]
     },
@@ -169,7 +189,11 @@
       "id": "y1-w17-lesson",
       "week": 17,
       "title": "Build the major scale",
-      "focus": "Whole-step/half-step formula and a small C major pattern",
+      "focus": [
+        "Play one octave of C major and name each note while playing.",
+        "Say the A minor pentatonic notes A–C–D–E–G and locate the root A.",
+        "Create a short phrase using only those five notes and finish on A."
+      ],
       "estimatedMinutes": 30,
       "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
@@ -179,7 +203,7 @@
       "title": "Shell chords: roots and guide tones",
       "focus": "Three-note chord grips as a bridge to movable chords",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords"]
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"]
     },
     {
       "id": "y1-w19-lesson",
@@ -195,7 +219,7 @@
       "title": "Play with expression",
       "focus": "Slides, bends, dynamics and phrasing",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.triads", "harmony.voice-leading"]
+      "skillIds": ["lead.phrasing", "technique.bends"]
     },
     {
       "id": "y1-w21-lesson",
@@ -203,7 +227,7 @@
       "title": "Movable power chords",
       "focus": "Root-5 shapes, muting and rock rhythm",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.power-chords"]
+      "skillIds": ["harmony.power-chords"]
     },
     {
       "id": "y1-w22-lesson",
@@ -211,15 +235,19 @@
       "title": "Approach barre chords safely",
       "focus": "Partial barre shape and efficient pressure",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.barre-chords"]
+      "skillIds": ["harmony.barre-chords"]
     },
     {
       "id": "y1-w23-lesson",
       "week": 23,
       "title": "Minor pentatonic box 1",
-      "focus": "Map the five notes and find the roots",
+      "focus": [
+        "Play the box 1 shape slowly from low E to high E and back.",
+        "Name the A root when it appears on the low E and high E strings.",
+        "Create a short phrase using the five notes and end on A."
+      ],
       "estimatedMinutes": 30,
-      "skillIds": ["lead.major-scale", "lead.pentatonic"]
+      "skillIds": ["lead.pentatonic"]
     },
     {
       "id": "y1-w24-lesson",
@@ -239,19 +267,19 @@
       "title": "Find roots and octaves",
       "focus": "Fretboard navigation beyond open position",
       "estimatedMinutes": 30,
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes",
-        "fretboard.octaves"
-      ]
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes", "fretboard.octaves"]
     },
     {
       "id": "y1-w26-lesson",
       "week": 26,
       "title": "Triads on the top strings",
-      "focus": "Compact voicings and inversions",
+      "focus": [
+        "Play each C, F and G triad reference one string at a time.",
+        "Name the root, third and fifth before sounding the triad together.",
+        "Move from one triad to the next and keep the intended three-note voicing clear."
+      ],
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.triads"]
+      "skillIds": ["harmony.triads"]
     },
     {
       "id": "y1-w27-lesson",
@@ -345,14 +373,14 @@
       "id": "y1-w37-lesson",
       "week": 37,
       "title": "Learn a melody by ear",
-      "focus": "Listen, sing, find and verify notes",
+      "focus": [
+        "Hum the phrase and repeat it in short fragments of two or three notes.",
+        "Clap the rhythm separately from the pitch task.",
+        "Locate the opening note, work out subsequent interval movement and record note order.",
+        "Replay the source only after the first independent transcription, then correct one specific difference."
+      ],
       "estimatedMinutes": 30,
-      "skillIds": [
-        "ear.pitch",
-        "ear.rhythm",
-        "ear.melody-transcription",
-        "ear.intervals"
-      ]
+      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"]
     },
     {
       "id": "y1-w38-lesson",
@@ -392,7 +420,7 @@
       "title": "The ii-V-I connection",
       "focus": "Connect jazz chords with voice leading",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords"]
+      "skillIds": ["harmony.voice-leading"]
     },
     {
       "id": "y1-w43-lesson",
