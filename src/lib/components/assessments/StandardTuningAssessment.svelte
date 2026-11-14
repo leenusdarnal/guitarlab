@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import {
     standardTuningAssessment,
+    type StandardTuningItemId,
     type StandardTuningAnswers
   } from '../../../lib/domain/learning/standard-tuning-assessment';
   import {
@@ -10,13 +11,13 @@
   } from '../../../lib/storage/assessment';
   import type { AssessmentAttemptRecord } from '../../../lib/repositories/contracts';
 
-  function emptyAnswers(): StandardTuningAnswers {
+  function emptyAnswers(): Record<StandardTuningItemId, string> {
     return Object.fromEntries(
       standardTuningAssessment.items.map((item) => [item.id, ''])
-    ) as StandardTuningAnswers;
+    ) as Record<StandardTuningItemId, string>;
   }
 
-  let answers = $state<StandardTuningAnswers>(emptyAnswers());
+  let answers = $state<Record<StandardTuningItemId, string>>(emptyAnswers());
   let result = $state<AssessmentAttemptRecord | null>(null);
   let saving = $state(false);
   let loading = $state(true);
