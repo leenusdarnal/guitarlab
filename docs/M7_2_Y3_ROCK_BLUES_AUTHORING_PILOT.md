@@ -49,7 +49,9 @@ The pilot deliberately preserves an inclusive approach to posture and technique.
 - [x] Worked examples and exercises match the named checkpoint.
 - [x] Accessibility and common-error guidance remain present.
 - [x] Stable lesson IDs and skill mappings are preserved.
-- [x] An explicit immutable release manifest and D1 migration seed `curriculum-v1.0.1` alongside the original `curriculum-v1` snapshot.\n- [x] Local D1 checks assert both releases and all 152 lesson metadata rows remain present independently.\n- [ ] Curriculum validation CI passes on the pull request head.
+- [x] An explicit immutable release manifest and D1 migration seed `curriculum-v1.0.1` alongside the original `curriculum-v1` snapshot.
+- [x] Local D1 checks assert both releases and all 152 lesson metadata rows remain present independently.
+- [ ] Curriculum validation CI passes on the pull request head.
 - [ ] Formatting, application and browser acceptance CI passes.
 - [ ] Curriculum reviewer approves task difficulty and note/fret examples.
 
