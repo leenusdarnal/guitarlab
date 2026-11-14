@@ -1,4 +1,9 @@
 import { recordAssessmentAttempt } from '../application/services';
+import { scoreIntervalRecognitionResponse } from '../domain/learning/ear-training-assessment';
+import type {
+  EarTrainingAnswer,
+  EarTrainingExercise
+} from '../domain/music/ear-training';
 import {
   ACTIVE_CURRICULUM_RELEASE_ID,
   listCurriculumSkills
@@ -145,6 +150,66 @@ export async function loadLatestActiveStandardTuningAssessment(): Promise<Assess
             right.recordedAt - left.recordedAt ||
             right.id.localeCompare(left.id)
         )[0] ?? null
+    );
+  } finally {
+    database.close();
+  }
+}
+
+/**
+ * Append one explicitly selected interval-recognition response to the active
+ * learner's local assessment history. This is a supporting probe only.
+ */
+export async function recordActiveIntervalRecognitionAssessment(
+  exercise: EarTrainingExercise,
+  response: EarTrainingAnswer
+): Promise<AssessmentAttemptRecord> {
+  const scored = scoreIntervalRecognitionResponse(exercise, response);
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const skills: Pick<SkillRepository, 'findForRelease'> = {
+      findForRelease: async (releaseId, skillId) => {
+        if (releaseId !== ACTIVE_CURRICULUM_RELEASE_ID) return null;
+        return (
+          listCurriculumSkills().find((skill) => skill.id === skillId) ?? null
+        );
+      }
+    };
+    const curriculum: Pick<CurriculumRepository, 'findLesson'> = {
+      findLesson: async () => null
+    };
+
+    return await recordAssessmentAttempt(
+      {
+        learnerId: profile.id,
+        submission: {
+          curriculumReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
+          skillId: 'ear.intervals',
+          lessonId: null,
+          assessmentKind: 'measured',
+          evidenceType: 'measured',
+          outcome: scored.outcome,
+          score: scored.score,
+          evidenceSummary:
+            scored.outcome === 'passed'
+              ? 'The selected interval matched the generated listening item.'
+              : 'The selected interval did not match the generated listening item.',
+          evidence: {
+            source: 'locally-generated-interval-recognition',
+            itemId: scored.itemEvidence[0].itemId
+          },
+          assessmentInstrument: scored.assessmentInstrument,
+          itemEvidence: scored.itemEvidence
+        }
+      },
+      {
+        curriculum,
+        skills,
+        assessments: repositories.assessments,
+        runtime: systemRuntime
+      }
     );
   } finally {
     database.close();

@@ -3,6 +3,7 @@
   import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
   import { AudioContextSession } from '../../../lib/audio/audio-context-session';
   import { resolve } from '$app/paths';
+  import { recordActiveIntervalRecognitionAssessment } from '../../../lib/storage/assessment';
   import {
     createEarTrainingExercise,
     type EarTrainingAnswer,
@@ -17,6 +18,7 @@
   let audioError = $state('');
   let correctCount = $state(0);
   let attemptCount = $state(0);
+  let evidenceSaveState = $state<'idle' | 'saving' | 'saved' | 'error'>('idle');
   let playbackAbortController: AbortController | null = null;
   const audioSession = new AudioContextSession(() => {
     if (typeof AudioContext === 'undefined') {
@@ -51,6 +53,7 @@
     selectedAnswer = null;
     feedbackState = '';
     audioError = '';
+    evidenceSaveState = 'idle';
   }
 
   async function playExercise() {
@@ -114,7 +117,7 @@
     }
   }
 
-  function submitAnswer(answer: EarTrainingAnswer) {
+  async function submitAnswer(answer: EarTrainingAnswer) {
     if (selectedAnswer !== null) return;
     selectedAnswer = answer;
     attemptCount += 1;
@@ -124,11 +127,22 @@
     } else {
       feedbackState = 'incorrect';
     }
+
+    if (kind === 'interval') {
+      evidenceSaveState = 'saving';
+      try {
+        await recordActiveIntervalRecognitionAssessment(exercise, answer);
+        evidenceSaveState = 'saved';
+      } catch {
+        evidenceSaveState = 'error';
+      }
+    }
   }
 
   function retryAnswer() {
     selectedAnswer = null;
     feedbackState = '';
+    evidenceSaveState = 'idle';
   }
 
   function nextExercise() {
@@ -136,6 +150,7 @@
     selectedAnswer = null;
     feedbackState = '';
     audioError = '';
+    evidenceSaveState = 'idle';
   }
 </script>
 
@@ -203,14 +218,22 @@
       <div class="feedback incorrect" role="status">
         <strong>Not quite — give it another listen.</strong>
         <p>Replay the example and try again. Your next attempt can use the same sound.</p>
-        <button type="button" class="secondary-button" onclick={retryAnswer}>Try again</button>
+        <button type="button" class="secondary-button" onclick={retryAnswer} disabled={evidenceSaveState === 'saving'}>Try again</button>
       </div>
     {:else if feedbackState === 'correct'}
       <div class="feedback correct" role="status">
         <strong>That's right.</strong>
         <p>{exercise.explanation}</p>
-        <button type="button" class="secondary-button" onclick={nextExercise}>Next exercise</button>
+        <button type="button" class="secondary-button" onclick={nextExercise} disabled={evidenceSaveState === 'saving'}>Next exercise</button>
       </div>
+    {/if}
+
+    {#if kind === 'interval' && evidenceSaveState === 'saving'}
+      <p class="audio-caption" role="status">Saving this interval response on this device…</p>
+    {:else if kind === 'interval' && evidenceSaveState === 'saved'}
+      <p class="audio-caption" role="status">Interval item evidence saved locally. This supporting probe does not establish skill mastery.</p>
+    {:else if kind === 'interval' && evidenceSaveState === 'error'}
+      <p class="audio-error" role="alert">This response could not be saved locally. You can retry the answer to try saving again.</p>
     {/if}
 
     {#if audioError}
