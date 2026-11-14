@@ -1077,7 +1077,7 @@ try {
   await reloadedAuthoredObservationLink.waitFor();
   assert.match(
     await reloadedAuthoredObservationLink.innerText(),
-    /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus[\\s\\S]*curriculum-v1\\.0\\.6[\\s\\S]*0\\.1\\.0/
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
   );
   assert.equal(
     await page.locator('.elapsed').innerText(),
