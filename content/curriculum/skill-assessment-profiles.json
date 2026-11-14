@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.1.0",
   "status": "draft",
-  "curriculumReleaseId": "curriculum-v1.0.5",
+  "curriculumReleaseId": "curriculum-v1.0.6",
   "skillCatalogVersion": "1.0.0",
   "scoringPolicy": "No universal cut scores, numeric mastery thresholds, or automated pass/fail decisions are approved in this draft.",
   "feedbackPolicy": "Feedback should identify the task or process criterion, invite learner interpretation, and support a next-step decision. Do not use a single real-time score as proof of retained learning.",
