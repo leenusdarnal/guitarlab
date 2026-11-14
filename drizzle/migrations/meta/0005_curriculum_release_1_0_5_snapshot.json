@@ -447,11 +447,7 @@
       "indexes": {
         "lesson_progress_learner_release_lesson_unique": {
           "name": "lesson_progress_learner_release_lesson_unique",
-          "columns": [
-            "learner_id",
-            "curriculum_release_id",
-            "lesson_id"
-          ],
+          "columns": ["learner_id", "curriculum_release_id", "lesson_id"],
           "isUnique": true
         },
         "lesson_progress_id_learner_unique": {
@@ -619,10 +615,7 @@
           "name": "practice_sessions_primary_lesson_fk",
           "tableFrom": "practice_sessions",
           "tableTo": "curriculum_lessons",
-          "columnsFrom": [
-            "primary_curriculum_release_id",
-            "primary_lesson_id"
-          ],
+          "columnsFrom": ["primary_curriculum_release_id", "primary_lesson_id"],
           "columnsTo": ["release_id", "lesson_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
@@ -760,12 +753,7 @@
       "indexes": {
         "skill_assessment_attempts_mastery_fk_unique": {
           "name": "skill_assessment_attempts_mastery_fk_unique",
-          "columns": [
-            "id",
-            "learner_id",
-            "skill_id",
-            "curriculum_release_id"
-          ],
+          "columns": ["id", "learner_id", "skill_id", "curriculum_release_id"],
           "isUnique": true
         },
         "skill_assessment_attempts_learner_skill_time_idx": {
@@ -931,23 +919,14 @@
             "skill_id",
             "curriculum_release_id"
           ],
-          "columnsTo": [
-            "id",
-            "learner_id",
-            "skill_id",
-            "curriculum_release_id"
-          ],
+          "columnsTo": ["id", "learner_id", "skill_id", "curriculum_release_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "skill_mastery_learner_id_curriculum_release_id_skill_id_pk": {
-          "columns": [
-            "learner_id",
-            "curriculum_release_id",
-            "skill_id"
-          ],
+          "columns": ["learner_id", "curriculum_release_id", "skill_id"],
           "name": "skill_mastery_learner_id_curriculum_release_id_skill_id_pk"
         }
       },
