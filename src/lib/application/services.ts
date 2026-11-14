@@ -600,7 +600,8 @@ const startPracticeInputSchema = z
       context.addIssue({
         code: 'custom',
         path: ['primaryExerciseId'],
-        message: 'An authored exercise requires a curriculum release, lesson and taxonomy version.'
+        message:
+          'An authored exercise requires a curriculum release, lesson and taxonomy version.'
       });
     }
   });
@@ -774,10 +775,14 @@ export async function recordPracticeEvidence(
     ...value.submission,
     id: dependencies.runtime.newId(),
     learnerId: value.learnerId,
-    curriculumReleaseId: hasAuthoredExercise ? session.primaryCurriculumReleaseId : null,
+    curriculumReleaseId: hasAuthoredExercise
+      ? session.primaryCurriculumReleaseId
+      : null,
     lessonId: hasAuthoredExercise ? session.primaryLessonId : null,
     authoredExerciseId: hasAuthoredExercise ? session.primaryExerciseId : null,
-    practiceTaxonomyVersion: hasAuthoredExercise ? session.practiceTaxonomyVersion : null,
+    practiceTaxonomyVersion: hasAuthoredExercise
+      ? session.practiceTaxonomyVersion
+      : null,
     recordedAt: dependencies.runtime.now()
   });
   await dependencies.evidence.append(record);
