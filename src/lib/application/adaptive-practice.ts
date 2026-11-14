@@ -369,10 +369,26 @@ function buildPracticeExposureCoverage(input: {
     availableByDimension.set(dimensionKey(dimension), keys);
   }
 
-  const observedByScope = new Map<
+  const observedByDimension = new Map<
     string,
-    { sessionIds: Set<string>; latestObservedAt: number }
+    Map<string, { sessionIds: Set<string>; latestObservedAt: number }>
   >();
+
+  const scopeHasDimension = (
+    scope: PracticeExposureScope,
+    dimension: AuthoredPracticeDimension
+  ): boolean => {
+    switch (dimension.category) {
+      case 'topic':
+        return scope.topicIds.includes(dimension.id);
+      case 'technique':
+        return scope.techniqueIds.includes(dimension.id);
+      case 'string':
+        return scope.stringNumbers.includes(Number(dimension.id));
+      case 'fret_position':
+        return scope.fretPositionIds.includes(dimension.id);
+    }
+  };
 
   for (const record of input.practiceEvidence) {
     if (
@@ -387,18 +403,26 @@ function buildPracticeExposureCoverage(input: {
 
     const key = keyFor(record.lessonId, record.authoredExerciseId);
     const versionScopes = scopesByVersion.get(record.practiceTaxonomyVersion);
-    if (!versionScopes?.has(key)) continue;
+    const scope = versionScopes?.get(key);
+    if (!scope) continue;
 
-    const current = observedByScope.get(key) ?? {
-      sessionIds: new Set<string>(),
-      latestObservedAt: record.recordedAt
-    };
-    current.sessionIds.add(record.sessionId);
-    current.latestObservedAt = Math.max(
-      current.latestObservedAt,
-      record.recordedAt
-    );
-    observedByScope.set(key, current);
+    for (const dimension of input.dimensions) {
+      if (!scopeHasDimension(scope, dimension)) continue;
+      const keyForDimension = dimensionKey(dimension);
+      const observedForDimension =
+        observedByDimension.get(keyForDimension) ?? new Map();
+      const current = observedForDimension.get(key) ?? {
+        sessionIds: new Set<string>(),
+        latestObservedAt: record.recordedAt
+      };
+      current.sessionIds.add(record.sessionId);
+      current.latestObservedAt = Math.max(
+        current.latestObservedAt,
+        record.recordedAt
+      );
+      observedForDimension.set(key, current);
+      observedByDimension.set(keyForDimension, observedForDimension);
+    }
   }
 
   return input.dimensions.flatMap((dimension) => {
@@ -406,6 +430,8 @@ function buildPracticeExposureCoverage(input: {
       availableByDimension.get(dimensionKey(dimension)) ?? new Set<string>();
     if (availableKeys.size === 0) return [];
 
+    const observedByScope =
+      observedByDimension.get(dimensionKey(dimension)) ?? new Map();
     const observed = [...availableKeys].flatMap((key) => {
       const record = observedByScope.get(key);
       return record ? [record] : [];
