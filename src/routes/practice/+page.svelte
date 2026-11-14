@@ -16,11 +16,17 @@
   } from '../../lib/repositories/contracts';
   import { filterPracticeSessions } from '../../lib/application/practice-history';
   import { getSkillCategoryDisplayName } from '../../lib/application/skill-catalog';
-  import type {
-    AdaptivePracticeRecommendation,
-    AdaptivePracticeSnapshot
+  import {
+    resolveAdaptiveRecommendationFeedback,
+    type AdaptivePracticeRecommendation,
+    type AdaptivePracticeSnapshot
   } from '../../lib/application/adaptive-practice';
-  import { loadActiveAdaptivePracticeSnapshot } from '../../lib/storage/indexeddb';
+  import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
+  import {
+    loadActiveAdaptivePracticeSnapshot,
+    loadActiveAdaptiveRecommendationFeedback,
+    recordActiveAdaptiveRecommendationFeedback
+  } from '../../lib/storage/indexeddb';
 
   let sessions = $state<PracticeSessionRecord[]>([]);
   let historyQuery = $state('');
@@ -31,6 +37,8 @@
   let historyEvidence = $state<PracticeEvidenceRecord[]>([]);
   let historyEvidenceLoadingSessionId = $state<string | null>(null);
   let adaptiveSnapshot = $state<AdaptivePracticeSnapshot | null>(null);
+  let adaptiveFeedbackRecords = $state<AdaptiveRecommendationFeedbackRecord[]>([]);
+  let adaptiveFeedbackSavingId = $state<string | null>(null);
   let adaptiveLoading = $state(true);
   let adaptiveError = $state('');
 
@@ -69,8 +77,14 @@
         session.status === 'in_progress' || session.status === 'paused'
     ) ?? null
   );
+  const adaptiveRecommendationViews = $derived(
+    resolveAdaptiveRecommendationFeedback({
+      recommendations: adaptiveSnapshot?.recommendations ?? [],
+      feedback: adaptiveFeedbackRecords
+    })
+  );
   const adaptiveRecommendations = $derived(
-    adaptiveSnapshot?.recommendations.slice(0, 6) ?? []
+    adaptiveRecommendationViews.slice(0, 6)
   );
 
   async function loadActiveEvidence(sessionId: string) {
@@ -92,7 +106,12 @@
     adaptiveLoading = true;
     adaptiveError = '';
     try {
-      adaptiveSnapshot = await loadActiveAdaptivePracticeSnapshot();
+      const [snapshot, feedback] = await Promise.all([
+        loadActiveAdaptivePracticeSnapshot(),
+        loadActiveAdaptiveRecommendationFeedback()
+      ]);
+      adaptiveSnapshot = snapshot;
+      adaptiveFeedbackRecords = feedback;
     } catch {
       adaptiveSnapshot = null;
       adaptiveError =
@@ -325,6 +344,34 @@
   }
 
 
+  async function saveAdaptiveRecommendationFeedback(
+    recommendation: AdaptivePracticeRecommendation,
+    action: AdaptiveRecommendationFeedbackRecord['action'],
+    correction: AdaptiveRecommendationFeedbackRecord['correction'] = null
+  ) {
+    adaptiveError = '';
+    adaptiveFeedbackSavingId = recommendation.id;
+    try {
+      await recordActiveAdaptiveRecommendationFeedback({
+        recommendationId: recommendation.id,
+        targetType: recommendation.targetType,
+        targetId: recommendation.targetId,
+        reasonCodes: recommendation.reasonCodes,
+        action,
+        correction
+      });
+      await refreshAdaptivePractice();
+      notice = 'Your recommendation feedback was saved on this device.';
+    } catch (cause) {
+      adaptiveError =
+        cause instanceof Error
+          ? cause.message
+          : 'Could not save your recommendation feedback.';
+    } finally {
+      adaptiveFeedbackSavingId = null;
+    }
+  }
+
   function adaptiveEvidenceLabel(
     recommendation: AdaptivePracticeRecommendation
   ) {
@@ -404,14 +451,55 @@
       <p class="message error" role="alert">{adaptiveError}</p>
     {:else if adaptiveRecommendations.length > 0}
       <ol class="adaptive-list">
-        {#each adaptiveRecommendations as recommendation (recommendation.id)}
+        {#each adaptiveRecommendations as item (item.recommendation.id)}
+          {@const recommendation = item.recommendation}
           <li>
-            <div>
+            <div class="recommendation-main">
               <span class="recommendation-type">
                 {recommendation.targetType === 'skill' ? 'SKILL' : 'EXERCISE'}
               </span>
               <strong>{recommendation.title}</strong>
               <p>{recommendation.explanation}</p>
+              {#if item.feedback?.correction === 'too_difficult'}
+                <p class="feedback-guidance" role="status">
+                  You asked for an easier starting step. Keep this focus, but
+                  reduce the tempo, simplify the shape or practise a smaller part.
+                </p>
+              {/if}
+              <div class="recommendation-actions" aria-label={`Feedback for ${recommendation.title}`}>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'dismiss')}
+                >
+                  Dismiss
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'already_confident')}
+                >
+                  I’m confident
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'too_difficult')}
+                >
+                  Make it easier
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'not_relevant')}
+                >
+                  Not relevant
+                </button>
+              </div>
             </div>
             <span class="recommendation-evidence">
               {adaptiveEvidenceLabel(recommendation)}
@@ -421,8 +509,9 @@
       </ol>
     {:else}
       <p class="empty-inline">
-        No current priority has been identified. Continue your next lesson or
-        record an assessment when you are ready.
+        {adaptiveSnapshot?.recommendations.length
+          ? 'No active suggestions remain after your feedback. New assessment or exercise evidence can bring a focus back.'
+          : 'No current priority has been identified. Continue your next lesson or record an assessment when you are ready.'}
       </p>
     {/if}
 
@@ -977,6 +1066,28 @@
 
   .adaptive-list li > div {
     min-width: 0;
+  }
+
+  .recommendation-main {
+    flex: 1;
+  }
+
+  .recommendation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-top: 12px;
+  }
+
+  .recommendation-actions button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+  }
+
+  .feedback-guidance {
+    padding: 9px 11px;
+    border-left: 2px solid var(--primary, #96580f);
+    background: var(--surface-raised, #2b2b2b);
   }
 
   .adaptive-list strong {
