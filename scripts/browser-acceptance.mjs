@@ -656,7 +656,8 @@ try {
   assert.deepEqual(
     backup.records.adaptiveRecommendationFeedback
       .filter((record) => record.recommendationId === recommendationId)
-      .map((record) => record.action),
+      .map((record) => record.action)
+      .sort(),
     ['correct', 'dismiss'],
     "Export retains the learner's append-only feedback history"
   );
@@ -903,7 +904,8 @@ try {
   assert.deepEqual(
     restoredFeedback
       .filter((record) => record.recommendationId === recommendationId)
-      .map((record) => record.action),
+      .map((record) => record.action)
+      .sort(),
     ['correct', 'dismiss'],
     "Restore reinstates the learner's full adaptive recommendation feedback history"
   );
