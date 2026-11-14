@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "curriculum-v1.0.2",
-  "version": "1.0.2",
-  "parentReleaseId": "curriculum-v1.0.1",
-  "publishedAt": "2026-11-14T05:50:00.000Z",
+  "id": "curriculum-v1.0.3",
+  "version": "1.0.3",
+  "parentReleaseId": "curriculum-v1.0.2",
+  "publishedAt": "2026-11-14T06:17:10.108Z",
   "changeType": "content_patch",
-  "summary": "Complete task-specific authoring for Year 3 Rock & Blues weeks 5–12 and correct their lesson-to-skill associations using the existing 34-skill catalogue.",
+  "summary": "Complete task-specific authoring for the Year 3 Fingerstyle & Acoustic route across Weeks 1–12, with reviewed mappings to the existing skill catalogue.",
   "compatibility": {
     "skillIdsUnchanged": true,
     "lessonIdsUnchanged": true,
     "mappingsUnchanged": false,
-    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1 and curriculum-v1.0.1. New progress is recorded against curriculum-v1.0.2; no automatic migration or mastery carry-forward is performed."
+    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1 and curriculum-v1.0.2. New progress is recorded against curriculum-v1.0.3; no automatic migration or mastery carry-forward is performed."
   }
 }
