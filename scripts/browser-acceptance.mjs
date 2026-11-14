@@ -618,7 +618,8 @@ try {
   assert.deepEqual(
     adaptiveFeedbackSnapshot.rows
       .filter((record) => record.recommendationId === recommendationId)
-      .map((record) => record.action),
+      .map((record) => record.action)
+      .sort(),
     ['correct', 'dismiss'],
     'Feedback is persisted as a new record for each learner action'
   );
