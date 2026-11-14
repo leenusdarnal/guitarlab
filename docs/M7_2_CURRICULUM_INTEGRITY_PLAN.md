@@ -158,10 +158,10 @@ Use this register as the single high-level progress view. Update it as work is c
 
 | Workstream | Coverage / target | Status | Evidence / notes |
 |---|---:|---|---|
-| Catalogue definition audit | 34 skills | Not started | |
-| Lesson mapping audit | 152 lessons | Not started | |
+| Catalogue definition audit | 34 skills | In progress | Preliminary definition review documented in `docs/M7_2_SKILL_DEFINITION_AUDIT.md`; curriculum-owner approval pending |
+| Lesson mapping audit | 152 lessons | Not started | Next workstream: generate a complete lesson-to-skill review register |
 | Progression and coverage | All 34 skills across curriculum | Not started | |
-| Assessment-readiness | 34 skills | Not started | |
+| Assessment-readiness | 34 skills | In progress | Draft evidence routes and assessment gaps documented; rubric approval pending |
 | Versioning and learner-data safety | Catalogue policy | In progress | Versioned catalogue exists; policy review remains |
 | Automated validation | Catalogue + all mappings | In progress | Validator and catalogue tests are part of M7.2 implementation; verify coverage during audit |
 | Curriculum-owner review | All findings | Not started | |
@@ -217,11 +217,11 @@ Use targeted external research only when a specific question cannot be resolved 
 ## 11. Related repository artefacts
 
 - `content/curriculum/skill-catalog.json` — canonical versioned skill catalogue.
-- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.
+- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.\n- `docs/M7_2_SKILL_DEFINITION_AUDIT.md` — preliminary review of all 34 skill definitions and proposed observable evidence.
 - `src/lib/application/skill-catalog.ts` — application-level catalogue access.
 - Curriculum validation scripts/tests — automated integrity enforcement.
 - M7.2 adaptive practice implementation — downstream consumer of skill and learner evidence.
 
 ---
 
-**Next action:** Complete the 34-skill catalogue definition audit and generate the full 152-lesson mapping review register. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
+**Next action:** Generate the full 152-lesson mapping review register and assess each association against lesson objectives/checkpoints. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
