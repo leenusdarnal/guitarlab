@@ -159,7 +159,7 @@ Use this register as the single high-level progress view. Update it as work is c
 | Workstream | Coverage / target | Status | Evidence / notes |
 |---|---:|---|---|
 | Catalogue definition audit | 34 skills | In progress | Preliminary definition review documented in `docs/M7_2_SKILL_DEFINITION_AUDIT.md`; curriculum-owner approval pending |
-| Lesson mapping audit | 152 lessons | In progress | Register created; five flagged lessons reviewed in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` (3 provisionally supported, 2 decisions pending); 147 remaining rows need review |
+| Lesson mapping audit | 152 lessons | In progress | Complete register plus advisory lexical scan; focused triage covers 33 `harmony.open-chords` mappings and 54 associations across five other skill groups. Five initial lessons received full focused review; curriculum-owner decisions and remaining row-by-row dispositions are still open |
 | Progression and coverage | All 34 skills across curriculum | Not started | |
 | Assessment-readiness | 34 skills | In progress | Separate draft machine-readable profiles created for all 34 skills (102 criteria) with evidence, retention, transfer and human-review guidance; no score thresholds or automated pass/fail approved |
 | Versioning and learner-data safety | Catalogue policy | In progress | Versioned catalogue exists; policy review remains |
