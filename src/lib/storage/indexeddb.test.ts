@@ -382,7 +382,8 @@ describe('local learner profile persistence', () => {
   it('stores adaptive recommendation feedback as append-only learner-owned records', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
-    const repository = createIndexedDbRepositories(database).adaptiveRecommendationFeedback;
+    const repository =
+      createIndexedDbRepositories(database).adaptiveRecommendationFeedback;
     const record: AdaptiveRecommendationFeedbackRecord = {
       id: '6d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
       learnerId: profile.id,
