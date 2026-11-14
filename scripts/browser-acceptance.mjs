@@ -279,6 +279,7 @@ try {
   assert.equal(upgradeResult.adaptiveFeedbackStore, true);
   assert.equal(upgradeResult.adaptiveFeedbackReleaseIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
+    'adaptiveRecommendationFeedback',
     'assessmentAttempts',
     'learnerProfiles',
     'lessonCompletionEvents',
