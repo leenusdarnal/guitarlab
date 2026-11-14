@@ -486,7 +486,8 @@ describe('M2.2 application service boundaries', () => {
       assessmentInstrument: {
         definitionId: 'guitar.standard-tuning-open-pitches',
         definitionVersion: 1,
-        scoringRuleVersion: 'exact-pitch-five-of-six-v1'
+        scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        decisionScope: 'supporting_probe'
       },
       itemEvidence: [
         {
