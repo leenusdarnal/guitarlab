@@ -87,7 +87,14 @@ function readableName(skillId) {
     .join(' ');
 }
 
-function buildSeedStatements({ releaseId, version, schemaVersion, publishedAt, lessons, skillIds }) {
+function buildSeedStatements({
+  releaseId,
+  version,
+  schemaVersion,
+  publishedAt,
+  lessons,
+  skillIds
+}) {
   const statements = [];
   statements.push(
     'INSERT INTO curriculum_releases (id, version, schema_version, content_hash, published_at, status) VALUES (' +
@@ -138,10 +145,7 @@ const parsed = new Map(
   await Promise.all(
     files
       .filter((file) => file.name !== 'release.json')
-      .map(async (file) => [
-        file.name,
-        JSON.parse(file.bytes.toString('utf8'))
-      ])
+      .map(async (file) => [file.name, JSON.parse(file.bytes.toString('utf8'))])
   )
 );
 
@@ -195,9 +199,7 @@ if (latestSeed && parseSeedHash(latestSeed.content) === contentHash) {
   process.exit(0);
 }
 
-const previousRelease = latestSeed
-  ? parseRelease(latestSeed.content)
-  : null;
+const previousRelease = latestSeed ? parseRelease(latestSeed.content) : null;
 
 if (latestSeed && !releaseManifest) {
   throw new Error(
@@ -334,8 +336,16 @@ const nextJournal = {
 };
 
 await writeFile(migrationPath, migrationSql, 'utf8');
-await writeFile(snapshotPath, JSON.stringify(nextSnapshot, null, 2) + '\n', 'utf8');
-await writeFile(journalPath, JSON.stringify(nextJournal, null, 2) + '\n', 'utf8');
+await writeFile(
+  snapshotPath,
+  JSON.stringify(nextSnapshot, null, 2) + '\n',
+  'utf8'
+);
+await writeFile(
+  journalPath,
+  JSON.stringify(nextJournal, null, 2) + '\n',
+  'utf8'
+);
 
 console.log(
   'Created immutable curriculum release migration ' +
