@@ -25,7 +25,11 @@
           "descriptor": "Explains one arrangement choice in relation to the intended musical effect."
         }
       ],
-      "evidenceTypes": ["performance_recording", "arrangement_artifact", "learner_explanation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "arrangement_artifact",
+        "learner_explanation"
+      ],
       "retentionProbe": "After a delay, outline the form of a previously studied piece without consulting the lesson.",
       "transferProbe": "Map or arrange the sections of an unfamiliar short piece.",
       "humanReviewRequired": true,
@@ -75,7 +79,11 @@
           "descriptor": "Checks and corrects the transcription against the source after an independent attempt."
         }
       ],
-      "evidenceTypes": ["transcription_artifact", "performance_recording", "learner_explanation"],
+      "evidenceTypes": [
+        "transcription_artifact",
+        "performance_recording",
+        "learner_explanation"
+      ],
       "retentionProbe": "Reproduce or transcribe a previously studied short phrase after a delay without replaying it during the attempt.",
       "transferProbe": "Transcribe an unfamiliar phrase of similar length and difficulty.",
       "humanReviewRequired": true,
@@ -158,7 +166,11 @@
           "descriptor": "Applies the pattern to a different chord or harmonic context without losing the pattern."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation", "learner_reflection"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation",
+        "learner_reflection"
+      ],
       "retentionProbe": "Play a practised pattern in a later session without following a visual fingering prompt.",
       "transferProbe": "Apply the same pattern to a different chord progression or string set.",
       "humanReviewRequired": true,
@@ -233,7 +245,11 @@
           "descriptor": "Transfers the octave relationship to another string pair or neck position."
         }
       ],
-      "evidenceTypes": ["fretboard_task", "performance_recording", "learner_explanation"],
+      "evidenceTypes": [
+        "fretboard_task",
+        "performance_recording",
+        "learner_explanation"
+      ],
       "retentionProbe": "Find octave partners for a small set of reference notes after a delay.",
       "transferProbe": "Find octave equivalents using a different string pair or starting position.",
       "humanReviewRequired": false,
@@ -470,7 +486,11 @@
           "descriptor": "Can sustain the setup through a short playing task and identify any discomfort."
         }
       ],
-      "evidenceTypes": ["teacher_observation", "learner_reflection", "performance_video"],
+      "evidenceTypes": [
+        "teacher_observation",
+        "learner_reflection",
+        "performance_video"
+      ],
       "retentionProbe": "Set up independently at the start of a later session and self-check comfort.",
       "transferProbe": "Use the setup in both seated and standing contexts where relevant.",
       "humanReviewRequired": true,
@@ -578,7 +598,11 @@
           "descriptor": "Explains one expressive choice and its intended effect."
         }
       ],
-      "evidenceTypes": ["performance_recording", "learner_reflection", "teacher_or_peer_review"],
+      "evidenceTypes": [
+        "performance_recording",
+        "learner_reflection",
+        "teacher_or_peer_review"
+      ],
       "retentionProbe": "Perform a short phrase after a delay and describe an intentional expressive choice.",
       "transferProbe": "Shape a new phrase over a different progression or style while retaining a clear musical intention.",
       "humanReviewRequired": true,
@@ -653,7 +677,11 @@
           "descriptor": "Maintains continuity after recovery and reflects on the chosen recovery strategy."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation", "learner_reflection"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation",
+        "learner_reflection"
+      ],
       "retentionProbe": "Demonstrate recovery after a controlled interruption in a later session.",
       "transferProbe": "Recover from a different type of slip or interruption in an unfamiliar short passage.",
       "humanReviewRequired": true,
@@ -678,7 +706,11 @@
           "descriptor": "Identifies what is secure and what needs further learning using specific evidence."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_or_peer_review", "learner_reflection"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_or_peer_review",
+        "learner_reflection"
+      ],
       "retentionProbe": "Perform the agreed passage after a meaningful delay without immediate rehearsal or prompts.",
       "transferProbe": "Perform the piece in a new context such as a different starting point, accompaniment or ensemble role.",
       "humanReviewRequired": true,
