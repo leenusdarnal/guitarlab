@@ -63,9 +63,12 @@ export function scoreIntervalRecognitionResponse(
   const correct = response === exercise.answer;
   return {
     assessmentInstrument: {
-      ...intervalRecognitionAssessment,
+      definitionId: intervalRecognitionAssessment.definitionId,
+      definitionVersion: intervalRecognitionAssessment.definitionVersion,
+      scoringRuleVersion: intervalRecognitionAssessment.scoringRuleVersion,
       itemCount: 1,
-      passThreshold: 100
+      passThreshold: 100,
+      decisionScope: intervalRecognitionAssessment.decisionScope
     },
     itemEvidence: [
       {
