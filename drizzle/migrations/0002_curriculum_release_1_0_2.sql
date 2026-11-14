@@ -1,5 +1,5 @@
 -- GUITARLAB_CURRICULUM_RELEASE: curriculum-v1.0.2|1.0.2
--- GUITARLAB_CURRICULUM_SEED: f2976bf400cf9b29e430db753bcefae748dfc98c147b9e873d8fda089e9c32f4
+-- GUITARLAB_CURRICULUM_SEED: b6fa870533f972c81ad9a8527142b187f9739164624d4356c598bc9d2805e011
 -- Immutable content release: existing release rows and learner evidence are preserved.
 INSERT INTO curriculum_releases (id, version, schema_version, content_hash, published_at, status) VALUES ('curriculum-v1.0.2', '1.0.2', 1, 'f2976bf400cf9b29e430db753bcefae748dfc98c147b9e873d8fda089e9c32f4', 1794628800000, 'published') ON CONFLICT(id) DO NOTHING;
 INSERT INTO skills (id, category, display_name) VALUES ('arrangement.song-form', 'arrangement', 'Song Form') ON CONFLICT(id) DO NOTHING;
