@@ -139,17 +139,9 @@ All three flows record response provenance and direct item correctness. The two 
 
 ### Remaining integration gap
 
-The Practice Studio read model currently excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. That boundary is correct for mastery, but it also means valid item outcomes are not yet surfaced as item-level analytics or used for focused-practice ranking.
+The Practice Studio read model excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. PR #110 now surfaces their comparable item outcomes separately and uses repeated same-item misses for focused-practice ranking without changing whole-skill mastery.
 
-The next implementation should:
-
-1. Derive item correctness summaries separately from whole-skill score summaries.
-2. Aggregate only within the same assessment definition, definition version and scoring-rule version; do not combine unlike instruments or item identities.
-3. Keep inconclusive outcomes visible but exclude them from the accuracy denominator.
-4. Raise focused-practice priority only after repeated incorrect outcomes on the same stable item in consecutive attempts. A later correct or inconclusive response resets that streak.
-5. Keep item-level recommendations separate from `explainSkillState`; supporting probes must never change whole-skill assessment counts, category assessment coverage or mastery.
-6. Scope every signal to the active learner and curriculum release. Preserve local-only, read-only analytics over existing assessment attempts.
-7. Leave confusion-code and topic/fretboard coverage work open until an exercise has authored, defensible metadata for those dimensions.
+The next implementation should link new practice observations to stable authored lesson/exercise IDs and curriculum release, then derive topic/fretboard exposure only from those links and the authored taxonomy. Existing free-text observations remain unclassified. Expand the taxonomy only after explicit author review; keep confusion/error codes deferred unless an assessment can identify a specific misconception deterministically.
 
 ### Current sequence
 
@@ -157,9 +149,11 @@ The next implementation should:
 - [x] Add the first objectively scored, learner-facing item evidence producer (PR #107).
 - [x] Extend objective item capture to interval listening (PR #108).
 - [x] Extend objective item capture to Pulse listening (PR #109).
-- [ ] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules.
-- [ ] Add canonical topic, technique, string and fretboard-position metadata only where authors can explicitly assign it.
-- [ ] Add topic/fretboard exposure coverage only after those tags and corresponding learner evidence exist.
+- [x] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules (PR #110).
+- [x] Add a first authored topic, technique, string and fret-position taxonomy for ten directly evidenced Year 1 exercises.
+- [ ] Link new practice observations to authored lesson/exercise IDs and curriculum release; do not retroactively classify free-text history.
+- [ ] Add topic/fretboard exposure coverage only after stable authored exercise links exist.
+- [ ] Expand taxonomy across Years 1–3 through author review; add confusion/error labels only where the task deterministically supports them.
 
 
 ## Structured item analytics and authored practice taxonomy checkpoint
