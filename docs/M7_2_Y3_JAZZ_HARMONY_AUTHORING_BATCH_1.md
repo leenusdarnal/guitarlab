@@ -1,6 +1,6 @@
 # M7.2 — Jazz & Harmony Authoring Batch 1 (Weeks 1–4)
 
-**Status:** Draft implementation; release migration and full validation pending  
+**Status:** Release manifest and migration seed committed; full CI validation and reviewer sign-off pending  
 **Dataset:** `year-3-specialisation-lessons.json` version `1.0.5`  
 **Scope:** Jazz & Harmony Weeks 1–4; stable lesson and week IDs preserved  
 **Skill catalogue:** Existing 34 identifiers only
@@ -36,7 +36,7 @@ The prior generic `harmony.open-chords` associations were removed because the le
 
 ## Remaining before merge
 
-- [ ] Add immutable `curriculum-v1.0.5` release manifest and migration seed.
+- [x] Add immutable `curriculum-v1.0.5` release manifest and migration seed (`0005_curriculum_release_1_0_5.sql`).
 - [ ] Run curriculum validator, format, type checks, unit tests and full CI.
 - [ ] Review chord voicings and voice-leading against the standard tuning/fretboard.
 - [ ] Continue with Jazz & Harmony Weeks 5–8 in a separate batch.
