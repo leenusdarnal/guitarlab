@@ -533,6 +533,76 @@ describe('M2.2 application service boundaries', () => {
     expect(harness.attempts).toHaveLength(1);
   });
 
+  it('does not allow a supporting item probe to replace skill-level evidence for mastery', async () => {
+    const dependencies = {
+      curriculum: harness.curriculumRepository,
+      skills: harness.skillRepository,
+      assessments: harness.assessmentRepository,
+      runtime: harness.runtime
+    };
+    const baseSubmission = {
+      curriculumReleaseId: releaseId,
+      skillId,
+      lessonId,
+      assessmentKind: 'measured',
+      evidenceType: 'measured',
+      score: null,
+      evidenceSummary: null,
+      evidence: {}
+    } as const;
+
+    await recordAssessmentAttempt(
+      { learnerId, submission: { ...baseSubmission, outcome: 'needs_practice' } },
+      dependencies
+    );
+    await recordAssessmentAttempt(
+      {
+        learnerId,
+        submission: {
+          ...baseSubmission,
+          outcome: 'passed',
+          score: 100,
+          assessmentInstrument: {
+            definitionId: 'guitar.standard-tuning-open-pitches',
+            definitionVersion: 1,
+            scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+            decisionScope: 'supporting_probe'
+          },
+          itemEvidence: [
+            {
+              itemId: 'standard-tuning.string-6-open-pitch',
+              response: 'E2',
+              outcome: 'correct',
+              responseSource: 'learner_selected_option'
+            }
+          ]
+        }
+      },
+      dependencies
+    );
+
+    await expect(
+      updateSkillMasteryFromEvidence(
+        {
+          learnerId,
+          releaseId,
+          skillId,
+          state: 'stable',
+          confidence: 90,
+          nextReviewAt: null
+        },
+        {
+          curriculum: harness.curriculumRepository,
+          skills: harness.skillRepository,
+          assessments: harness.assessmentRepository,
+          mastery: harness.masteryRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(InvalidStateError);
+    expect(harness.masteryRows.size).toBe(0);
+  });
+
   it('does not let stale or failed evidence establish stable mastery', async () => {
     const baseSubmission = {
       curriculumReleaseId: releaseId,
