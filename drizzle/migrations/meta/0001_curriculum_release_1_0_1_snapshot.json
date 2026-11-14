@@ -919,12 +919,7 @@
             "skill_id",
             "curriculum_release_id"
           ],
-          "columnsTo": [
-            "id",
-            "learner_id",
-            "skill_id",
-            "curriculum_release_id"
-          ],
+          "columnsTo": ["id", "learner_id", "skill_id", "curriculum_release_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
