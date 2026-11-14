@@ -62,7 +62,7 @@ A reusable family explanation can be pedagogically appropriate. The weakness is 
 
 ## 4. Year 3+ has an additional specificity gap
 
-The 48 Year 3+ specialist lessons were checked separately:
+The 48 Year 3+ specialist lessons were checked separately in the initial scan. Since then, all 12 Rock & Blues lessons (Weeks 1–12) have received task-specific authoring; the other 36 specialist lessons remain open. The initial findings below are retained as the pre-remediation baseline:
 
 - **48/48** use the same generic second and third learning objectives as the full curriculum.
 - **48/48** use a checkpoint of the form “Demonstrate [lesson title] in a short musical example, explain the key choice and identify one next improvement.”
@@ -133,4 +133,26 @@ Keep safety, accessibility and general musicianship guidance, but do not let ide
 
 ## 8. Next action
 
-Pilot a high-quality rewrite on a representative 12-lesson batch containing basic chords, rhythm, fretboard, ear learning, technique, harmony and performance. Use the draft assessment profiles as guidance, then compare the result with the existing generic structure before applying the authoring standard across the remaining lessons.
+The representative 12-lesson Rock & Blues batch has been completed across Weeks 1–12. Apply the validated authoring standard to the next Year 3+ specialist route, beginning with Fingerstyle & Acoustic Weeks 1–12. Continue route-by-route and then return to the highest-impact generic objectives and criteria across the 104 Year 1–2 lessons.
+
+
+## 9. Current remediation state (2026-11-14)
+
+The Year 3 Rock & Blues route is now fully authored across Weeks 1–12. Weeks 1–4 were improved in release `curriculum-v1.0.1`; Weeks 5–12 were completed in release `curriculum-v1.0.2`. All 12 stable lesson IDs remain unchanged, and the 34-skill catalogue remains at version 1.0.0. Weeks 5–12 received revised skill mappings where the prior associations did not match the actual musical task.
+
+A fresh count across the 152 current lesson records gives:
+
+| Measure | Current result | Remaining interpretation |
+|---|---:|---|
+| Generic learning objective 2 | 140/152 | 12 lessons remediated; 140 still use the original generic sentence |
+| Generic learning objective 3 | 140/152 | 12 lessons remediated; 140 still use the original generic sentence |
+| Each of the three formerly repeated criteria | 140 occurrences each | Retained in the 140 lessons not yet rewritten; the 12 Rock & Blues lessons have task-specific criteria |
+| Distinct `explanation.keyIdea` texts | 25 | Increased from the initial 13 as route-specific explanations were added |
+| Year 3+ specialist generic objective 2 | 36/48 | The 12 Rock & Blues lessons are specific; 36 lessons across the other three routes remain generic |
+| Year 3+ specialist generic objective 3 | 36/48 | Same remaining route coverage as above |
+| Year 3+ generic capstone-style checkpoint | 36/48 | The 12 Rock & Blues checkpoints are task-specific; 36 remain open |
+| Year 3+ specialist lessons with task-specific objectives/checkpoints | 12/48 | Rock & Blues is complete; Fingerstyle Acoustic, Jazz Harmony and All-Round Musician remain |
+
+The original duplicated-criteria and generic-objective findings are therefore not resolved curriculum-wide. Do not promote the advisory duplication diagnostic to a blocking global threshold yet. Continue small, route-level authoring batches and recalculate the audit after each release.
+
+**Next batch:** Fingerstyle & Acoustic Weeks 1–12. Preserve its specialist techniques and existing skill identifiers unless a reviewed mapping decision supports a change. The target is the same observable lesson contract used in the Rock & Blues completion: three distinct objectives, concrete demonstration and checkpoint, at least five task-specific criteria, corrective feedback, an accessible alternative, retrieval and delayed transfer guidance.
