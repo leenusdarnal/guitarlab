@@ -1047,12 +1047,12 @@ try {
     .locator('.active-evidence-list')
     .getByText('G major scale', { exact: true })
     .waitFor();
-  const authoredObservationLink = page.locator(
+  const reloadedAuthoredObservationLink = page.locator(
     '.active-evidence-list .authored-observation-link'
   );
-  await authoredObservationLink.waitFor();
+  await reloadedAuthoredObservationLink.waitFor();
   assert.match(
-    await authoredObservationLink.innerText(),
+    await reloadedAuthoredObservationLink.innerText(),
     /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus[\\s\\S]*curriculum-v1\\.0\\.6[\\s\\S]*0\\.1\\.0/
   );
   await delay(1_200);
@@ -1071,12 +1071,12 @@ try {
     .locator('.active-evidence-list')
     .getByText('G major scale', { exact: true })
     .waitFor();
-  const authoredObservationLink = page.locator(
+  const reloadedAuthoredObservationLink = page.locator(
     '.active-evidence-list .authored-observation-link'
   );
-  await authoredObservationLink.waitFor();
+  await reloadedAuthoredObservationLink.waitFor();
   assert.match(
-    await authoredObservationLink.innerText(),
+    await reloadedAuthoredObservationLink.innerText(),
     /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus[\\s\\S]*curriculum-v1\\.0\\.6[\\s\\S]*0\\.1\\.0/
   );
   assert.equal(
