@@ -81,7 +81,9 @@ describe('practice evidence contract', () => {
   });
 
   it('keeps legacy observations unlinked and rejects partial authored identity', () => {
-    expect(practiceEvidenceInputSchema.parse(validEvidence)).toEqual(validEvidence);
+    expect(practiceEvidenceInputSchema.parse(validEvidence)).toEqual(
+      validEvidence
+    );
     expect(
       practiceEvidenceInputSchema.safeParse({
         ...validEvidence,
