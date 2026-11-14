@@ -37,7 +37,8 @@ export type SkillAnalytics = {
   latestMeasuredScore: number | null;
   measuredScoreMean: number | null;
   measuredScoreSpread: number | null;
-  measuredScoreTrend: 'improving' | 'stable' | 'declining' | 'insufficient_evidence';
+  measuredScoreTrend:
+    'improving' | 'stable' | 'declining' | 'insufficient_evidence';
   measuredScoreTrendDelta: number | null;
   accuracyEvidenceStatus: 'available' | 'insufficient_evidence';
 };
@@ -160,8 +161,7 @@ export function buildAdaptivePracticeSnapshot(input: {
     const currentMastery = masteryBySkill.get(skill.id) ?? null;
 
     const measuredAttempts = attempts.filter(
-      (attempt) =>
-        attempt.evidenceType === 'measured' && attempt.score !== null
+      (attempt) => attempt.evidenceType === 'measured' && attempt.score !== null
     );
     // Scores from different assessment kinds may not be comparable. Use only
     // the most recently used kind for this skill's score summaries and trend.
