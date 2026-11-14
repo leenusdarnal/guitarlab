@@ -88,6 +88,10 @@ export type PracticeSessionRecord = {
   learnerId: string;
   primaryCurriculumReleaseId: string | null;
   primaryLessonId: string | null;
+  /** Exact authored exercise selected when this session starts; absent on legacy/general sessions. */
+  primaryExerciseId?: string | null;
+  /** Taxonomy version used to resolve the authored exercise; absent on legacy sessions. */
+  practiceTaxonomyVersion?: string | null;
   status: 'in_progress' | 'paused' | 'completed' | 'abandoned';
   /** Start timestamp for the currently running segment; absent on legacy rows. */
   activeStartedAt?: number | null;

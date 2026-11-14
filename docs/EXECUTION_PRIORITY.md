@@ -38,19 +38,24 @@
 - PRs #107–109: objectively keyed item evidence for standard tuning, interval recognition and pulse listening.
 - PR #110: separate item accuracy and repeated-miss prioritisation, without changing whole-skill mastery.
 
-**Current implementation slice — explicit authored exercise scope:**
-1. Add a versioned public taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions.
-2. Link only stable lesson/exercise IDs whose authored instructions or success criteria explicitly support the tag.
-3. Keep unknown string/fret values empty; do not infer them from free text, titles or broad skill categories.
-4. Validate taxonomy terms, release identity, exercise references and numeric bounds in the curriculum validation command.
-5. Keep taxonomy metadata separate from learner-owned observations.
+**Delivered authored exercise scope (PR #111):**
+1. Versioned public taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions.
+2. Exact stable lesson/exercise links only where authored instructions or success criteria support the tag.
+3. Unknown string/fret values remain empty; no inference from free text, titles or broad skill categories.
+4. Taxonomy terms, release identity, exercise references and numeric bounds are validated in curriculum CI.
+5. Taxonomy metadata remains separate from learner-owned observations.
+
+**Current implementation slice — stable local observation links:**
+1. Offer an optional Practice Studio selector of exact authored lesson/exercise pairs for the active release.
+2. Persist selected release, lesson ID, exercise ID and taxonomy version on the session; inherit them on new observations.
+3. Keep general sessions and prior free-text history unlinked; no retroactive classification.
+4. Validate session/observation identity and preserve optional fields in existing version-1 backups.
+5. Do not calculate topic/string/fretboard exposure until a separate definition and read model are reviewed.
 
 **Next after this slice:**
-1. Let Practice Studio select authored lesson/exercise identifiers and persist release/identity with new local practice observations.
-2. Keep all existing free-text history unclassified; no retroactive guesswork.
-3. Add topic/string/fretboard exposure coverage only after stable exercise links exist.
-4. Extend the catalogue through author review across Years 1–3.
-5. Add confusion codes only when an exercise deterministically identifies a specific error.
+1. Expand authored exercise scope through explicit author review across Years 1–3.
+2. Define what constitutes an exposure event and build aggregate coverage from stable links only.
+3. Add confusion codes only when an exercise deterministically identifies a specific error.
 
 **Exit criteria:** canonical tags have authored source evidence, taxonomy validation passes, and later exposure analytics are grounded in local records linked to stable lesson/exercise IDs. No taxonomy metadata or practice activity changes mastery.
 
@@ -122,13 +127,14 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `a04d284e82447707de6b4d70a01115f2b2982e0b` (PR #110 merged) |
+| Last verified main SHA | `9fa940474ebe650552ed70f222dc1cf44b506aba` (PR #111 merged) |
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
 | PR #103 | Merged; append-only local recommendation feedback; merge commit `b27eed5e27e805d43259019fa304f80df20f356a` |
 | PR #104 | Merged; comparable measured-score summaries/trends; merge commit `a1da00fe0fb5804464ccb1679c128d1176957041` |
 | PR #110 | Merged; item accuracy and repeated-miss analytics; merge commit `a04d284e82447707de6b4d70a01115f2b2982e0b` |
+| PR #111 | Merged; authored practice taxonomy v0.1.0 for ten evidenced Year 1 exercises; merge commit `9fa940474ebe650552ed70f222dc1cf44b506aba` |
 | PR #104 validation | Run [#43584492437](https://github.com/leenusdarnal/guitarlab/actions/runs/43584492437); primary application/curriculum and Node.js 26 jobs passed |
-| Current engineering task | Complete the authored practice taxonomy slice on feat/m7-authored-practice-taxonomy; then add stable lesson/exercise identity to new local practice observations before measuring topic/fretboard exposure |
+| Current engineering task | Add the optional authored-exercise session selector and persist stable links on new local observations; author-review more scopes before defining exposure analytics |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
 | Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
 | M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |

@@ -426,8 +426,10 @@ describe('local learner profile persistence', () => {
     const session: PracticeSessionRecord = {
       id: '5d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
       learnerId: profile.id,
-      primaryCurriculumReleaseId: null,
-      primaryLessonId: null,
+      primaryCurriculumReleaseId: 'curriculum-v1.0.6',
+      primaryLessonId: 'y1-w01-lesson',
+      primaryExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0',
       status: 'in_progress',
       activeStartedAt: 100,
       plannedMinutes: 20,
@@ -450,7 +452,11 @@ describe('local learner profile persistence', () => {
       cleanRepetitions: 9,
       tempoBpm: 72,
       difficulty: 3,
-      recordedAt: 200
+      recordedAt: 200,
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      lessonId: 'y1-w01-lesson',
+      authoredExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0'
     };
 
     await repositories.practiceEvidence.append(observation);
@@ -467,6 +473,13 @@ describe('local learner profile persistence', () => {
         learnerId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
       })
     ).rejects.toThrow(/owned by this learner/i);
+    await expect(
+      repositories.practiceEvidence.append({
+        ...observation,
+        id: '8d1b2a4c-6e8f-4a01-9b2c-3d4e5f6a7b8c',
+        authoredExerciseId: 'another-exercise'
+      })
+    ).rejects.toThrow(/must match its session/i);
     expect(
       await repositories.mastery.find(
         profile.id,

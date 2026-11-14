@@ -566,6 +566,32 @@ export function createIndexedDbRepositories(
               'Practice evidence must reference a session owned by this learner.'
             );
           }
+          const hasAuthoredExercise = Boolean(session.primaryExerciseId);
+          const expectedIdentity = {
+            curriculumReleaseId: hasAuthoredExercise
+              ? session.primaryCurriculumReleaseId
+              : null,
+            lessonId: hasAuthoredExercise ? session.primaryLessonId : null,
+            authoredExerciseId: hasAuthoredExercise
+              ? session.primaryExerciseId
+              : null,
+            practiceTaxonomyVersion: hasAuthoredExercise
+              ? session.practiceTaxonomyVersion
+              : null
+          };
+          const actualIdentity = {
+            curriculumReleaseId: record.curriculumReleaseId ?? null,
+            lessonId: record.lessonId ?? null,
+            authoredExerciseId: record.authoredExerciseId ?? null,
+            practiceTaxonomyVersion: record.practiceTaxonomyVersion ?? null
+          };
+          if (
+            JSON.stringify(actualIdentity) !== JSON.stringify(expectedIdentity)
+          ) {
+            throw new Error(
+              'Practice evidence authored exercise identity must match its session.'
+            );
+          }
           // add(), not put(), makes the repository append-only.
           await requestResult(
             tx.objectStore(stores.practiceEvidence).add(record)

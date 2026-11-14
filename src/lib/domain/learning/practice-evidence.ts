@@ -37,10 +37,34 @@ export const practiceEvidenceInputSchema = z
     learnerId: uuid,
     sessionId: uuid,
     ...observationFields,
-    recordedAt: z.number().int().nonnegative()
+    recordedAt: z.number().int().nonnegative(),
+    curriculumReleaseId: z.string().min(1).max(100).nullable().optional(),
+    lessonId: z.string().min(1).max(160).nullable().optional(),
+    authoredExerciseId: z.string().min(1).max(160).nullable().optional(),
+    practiceTaxonomyVersion: z.string().min(1).max(40).nullable().optional()
   })
   .strict()
   .superRefine((value, context) => {
+    const identity = [
+      value.curriculumReleaseId,
+      value.lessonId,
+      value.authoredExerciseId,
+      value.practiceTaxonomyVersion
+    ];
+    const hasAnyIdentity = identity.some(
+      (part) => part !== undefined && part !== null
+    );
+    const hasCompleteIdentity = identity.every(
+      (part) => typeof part === 'string' && part.length > 0
+    );
+    if (hasAnyIdentity && !hasCompleteIdentity) {
+      context.addIssue({
+        code: 'custom',
+        path: ['authoredExerciseId'],
+        message:
+          'Authored practice identity must include release, lesson, exercise and taxonomy version.'
+      });
+    }
     if (value.cleanRepetitions > value.repetitions) {
       context.addIssue({
         code: 'custom',

@@ -11,6 +11,11 @@ import {
   openLocalDatabase
 } from './indexeddb';
 import { systemRuntime } from '../repositories/contracts';
+import {
+  getAuthoredPracticeScope,
+  PRACTICE_TAXONOMY_RELEASE_ID,
+  PRACTICE_TAXONOMY_VERSION
+} from '../application/practice-taxonomy';
 import type {
   PracticeEvidenceRecord,
   PracticeSessionRecord
@@ -47,28 +52,72 @@ export async function listActivePracticeSessions(): Promise<
   }
 }
 
-/** Start a local session. Lesson association is added with exercise sequencing. */
+/** Start a local session, optionally linked to an exact authored exercise. */
 export async function startActivePracticeSession(input: {
   plannedMinutes: number | null;
   focus: string | null;
+  authoredPracticeScope?: {
+    curriculumReleaseId: string;
+    lessonId: string;
+    exerciseId: string;
+  } | null;
 }): Promise<PracticeSessionRecord> {
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
+    const selected = input.authoredPracticeScope ?? null;
+    const authoredScope = selected
+      ? getAuthoredPracticeScope(selected.lessonId, selected.exerciseId)
+      : null;
+    if (
+      selected &&
+      (selected.curriculumReleaseId !== PRACTICE_TAXONOMY_RELEASE_ID ||
+        !authoredScope)
+    ) {
+      throw new Error(
+        'Choose an exercise from the current authored practice catalogue.'
+      );
+    }
+
     return await startPracticeSession(
       {
         learnerId: profile.id,
         plannedMinutes: input.plannedMinutes,
-        primaryCurriculumReleaseId: null,
-        primaryLessonId: null,
+        primaryCurriculumReleaseId: authoredScope
+          ? PRACTICE_TAXONOMY_RELEASE_ID
+          : null,
+        primaryLessonId: authoredScope?.lessonId ?? null,
+        primaryExerciseId: authoredScope?.exerciseId ?? null,
+        practiceTaxonomyVersion: authoredScope
+          ? PRACTICE_TAXONOMY_VERSION
+          : null,
         focus: input.focus
       },
       {
         curriculum: {
           findRelease: async () => null,
           listLessons: async () => [],
-          findLesson: async () => null
+          findLesson: async (releaseId, lessonId) => {
+            if (
+              !authoredScope ||
+              releaseId !== PRACTICE_TAXONOMY_RELEASE_ID ||
+              lessonId !== authoredScope.lessonId
+            ) {
+              return null;
+            }
+            return {
+              releaseId,
+              lessonId,
+              curriculumId: authoredScope.curriculumId,
+              curriculumWeekId: authoredScope.curriculumWeekId,
+              week: authoredScope.week,
+              route: authoredScope.route,
+              title: authoredScope.lessonTitle,
+              focus: authoredScope.focus,
+              estimatedMinutes: authoredScope.estimatedMinutes
+            };
+          }
         },
         practice: repositories.practice,
         runtime: systemRuntime

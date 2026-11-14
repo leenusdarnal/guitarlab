@@ -75,6 +75,8 @@ const practiceSessionSchema = z
     learnerId: id,
     primaryCurriculumReleaseId: z.string().min(1).max(100).nullable(),
     primaryLessonId: z.string().min(1).max(160).nullable(),
+    primaryExerciseId: z.string().min(1).max(160).nullable().optional(),
+    practiceTaxonomyVersion: z.string().min(1).max(40).nullable().optional(),
     status: z.enum(['in_progress', 'paused', 'completed', 'abandoned']),
     activeStartedAt: timestamp.nullable().optional(),
     plannedMinutes: z.number().int().min(1).max(600).nullable(),
@@ -88,7 +90,23 @@ const practiceSessionSchema = z
     createdAt: timestamp,
     updatedAt: timestamp
   })
-  .strict();
+  .strict()
+  .superRefine((session, context) => {
+    const hasExercise = Boolean(session.primaryExerciseId);
+    const hasTaxonomyVersion = Boolean(session.practiceTaxonomyVersion);
+    if (
+      hasExercise !== hasTaxonomyVersion ||
+      (hasExercise &&
+        (!session.primaryCurriculumReleaseId || !session.primaryLessonId))
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['primaryExerciseId'],
+        message:
+          'An authored session exercise requires release, lesson and taxonomy version.'
+      });
+    }
+  });
 
 export const learnerBackupRecordsSchema = z
   .object({
@@ -217,6 +235,36 @@ export const learnerBackupSchema = z
         message:
           'Every practice observation must reference an included practice session.'
       });
+    }
+
+    const sessionsById = new Map(
+      records.practiceSessions.map((session) => [session.id, session])
+    );
+    for (const evidence of records.practiceEvidence ?? []) {
+      const hasAuthoredIdentity = Boolean(
+        evidence.curriculumReleaseId ||
+        evidence.lessonId ||
+        evidence.authoredExerciseId ||
+        evidence.practiceTaxonomyVersion
+      );
+      if (!hasAuthoredIdentity) continue;
+      const session = sessionsById.get(evidence.sessionId);
+      if (
+        !session ||
+        evidence.curriculumReleaseId !== session.primaryCurriculumReleaseId ||
+        evidence.lessonId !== session.primaryLessonId ||
+        evidence.authoredExerciseId !== (session.primaryExerciseId ?? null) ||
+        evidence.practiceTaxonomyVersion !==
+          (session.practiceTaxonomyVersion ?? null)
+      ) {
+        context.addIssue({
+          code: 'custom',
+          path: ['records', 'practiceEvidence'],
+          message:
+            'An authored practice observation must match the linked exercise and taxonomy version on its session.'
+        });
+        break;
+      }
     }
 
     const assessmentIds = new Set(

@@ -1012,11 +1012,22 @@ try {
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
   await page.locator('#duration').fill('2');
+  await page
+    .locator('#authored-exercise')
+    .selectOption('y1-w01-lesson::y1-w01-lesson-focus');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
   await page
     .getByRole('heading', { name: 'Your session is in progress' })
     .waitFor();
+  const authoredSessionLabel = await page
+    .locator('.authored-session-link')
+    .innerText();
+  console.log('Practice session authored link:', authoredSessionLabel);
+  assert.match(
+    authoredSessionLabel,
+    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.1\.0/
+  );
 
   // Reject impossible learner-entered counts before any observation is saved.
   await page.locator('#exercise-name').fill('G major scale');
@@ -1036,6 +1047,14 @@ try {
     .locator('.active-evidence-list')
     .getByText('G major scale', { exact: true })
     .waitFor();
+  const authoredObservationLink = page.locator(
+    '.active-evidence-list .authored-observation-link'
+  );
+  await authoredObservationLink.waitFor();
+  assert.match(
+    await authoredObservationLink.innerText(),
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
+  );
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
   await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
@@ -1052,6 +1071,14 @@ try {
     .locator('.active-evidence-list')
     .getByText('G major scale', { exact: true })
     .waitFor();
+  const reloadedAuthoredObservationLink = page.locator(
+    '.active-evidence-list .authored-observation-link'
+  );
+  await reloadedAuthoredObservationLink.waitFor();
+  assert.match(
+    await reloadedAuthoredObservationLink.innerText(),
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
+  );
   assert.equal(
     await page.locator('.elapsed').innerText(),
     pausedElapsed,

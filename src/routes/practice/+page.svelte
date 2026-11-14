@@ -15,6 +15,11 @@
     PracticeSessionRecord
   } from '../../lib/repositories/contracts';
   import { filterPracticeSessions } from '../../lib/application/practice-history';
+  import {
+    getAuthoredPracticeScope,
+    listAuthoredPracticeScopes,
+    PRACTICE_TAXONOMY_RELEASE_ID
+  } from '../../lib/application/practice-taxonomy';
   import { getSkillCategoryDisplayName } from '../../lib/application/skill-catalog';
   import {
     resolveAdaptiveRecommendationFeedback,
@@ -42,6 +47,8 @@
   let adaptiveLoading = $state(true);
   let adaptiveError = $state('');
 
+  const authoredPracticeScopes = listAuthoredPracticeScopes();
+  let selectedAuthoredScopeKey = $state('');
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
   let exerciseName = $state('');
@@ -76,6 +83,16 @@
       (session) =>
         session.status === 'in_progress' || session.status === 'paused'
     ) ?? null
+  );
+  const selectedAuthoredScope = $derived(
+    authoredPracticeScopes.find(
+      (scope) => `${scope.lessonId}::${scope.exerciseId}` === selectedAuthoredScopeKey
+    ) ?? null
+  );
+  const activeSessionAuthoredScope = $derived(
+    activeSession?.primaryLessonId && activeSession.primaryExerciseId
+      ? getAuthoredPracticeScope(activeSession.primaryLessonId, activeSession.primaryExerciseId)
+      : null
   );
   const adaptiveRecommendationViews = $derived(
     resolveAdaptiveRecommendationFeedback({
@@ -166,11 +183,21 @@
     }
 
     saving = true;
+    const authoredScope = selectedAuthoredScope;
     try {
       await startActivePracticeSession({
         plannedMinutes: minutes,
-        focus: focus.trim() || null
+        focus: focus.trim() || null,
+        authoredPracticeScope: authoredScope
+          ? {
+              curriculumReleaseId: PRACTICE_TAXONOMY_RELEASE_ID,
+              lessonId: authoredScope.lessonId,
+              exerciseId: authoredScope.exerciseId
+            }
+          : null
       });
+      exerciseName = authoredScope?.exerciseTitle ?? '';
+      selectedAuthoredScopeKey = '';
       focus = '';
       reflection = '';
       nextTarget = '';
@@ -661,6 +688,23 @@
         {#if activeSession.plannedMinutes}
           <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
         {/if}
+        {#if activeSession.primaryExerciseId}
+          <p class="authored-session-link">
+            <strong>Authored exercise:</strong>
+            {activeSessionAuthoredScope
+              ? activeSessionAuthoredScope.lessonTitle + ' — ' + activeSessionAuthoredScope.exerciseTitle
+              : activeSession.primaryExerciseId}
+            <span>
+              {activeSession.primaryCurriculumReleaseId} ·
+              {activeSession.primaryLessonId} ·
+              {activeSession.practiceTaxonomyVersion}
+            </span>
+          </p>
+        {:else}
+          <p class="muted authored-session-link">
+            General session — exercise observations will remain unlinked to authored curriculum.
+          </p>
+        {/if}
 
         <div class="session-actions">
           <button
@@ -788,6 +832,16 @@
                       {observation.cleanRepetitions} clean /
                       {observation.repetitions} total repetitions
                     </p>
+                    {#if observation.authoredExerciseId}
+                      <p class="authored-observation-link">
+                        Authored link: {observation.lessonId} ·
+                        {observation.authoredExerciseId} ·
+                        {observation.curriculumReleaseId} ·
+                        {observation.practiceTaxonomyVersion}
+                      </p>
+                    {:else}
+                      <p class="authored-observation-link">No authored curriculum link</p>
+                    {/if}
                   </div>
                   <div class="evidence-meta">
                     <span>{observationTempoLabel(observation)}</span>
@@ -867,6 +921,21 @@
             step="1"
             bind:value={plannedMinutes}
           />
+          <label for="authored-exercise">
+            Link to an authored exercise <span>optional</span>
+          </label>
+          <select id="authored-exercise" bind:value={selectedAuthoredScopeKey}>
+            <option value="">General session — no authored exercise link</option>
+            {#each authoredPracticeScopes as scope (`${scope.lessonId}::${scope.exerciseId}`)}
+              <option value={`${scope.lessonId}::${scope.exerciseId}`}>
+                Week {scope.week} · {scope.lessonTitle} — {scope.exerciseTitle}
+              </option>
+            {/each}
+          </select>
+          <p class="muted">
+            Only reviewed lesson/exercise pairs are selectable. New observations
+            inherit the selected release, exercise and taxonomy version.
+          </p>
           <label for="focus">What will you focus on? <span>optional</span></label>
           <input
             id="focus"
@@ -1327,7 +1396,8 @@
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     width: 100%;
     padding: 12px 14px;
     border: 1px solid var(--border, #666);
@@ -1345,6 +1415,14 @@
   button {
     font: inherit;
     cursor: pointer;
+  }
+
+  .authored-session-link span,
+  .authored-observation-link {
+    display: block;
+    color: var(--muted, #aaa);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
   }
 
   .primary {
