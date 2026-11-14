@@ -913,7 +913,12 @@
           "name": "skill_mastery_last_assessment_owner_fk",
           "tableFrom": "skill_mastery",
           "tableTo": "skill_assessment_attempts",
-          "columnsFrom": ["last_assessment_id", "learner_id", "skill_id", "curriculum_release_id"],
+          "columnsFrom": [
+            "last_assessment_id",
+            "learner_id",
+            "skill_id",
+            "curriculum_release_id"
+          ],
           "columnsTo": ["id", "learner_id", "skill_id", "curriculum_release_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
