@@ -31,6 +31,8 @@ export const assessmentInstrumentSchema = z
     definitionId: z.string().min(1).max(120),
     definitionVersion: z.number().int().positive(),
     scoringRuleVersion: z.string().min(1).max(80),
+    itemCount: z.number().int().min(1).max(100),
+    passThreshold: z.number().int().min(0).max(100),
     decisionScope: z.enum(['skill_level', 'supporting_probe'])
   })
   .strict();
@@ -129,6 +131,14 @@ export const assessmentAttemptInputSchema = z
         });
       }
 
+      if (attempt.itemEvidence.length !== attempt.assessmentInstrument!.itemCount) {
+        context.addIssue({
+          code: 'custom',
+          path: ['itemEvidence'],
+          message: 'The item evidence count must match the authored assessment definition.'
+        });
+      }
+
       const hasInconclusiveItem = attempt.itemEvidence.some(
         (item) => item.outcome === 'inconclusive'
       );
@@ -143,16 +153,28 @@ export const assessmentAttemptInputSchema = z
             'Attempts with inconclusive item evidence must have an inconclusive outcome and no score.'
         });
       }
-      if (
-        !hasInconclusiveItem &&
-        (attempt.outcome === 'inconclusive' || attempt.score === null)
-      ) {
-        context.addIssue({
-          code: 'custom',
-          path: ['outcome'],
-          message:
-            'A complete item-level attempt must have a scored, non-inconclusive outcome.'
-        });
+      if (!hasInconclusiveItem) {
+        const correctCount = attempt.itemEvidence.filter(
+          (item) => item.outcome === 'correct'
+        ).length;
+        const expectedScore = Math.round(
+          (correctCount / attempt.assessmentInstrument!.itemCount) * 100
+        );
+        const expectedOutcome =
+          expectedScore >= attempt.assessmentInstrument!.passThreshold
+            ? 'passed'
+            : 'needs_practice';
+        if (
+          attempt.score !== expectedScore ||
+          attempt.outcome !== expectedOutcome
+        ) {
+          context.addIssue({
+            code: 'custom',
+            path: ['score'],
+            message:
+              'The score and attempt outcome must match the recorded item outcomes and versioned pass threshold.'
+          });
+        }
       }
     }
   });
