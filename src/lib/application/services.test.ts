@@ -480,9 +480,9 @@ describe('M2.2 application service boundaries', () => {
       assessmentKind: 'checkpoint',
       evidenceType: 'observed_or_self_checked',
       outcome: 'passed',
-      score: 90,
-      evidenceSummary: 'Correctly named all six strings.',
-      evidence: { correctItems: 6, totalItems: 6 },
+      score: 100,
+      evidenceSummary: 'Correctly identified the open pitch for the sixth string.',
+      evidence: { correctItems: 1, totalItems: 1 },
       assessmentInstrument: {
         definitionId: 'guitar.standard-tuning-open-pitches',
         definitionVersion: 1,
