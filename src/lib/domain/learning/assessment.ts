@@ -127,6 +127,32 @@ export const assessmentAttemptInputSchema = z
           message: 'An assessment attempt cannot contain duplicate item IDs.'
         });
       }
+
+      const hasInconclusiveItem = attempt.itemEvidence.some(
+        (item) => item.outcome === 'inconclusive'
+      );
+      if (
+        hasInconclusiveItem &&
+        (attempt.outcome !== 'inconclusive' || attempt.score !== null)
+      ) {
+        context.addIssue({
+          code: 'custom',
+          path: ['outcome'],
+          message:
+            'Attempts with inconclusive item evidence must have an inconclusive outcome and no score.'
+        });
+      }
+      if (
+        !hasInconclusiveItem &&
+        (attempt.outcome === 'inconclusive' || attempt.score === null)
+      ) {
+        context.addIssue({
+          code: 'custom',
+          path: ['outcome'],
+          message:
+            'A complete item-level attempt must have a scored, non-inconclusive outcome.'
+        });
+      }
     }
   });
 
