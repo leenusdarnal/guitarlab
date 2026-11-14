@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "curriculumReleaseId": "curriculum-v1.0.6",
   "authoringPolicy": "Only tag dimensions directly stated by the authored exercise instructions or success criterion. Omit unknown string, fret and position details; never infer them from a lesson title, skill name or generic exercise template.",
   "topics": [
@@ -63,6 +63,11 @@
       "id": "rhythm.groove-transcription",
       "label": "Rhythm transcription",
       "description": "Capture beat grouping, attacks, accents and rests in a heard four-bar groove."
+    },
+    {
+      "id": "harmony.extended-chord-voicings",
+      "label": "Extended chord voicings",
+      "description": "Spell and play explicitly authored chord-extension shapes while controlling included and excluded strings."
     }
   ],
   "techniques": [
@@ -90,6 +95,16 @@
       "id": "technique.fingerstyle-thumb-independence",
       "label": "Fingerstyle thumb independence",
       "description": "Maintain an even thumb-led bass pulse while treble fingers vary their pattern."
+    },
+    {
+      "id": "technique.pitch-bending",
+      "label": "Target-pitch bending",
+      "description": "Bend a fretted note toward an explicitly stated target pitch, then control its release."
+    },
+    {
+      "id": "technique.pima-fingerstyle",
+      "label": "P–I–M–A fingerstyle pattern",
+      "description": "Play the prescribed thumb–index–middle–ring sequence across the explicitly named strings."
     }
   ],
   "fretPositions": [
@@ -107,6 +122,11 @@
       "id": "position.pentatonic-box-1",
       "label": "Pentatonic box 1",
       "description": "The explicitly named box-1 fingering area; no numeric fret range is assumed by this tag."
+    },
+    {
+      "id": "position.pentatonic-box-2",
+      "label": "Pentatonic box 2",
+      "description": "An exercise explicitly assigned to the adjacent pentatonic box-2 pattern."
     }
   ],
   "strings": [
@@ -198,10 +218,7 @@
       "lessonId": "y1-w15-lesson",
       "exerciseId": "y1-w15-lesson-focus",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.alternate-picking",
-        "technique.string-crossing"
-      ],
+      "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -245,10 +262,7 @@
     {
       "lessonId": "y1-w17-lesson",
       "exerciseId": "y1-w17-lesson-focus",
-      "topicIds": [
-        "theory.major-scale-construction",
-        "lead.a-minor-pentatonic-note-set"
-      ],
+      "topicIds": ["theory.major-scale-construction", "lead.a-minor-pentatonic-note-set"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -280,6 +294,111 @@
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "The exercise claps the heard rhythm, writes attacks, accents and rests across four bars, then replays the groove to correct a timing or grouping error."
+    },
+    {
+      "lessonId": "y1-w13-lesson",
+      "exerciseId": "y1-w13-lesson-music",
+      "topicIds": ["notation.tab-reading"],
+      "techniqueIds": [],
+      "stringNumbers": [3, 4],
+      "fretPositionIds": [],
+      "sourceEvidence": "Exercise instruction: “G-D string answer melody (TAB core; staff optional).” Success criterion: “identify matching G- and D-string notes.”"
+    },
+    {
+      "lessonId": "y1-w45-lesson",
+      "exerciseId": "y1-w45-lesson-music",
+      "topicIds": [],
+      "techniqueIds": [],
+      "stringNumbers": [1, 2, 3, 4],
+      "fretPositionIds": [],
+      "sourceEvidence": "Success criterion: “Read a short melody on strings 1-4 with rests and repeated notes.”"
+    },
+    {
+      "lessonId": "y2-w01-lesson",
+      "exerciseId": "y2-w01-lesson-music",
+      "topicIds": ["fretboard.natural-note-landmarks"],
+      "techniqueIds": [],
+      "stringNumbers": [5, 6],
+      "fretPositionIds": [],
+      "sourceEvidence": "Exercise instruction: “Low E/A note map”. Success criterion: “Find and name every natural note to fret 5.” No lower fret bound is inferred."
+    },
+    {
+      "lessonId": "y3-rock-blues-w03-lesson",
+      "exerciseId": "y3-rock-blues-w03-lesson-focus",
+      "topicIds": [],
+      "techniqueIds": ["technique.pitch-bending"],
+      "stringNumbers": [2],
+      "fretPositionIds": [],
+      "fretRange": {
+        "minFret": 8,
+        "maxFret": 10
+      },
+      "sourceEvidence": "Exercise instruction: “Fret B-string fret 8” and “Bend upward slowly until the pitch matches the fretted A at fret 10.”"
+    },
+    {
+      "lessonId": "y3-rock-blues-w04-lesson",
+      "exerciseId": "y3-rock-blues-w04-lesson-focus",
+      "topicIds": [],
+      "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.legato",
+        "technique.string-crossing"
+      ],
+      "stringNumbers": [2, 3, 4],
+      "fretPositionIds": [],
+      "fretRange": {
+        "minFret": 5,
+        "maxFret": 7
+      },
+      "sourceEvidence": "Exercise instructions name D-string and G-string frets 5–7 with down-up-down-up strokes, then B-string frets 5–7–5–7 with hammer-ons and pull-offs."
+    },
+    {
+      "lessonId": "y3-rock-blues-w08-lesson",
+      "exerciseId": "y3-rock-blues-w08-lesson-focus",
+      "topicIds": ["lead.a-minor-pentatonic-box-1"],
+      "techniqueIds": [],
+      "stringNumbers": [1, 2, 3, 4, 5, 6],
+      "fretPositionIds": ["position.pentatonic-box-1"],
+      "fretRange": {
+        "minFret": 5,
+        "maxFret": 8
+      },
+      "sourceEvidence": "Exercise instruction explicitly maps A minor pentatonic box 1: low E 5–8, A 5–7, D 5–7, G 5–7, B 5–8 and high E 5–8."
+    },
+    {
+      "lessonId": "y3-rock-blues-w02-lesson",
+      "exerciseId": "y3-rock-blues-w02-lesson-focus",
+      "topicIds": ["lead.a-minor-pentatonic-box-1"],
+      "techniqueIds": [],
+      "stringNumbers": [],
+      "fretPositionIds": ["position.pentatonic-box-1", "position.pentatonic-box-2"],
+      "sourceEvidence": "Exercise instructions explicitly require A minor pentatonic box 1, adjacent box 2, and connecting those two named positions. No string numbers or numeric fret range are stated."
+    },
+    {
+      "lessonId": "y3-fingerstyle-acoustic-w02-lesson",
+      "exerciseId": "y3-fingerstyle-acoustic-w02-lesson-focus",
+      "topicIds": [],
+      "techniqueIds": ["technique.pima-fingerstyle"],
+      "stringNumbers": [1, 2, 3, 5],
+      "fretPositionIds": ["position.open-position"],
+      "fretRange": {
+        "minFret": 0,
+        "maxFret": 3
+      },
+      "sourceEvidence": "Exercise instruction names C (x32010), Am (x02210) and the p–i–m–a sequence on strings 5–3–2–1."
+    },
+    {
+      "lessonId": "y3-jazz-harmony-w05-lesson",
+      "exerciseId": "y3-jazz-harmony-w05-lesson-focus",
+      "topicIds": ["harmony.extended-chord-voicings"],
+      "techniqueIds": [],
+      "stringNumbers": [2, 3, 4, 5, 6],
+      "fretPositionIds": [],
+      "fretRange": {
+        "minFret": 2,
+        "maxFret": 5
+      },
+      "sourceEvidence": "Exercise instructions give Dm9 x5355xx, G13 3x345x and Cmaj9 x3243x, identify their chord extensions, and specify strings 5–2 and muted strings."
     }
   ],
   "previousVersions": [
@@ -450,10 +569,7 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.alternate-picking",
-            "technique.string-crossing"
-          ],
+          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -484,6 +600,285 @@
           "stringNumbers": [1],
           "fretPositionIds": [],
           "sourceEvidence": "The musical-application exercise is explicitly a high-E legato cell and the checkpoint requires hammer-ons and pull-offs without re-picking."
+        }
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "topics": [
+        {
+          "id": "instrument.standard-tuning",
+          "label": "Standard tuning",
+          "description": "Name and tune the six standard open strings."
+        },
+        {
+          "id": "notation.tab-reading",
+          "label": "TAB reading",
+          "description": "Translate authored tablature into string and fret actions."
+        },
+        {
+          "id": "harmony.open-chord-voicings",
+          "label": "Open chord voicings",
+          "description": "Form and check the explicitly named open-position chord shapes."
+        },
+        {
+          "id": "rhythm.eighth-note-subdivision",
+          "label": "Eighth-note subdivision",
+          "description": "Maintain even eighth-note subdivisions and continuous strumming motion."
+        },
+        {
+          "id": "fretboard.natural-note-landmarks",
+          "label": "Natural-note landmarks",
+          "description": "Locate natural notes using stated string and fret references."
+        },
+        {
+          "id": "lead.a-minor-pentatonic-box-1",
+          "label": "A minor pentatonic box 1",
+          "description": "Navigate the named A minor pentatonic box-1 pattern."
+        },
+        {
+          "id": "harmony.triad-voicings",
+          "label": "Triad voicings",
+          "description": "Identify and play C, F and G triads on the named top three strings."
+        },
+        {
+          "id": "theory.major-scale-construction",
+          "label": "Major-scale construction",
+          "description": "Play and name the C major note sequence and state the major-scale formula."
+        },
+        {
+          "id": "lead.a-minor-pentatonic-note-set",
+          "label": "A minor pentatonic note set",
+          "description": "Identify and use A–C–D–E–G without assuming a fretboard box or fingering."
+        },
+        {
+          "id": "ear.melody-transcription",
+          "label": "Melody transcription by ear",
+          "description": "Represent note order, interval movement and rhythm from a heard phrase."
+        },
+        {
+          "id": "harmony.triad-inversions",
+          "label": "Triad inversions",
+          "description": "Play root position, first inversion and second inversion; identify the lowest chord tone."
+        },
+        {
+          "id": "rhythm.groove-transcription",
+          "label": "Rhythm transcription",
+          "description": "Capture beat grouping, attacks, accents and rests in a heard four-bar groove."
+        }
+      ],
+      "techniques": [
+        {
+          "id": "technique.down-up-strumming",
+          "label": "Down-up strumming",
+          "description": "Alternate downstrokes and upstrokes while preserving hand motion."
+        },
+        {
+          "id": "technique.alternate-picking",
+          "label": "Alternate picking",
+          "description": "Maintain a down-up pick sequence through a note cell."
+        },
+        {
+          "id": "technique.string-crossing",
+          "label": "String crossing",
+          "description": "Plan and execute a picking-hand transition between adjacent strings."
+        },
+        {
+          "id": "technique.legato",
+          "label": "Legato articulation",
+          "description": "Use hammer-ons and pull-offs without re-picking every note."
+        },
+        {
+          "id": "technique.fingerstyle-thumb-independence",
+          "label": "Fingerstyle thumb independence",
+          "description": "Maintain an even thumb-led bass pulse while treble fingers vary their pattern."
+        }
+      ],
+      "fretPositions": [
+        {
+          "id": "position.open-position",
+          "label": "Open position",
+          "description": "An exercise explicitly authored around named open-position chord shapes."
+        },
+        {
+          "id": "position.first-position",
+          "label": "First position",
+          "description": "An exercise explicitly assigned to first-position notes on named strings."
+        },
+        {
+          "id": "position.pentatonic-box-1",
+          "label": "Pentatonic box 1",
+          "description": "The explicitly named box-1 fingering area; no numeric fret range is assumed by this tag."
+        }
+      ],
+      "strings": [
+        {
+          "number": 1,
+          "label": "High E"
+        },
+        {
+          "number": 2,
+          "label": "B"
+        },
+        {
+          "number": 3,
+          "label": "G"
+        },
+        {
+          "number": 4,
+          "label": "D"
+        },
+        {
+          "number": 5,
+          "label": "A"
+        },
+        {
+          "number": 6,
+          "label": "Low E"
+        }
+      ],
+      "exerciseScopes": [
+        {
+          "lessonId": "y1-w01-lesson",
+          "exerciseId": "y1-w01-lesson-focus",
+          "topicIds": ["instrument.standard-tuning"],
+          "techniqueIds": [],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise explicitly says to tune and play all six strings."
+        },
+        {
+          "lessonId": "y1-w03-lesson",
+          "exerciseId": "y1-w03-lesson-focus",
+          "topicIds": ["notation.tab-reading"],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise explicitly asks the learner to say each string and fret in a selected TAB phrase; no fixed string or fret range is authored."
+        },
+        {
+          "lessonId": "y1-w04-lesson",
+          "exerciseId": "y1-w04-lesson-focus",
+          "topicIds": ["harmony.open-chord-voicings"],
+          "techniqueIds": [],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
+          "fretPositionIds": ["position.open-position"],
+          "sourceEvidence": "The exercise names Em and G open-position shapes and requires a separate check of strings 6 through 1."
+        },
+        {
+          "lessonId": "y1-w07-lesson",
+          "exerciseId": "y1-w07-lesson-focus",
+          "topicIds": ["rhythm.eighth-note-subdivision"],
+          "techniqueIds": ["technique.down-up-strumming"],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise explicitly specifies eight down-up strokes, eighth-note counting and a skipped string contact."
+        },
+        {
+          "lessonId": "y1-w08-lesson",
+          "exerciseId": "y1-w08-lesson-focus",
+          "topicIds": ["notation.tab-reading"],
+          "techniqueIds": [],
+          "stringNumbers": [1, 2],
+          "fretPositionIds": ["position.first-position"],
+          "sourceEvidence": "The lesson explicitly scopes the parallel notation track to first-position notes on high E and B strings."
+        },
+        {
+          "lessonId": "y1-w11-lesson",
+          "exerciseId": "y1-w11-lesson-focus",
+          "topicIds": ["fretboard.natural-note-landmarks"],
+          "techniqueIds": [],
+          "stringNumbers": [5, 6],
+          "fretPositionIds": [],
+          "fretRange": {
+            "minFret": 0,
+            "maxFret": 5
+          },
+          "sourceEvidence": "The exercise names low E and A strings and asks for natural notes within the first five frets, including open-string references."
+        },
+        {
+          "lessonId": "y1-w15-lesson",
+          "exerciseId": "y1-w15-lesson-focus",
+          "topicIds": [],
+          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
+        },
+        {
+          "lessonId": "y1-w23-lesson",
+          "exerciseId": "y1-w23-lesson-focus",
+          "topicIds": ["lead.a-minor-pentatonic-box-1"],
+          "techniqueIds": [],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
+          "fretPositionIds": ["position.pentatonic-box-1"],
+          "sourceEvidence": "The exercise explicitly names A minor pentatonic box 1 and requires the shape to be played from low E to high E and back."
+        },
+        {
+          "lessonId": "y1-w26-lesson",
+          "exerciseId": "y1-w26-lesson-focus",
+          "topicIds": ["harmony.triad-voicings"],
+          "techniqueIds": [],
+          "stringNumbers": [1, 2, 3],
+          "fretPositionIds": [],
+          "sourceEvidence": "The lesson explicitly identifies the top three strings as G, B and high E and locates the C, F and G triad task there."
+        },
+        {
+          "lessonId": "y1-w31-lesson",
+          "exerciseId": "y1-w31-lesson-music",
+          "topicIds": [],
+          "techniqueIds": ["technique.legato"],
+          "stringNumbers": [1],
+          "fretPositionIds": [],
+          "sourceEvidence": "The musical-application exercise is explicitly a high-E legato cell and the checkpoint requires hammer-ons and pull-offs without re-picking."
+        },
+        {
+          "lessonId": "y1-w16-lesson",
+          "exerciseId": "y1-w16-lesson-music",
+          "topicIds": [],
+          "techniqueIds": ["technique.fingerstyle-thumb-independence"],
+          "stringNumbers": [6],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise explicitly assigns the low E bass note to the thumb and treble notes to i–m–a, then asks the learner to vary treble order without changing the bass pulse."
+        },
+        {
+          "lessonId": "y1-w17-lesson",
+          "exerciseId": "y1-w17-lesson-focus",
+          "topicIds": [
+            "theory.major-scale-construction",
+            "lead.a-minor-pentatonic-note-set"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise asks the learner to play and name one octave of C major, state A–C–D–E–G as A minor pentatonic and create a phrase ending on A; its success criterion includes the major-scale formula."
+        },
+        {
+          "lessonId": "y1-w37-lesson",
+          "exerciseId": "y1-w37-lesson-focus",
+          "topicIds": ["ear.melody-transcription"],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise separates rhythm from pitch, locates the opening note from a reference, records interval movement and note order, then checks the independent transcription against the source."
+        },
+        {
+          "lessonId": "y2-w04-lesson",
+          "exerciseId": "y2-w04-lesson-focus",
+          "topicIds": ["harmony.triad-inversions"],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise plays root position, first inversion and second inversion, names the lowest chord tone in each and connects the voicings while retaining the triad quality."
+        },
+        {
+          "lessonId": "y2-w30-lesson",
+          "exerciseId": "y2-w30-lesson-focus",
+          "topicIds": ["rhythm.groove-transcription"],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "The exercise claps the heard rhythm, writes attacks, accents and rests across four bars, then replays the groove to correct a timing or grouping error."
         }
       ]
     }

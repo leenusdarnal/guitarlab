@@ -9,10 +9,10 @@ import {
 } from './practice-taxonomy';
 
 describe('versioned authored exercise practice taxonomy', () => {
-  it('is scoped to the active curriculum release and exposes a small reviewed first slice', () => {
+  it('is scoped to the active curriculum release and exposes the expanded author-reviewed scope', () => {
     expect(PRACTICE_TAXONOMY_RELEASE_ID).toBe('curriculum-v1.0.6');
-    expect(PRACTICE_TAXONOMY_VERSION).toBe('0.2.0');
-    expect(listAuthoredPracticeScopes()).toHaveLength(15);
+    expect(PRACTICE_TAXONOMY_VERSION).toBe('0.3.0');
+    expect(listAuthoredPracticeScopes()).toHaveLength(24);
     expect(
       listAuthoredPracticeScopeSnapshots().map((snapshot) => [
         snapshot.version,
@@ -20,7 +20,8 @@ describe('versioned authored exercise practice taxonomy', () => {
       ])
     ).toEqual([
       ['0.1.0', 10],
-      ['0.2.0', 15]
+      ['0.2.0', 15],
+      ['0.3.0', 24]
     ]);
   });
 
@@ -94,6 +95,93 @@ describe('versioned authored exercise practice taxonomy', () => {
     });
   });
 
+  it('adds nine more exact exercises only where their authored evidence supports the scope', () => {
+    expect(
+      getAuthoredPracticeScope('y1-w13-lesson', 'y1-w13-lesson-music')
+    ).toMatchObject({
+      topicIds: ['notation.tab-reading'],
+      stringNumbers: [3, 4]
+    });
+    expect(
+      getAuthoredPracticeScope('y1-w45-lesson', 'y1-w45-lesson-music')
+    ).toMatchObject({ stringNumbers: [1, 2, 3, 4] });
+    expect(
+      getAuthoredPracticeScope('y2-w01-lesson', 'y2-w01-lesson-music')
+    ).toMatchObject({
+      topicIds: ['fretboard.natural-note-landmarks'],
+      stringNumbers: [5, 6],
+      fretPositionIds: []
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-rock-blues-w03-lesson',
+        'y3-rock-blues-w03-lesson-focus'
+      )
+    ).toMatchObject({
+      techniqueIds: ['technique.pitch-bending'],
+      stringNumbers: [2],
+      fretRange: { minFret: 8, maxFret: 10 }
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-rock-blues-w04-lesson',
+        'y3-rock-blues-w04-lesson-focus'
+      )
+    ).toMatchObject({
+      techniqueIds: [
+        'technique.alternate-picking',
+        'technique.legato',
+        'technique.string-crossing'
+      ],
+      stringNumbers: [2, 3, 4],
+      fretRange: { minFret: 5, maxFret: 7 }
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-rock-blues-w08-lesson',
+        'y3-rock-blues-w08-lesson-focus'
+      )
+    ).toMatchObject({
+      topicIds: ['lead.a-minor-pentatonic-box-1'],
+      stringNumbers: [1, 2, 3, 4, 5, 6],
+      fretPositionIds: ['position.pentatonic-box-1'],
+      fretRange: { minFret: 5, maxFret: 8 }
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-rock-blues-w02-lesson',
+        'y3-rock-blues-w02-lesson-focus'
+      )
+    ).toMatchObject({
+      topicIds: ['lead.a-minor-pentatonic-box-1'],
+      fretPositionIds: [
+        'position.pentatonic-box-1',
+        'position.pentatonic-box-2'
+      ]
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-fingerstyle-acoustic-w02-lesson',
+        'y3-fingerstyle-acoustic-w02-lesson-focus'
+      )
+    ).toMatchObject({
+      techniqueIds: ['technique.pima-fingerstyle'],
+      stringNumbers: [1, 2, 3, 5],
+      fretPositionIds: ['position.open-position'],
+      fretRange: { minFret: 0, maxFret: 3 }
+    });
+    expect(
+      getAuthoredPracticeScope(
+        'y3-jazz-harmony-w05-lesson',
+        'y3-jazz-harmony-w05-lesson-focus'
+      )
+    ).toMatchObject({
+      topicIds: ['harmony.extended-chord-voicings'],
+      stringNumbers: [2, 3, 4, 5, 6],
+      fretRange: { minFret: 2, maxFret: 5 }
+    });
+  });
+
   it('lists only dimensions defined by the active authored taxonomy', () => {
     const dimensions = listAuthoredPracticeDimensions();
     expect(dimensions).toContainEqual({
@@ -120,6 +208,26 @@ describe('versioned authored exercise practice taxonomy', () => {
       category: 'technique',
       id: 'technique.fingerstyle-thumb-independence',
       label: 'Fingerstyle thumb independence'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'topic',
+      id: 'harmony.extended-chord-voicings',
+      label: 'Extended chord voicings'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'technique',
+      id: 'technique.pitch-bending',
+      label: 'Target-pitch bending'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'technique',
+      id: 'technique.pima-fingerstyle',
+      label: 'P–I–M–A fingerstyle pattern'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'fret_position',
+      id: 'position.pentatonic-box-2',
+      label: 'Pentatonic box 2'
     });
     expect(dimensions.some((dimension) => dimension.id === 'free-text')).toBe(
       false
