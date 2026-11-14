@@ -563,6 +563,34 @@
         </div>
       </div>
     {/if}
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.practiceExposureCoverage.length > 0}
+      <details class="adaptive-analytics">
+        <summary>Authored exercise exposure coverage</summary>
+        <p class="adaptive-analytics-note">
+          Counts distinct tagged exercises with at least one observation linked
+          to the exact authored lesson, exercise and taxonomy version. Unlinked
+          historical notes are excluded. This is activity coverage, not accuracy,
+          completion or skill mastery; repetitions do not increase the count.
+        </p>
+        <div class="coverage-list">
+          {#each adaptiveSnapshot.practiceExposureCoverage as coverage (coverage.category + ':' + coverage.dimensionId)}
+            <span>
+              <strong>
+                {coverage.category === 'fret_position'
+                  ? 'Fret position'
+                  : coverage.category}
+                · {coverage.label}
+              </strong>
+              {coverage.observedExerciseCount} of {coverage.availableExerciseCount}
+              tagged exercises observed
+              {#if coverage.observedSessionCount > 0}
+                · {coverage.observedSessionCount} session(s)
+              {/if}
+            </span>
+          {/each}
+        </div>
+      </details>
+    {/if}
     {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.skillAnalytics.length > 0}
       <details class="adaptive-analytics">
         <summary>Measured scores and item outcomes by skill</summary>

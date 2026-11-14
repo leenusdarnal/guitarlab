@@ -17,6 +17,11 @@ import {
   ACTIVE_CURRICULUM_RELEASE_ID,
   listSkillsForLessons
 } from '../application/skill-catalog';
+import {
+  listAuthoredPracticeDimensions,
+  listAuthoredPracticeScopes,
+  PRACTICE_TAXONOMY_VERSION
+} from '../application/practice-taxonomy';
 import { explainSkillState } from '../domain/learning/skill-state';
 import type { SkillStateExplanation } from '../domain/learning/skill-state';
 import year1DashboardIndex from '../../../content/curriculum/year-1-dashboard-index.json';
@@ -1000,6 +1005,9 @@ export async function loadActiveAdaptivePracticeSnapshot(
           attempts,
           mastery,
           practiceEvidence,
+          authoredPracticeScopes: listAuthoredPracticeScopes(),
+          authoredPracticeDimensions: listAuthoredPracticeDimensions(),
+          practiceTaxonomyVersion: PRACTICE_TAXONOMY_VERSION,
           now
         });
       }

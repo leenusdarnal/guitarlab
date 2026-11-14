@@ -1079,6 +1079,16 @@ try {
     await reloadedAuthoredObservationLink.innerText(),
     /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
   );
+  const authoredExposure = page
+    .locator('details.adaptive-analytics')
+    .filter({ hasText: 'Authored exercise exposure coverage' });
+  await authoredExposure.locator('summary').click();
+  await authoredExposure
+    .getByText('Standard tuning', { exact: false })
+    .waitFor();
+  await authoredExposure
+    .getByText('1 of 1 tagged exercises observed', { exact: false })
+    .waitFor();
   assert.equal(
     await page.locator('.elapsed').innerText(),
     pausedElapsed,

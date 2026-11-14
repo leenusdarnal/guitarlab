@@ -486,6 +486,177 @@ describe('buildAdaptivePracticeSnapshot', () => {
     expect(recommendation?.priority).toBe(30);
   });
 
+  it('counts only distinct exercises with exact current authored identity for exposure coverage', () => {
+    const linked = (
+      id: string,
+      lessonId: string,
+      authoredExerciseId: string,
+      recordedAt: number,
+      sessionId = '00000000-0000-4000-8000-000000000002'
+    ): PracticeEvidenceRecord => ({
+      ...observation(id, 'learner-entered exercise label', 5, recordedAt),
+      sessionId,
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      lessonId,
+      authoredExerciseId,
+      practiceTaxonomyVersion: '0.1.0',
+      repetitions: 100_000,
+      cleanRepetitions: 100_000
+    });
+
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      skills,
+      attempts: [],
+      mastery: [],
+      practiceEvidence: [
+        linked('linked-a1', 'lesson-a', 'exercise-a', 100),
+        linked('linked-a2', 'lesson-a', 'exercise-a', 110),
+        linked(
+          'linked-b',
+          'lesson-b',
+          'exercise-b',
+          120,
+          '00000000-0000-4000-8000-000000000003'
+        ),
+        observation('legacy-free-text', 'exercise-a', 130, 130),
+        {
+          ...linked('stale-version', 'lesson-a', 'exercise-a', 140),
+          practiceTaxonomyVersion: '0.0.9'
+        },
+        {
+          ...linked('stale-release', 'lesson-a', 'exercise-a', 150),
+          curriculumReleaseId: 'curriculum-v1.0.5'
+        },
+        {
+          ...linked('wrong-lesson-pair', 'lesson-other', 'exercise-a', 160)
+        },
+        {
+          ...linked('other-learner', 'lesson-a', 'exercise-a', 170),
+          learnerId: '00000000-0000-4000-8000-000000000099'
+        }
+      ],
+      authoredPracticeScopes: [
+        {
+          lessonId: 'lesson-a',
+          exerciseId: 'exercise-a',
+          topicIds: ['topic.tuning'],
+          techniqueIds: ['technique.strumming'],
+          stringNumbers: [1],
+          fretPositionIds: ['position.open']
+        },
+        {
+          lessonId: 'lesson-b',
+          exerciseId: 'exercise-b',
+          topicIds: ['topic.tuning'],
+          techniqueIds: [],
+          stringNumbers: [],
+          fretPositionIds: ['position.open']
+        }
+      ],
+      authoredPracticeDimensions: [
+        {
+          category: 'fret_position',
+          id: 'position.open',
+          label: 'Open position'
+        },
+        { category: 'string', id: '1', label: 'High E' },
+        {
+          category: 'technique',
+          id: 'technique.strumming',
+          label: 'Strumming'
+        },
+        { category: 'topic', id: 'topic.tuning', label: 'Tuning' }
+      ],
+      practiceTaxonomyVersion: '0.1.0',
+      now: 200
+    });
+
+    expect(result.practiceExposureCoverage).toEqual([
+      {
+        category: 'fret_position',
+        dimensionId: 'position.open',
+        label: 'Open position',
+        observedExerciseCount: 2,
+        availableExerciseCount: 2,
+        observedSessionCount: 2,
+        latestObservedAt: 120
+      },
+      {
+        category: 'string',
+        dimensionId: '1',
+        label: 'High E',
+        observedExerciseCount: 1,
+        availableExerciseCount: 1,
+        observedSessionCount: 1,
+        latestObservedAt: 110
+      },
+      {
+        category: 'technique',
+        dimensionId: 'technique.strumming',
+        label: 'Strumming',
+        observedExerciseCount: 1,
+        availableExerciseCount: 1,
+        observedSessionCount: 1,
+        latestObservedAt: 110
+      },
+      {
+        category: 'topic',
+        dimensionId: 'topic.tuning',
+        label: 'Tuning',
+        observedExerciseCount: 2,
+        availableExerciseCount: 2,
+        observedSessionCount: 2,
+        latestObservedAt: 120
+      }
+    ]);
+  });
+
+  it('shows zero recorded exposure without treating it as missing accuracy or mastery evidence', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      skills,
+      attempts: [],
+      mastery: [],
+      practiceEvidence: [observation('legacy', 'old free text', 5, 100)],
+      authoredPracticeScopes: [
+        {
+          lessonId: 'lesson-a',
+          exerciseId: 'exercise-a',
+          topicIds: ['topic.tuning'],
+          techniqueIds: [],
+          stringNumbers: [],
+          fretPositionIds: []
+        }
+      ],
+      authoredPracticeDimensions: [
+        { category: 'topic', id: 'topic.tuning', label: 'Tuning' }
+      ],
+      practiceTaxonomyVersion: '0.1.0',
+      now: 200
+    });
+    expect(result.practiceExposureCoverage).toEqual([
+      {
+        category: 'topic',
+        dimensionId: 'topic.tuning',
+        label: 'Tuning',
+        observedExerciseCount: 0,
+        availableExerciseCount: 1,
+        observedSessionCount: 0,
+        latestObservedAt: null
+      }
+    ]);
+    expect(
+      result.skillAnalytics.every(
+        (item) =>
+          item.accuracyEvidenceStatus === 'insufficient_evidence' &&
+          item.measuredScoreMean === null
+      )
+    ).toBe(true);
+  });
+
   it('does not call self-reported clean repetitions verified accuracy', () => {
     const result = buildAdaptivePracticeSnapshot({
       learnerId: '00000000-0000-4000-8000-000000000001',
