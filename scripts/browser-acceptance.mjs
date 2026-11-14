@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 5 &&
+      database.version === 6 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -186,6 +186,11 @@ try {
         .objectStore('practiceSessions')
         .indexNames.contains('byLearnerStatus') &&
       database.objectStoreNames.contains('practiceEvidence') &&
+      database.objectStoreNames.contains('adaptiveRecommendationFeedback') &&
+      database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .indexNames.contains('byLearnerRelease') &&
       database
         .transaction('assessmentAttempts')
         .objectStore('assessmentAttempts')
@@ -246,15 +251,22 @@ try {
       assessmentReleaseIndex:
         assessmentAttempts.indexNames.contains('byLearnerRelease'),
       practiceEvidenceLearnerIndex:
-        practiceEvidence.indexNames.contains('byLearnerId')
+        practiceEvidence.indexNames.contains('byLearnerId'),
+      adaptiveFeedbackStore: database.objectStoreNames.contains(
+        'adaptiveRecommendationFeedback'
+      ),
+      adaptiveFeedbackReleaseIndex: database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .indexNames.contains('byLearnerRelease')
     };
     database.close();
     return result;
   });
   assert.equal(
     upgradeResult.version,
-    5,
-    'The existing v1 database should upgrade to v5'
+    6,
+    'The existing v1 database should upgrade to v6'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
@@ -264,6 +276,8 @@ try {
   assert.equal(upgradeResult.learnerStatusIndex, true);
   assert.equal(upgradeResult.assessmentReleaseIndex, true);
   assert.equal(upgradeResult.practiceEvidenceLearnerIndex, true);
+  assert.equal(upgradeResult.adaptiveFeedbackStore, true);
+  assert.equal(upgradeResult.adaptiveFeedbackReleaseIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
     'assessmentAttempts',
     'learnerProfiles',
