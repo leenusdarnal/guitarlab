@@ -238,11 +238,11 @@ if (keyIdeaCount <= Math.ceil(lessonCount * 0.2)) {
 }
 const specialistLessons = y3Lessons.lessons ?? [];
 const genericSpecialistCheckpointCount = specialistLessons.filter((lesson) =>
-  /^Demonstrate .+ in a short musical example, explain the key choice and identify one next improvement\\.$/i.test(lesson.checkpoint ?? "")
+  /^Demonstrate .+ in a short musical example, explain the key choice and identify one next improvement\.$/i.test(lesson.checkpoint ?? "")
 ).length;
 const genericSpecialistWorkedExampleCount = specialistLessons.filter((lesson) =>
   (lesson.workedExamples ?? []).some((example) =>
-    /^Create or perform an original 4- to 8-bar example demonstrating .+\\.$/i.test(example.content ?? "")
+    /^Create or perform an original 4- to 8-bar example demonstrating .+\.$/i.test(example.content ?? "")
   )
 ).length;
 if (specialistLessons.length > 0 && genericSpecialistCheckpointCount >= Math.ceil(specialistLessons.length * 0.8)) {
