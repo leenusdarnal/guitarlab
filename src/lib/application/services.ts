@@ -572,6 +572,8 @@ const startPracticeInputSchema = z
     plannedMinutes: z.number().int().min(1).max(180).nullable(),
     primaryCurriculumReleaseId: releaseIdSchema.nullable(),
     primaryLessonId: lessonIdSchema.nullable(),
+    primaryExerciseId: lessonIdSchema.nullable().default(null),
+    practiceTaxonomyVersion: z.string().min(1).max(40).nullable().default(null),
     focus: z.string().trim().min(1).max(180).nullable()
   })
   .strict()
@@ -585,6 +587,20 @@ const startPracticeInputSchema = z
         path: ['primaryLessonId'],
         message:
           'A primary lesson requires both a release and lesson identifier.'
+      });
+    }
+    const hasExercise = value.primaryExerciseId !== null;
+    const hasTaxonomyVersion = value.practiceTaxonomyVersion !== null;
+    if (
+      hasExercise !== hasTaxonomyVersion ||
+      (hasExercise &&
+        (value.primaryCurriculumReleaseId === null ||
+          value.primaryLessonId === null))
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['primaryExerciseId'],
+        message: 'An authored exercise requires a curriculum release, lesson and taxonomy version.'
       });
     }
   });
@@ -617,6 +633,8 @@ export async function startPracticeSession(
     learnerId: value.learnerId,
     primaryCurriculumReleaseId: value.primaryCurriculumReleaseId,
     primaryLessonId: value.primaryLessonId,
+    primaryExerciseId: value.primaryExerciseId,
+    practiceTaxonomyVersion: value.practiceTaxonomyVersion,
     status: 'in_progress',
     activeStartedAt: now,
     plannedMinutes: value.plannedMinutes,
@@ -735,10 +753,31 @@ export async function recordPracticeEvidence(
     );
   }
 
+  const hasAuthoredExercise = Boolean(session.primaryExerciseId);
+  if (
+    hasAuthoredExercise &&
+    (!session.primaryCurriculumReleaseId ||
+      !session.primaryLessonId ||
+      !session.practiceTaxonomyVersion)
+  ) {
+    throw new InvalidStateError(
+      'The practice session has incomplete authored exercise identity.'
+    );
+  }
+  if (!hasAuthoredExercise && session.practiceTaxonomyVersion) {
+    throw new InvalidStateError(
+      'A taxonomy version cannot be attached without an authored exercise.'
+    );
+  }
+
   const record = parseInput(practiceEvidenceInputSchema, {
     ...value.submission,
     id: dependencies.runtime.newId(),
     learnerId: value.learnerId,
+    curriculumReleaseId: hasAuthoredExercise ? session.primaryCurriculumReleaseId : null,
+    lessonId: hasAuthoredExercise ? session.primaryLessonId : null,
+    authoredExerciseId: hasAuthoredExercise ? session.primaryExerciseId : null,
+    practiceTaxonomyVersion: hasAuthoredExercise ? session.practiceTaxonomyVersion : null,
     recordedAt: dependencies.runtime.now()
   });
   await dependencies.evidence.append(record);

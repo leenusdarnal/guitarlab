@@ -17,14 +17,21 @@ type PracticeScopeRecord = {
 
 type AuthoredLesson = {
   id: string;
+  curriculumId: string;
+  curriculumWeekId: string;
+  week: number;
+  route: string;
   title: string;
+  focus: string;
+  estimatedMinutes: number;
   exercises: { id: string; title: string }[];
 };
 
-export type AuthoredPracticeScope = PracticeScopeRecord & {
-  lessonTitle: string;
-  exerciseTitle: string;
-};
+export type AuthoredPracticeScope = PracticeScopeRecord &
+  Pick<AuthoredLesson, 'curriculumId' | 'curriculumWeekId' | 'week' | 'route' | 'focus' | 'estimatedMinutes'> & {
+    lessonTitle: string;
+    exerciseTitle: string;
+  };
 
 const lessonSets = [
   year1Lessons.lessons,
@@ -64,7 +71,13 @@ export function listAuthoredPracticeScopes(): AuthoredPracticeScope[] {
           techniqueIds: [...scope.techniqueIds],
           stringNumbers: [...scope.stringNumbers],
           fretPositionIds: [...scope.fretPositionIds],
+          curriculumId: lesson.curriculumId,
+          curriculumWeekId: lesson.curriculumWeekId,
+          week: lesson.week,
+          route: lesson.route,
           lessonTitle: lesson.title,
+          focus: lesson.focus,
+          estimatedMinutes: lesson.estimatedMinutes,
           exerciseTitle: exercise.title
         }
       ];
