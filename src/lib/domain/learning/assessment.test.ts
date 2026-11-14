@@ -80,6 +80,8 @@ describe('assessment attempt validation', () => {
     expect(
       assessmentAttemptInputSchema.safeParse({
         ...valid,
+        outcome: 'passed',
+        score: 100,
         assessmentInstrument: objectiveEvidence.assessmentInstrument,
         itemEvidence: [
           objectiveEvidence.itemEvidence[0],
