@@ -199,6 +199,42 @@ describe('learner backup contract', () => {
     });
   });
 
+  it('round-trips adaptive feedback and preserves version-1 backup compatibility', () => {
+    const backup = makeBackup();
+    const record = {
+      id: 'e1e1e1e1-1111-4111-8111-111111111111',
+      learnerId,
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      recommendationId: 'skill:rhythm.pulse',
+      targetType: 'skill' as const,
+      targetId: 'rhythm.pulse',
+      reasonCodes: ['assessment_needs_practice'],
+      action: 'correct' as const,
+      correction: 'too_difficult' as const,
+      createdAt: 300
+    };
+    backup.records.adaptiveRecommendationFeedback = [record];
+    expect(parseLearnerBackupJson(JSON.stringify(backup))).toMatchObject({
+      success: true,
+      data: { records: { adaptiveRecommendationFeedback: [record] } }
+    });
+
+    const legacyBackup = makeBackup();
+    expect(parseLearnerBackup(legacyBackup)).toMatchObject({ success: true });
+
+    const foreign = structuredClone(backup);
+    foreign.records.adaptiveRecommendationFeedback![0].learnerId =
+      'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    expect(parseLearnerBackup(foreign)).toMatchObject({ success: false });
+
+    const duplicate = structuredClone(backup);
+    duplicate.records.adaptiveRecommendationFeedback!.push(record);
+    expect(parseLearnerBackup(duplicate)).toMatchObject({
+      success: false,
+      message: expect.stringContaining('duplicate')
+    });
+  });
+
   it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,
