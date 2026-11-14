@@ -106,12 +106,7 @@
       "week": 4,
       "phaseId": "fretboard-triads",
       "title": "Triad inversions",
-      "focus": [
-        "Play the root-position voicing and name the lowest chord tone.",
-        "Play first inversion and identify the third as the lowest chord tone.",
-        "Play second inversion and identify the fifth as the lowest chord tone.",
-        "Move between the three voicings slowly while keeping the notes clear."
-      ],
+      "focus": "Major triad root position and inversions on the top string set",
       "checkpoint": "Play three inversions of a major triad on the top string set, name the root and identify which chord tone is in the bass of each voicing.",
       "practiceExercise": "C-F-G top-string triad cycle",
       "startingTempoBpm": 66
@@ -371,12 +366,7 @@
       "week": 30,
       "phaseId": "repertoire-ear",
       "title": "Learn by ear: rhythm",
-      "focus": [
-        "Clap the rhythm without the guitar and keep the beat audible or counted.",
-        "Write the first bar's attacks, accents and rests.",
-        "Extend the pattern to four bars, noting repetitions or changes.",
-        "Replay the groove after the transcription and correct one timing or grouping error."
-      ],
+      "focus": "Hear and transcribe strumming accents, attacks and rests",
       "checkpoint": "Write or speak a four-bar rhythm after listening, preserving its beat grouping, accents and rests.",
       "practiceExercise": "Clap and reproduce an 8-beat groove",
       "startingTempoBpm": 68
@@ -576,12 +566,7 @@
       "week": 50,
       "phaseId": "independent-musician",
       "title": "Recording craft",
-      "focus": [
-        "Practise the two hardest transitions as short loops, then stop looping and prepare for a complete run.",
-        "Record one uninterrupted take from count-in to ending.",
-        "Listen back for tuning, unwanted noise, timing and dynamic balance; select one issue to address.",
-        "Repeat only the section needed to practise the selected improvement."
-      ],
+      "focus": "Record, review and recover through a one-take performance",
       "checkpoint": "Record a 60-second repertoire excerpt from count-in to ending, then review tuning, unwanted noise, timing and dynamic balance and identify one recovery point.",
       "practiceExercise": "Record a 60-second repertoire excerpt",
       "startingTempoBpm": 70
