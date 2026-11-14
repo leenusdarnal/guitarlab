@@ -110,7 +110,7 @@
         {/each}
       </ol>
       <p class="mastery-boundary">
-        This records a scored recall attempt only. It does not automatically award skill mastery or verify the physical tuning of your guitar.
+        This is supporting item evidence, not a full skill assessment. It does not automatically award skill mastery or verify the physical tuning of your guitar.
       </p>
       <button type="button" class="secondary-button" onclick={startAnotherAttempt}>
         Retake check
