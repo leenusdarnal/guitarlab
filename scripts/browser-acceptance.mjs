@@ -1026,7 +1026,7 @@ try {
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
-    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.1\.0/
+    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.2\.0/
   );
 
   // Reject impossible learner-entered counts before any observation is saved.
