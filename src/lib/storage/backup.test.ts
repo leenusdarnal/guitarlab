@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/adaptive-recommendation-feedback';
 import {
   createRestorePreview,
   LEARNER_BACKUP_FORMAT,
@@ -201,14 +202,14 @@ describe('learner backup contract', () => {
 
   it('round-trips adaptive feedback and preserves version-1 backup compatibility', () => {
     const backup = makeBackup();
-    const record = {
+    const record: AdaptiveRecommendationFeedbackRecord = {
       id: 'e1e1e1e1-1111-4111-8111-111111111111',
       learnerId,
       curriculumReleaseId: 'curriculum-v1.0.6',
       recommendationId: 'skill:rhythm.pulse',
       targetType: 'skill' as const,
       targetId: 'rhythm.pulse',
-      reasonCodes: ['assessment_needs_practice'] as const,
+      reasonCodes: ['assessment_needs_practice'],
       action: 'correct' as const,
       correction: 'too_difficult' as const,
       createdAt: 300
