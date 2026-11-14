@@ -130,8 +130,8 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Immediate next actions
 
-1. Complete the current M7.2 implementation slice: append-only learner feedback for adaptive recommendations (dismiss/correct), local persistence and accessible Practice Studio controls.
-2. Update Issue #69 and this tracker with merged feedback evidence; do not mark measured accuracy complete without valid per-item data.
+1. Design a versioned per-item assessment evidence contract for Issue #69, including outcome provenance, learner/release/skill scope, backup/restore compatibility and privacy constraints.
+2. Add canonical topic/technique/fretboard tags only where curriculum or assessment authors can assign them explicitly; do not guess from free text.
 3. Continue Issue #17 with chord-movement listening, theory recall and shared triad/inversion/CAGED learning; then add the copyright-safe repertoire workspace.
 4. Complete Issue #89 real-recording and physical-device audio validation with consent and a local-only evidence corpus.
 5. Complete physical-device offline/IndexedDB and backup/restore QA in Issues #9 and #10; complete the controlled CI failure/recovery check in #5.
