@@ -674,6 +674,14 @@ describe('buildAdaptivePracticeSnapshot', () => {
           lessonId: 'lesson-a',
           authoredExerciseId: 'exercise-a',
           practiceTaxonomyVersion: '0.1.0'
+        },
+        {
+          ...observation('new-version', 'same exercise after taxonomy update', 5, 150),
+          sessionId: '00000000-0000-4000-8000-000000000003',
+          curriculumReleaseId: 'curriculum-v1.0.6',
+          lessonId: 'lesson-a',
+          authoredExerciseId: 'exercise-a',
+          practiceTaxonomyVersion: '0.2.0'
         }
       ],
       authoredPracticeTaxonomies: [
@@ -696,19 +704,10 @@ describe('buildAdaptivePracticeSnapshot', () => {
             {
               lessonId: 'lesson-a',
               exerciseId: 'exercise-a',
-              topicIds: ['topic.original'],
+              topicIds: ['topic.original', 'topic.new'],
               techniqueIds: [],
               stringNumbers: [],
               fretPositionIds: []
-            },
-            {
-              lessonId: 'lesson-b',
-              exerciseId: 'exercise-b',
-              topicIds: ['topic.new'],
-              techniqueIds: [],
-              stringNumbers: [],
-              fretPositionIds: []
-            }
           ]
         }
       ],
@@ -724,10 +723,10 @@ describe('buildAdaptivePracticeSnapshot', () => {
         category: 'topic',
         dimensionId: 'topic.new',
         label: 'New dimension',
-        observedExerciseCount: 0,
+        observedExerciseCount: 1,
         availableExerciseCount: 1,
-        observedSessionCount: 0,
-        latestObservedAt: null
+        observedSessionCount: 1,
+        latestObservedAt: 150
       },
       {
         category: 'topic',
@@ -735,8 +734,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
         label: 'Original',
         observedExerciseCount: 1,
         availableExerciseCount: 1,
-        observedSessionCount: 1,
-        latestObservedAt: 100
+        observedSessionCount: 2,
+        latestObservedAt: 150
       }
     ]);
   });
