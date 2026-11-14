@@ -2486,7 +2486,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Use task-specific evidence, revisit the skill after a delay and check transfer in another musical context. Do not infer durable mastery from one recording."
       },
       "checkpoint": "Play a two-bar call-and-response phrase over an A blues pulse with a counted rest, a recognisable motif variation and a deliberate resolving note.",
-      "skillIds": ["lead.phrasing", "rhythm.muting", "rhythm.pulse", "ear.rhythm"],
+      "skillIds": [
+        "lead.phrasing",
+        "rhythm.muting",
+        "rhythm.pulse",
+        "ear.rhythm"
+      ],
       "workedExamples": [
         {
           "kind": "phrase-example",
@@ -8652,7 +8657,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate listening journal in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -8880,7 +8890,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate ear intervals in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
