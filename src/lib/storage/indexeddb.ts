@@ -568,10 +568,16 @@ export function createIndexedDbRepositories(
           }
           const hasAuthoredExercise = Boolean(session.primaryExerciseId);
           const expectedIdentity = {
-            curriculumReleaseId: hasAuthoredExercise ? session.primaryCurriculumReleaseId : null,
+            curriculumReleaseId: hasAuthoredExercise
+              ? session.primaryCurriculumReleaseId
+              : null,
             lessonId: hasAuthoredExercise ? session.primaryLessonId : null,
-            authoredExerciseId: hasAuthoredExercise ? session.primaryExerciseId : null,
-            practiceTaxonomyVersion: hasAuthoredExercise ? session.practiceTaxonomyVersion : null
+            authoredExerciseId: hasAuthoredExercise
+              ? session.primaryExerciseId
+              : null,
+            practiceTaxonomyVersion: hasAuthoredExercise
+              ? session.practiceTaxonomyVersion
+              : null
           };
           const actualIdentity = {
             curriculumReleaseId: record.curriculumReleaseId ?? null,
@@ -579,7 +585,9 @@ export function createIndexedDbRepositories(
             authoredExerciseId: record.authoredExerciseId ?? null,
             practiceTaxonomyVersion: record.practiceTaxonomyVersion ?? null
           };
-          if (JSON.stringify(actualIdentity) !== JSON.stringify(expectedIdentity)) {
+          if (
+            JSON.stringify(actualIdentity) !== JSON.stringify(expectedIdentity)
+          ) {
             throw new Error(
               'Practice evidence authored exercise identity must match its session.'
             );
