@@ -1,7 +1,7 @@
 -- GUITARLAB_CURRICULUM_RELEASE: curriculum-v1.0.2|1.0.2
--- GUITARLAB_CURRICULUM_SEED: 0136c48333bd766ce50f87645005ffb5c6cb50ca162839e5411cde341b098ec3
+-- GUITARLAB_CURRICULUM_SEED: 9e9e0ae0bcd0440bbfc3be4ae78c187ecf17647173b24ca652a895814d81c706
 -- Immutable content release: existing release rows and learner evidence are preserved.
-INSERT INTO curriculum_releases (id, version, schema_version, content_hash, published_at, status) VALUES ('curriculum-v1.0.2', '1.0.2', 1, '0136c48333bd766ce50f87645005ffb5c6cb50ca162839e5411cde341b098ec3', 1794628800000, 'published') ON CONFLICT(id) DO NOTHING;
+INSERT INTO curriculum_releases (id, version, schema_version, content_hash, published_at, status) VALUES ('curriculum-v1.0.2', '1.0.2', 1, '9e9e0ae0bcd0440bbfc3be4ae78c187ecf17647173b24ca652a895814d81c706', 1794628800000, 'published') ON CONFLICT(id) DO NOTHING;
 INSERT INTO skills (id, category, display_name) VALUES ('arrangement.song-form', 'arrangement', 'Song Form') ON CONFLICT(id) DO NOTHING;
 INSERT INTO curriculum_release_skills (release_id, skill_id) VALUES ('curriculum-v1.0.2', 'arrangement.song-form') ON CONFLICT(release_id, skill_id) DO NOTHING;
 INSERT INTO skills (id, category, display_name) VALUES ('ear.intervals', 'ear', 'Intervals') ON CONFLICT(id) DO NOTHING;
