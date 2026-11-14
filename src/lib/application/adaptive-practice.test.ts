@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type {
+  AdaptiveRecommendationFeedbackRecord,
   AssessmentAttemptRecord,
   PracticeEvidenceRecord,
   SkillMasteryRecord,
