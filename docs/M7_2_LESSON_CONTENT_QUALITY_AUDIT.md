@@ -58,7 +58,19 @@ The 13 key-idea templates are distributed as follows:
 
 A reusable family explanation can be pedagogically appropriate. The weakness is when the lesson does not add a worked example, task explanation or criterion that makes the family concept specific to that week's learning outcome.
 
-## 4. Why this matters
+## 4. Year 3+ has an additional specificity gap
+
+The 48 Year 3+ specialist lessons were checked separately:
+
+- **48/48** use the same generic second and third learning objectives as the full curriculum.
+- **48/48** use a checkpoint of the form “Demonstrate [lesson title] in a short musical example, explain the key choice and identify one next improvement.”
+- **48/48** contain a worked example of the form “Create or perform an original 4- to 8-bar example demonstrating [lesson title].”
+- There are only **44 distinct checkpoints** across the 48 lessons.
+- The lessons are split across Rock & Blues, Fingerstyle Acoustic, Jazz Harmony and All-Round Musician routes, but the generated worked example does not specify the actual key, progression, rhythmic feel, technique constraints or listening target required for the named lesson.
+
+These fields provide a useful capstone shell, but they are not yet sufficient lesson content for an advanced learner. The Y3+ pathway should be treated as a high-priority authoring remediation: each lesson needs a concrete musical brief, task constraints, relevant skill-specific criteria and a check that transfers the idea beyond the exact example.
+
+## 5. Why this matters
 
 1. **Assessment validity:** A learner can satisfy a generic “clear notes and steady pulse” criterion without demonstrating the actual lesson target, such as a ii–V–I voice-leading connection, a bend to a target pitch, or an interval-recognition task.
 2. **Adaptive recommendations:** If assessment criteria do not distinguish the skill being assessed, the system can record an outcome against a skill ID without evidence that the intended construct was tested.
