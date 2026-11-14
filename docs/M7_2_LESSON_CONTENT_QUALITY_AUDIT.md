@@ -1,6 +1,6 @@
 # M7.2 — Authored Lesson Content Quality Audit
 
-**Status:** Dataset-level quality scan complete; targeted lesson rewrites not yet started  
+**Status:** Dataset-level scan complete; 12 Year 1/Year 2 lessons and four Year 3+ lessons now have a task-specific authoring pilot; full remediation remains open  
 **Scope:** 152 authored lessons across Year 1, Year 2 and Year 3+  
 **Purpose:** Find structural weaknesses that can make lessons appear complete while leaving learners with generic objectives or non-discriminating assessment criteria.
 
@@ -129,6 +129,10 @@ Keep safety, accessibility and general musicianship guidance, but do not let ide
 - Add a non-blocking curriculum-quality diagnostic before turning duplication thresholds into hard CI failures.
 - Promote the quality gate from advisory to blocking only after existing content has been remediated and the curriculum owner approves the standard.
 
-## 8. Next action
+## 8. Pilot implementation update — curriculum-v1.0.2
 
-Pilot a high-quality rewrite on a representative 12-lesson batch containing basic chords, rhythm, fretboard, ear learning, technique, harmony and performance. Use the draft assessment profiles as guidance, then compare the result with the existing generic structure before applying the authoring standard across the remaining lessons.
+A representative 12-lesson Year 1/Year 2 pilot has now been authored across chords, rhythm, fretboard, picking, fingerstyle, scales, triads, ear learning and performance. Each pilot lesson has three task-specific objectives, a concrete checkpoint, five task-specific criteria, a tailored demonstration, four practice stages, retrieval prompts, common-error corrections and an accessible alternative.
+
+A separate four-lesson Year 3 Rock & Blues pilot covers setup/tuning, pentatonic position connection, bends to target pitch and legato control. Together the two pilots cover 16 of the 152 lessons; 136 remain outside these rewrites. The pilots are content changes, not validated grading rubrics. Full CI and curriculum review are still required.
+
+**Next action:** Have curriculum reviewers check musical accuracy, difficulty and accessible alternatives across the 16-lesson sample. Test whether task-specific criteria are understandable and reliably judged before applying the standard to the remaining lessons. Keep numeric thresholds and automated mastery decisions disabled.
