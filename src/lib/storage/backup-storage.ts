@@ -56,7 +56,9 @@ export function buildLearnerBackup(
       skillMastery: owned(source.skillMastery),
       practiceSessions: owned(source.practiceSessions),
       practiceEvidence: owned(source.practiceEvidence),
-      adaptiveRecommendationFeedback: owned(source.adaptiveRecommendationFeedback)
+      adaptiveRecommendationFeedback: owned(
+        source.adaptiveRecommendationFeedback
+      )
     }
   });
 }
