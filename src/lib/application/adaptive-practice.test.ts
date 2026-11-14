@@ -5,7 +5,10 @@ import type {
   SkillMasteryRecord,
   SkillRecord
 } from '../repositories/contracts';
-import {\n  buildAdaptivePracticeSnapshot,\n  resolveAdaptiveRecommendationFeedback\n} from './adaptive-practice';
+import {
+  buildAdaptivePracticeSnapshot,
+  resolveAdaptiveRecommendationFeedback
+} from './adaptive-practice';
 
 const skills: SkillRecord[] = [
   { id: 'rhythm.pulse', category: 'rhythm', displayName: 'Pulse' },
@@ -255,7 +258,6 @@ describe('buildAdaptivePracticeSnapshot', () => {
     ).toBe(false);
   });
 });
-
 
 describe('resolveAdaptiveRecommendationFeedback', () => {
   const recommendation = {
