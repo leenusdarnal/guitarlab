@@ -1047,7 +1047,7 @@ try {
     .locator('.active-evidence-list')
     .getByText('G major scale', { exact: true })
     .waitFor();
-  const reloadedAuthoredObservationLink = page.locator(
+  const authoredObservationLink = page.locator(
     '.active-evidence-list .authored-observation-link'
   );
   await reloadedAuthoredObservationLink.waitFor();
