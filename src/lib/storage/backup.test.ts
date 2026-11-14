@@ -248,13 +248,13 @@ describe('learner backup contract', () => {
       evidenceType: 'measured' as const,
       outcome: 'passed' as const,
       score: 100,
-      evidenceSummary: 'Six of six standard open-string pitches were identified correctly.',
+      evidenceSummary: 'Both open-string pitches in this test fixture were identified correctly.',
       evidence: {
         source: 'learner-selected-pitch-options',
-        scoringRuleVersion: 'exact-pitch-five-of-six-v1',
-        correctItems: 6,
-        answeredItems: 6,
-        totalItems: 6
+        scoringRuleVersion: 'two-item-round-trip-test-v1',
+        correctItems: 2,
+        answeredItems: 2,
+        totalItems: 2
       },
       assessmentInstrument: {
         definitionId: 'guitar.standard-tuning-open-pitches',
