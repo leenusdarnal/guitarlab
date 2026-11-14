@@ -544,10 +544,7 @@
           "descriptor": "Uses the pattern in a short phrase or in a second position/key."
         }
       ],
-      "evidenceTypes": [
-        "performance_recording",
-        "written_or_spoken_response"
-      ],
+      "evidenceTypes": ["performance_recording", "written_or_spoken_response"],
       "retentionProbe": "Play and name a previously learned major-scale fragment after a delay.",
       "transferProbe": "Apply the formula or pattern in a different key or fretboard position.",
       "humanReviewRequired": true,
