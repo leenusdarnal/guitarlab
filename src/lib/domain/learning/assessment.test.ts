@@ -20,8 +20,10 @@ const objectiveEvidence = {
   assessmentInstrument: {
     definitionId: 'guitar.standard-tuning-open-pitches',
     definitionVersion: 1,
-    scoringRuleVersion: 'exact-pitch-five-of-six-v1',
-        decisionScope: 'supporting_probe'
+    scoringRuleVersion: 'three-item-test-v1',
+    itemCount: 3,
+    passThreshold: 67,
+    decisionScope: 'supporting_probe'
   },
   itemEvidence: [
     {
@@ -82,7 +84,10 @@ describe('assessment attempt validation', () => {
         ...valid,
         outcome: 'passed',
         score: 100,
-        assessmentInstrument: objectiveEvidence.assessmentInstrument,
+        assessmentInstrument: {
+          ...objectiveEvidence.assessmentInstrument,
+          itemCount: 2
+        },
         itemEvidence: [
           objectiveEvidence.itemEvidence[0],
           objectiveEvidence.itemEvidence[0]
@@ -92,7 +97,12 @@ describe('assessment attempt validation', () => {
     expect(
       assessmentAttemptInputSchema.safeParse({
         ...valid,
-        assessmentInstrument: objectiveEvidence.assessmentInstrument,
+        outcome: 'inconclusive',
+        score: null,
+        assessmentInstrument: {
+          ...objectiveEvidence.assessmentInstrument,
+          itemCount: 1
+        },
         itemEvidence: [
           {
             itemId: 'standard-tuning.string-6-open-pitch',
