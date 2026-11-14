@@ -259,7 +259,6 @@ export function buildAdaptivePracticeSnapshot(input: {
   };
 }
 
-
 export type AdaptiveRecommendationFeedbackViewItem = {
   recommendation: AdaptivePracticeRecommendation;
   feedback: AdaptiveRecommendationFeedbackRecord | null;
@@ -304,8 +303,6 @@ export function resolveAdaptiveRecommendationFeedback(input: {
       (feedback?.action === 'correct' &&
         feedback.correction !== 'too_difficult');
 
-    return hidesRecommendation
-      ? []
-      : [{ recommendation, feedback }];
+    return hidesRecommendation ? [] : [{ recommendation, feedback }];
   });
 }
