@@ -134,5 +134,7 @@ Each lesson now has three distinct objectives and five task-specific criteria. S
 - [x] All revised skill IDs resolve to the canonical 34-skill catalogue.
 - [x] The full dataset continues to contain 152 lessons with unique IDs.
 - [x] Dataset and release manifest are versioned as 1.0.3 / curriculum-v1.0.3.
-- [ ] Generated migration, local D1 integrity, formatting, lint, type checks, unit tests, build and browser acceptance pass.
+- [x] Immutable release migration, snapshot and journal entry are generated with matching content hash and parent ancestry.
+- [x] Static validation confirms 152 unique lesson IDs, 34 known skills, all schema-required fields, and unchanged Fingerstyle lesson/block IDs.
+- [ ] Local D1 integrity, formatting, lint, type checks, unit tests, build and browser acceptance pass in CI.
 - [ ] Curriculum reviewer checks the fretboard examples, chord voicings and physical technique guidance.
