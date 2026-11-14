@@ -1,0 +1,997 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "1278303c-cc6b-5f6e-a7d2-19616b00eec7",
+  "prevId": "76b4667b-62a7-54cd-aba0-6af27fba7f56",
+  "tables": {
+    "curriculum_lessons": {
+      "name": "curriculum_lessons",
+      "columns": {
+        "release_id": {
+          "name": "release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lesson_id": {
+          "name": "lesson_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_id": {
+          "name": "curriculum_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_week_id": {
+          "name": "curriculum_week_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "week": {
+          "name": "week",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "route": {
+          "name": "route",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "focus": {
+          "name": "focus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "estimated_minutes": {
+          "name": "estimated_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "curriculum_lessons_curriculum_week_idx": {
+          "name": "curriculum_lessons_curriculum_week_idx",
+          "columns": ["release_id", "curriculum_id", "week"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "curriculum_lessons_release_fk": {
+          "name": "curriculum_lessons_release_fk",
+          "tableFrom": "curriculum_lessons",
+          "tableTo": "curriculum_releases",
+          "columnsFrom": ["release_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "curriculum_lessons_release_id_lesson_id_pk": {
+          "columns": ["release_id", "lesson_id"],
+          "name": "curriculum_lessons_release_id_lesson_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "curriculum_lessons_week_positive": {
+          "name": "curriculum_lessons_week_positive",
+          "value": "week > 0"
+        },
+        "curriculum_lessons_estimated_minutes_range": {
+          "name": "curriculum_lessons_estimated_minutes_range",
+          "value": "estimated_minutes between 1 and 180"
+        }
+      }
+    },
+    "curriculum_release_skills": {
+      "name": "curriculum_release_skills",
+      "columns": {
+        "release_id": {
+          "name": "release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "skill_id": {
+          "name": "skill_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "curriculum_release_skills_release_fk": {
+          "name": "curriculum_release_skills_release_fk",
+          "tableFrom": "curriculum_release_skills",
+          "tableTo": "curriculum_releases",
+          "columnsFrom": ["release_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "curriculum_release_skills_skill_fk": {
+          "name": "curriculum_release_skills_skill_fk",
+          "tableFrom": "curriculum_release_skills",
+          "tableTo": "skills",
+          "columnsFrom": ["skill_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "curriculum_release_skills_release_id_skill_id_pk": {
+          "columns": ["release_id", "skill_id"],
+          "name": "curriculum_release_skills_release_id_skill_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "curriculum_releases": {
+      "name": "curriculum_releases",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "schema_version": {
+          "name": "schema_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content_hash": {
+          "name": "content_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'published'"
+        }
+      },
+      "indexes": {
+        "curriculum_releases_version_unique": {
+          "name": "curriculum_releases_version_unique",
+          "columns": ["version"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "curriculum_releases_schema_version_positive": {
+          "name": "curriculum_releases_schema_version_positive",
+          "value": "schema_version > 0"
+        },
+        "curriculum_releases_content_hash_sha256": {
+          "name": "curriculum_releases_content_hash_sha256",
+          "value": "length(content_hash) = 64"
+        }
+      }
+    },
+    "learner_profiles": {
+      "name": "learner_profiles",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "preferences_schema_version": {
+          "name": "preferences_schema_version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "preferences_json": {
+          "name": "preferences_json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'{\"schemaVersion\":1,\"instrument\":null,\"handedness\":null,\"tuning\":null,\"startingPoint\":null,\"goals\":[],\"practiceMinutes\":null,\"availableDays\":[],\"lessonPresentation\":null}'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_active_at": {
+          "name": "last_active_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "learner_profiles_last_active_idx": {
+          "name": "learner_profiles_last_active_idx",
+          "columns": ["last_active_at"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "learner_profiles_preferences_json_valid": {
+          "name": "learner_profiles_preferences_json_valid",
+          "value": "json_valid(preferences_json)"
+        },
+        "learner_profiles_preferences_schema_positive": {
+          "name": "learner_profiles_preferences_schema_positive",
+          "value": "preferences_schema_version > 0"
+        }
+      }
+    },
+    "lesson_completion_events": {
+      "name": "lesson_completion_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "progress_id": {
+          "name": "progress_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_release_id": {
+          "name": "curriculum_release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lesson_id": {
+          "name": "lesson_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completion_source": {
+          "name": "completion_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "lesson_completion_events_learner_completed_idx": {
+          "name": "lesson_completion_events_learner_completed_idx",
+          "columns": ["learner_id", "completed_at"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "lesson_completion_events_progress_owner_fk": {
+          "name": "lesson_completion_events_progress_owner_fk",
+          "tableFrom": "lesson_completion_events",
+          "tableTo": "lesson_progress",
+          "columnsFrom": ["progress_id", "learner_id"],
+          "columnsTo": ["id", "learner_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "lesson_completion_events_curriculum_lesson_fk": {
+          "name": "lesson_completion_events_curriculum_lesson_fk",
+          "tableFrom": "lesson_completion_events",
+          "tableTo": "curriculum_lessons",
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "lesson_progress": {
+      "name": "lesson_progress",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_release_id": {
+          "name": "curriculum_release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lesson_id": {
+          "name": "lesson_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'in_progress'"
+        },
+        "last_block_id": {
+          "name": "last_block_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "lesson_progress_learner_release_lesson_unique": {
+          "name": "lesson_progress_learner_release_lesson_unique",
+          "columns": ["learner_id", "curriculum_release_id", "lesson_id"],
+          "isUnique": true
+        },
+        "lesson_progress_id_learner_unique": {
+          "name": "lesson_progress_id_learner_unique",
+          "columns": ["id", "learner_id"],
+          "isUnique": true
+        },
+        "lesson_progress_learner_status_idx": {
+          "name": "lesson_progress_learner_status_idx",
+          "columns": ["learner_id", "status"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "lesson_progress_learner_fk": {
+          "name": "lesson_progress_learner_fk",
+          "tableFrom": "lesson_progress",
+          "tableTo": "learner_profiles",
+          "columnsFrom": ["learner_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "lesson_progress_curriculum_lesson_fk": {
+          "name": "lesson_progress_curriculum_lesson_fk",
+          "tableFrom": "lesson_progress",
+          "tableTo": "curriculum_lessons",
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "lesson_progress_completion_timestamp_consistent": {
+          "name": "lesson_progress_completion_timestamp_consistent",
+          "value": "(status = 'in_progress' and completed_at is null) or (status = 'completed' and completed_at is not null)"
+        }
+      }
+    },
+    "practice_sessions": {
+      "name": "practice_sessions",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "primary_curriculum_release_id": {
+          "name": "primary_curriculum_release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "primary_lesson_id": {
+          "name": "primary_lesson_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'in_progress'"
+        },
+        "planned_minutes": {
+          "name": "planned_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "actual_duration_seconds": {
+          "name": "actual_duration_seconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "focus": {
+          "name": "focus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reflection": {
+          "name": "reflection",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ended_at": {
+          "name": "ended_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "practice_sessions_learner_started_idx": {
+          "name": "practice_sessions_learner_started_idx",
+          "columns": ["learner_id", "started_at"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "practice_sessions_learner_fk": {
+          "name": "practice_sessions_learner_fk",
+          "tableFrom": "practice_sessions",
+          "tableTo": "learner_profiles",
+          "columnsFrom": ["learner_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "practice_sessions_primary_lesson_fk": {
+          "name": "practice_sessions_primary_lesson_fk",
+          "tableFrom": "practice_sessions",
+          "tableTo": "curriculum_lessons",
+          "columnsFrom": ["primary_curriculum_release_id", "primary_lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "practice_sessions_planned_minutes_range": {
+          "name": "practice_sessions_planned_minutes_range",
+          "value": "planned_minutes is null or planned_minutes between 1 and 180"
+        },
+        "practice_sessions_actual_duration_nonnegative": {
+          "name": "practice_sessions_actual_duration_nonnegative",
+          "value": "actual_duration_seconds between 0 and 43200"
+        },
+        "practice_sessions_difficulty_range": {
+          "name": "practice_sessions_difficulty_range",
+          "value": "difficulty is null or difficulty between 1 and 5"
+        },
+        "practice_sessions_primary_lesson_pair": {
+          "name": "practice_sessions_primary_lesson_pair",
+          "value": "(primary_curriculum_release_id is null and primary_lesson_id is null) or (primary_curriculum_release_id is not null and primary_lesson_id is not null)"
+        },
+        "practice_sessions_status_timestamps_consistent": {
+          "name": "practice_sessions_status_timestamps_consistent",
+          "value": "(status = 'in_progress' and ended_at is null) or (status in ('completed', 'abandoned') and ended_at is not null)"
+        },
+        "practice_sessions_completed_duration_positive": {
+          "name": "practice_sessions_completed_duration_positive",
+          "value": "status <> 'completed' or actual_duration_seconds > 0"
+        },
+        "practice_sessions_reflection_length": {
+          "name": "practice_sessions_reflection_length",
+          "value": "reflection is null or length(reflection) <= 2000"
+        }
+      }
+    },
+    "skill_assessment_attempts": {
+      "name": "skill_assessment_attempts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_release_id": {
+          "name": "curriculum_release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "skill_id": {
+          "name": "skill_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lesson_id": {
+          "name": "lesson_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "assessment_kind": {
+          "name": "assessment_kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "evidence_type": {
+          "name": "evidence_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "outcome": {
+          "name": "outcome",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "evidence_summary": {
+          "name": "evidence_summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "evidence_json": {
+          "name": "evidence_json",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'{}'"
+        },
+        "assessed_at": {
+          "name": "assessed_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "recorded_at": {
+          "name": "recorded_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "skill_assessment_attempts_mastery_fk_unique": {
+          "name": "skill_assessment_attempts_mastery_fk_unique",
+          "columns": ["id", "learner_id", "skill_id", "curriculum_release_id"],
+          "isUnique": true
+        },
+        "skill_assessment_attempts_learner_skill_time_idx": {
+          "name": "skill_assessment_attempts_learner_skill_time_idx",
+          "columns": ["learner_id", "skill_id", "assessed_at"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "skill_assessment_attempts_learner_fk": {
+          "name": "skill_assessment_attempts_learner_fk",
+          "tableFrom": "skill_assessment_attempts",
+          "tableTo": "learner_profiles",
+          "columnsFrom": ["learner_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "skill_assessment_attempts_release_skill_fk": {
+          "name": "skill_assessment_attempts_release_skill_fk",
+          "tableFrom": "skill_assessment_attempts",
+          "tableTo": "curriculum_release_skills",
+          "columnsFrom": ["curriculum_release_id", "skill_id"],
+          "columnsTo": ["release_id", "skill_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "skill_assessment_attempts_lesson_fk": {
+          "name": "skill_assessment_attempts_lesson_fk",
+          "tableFrom": "skill_assessment_attempts",
+          "tableTo": "curriculum_lessons",
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "skill_assessment_attempts_score_range": {
+          "name": "skill_assessment_attempts_score_range",
+          "value": "score is null or score between 0 and 100"
+        },
+        "skill_assessment_attempts_summary_length": {
+          "name": "skill_assessment_attempts_summary_length",
+          "value": "evidence_summary is null or length(evidence_summary) <= 1000"
+        },
+        "skill_assessment_attempts_evidence_json_valid": {
+          "name": "skill_assessment_attempts_evidence_json_valid",
+          "value": "json_valid(evidence_json)"
+        }
+      }
+    },
+    "skill_mastery": {
+      "name": "skill_mastery",
+      "columns": {
+        "learner_id": {
+          "name": "learner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "curriculum_release_id": {
+          "name": "curriculum_release_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "skill_id": {
+          "name": "skill_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "evidence_count": {
+          "name": "evidence_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "confidence": {
+          "name": "confidence",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_assessment_id": {
+          "name": "last_assessment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "last_assessed_at": {
+          "name": "last_assessed_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "next_review_at": {
+          "name": "next_review_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "skill_mastery_learner_state_idx": {
+          "name": "skill_mastery_learner_state_idx",
+          "columns": ["learner_id", "state"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "skill_mastery_learner_fk": {
+          "name": "skill_mastery_learner_fk",
+          "tableFrom": "skill_mastery",
+          "tableTo": "learner_profiles",
+          "columnsFrom": ["learner_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "skill_mastery_release_skill_fk": {
+          "name": "skill_mastery_release_skill_fk",
+          "tableFrom": "skill_mastery",
+          "tableTo": "curriculum_release_skills",
+          "columnsFrom": ["curriculum_release_id", "skill_id"],
+          "columnsTo": ["release_id", "skill_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "skill_mastery_last_assessment_owner_fk": {
+          "name": "skill_mastery_last_assessment_owner_fk",
+          "tableFrom": "skill_mastery",
+          "tableTo": "skill_assessment_attempts",
+          "columnsFrom": [
+            "last_assessment_id",
+            "learner_id",
+            "skill_id",
+            "curriculum_release_id"
+          ],
+          "columnsTo": ["id", "learner_id", "skill_id", "curriculum_release_id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "skill_mastery_learner_id_curriculum_release_id_skill_id_pk": {
+          "columns": ["learner_id", "curriculum_release_id", "skill_id"],
+          "name": "skill_mastery_learner_id_curriculum_release_id_skill_id_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "skill_mastery_evidence_count_nonnegative": {
+          "name": "skill_mastery_evidence_count_nonnegative",
+          "value": "evidence_count >= 0"
+        },
+        "skill_mastery_confidence_range": {
+          "name": "skill_mastery_confidence_range",
+          "value": "confidence is null or confidence between 0 and 100"
+        },
+        "skill_mastery_stable_requires_evidence": {
+          "name": "skill_mastery_stable_requires_evidence",
+          "value": "state <> 'stable' or (evidence_count > 0 and last_assessment_id is not null)"
+        }
+      }
+    },
+    "skills": {
+      "name": "skills",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "skills_category_idx": {
+          "name": "skills_category_idx",
+          "columns": ["category"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
