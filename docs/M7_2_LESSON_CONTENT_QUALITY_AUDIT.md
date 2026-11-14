@@ -133,10 +133,10 @@ Keep safety, accessibility and general musicianship guidance, but do not let ide
 
 ## 8. Next action
 
-The representative 12-lesson Rock & Blues batch has been completed across Weeks 1–12. Apply the validated authoring standard to the next Year 3+ specialist route, beginning with Fingerstyle & Acoustic Weeks 1–12. Continue route-by-route and then return to the highest-impact generic objectives and criteria across the 104 Year 1–2 lessons.
+The Rock & Blues and Fingerstyle & Acoustic routes have both been completed across Weeks 1–12. The next specialist batch is Jazz & Harmony Weeks 1–12. Continue route-by-route, then return to the highest-impact generic objectives and criteria across the 104 Year 1–2 lessons.
 
 
-## 9. Current remediation state (2026-11-14)
+## 9. Historical remediation state after Rock & Blues (2026-11-14)
 
 The Year 3 Rock & Blues route is now fully authored across Weeks 1–12. Weeks 1–4 were improved in release `curriculum-v1.0.1`; Weeks 5–12 were completed in release `curriculum-v1.0.2`. All 12 stable lesson IDs remain unchanged, and the 34-skill catalogue remains at version 1.0.0. Weeks 5–12 received revised skill mappings where the prior associations did not match the actual musical task.
 
@@ -156,3 +156,29 @@ A fresh count across the 152 current lesson records gives:
 The original duplicated-criteria and generic-objective findings are therefore not resolved curriculum-wide. Do not promote the advisory duplication diagnostic to a blocking global threshold yet. Continue small, route-level authoring batches and recalculate the audit after each release.
 
 **Next batch:** Fingerstyle & Acoustic Weeks 1–12. Preserve its specialist techniques and existing skill identifiers unless a reviewed mapping decision supports a change. The target is the same observable lesson contract used in the Rock & Blues completion: three distinct objectives, concrete demonstration and checkpoint, at least five task-specific criteria, corrective feedback, an accessible alternative, retrieval and delayed transfer guidance.
+
+
+## 10. Current remediation state after Fingerstyle & Acoustic (2026-11-14)
+
+The Year 3 Rock & Blues and Fingerstyle & Acoustic routes are now fully authored across Weeks 1–12. Rock & Blues was completed in releases `curriculum-v1.0.1` and `curriculum-v1.0.2`; Fingerstyle & Acoustic was completed in `curriculum-v1.0.3`. All 24 stable lesson IDs and lesson-block IDs remain unchanged. The canonical skill catalogue remains at 34 identifiers and version 1.0.0. Fingerstyle skill mappings were expanded or corrected where the previous associations did not adequately represent the taught performance task.
+
+A fresh count across all 152 current lesson records gives:
+
+| Measure | Current result | Remaining interpretation |
+|---|---:|---|
+| Generic learning objective 2 | 128/152 | 24 lessons remediated; 128 still use the original generic sentence |
+| Generic learning objective 3 | 128/152 | 24 lessons remediated; 128 still use the original generic sentence |
+| Each of the three formerly repeated criteria | 128 occurrences each | Retained in the 128 lessons not yet rewritten; both completed routes have task-specific criteria |
+| Distinct `explanation.keyIdea` texts | 37 | Increased as route-specific teaching explanations were added |
+| Year 3+ specialist generic objective 2 | 24/48 | Remaining instances are all in Jazz & Harmony and All-Round Musician |
+| Year 3+ specialist generic objective 3 | 24/48 | Same remaining route coverage |
+| Year 3+ generic capstone-style checkpoint | 24/48 | Remaining instances are all in Jazz & Harmony and All-Round Musician |
+| Year 3+ specialist lessons with task-specific objectives/checkpoints | 24/48 | Rock & Blues and Fingerstyle & Acoustic complete; two specialist routes remain |
+
+The remaining specialist routes are:
+- Jazz & Harmony — 12 lessons
+- All-Round Musician — 12 lessons
+
+The original repeated criteria and generic objectives are not resolved curriculum-wide. Do not promote the advisory duplication diagnostic to a blocking global threshold yet. Continue small, route-level authoring batches and recalculate the audit after each release.
+
+**Next batch:** Jazz & Harmony Weeks 1–12. Preserve jazz-specific harmonic, rhythmic, ear-training and improvisation intent; map only to existing skill identifiers unless a separately reviewed catalogue change is justified. Use the same lesson contract: three distinct objectives, concrete demonstration and worked example, task-matched application/checkpoint, five task-specific criteria, corrective feedback, accessible alternatives, retrieval and delayed transfer guidance.
