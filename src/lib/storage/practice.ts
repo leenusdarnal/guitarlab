@@ -72,19 +72,26 @@ export async function startActivePracticeSession(input: {
       : null;
     if (
       selected &&
-      (selected.curriculumReleaseId !== PRACTICE_TAXONOMY_RELEASE_ID || !authoredScope)
+      (selected.curriculumReleaseId !== PRACTICE_TAXONOMY_RELEASE_ID ||
+        !authoredScope)
     ) {
-      throw new Error('Choose an exercise from the current authored practice catalogue.');
+      throw new Error(
+        'Choose an exercise from the current authored practice catalogue.'
+      );
     }
 
     return await startPracticeSession(
       {
         learnerId: profile.id,
         plannedMinutes: input.plannedMinutes,
-        primaryCurriculumReleaseId: authoredScope ? PRACTICE_TAXONOMY_RELEASE_ID : null,
+        primaryCurriculumReleaseId: authoredScope
+          ? PRACTICE_TAXONOMY_RELEASE_ID
+          : null,
         primaryLessonId: authoredScope?.lessonId ?? null,
         primaryExerciseId: authoredScope?.exerciseId ?? null,
-        practiceTaxonomyVersion: authoredScope ? PRACTICE_TAXONOMY_VERSION : null,
+        practiceTaxonomyVersion: authoredScope
+          ? PRACTICE_TAXONOMY_VERSION
+          : null,
         focus: input.focus
       },
       {
