@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createEarTrainingExercise } from '../music/ear-training';
+import type { EarTrainingAnswer } from '../music/ear-training';
 import {
   intervalRecognitionAssessment,
   pulseRecognitionAssessment,
@@ -72,7 +73,6 @@ describe('interval recognition assessment evidence', () => {
     ).toThrow('not valid for this interval item');
   });
 });
-
 
 describe('pulse recognition assessment evidence', () => {
   it('uses a versioned supporting-probe instrument for auditory rhythm recognition', () => {
@@ -147,7 +147,7 @@ describe('pulse recognition assessment evidence', () => {
     ).toThrow('not valid for this pulse item');
     const invalidKey = {
       ...createEarTrainingExercise('pulse', 0),
-      answer: 'rising'
+      answer: 'rising' as EarTrainingAnswer
     };
     expect(() =>
       scorePulseRecognitionResponse(invalidKey, 'steady')
