@@ -126,6 +126,38 @@ describe('assessment attempt validation', () => {
     ).toBe(false);
   });
 
+  it('rejects a score that does not match the captured item outcomes', () => {
+    const complete = [
+      {
+        itemId: 'standard-tuning.string-6-open-pitch',
+        response: 'E2',
+        outcome: 'correct',
+        responseSource: 'learner_selected_option'
+      },
+      {
+        itemId: 'standard-tuning.string-5-open-pitch',
+        response: 'E2',
+        outcome: 'incorrect',
+        responseSource: 'learner_selected_option'
+      },
+      {
+        itemId: 'standard-tuning.string-4-open-pitch',
+        response: 'D3',
+        outcome: 'correct',
+        responseSource: 'learner_selected_option'
+      }
+    ] as const;
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'passed',
+        score: 100,
+        assessmentInstrument: objectiveEvidence.assessmentInstrument,
+        itemEvidence: complete
+      }).success
+    ).toBe(false);
+  });
+
   it('rejects out-of-range scores', () => {
     expect(
       assessmentAttemptInputSchema.safeParse({ ...valid, score: 101 }).success
