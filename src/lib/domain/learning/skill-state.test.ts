@@ -88,6 +88,8 @@ describe('explainSkillState', () => {
         definitionId: 'guitar.standard-tuning-open-pitches',
         definitionVersion: 1,
         scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        itemCount: 1,
+        passThreshold: 100,
         decisionScope: 'supporting_probe'
       },
       itemEvidence: [
