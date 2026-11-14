@@ -20,6 +20,11 @@ type PracticeExposureScope = Pick<
   | 'fretPositionIds'
 >;
 
+type PracticeExposureTaxonomy = {
+  version: string;
+  scopes: readonly PracticeExposureScope[];
+};
+
 export type AdaptiveReasonCode =
   | 'assessment_needs_practice'
   | 'assessment_inconclusive'
@@ -319,31 +324,77 @@ function buildItemEvidenceGroups(
 function buildPracticeExposureCoverage(input: {
   learnerId: string;
   curriculumReleaseId: string;
-  taxonomyVersion: string | null;
   practiceEvidence: readonly PracticeEvidenceRecord[];
-  practiceScopes: readonly PracticeExposureScope[];
+  taxonomies: readonly PracticeExposureTaxonomy[];
   dimensions: readonly AuthoredPracticeDimension[];
 }): PracticeExposureCoverage[] {
-  if (!input.taxonomyVersion || input.practiceScopes.length === 0) return [];
+  if (input.taxonomies.length === 0 || input.dimensions.length === 0) return [];
 
   const keyFor = (lessonId: string, exerciseId: string) =>
     JSON.stringify([lessonId, exerciseId]);
-  const scopesByKey = new Map(
-    input.practiceScopes.map((scope) => [
-      keyFor(scope.lessonId, scope.exerciseId),
-      scope
+  const dimensionKey = (dimension: AuthoredPracticeDimension) =>
+    JSON.stringify([dimension.category, dimension.id]);
+  const scopesByVersion = new Map(
+    input.taxonomies.map((taxonomy) => [
+      taxonomy.version,
+      new Map(
+        taxonomy.scopes.map((scope) => [
+          keyFor(scope.lessonId, scope.exerciseId),
+          scope
+        ])
+      )
     ])
   );
-  const observedByScope = new Map<
+  const availableByDimension = new Map<string, Set<string>>();
+
+  for (const dimension of input.dimensions) {
+    const keys = new Set<string>();
+    for (const taxonomy of input.taxonomies) {
+      for (const scope of taxonomy.scopes) {
+        const matches = (() => {
+          switch (dimension.category) {
+            case 'topic':
+              return scope.topicIds.includes(dimension.id);
+            case 'technique':
+              return scope.techniqueIds.includes(dimension.id);
+            case 'string':
+              return scope.stringNumbers.includes(Number(dimension.id));
+            case 'fret_position':
+              return scope.fretPositionIds.includes(dimension.id);
+          }
+        })();
+        if (matches) keys.add(keyFor(scope.lessonId, scope.exerciseId));
+      }
+    }
+    availableByDimension.set(dimensionKey(dimension), keys);
+  }
+
+  const observedByDimension = new Map<
     string,
-    { sessionIds: Set<string>; latestObservedAt: number }
+    Map<string, { sessionIds: Set<string>; latestObservedAt: number }>
   >();
+
+  const scopeHasDimension = (
+    scope: PracticeExposureScope,
+    dimension: AuthoredPracticeDimension
+  ): boolean => {
+    switch (dimension.category) {
+      case 'topic':
+        return scope.topicIds.includes(dimension.id);
+      case 'technique':
+        return scope.techniqueIds.includes(dimension.id);
+      case 'string':
+        return scope.stringNumbers.includes(Number(dimension.id));
+      case 'fret_position':
+        return scope.fretPositionIds.includes(dimension.id);
+    }
+  };
 
   for (const record of input.practiceEvidence) {
     if (
       record.learnerId !== input.learnerId ||
       record.curriculumReleaseId !== input.curriculumReleaseId ||
-      record.practiceTaxonomyVersion !== input.taxonomyVersion ||
+      !record.practiceTaxonomyVersion ||
       !record.lessonId ||
       !record.authoredExerciseId
     ) {
@@ -351,39 +402,38 @@ function buildPracticeExposureCoverage(input: {
     }
 
     const key = keyFor(record.lessonId, record.authoredExerciseId);
-    if (!scopesByKey.has(key)) continue;
+    const versionScopes = scopesByVersion.get(record.practiceTaxonomyVersion);
+    const scope = versionScopes?.get(key);
+    if (!scope) continue;
 
-    const current = observedByScope.get(key) ?? {
-      sessionIds: new Set<string>(),
-      latestObservedAt: record.recordedAt
-    };
-    current.sessionIds.add(record.sessionId);
-    current.latestObservedAt = Math.max(
-      current.latestObservedAt,
-      record.recordedAt
-    );
-    observedByScope.set(key, current);
+    for (const dimension of input.dimensions) {
+      if (!scopeHasDimension(scope, dimension)) continue;
+      const keyForDimension = dimensionKey(dimension);
+      const observedForDimension =
+        observedByDimension.get(keyForDimension) ?? new Map();
+      const current = observedForDimension.get(key) ?? {
+        sessionIds: new Set<string>(),
+        latestObservedAt: record.recordedAt
+      };
+      current.sessionIds.add(record.sessionId);
+      current.latestObservedAt = Math.max(
+        current.latestObservedAt,
+        record.recordedAt
+      );
+      observedForDimension.set(key, current);
+      observedByDimension.set(keyForDimension, observedForDimension);
+    }
   }
 
   return input.dimensions.flatMap((dimension) => {
-    const matchingScopes = input.practiceScopes.filter((scope) => {
-      switch (dimension.category) {
-        case 'topic':
-          return scope.topicIds.includes(dimension.id);
-        case 'technique':
-          return scope.techniqueIds.includes(dimension.id);
-        case 'string':
-          return scope.stringNumbers.includes(Number(dimension.id));
-        case 'fret_position':
-          return scope.fretPositionIds.includes(dimension.id);
-      }
-    });
-    if (matchingScopes.length === 0) return [];
+    const availableKeys =
+      availableByDimension.get(dimensionKey(dimension)) ?? new Set<string>();
+    if (availableKeys.size === 0) return [];
 
-    const observed = matchingScopes.flatMap((scope) => {
-      const record = observedByScope.get(
-        keyFor(scope.lessonId, scope.exerciseId)
-      );
+    const observedByScope =
+      observedByDimension.get(dimensionKey(dimension)) ?? new Map();
+    const observed = [...availableKeys].flatMap((key) => {
+      const record = observedByScope.get(key);
       return record ? [record] : [];
     });
     const sessionIds = new Set(
@@ -396,7 +446,7 @@ function buildPracticeExposureCoverage(input: {
         dimensionId: dimension.id,
         label: dimension.label,
         observedExerciseCount: observed.length,
-        availableExerciseCount: matchingScopes.length,
+        availableExerciseCount: availableKeys.size,
         observedSessionCount: sessionIds.size,
         latestObservedAt:
           observed.length > 0
@@ -419,9 +469,8 @@ export function buildAdaptivePracticeSnapshot(input: {
   attempts: readonly AssessmentAttemptRecord[];
   mastery: readonly SkillMasteryRecord[];
   practiceEvidence: readonly PracticeEvidenceRecord[];
-  authoredPracticeScopes?: readonly PracticeExposureScope[];
+  authoredPracticeTaxonomies?: readonly PracticeExposureTaxonomy[];
   authoredPracticeDimensions?: readonly AuthoredPracticeDimension[];
-  practiceTaxonomyVersion?: string | null;
   now: number;
 }): AdaptivePracticeSnapshot {
   const skillById = new Map(input.skills.map((skill) => [skill.id, skill]));
@@ -673,9 +722,8 @@ export function buildAdaptivePracticeSnapshot(input: {
   const practiceExposureCoverage = buildPracticeExposureCoverage({
     learnerId: input.learnerId,
     curriculumReleaseId: input.curriculumReleaseId,
-    taxonomyVersion: input.practiceTaxonomyVersion ?? null,
     practiceEvidence: scopedPracticeEvidence,
-    practiceScopes: input.authoredPracticeScopes ?? [],
+    taxonomies: input.authoredPracticeTaxonomies ?? [],
     dimensions: input.authoredPracticeDimensions ?? []
   });
   return {

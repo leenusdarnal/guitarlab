@@ -171,3 +171,23 @@ The Practice Studio now offers an optional selector containing only exact lesson
 - [ ] Add structured error/confusion labels only when a task deterministically identifies a specific misconception.
 
 **Privacy and evidence boundary:** The taxonomy is public authored curriculum metadata. Learner observations remain local IndexedDB records. Taxonomy tags do not assert learner performance, correctness, proficiency or mastery.
+
+
+## Authored exercise exposure and taxonomy compatibility — 2026-11-14
+
+- PR #112 adds exact authored exercise identity to newly created sessions and observations. Historic free-text observations remain unlinked.
+- PR #113 adds read-only exposure counts from exact linked records. An exposure event is at least one linked observation; counts are distinct exercises and sessions, not repetitions.
+- PR #114 expands the taxonomy from ten to fifteen exact scopes across Years 1 and 2. The source-level decisions and deliberately omitted dimensions are recorded in [M7.2 Taxonomy Expansion Review 1](M7_2_TAXONOMY_EXPANSION_REVIEW_1.md).
+- Taxonomy v0.2.0 retains the exact v0.1.0 scope/dimension snapshot. New sessions use v0.2.0; historical records are resolved against the version they stored. An older record never inherits a newly introduced tag.
+- Exposure denominators union exact authored exercise identities by stable dimension across retained versions. This preserves historic counts without relabelling records.
+- The new batch adds five topics and one technique; only the explicitly named low E bass in the Week 16 musical-application exercise is tagged as string 6. No new fret-position or numeric fret-range tags are added.
+- Exposure remains activity coverage only. It does not assert exercise completion, independently verified correctness, retention, proficiency or skill mastery. No confusion labels are added because these exercises do not emit deterministic per-attempt misconception records.
+
+### Taxonomy expansion sequence
+
+- [x] Establish exact lesson/exercise links and local observation inheritance (PR #112).
+- [x] Define and implement read-only exposure coverage (PR #113).
+- [x] Preserve v0.1.0 metadata while expanding exact scope to fifteen exercises in v0.2.0 (PR #114).
+- [ ] Complete curriculum-owner review of the five added source mappings.
+- [ ] Expand Year 1–3 coverage in further source-reviewed batches.
+- [ ] Define structured confusion labels only after a task can deterministically identify a misconception.

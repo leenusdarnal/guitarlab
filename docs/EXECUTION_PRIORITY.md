@@ -6,6 +6,14 @@
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
+## Live checkpoint — 2026-11-14 after PR #113
+
+- Verified `main`: `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; PR #113 is merged and its post-merge GuitarLab CI run [#43623315478](https://github.com/leenusdarnal/guitarlab/actions/runs/43623315478) passed.
+- PR #112 links newly created sessions/observations to the exact authored lesson/exercise pair, curriculum release and taxonomy version.
+- PR #113 derives local read-only exposure from exact linked observations; it counts distinct exercises and sessions and does not infer accuracy or mastery.
+- Next implementation: expand the source-evidenced taxonomy from ten to fifteen exact exercise scopes in taxonomy v0.2.0 while retaining the v0.1.0 snapshot so historical observations continue to match their original taxonomy.
+- No open PR was present at this checkpoint.
+
 ## 1. Latest verified checkpoint
 
 - PR #102, Jazz & Harmony Weeks 5–8, merged to `main` as `de9b0f3992c258e5dfdc840e48fb45da47276bd2`.
@@ -52,10 +60,11 @@
 4. Validate session/observation identity and preserve optional fields in existing version-1 backups.
 5. Do not calculate topic/string/fretboard exposure until a separate definition and read model are reviewed.
 
-**Next after this slice:**
-1. Expand authored exercise scope through explicit author review across Years 1–3.
-2. Define what constitutes an exposure event and build aggregate coverage from stable links only.
-3. Add confusion codes only when an exercise deterministically identifies a specific error.
+**Next after PR #113:**
+1. Expand authored exercise scope only through exact source review; the next bounded batch covers five Year 1 / Year 2 exercises and keeps unsupported string/fret values empty.
+2. Version taxonomy additions and retain prior snapshots so old records remain interpretable under their original taxonomy.
+3. Preserve the PR #113 exposure definition: one or more exact linked observations constitute activity exposure, not completion, accuracy or mastery.
+4. Add confusion codes only when an exercise deterministically identifies a specific error.
 
 **Exit criteria:** canonical tags have authored source evidence, taxonomy validation passes, and later exposure analytics are grounded in local records linked to stable lesson/exercise IDs. No taxonomy metadata or practice activity changes mastery.
 
@@ -127,14 +136,16 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `9fa940474ebe650552ed70f222dc1cf44b506aba` (PR #111 merged) |
+| Last verified main SHA | `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf` (PR #113 merged) |
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
 | PR #103 | Merged; append-only local recommendation feedback; merge commit `b27eed5e27e805d43259019fa304f80df20f356a` |
 | PR #104 | Merged; comparable measured-score summaries/trends; merge commit `a1da00fe0fb5804464ccb1679c128d1176957041` |
 | PR #110 | Merged; item accuracy and repeated-miss analytics; merge commit `a04d284e82447707de6b4d70a01115f2b2982e0b` |
 | PR #111 | Merged; authored practice taxonomy v0.1.0 for ten evidenced Year 1 exercises; merge commit `9fa940474ebe650552ed70f222dc1cf44b506aba` |
+| PR #112 | Merged; exact authored exercise identity on new sessions and observations; merge commit `f402b8f307425d1c70b8f9f7f7d303438643948e` |
+| PR #113 | Merged; read-only authored exercise exposure coverage; merge commit `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; post-merge CI run #43623315478 passed |
 | PR #104 validation | Run [#43584492437](https://github.com/leenusdarnal/guitarlab/actions/runs/43584492437); primary application/curriculum and Node.js 26 jobs passed |
-| Current engineering task | Add the optional authored-exercise session selector and persist stable links on new local observations; author-review more scopes before defining exposure analytics |
+| Current engineering task | Expand the taxonomy to v0.2.0 with five exact source-evidenced exercises and version-compatible history; PR #114 is the intended slice |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
 | Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
 | M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |
@@ -142,3 +153,13 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | Deferred | Production deployment, production D1, authentication, cloud sync and unreviewed CI redesign |
 
 **Source-of-truth hierarchy:** current code/tests on `main` → merged PR evidence → current GitHub Issues/Actions → this checkpoint → historical notes and chat summaries.
+
+
+## M7.2 taxonomy expansion checkpoint — 2026-11-14
+
+- PR #113 merged as `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; main CI run #43623315478 passed.
+- The next batch adds five exact exercises: Year 1 Weeks 16, 17 and 37; Year 2 Weeks 4 and 30.
+- Taxonomy moves from v0.1.0 to v0.2.0 and retains an immutable v0.1.0 snapshot. New sessions use v0.2.0; historical records remain matched against v0.1.0 without backfilling.
+- Exposure aggregation unions scope identity across supported taxonomy snapshots while only applying dimension tags that existed in the record's own version.
+- Five topics and one technique are added. Only the explicit low E bass string in the Week 16 musical-application exercise is tagged as string 6; no new fret-position/range is inferred.
+- Curriculum-owner review remains a manual follow-up. No confusion codes or mastery rules are added.

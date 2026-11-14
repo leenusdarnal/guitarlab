@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate the versioned authored exercise taxonomy against source lessons.
+ * Validate versioned authored exercise taxonomies against source lessons.
  * Run from repository root: node scripts/validate-practice-taxonomy.mjs
  */
 import { readFile } from 'node:fs/promises';
@@ -37,83 +37,158 @@ const exercises = new Map(
     ])
   )
 );
-const topics = taxonomy.topics ?? [];
-const techniques = taxonomy.techniques ?? [];
-const positions = taxonomy.fretPositions ?? [];
-const strings = taxonomy.strings ?? [];
-const scopes = taxonomy.exerciseScopes ?? [];
-const topicIds = topics.map((item) => item.id);
-const techniqueIds = techniques.map((item) => item.id);
-const positionIds = positions.map((item) => item.id);
-const stringNumbers = strings.map((item) => item.number);
 
 check(taxonomy.schemaVersion === 1, 'Practice taxonomy: unsupported schemaVersion');
 check(isText(taxonomy.version), 'Practice taxonomy: missing version');
 check(taxonomy.curriculumReleaseId === release.id, 'Practice taxonomy: curriculum release mismatch');
 check(isText(taxonomy.authoringPolicy), 'Practice taxonomy: missing authoring policy');
 
-for (const [name, records, ids] of [
-  ['topic', topics, topicIds],
-  ['technique', techniques, techniqueIds],
-  ['fret position', positions, positionIds]
-]) {
-  check(ids.length > 0 && unique(ids), `Practice taxonomy: duplicate or missing ${name} IDs`);
+const current = {
+  version: taxonomy.version,
+  topics: taxonomy.topics ?? [],
+  techniques: taxonomy.techniques ?? [],
+  fretPositions: taxonomy.fretPositions ?? [],
+  strings: taxonomy.strings ?? [],
+  exerciseScopes: taxonomy.exerciseScopes ?? []
+};
+const snapshots = [...(taxonomy.previousVersions ?? []), current];
+check(
+  unique(snapshots.map((snapshot) => snapshot.version)),
+  'Practice taxonomy: duplicate current or historical version'
+);
+
+function validateDimensionRecords(version, name, records) {
+  check(Array.isArray(records), `Practice taxonomy ${version}: missing ${name} definitions`);
+  if (!Array.isArray(records)) return [];
+  const ids = records.map((item) => item.id);
+  check(
+    ids.length > 0 && unique(ids),
+    `Practice taxonomy ${version}: duplicate or missing ${name} IDs`
+  );
   for (const record of records) {
-    check(isText(record.id) && isText(record.label) && isText(record.description),
-      `Practice taxonomy ${name}: incomplete metadata`);
+    check(
+      isText(record.id) && isText(record.label) && isText(record.description),
+      `Practice taxonomy ${version} ${name}: incomplete metadata`
+    );
   }
+  return ids;
 }
 
-check(strings.length === 6 && unique(stringNumbers), 'Practice taxonomy: expected six unique string numbers');
-for (const string of strings) {
-  check(Number.isInteger(string.number) && string.number >= 1 && string.number <= 6 && isText(string.label),
-    'Practice taxonomy: invalid string definition');
-}
+function validateSnapshot(snapshot) {
+  check(isText(snapshot.version), 'Practice taxonomy: snapshot missing version');
+  const version = snapshot.version || 'unknown';
+  const topicIds = validateDimensionRecords(version, 'topic', snapshot.topics);
+  const techniqueIds = validateDimensionRecords(version, 'technique', snapshot.techniques);
+  const positionIds = validateDimensionRecords(version, 'fret position', snapshot.fretPositions);
+  const strings = snapshot.strings;
+  check(Array.isArray(strings) && strings.length === 6, `Practice taxonomy ${version}: expected six strings`);
+  const stringNumbers = Array.isArray(strings) ? strings.map((item) => item.number) : [];
+  check(
+    stringNumbers.length === 6 && unique(stringNumbers),
+    `Practice taxonomy ${version}: expected six unique string numbers`
+  );
+  for (const string of Array.isArray(strings) ? strings : []) {
+    check(
+      Number.isInteger(string.number) &&
+        string.number >= 1 &&
+        string.number <= 6 &&
+        isText(string.label),
+      `Practice taxonomy ${version}: invalid string definition`
+    );
+  }
 
-const scopeKeys = scopes.map((scope) => `${scope.lessonId}:${scope.exerciseId}`);
-check(unique(scopeKeys), 'Practice taxonomy: duplicate exercise scope mappings');
-for (const scope of scopes) {
-  const key = `${scope.lessonId}:${scope.exerciseId}`;
-  const source = exercises.get(key);
-  check(Boolean(source), `Practice taxonomy: unknown authored exercise ${key}`);
-  check(isText(scope.sourceEvidence), `Practice taxonomy ${key}: missing source evidence`);
+  const scopes = snapshot.exerciseScopes;
+  check(Array.isArray(scopes), `Practice taxonomy ${version}: missing exercise scopes`);
+  if (!Array.isArray(scopes)) return;
+  const scopeKeys = scopes.map((scope) => `${scope.lessonId}:${scope.exerciseId}`);
+  check(unique(scopeKeys), `Practice taxonomy ${version}: duplicate exercise scope mappings`);
 
-  for (const [field, allowed] of [
-    ['topicIds', topicIds],
-    ['techniqueIds', techniqueIds],
-    ['fretPositionIds', positionIds]
-  ]) {
-    const values = scope[field] ?? [];
-    check(Array.isArray(values) && unique(values), `Practice taxonomy ${key}: invalid ${field}`);
-    for (const value of values) {
-      check(allowed.includes(value), `Practice taxonomy ${key}: unknown ${field} value ${value}`);
+  for (const scope of scopes) {
+    const key = `${scope.lessonId}:${scope.exerciseId}`;
+    check(exercises.has(key), `Practice taxonomy ${version}: unknown authored exercise ${key}`);
+    check(isText(scope.sourceEvidence), `Practice taxonomy ${key}: missing source evidence`);
+
+    for (const [field, allowed] of [
+      ['topicIds', topicIds],
+      ['techniqueIds', techniqueIds],
+      ['fretPositionIds', positionIds]
+    ]) {
+      const values = scope[field] ?? [];
+      check(
+        Array.isArray(values) && unique(values),
+        `Practice taxonomy ${version} ${key}: invalid ${field}`
+      );
+      if (Array.isArray(values)) {
+        for (const value of values) {
+          check(
+            allowed.includes(value),
+            `Practice taxonomy ${version} ${key}: unknown ${field} value ${value}`
+          );
+        }
+      }
+    }
+
+    const selectedStrings = scope.stringNumbers ?? [];
+    check(
+      Array.isArray(selectedStrings) && unique(selectedStrings),
+      `Practice taxonomy ${version} ${key}: invalid or duplicate string numbers`
+    );
+    if (Array.isArray(selectedStrings)) {
+      for (const number of selectedStrings) {
+        check(
+          stringNumbers.includes(number),
+          `Practice taxonomy ${version} ${key}: unknown string number ${number}`
+        );
+      }
+    }
+
+    const hasScope =
+      (Array.isArray(scope.topicIds) ? scope.topicIds.length : 0) +
+        (Array.isArray(scope.techniqueIds) ? scope.techniqueIds.length : 0) +
+        selectedStrings.length +
+        (Array.isArray(scope.fretPositionIds) ? scope.fretPositionIds.length : 0) >
+        0 ||
+      scope.fretRange != null;
+    check(hasScope, `Practice taxonomy ${version} ${key}: empty practice scope`);
+
+    if (scope.fretRange != null) {
+      check(
+        Number.isInteger(scope.fretRange.minFret) &&
+          Number.isInteger(scope.fretRange.maxFret) &&
+          scope.fretRange.minFret >= 0 &&
+          scope.fretRange.maxFret <= 24 &&
+          scope.fretRange.maxFret >= scope.fretRange.minFret,
+        `Practice taxonomy ${version} ${key}: invalid fret range`
+      );
     }
   }
+}
 
-  const selectedStrings = scope.stringNumbers ?? [];
-  check(Array.isArray(selectedStrings) && unique(selectedStrings),
-    `Practice taxonomy ${key}: invalid or duplicate string numbers`);
-  for (const number of selectedStrings) {
-    check(stringNumbers.includes(number), `Practice taxonomy ${key}: unknown string number ${number}`);
-  }
+for (const snapshot of snapshots) validateSnapshot(snapshot);
 
-  const hasScope =
-    (scope.topicIds?.length ?? 0) +
-      (scope.techniqueIds?.length ?? 0) +
-      selectedStrings.length +
-      (scope.fretPositionIds?.length ?? 0) > 0 ||
-    scope.fretRange != null;
-  check(hasScope, `Practice taxonomy ${key}: empty practice scope`);
-
-  if (scope.fretRange != null) {
-    check(
-      Number.isInteger(scope.fretRange.minFret) &&
-        Number.isInteger(scope.fretRange.maxFret) &&
-        scope.fretRange.minFret >= 0 &&
-        scope.fretRange.maxFret <= 24 &&
-        scope.fretRange.maxFret >= scope.fretRange.minFret,
-      `Practice taxonomy ${key}: invalid fret range`
-    );
+const historicalVersions = taxonomy.previousVersions ?? [];
+for (const historical of historicalVersions) {
+  for (const [name, oldRecords, currentRecords] of [
+    ['topics', historical.topics ?? [], current.topics],
+    ['techniques', historical.techniques ?? [], current.techniques],
+    ['fretPositions', historical.fretPositions ?? [], current.fretPositions],
+    ['strings', historical.strings ?? [], current.strings]
+  ]) {
+    const currentById = new Map(currentRecords.map((record) => [
+      name === 'strings' ? String(record.number) : record.id,
+      record
+    ]));
+    for (const oldRecord of oldRecords) {
+      const id = name === 'strings' ? String(oldRecord.number) : oldRecord.id;
+      const activeRecord = currentById.get(id);
+      check(
+        Boolean(activeRecord) &&
+          activeRecord.label === oldRecord.label &&
+          (name === 'strings' ||
+            activeRecord.description === oldRecord.description),
+        `Practice taxonomy: historical ${name} definition changed for ${id}`
+      );
+    }
   }
 }
 
@@ -122,5 +197,7 @@ if (fail.length) {
   for (const message of fail) console.error(`- ${message}`);
   process.exitCode = 1;
 } else {
-  console.log(`Practice taxonomy validation passed: ${scopes.length} authored exercise scopes.`);
+  console.log(
+    `Practice taxonomy validation passed: ${current.exerciseScopes.length} current exercise scopes and ${historicalVersions.length} retained historical version(s).`
+  );
 }

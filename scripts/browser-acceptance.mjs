@@ -1026,7 +1026,7 @@ try {
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
-    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.1\.0/
+    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.2\.0/
   );
 
   // Reject impossible learner-entered counts before any observation is saved.
@@ -1053,7 +1053,7 @@ try {
   await authoredObservationLink.waitFor();
   assert.match(
     await authoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.2\.0/
   );
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
@@ -1077,7 +1077,7 @@ try {
   await reloadedAuthoredObservationLink.waitFor();
   assert.match(
     await reloadedAuthoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.1\.0/
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.2\.0/
   );
   const authoredExposure = page
     .locator('details.adaptive-analytics')

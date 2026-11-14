@@ -15,6 +15,11 @@ type PracticeScopeRecord = {
   sourceEvidence: string;
 };
 
+type PracticeTaxonomySnapshotRecord = {
+  version: string;
+  exerciseScopes: PracticeScopeRecord[];
+};
+
 type AuthoredLesson = {
   id: string;
   curriculumId: string;
@@ -50,6 +55,8 @@ const lessonsById = new Map(
   lessonSets.flat().map((lesson) => [lesson.id, lesson])
 );
 const scopeRecords = practiceTaxonomy.exerciseScopes as PracticeScopeRecord[];
+const previousVersions = (practiceTaxonomy.previousVersions ??
+  []) as PracticeTaxonomySnapshotRecord[];
 
 export const PRACTICE_TAXONOMY_VERSION = practiceTaxonomy.version;
 export const PRACTICE_TAXONOMY_RELEASE_ID =
@@ -63,6 +70,48 @@ export type AuthoredPracticeDimension = {
   id: string;
   label: string;
 };
+
+export type AuthoredPracticeScopeSnapshot = {
+  version: string;
+  scopes: AuthoredPracticeScope[];
+};
+
+/** Resolve only exact lesson/exercise IDs present in the authored curriculum. */
+function resolveScopeRecords(
+  records: readonly PracticeScopeRecord[]
+): AuthoredPracticeScope[] {
+  return records
+    .flatMap((scope) => {
+      const lesson = lessonsById.get(scope.lessonId);
+      const exercise = lesson?.exercises.find(
+        (item) => item.id === scope.exerciseId
+      );
+      if (!lesson || !exercise) return [];
+
+      return [
+        {
+          ...scope,
+          topicIds: [...scope.topicIds],
+          techniqueIds: [...scope.techniqueIds],
+          stringNumbers: [...scope.stringNumbers],
+          fretPositionIds: [...scope.fretPositionIds],
+          curriculumId: lesson.curriculumId,
+          curriculumWeekId: lesson.curriculumWeekId,
+          week: lesson.week,
+          route: lesson.route,
+          lessonTitle: lesson.title,
+          focus: lesson.focus,
+          estimatedMinutes: lesson.estimatedMinutes,
+          exerciseTitle: exercise.title
+        }
+      ];
+    })
+    .sort(
+      (left, right) =>
+        left.lessonId.localeCompare(right.lessonId) ||
+        left.exerciseId.localeCompare(right.exerciseId)
+    );
+}
 
 /** List only dimensions defined by the active authored taxonomy. */
 export function listAuthoredPracticeDimensions(): AuthoredPracticeDimension[] {
@@ -101,45 +150,36 @@ export function listAuthoredPracticeDimensions(): AuthoredPracticeDimension[] {
 }
 
 /**
- * Return only exercise scopes tied to the active curriculum release.
+ * Return current exercise scopes for selection in new Practice Studio sessions.
  * A missing or stale taxonomy is unavailable, never guessed from free text.
  */
 export function listAuthoredPracticeScopes(): AuthoredPracticeScope[] {
   if (PRACTICE_TAXONOMY_RELEASE_ID !== ACTIVE_CURRICULUM_RELEASE_ID) {
     return [];
   }
+  return resolveScopeRecords(scopeRecords);
+}
 
-  return scopeRecords
-    .flatMap((scope) => {
-      const lesson = lessonsById.get(scope.lessonId);
-      const exercise = lesson?.exercises.find(
-        (item) => item.id === scope.exerciseId
-      );
-      if (!lesson || !exercise) return [];
+/**
+ * Return immutable scope snapshots for every supported taxonomy version.
+ * Historical versions are read-only compatibility data: new sessions always
+ * use the current version, while exact prior links remain valid for analytics.
+ */
+export function listAuthoredPracticeScopeSnapshots(): AuthoredPracticeScopeSnapshot[] {
+  if (PRACTICE_TAXONOMY_RELEASE_ID !== ACTIVE_CURRICULUM_RELEASE_ID) {
+    return [];
+  }
 
-      return [
-        {
-          ...scope,
-          topicIds: [...scope.topicIds],
-          techniqueIds: [...scope.techniqueIds],
-          stringNumbers: [...scope.stringNumbers],
-          fretPositionIds: [...scope.fretPositionIds],
-          curriculumId: lesson.curriculumId,
-          curriculumWeekId: lesson.curriculumWeekId,
-          week: lesson.week,
-          route: lesson.route,
-          lessonTitle: lesson.title,
-          focus: lesson.focus,
-          estimatedMinutes: lesson.estimatedMinutes,
-          exerciseTitle: exercise.title
-        }
-      ];
-    })
-    .sort(
-      (left, right) =>
-        left.lessonId.localeCompare(right.lessonId) ||
-        left.exerciseId.localeCompare(right.exerciseId)
-    );
+  return [
+    ...previousVersions.map((snapshot) => ({
+      version: snapshot.version,
+      scopes: resolveScopeRecords(snapshot.exerciseScopes)
+    })),
+    {
+      version: PRACTICE_TAXONOMY_VERSION,
+      scopes: listAuthoredPracticeScopes()
+    }
+  ];
 }
 
 /** Resolve an exact authored lesson/exercise pair; unknown IDs stay untagged. */

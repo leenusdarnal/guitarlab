@@ -486,23 +486,40 @@ describe('buildAdaptivePracticeSnapshot', () => {
     expect(recommendation?.priority).toBe(30);
   });
 
-  it('counts only distinct exercises with exact current authored identity for exposure coverage', () => {
+  it('counts distinct exercises across supported taxonomy versions with exact identity', () => {
     const linked = (
       id: string,
       lessonId: string,
       authoredExerciseId: string,
       recordedAt: number,
-      sessionId = '00000000-0000-4000-8000-000000000002'
+      sessionId: string,
+      practiceTaxonomyVersion = '0.1.0'
     ): PracticeEvidenceRecord => ({
       ...observation(id, 'learner-entered exercise label', 5, recordedAt),
       sessionId,
       curriculumReleaseId: 'curriculum-v1.0.6',
       lessonId,
       authoredExerciseId,
-      practiceTaxonomyVersion: '0.1.0',
+      practiceTaxonomyVersion,
       repetitions: 100_000,
       cleanRepetitions: 100_000
     });
+    const scopeA = {
+      lessonId: 'lesson-a',
+      exerciseId: 'exercise-a',
+      topicIds: ['topic.tuning'],
+      techniqueIds: ['technique.strumming'],
+      stringNumbers: [1],
+      fretPositionIds: ['position.open']
+    };
+    const scopeB = {
+      lessonId: 'lesson-b',
+      exerciseId: 'exercise-b',
+      topicIds: ['topic.tuning'],
+      techniqueIds: [],
+      stringNumbers: [],
+      fretPositionIds: ['position.open']
+    };
 
     const result = buildAdaptivePracticeSnapshot({
       learnerId: '00000000-0000-4000-8000-000000000001',
@@ -511,10 +528,30 @@ describe('buildAdaptivePracticeSnapshot', () => {
       attempts: [],
       mastery: [],
       practiceEvidence: [
-        linked('linked-a1', 'lesson-a', 'exercise-a', 100),
-        linked('linked-a2', 'lesson-a', 'exercise-a', 110),
         linked(
-          'linked-b',
+          'old-a',
+          'lesson-a',
+          'exercise-a',
+          100,
+          '00000000-0000-4000-8000-000000000002'
+        ),
+        linked(
+          'old-a-repeat',
+          'lesson-a',
+          'exercise-a',
+          110,
+          '00000000-0000-4000-8000-000000000004'
+        ),
+        linked(
+          'new-a',
+          'lesson-a',
+          'exercise-a',
+          115,
+          '00000000-0000-4000-8000-000000000005',
+          '0.2.0'
+        ),
+        linked(
+          'old-b',
           'lesson-b',
           'exercise-b',
           120,
@@ -522,38 +559,48 @@ describe('buildAdaptivePracticeSnapshot', () => {
         ),
         observation('legacy-free-text', 'exercise-a', 130, 130),
         {
-          ...linked('stale-version', 'lesson-a', 'exercise-a', 140),
+          ...linked(
+            'unsupported-version',
+            'lesson-a',
+            'exercise-a',
+            140,
+            '00000000-0000-4000-8000-000000000006'
+          ),
           practiceTaxonomyVersion: '0.0.9'
         },
         {
-          ...linked('stale-release', 'lesson-a', 'exercise-a', 150),
+          ...linked(
+            'stale-release',
+            'lesson-a',
+            'exercise-a',
+            150,
+            '00000000-0000-4000-8000-000000000007'
+          ),
           curriculumReleaseId: 'curriculum-v1.0.5'
         },
         {
-          ...linked('wrong-lesson-pair', 'lesson-other', 'exercise-a', 160)
+          ...linked(
+            'wrong-lesson-pair',
+            'lesson-other',
+            'exercise-a',
+            160,
+            '00000000-0000-4000-8000-000000000008'
+          )
         },
         {
-          ...linked('other-learner', 'lesson-a', 'exercise-a', 170),
+          ...linked(
+            'other-learner',
+            'lesson-a',
+            'exercise-a',
+            170,
+            '00000000-0000-4000-8000-000000000009'
+          ),
           learnerId: '00000000-0000-4000-8000-000000000099'
         }
       ],
-      authoredPracticeScopes: [
-        {
-          lessonId: 'lesson-a',
-          exerciseId: 'exercise-a',
-          topicIds: ['topic.tuning'],
-          techniqueIds: ['technique.strumming'],
-          stringNumbers: [1],
-          fretPositionIds: ['position.open']
-        },
-        {
-          lessonId: 'lesson-b',
-          exerciseId: 'exercise-b',
-          topicIds: ['topic.tuning'],
-          techniqueIds: [],
-          stringNumbers: [],
-          fretPositionIds: ['position.open']
-        }
+      authoredPracticeTaxonomies: [
+        { version: '0.1.0', scopes: [scopeA, scopeB] },
+        { version: '0.2.0', scopes: [scopeA, scopeB] }
       ],
       authoredPracticeDimensions: [
         {
@@ -569,7 +616,6 @@ describe('buildAdaptivePracticeSnapshot', () => {
         },
         { category: 'topic', id: 'topic.tuning', label: 'Tuning' }
       ],
-      practiceTaxonomyVersion: '0.1.0',
       now: 200
     });
 
@@ -580,7 +626,7 @@ describe('buildAdaptivePracticeSnapshot', () => {
         label: 'Open position',
         observedExerciseCount: 2,
         availableExerciseCount: 2,
-        observedSessionCount: 2,
+        observedSessionCount: 4,
         latestObservedAt: 120
       },
       {
@@ -589,8 +635,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
         label: 'High E',
         observedExerciseCount: 1,
         availableExerciseCount: 1,
-        observedSessionCount: 1,
-        latestObservedAt: 110
+        observedSessionCount: 3,
+        latestObservedAt: 115
       },
       {
         category: 'technique',
@@ -598,8 +644,8 @@ describe('buildAdaptivePracticeSnapshot', () => {
         label: 'Strumming',
         observedExerciseCount: 1,
         availableExerciseCount: 1,
-        observedSessionCount: 1,
-        latestObservedAt: 110
+        observedSessionCount: 3,
+        latestObservedAt: 115
       },
       {
         category: 'topic',
@@ -607,8 +653,95 @@ describe('buildAdaptivePracticeSnapshot', () => {
         label: 'Tuning',
         observedExerciseCount: 2,
         availableExerciseCount: 2,
-        observedSessionCount: 2,
+        observedSessionCount: 4,
         latestObservedAt: 120
+      }
+    ]);
+  });
+
+  it('does not backfill a newly introduced dimension onto older taxonomy versions', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      skills,
+      attempts: [],
+      mastery: [],
+      practiceEvidence: [
+        {
+          ...observation('old-version', 'old exercise', 5, 100),
+          sessionId: '00000000-0000-4000-8000-000000000002',
+          curriculumReleaseId: 'curriculum-v1.0.6',
+          lessonId: 'lesson-a',
+          authoredExerciseId: 'exercise-a',
+          practiceTaxonomyVersion: '0.1.0'
+        },
+        {
+          ...observation(
+            'new-version',
+            'same exercise after taxonomy update',
+            5,
+            150
+          ),
+          sessionId: '00000000-0000-4000-8000-000000000003',
+          curriculumReleaseId: 'curriculum-v1.0.6',
+          lessonId: 'lesson-a',
+          authoredExerciseId: 'exercise-a',
+          practiceTaxonomyVersion: '0.2.0'
+        }
+      ],
+      authoredPracticeTaxonomies: [
+        {
+          version: '0.1.0',
+          scopes: [
+            {
+              lessonId: 'lesson-a',
+              exerciseId: 'exercise-a',
+              topicIds: ['topic.original'],
+              techniqueIds: [],
+              stringNumbers: [],
+              fretPositionIds: []
+            }
+          ]
+        },
+        {
+          version: '0.2.0',
+          scopes: [
+            {
+              lessonId: 'lesson-a',
+              exerciseId: 'exercise-a',
+              topicIds: ['topic.original', 'topic.new'],
+              techniqueIds: [],
+              stringNumbers: [],
+              fretPositionIds: []
+            }
+          ]
+        }
+      ],
+      authoredPracticeDimensions: [
+        { category: 'topic', id: 'topic.new', label: 'New dimension' },
+        { category: 'topic', id: 'topic.original', label: 'Original' }
+      ],
+      now: 200
+    });
+
+    expect(result.practiceExposureCoverage).toEqual([
+      {
+        category: 'topic',
+        dimensionId: 'topic.new',
+        label: 'New dimension',
+        observedExerciseCount: 1,
+        availableExerciseCount: 1,
+        observedSessionCount: 1,
+        latestObservedAt: 150
+      },
+      {
+        category: 'topic',
+        dimensionId: 'topic.original',
+        label: 'Original',
+        observedExerciseCount: 1,
+        availableExerciseCount: 1,
+        observedSessionCount: 2,
+        latestObservedAt: 150
       }
     ]);
   });
@@ -621,20 +754,24 @@ describe('buildAdaptivePracticeSnapshot', () => {
       attempts: [],
       mastery: [],
       practiceEvidence: [observation('legacy', 'old free text', 5, 100)],
-      authoredPracticeScopes: [
+      authoredPracticeTaxonomies: [
         {
-          lessonId: 'lesson-a',
-          exerciseId: 'exercise-a',
-          topicIds: ['topic.tuning'],
-          techniqueIds: [],
-          stringNumbers: [],
-          fretPositionIds: []
+          version: '0.2.0',
+          scopes: [
+            {
+              lessonId: 'lesson-a',
+              exerciseId: 'exercise-a',
+              topicIds: ['topic.tuning'],
+              techniqueIds: [],
+              stringNumbers: [],
+              fretPositionIds: []
+            }
+          ]
         }
       ],
       authoredPracticeDimensions: [
         { category: 'topic', id: 'topic.tuning', label: 'Tuning' }
       ],
-      practiceTaxonomyVersion: '0.1.0',
       now: 200
     });
     expect(result.practiceExposureCoverage).toEqual([
