@@ -140,12 +140,14 @@ try {
       })
     ]);
     database.close();
-    return attempts.find(
-      (attempt) =>
-        attempt.learnerId === active &&
-        attempt.assessmentInstrument?.definitionId ===
-          'guitar.standard-tuning-open-pitches'
-    ) ?? null;
+    return (
+      attempts.find(
+        (attempt) =>
+          attempt.learnerId === active &&
+          attempt.assessmentInstrument?.definitionId ===
+            'guitar.standard-tuning-open-pitches'
+      ) ?? null
+    );
   });
   assert.ok(savedAssessment, 'The objective assessment must be saved locally');
   assert.equal(savedAssessment.curriculumReleaseId, 'curriculum-v1.0.6');
