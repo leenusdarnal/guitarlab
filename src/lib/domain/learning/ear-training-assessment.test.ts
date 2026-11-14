@@ -145,5 +145,12 @@ describe('pulse recognition assessment evidence', () => {
         'rising'
       )
     ).toThrow('not valid for this pulse item');
+    const invalidKey = {
+      ...createEarTrainingExercise('pulse', 0),
+      answer: 'rising'
+    };
+    expect(() =>
+      scorePulseRecognitionResponse(invalidKey, 'steady')
+    ).toThrow('The pulse item does not have an authored answer.');
   });
 });
