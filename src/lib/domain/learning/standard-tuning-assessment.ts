@@ -63,6 +63,9 @@ export type ScoredStandardTuningAssessment = {
     definitionId: string;
     definitionVersion: number;
     scoringRuleVersion: string;
+    itemCount: number;
+    passThreshold: number;
+    decisionScope: 'skill_level' | 'supporting_probe';
   };
   itemEvidence: ScoredStandardTuningItem[];
   correctCount: number;
