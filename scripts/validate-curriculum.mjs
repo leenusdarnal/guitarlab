@@ -207,3 +207,37 @@ if (failures.length) {
 } else {
   console.log("Curriculum validation passed: 52 Year 1 + 52 Year 2 + 48 Year 3 lessons.");
 }
+
+const countText = (values) => {
+  const counts = new Map();
+  for (const value of values) {
+    if (isText(value)) counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+  return [...counts.entries()].sort((left, right) => right[1] - left[1]);
+};
+const lessonCount = authoredLessons.length;
+const qualityAdvisories = [];
+const secondObjective = countText(authoredLessons.map((lesson) => lesson.learningObjectives?.[1]))[0];
+const thirdObjective = countText(authoredLessons.map((lesson) => lesson.learningObjectives?.[2]))[0];
+const repeatedCriterion = countText(
+  authoredLessons.flatMap((lesson) => (lesson.successCriteria ?? []).map((criterion) => criterion.criterion))
+)[0];
+const keyIdeaCount = new Set(authoredLessons.map((lesson) => lesson.explanation?.keyIdea).filter(isText)).size;
+
+if (secondObjective && secondObjective[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`learning objective 2 repeats in ${secondObjective[1]}/${lessonCount} lessons`);
+}
+if (thirdObjective && thirdObjective[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`learning objective 3 repeats in ${thirdObjective[1]}/${lessonCount} lessons`);
+}
+if (repeatedCriterion && repeatedCriterion[1] >= Math.ceil(lessonCount * 0.8)) {
+  qualityAdvisories.push(`one success criterion is shared by ${repeatedCriterion[1]}/${lessonCount} lessons`);
+}
+if (keyIdeaCount <= Math.ceil(lessonCount * 0.2)) {
+  qualityAdvisories.push(`only ${keyIdeaCount} distinct key-idea explanations exist across ${lessonCount} lessons`);
+}
+if (qualityAdvisories.length) {
+  console.warn("Curriculum quality advisory (non-blocking):");
+  for (const advisory of qualityAdvisories) console.warn(`- ${advisory}`);
+  console.warn("These signals require human review; they do not fail curriculum validation.");
+}
