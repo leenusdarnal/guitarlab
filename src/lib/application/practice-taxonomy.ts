@@ -83,8 +83,7 @@ export function getAuthoredPracticeScope(
 ): AuthoredPracticeScope | null {
   return (
     listAuthoredPracticeScopes().find(
-      (scope) =>
-        scope.lessonId === lessonId && scope.exerciseId === exerciseId
+      (scope) => scope.lessonId === lessonId && scope.exerciseId === exerciseId
     ) ?? null
   );
 }
