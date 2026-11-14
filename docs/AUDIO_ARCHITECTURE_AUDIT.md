@@ -1,110 +1,59 @@
-# GuitarLab Audio Architecture Audit
+# GuitarLab Audio Architecture and Delivery Audit
 
-**Date:** 2026-11-13  
-**Baseline:** `main` at `29625fe9b69263a10550587458724d9baccbf382`  
-**Tracking:** [Issue #68 — Shared audio foundation and microphone pitch recognition](https://github.com/leenusdarnal/guitarlab/issues/68)
+**Last reconciled:** 2026-11-14  
+**Verified baseline:** `main` at `de9b0f3992c258e5dfdc840e48fb45da47276bd2`  
+**Implementation tracking:** [Issue #68](https://github.com/leenusdarnal/guitarlab/issues/68) — closed  
+**Remaining external validation:** [Issue #89](https://github.com/leenusdarnal/guitarlab/issues/89)
 
 ## Executive finding
 
-GuitarLab currently has two implemented Web Audio feature areas: the metronome/reference tone and generated ear-training exercises. They each own their own `AudioContext` lifecycle and implement oscillator/gain-node setup independently. There is no shared audio-session abstraction and no microphone capture or pitch-detection implementation in the current source tree.
+The shared audio and single-note pitch-recognition implementation is now merged. Do not restart the earlier audio-foundation plan or duplicate its work. PRs #73–80 cover lifecycle tests, cleanup fixes and explicitly owned audio sessions. PRs #81–86 and #90–91 cover confidence-aware pitch estimation, explicit microphone input, stable-note tracking, the tuner, guided note recognition, synthetic benchmarks and a local real-recording evaluation tool.
 
-This is a justified opportunity for a small shared audio foundation, but not a reason to introduce a global singleton or rewrite the feature schedulers. Keep scheduling policy owned by each feature; extract only the common context lifecycle and tone-node construction after tests cover the current behaviour.
+The implementation is local-first and microphone capture is user initiated. The remaining gap is evidence from a consented real-guitar corpus and physical browsers/devices. Synthetic signals and mocked Chromium acceptance are regression evidence; they are not proof of real-world accuracy or hardware compatibility.
 
-## Current implementation inventory
+## Implemented areas
 
-| Area | Source | Context ownership | Playback and cleanup |
-|---|---|---|---|
-| Metronome | `src/lib/audio/metronome.ts` — `WebAudioMetronome` | One context owned by each metronome instance; created lazily on start | Lookahead scheduler uses a 25 ms timer and 100 ms audio-clock window. `stop()` clears the timer and visibility listener. `dispose()` closes the owned context. Individual oscillator/gain nodes disconnect on `ended`. |
-| Reference tone | `src/lib/audio/metronome.ts` — `playReferenceTone()` | Creates a fresh context for each call | Schedules one oscillator/gain pair, waits for `ended`, disconnects nodes and closes the context in `finally`. |
-| Ear training | `src/routes/tools/ear-training/+page.svelte` — `playExercise()` | One context retained by the page component and lazily created after learner action | Schedules each exercise tone using oscillator/gain pairs; nodes disconnect on `ended`. The context closes in Svelte `onDestroy`. An abortable completion wait is cleared on teardown; hiding the document aborts playback and closes the page-owned context. The next explicit play creates a fresh context. |
-| Microphone/tuner | No implementation found in the current repository tree | None | No `getUserMedia`, `MediaStream`, analyser or pitch detector found in the inspected audio feature files/tree. |
+| Area | Merged implementation | Current boundary |
+|---|---|---|
+| Audio lifecycle | PRs #73–80 | Feature-owned sessions; start/resume/stop/dispose; metronome scheduler stays feature-owned; resource cleanup is tested |
+| Pitch estimator | PR #81 | Single-note pitch estimate with confidence and uncertain/no-signal handling |
+| Microphone input | PR #82 | Permission only after explicit learner action; local ephemeral samples; device/error handling and stream-track cleanup |
+| Stable-note tracking | PR #83 | Smoothing/hysteresis and sustained-note event suppression |
+| Tuner | PR #84 | Chromatic tuner at `/tools/tuner`; permission and device states are learner-facing |
+| Note recognition | PR #85 | Guided generated-audio/recognition exercise; does not require recording upload |
+| Synthetic validation | PRs #86 and #90 | Deterministic fixtures and regression/error-budget tests |
+| Local recording evaluation | PR #91 | Evaluator runs on local supplied recordings; source recordings are not intended for repository or production upload |
 
-## Findings and risks
+## Architecture constraints to preserve
 
-### 1. Duplicated context lifecycle
+1. Keep `AudioContext` ownership explicit and feature-scoped; do not add a global singleton.
+2. Preserve the metronome's Web Audio lookahead scheduler. Do not replace it with repeated timer-driven beat playback.
+3. Request microphone permission only after a clear learner action.
+4. Keep raw samples local and ephemeral; do not upload, persist or log raw audio or microphone samples.
+5. Treat low-confidence detections as uncertain rather than showing a confident wrong note.
+6. Keep microphone denial, missing devices and unsupported APIs from blocking the metronome, ear training or other non-microphone functionality.
+7. Do not infer polyphonic chord recognition from the single-note estimator.
+8. Avoid unsupported accuracy claims. Record device/browser, input device, sample rate and acoustic context for any real-world measurement.
 
-- Metronome, reference tone and ear training each construct `AudioContext` independently.
-- Each feature handles suspended-context resume and checks for a running context.
-- Ownership differs: long-lived metronome instance, one-shot reference tone, and page-scoped ear-training context.
-- A shared abstraction should make ownership and disposal explicit without forcing all three use cases into one lifetime.
+## Remaining evidence — Issue #89
 
-### 2. Duplicated oscillator/gain construction
+- Define and review a consented, local-only real-guitar recording corpus with known ground-truth frequencies and provenance.
+- Measure per-string detection coverage, median and P95 absolute cents error, false-note rate during silence/noise, and note-on latency.
+- Include instrument/pickup or microphone, playing dynamics, tuning offsets, room noise, and attack/sustain/decay segments.
+- Run physical microphone acceptance on supported browser/OS/device combinations and record exact versions, sample rate and device class.
+- Verify track cleanup and audio-context lifecycle on physical devices during stop, route navigation, permission denial, device removal and page teardown.
+- Attach only derived aggregate metrics to the repository; retain raw recordings locally unless consent and licensing explicitly allow otherwise.
+- Record tested versus untested combinations. Do not infer compatibility from mocked Chromium runs.
 
-- Metronome clicks, reference tone and ear-training notes all create oscillator and gain nodes, set a sine frequency, shape a short gain envelope, connect to destination and disconnect on `ended`.
-- Their envelopes and scheduling differ intentionally; a shared primitive should accept frequency, absolute audio start/end times and gain/envelope parameters rather than hard-code a single sound profile.
-- The metronome's lookahead scheduling must remain on the Web Audio clock. Do not replace it with repeated `setTimeout` playback.
+## Related release hardening — Issue #18
 
-### 3. Stop and teardown semantics need explicit tests
+Cross-browser audio timing, permission-denied paths and physical-device resource cleanup are part of the wider release checklist. CSP, full WCAG 2.2 AA review, privacy, dependencies/content licences, performance, offline and rollback acceptance remain separate gates. Production deployment remains deferred.
 
-- Metronome `stop()` stops future scheduling but already queued lookahead oscillators can still play for their short scheduled duration. Confirm and document the intended maximum tail before deciding whether active source nodes need explicit cancellation.
-- Ear-training teardown now aborts its completion wait before closing the page-owned context, so unmount does not leave the completion timer pending or update stale component state.
-- Ear training now follows the metronome's hidden-tab policy: a `visibilitychange` to `hidden` aborts playback, closes the page-owned context and clears the playing state. A later learner action creates a fresh context.
-- Reference tone closes its one-shot context in `finally`, which is a useful ownership pattern to preserve.
+## Completion boundary
 
-### 4. Existing test coverage is incomplete at the Web Audio boundary
+- [x] Existing Web Audio lifecycle risk audited and remediated in PRs #73–80.
+- [x] Explicit microphone input, pitch estimator, stable-note tracking, tuner and note-recognition exercise merged in PRs #81–85.
+- [x] Synthetic pitch validation merged in PRs #86 and #90.
+- [x] Local real-recording evaluation tooling merged in PR #91.
+- [ ] Real-guitar corpus metrics and physical-device/browser matrix recorded in Issue #89.
 
-- `src/lib/audio/metronome.test.ts` covers tempo/meter validation and invalid reference-tone arguments.
-- Browser acceptance verifies metronome start/stop, reference-tone playback, ear-training playback and answers; it now also covers ear-training interruption on tab hide and route teardown.
-- `src/lib/audio/playback-lifecycle.test.ts` verifies normal completion, abort-driven timer cleanup, already-aborted signals and invalid durations. Actual AudioContext creation/resume/close remains covered by the metronome tests only; reference-tone and ear-training Web Audio context boundaries still need dedicated deterministic seams.
-- Add deterministic fake-Web-Audio tests before refactoring; retain browser acceptance for actual browser integration.
-
-### 5. Microphone capability is a new feature, not a refactor of existing capture
-
-- No microphone permission or capture path exists in the inspected source tree.
-- Microphone capture must be introduced only after an explicit learner action.
-- Keep raw samples local and ephemeral. Never log, persist or upload microphone samples by default.
-- Pitch detection must report confidence and distinguish silence/noise/uncertain input from a confidently detected note.
-- Stable-note tracking is needed to avoid emitting repeated note events for one sustained note.
-
-## Recommended target boundaries
-
-1. **Audio session factory (small, feature-owned instances):** create/resume an `AudioContext`, expose its running context, and close it deterministically. No implicit global singleton.
-2. **Tone scheduling primitive:** create and clean up an oscillator/gain voice using caller-supplied timing and envelope settings. Do not own the metronome's timer or ear-training exercise sequence.
-3. **Feature schedulers remain separate:** `WebAudioMetronome` retains lookahead timing; ear training retains exercise generation and sequencing; reference tone remains a one-shot caller.
-4. **Microphone input service (separate capability):** explicit permission, stream-track stop, analyser lifecycle, silence/noise handling and confidence-aware pitch estimation. Do not couple it to tone playback.
-5. **Test seams:** inject context creation or a narrow audio-context factory so unit tests can deterministically verify resume, failure, stop, close and node cleanup.
-
-## Proposed implementation sequence
-
-### A. Characterise current behaviour
-- Add fake AudioContext tests for the metronome and reference tone.
-- [x] Add ear-training playback lifecycle coverage for abortable completion waits and component teardown during playback.
-- [x] Align ear-training hidden-tab behaviour with the metronome: abort playback and close the page-owned context.
-- [ ] Record the short scheduled-click tail and decide whether queued metronome clicks need explicit cancellation.
-
-### B. Extract the minimal shared playback layer
-- Introduce an explicitly owned audio-session factory.
-- Introduce a tone voice helper with caller-defined timing/envelope.
-- Migrate reference tone first, then ear training, then metronome only if the tests show no timing regression.
-- Keep the feature-specific schedulers and exercise domain pure.
-
-### C. Add microphone capture and pitch estimation
-- Add permission/no-device/unsupported-browser handling.
-- Implement a testable pitch-estimation core independent of browser media APIs.
-- Add silence/noise rejection, confidence thresholds and stable-note tracking.
-- Connect a browser capture adapter only after the estimator is tested.
-
-### D. Add tuner and validation
-- Add chromatic tuner UI with explicit start/stop.
-- Benchmark synthetic signals and representative real guitar recordings.
-- Test supported browser engines and physical devices.
-- Document measured limitations; do not publish accuracy claims without representative results.
-
-## Non-goals for this slice
-
-- Do not add polyphonic chord recognition.
-- Do not upload or persist raw audio.
-- Do not introduce a global singleton AudioContext manager.
-- Do not replace Web Audio lookahead scheduling with timer-based beat playback.
-- Do not copy third-party pitch-detection source code.
-- Do not change user-facing sound or timing until regression tests exist.
-
-## Audit exit criteria
-
-- [x] Current Web Audio owners and lifecycle patterns are inventoried.
-- [x] Existing duplication and lifecycle risks are documented.
-- [x] Microphone/tuner implementation status is verified as not present in the inspected repository tree.
-- [x] Minimal shared boundaries and a safe migration order are proposed.
-- [ ] Unit tests characterise current context lifecycle and teardown behaviour.
-- [ ] Shared audio-session and tone helpers are implemented and regression-tested.
-- [ ] Microphone capture, pitch estimation, tuner and real-device benchmarks are implemented in later slices.
