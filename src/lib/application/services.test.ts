@@ -482,7 +482,20 @@ describe('M2.2 application service boundaries', () => {
       outcome: 'passed',
       score: 90,
       evidenceSummary: 'Correctly named all six strings.',
-      evidence: { correctItems: 6, totalItems: 6 }
+      evidence: { correctItems: 6, totalItems: 6 },
+      assessmentInstrument: {
+        definitionId: 'guitar.standard-tuning-open-pitches',
+        definitionVersion: 1,
+        scoringRuleVersion: 'exact-pitch-five-of-six-v1'
+      },
+      itemEvidence: [
+        {
+          itemId: 'standard-tuning.string-6-open-pitch',
+          response: 'E2',
+          outcome: 'correct',
+          responseSource: 'learner_selected_option'
+        }
+      ]
     } as const;
 
     const attempt = await recordAssessmentAttempt(
@@ -497,6 +510,10 @@ describe('M2.2 application service boundaries', () => {
 
     expect(attempt.learnerId).toBe(learnerId);
     expect(attempt.id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(attempt.assessmentInstrument?.definitionId).toBe(
+      'guitar.standard-tuning-open-pitches'
+    );
+    expect(attempt.itemEvidence).toEqual(submission.itemEvidence);
     expect(harness.attempts).toHaveLength(1);
     await expect(
       recordAssessmentAttempt(
