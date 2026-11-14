@@ -303,7 +303,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Set up the guitar comfortably, tune all six strings to E–A–D–G–B–E and name them low-to-high without a reference chart.",
-      "skillIds": ["instrument.tuning","instrument.posture"],
+      "skillIds": ["instrument.tuning", "instrument.posture"],
       "workedExamples": [
         {
           "kind": "tuning-reference",
@@ -534,7 +534,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play A minor pentatonic box 1 and adjacent box 2 as one connected pattern, name A–C–D–E–G and finish a short phrase on A.",
-      "skillIds": ["lead.major-scale","lead.pentatonic"],
+      "skillIds": ["lead.major-scale", "lead.pentatonic"],
       "workedExamples": [
         {
           "kind": "major-scale-reference",
@@ -770,7 +770,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Match a whole-step bend from B-string fret 8 (G) to fret 10 (A), release cleanly, then use the bend in a short A minor pentatonic blues phrase without losing the pulse.",
-      "skillIds": ["lead.pentatonic","lead.phrasing","technique.bends"],
+      "skillIds": ["lead.pentatonic", "lead.phrasing", "technique.bends"],
       "workedExamples": [
         {
           "kind": "pitch-reference",
@@ -2486,7 +2486,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Use task-specific evidence, revisit the skill after a delay and check transfer in another musical context. Do not infer durable mastery from one recording."
       },
       "checkpoint": "Play a two-bar call-and-response phrase over an A blues pulse with a counted rest, a recognisable motif variation and a deliberate resolving note.",
-      "skillIds": ["lead.phrasing","rhythm.muting","rhythm.pulse","ear.rhythm"],
+      "skillIds": [
+        "lead.phrasing",
+        "rhythm.muting",
+        "rhythm.pulse",
+        "ear.rhythm"
+      ],
       "workedExamples": [
         {
           "kind": "phrase-example",
@@ -6195,7 +6200,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play the three compact voicings with intended notes ringing and unused strings controlled; compare each chord against its root bass note.",
-      "skillIds": ["harmony.seventh-chords","harmony.voice-leading"],
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "worked-example",
@@ -6419,7 +6424,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Perform a four-bar swing comp with an even quarter-note pulse and a clear, controlled long–short eighth-note feel.",
-      "skillIds": ["rhythm.pulse","rhythm.subdivision"],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision"],
       "workedExamples": [
         {
           "kind": "worked-example",
@@ -6643,7 +6648,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play the guide-tone line F–F–E and C–B–B across Dm7–G7–Cmaj7, hearing the semitone resolutions into the tonic chord.",
-      "skillIds": ["harmony.voice-leading","harmony.seventh-chords"],
+      "skillIds": ["harmony.voice-leading", "harmony.seventh-chords"],
       "workedExamples": [
         {
           "kind": "worked-example",
@@ -6867,7 +6872,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play both progressions in compact voicings with clear thirds and sevenths, controlled string noise and smooth guide-tone movement.",
-      "skillIds": ["harmony.seventh-chords","harmony.voice-leading"],
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "worked-example",
@@ -7099,7 +7104,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play Dm9–G13–Cmaj9 with the stated voicings, name the guide tones and added extension in each, and distinguish Cadd9 from Cmaj9.",
-      "skillIds": ["harmony.seventh-chords","harmony.voice-leading"],
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "voicing-map",
@@ -7576,7 +7581,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Perform the two-layer bossa-inspired starter pattern over Am7–Dm7–G7–Cmaj7, keeping the bass pulse steady and adding one intentional upper-chord anticipation.",
-      "skillIds": ["rhythm.pulse","rhythm.subdivision","rhythm.strumming"],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "rhythm-grid",
@@ -7813,7 +7818,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Perform a complete 12-bar A blues, identify bar numbers and I7/IV7/V7 roles, compare the jazz variation, and play one shaped A minor-pentatonic call-and-response chorus.",
-      "skillIds": ["arrangement.song-form","lead.pentatonic","lead.phrasing"],
+      "skillIds": ["arrangement.song-form", "lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "form-map",
@@ -8269,7 +8274,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate tune learning workflow in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch","ear.rhythm","ear.melody-transcription"],
+      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription"],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -8952,7 +8957,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate listening journal in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch","ear.rhythm","ear.melody-transcription","ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -9180,7 +9190,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate ear intervals in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch","ear.rhythm","ear.melody-transcription","ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -9859,7 +9874,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate transposition in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["fretboard.string-map","fretboard.natural-notes"],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -10319,7 +10334,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate arranging texture in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["arrangement.song-form","lead.phrasing"],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -10779,7 +10794,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate songwriting form in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["arrangement.song-form","lead.phrasing"],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -11239,7 +11254,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate teaching a skill in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["harmony.triads","harmony.voice-leading"],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
