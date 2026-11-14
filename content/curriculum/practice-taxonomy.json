@@ -451,9 +451,9 @@
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
           "techniqueIds": [
-        "technique.alternate-picking",
-        "technique.string-crossing"
-      ],
+            "technique.alternate-picking",
+            "technique.string-crossing"
+          ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
