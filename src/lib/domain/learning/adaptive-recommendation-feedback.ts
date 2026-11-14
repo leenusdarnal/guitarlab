@@ -37,6 +37,13 @@ export const adaptiveRecommendationFeedbackSchema = z
   })
   .strict()
   .superRefine((record, context) => {
+    if (record.recommendationId !== `${record.targetType}:${record.targetId}`) {
+      context.addIssue({
+        code: 'custom',
+        path: ['recommendationId'],
+        message: 'Recommendation identity must match its target type and ID.'
+      });
+    }
     if (record.action === 'dismiss' && record.correction !== null) {
       context.addIssue({
         code: 'custom',
