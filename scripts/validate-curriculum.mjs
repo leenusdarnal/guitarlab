@@ -13,7 +13,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const unique = (values) => new Set(values).size === values.length;
 const isText = (value) => typeof value === "string" && value.trim().length > 0;
 
-const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog, skillAssessmentProfiles] = await Promise.all([
+const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog, skillAssessmentProfiles, releaseManifest] = await Promise.all([
   readJson("content/curriculum/year-1.json"),
   readJson("content/curriculum/year-2.json"),
   readJson("content/curriculum/year-3-specialisations.json"),
@@ -22,7 +22,8 @@ const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatal
   readJson("content/curriculum/year-3-specialisation-lessons.json"),
   readJson("content/curriculum/year-1-dashboard-index.json"),
   readJson("content/curriculum/skill-catalog.json"),
-  readJson("content/curriculum/skill-assessment-profiles.json")
+  readJson("content/curriculum/skill-assessment-profiles.json"),
+  readJson("content/curriculum/release.json")
 ]);
 
 const checkOutline = (name, outline, expectedCount) => {
@@ -115,7 +116,10 @@ const authoredSkillIds = new Set(
 );
 check(skillCatalog.schemaVersion === 1, "Skill catalogue: unsupported schemaVersion");
 check(isText(skillCatalog.version), "Skill catalogue: missing version");
-check(skillCatalog.curriculumReleaseId === "curriculum-v1", "Skill catalogue: unexpected curriculum release key");
+check(releaseManifest.schemaVersion === 1, "Curriculum release: unsupported schemaVersion");
+check(isText(releaseManifest.id) && isText(releaseManifest.version), "Curriculum release: missing ID or version");
+check(releaseManifest.id === `curriculum-v${releaseManifest.version}`, "Curriculum release: ID/version mismatch");
+check(skillCatalog.curriculumReleaseId === releaseManifest.id, "Skill catalogue: curriculum release key does not match the active release");
 check(unique(categoryIds), "Skill catalogue: duplicate category IDs");
 check(unique(catalogSkillIds), "Skill catalogue: duplicate skill IDs");
 for (const category of skillCatalog.categories ?? []) {
