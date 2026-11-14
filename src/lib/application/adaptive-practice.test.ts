@@ -708,6 +708,7 @@ describe('buildAdaptivePracticeSnapshot', () => {
               techniqueIds: [],
               stringNumbers: [],
               fretPositionIds: []
+            }
           ]
         }
       ],
