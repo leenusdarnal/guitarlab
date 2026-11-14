@@ -209,11 +209,11 @@ The following are known candidates from the initial source audit. They are flagg
 | Year 1 | 52 |
 | Year 2 | 52 |
 | Year 3+ | 48 |
-| Lessons flagged for focused review | 5 |
+| Outstanding focused review questions | 2 |
 | Lessons with a documented mapping disposition in this pilot batch | 25 |
 | Lessons still requiring explicit disposition | 127 |
 
-**Important:** Register generation is not the same as mapping validation. The mapping audit remains incomplete until all 152 rows have a recorded disposition and supporting evidence. The five candidates have an initial evidence review in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md`: three mapping sets are provisionally supported and two need curriculum-owner decisions. Continue with the remaining lessons in curriculum order.
+**Current scope:** This register now reflects release `curriculum-v1.0.2` and the latest Year 1/Year 2 mapping corrections. There are 25 lesson rows with an explicit pilot or correction disposition; 127 still require full lesson-level review.\n\n**Important:** Register generation is not the same as mapping validation. The mapping audit remains incomplete until all 152 rows have a recorded disposition and supporting evidence. The five candidates have an initial evidence review in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md`: three mapping sets are provisionally supported and two need curriculum-owner decisions. Continue with the remaining lessons in curriculum order.
 
 ## 6. Sign-off
 
