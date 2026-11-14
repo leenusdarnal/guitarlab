@@ -204,8 +204,13 @@ try {
     .waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await waitForEarAudio();
+  await page.getByRole('button', { name: 'Minor third' }).click();
+  await page.getByText('Not quite — give it another listen.').waitFor();
+  await page.getByText('Interval item evidence saved locally.', { exact: false }).waitFor();
+  await page.getByRole('button', { name: 'Try again' }).click();
   await page.getByRole('button', { name: 'Same note (unison)' }).click();
   await page.getByText("That's right.").waitFor();
+  await page.getByText('Interval item evidence saved locally.', { exact: false }).waitFor();
   await page.getByRole('button', { name: 'Next exercise' }).click();
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await waitForEarAudio();
