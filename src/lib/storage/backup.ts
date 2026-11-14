@@ -243,9 +243,9 @@ export const learnerBackupSchema = z
     for (const evidence of records.practiceEvidence ?? []) {
       const hasAuthoredIdentity = Boolean(
         evidence.curriculumReleaseId ||
-          evidence.lessonId ||
-          evidence.authoredExerciseId ||
-          evidence.practiceTaxonomyVersion
+        evidence.lessonId ||
+        evidence.authoredExerciseId ||
+        evidence.practiceTaxonomyVersion
       );
       if (!hasAuthoredIdentity) continue;
       const session = sessionsById.get(evidence.sessionId);
