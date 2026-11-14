@@ -6215,7 +6215,11 @@
         "harmony.voice-leading"
       ],
       "workedExamples": [
-        "In C: Dm7 = D–F–A–C; G7 = G–B–D–F; Cmaj7 = C–E–G–B. On guitar, compare Dm7 xx0211, G7 3x343x and Cmaj7 x32000. Check each sounding string separately before comping."
+        {
+          "kind": "worked-example",
+          "label": "Week 1 original GuitarLab example",
+          "content": "In C: Dm7 = D–F–A–C; G7 = G–B–D–F; Cmaj7 = C–E–G–B. On guitar, compare Dm7 xx0211, G7 3x343x and Cmaj7 x32000. Check each sounding string separately before comping."
+        }
       ]
     },
     {
@@ -6438,7 +6442,11 @@
         "rhythm.subdivision"
       ],
       "workedExamples": [
-        "At a comfortable tempo, tap quarter notes with the foot and speak 'long-short' for each pair. Then play two muted down-up attacks per beat, delaying the second attack enough to create a clear lilt without changing the foot pulse."
+        {
+          "kind": "worked-example",
+          "label": "Week 2 original GuitarLab example",
+          "content": "At a comfortable tempo, tap quarter notes with the foot and speak 'long-short' for each pair. Then play two muted down-up attacks per beat, delaying the second attack enough to create a clear lilt without changing the foot pulse."
+        }
       ]
     },
     {
@@ -6661,7 +6669,11 @@
         "harmony.seventh-chords"
       ],
       "workedExamples": [
-        "In C, Dm7 contains F and C; G7 contains B and F; Cmaj7 contains E and B. The guide-tone voices can move F→F→E and C→B→B, with one semitone resolution from F to E and another from C to B."
+        {
+          "kind": "worked-example",
+          "label": "Week 3 original GuitarLab example",
+          "content": "In C, Dm7 contains F and C; G7 contains B and F; Cmaj7 contains E and B. The guide-tone voices can move F→F→E and C→B→B, with one semitone resolution from F to E and another from C to B."
+        }
       ]
     },
     {
@@ -6884,7 +6896,11 @@
         "harmony.voice-leading"
       ],
       "workedExamples": [
-        "C major: Dm7–G7–Cmaj7 (ii–V–I). F major: Gm7–C7–Fmaj7. Spell the chords before choosing a guitar grip; keep the thirds and sevenths audible so the functional pull remains clear."
+        {
+          "kind": "worked-example",
+          "label": "Week 4 original GuitarLab example",
+          "content": "C major: Dm7–G7–Cmaj7 (ii–V–I). F major: Gm7–C7–Fmaj7. Spell the chords before choosing a guitar grip; keep the thirds and sevenths audible so the functional pull remains clear."
+        }
       ]
     },
     {
