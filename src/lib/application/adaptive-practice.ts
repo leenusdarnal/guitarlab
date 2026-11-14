@@ -129,7 +129,8 @@ export function buildAdaptivePracticeSnapshot(input: {
   const scopedAttempts = input.attempts.filter(
     (attempt) =>
       attempt.learnerId === input.learnerId &&
-      attempt.curriculumReleaseId === input.curriculumReleaseId
+      attempt.curriculumReleaseId === input.curriculumReleaseId &&
+      attempt.assessmentInstrument?.decisionScope !== 'supporting_probe'
   );
   const scopedMastery = input.mastery.filter(
     (record) =>
