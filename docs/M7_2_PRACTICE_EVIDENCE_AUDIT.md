@@ -102,7 +102,7 @@ The recommendation read model and category assessment-coverage view landed in PR
 - [x] Define a versioned per-item evidence contract for correctness only where the assessment flow directly observes an outcome; include provenance, learner/release scope and backup compatibility (PRs #107–109).
 - [ ] Add explicit canonical topic/technique/fretboard metadata where authors can reliably tag the assessed scope; do not guess tags from free text.
 - [ ] Use item outcomes for repeated-confusion prioritisation and item accuracy only after valid source records exist.
-- [ ] Add topic/fretboard exposure coverage only after canonical metadata and corresponding learner evidence exist.
+- [ ] Add topic/fretboard exposure coverage only after further author review and a defined exposure read model exist.
 - [x] Keep session duration, repetitions, feedback and recommendations outside mastery decisions; preserve explicit missing-data states.
 - [ ] Update the M7.2 issue and implementation checkpoint when the structured evidence slice is merged.
 
@@ -141,7 +141,7 @@ All three flows record response provenance and direct item correctness. The two 
 
 The Practice Studio read model excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. PR #110 now surfaces their comparable item outcomes separately and uses repeated same-item misses for focused-practice ranking without changing whole-skill mastery.
 
-The next implementation should link new practice observations to stable authored lesson/exercise IDs and curriculum release, then derive topic/fretboard exposure only from those links and the authored taxonomy. Existing free-text observations remain unclassified. Expand the taxonomy only after explicit author review; keep confusion/error codes deferred unless an assessment can identify a specific misconception deterministically.
+The Practice Studio now offers an optional selector containing only exact lesson/exercise pairs from the active authored taxonomy. Starting a linked session stores its curriculum release, lesson ID, authored exercise ID and taxonomy version; each new observation inherits that identity from its owning session. General sessions remain available and write explicitly unlinked observations. Historic free-text observations and older session rows remain untouched and unclassified. No exposure analytics are calculated yet. Expand the taxonomy only after explicit author review; keep confusion/error codes deferred unless an assessment can identify a specific misconception deterministically.
 
 ### Current sequence
 
@@ -151,7 +151,8 @@ The next implementation should link new practice observations to stable authored
 - [x] Extend objective item capture to Pulse listening (PR #109).
 - [x] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules (PR #110).
 - [x] Add a first authored topic, technique, string and fret-position taxonomy for ten directly evidenced Year 1 exercises.
-- [ ] Link new practice observations to authored lesson/exercise IDs and curriculum release; do not retroactively classify free-text history.
+- [x] Link newly created Practice Studio sessions and observations to the exact authored lesson/exercise ID, curriculum release and taxonomy version when the learner selects a reviewed exercise; general sessions remain unlinked.
+- [x] Preserve older free-text observations and historical sessions without backfilling or guessing identity; carry new optional fields through version-1 backup/restore.
 - [ ] Add topic/fretboard exposure coverage only after stable authored exercise links exist.
 - [ ] Expand taxonomy across Years 1–3 through author review; add confusion/error labels only where the task deterministically supports them.
 
@@ -163,8 +164,9 @@ The next implementation should link new practice observations to stable authored
 - [x] Create a versioned authored exercise taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions for an initial ten explicitly evidenced Year 1 exercise scopes (content/curriculum/practice-taxonomy.json).
 - [x] Expose exact lesson/exercise lookup for the active curriculum release; unknown and generic exercises remain untagged (src/lib/application/practice-taxonomy.ts).
 - [x] Add unit tests and curriculum validation for taxonomy references and scope constraints.
-- [ ] Extend Practice Studio session creation to select an authored lesson and exercise ID, persisting curriculum release and stable exercise identity alongside learner observations.
-- [ ] Add exposure coverage only after new records carry that stable scope. Historic free-text observations remain unclassified.
+- [x] Extend Practice Studio session creation with an optional exact authored-exercise selector; persist release, lesson, exercise and taxonomy identity on the session and inherit it on new observations.
+- [x] Validate observation/session identity in IndexedDB and learner backup parsing; keep fields optional for legacy rows and version-1 backups.
+- [ ] Add exposure coverage only after author-reviewed scope expansion and a clear definition of what counts as exposure. Historic free-text observations remain unclassified.
 - [ ] Expand taxonomy across Years 1–3 through author review; do not bulk-tag using keyword or title similarity.
 - [ ] Add structured error/confusion labels only when a task deterministically identifies a specific misconception.
 
