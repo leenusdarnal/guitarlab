@@ -30,7 +30,8 @@ export const assessmentInstrumentSchema = z
   .object({
     definitionId: z.string().min(1).max(120),
     definitionVersion: z.number().int().positive(),
-    scoringRuleVersion: z.string().min(1).max(80)
+    scoringRuleVersion: z.string().min(1).max(80),
+    decisionScope: z.enum(['skill_level', 'supporting_probe'])
   })
   .strict();
 
