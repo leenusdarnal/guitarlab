@@ -110,6 +110,9 @@ export function scorePulseRecognitionResponse(
   if (exercise.kind !== 'pulse') {
     throw new Error('Only pulse-recognition exercises can be scored here.');
   }
+  if (!pulseAnswers.includes(exercise.answer as PulseRecognitionAnswer)) {
+    throw new Error('The pulse item does not have an authored answer.');
+  }
   if (
     !pulseAnswers.includes(response as PulseRecognitionAnswer) ||
     !exercise.choices.some((choice) => choice.value === response)
