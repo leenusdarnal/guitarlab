@@ -1,4 +1,5 @@
 import type { AssessmentAttemptInput } from '../domain/learning/assessment';
+import type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/adaptive-recommendation-feedback';
 import type { PracticeEvidenceInput } from '../domain/learning/practice-evidence';
 import type { SkillMasteryUpdate } from '../domain/learning/mastery';
 import type { ProfilePreferences } from '../domain/profile/preferences';
@@ -79,6 +80,8 @@ export type SkillMasteryRecord = SkillMasteryUpdate & {
 };
 
 export type PracticeEvidenceRecord = PracticeEvidenceInput;
+
+export type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/adaptive-recommendation-feedback';
 
 export type PracticeSessionRecord = {
   id: string;
@@ -174,6 +177,15 @@ export interface SkillMasteryRepository {
 }
 
 /** Append-only exercise observations, scoped to one learner and session. */
+export interface AdaptiveRecommendationFeedbackRepository {
+  /** Append-only; feedback never updates assessment or mastery records. */
+  append(record: AdaptiveRecommendationFeedbackRecord): Promise<void>;
+  listByLearnerRelease(
+    learnerId: string,
+    releaseId: string
+  ): Promise<AdaptiveRecommendationFeedbackRecord[]>;
+}
+
 export interface PracticeEvidenceRepository {
   append(record: PracticeEvidenceRecord): Promise<void>;
   listBySession(
