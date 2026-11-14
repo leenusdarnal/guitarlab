@@ -100,8 +100,7 @@ export async function recordActiveStandardTuningAssessment(
               : `${scored.correctCount} of ${scored.totalItems} standard open-string pitches were identified correctly.`,
           evidence: {
             source: 'learner-selected-pitch-options',
-            scoringRuleVersion:
-              standardTuningAssessment.scoringRuleVersion,
+            scoringRuleVersion: standardTuningAssessment.scoringRuleVersion,
             correctItems: scored.correctCount,
             answeredItems: scored.answeredCount,
             totalItems: scored.totalItems
