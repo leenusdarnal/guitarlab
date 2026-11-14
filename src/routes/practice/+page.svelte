@@ -379,7 +379,7 @@
       return `${recommendation.evidenceCount} assessment(s)`;
     }
     if (recommendation.evidenceType === 'supporting_probe') {
-      return `${recommendation.evidenceCount} supporting probe response(s)`;
+      return `${recommendation.evidenceCount} supporting probe attempt(s)`;
     }
     if (recommendation.evidenceType === 'learner_observation') {
       return `${recommendation.evidenceCount} learner notes`;
