@@ -86,6 +86,38 @@ const release = quote('curriculum-v1');
 const lesson = quote('y1-w01-lesson');
 const skill = quote('instrument.tuning');
 
+const currentRelease = quote('curriculum-v1.0.1');
+const currentLesson = quote('y3-rock-blues-w01-lesson');
+const releaseCountResult = runSql(
+  "SELECT COUNT(*) AS releaseCount FROM curriculum_releases WHERE id IN ('curriculum-v1', 'curriculum-v1.0.1');"
+);
+assert.equal(
+  Number(findValue(parseOutput(releaseCountResult.stdout), 'releaseCount')),
+  2,
+  'The original and new immutable curriculum releases must both remain available.'
+);
+const originalLessonCount = runSql(
+  "SELECT COUNT(*) AS lessonCount FROM curriculum_lessons WHERE release_id = 'curriculum-v1';"
+);
+const currentLessonCount = runSql(
+  "SELECT COUNT(*) AS lessonCount FROM curriculum_lessons WHERE release_id = 'curriculum-v1.0.1';"
+);
+assert.equal(
+  Number(findValue(parseOutput(originalLessonCount.stdout), 'lessonCount')),
+  152
+);
+assert.equal(
+  Number(findValue(parseOutput(currentLessonCount.stdout), 'lessonCount')),
+  152
+);
+const currentSkillCount = runSql(
+  "SELECT COUNT(*) AS skillCount FROM curriculum_release_skills WHERE release_id = 'curriculum-v1.0.1';"
+);
+assert.equal(
+  Number(findValue(parseOutput(currentSkillCount.stdout), 'skillCount')),
+  34
+);
+
 runSql(
   'INSERT INTO learner_profiles (id, created_at, updated_at) VALUES (' +
     [learner, now, now].join(', ') +
@@ -105,6 +137,33 @@ runSql(
       now
     ].join(', ') +
     ');'
+);
+
+const newReleaseProgressId = quote(randomUUID());
+runSql(
+  'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, updated_at) VALUES (' +
+    [
+      newReleaseProgressId,
+      learner,
+      currentRelease,
+      currentLesson,
+      quote('in_progress'),
+      now,
+      now
+    ].join(', ') +
+    ');'
+);
+const versionedProgressResult = runSql(
+  'SELECT COUNT(*) AS progressCount FROM lesson_progress WHERE learner_id = ' +
+    learner +
+    " AND ((curriculum_release_id = 'curriculum-v1' AND lesson_id = 'y1-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.1' AND lesson_id = 'y3-rock-blues-w01-lesson'));"
+);
+assert.equal(
+  Number(
+    findValue(parseOutput(versionedProgressResult.stdout), 'progressCount')
+  ),
+  2,
+  'Learner progress must be independently stored against both immutable releases.'
 );
 
 const result = runSql(

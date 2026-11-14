@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "id": "guitarlab-year-3-specialisation-lessons",
   "title": "Year 3+ — Specialisation lesson library",
   "sourceCurriculumId": "year-3-specialisations",
@@ -94,30 +94,33 @@
       "route": "rock-blues",
       "routeGoal": "Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
       "title": "Technique reset",
-      "focus": "Technique reset — Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
+      "focus": "Set up the guitar comfortably, identify the six strings and tune to standard pitch.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: technique reset — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Name the six strings from low to high (E–A–D–G–B–E) and describe the standard tuning targets.",
+        "Tune each string individually with a tuner, then recheck the full set after the first pass.",
+        "Demonstrate a supported seated or standing setup that lets both hands move without gripping or avoidable strain."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [
         "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
       ],
       "explanation": {
-        "keyIdea": "Instrument setup, tuning and relaxed posture affect the sound you hear and the movements you repeat. Support the guitar with the body or strap rather than gripping it with the fretting hand; tune one string at a time and recheck the result.",
-        "plainLanguage": "This lesson focuses on technique reset — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating technique reset."
+        "keyIdea": "A stable setup lets the hands focus on sound and movement instead of holding the instrument in place. Tuning is a comparison task: adjust one string toward its target, then recheck all six because changing string tension can slightly affect the others.",
+        "plainLanguage": "Support the guitar with your body or strap, not with a tight fretting-hand grip. Tune one string at a time using small peg movements, then check the whole set again.",
+        "workedExample": "Standard tuning check: from thickest to thinnest string, E2–A2–D3–G3–B3–E4. Use the tuner to verify each open string, then say the note names without looking."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of technique reset — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a tuner display set to standard E–A–D–G–B–E and observe the learner's own comfortable instrument support. Do not treat one seated or standing posture as a universal body template.",
         "steps": [
-          "Support the instrument at a height where both hands can move without holding its weight.",
-          "Name the strings from thickest to thinnest: E–A–D–G–B–E.",
-          "Tune one string at a time with small peg movements; recheck each string after the full set is tuned."
+          "Support the guitar on your leg or with the strap so it stays in place without being held by the fretting hand.",
+          "Relax the shoulders and wrists; check that both hands can reach their normal playing areas without forcing the joint angle.",
+          "Name the strings from thickest to thinnest: low E, A, D, G, B, high E.",
+          "Set the tuner to standard tuning. Pluck one open string at a time and make small peg adjustments toward its target note.",
+          "Repeat the check from low E to high E after the first pass; retune any string that moved while the others were adjusted.",
+          "Play each open string once, listen for a stable pitch, and repeat the setup without reading the string list."
         ]
       },
       "lessonBlocks": [
@@ -125,41 +128,41 @@
           "id": "y3-rock-blues-w01-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to each open string separately. Notice whether the pitch is stable and whether the guitar remains supported when both hands are free to move."
         },
         {
           "id": "y3-rock-blues-w01-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Instrument setup, tuning and relaxed posture affect the sound you hear and the movements you repeat. Support the guitar with the body or strap rather than gripping it with the fretting hand; tune one string at a time and recheck the result."
+          "content": "A stable setup lets the hands focus on sound and movement instead of holding the instrument in place. Tuning is a comparison task: adjust one string toward its target, then recheck all six because changing string tension can slightly affect the others."
         },
         {
           "id": "y3-rock-blues-w01-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Support the instrument at a height where both hands can move without holding its weight.",
-            "Name the strings from thickest to thinnest: E–A–D–G–B–E.",
-            "Tune one string at a time with small peg movements; recheck each string after the full set is tuned.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating technique reset.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Support the guitar on your leg or with the strap so it stays in place without being held by the fretting hand.",
+            "Relax the shoulders and wrists; check that both hands can reach their normal playing areas without forcing the joint angle.",
+            "Name the strings from thickest to thinnest: low E, A, D, G, B, high E.",
+            "Set the tuner to standard tuning. Pluck one open string at a time and make small peg adjustments toward its target note.",
+            "Repeat the check from low E to high E after the first pass; retune any string that moved while the others were adjusted.",
+            "Play each open string once, listen for a stable pitch, and repeat the setup without reading the string list."
           ]
         },
         {
           "id": "y3-rock-blues-w01-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating technique reset.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "Set up the instrument, tune and recheck all six strings, then play a slow low-to-high and high-to-low open-string check while naming each note."
         },
         {
           "id": "y3-rock-blues-w01-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "Name the six strings from low to high.",
-            "How can you tell that your instrument is ready to practise?"
+            "Which string needed the largest adjustment?",
+            "What supports the guitar so your fretting hand does not have to grip it?",
+            "What will you check first when you set up next time?"
           ]
         }
       ],
@@ -170,11 +173,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Place the guitar in your usual seated or standing position.",
+            "Check that the body or strap supports the instrument without a gripping hand.",
+            "Name all six strings from low to high before switching on the tuner."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner names E–A–D–G–B–E in order and can adjust the instrument support without creating discomfort.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -183,11 +186,11 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Tune all six strings, then play four even quarter notes on each string. Pause and listen for a stable pitch before moving to the next string.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Tune low E, A, D, G, B and high E one at a time using small peg movements.",
+            "After the first pass, recheck each string in the same order and correct any drift.",
+            "Play each open string once and say its name before moving to the next."
           ],
-          "successCriterion": "All six strings are close to standard tuning and can be named low-to-high without relying on the tuner display.",
+          "successCriterion": "The tuner indicates each string is within its in-tune range after a second check, and the learner identifies the six strings without relying on the display.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -196,11 +199,11 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating technique reset..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Begin with the guitar already supported comfortably.",
+            "Play the six open strings low-to-high, then high-to-low, naming each pitch aloud.",
+            "Repeat once with the tuner hidden; reveal it afterward to verify the result."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate technique reset in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "The learner completes the setup and tuning sequence independently, names the strings in order and keeps the instrument supported while playing.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -209,60 +212,60 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the string chart away and recall the six strings in order.",
+            "Record which string, if any, needed another tuning adjustment.",
+            "Choose one setup adjustment that makes the next practice session more comfortable."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner records a specific setup or tuning observation and can recall the string order without immediately viewing the reference.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating technique reset.",
+        "prompt": "Set up and tune the guitar independently, then play and name each open string from low to high and back again.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Support the instrument before touching the tuning pegs.",
+          "Tune one string at a time and make a complete second pass.",
+          "Play each open string clearly and name the note without looking at the tuner display."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand."
+          "dimension": "string-identification",
+          "criterion": "Names all six standard-tuning strings from low to high: E–A–D–G–B–E."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "tuning-accuracy",
+          "criterion": "Uses the tuner to bring each open string into its in-tune range and verifies the full set a second time."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "instrument-support",
+          "criterion": "The guitar remains supported while both hands are free to move; the learner does not rely on a tight fretting-hand grip."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "comfort-and-adjustment",
+          "criterion": "Identifies and changes a setup position that creates avoidable tension or discomfort."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate technique reset in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "independent-recall",
+          "criterion": "Repeats the setup and string-naming sequence without relying on a chart or step-by-step prompt."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Turning a tuning peg too quickly or continuing beyond the target pitch.",
-          "correction": "Make small peg adjustments and check pitch after each one."
+          "mistake": "Turning a tuning peg too far or continuing after the target pitch has been reached.",
+          "correction": "Make small adjustments, wait for the pitch reading to settle and recheck before turning again."
         },
         {
-          "mistake": "Holding the guitar up with the fretting hand and creating unnecessary shoulder or wrist tension.",
-          "correction": "Reposition the instrument or strap so the body is supported; relax the shoulders and pause if discomfort appears."
+          "mistake": "Holding the guitar in place by gripping the neck or raising the shoulder.",
+          "correction": "Adjust the body or strap support so the instrument stays stable without a gripping hand; pause and reset if discomfort appears."
         }
       ],
-      "accessibleAlternative": "Tune one string at a time and practise naming only two strings per round. Use a supported seated position if standing is uncomfortable.",
+      "accessibleAlternative": "Use a clip-on or screen-based tuner with a larger display, ask a helper to support the instrument during setup, or complete the string-naming task before tuning. Adapt seated/standing position to the learner's mobility and comfort.",
       "retrievalPrompt": [
         "Name the six strings from low to high.",
-        "How can you tell that your instrument is ready to practise?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "How do you know that each string is in tune?",
+        "What supports the guitar so your hands can move freely?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -299,16 +302,18 @@
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate technique reset in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "instrument.tuning",
-        "instrument.posture"
-      ],
+      "checkpoint": "Set up the guitar comfortably, tune all six strings to E–A–D–G–B–E and name them low-to-high without a reference chart.",
+      "skillIds": ["instrument.tuning", "instrument.posture"],
       "workedExamples": [
         {
+          "kind": "tuning-reference",
+          "label": "Standard tuning",
+          "content": "Low to high: E2–A2–D3–G3–B3–E4. Tune one string at a time, then repeat the full check because string tension can shift slightly as the set is adjusted."
+        },
+        {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating technique reset. Success target: Demonstrate technique reset in a short musical example, explain the key choice and identify one next improvement."
+          "label": "Independent setup check",
+          "content": "Support the guitar, tune and recheck all six open strings, then name them low-to-high without reading a chart."
         }
       ]
     },
@@ -320,30 +325,33 @@
       "route": "rock-blues",
       "routeGoal": "Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
       "title": "Pentatonic across neck",
-      "focus": "Pentatonic across neck — Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
+      "focus": "Connect two A minor pentatonic positions across the neck and compare their five notes with the C major scale.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: pentatonic across neck — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Play a short C major pattern and state its whole-step/half-step formula; identify how A minor pentatonic uses A–C–D–E–G.",
+        "Play A minor pentatonic box 1 and the adjacent box 2, naming the five notes and locating A as the tonal centre.",
+        "Create a short call-and-response phrase that moves between the two positions and resolves deliberately to A."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [
         "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
       ],
       "explanation": {
-        "keyIdea": "A scale is an ordered set of notes. The major scale follows whole, whole, half, whole, whole, whole, half steps. A minor pentatonic scale uses five notes and leaves out two scale degrees, creating a compact palette for melody and improvisation.",
-        "plainLanguage": "This lesson focuses on pentatonic across neck — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck."
+        "keyIdea": "The C major scale contains C–D–E–F–G–A–B. A minor pentatonic uses five notes from that same note collection—A, C, D, E and G—leaving out B and F. Two neighbouring fretboard positions let you keep the same musical idea while moving across the neck.",
+        "plainLanguage": "Learn the five notes first, then find them in two nearby fretboard shapes. The shapes are maps of the same A minor pentatonic sound, not two different scales. Finish phrases on A so the tonal centre remains clear.",
+        "workedExample": "A minor pentatonic box 1: low E 5–8, A 5–7, D 5–7, G 5–7, B 5–8, high e 5–8. Adjacent box 2: low E 8–10, A 7–10, D 7–10, G 7–9, B 8–10, high e 8–10."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of pentatonic across neck — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a clear fretboard diagram showing A minor pentatonic box 1 at the fifth position and the adjacent box 2, with A-root notes highlighted. Demonstrate the shift slowly before adding a backing track.",
         "steps": [
-          "Name the key and root before playing the pattern.",
-          "For a major scale, apply W-W-H-W-W-W-H; C major is C-D-E-F-G-A-B.",
-          "For A minor pentatonic, use A-C-D-E-G and hear how a phrase changes when it resolves to A."
+          "Play C major slowly and say the notes C–D–E–F–G–A–B; recall the formula whole–whole–half–whole–whole–whole–half.",
+          "Compare the note collection with A minor pentatonic: A–C–D–E–G. Say which two C-major notes are left out.",
+          "Play box 1 at the fifth position: low E 5–8, A 5–7, D 5–7, G 5–7, B 5–8, high e 5–8.",
+          "Play the adjacent box 2: low E 8–10, A 7–10, D 7–10, G 7–9, B 8–10, high e 8–10.",
+          "Connect the shapes slowly through the shared notes around the seventh-to-eighth-fret area; name A whenever you reach a root note.",
+          "Create a two-bar question and answer. Use notes from both positions and leave the final note on A."
         ]
       },
       "lessonBlocks": [
@@ -351,41 +359,41 @@
           "id": "y3-rock-blues-w02-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to a short A minor pentatonic phrase in two positions. Notice that the tone stays the same even as the hand moves to a new area of the neck."
         },
         {
           "id": "y3-rock-blues-w02-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "A scale is an ordered set of notes. The major scale follows whole, whole, half, whole, whole, whole, half steps. A minor pentatonic scale uses five notes and leaves out two scale degrees, creating a compact palette for melody and improvisation."
+          "content": "The C major scale contains C–D–E–F–G–A–B. A minor pentatonic uses five notes from that same note collection—A, C, D, E and G—leaving out B and F. Two neighbouring fretboard positions let you keep the same musical idea while moving across the neck."
         },
         {
           "id": "y3-rock-blues-w02-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Name the key and root before playing the pattern.",
-            "For a major scale, apply W-W-H-W-W-W-H; C major is C-D-E-F-G-A-B.",
-            "For A minor pentatonic, use A-C-D-E-G and hear how a phrase changes when it resolves to A.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Play C major slowly and say the notes C–D–E–F–G–A–B; recall the formula whole–whole–half–whole–whole–whole–half.",
+            "Compare the note collection with A minor pentatonic: A–C–D–E–G. Say which two C-major notes are left out.",
+            "Play box 1 at the fifth position: low E 5–8, A 5–7, D 5–7, G 5–7, B 5–8, high e 5–8.",
+            "Play the adjacent box 2: low E 8–10, A 7–10, D 7–10, G 7–9, B 8–10, high e 8–10.",
+            "Connect the shapes slowly through the shared notes around the seventh-to-eighth-fret area; name A whenever you reach a root note.",
+            "Create a two-bar question and answer. Use notes from both positions and leave the final note on A."
           ]
         },
         {
           "id": "y3-rock-blues-w02-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "Connect the two A minor pentatonic positions, then create a two-bar question-and-answer phrase. Use at least one note from each position and resolve the final note to A."
         },
         {
           "id": "y3-rock-blues-w02-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the major-scale whole/half-step formula?",
-            "Which notes are in A minor pentatonic?"
+            "Which five notes make up A minor pentatonic?",
+            "Where are the A-root notes in the two positions?",
+            "What changed when you moved the same phrase to the next box?"
           ]
         }
       ],
@@ -396,11 +404,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Say the C major notes and whole/half-step formula.",
+            "Name the five A minor pentatonic notes: A, C, D, E and G.",
+            "Find one A-root note in the fifth-position shape before playing the pattern."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner distinguishes the seven-note C major scale from the five-note A minor pentatonic set and identifies A as the tonic.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -409,11 +417,11 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Play the target scale fragment slowly in ascending and descending directions. Name the root at the beginning and end, then practise one short sequence or position link.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Play A minor pentatonic box 1 ascending and descending at a slow, even pulse.",
+            "Play the adjacent box 2 and name the notes as they are reached.",
+            "Connect the positions through the shared fretboard area without restarting the pulse; pause and locate A again if the pattern becomes unclear."
           ],
-          "successCriterion": "The notes and fingering are accurate, the pulse is even, and the learner can identify the root and describe the scale pattern.",
+          "successCriterion": "The learner plays both positions with the correct A–C–D–E–G note set, identifies the root notes and connects the positions without losing the pulse.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -422,11 +430,11 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Choose a comfortable A minor backing or metronome pulse.",
+            "Play a two-bar question in box 1 and answer in box 2.",
+            "Leave a short space between phrases and resolve the final note to A."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate pentatonic across neck in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "The phrase uses both positions, keeps a clear pulse and resolves intentionally to A rather than ending on an arbitrary scale note.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -435,60 +443,60 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the fretboard diagram away and name the five notes from memory.",
+            "Describe where the two positions connect and identify one A-root location.",
+            "Record which position needs another slow review."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the note set and records a specific position or transition to revisit.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck.",
+        "prompt": "Create a two-bar A minor pentatonic call-and-response phrase using both adjacent positions and resolving to A.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in at a comfortable tempo.",
+          "Play the first phrase in box 1 and answer from box 2.",
+          "Leave space between the phrases and finish on an A-root note."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The notes and fingering are accurate, the pulse remains even, and the learner can identify the root and describe the scale pattern."
+          "dimension": "major-scale-understanding",
+          "criterion": "Plays the specified C major fragment and recalls the whole-step/half-step formula accurately."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "pentatonic-note-set",
+          "criterion": "Names and plays A–C–D–E–G without inserting B or F into the A minor pentatonic pattern."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "position-mapping",
+          "criterion": "Plays box 1 and box 2 with the stated string/fret locations and identifies A-root notes in each."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "position-connection",
+          "criterion": "Moves between the two positions without losing the pattern or pulse."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate pentatonic across neck in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "musical-application",
+          "criterion": "Creates a short phrase using both positions and resolves it deliberately to A."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Playing a shape without knowing its root or key.",
-          "correction": "Locate and say the root before each repetition; transpose only after the pattern is understood."
+          "mistake": "Treating the second box as a different scale or adding notes that are not in A minor pentatonic.",
+          "correction": "Say A–C–D–E–G before each run and check the note at each new position against that five-note set."
         },
         {
-          "mistake": "Increasing speed before the notes sound even or the fingering is secure.",
-          "correction": "Use a slower tempo and increase it in small steps only after clean repetitions."
+          "mistake": "Playing the shapes mechanically without hearing A as the tonal centre.",
+          "correction": "Pause on an A-root note, sing it, then end the phrase on A and listen for the sense of resolution."
         }
       ],
-      "accessibleAlternative": "Use a one-octave fragment or sing the scale before playing; practise two- or three-note groups instead of the full shape.",
+      "accessibleAlternative": "Practise the five-note set on one string first, use a slower tempo or smaller fretboard range, and connect only two strings before playing all six. A printed or enlarged fretboard map may remain available during early attempts.",
       "retrievalPrompt": [
-        "What is the major-scale whole/half-step formula?",
-        "Which notes are in A minor pentatonic?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What are the notes in A minor pentatonic?",
+        "Which two notes from C major are omitted?",
+        "How do you connect box 1 to box 2 and keep A as the tonal centre?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -525,21 +533,23 @@
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate pentatonic across neck in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "lead.major-scale",
-        "lead.pentatonic"
-      ],
+      "checkpoint": "Play A minor pentatonic box 1 and adjacent box 2 as one connected pattern, name A–C–D–E–G and finish a short phrase on A.",
+      "skillIds": ["lead.major-scale", "lead.pentatonic"],
       "workedExamples": [
         {
-          "kind": "scale-reference",
-          "label": "A minor pentatonic",
-          "content": "Notes: A–C–D–E–G. Box 1 at the 5th fret, low E to high e: 5–8 / 5–7 / 5–7 / 5–7 / 5–8 / 5–8. The roots A are on the low E and high e strings at fret 5. Start and finish phrases on A to hear the tonal centre."
+          "kind": "major-scale-reference",
+          "label": "C major comparison",
+          "content": "C major: C–D–E–F–G–A–B. Formula: whole–whole–half–whole–whole–whole–half. A minor pentatonic: A–C–D–E–G; the notes B and F are not used in this five-note pattern."
+        },
+        {
+          "kind": "fretboard-reference",
+          "label": "Two connected A minor pentatonic positions",
+          "content": "Box 1: low E 5–8 / A 5–7 / D 5–7 / G 5–7 / B 5–8 / high e 5–8. Box 2: low E 8–10 / A 7–10 / D 7–10 / G 7–9 / B 8–10 / high e 8–10. Name A at each root and connect through the shared notes."
         },
         {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating pentatonic across neck. Success target: Demonstrate pentatonic across neck in a short musical example, explain the key choice and identify one next improvement."
+          "label": "Question and answer",
+          "content": "Play a short question in box 1, answer it in box 2, leave a beat of space and resolve the final phrase to A."
         }
       ]
     },
@@ -551,30 +561,33 @@
       "route": "rock-blues",
       "routeGoal": "Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
       "title": "Bends to pitch",
-      "focus": "Bends to pitch — Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
+      "focus": "Bend a target pitch accurately and shape a short A minor pentatonic phrase over a blues pulse.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: bends to pitch — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Locate the G starting note and A target note on the B string, and compare the target with a fretted reference pitch.",
+        "Bend B-string fret 8 (G) up a whole step to match fret 10 (A), sustain it briefly and release with control.",
+        "Use one controlled bend in a short A minor pentatonic phrase, leaving musical space and maintaining the pulse."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [
         "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
       ],
       "explanation": {
-        "keyIdea": "Blues playing combines a repeating form, dominant-seventh colour, shuffle or straight subdivision, concise melodic motifs and expressive articulation. The form and pulse must stay clear even when the lead part becomes more adventurous.",
-        "plainLanguage": "This lesson focuses on bends to pitch — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating bends to pitch."
+        "keyIdea": "A bend raises a fretted note by increasing string tension. The target pitch should be heard and checked against a known reference note; the bend is not complete just because the string has moved. Support the bending finger, stop at the intended pitch and release without dropping the pulse.",
+        "plainLanguage": "Play the note you want to reach first. Then fret the lower note and bend it until it sounds like that target. Keep the movement controlled, listen for the pitch and let the note return smoothly.",
+        "workedExample": "On the B string, fret 10 and hear A. Fret 8 (G), bend it up one whole step until it matches the A reference, hold briefly and release to G. Use the bend once in a short A minor pentatonic phrase."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of bends to pitch — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a close-up demonstration on the B string that first sounds the target A at fret 10, then bends G at fret 8 to match it. A tuner may support checking, but listening to the fretted reference is part of the task.",
         "steps": [
-          "Count a 12-bar form: I for bars 1–4, IV for bars 5–6, I for bars 7–8, V for bar 9, IV for bar 10, I for bar 11 and V/turnaround material for bar 12.",
-          "Clap straight eighths, then compare the longer-shorter shuffle feel.",
-          "Play a short motif, leave space and resolve deliberately to a chord tone when the harmony changes."
+          "On the B string, play fret 10 and listen carefully to the target A pitch.",
+          "Play fret 8 (G) on the same string, then bend it upward slowly until it matches the fretted A reference.",
+          "Use the index and middle fingers behind the bending finger for support; keep the wrist and thumb comfortable.",
+          "Hold the target briefly, release smoothly to G and compare the returned note with the original starting pitch.",
+          "Repeat at a slow pulse. If a whole-step bend is uncomfortable, use a smaller interval and compare it with the matching fretted target.",
+          "Place one controlled bend into a short A minor pentatonic phrase over an A blues pulse; leave space before the next idea."
         ]
       },
       "lessonBlocks": [
@@ -582,41 +595,41 @@
           "id": "y3-rock-blues-w03-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen to the target note first, then hear the lower note bend toward it. Notice whether the bend arrives at the target pitch or stops short/overshoots."
         },
         {
           "id": "y3-rock-blues-w03-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Blues playing combines a repeating form, dominant-seventh colour, shuffle or straight subdivision, concise melodic motifs and expressive articulation. The form and pulse must stay clear even when the lead part becomes more adventurous."
+          "content": "A bend raises a fretted note by increasing string tension. The target pitch should be heard and checked against a known reference note; the bend is not complete just because the string has moved. Support the bending finger, stop at the intended pitch and release without dropping the pulse."
         },
         {
           "id": "y3-rock-blues-w03-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Count a 12-bar form: I for bars 1–4, IV for bars 5–6, I for bars 7–8, V for bar 9, IV for bar 10, I for bar 11 and V/turnaround material for bar 12.",
-            "Clap straight eighths, then compare the longer-shorter shuffle feel.",
-            "Play a short motif, leave space and resolve deliberately to a chord tone when the harmony changes.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating bends to pitch.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "On the B string, play fret 10 and listen carefully to the target A pitch.",
+            "Play fret 8 (G) on the same string, then bend it upward slowly until it matches the fretted A reference.",
+            "Use the index and middle fingers behind the bending finger for support; keep the wrist and thumb comfortable.",
+            "Hold the target briefly, release smoothly to G and compare the returned note with the original starting pitch.",
+            "Repeat at a slow pulse. If a whole-step bend is uncomfortable, use a smaller interval and compare it with the matching fretted target.",
+            "Place one controlled bend into a short A minor pentatonic phrase over an A blues pulse; leave space before the next idea."
           ]
         },
         {
           "id": "y3-rock-blues-w03-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating bends to pitch.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "Play a short A minor pentatonic phrase and include one whole-step bend from G to A on the B string. Keep the pulse, release the bend smoothly and leave space before the next phrase."
         },
         {
           "id": "y3-rock-blues-w03-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the 12-bar blues chord order in Roman numerals?",
-            "How can you keep the form while improvising?"
+            "What was the target pitch for the B-string fret 8 bend?",
+            "Did the bend stop at, below or above the A reference?",
+            "What changed when you placed the bend inside a phrase rather than practising it alone?"
           ]
         }
       ],
@@ -627,11 +640,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Play B-string fret 10 and sing or remember the target A.",
+            "Play B-string fret 8 and identify the starting G.",
+            "Check that the hand and wrist feel comfortable before attempting the bend."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner identifies G as the starting note and A as the target, and can hear the difference between them.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -640,11 +653,11 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Loop one four-bar section of the blues form. Count aloud, play the assigned rhythm or motif, and re-enter bar 1 accurately.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Fret B-string fret 8 with a supported finger position.",
+            "Bend upward slowly until the pitch matches the fretted A at fret 10; use the target note as a reference between attempts.",
+            "Hold briefly, release to G and repeat at a slow pulse. Stop if the movement causes discomfort."
           ],
-          "successCriterion": "The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "The bent note reaches the fretted A target without a clear undershoot/overshoot, sustains briefly and returns smoothly to G.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -653,11 +666,11 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating bends to pitch..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Use an A minor backing or a steady pulse at a comfortable tempo.",
+            "Play a short phrase using A, C, D, E and G; include one G-to-A bend on the B string.",
+            "Leave space after the bend and resolve the phrase to A or another intended chord tone."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate bends to pitch in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "The bend reaches its intended pitch inside the phrase, the release is controlled and the learner keeps the musical pulse.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -666,60 +679,60 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Listen back to the bend or repeat it once without the tuner display.",
+            "Record whether the target was reached and what helped the intonation.",
+            "Choose whether to repeat the same interval or reduce the bend range for the next session."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner records a specific pitch or comfort observation and chooses an appropriate next practice target.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating bends to pitch.",
+        "prompt": "Play a short A minor pentatonic blues phrase with one controlled G-to-A bend on the B string.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Play the target A at B-string fret 10 before the phrase.",
+          "Use the G note at fret 8 and bend it to match the target.",
+          "Release smoothly, leave a beat of space and resolve the phrase deliberately."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand."
+          "dimension": "target-pitch",
+          "criterion": "The B-string fret 8 bend reaches the A reference at fret 10 without a clear undershoot or overshoot."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "sustain-and-release",
+          "criterion": "The bent pitch is held briefly and released smoothly to the original G note."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "technique-and-comfort",
+          "criterion": "The learner supports the bending finger and avoids forcing the wrist or grip."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "pentatonic-context",
+          "criterion": "The bend is integrated into a phrase using A minor pentatonic notes."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate bends to pitch in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "phrasing-and-time",
+          "criterion": "The phrase keeps a clear pulse, includes space and resolves intentionally after the bend."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Losing the bar count while concentrating on a lick.",
-          "correction": "Count the form aloud and mark the change bars before adding lead notes."
+          "mistake": "Bending by feel without first hearing the target note.",
+          "correction": "Play the target fret first, then compare the bend to that known pitch on the same string."
         },
         {
-          "mistake": "Overfilling every space or forcing a bend beyond a comfortable range.",
-          "correction": "Use a fretted target pitch as a reference; use a smaller bend or omit it if it causes discomfort."
+          "mistake": "Overshooting the target or forcing the hand to reach the interval.",
+          "correction": "Slow the movement, support the bending finger with the fingers behind it, or practise a smaller interval if needed."
         }
       ],
-      "accessibleAlternative": "Play roots or a two-note motif through the form; use straight eighths before adding shuffle feel.",
+      "accessibleAlternative": "Use a half-step bend to a fretted target on the same string, reduce the tempo, or sing the target before attempting the movement. Do not continue a bend that causes pain or strain.",
       "retrievalPrompt": [
-        "What is the 12-bar blues chord order in Roman numerals?",
-        "How can you keep the form while improvising?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What note is the target for B-string fret 8 in this exercise?",
+        "How do you check whether the bend reaches the target pitch?",
+        "What helps you release the bend smoothly?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -756,22 +769,18 @@
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate bends to pitch in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing",
-        "technique.bends"
-      ],
+      "checkpoint": "Match a whole-step bend from B-string fret 8 (G) to fret 10 (A), release cleanly, then use the bend in a short A minor pentatonic blues phrase without losing the pulse.",
+      "skillIds": ["lead.pentatonic", "lead.phrasing", "technique.bends"],
       "workedExamples": [
         {
-          "kind": "form-reference",
-          "label": "12-bar blues map",
-          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+          "kind": "pitch-reference",
+          "label": "G-to-A whole-step bend",
+          "content": "B string: fret 10 = A (target); fret 8 = G (starting pitch). Play A first, then bend G upward until it matches A. Hold briefly and release to G."
         },
         {
-          "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating bends to pitch. Success target: Demonstrate bends to pitch in a short musical example, explain the key choice and identify one next improvement."
+          "kind": "musical-application",
+          "label": "A minor pentatonic phrase",
+          "content": "Use A–C–D as the start of a short motif, play G at B-string fret 8 and bend it to A, leave a beat of space, then resolve on A."
         }
       ]
     },
@@ -783,30 +792,33 @@
       "route": "rock-blues",
       "routeGoal": "Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
       "title": "Legato control",
-      "focus": "Legato control — Develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.",
+      "focus": "Coordinate alternate picking, clean two-string crossings and legato articulation with even timing and volume.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: legato control — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Play a down-up picking sequence on one string and preserve the sequence when moving to a neighbouring string.",
+        "Cross from the D string to the G string with planned pick directions and without unintended string noise.",
+        "Perform a B-string hammer-on/pull-off cell without re-picking each note, keeping timing and volume even."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [
         "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
       ],
       "explanation": {
-        "keyIdea": "Alternate picking uses a consistent down-up sequence. The pick travels only far enough to clear the string; string crossings are planned so timing and tone stay even. Legato techniques create connected notes without re-picking every pitch.",
-        "plainLanguage": "This lesson focuses on legato control — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating legato control."
+        "keyIdea": "Alternate picking uses a planned down-up sequence. String crossing means carrying that sequence to the next string without resetting automatically. Legato uses fretting-hand movement—such as hammer-ons and pull-offs—to sound connected notes without picking every pitch. These are related but distinct skills and need separate checks.",
+        "plainLanguage": "Practise the picking pattern and the legato pattern separately first. Keep the pick moving down-up as you cross strings. For legato, pick the first note, hammer to the higher fret, pull back and hammer again without extra pick strokes.",
+        "workedExample": "Picking: D string 5–7 then G string 5–7 with down-up-down-up. Legato: B string 5–7–5–7—pick fret 5, hammer to 7, pull to 5, then hammer to 7."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of legato control — develop more controlled lead playing, blues vocabulary, riffs and performance arrangements. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Show a close-up picking-hand view for the D-to-G string crossing and a fretting-hand view for the B-string 5–7–5–7 legato cell. Demonstrate each movement separately before combining them.",
         "steps": [
-          "Hold the pick securely but without a rigid grip; expose only a small tip.",
-          "Play down-up on one string with small movements and even volume.",
-          "Cross to a neighbouring string slowly while preserving the stroke sequence. For legato, sound the second note with a controlled fretting-hand movement."
+          "Hold the pick without a rigid grip and expose only enough tip to contact the string.",
+          "On the D string, play frets 5 and 7 using down then up strokes.",
+          "Continue to the G string at frets 5 and 7, preserving the next down-up strokes rather than restarting the pattern.",
+          "Play the picking cell slowly and listen for even timing and attack across the string change.",
+          "On the B string, pick fret 5, hammer to fret 7, pull back to fret 5 and hammer to fret 7; do not pick each legato note.",
+          "Compare the timing and volume of the four legato notes, then join the picking and legato cells in a short phrase."
         ]
       },
       "lessonBlocks": [
@@ -814,41 +826,41 @@
           "id": "y3-rock-blues-w04-lesson-notice",
           "type": "listen-and-notice",
           "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "content": "Listen for an even down-up attack across two strings, then compare it with a connected legato phrase in which the fretting hand sounds several notes after one pick attack."
         },
         {
           "id": "y3-rock-blues-w04-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Alternate picking uses a consistent down-up sequence. The pick travels only far enough to clear the string; string crossings are planned so timing and tone stay even. Legato techniques create connected notes without re-picking every pitch."
+          "content": "Alternate picking uses a planned down-up sequence. String crossing means carrying that sequence to the next string without resetting automatically. Legato uses fretting-hand movement—such as hammer-ons and pull-offs—to sound connected notes without picking every pitch. These are related but distinct skills and need separate checks."
         },
         {
           "id": "y3-rock-blues-w04-lesson-demo",
           "type": "guided-demonstration",
           "title": "See and try it slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Hold the pick securely but without a rigid grip; expose only a small tip.",
-            "Play down-up on one string with small movements and even volume.",
-            "Cross to a neighbouring string slowly while preserving the stroke sequence. For legato, sound the second note with a controlled fretting-hand movement.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating legato control.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Hold the pick without a rigid grip and expose only enough tip to contact the string.",
+            "On the D string, play frets 5 and 7 using down then up strokes.",
+            "Continue to the G string at frets 5 and 7, preserving the next down-up strokes rather than restarting the pattern.",
+            "Play the picking cell slowly and listen for even timing and attack across the string change.",
+            "On the B string, pick fret 5, hammer to fret 7, pull back to fret 5 and hammer to fret 7; do not pick each legato note.",
+            "Compare the timing and volume of the four legato notes, then join the picking and legato cells in a short phrase."
           ]
         },
         {
           "id": "y3-rock-blues-w04-lesson-apply",
           "type": "musical-application",
           "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating legato control.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "content": "Join the two-string D–U–D–U picking cell and the B-string 5–7–5–7 legato cell into a short two-part phrase. Keep the pulse and note volume controlled."
         },
         {
           "id": "y3-rock-blues-w04-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What does alternate picking mean?",
-            "Which movement or string crossing needs the smallest correction?"
+            "Where did the pick sequence change or reset during the string crossing?",
+            "Which legato note was quieter or less clear?",
+            "What will you practise separately before joining both cells again?"
           ]
         }
       ],
@@ -859,11 +871,11 @@
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Say the next pick direction aloud: down, up, down, up.",
+            "Identify the D and G strings and the B-string frets used in the lesson.",
+            "Play one slow down-up pair on a single string before crossing."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner can state the picking sequence and identify which part of the task uses picking versus legato.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -872,11 +884,11 @@
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Play a two- or four-note cell on one string, then repeat it across two neighbouring strings. Keep notes even and isolate any awkward crossing or legato movement.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Play D-string frets 5–7 then G-string frets 5–7 using down-up-down-up strokes.",
+            "Repeat until the string change does not interrupt the sequence or pulse.",
+            "Play B-string frets 5–7–5–7: pick the first note, hammer to 7, pull to 5 and hammer to 7. Keep the three unpicked notes clear and even."
           ],
-          "successCriterion": "The stroke sequence remains consistent through string changes and notes are even in timing, tone and volume.",
+          "successCriterion": "The D-to-G crossing preserves the D–U–D–U sequence, and the legato cell sounds four distinct notes without re-picking the hammer-on/pull-off notes.",
           "evidenceType": "observed_or_self_checked"
         },
         {
@@ -885,11 +897,11 @@
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating legato control..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count in at a comfortable tempo.",
+            "Play the D/G string-crossing cell once, then answer with the B-string legato cell.",
+            "Repeat the two-part phrase without stopping; focus on even note volume and pulse rather than speed."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate legato control in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "The learner completes both cells in sequence, maintains the pulse and keeps picking and legato notes clear and controlled.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -898,60 +910,60 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Listen to a recording or repeat the two cells once slowly.",
+            "Identify whether the picking sequence, string crossing or legato articulation needs the next correction.",
+            "Record one short practice target for the next session."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner names the weakest movement and selects a specific correction instead of increasing speed automatically.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating legato control.",
+        "prompt": "Perform a short two-part phrase using the D/G alternate-picking cell followed by the B-string legato cell.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in and play D-string frets 5–7 then G-string frets 5–7 with D–U–D–U strokes.",
+          "Follow with B-string 5–7–5–7 using pick, hammer-on, pull-off, hammer-on.",
+          "Repeat once at the same tempo and listen for evenness, clarity and comfort."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "Each intended note speaks clearly at a relaxed pressure, with no avoidable buzz and no excess tension."
+          "dimension": "alternate-picking",
+          "criterion": "The pick follows the intended down-up sequence on the four-note picking cell."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "string-crossing",
+          "criterion": "The D-to-G string change is accurate and does not interrupt the stroke sequence or create unintended string noise."
+        },
+        {
+          "dimension": "legato-articulation",
+          "criterion": "Hammer-ons and pull-offs sound as distinct notes without additional pick attacks on the unpicked notes."
+        },
+        {
+          "dimension": "timing-and-volume",
+          "criterion": "The picking and legato cells maintain a steady pulse and reasonably even note volume."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
-        },
-        {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
-        },
-        {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate legato control in a short musical example, explain the key choice and identify one next improvement."
+          "criterion": "The hands remain relaxed and the learner can isolate, slow down and correct one movement without forcing the hand."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Using large arm movements or gripping the pick tightly.",
-          "correction": "Reduce pick depth and movement; let the wrist remain mobile."
+          "mistake": "Restarting every string with a downstroke even when the alternate-picking sequence calls for an upstroke.",
+          "correction": "Say D–U–D–U aloud and practise the two-string cell slowly before adding more notes."
         },
         {
-          "mistake": "Restarting with a downstroke at each string without planning the sequence, or striking a legato note too weakly.",
-          "correction": "Say the stroke sequence aloud and practise crossings slowly; use a controlled, decisive fretting-hand movement for legato."
+          "mistake": "Pulling off too weakly or lifting the finger so far that the next note loses timing.",
+          "correction": "Use a small controlled fretting-hand movement and compare the volume of picked and unpicked notes."
         }
       ],
-      "accessibleAlternative": "Practise one string only, reduce the number of notes per group, or play the same rhythm with fingers before adding string crossings.",
+      "accessibleAlternative": "Practise the picking cell on one string before adding the crossing. For legato, use a two-note picked/hammer-on pair first, reduce the number of notes or lower the tempo. Stop if the hand becomes uncomfortable.",
       "retrievalPrompt": [
-        "What does alternate picking mean?",
-        "Which movement or string crossing needs the smallest correction?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What is the pick direction after the first downstroke?",
+        "How do you keep the pattern when moving from D to G?",
+        "Which legato notes are sounded without another pick attack?"
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
@@ -988,7 +1000,7 @@
         "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate legato control in a short musical example, explain the key choice and identify one next improvement.",
+      "checkpoint": "Play D-string frets 5–7 then G-string frets 5–7 with D–U–D–U picking; then play B-string frets 5–7–5–7 using a picked note, hammer-on, pull-off and hammer-on while keeping the pulse steady.",
       "skillIds": [
         "technique.alternate-picking",
         "technique.string-crossing",
@@ -996,14 +1008,19 @@
       ],
       "workedExamples": [
         {
-          "kind": "technique-reference",
-          "label": "Picking pattern",
-          "content": "Alternate the pick D–U–D–U on successive notes. Keep the pick depth shallow. Say the stroke direction aloud while practising a slow two-string crossing."
+          "kind": "picking-reference",
+          "label": "Two-string alternate picking",
+          "content": "D string: fret 5 then fret 7; G string: fret 5 then fret 7. Use down, up, down, up (D–U–D–U) across all four notes."
+        },
+        {
+          "kind": "legato-reference",
+          "label": "Four-note legato cell",
+          "content": "B string: frets 5–7–5–7. Pick fret 5, hammer-on to fret 7, pull-off to fret 5, then hammer-on to fret 7. Do not re-pick the three connected notes."
         },
         {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating legato control. Success target: Demonstrate legato control in a short musical example, explain the key choice and identify one next improvement."
+          "label": "Combined phrase",
+          "content": "Play the two-string D–U–D–U cell, then answer with the four-note legato cell. Keep the pulse and compare the volume of each note."
         }
       ]
     },
@@ -1686,9 +1703,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -1911,10 +1926,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate riff construction in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -2142,10 +2154,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate modal colour in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -2373,10 +2382,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate phrasing and silence in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -3064,10 +3070,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate right-hand independence in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -3295,10 +3298,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate arpeggio consistency in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -3526,10 +3526,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate alternating bass in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "fingerstyle.thumb-independence",
-        "fingerstyle.patterns"
-      ],
+      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -3757,9 +3754,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate chord melody basics in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -3982,10 +3977,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate sus and add9 colour in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -4440,10 +4432,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate percussive accompaniment in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -4671,10 +4660,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate moving bass lines in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -4897,10 +4883,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate arrange a melody in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -5128,10 +5111,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate open-string colour in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -5354,10 +5334,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate dynamic arc in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -5817,9 +5794,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate jazz chord grips in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6042,11 +6017,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate swing subdivision in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -6274,9 +6245,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate guide tones in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6499,9 +6468,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate ii-v-i in two keys in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6724,9 +6691,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -7181,11 +7146,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "rhythm.pulse",
-        "rhythm.subdivision",
-        "rhythm.strumming"
-      ],
+      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -7413,10 +7374,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "lead.pentatonic",
-        "lead.phrasing"
-      ],
+      "skillIds": ["lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "form-reference",
@@ -7644,9 +7602,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate chord-tone soloing in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -7869,11 +7825,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate tune learning workflow in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "ear.pitch",
-        "ear.rhythm",
-        "ear.melody-transcription"
-      ],
+      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription"],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -8101,9 +8053,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate reharmonisation in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -9024,9 +8974,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate sight reading routine in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "notation.tab"
-      ],
+      "skillIds": ["notation.tab"],
       "workedExamples": [
         {
           "kind": "notation-reference",
@@ -9254,9 +9202,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate harmony analysis in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.open-chords"
-      ],
+      "skillIds": ["harmony.open-chords"],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -9479,10 +9425,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate transposition in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "fretboard.string-map",
-        "fretboard.natural-notes"
-      ],
+      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -9942,10 +9885,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate arranging texture in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -10405,10 +10345,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate songwriting form in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "arrangement.song-form",
-        "lead.phrasing"
-      ],
+      "skillIds": ["arrangement.song-form", "lead.phrasing"],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -10868,10 +10805,7 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate teaching a skill in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": [
-        "harmony.triads",
-        "harmony.voice-leading"
-      ],
+      "skillIds": ["harmony.triads", "harmony.voice-leading"],
       "workedExamples": [
         {
           "kind": "lesson-application",
