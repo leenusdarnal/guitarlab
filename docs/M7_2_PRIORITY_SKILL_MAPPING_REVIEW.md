@@ -116,3 +116,7 @@ A mapping should normally be retained only when the learner is expected to demon
 - Do not change historical learner evidence or the existing curriculum release key as part of these editorial decisions.
 
 **Next action:** Curriculum-owner review of the triad/voice-leading/pentatonic dispositions, then remediate Year 3+ task-specific criteria using the assessment profiles and the content authoring quality standard.
+
+## Update — curriculum-v1.0.2 mapping decisions
+
+The 54-association focused triage remains the original review baseline, not a final approval record. In the first implementation batch, Year 1 W20 was remapped to phrasing/bends; Year 1 W42 and Year 2 W41 were mapped to voice leading; Year 1 W26 and Year 2 W04 were narrowed to triads; Year 2 W35 to interval recognition; Year 2 W36 to seventh chords. Other triad, voice-leading, ear-rhythm, thumb-independence and pentatonic associations remain provisional until every lesson's teaching blocks and checkpoint have a recorded disposition.

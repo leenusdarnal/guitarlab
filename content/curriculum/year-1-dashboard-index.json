@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "outlineVersion": "1.1.0",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.0.1",
   "phases": [
     {
       "id": "beginner-base",
@@ -61,7 +61,7 @@
       "id": "y1-w04-lesson",
       "week": 4,
       "title": "First chord shapes",
-      "focus": "Em and G; checking each string",
+      "focus": "Em and G open-position shapes: clean individual strings and relaxed changes",
       "estimatedMinutes": 30,
       "skillIds": ["harmony.open-chords"]
     },
@@ -85,7 +85,7 @@
       "id": "y1-w07-lesson",
       "week": 7,
       "title": "Strum in time",
-      "focus": "Downstrokes, upstrokes and subdivisions",
+      "focus": "Downstrokes, upstrokes, subdivisions and continuous hand motion",
       "estimatedMinutes": 30,
       "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"]
     },
@@ -117,7 +117,7 @@
       "id": "y1-w11-lesson",
       "week": 11,
       "title": "Your first music map",
-      "focus": "Open-string map, semitone steps and first fretboard landmarks",
+      "focus": "Open-string names, semitone spacing and natural-note landmarks",
       "estimatedMinutes": 30,
       "skillIds": ["fretboard.string-map", "fretboard.natural-notes"]
     },
@@ -153,7 +153,7 @@
       "id": "y1-w15-lesson",
       "week": 15,
       "title": "Pick control and clean tone",
-      "focus": "Alternate picking and string crossing",
+      "focus": "Alternate-picking sequence and controlled string crossings",
       "estimatedMinutes": 30,
       "skillIds": ["technique.alternate-picking", "technique.string-crossing"]
     },
@@ -161,7 +161,7 @@
       "id": "y1-w16-lesson",
       "week": 16,
       "title": "Fingerstyle foundation",
-      "focus": "Thumb and fingers as separate roles",
+      "focus": "Independent thumb pulse with treble-finger patterns",
       "estimatedMinutes": 30,
       "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"]
     },
@@ -169,7 +169,7 @@
       "id": "y1-w17-lesson",
       "week": 17,
       "title": "Build the major scale",
-      "focus": "Whole-step/half-step formula and a small C major pattern",
+      "focus": "Major-scale formula and comparison with A minor pentatonic",
       "estimatedMinutes": 30,
       "skillIds": ["lead.major-scale", "lead.pentatonic"]
     },
@@ -179,7 +179,7 @@
       "title": "Shell chords: roots and guide tones",
       "focus": "Three-note chord grips as a bridge to movable chords",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords"]
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"]
     },
     {
       "id": "y1-w19-lesson",
@@ -195,7 +195,7 @@
       "title": "Play with expression",
       "focus": "Slides, bends, dynamics and phrasing",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.triads", "harmony.voice-leading"]
+      "skillIds": ["lead.phrasing", "technique.bends"]
     },
     {
       "id": "y1-w21-lesson",
@@ -203,7 +203,7 @@
       "title": "Movable power chords",
       "focus": "Root-5 shapes, muting and rock rhythm",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.power-chords"]
+      "skillIds": ["harmony.power-chords"]
     },
     {
       "id": "y1-w22-lesson",
@@ -211,15 +211,15 @@
       "title": "Approach barre chords safely",
       "focus": "Partial barre shape and efficient pressure",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.barre-chords"]
+      "skillIds": ["harmony.barre-chords"]
     },
     {
       "id": "y1-w23-lesson",
       "week": 23,
       "title": "Minor pentatonic box 1",
-      "focus": "Map the five notes and find the roots",
+      "focus": "A minor pentatonic box 1: five notes, root locations and phrase resolution",
       "estimatedMinutes": 30,
-      "skillIds": ["lead.major-scale", "lead.pentatonic"]
+      "skillIds": ["lead.pentatonic"]
     },
     {
       "id": "y1-w24-lesson",
@@ -249,9 +249,9 @@
       "id": "y1-w26-lesson",
       "week": 26,
       "title": "Triads on the top strings",
-      "focus": "Compact voicings and inversions",
+      "focus": "C, F and G triads on the top three strings",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords", "harmony.triads"]
+      "skillIds": ["harmony.triads"]
     },
     {
       "id": "y1-w27-lesson",
@@ -345,7 +345,7 @@
       "id": "y1-w37-lesson",
       "week": 37,
       "title": "Learn a melody by ear",
-      "focus": "Listen, sing, find and verify notes",
+      "focus": "Listen, sing, identify interval movement and transcribe a short melody",
       "estimatedMinutes": 30,
       "skillIds": [
         "ear.pitch",
@@ -392,7 +392,7 @@
       "title": "The ii-V-I connection",
       "focus": "Connect jazz chords with voice leading",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.open-chords"]
+      "skillIds": ["harmony.voice-leading"]
     },
     {
       "id": "y1-w43-lesson",

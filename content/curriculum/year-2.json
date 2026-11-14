@@ -106,8 +106,8 @@
       "week": 4,
       "phaseId": "fretboard-triads",
       "title": "Triad inversions",
-      "focus": "Major triads in root position and inversions",
-      "checkpoint": "Play three inversions on the top string set",
+      "focus": "Major triad root position and inversions on the top string set",
+      "checkpoint": "Play three inversions of a major triad on the top string set, name the root and identify which chord tone is in the bass of each voicing.",
       "practiceExercise": "C-F-G top-string triad cycle",
       "startingTempoBpm": 66
     },
@@ -366,8 +366,8 @@
       "week": 30,
       "phaseId": "repertoire-ear",
       "title": "Learn by ear: rhythm",
-      "focus": "Transcribe strumming accents and rests",
-      "checkpoint": "Write a four-bar rhythm after listening",
+      "focus": "Hear and transcribe strumming accents, attacks and rests",
+      "checkpoint": "Write or speak a four-bar rhythm after listening, preserving its beat grouping, accents and rests.",
       "practiceExercise": "Clap and reproduce an 8-beat groove",
       "startingTempoBpm": 68
     },
@@ -566,8 +566,8 @@
       "week": 50,
       "phaseId": "independent-musician",
       "title": "Recording craft",
-      "focus": "Balance levels and capture a clean one-take performance",
-      "checkpoint": "Check tuning, noise, timing and dynamic balance",
+      "focus": "Record, review and recover through a one-take performance",
+      "checkpoint": "Record a 60-second repertoire excerpt from count-in to ending, then review tuning, unwanted noise, timing and dynamic balance and identify one recovery point.",
       "practiceExercise": "Record a 60-second repertoire excerpt",
       "startingTempoBpm": 70
     },

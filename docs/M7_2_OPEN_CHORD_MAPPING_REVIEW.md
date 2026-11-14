@@ -75,3 +75,9 @@ This review relies on the visible focus, checkpoint, worked examples and current
 5. Once the mapping baseline is approved, add stronger CI validation that each skill has an authored assessment cue; do not try to infer semantic correctness from keywords alone.
 
 **Next action:** Use this review to resolve the high-reuse mapping group, then continue the lexical-screen review of `harmony.triads`, `harmony.voice-leading`, `ear.rhythm`, `fingerstyle.thumb-independence` and `lead.pentatonic`.
+
+## Update — curriculum-v1.0.2 mapping batch
+
+The count of 33 `harmony.open-chords` associations in this report is the original v1.0.0 baseline. In release v1.0.2, nine evidence-backed associations were removed or replaced with more precise existing skills (seventh chords, power chords, barre chords, triads, intervals or voice leading). The current dataset has **24** remaining `harmony.open-chords` associations.
+
+The original 2 direct / 5 contextual / 26 likely-misaligned classification is historical and must not be read as a classification of the current 24. The remaining 24 still require full lesson-block review; no automatic bulk removal was made. See `M7_2_MAPPING_DECISIONS_BATCH_1.md` and the updated `M7_2_LESSON_SKILL_MAPPING_REGISTER.md`.
