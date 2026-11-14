@@ -3,7 +3,7 @@
 **Last updated:** 2026-11-14  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Verified baseline:** `de9b0f3992c258e5dfdc840e48fb45da47276bd2` (PR #102 merged; curriculum release v1.0.6)  
+**Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
 ## 1. Latest verified checkpoint
@@ -13,7 +13,7 @@
 - Curriculum v1.0.6 preserves all 152 lesson IDs and 34 canonical skill IDs. Task-specific authoring now covers 44/152 lessons overall and 32/48 Year 3+ specialist lessons; 391 mapping links are retained.
 - Audio implementation Issue #68 is closed. PRs #73–80 added lifecycle tests, explicit session ownership and deterministic teardown; PRs #81–86 added pitch estimation, explicit microphone capture, stable-note tracking, tuner, note-recognition exercises and synthetic benchmarks; PRs #90–91 expanded synthetic validation and added a local real-recording evaluator.
 - Remaining audio evidence is isolated in [Issue #89](https://github.com/leenusdarnal/guitarlab/issues/89): a consented real-guitar corpus, physical-device/browser measurements and resource-cleanup acceptance. Mocked browser tests and synthetic fixtures are not hardware evidence.
-- M7.2 adaptive practice has a baseline audit (PR #92), deterministic evidence-aware read model (PR #93), versioned skill catalogue and Practice Studio recommendation/coverage view (PR #94). Issue #69 remains open: recommendation dismiss/correct feedback with provenance is not implemented; measured per-item accuracy and richer trend analytics remain constrained by current evidence fields.
+- M7.2 adaptive practice now includes the evidence audit (PR #92), deterministic evidence-aware read model (PR #93), canonical skill catalogue and Practice Studio recommendations/assessment coverage (PR #94), append-only local dismiss/correct feedback with provenance (PR #103), and comparable measured-score summaries/trends by skill (PR #104). Issue #69 remains open for structured per-item outcomes/confusion signals and genuine topic/fretboard coverage; the present records do not support those claims.
 - Ear-training foundations and interval recognition are merged in PRs #61 and #67. Jazz & Harmony Weeks 1–8 are merged in PRs #101–102.
 - Preview deployment workflow has previously succeeded for a main-branch commit; verify the exact commit before relying on it. Production deployment, production D1, authentication and cloud sync remain deferred.
 - No open PR was present immediately after PR #102 merged. Refresh PRs, issues and Actions before beginning each new slice.
@@ -29,22 +29,27 @@
 
 **Exit criteria:** the current main SHA, CI evidence, curriculum progress and issue owners agree across docs and GitHub.
 
-### P1 — Adaptive recommendation feedback and explainability (Issue #69)
+### P1 — Adaptive recommendations and evidence-backed analytics (Issue #69)
 
-**Already implemented:** PR #92 audited practice evidence; PR #93 added a deterministic read model with stable reason codes, active-learner/release scoping, measured-score summaries, missing-evidence states and assessment-category coverage; PR #94 integrated the view into Practice Studio and introduced the canonical 34-skill catalogue plus draft assessment profiles.
+**Delivered:**
 
-**Next implementation slice:**
+- PR #92: audited the planner, append-only practice observations, assessment history and mastery boundary.
+- PR #93: added a deterministic, learner/release-scoped read model with stable reason codes, review-due and assessment signals, explicit missing-evidence states, measured-score summaries and assessment-category coverage.
+- PR #94: integrated recommendations and assessment coverage into Practice Studio; added the canonical catalogue for the existing 34 skill IDs and draft-only assessment profiles.
+- PR #103: added bounded, append-only dismiss/correct feedback with provenance, learner/release-scoped IndexedDB persistence, deterministic resolution against newer evidence, backup/restore/reset handling and accessible Practice Studio controls.
+- PR #104: added measured-score count/latest/mean/spread and cautious improving/stable/declining trends per skill. Scores are compared only within the latest assessment kind; a trend requires four comparable scores and compares two earlier with two recent scores.
 
-1. Add append-only, learner- and curriculum-release-scoped recommendation feedback records.
-2. Support dismissing a recommendation and correcting it with a bounded reason (for example, already confident, needs a simpler step or not relevant).
-3. Preserve recommendation identity, original reason codes, action, correction reason and timestamp. New feedback supersedes old feedback only in the derived view; never update or delete the historical record.
-4. Hide dismissed or no-longer-relevant recommendations until newer assessment/practice evidence exists; show an explicit simplification cue when the learner says the task is too difficult.
-5. Keep feedback local in IndexedDB. It must not write assessments, mastery, learner notes to telemetry, or remote services.
-6. Add unit, storage, migration and browser tests for ownership, append-only history, deterministic latest-feedback resolution, empty/error states and mastery invariants.
+**Next implementation slice — structured evidence contract (not guessed analytics):**
 
-**Known evidence limitation:** current practice observations do not contain per-attempt correctness or structured confusion/fretboard tags. Do not label repetitions or self-reported difficulty as accuracy. Current analytics can summarise comparable measured assessment scores and category assessment coverage; richer accuracy/consistency trends require valid evidence fields first.
+1. Define a bounded, versioned per-item assessment evidence shape with stable item identity and outcome (`correct`, `incorrect`, `inconclusive`) only for assessment flows that actually observe the outcome.
+2. Keep item evidence tied to learner, curriculum release, skill and assessment attempt; define provenance and retention/export behaviour before persisting it.
+3. Add taxonomy metadata only where curriculum/assessment authors can explicitly name topic, technique or fretboard scope. Do not infer it from free-text exercise names, lesson titles or repetition logs.
+4. Add deterministic tests for repeated-confusion prioritisation and coverage only after the corresponding structured evidence exists.
+5. Preserve assessment outcomes and mastery rules; additional item evidence can inform recommendations but must not silently award mastery.
 
-**Exit criteria:** learners can dismiss/correct suggestions with an auditable local record; recommendation display is deterministic; no recommendation interaction changes mastery or assessment history.
+**Known evidence limits:** practice observations contain learner-entered repetitions and difficulty, not per-item correctness. Skill catalogue categories support assessment-category coverage, not string/fretboard-position exposure. PR #104 score spread and four-score trend are descriptive measured-score consistency signals, not per-item accuracy or mastery. Do not represent any of these missing dimensions as zero or poor performance.
+
+**Exit criteria:** a versioned item-evidence contract, provenance/privacy rules and canonical topic/fretboard metadata are implemented and tested before recommendation ranking uses them. Existing feedback and analytics remain read-only with respect to mastery.
 
 ### P2 — Musicianship, connected theory and repertoire (Issue #17)
 
@@ -114,12 +119,12 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `de9b0f3992c258e5dfdc840e48fb45da47276bd2` |
+| Last verified main SHA | `a1da00fe0fb5804464ccb1679c128d1176957041` |
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
-| PR #102 branch checks | Application/curriculum validation, Node.js 26 and curriculum validator passed |
-| Post-merge main CI | Run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570); passed |
-| Current implementation branch | `feat/m7-adaptive-recommendation-feedback`; PR [#103](https://github.com/leenusdarnal/guitarlab/pull/103) open, CI pending |
-| Current engineering task | Append-only adaptive recommendation dismiss/correct feedback implemented in PR #103; merge after required checks pass |
+| PR #103 | Merged; append-only local recommendation feedback; merge commit `b27eed5e27e805d43259019fa304f80df20f356a` |
+| PR #104 | Merged; comparable measured-score summaries/trends; merge commit `a1da00fe0fb5804464ccb1679c128d1176957041` |
+| PR #104 validation | Run [#43584492437](https://github.com/leenusdarnal/guitarlab/actions/runs/43584492437); primary application/curriculum and Node.js 26 jobs passed |
+| Current engineering task | Design a versioned, privacy-bounded per-item assessment evidence contract and explicit topic/fretboard taxonomy before implementing per-item accuracy/confusion or coverage ranking |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
 | Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
 | M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |
