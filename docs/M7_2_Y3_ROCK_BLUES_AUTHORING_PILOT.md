@@ -37,7 +37,7 @@ The pilot deliberately preserves an inclusive approach to posture and technique.
 - All four lesson IDs are unchanged.
 - All four existing `skillIds` arrays are unchanged.
 - The 34-skill catalogue is unchanged.
-- The catalogue release key remains `curriculum-v1`.
+- The original `curriculum-v1` release remains immutable; the new authored snapshot is `curriculum-v1.0.1`.
 - No learner assessment, practice observation or mastery record is migrated or rewritten.
 - The Year 3 specialist lesson dataset version is incremented from 1.0.0 to 1.0.1 to identify this authored-content revision.
 
@@ -49,7 +49,7 @@ The pilot deliberately preserves an inclusive approach to posture and technique.
 - [x] Worked examples and exercises match the named checkpoint.
 - [x] Accessibility and common-error guidance remain present.
 - [x] Stable lesson IDs and skill mappings are preserved.
-- [ ] Curriculum validation CI passes on the pull request head.
+- [x] An explicit immutable release manifest and D1 migration seed `curriculum-v1.0.1` alongside the original `curriculum-v1` snapshot.\n- [x] Local D1 checks assert both releases and all 152 lesson metadata rows remain present independently.\n- [ ] Curriculum validation CI passes on the pull request head.
 - [ ] Formatting, application and browser acceptance CI passes.
 - [ ] Curriculum reviewer approves task difficulty and note/fret examples.
 
@@ -62,7 +62,7 @@ The pilot tests whether advanced lessons become clearer when the learner can ans
 4. How can I apply the skill in a musical phrase?
 5. What should I recall or try later without the original prompt?
 
-It does not yet establish a validated grading rubric. The draft skill assessment profiles remain separate and unapproved; this pilot's criteria are authoring guidance, not automatic pass/fail or mastery rules.
+It does not yet establish a validated grading rubric. The draft skill assessment profiles remain separate and unapproved; this pilot's criteria are authoring guidance, not automatic pass/fail or mastery rules. The database migration adds a new release snapshot without updating or deleting any old progress, assessment or mastery evidence; no automatic carry-forward is performed.
 
 ## 7. Next stage
 
