@@ -53,7 +53,10 @@ export const assessmentItemEvidenceSchema = z
         message: 'A missing response must be marked as no_response.'
       });
     }
-    if (item.response !== null && item.responseSource !== 'learner_selected_option') {
+    if (
+      item.response !== null &&
+      item.responseSource !== 'learner_selected_option'
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['responseSource'],
@@ -109,7 +112,11 @@ const assessmentAttemptObjectSchema = z
     evidenceSummary: z.string().max(1000).nullable(),
     evidence: assessmentEvidenceSchema.default({}),
     assessmentInstrument: assessmentInstrumentSchema.optional(),
-    itemEvidence: z.array(assessmentItemEvidenceSchema).min(1).max(100).optional(),
+    itemEvidence: z
+      .array(assessmentItemEvidenceSchema)
+      .min(1)
+      .max(100)
+      .optional(),
     assessedAt: z.number().int().nonnegative()
   })
   .strict();
@@ -127,7 +134,8 @@ function validateAssessmentAttemptEvidence(
     context.addIssue({
       code: 'custom',
       path: ['itemEvidence'],
-      message: 'Instrument provenance and item evidence must be recorded together.'
+      message:
+        'Instrument provenance and item evidence must be recorded together.'
     });
   }
   if (attempt.itemEvidence && attempt.assessmentInstrument) {
@@ -140,11 +148,14 @@ function validateAssessmentAttemptEvidence(
       });
     }
 
-    if (attempt.itemEvidence.length !== attempt.assessmentInstrument.itemCount) {
+    if (
+      attempt.itemEvidence.length !== attempt.assessmentInstrument.itemCount
+    ) {
       context.addIssue({
         code: 'custom',
         path: ['itemEvidence'],
-        message: 'The item evidence count must match the authored assessment definition.'
+        message:
+          'The item evidence count must match the authored assessment definition.'
       });
     }
 
@@ -191,14 +202,13 @@ function validateAssessmentAttemptEvidence(
 export const assessmentAttemptInputSchema =
   assessmentAttemptObjectSchema.superRefine(validateAssessmentAttemptEvidence);
 
-export const assessmentAttemptSubmissionSchema =
-  assessmentAttemptObjectSchema
-    .omit({
-      id: true,
-      learnerId: true,
-      assessedAt: true
-    })
-    .superRefine(validateAssessmentAttemptEvidence);
+export const assessmentAttemptSubmissionSchema = assessmentAttemptObjectSchema
+  .omit({
+    id: true,
+    learnerId: true,
+    assessedAt: true
+  })
+  .superRefine(validateAssessmentAttemptEvidence);
 
 export const assessmentAttemptRecordSchema = assessmentAttemptObjectSchema
   .extend({ recordedAt: z.number().int().nonnegative() })
