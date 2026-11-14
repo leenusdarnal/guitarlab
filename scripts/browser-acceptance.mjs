@@ -565,7 +565,7 @@ try {
       .filter((record) => record.recommendationId === recommendationId)
       .map((record) => record.action),
     ['correct', 'dismiss'],
-    'Export retains the learner\'s append-only feedback history'
+    "Export retains the learner's append-only feedback history"
   );
 
   // Invalid JSON and unsupported backup versions must be rejected without preview.
@@ -812,7 +812,7 @@ try {
       .filter((record) => record.recommendationId === recommendationId)
       .map((record) => record.action),
     ['correct', 'dismiss'],
-    'Restore reinstates the learner\'s full adaptive recommendation feedback history'
+    "Restore reinstates the learner's full adaptive recommendation feedback history"
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
