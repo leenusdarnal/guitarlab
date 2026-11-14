@@ -103,8 +103,10 @@ describe('learner backup contract', () => {
     backup.records.practiceSessions.push({
       id: 'b1b1b1b1-1111-4111-8111-111111111111',
       learnerId,
-      primaryCurriculumReleaseId: null,
-      primaryLessonId: null,
+      primaryCurriculumReleaseId: 'curriculum-v1.0.6',
+      primaryLessonId: 'y1-w01-lesson',
+      primaryExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0',
       status: 'completed',
       activeStartedAt: null,
       plannedMinutes: 20,
@@ -128,15 +130,33 @@ describe('learner backup contract', () => {
         cleanRepetitions: 15,
         tempoBpm: 80,
         difficulty: 3,
-        recordedAt: 1_800_000_200_000
+        recordedAt: 1_800_000_200_000,
+        curriculumReleaseId: 'curriculum-v1.0.6',
+        lessonId: 'y1-w01-lesson',
+        authoredExerciseId: 'y1-w01-lesson-focus',
+        practiceTaxonomyVersion: '0.1.0'
       }
     ];
     expect(parseLearnerBackup(backup)).toMatchObject({
       success: true,
       data: {
         records: {
-          practiceEvidence: [{ repetitions: 20, cleanRepetitions: 15 }],
-          practiceSessions: [{ nextTarget: 'Repeat the scale at 72 BPM.' }]
+          practiceEvidence: [
+            {
+              repetitions: 20,
+              cleanRepetitions: 15,
+              lessonId: 'y1-w01-lesson',
+              authoredExerciseId: 'y1-w01-lesson-focus',
+              practiceTaxonomyVersion: '0.1.0'
+            }
+          ],
+          practiceSessions: [
+            {
+              nextTarget: 'Repeat the scale at 72 BPM.',
+              primaryExerciseId: 'y1-w01-lesson-focus',
+              practiceTaxonomyVersion: '0.1.0'
+            }
+          ]
         }
       }
     });
@@ -146,6 +166,13 @@ describe('learner backup contract', () => {
     expect(parseLearnerBackup(orphaned)).toMatchObject({
       success: false,
       message: expect.stringContaining('practiceEvidence')
+    });
+
+    const mismatchedAuthoredLink = structuredClone(backup);
+    mismatchedAuthoredLink.records.practiceEvidence![0].authoredExerciseId = 'another-exercise';
+    expect(parseLearnerBackup(mismatchedAuthoredLink)).toMatchObject({
+      success: false,
+      message: expect.stringContaining('authored practice observation')
     });
   });
 

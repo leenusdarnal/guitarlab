@@ -106,6 +106,8 @@ describe('practice session lifecycle', () => {
         plannedMinutes: 20,
         primaryCurriculumReleaseId: 'curriculum-v1',
         primaryLessonId: 'lesson-1',
+        primaryExerciseId: 'lesson-1-focus',
+        practiceTaxonomyVersion: '0.1.0',
         focus: '  Alternate picking  '
       },
       { curriculum, practice, runtime }
@@ -119,6 +121,8 @@ describe('practice session lifecycle', () => {
       plannedMinutes: 20,
       primaryCurriculumReleaseId: 'curriculum-v1',
       primaryLessonId: 'lesson-1',
+      primaryExerciseId: 'lesson-1-focus',
+      practiceTaxonomyVersion: '0.1.0',
       focus: 'Alternate picking',
       actualDurationSeconds: 0
     });
@@ -151,6 +155,20 @@ describe('practice session lifecycle', () => {
         { curriculum, practice, runtime }
       )
     ).rejects.toThrow(/Practice lesson not found/);
+
+    await expect(
+      startPracticeSession(
+        {
+          learnerId,
+          plannedMinutes: 20,
+          primaryCurriculumReleaseId: 'curriculum-v1',
+          primaryLessonId: 'lesson-1',
+          primaryExerciseId: 'lesson-1-focus',
+          focus: null
+        },
+        { curriculum, practice, runtime }
+      )
+    ).rejects.toThrow(/taxonomy version/);
 
     await expect(
       startPracticeSession(
@@ -313,6 +331,36 @@ describe('practice session lifecycle', () => {
       )
     ).rejects.toThrow(/abandoned/);
     expect(evidenceRows).toHaveLength(1);
+  });
+
+  it('copies the owning session authored identity to new observations', async () => {
+    sessions.set(sessionId, {
+      ...baseSession(),
+      primaryCurriculumReleaseId: 'curriculum-v1.0.6',
+      primaryLessonId: 'y1-w01-lesson',
+      primaryExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0'
+    });
+    const record = await recordPracticeEvidence(
+      {
+        learnerId,
+        submission: {
+          sessionId,
+          exerciseId: 'Meet your guitar',
+          repetitions: 4,
+          cleanRepetitions: 4,
+          tempoBpm: null,
+          difficulty: null
+        }
+      },
+      { practice, evidence, runtime }
+    );
+    expect(record).toMatchObject({
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      lessonId: 'y1-w01-lesson',
+      authoredExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0'
+    });
   });
 
   it('finishes running and paused sessions, trims notes and stores learner duration', async () => {

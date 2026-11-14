@@ -63,6 +63,34 @@ describe('practice evidence contract', () => {
     }
   });
 
+  it('accepts complete authored identity on persisted observations', () => {
+    expect(
+      practiceEvidenceInputSchema.parse({
+        ...validEvidence,
+        curriculumReleaseId: 'curriculum-v1.0.6',
+        lessonId: 'y1-w01-lesson',
+        authoredExerciseId: 'y1-w01-lesson-focus',
+        practiceTaxonomyVersion: '0.1.0'
+      })
+    ).toMatchObject({
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      lessonId: 'y1-w01-lesson',
+      authoredExerciseId: 'y1-w01-lesson-focus',
+      practiceTaxonomyVersion: '0.1.0'
+    });
+  });
+
+  it('keeps legacy observations unlinked and rejects partial authored identity', () => {
+    expect(practiceEvidenceInputSchema.parse(validEvidence)).toEqual(validEvidence);
+    expect(
+      practiceEvidenceInputSchema.safeParse({
+        ...validEvidence,
+        curriculumReleaseId: 'curriculum-v1.0.6',
+        lessonId: 'y1-w01-lesson'
+      }).success
+    ).toBe(false);
+  });
+
   it('rejects unknown fields so arbitrary payloads are not persisted', () => {
     expect(
       practiceEvidenceInputSchema.safeParse({
