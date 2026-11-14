@@ -8508,7 +8508,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate listening journal in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -8736,7 +8741,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Demonstrate ear intervals in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
