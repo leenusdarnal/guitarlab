@@ -46,6 +46,8 @@ describe('versioned authored exercise practice taxonomy', () => {
     expect(
       getAuthoredPracticeScope('y1-w01-lesson', 'y1-w01-lesson-orient')
     ).toBeNull();
-    expect(getAuthoredPracticeScope('unknown-lesson', 'unknown-exercise')).toBeNull();
+    expect(
+      getAuthoredPracticeScope('unknown-lesson', 'unknown-exercise')
+    ).toBeNull();
   });
 });
