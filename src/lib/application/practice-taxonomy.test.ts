@@ -13,10 +13,12 @@ describe('versioned authored exercise practice taxonomy', () => {
     expect(PRACTICE_TAXONOMY_RELEASE_ID).toBe('curriculum-v1.0.6');
     expect(PRACTICE_TAXONOMY_VERSION).toBe('0.2.0');
     expect(listAuthoredPracticeScopes()).toHaveLength(15);
-    expect(listAuthoredPracticeScopeSnapshots().map((snapshot) => [
-      snapshot.version,
-      snapshot.scopes.length
-    ])).toEqual([
+    expect(
+      listAuthoredPracticeScopeSnapshots().map((snapshot) => [
+        snapshot.version,
+        snapshot.scopes.length
+      ])
+    ).toEqual([
       ['0.1.0', 10],
       ['0.2.0', 15]
     ]);
