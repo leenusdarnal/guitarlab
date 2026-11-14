@@ -1020,6 +1020,14 @@ try {
   await page
     .getByRole('heading', { name: 'Your session is in progress' })
     .waitFor();
+  const authoredSessionLabel = await page
+    .locator('.authored-session-link')
+    .innerText();
+  console.log('Practice session authored link:', authoredSessionLabel);
+  assert.match(
+    authoredSessionLabel,
+    /y1-w01-lesson-focus.*curriculum-v1\.0\.6.*0\.1\.0/
+  );
 
   // Reject impossible learner-entered counts before any observation is saved.
   await page.locator('#exercise-name').fill('G major scale');
