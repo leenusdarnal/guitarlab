@@ -177,9 +177,15 @@ try {
     .waitFor({ state: 'visible' });
   await page.getByRole('button', { name: 'Uneven pulse' }).click();
   await page.getByText('Not quite — give it another listen.').waitFor();
+  await page
+    .getByText('Pulse item evidence saved locally.', { exact: false })
+    .waitFor();
   await page.getByRole('button', { name: 'Try again' }).click();
   await page.getByRole('button', { name: 'Steady pulse' }).click();
   await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('Pulse item evidence saved locally.', { exact: false })
+    .waitFor();
   await page.getByRole('button', { name: 'Next exercise' }).click();
 
   await page.getByRole('button', { name: 'High / low' }).click();
