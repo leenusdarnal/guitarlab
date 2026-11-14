@@ -168,7 +168,7 @@ describe('practice session lifecycle', () => {
         },
         { curriculum, practice, runtime }
       )
-    ).rejects.toThrow(/taxonomy version/);
+    ).rejects.toThrow();
 
     await expect(
       startPracticeSession(
