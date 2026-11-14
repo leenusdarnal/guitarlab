@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  assessmentAttemptSubmissionSchema,
   assessmentAttemptInputSchema,
   type AssessmentAttemptInput
 } from '../domain/learning/assessment';
@@ -371,11 +372,7 @@ export async function completeLesson(
   return result;
 }
 
-const assessmentSubmissionSchema = assessmentAttemptInputSchema.omit({
-  id: true,
-  learnerId: true,
-  assessedAt: true
-});
+const assessmentSubmissionSchema = assessmentAttemptSubmissionSchema;
 
 export type AssessmentSubmission = z.input<typeof assessmentSubmissionSchema>;
 
