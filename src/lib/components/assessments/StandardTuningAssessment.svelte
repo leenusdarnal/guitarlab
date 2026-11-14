@@ -1,9 +1,13 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import {
     standardTuningAssessment,
     type StandardTuningAnswers
   } from '../../../lib/domain/learning/standard-tuning-assessment';
-  import { recordActiveStandardTuningAssessment } from '../../../lib/storage/assessment';
+  import {
+    loadLatestActiveStandardTuningAssessment,
+    recordActiveStandardTuningAssessment
+  } from '../../../lib/storage/assessment';
   import type { AssessmentAttemptRecord } from '../../../lib/repositories/contracts';
 
   function emptyAnswers(): StandardTuningAnswers {
@@ -15,6 +19,7 @@
   let answers = $state<StandardTuningAnswers>(emptyAnswers());
   let result = $state<AssessmentAttemptRecord | null>(null);
   let saving = $state(false);
+  let loading = $state(true);
   let error = $state('');
   const answeredCount = $derived(
     standardTuningAssessment.items.filter((item) => Boolean(answers[item.id])).length
@@ -22,6 +27,28 @@
   const isComplete = $derived(
     answeredCount === standardTuningAssessment.items.length
   );
+
+  onMount(() => {
+    let active = true;
+    void loadLatestActiveStandardTuningAssessment()
+      .then((attempt) => {
+        if (active) result = attempt;
+      })
+      .catch((cause: unknown) => {
+        if (active) {
+          error =
+            cause instanceof Error
+              ? cause.message
+              : 'The previous assessment result could not be loaded.';
+        }
+      })
+      .finally(() => {
+        if (active) loading = false;
+      });
+    return () => {
+      active = false;
+    };
+  });
 
   async function submitAssessment() {
     if (!isComplete || saving || result) return;
@@ -59,7 +86,9 @@
     <p>{standardTuningAssessment.description}</p>
   </div>
 
-  {#if result}
+  {#if loading}
+    <p class="local-note" role="status">Loading your saved assessment result…</p>
+  {:else if result}
     <div class="assessment-result" aria-live="polite">
       <div class="result-summary">
         <strong>{result.outcome === 'passed' ? 'Check passed' : result.outcome === 'needs_practice' ? 'More practice recommended' : 'Inconclusive attempt'}</strong>
