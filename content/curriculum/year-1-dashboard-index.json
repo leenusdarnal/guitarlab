@@ -239,7 +239,11 @@
       "title": "Find roots and octaves",
       "focus": "Fretboard navigation beyond open position",
       "estimatedMinutes": 30,
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes", "fretboard.octaves"]
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes",
+        "fretboard.octaves"
+      ]
     },
     {
       "id": "y1-w26-lesson",
@@ -343,7 +347,12 @@
       "title": "Learn a melody by ear",
       "focus": "Listen, sing, identify interval movement and transcribe a short melody",
       "estimatedMinutes": 30,
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"]
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ]
     },
     {
       "id": "y1-w38-lesson",
