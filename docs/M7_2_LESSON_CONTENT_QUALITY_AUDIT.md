@@ -1,10 +1,12 @@
 # M7.2 — Authored Lesson Content Quality Audit
 
-**Status:** Dataset-level quality scan complete; targeted lesson rewrites not yet started  
+**Status:** Dataset-level quality scan complete; 12 Rock & Blues lessons remediated; 36 Year 3+ specialist lessons and broader curriculum remediations remain open  
 **Scope:** 152 authored lessons across Year 1, Year 2 and Year 3+  
 **Purpose:** Find structural weaknesses that can make lessons appear complete while leaving learners with generic objectives or non-discriminating assessment criteria.
 
 ## 1. Executive finding
+
+The counts in Sections 1–4 describe the initial 152-lesson scan before targeted authoring. Current post-remediation counts are recorded in Section 9 so the original baseline remains auditable.
 
 The 152 lessons contain substantial authored material, but several high-level instructional fields are heavily templated:
 
