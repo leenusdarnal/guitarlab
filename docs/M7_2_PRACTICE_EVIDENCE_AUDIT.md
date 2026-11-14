@@ -1,14 +1,14 @@
 # M7.2 — Practice Evidence and Planner Audit
 
-**Status:** Structured item-evidence producers now cover standard tuning, interval recognition and pulse listening; next is comparable item analytics and targeted prioritisation. Explicit topic/fretboard coverage remains open.  
-**Reviewed against:** `main` at `1c99ebb56e054f0ddc7528a36d7002cd6678fcb6` (PRs #92–94, #103–104 and #107–109 merged)  
+**Status:** Objective item capture and comparable item analytics are implemented (PRs #107–110). The next slice introduces a versioned, author-evidenced exercise taxonomy; learner exposure coverage remains deferred until practice records can reference stable authored exercise IDs and curriculum releases.  
+**Reviewed against:** merged PR #110 at `a04d284e82447707de6b4d70a01115f2b2982e0b` (PRs #92–94, #103–110 merged)  
 **Scope:** Existing practice planning, activity observations, assessment history and skill-state rules
 
 ## Executive summary
 
 GuitarLab already has the core records needed for a conservative, local-first adaptive practice layer. The existing planner is deterministic and explains its lesson, review, warm-up and musical-application suggestions. Practice observations and assessment attempts are separate records, and the skill-state explanation explicitly excludes practice duration and self-reported repetitions from mastery decisions.
 
-The recommendation read model and category assessment-coverage view landed in PRs #93–94; append-only local learner feedback landed in PR #103; comparable measured-score summaries, spread and cautious trends landed in PR #104. The remaining gap is not another display of the same score aggregates: item-level correctness/confusion and true topic/fretboard exposure require explicit source fields and canonical metadata. Do not invent them from free-text exercise IDs, lesson titles or repetition logs, and do not change the underlying assessment or mastery rules.
+The recommendation read model and category assessment-coverage view landed in PRs #93–94; append-only local learner feedback landed in PR #103; comparable measured-score summaries, spread and cautious trends landed in PR #104. Versioned item outcomes and repeated-miss analytics are now available through PRs #107–110. True topic/fretboard exposure is still not available: practice observations use learner-entered exercise names, and current sessions are not reliably associated with authored lesson/exercise IDs. A first taxonomy can document explicitly scoped authored exercises, but exposure must not be calculated until session linkage exists. Do not invent metadata from free-text names, lesson titles or repetition logs, and do not change assessment or mastery rules.
 
 ## Existing architecture
 
@@ -22,7 +22,7 @@ The recommendation read model and category assessment-coverage view landed in PR
 - Recent completed-session focus and difficulty are used as context for musical application, not as performance grades.
 - Existing tests cover duration budgets, due-review ordering, missing evidence, learner goals and recent-session context.
 
-**Remaining gap:** the planner still cannot consume per-item correctness or repeated confusion because current persisted evidence is skill-level, not item-level. The read model includes assessment outcome, review-due and explicit learner-difficulty signals, plus category-level assessment coverage; it does not measure exposure to a topic, string or fretboard position. PR #104 adds a descriptive measured-score trend, but the planner does not yet use it to override assessment state or change recommendation priority.
+**Remaining gap:** the adaptive read model now summarises versioned item outcomes separately from whole-skill measured scores and raises focused-practice priority after repeated incorrect outcomes on the same stable item (PR #110). It still does not measure actual practice exposure to a topic, string or fretboard position. Score trends remain descriptive and do not override assessment state or mastery.
 
 ### 2. Exercise observations
 
@@ -32,7 +32,7 @@ The recommendation read model and category assessment-coverage view landed in PR
 - The domain contract describes observations as append-only activity evidence, explicitly not assessment or mastery decisions.
 - `src/lib/storage/practice.ts` exposes active-learner local IndexedDB reads/writes for sessions and exercise observations.
 
-**Gap:** clean repetitions are a learner-entered self-observation, not independently verified correctness. They can inform a clearly labelled self-reported signal, but must not be treated as measured accuracy or as a mastery award. The current observation schema has no per-attempt item outcome, error/confusion code, or structured topic/fretboard tags. Avoid retroactively inventing these fields from free-text exercise IDs.
+**Gap:** clean repetitions are learner-entered self-observations, not independently verified correctness. They are not measured accuracy or mastery. The existing practice observation schema remains free-text and has no stable authored exercise reference. Item outcomes are stored separately on objective assessment attempts. The first practice taxonomy slice adds authored scope metadata for a narrow set of known exercises, but it does not retroactively tag historic free-text observations.
 
 ### 3. Assessment history and skill state
 
@@ -53,16 +53,18 @@ The recommendation read model and category assessment-coverage view landed in PR
 
 **Implemented:** the Practice Studio now shows up to six deterministic evidence-aware recommendations and assessment-category coverage from the reached Year 1 skill set (PR #94). It distinguishes assessment evidence from learner-entered exercise observations and shows an explicit missing-evidence state.
 
-**Delivered in PR #103:** recommendations can be dismissed or corrected with a bounded reason; records are append-only, learner/release scoped and local in IndexedDB, with deterministic latest-feedback resolution and reappearance after newer evidence. Backup, restore and confirmed reset account for the new store. **Delivered in PR #104:** the analytics disclosure presents measured-score count/latest/mean/spread and a four-score trend by assessment kind. It explicitly distinguishes missing evidence and does not use self-entered practice repetitions. **Remaining gap:** item-level accuracy/confusion and topic/fretboard practice coverage remain unavailable until explicit structured records and taxonomy metadata exist.
+**Delivered in PR #103:** recommendations can be dismissed or corrected with bounded reasons and append-only local provenance. **Delivered in PR #104:** measured-score summaries, spread and conservative trends. **Delivered in PR #110:** item accuracy, inconclusive counts and repeated-miss prioritisation, separated from whole-skill mastery. The next taxonomy slice does not yet produce exposure coverage because the active practice session is not linked to authored exercise IDs.
 
-## M7.2 implementation state after PRs #92–94 and #103–104
+## M7.2 implementation state after PRs #92–94 and #103–110
 
 - PR #92 completed the baseline evidence/planner audit.
 - PR #93 added `buildAdaptivePracticeSnapshot` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score summaries, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.
 - PR #94 integrated the read model into Practice Studio and added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.
 - PR #103 added bounded append-only dismiss/correct feedback, learner/release-scoped IndexedDB storage, deterministic latest-feedback resolution and accessible Practice Studio controls. Backup/restore/reset handling and browser acceptance are included; feedback does not alter assessments or mastery.
 - PR #104 added comparable measured-score count/latest/mean/spread and conservative improving/stable/declining trends. Only the most recently used assessment kind is summarized. A trend requires four comparable measured scores, compares two earlier with two recent scores, and uses a five-point threshold.
-- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score. Score spread/trends are descriptive summaries, not mastery decisions or verified item-level accuracy.
+- PR #107 adds objective standard-tuning item capture; PR #108 adds interval-recognition item capture; PR #109 adds pulse-listening item capture. All are supporting probes, not whole-skill mastery assessments.
+- PR #110 derives comparable item accuracy and consecutive repeated-miss signals from those versioned outcomes. Inconclusive attempts remain visible but are excluded from accuracy; correct or inconclusive later outcomes reset the same item's miss streak. Supporting probes do not change skill state or mastery.
+- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score. Score spread/trends are descriptive summaries, not mastery decisions.
 - Current feedback choices are dismissal, already confident, too difficult and not relevant. They do not update assessment attempts or mastery. New recommendation evidence after a feedback timestamp can make a recommendation eligible to return.
 
 ## Evidence quality rules for M7.2
@@ -137,17 +139,9 @@ All three flows record response provenance and direct item correctness. The two 
 
 ### Remaining integration gap
 
-The Practice Studio read model currently excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. That boundary is correct for mastery, but it also means valid item outcomes are not yet surfaced as item-level analytics or used for focused-practice ranking.
+The Practice Studio read model excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. PR #110 now surfaces their comparable item outcomes separately and uses repeated same-item misses for focused-practice ranking without changing whole-skill mastery.
 
-The next implementation should:
-
-1. Derive item correctness summaries separately from whole-skill score summaries.
-2. Aggregate only within the same assessment definition, definition version and scoring-rule version; do not combine unlike instruments or item identities.
-3. Keep inconclusive outcomes visible but exclude them from the accuracy denominator.
-4. Raise focused-practice priority only after repeated incorrect outcomes on the same stable item in consecutive attempts. A later correct or inconclusive response resets that streak.
-5. Keep item-level recommendations separate from `explainSkillState`; supporting probes must never change whole-skill assessment counts, category assessment coverage or mastery.
-6. Scope every signal to the active learner and curriculum release. Preserve local-only, read-only analytics over existing assessment attempts.
-7. Leave confusion-code and topic/fretboard coverage work open until an exercise has authored, defensible metadata for those dimensions.
+The next implementation should link new practice observations to stable authored lesson/exercise IDs and curriculum release, then derive topic/fretboard exposure only from those links and the authored taxonomy. Existing free-text observations remain unclassified. Expand the taxonomy only after explicit author review; keep confusion/error codes deferred unless an assessment can identify a specific misconception deterministically.
 
 ### Current sequence
 
@@ -155,6 +149,23 @@ The next implementation should:
 - [x] Add the first objectively scored, learner-facing item evidence producer (PR #107).
 - [x] Extend objective item capture to interval listening (PR #108).
 - [x] Extend objective item capture to Pulse listening (PR #109).
-- [ ] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules.
-- [ ] Add canonical topic, technique, string and fretboard-position metadata only where authors can explicitly assign it.
-- [ ] Add topic/fretboard exposure coverage only after those tags and corresponding learner evidence exist.
+- [x] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules (PR #110).
+- [x] Add a first authored topic, technique, string and fret-position taxonomy for ten directly evidenced Year 1 exercises.
+- [ ] Link new practice observations to authored lesson/exercise IDs and curriculum release; do not retroactively classify free-text history.
+- [ ] Add topic/fretboard exposure coverage only after stable authored exercise links exist.
+- [ ] Expand taxonomy across Years 1–3 through author review; add confusion/error labels only where the task deterministically supports them.
+
+
+## Structured item analytics and authored practice taxonomy checkpoint
+
+- [x] Add objective, versioned item outcomes for standard tuning, interval recognition and pulse listening (PRs #107–109).
+- [x] Surface item accuracy and repeated same-item misses without changing whole-skill mastery or category assessment coverage (PR #110).
+- [x] Create a versioned authored exercise taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions for an initial ten explicitly evidenced Year 1 exercise scopes (content/curriculum/practice-taxonomy.json).
+- [x] Expose exact lesson/exercise lookup for the active curriculum release; unknown and generic exercises remain untagged (src/lib/application/practice-taxonomy.ts).
+- [x] Add unit tests and curriculum validation for taxonomy references and scope constraints.
+- [ ] Extend Practice Studio session creation to select an authored lesson and exercise ID, persisting curriculum release and stable exercise identity alongside learner observations.
+- [ ] Add exposure coverage only after new records carry that stable scope. Historic free-text observations remain unclassified.
+- [ ] Expand taxonomy across Years 1–3 through author review; do not bulk-tag using keyword or title similarity.
+- [ ] Add structured error/confusion labels only when a task deterministically identifies a specific misconception.
+
+**Privacy and evidence boundary:** The taxonomy is public authored curriculum metadata. Learner observations remain local IndexedDB records. Taxonomy tags do not assert learner performance, correctness, proficiency or mastery.

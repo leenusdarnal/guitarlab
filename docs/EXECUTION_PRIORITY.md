@@ -29,27 +29,30 @@
 
 **Exit criteria:** current main SHA, CI evidence, curriculum progress and issue state are aligned across the repository tracker and GitHub.
 
-### P1 — Adaptive recommendations and evidence-backed analytics (Issue #69)
+### P1 — Adaptive recommendations, item analytics and authored practice taxonomy (Issue #69)
 
 **Delivered:**
+- PRs #92–94: evidence audit, deterministic learner/release-scoped read model, canonical 34-skill catalogue and Practice Studio recommendations/category assessment coverage.
+- PR #103: append-only local recommendation feedback with provenance and backup/restore/reset integration.
+- PR #104: comparable measured-score summaries, descriptive spread and conservative trends.
+- PRs #107–109: objectively keyed item evidence for standard tuning, interval recognition and pulse listening.
+- PR #110: separate item accuracy and repeated-miss prioritisation, without changing whole-skill mastery.
 
-- PR #92: audited the planner, append-only practice observations, assessment history and mastery boundary.
-- PR #93: added a deterministic, learner/release-scoped read model with stable reason codes, review-due and assessment signals, explicit missing-evidence states, measured-score summaries and assessment-category coverage.
-- PR #94: integrated recommendations and assessment coverage into Practice Studio; added the canonical catalogue for the existing 34 skill IDs and draft-only assessment profiles.
-- PR #103: added bounded, append-only dismiss/correct feedback with provenance, learner/release-scoped IndexedDB persistence, deterministic resolution against newer evidence, backup/restore/reset handling and accessible Practice Studio controls.
-- PR #104: added measured-score count/latest/mean/spread and cautious improving/stable/declining trends per skill. Scores are compared only within the latest assessment kind; a trend requires four comparable scores and compares two earlier with two recent scores.
+**Current implementation slice — explicit authored exercise scope:**
+1. Add a versioned public taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions.
+2. Link only stable lesson/exercise IDs whose authored instructions or success criteria explicitly support the tag.
+3. Keep unknown string/fret values empty; do not infer them from free text, titles or broad skill categories.
+4. Validate taxonomy terms, release identity, exercise references and numeric bounds in the curriculum validation command.
+5. Keep taxonomy metadata separate from learner-owned observations.
 
-**Next implementation slice — structured evidence contract (not guessed analytics):**
+**Next after this slice:**
+1. Let Practice Studio select authored lesson/exercise identifiers and persist release/identity with new local practice observations.
+2. Keep all existing free-text history unclassified; no retroactive guesswork.
+3. Add topic/string/fretboard exposure coverage only after stable exercise links exist.
+4. Extend the catalogue through author review across Years 1–3.
+5. Add confusion codes only when an exercise deterministically identifies a specific error.
 
-1. Define a bounded, versioned per-item assessment evidence shape with stable item identity and outcome (`correct`, `incorrect`, `inconclusive`) only for assessment flows that actually observe the outcome.
-2. Keep item evidence tied to learner, curriculum release, skill and assessment attempt; define provenance and retention/export behaviour before persisting it.
-3. Add taxonomy metadata only where curriculum/assessment authors can explicitly name topic, technique or fretboard scope. Do not infer it from free-text exercise names, lesson titles or repetition logs.
-4. Add deterministic tests for repeated-confusion prioritisation and coverage only after the corresponding structured evidence exists.
-5. Preserve assessment outcomes and mastery rules; additional item evidence can inform recommendations but must not silently award mastery.
-
-**Known evidence limits:** practice observations contain learner-entered repetitions and difficulty, not per-item correctness. Skill catalogue categories support assessment-category coverage, not string/fretboard-position exposure. PR #104 score spread and four-score trend are descriptive measured-score consistency signals, not per-item accuracy or mastery. Do not represent any of these missing dimensions as zero or poor performance.
-
-**Exit criteria:** a versioned item-evidence contract, provenance/privacy rules and canonical topic/fretboard metadata are implemented and tested before recommendation ranking uses them. Existing feedback and analytics remain read-only with respect to mastery.
+**Exit criteria:** canonical tags have authored source evidence, taxonomy validation passes, and later exposure analytics are grounded in local records linked to stable lesson/exercise IDs. No taxonomy metadata or practice activity changes mastery.
 
 ### P2 — Musicianship, connected theory and repertoire (Issue #17)
 
@@ -119,12 +122,13 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `a1da00fe0fb5804464ccb1679c128d1176957041` |
+| Last verified main SHA | `a04d284e82447707de6b4d70a01115f2b2982e0b` (PR #110 merged) |
 | PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
 | PR #103 | Merged; append-only local recommendation feedback; merge commit `b27eed5e27e805d43259019fa304f80df20f356a` |
 | PR #104 | Merged; comparable measured-score summaries/trends; merge commit `a1da00fe0fb5804464ccb1679c128d1176957041` |
+| PR #110 | Merged; item accuracy and repeated-miss analytics; merge commit `a04d284e82447707de6b4d70a01115f2b2982e0b` |
 | PR #104 validation | Run [#43584492437](https://github.com/leenusdarnal/guitarlab/actions/runs/43584492437); primary application/curriculum and Node.js 26 jobs passed |
-| Current engineering task | Design a versioned, privacy-bounded per-item assessment evidence contract and explicit topic/fretboard taxonomy before implementing per-item accuracy/confusion or coverage ranking |
+| Current engineering task | Complete the authored practice taxonomy slice on feat/m7-authored-practice-taxonomy; then add stable lesson/exercise identity to new local practice observations before measuring topic/fretboard exposure |
 | Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
 | Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
 | M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |

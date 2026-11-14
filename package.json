@@ -16,7 +16,7 @@
     "format:check": "prettier --check \"src/lib/**/*.ts\" \"src/app.d.ts\" \"*.{js,json,ts}\" \"wrangler.jsonc\" \"scripts/generate-curriculum-index.mjs\" \"scripts/validate-design-tokens.mjs\" \"scripts/finalize-db-migration.mjs\" \"scripts/test-local-db.mjs\" \"scripts/browser-acceptance.mjs\" \"scripts/curriculum-browser-acceptance.mjs\" \"scripts/music-tools-browser-acceptance.mjs\" \"scripts/accessibility-browser-acceptance.mjs\" \"scripts/install-git-hooks.mjs\" \"scripts/evaluate-pitch-recordings.mjs\"",
     "test": "vitest",
     "test:run": "vitest run",
-    "curriculum:validate": "node scripts/validate-curriculum.mjs",
+    "curriculum:validate": "node scripts/validate-curriculum.mjs && node scripts/validate-practice-taxonomy.mjs",
     "cf-typegen": "wrangler types",
     "design:validate": "node scripts/validate-design-tokens.mjs",
     "db:generate": "drizzle-kit generate",
