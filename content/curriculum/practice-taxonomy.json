@@ -141,7 +141,7 @@
       "exerciseId": "y1-w01-lesson-focus",
       "topicIds": ["instrument.standard-tuning"],
       "techniqueIds": [],
-      "stringNumbers": [1,2,3,4,5,6],
+      "stringNumbers": [1, 2, 3, 4, 5, 6],
       "fretPositionIds": [],
       "sourceEvidence": "The exercise explicitly says to tune and play all six strings."
     },
@@ -159,7 +159,7 @@
       "exerciseId": "y1-w04-lesson-focus",
       "topicIds": ["harmony.open-chord-voicings"],
       "techniqueIds": [],
-      "stringNumbers": [1,2,3,4,5,6],
+      "stringNumbers": [1, 2, 3, 4, 5, 6],
       "fretPositionIds": ["position.open-position"],
       "sourceEvidence": "The exercise names Em and G open-position shapes and requires a separate check of strings 6 through 1."
     },
@@ -177,7 +177,7 @@
       "exerciseId": "y1-w08-lesson-focus",
       "topicIds": ["notation.tab-reading"],
       "techniqueIds": [],
-      "stringNumbers": [1,2],
+      "stringNumbers": [1, 2],
       "fretPositionIds": ["position.first-position"],
       "sourceEvidence": "The lesson explicitly scopes the parallel notation track to first-position notes on high E and B strings."
     },
@@ -186,7 +186,7 @@
       "exerciseId": "y1-w11-lesson-focus",
       "topicIds": ["fretboard.natural-note-landmarks"],
       "techniqueIds": [],
-      "stringNumbers": [5,6],
+      "stringNumbers": [5, 6],
       "fretPositionIds": [],
       "fretRange": {
         "minFret": 0,
@@ -198,7 +198,10 @@
       "lessonId": "y1-w15-lesson",
       "exerciseId": "y1-w15-lesson-focus",
       "topicIds": [],
-      "techniqueIds": ["technique.alternate-picking","technique.string-crossing"],
+      "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -208,7 +211,7 @@
       "exerciseId": "y1-w23-lesson-focus",
       "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
-      "stringNumbers": [1,2,3,4,5,6],
+      "stringNumbers": [1, 2, 3, 4, 5, 6],
       "fretPositionIds": ["position.pentatonic-box-1"],
       "sourceEvidence": "The exercise explicitly names A minor pentatonic box 1 and requires the shape to be played from low E to high E and back."
     },
@@ -217,7 +220,7 @@
       "exerciseId": "y1-w26-lesson-focus",
       "topicIds": ["harmony.triad-voicings"],
       "techniqueIds": [],
-      "stringNumbers": [1,2,3],
+      "stringNumbers": [1, 2, 3],
       "fretPositionIds": [],
       "sourceEvidence": "The lesson explicitly identifies the top three strings as G, B and high E and locates the C, F and G triad task there."
     },
@@ -242,7 +245,10 @@
     {
       "lessonId": "y1-w17-lesson",
       "exerciseId": "y1-w17-lesson-focus",
-      "topicIds": ["theory.major-scale-construction","lead.a-minor-pentatonic-note-set"],
+      "topicIds": [
+        "theory.major-scale-construction",
+        "lead.a-minor-pentatonic-note-set"
+      ],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -387,7 +393,7 @@
           "exerciseId": "y1-w01-lesson-focus",
           "topicIds": ["instrument.standard-tuning"],
           "techniqueIds": [],
-          "stringNumbers": [1,2,3,4,5,6],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly says to tune and play all six strings."
         },
@@ -405,7 +411,7 @@
           "exerciseId": "y1-w04-lesson-focus",
           "topicIds": ["harmony.open-chord-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [1,2,3,4,5,6],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
           "fretPositionIds": ["position.open-position"],
           "sourceEvidence": "The exercise names Em and G open-position shapes and requires a separate check of strings 6 through 1."
         },
@@ -423,7 +429,7 @@
           "exerciseId": "y1-w08-lesson-focus",
           "topicIds": ["notation.tab-reading"],
           "techniqueIds": [],
-          "stringNumbers": [1,2],
+          "stringNumbers": [1, 2],
           "fretPositionIds": ["position.first-position"],
           "sourceEvidence": "The lesson explicitly scopes the parallel notation track to first-position notes on high E and B strings."
         },
@@ -432,7 +438,7 @@
           "exerciseId": "y1-w11-lesson-focus",
           "topicIds": ["fretboard.natural-note-landmarks"],
           "techniqueIds": [],
-          "stringNumbers": [5,6],
+          "stringNumbers": [5, 6],
           "fretPositionIds": [],
           "fretRange": {
             "minFret": 0,
@@ -444,7 +450,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking","technique.string-crossing"],
+          "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -454,7 +463,7 @@
           "exerciseId": "y1-w23-lesson-focus",
           "topicIds": ["lead.a-minor-pentatonic-box-1"],
           "techniqueIds": [],
-          "stringNumbers": [1,2,3,4,5,6],
+          "stringNumbers": [1, 2, 3, 4, 5, 6],
           "fretPositionIds": ["position.pentatonic-box-1"],
           "sourceEvidence": "The exercise explicitly names A minor pentatonic box 1 and requires the shape to be played from low E to high E and back."
         },
@@ -463,7 +472,7 @@
           "exerciseId": "y1-w26-lesson-focus",
           "topicIds": ["harmony.triad-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [1,2,3],
+          "stringNumbers": [1, 2, 3],
           "fretPositionIds": [],
           "sourceEvidence": "The lesson explicitly identifies the top three strings as G, B and high E and locates the C, F and G triad task there."
         },
