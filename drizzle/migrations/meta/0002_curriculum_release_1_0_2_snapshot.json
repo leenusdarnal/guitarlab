@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ece93fca-a70d-5e21-a33b-0ceeaf4d0db7",
+  "id": "2b2eaa8b-5ae4-519f-a3e9-bd803c0944d9",
   "prevId": "76b4667b-62a7-54cd-aba0-6af27fba7f56",
   "tables": {
     "curriculum_lessons": {
