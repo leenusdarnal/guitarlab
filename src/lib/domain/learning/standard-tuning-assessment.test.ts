@@ -40,6 +40,8 @@ describe('standard tuning assessment', () => {
         definitionId: 'guitar.standard-tuning-open-pitches',
         definitionVersion: 1,
         scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        itemCount: 6,
+        passThreshold: 83,
         decisionScope: 'supporting_probe'
       }
     });
