@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "version": "0.1.0",
   "status": "draft",
-  "curriculumReleaseId": "curriculum-v1.0.2",
+  "curriculumReleaseId": "curriculum-v1.0.4",
   "skillCatalogVersion": "1.0.0",
   "scoringPolicy": "No universal cut scores, numeric mastery thresholds, or automated pass/fail decisions are approved in this draft.",
   "feedbackPolicy": "Feedback should identify the task or process criterion, invite learner interpretation, and support a next-step decision. Do not use a single real-time score as proof of retained learning.",
@@ -54,7 +54,10 @@
           "descriptor": "Recognises the interval in a second key or musical context."
         }
       ],
-      "evidenceTypes": ["aural_response", "instrument_or_voice_response"],
+      "evidenceTypes": [
+        "aural_response",
+        "instrument_or_voice_response"
+      ],
       "retentionProbe": "Repeat a short interval-identification set in a later session without immediate answer cues.",
       "transferProbe": "Identify the same interval relationships in a different register or key.",
       "humanReviewRequired": false,
@@ -195,7 +198,10 @@
           "descriptor": "Adapts the upper-note pattern while the thumb role remains stable."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Perform the bass pattern with a familiar treble variation after a delay and without a prompt.",
       "transferProbe": "Keep the thumb pattern steady while changing the treble-note sequence.",
       "humanReviewRequired": true,
@@ -220,7 +226,10 @@
           "descriptor": "Repeats the task from a different starting string or fret."
         }
       ],
-      "evidenceTypes": ["fretboard_task", "written_or_spoken_response"],
+      "evidenceTypes": [
+        "fretboard_task",
+        "written_or_spoken_response"
+      ],
       "retentionProbe": "Complete a short note-location recall task after a delay without a reference chart.",
       "transferProbe": "Locate the same note names in an unpractised neck position.",
       "humanReviewRequired": false,
@@ -274,7 +283,10 @@
           "descriptor": "Uses the map to find a note from a different starting point."
         }
       ],
-      "evidenceTypes": ["fretboard_task", "written_or_spoken_response"],
+      "evidenceTypes": [
+        "fretboard_task",
+        "written_or_spoken_response"
+      ],
       "retentionProbe": "Complete a short string-and-fret recall task in a later session.",
       "transferProbe": "Locate a target note on a string or position not used in the original practice task.",
       "humanReviewRequired": false,
@@ -299,7 +311,10 @@
           "descriptor": "Changes to or from the shape in time within a short progression."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Form and play the same barre family after a delay without a diagram prompt.",
       "transferProbe": "Move the shape to a different root or progression position.",
       "humanReviewRequired": true,
@@ -324,7 +339,10 @@
           "descriptor": "Changes between selected open chords while maintaining the task's pulse."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Play a previously learned open-chord sequence after a delay without a chord diagram.",
       "transferProbe": "Use the chord shapes in a different progression or strumming/fingerstyle context.",
       "humanReviewRequired": true,
@@ -349,7 +367,10 @@
           "descriptor": "Moves between power-chord roots while maintaining the intended rhythm."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Play a short power-chord movement after a delay without a shape diagram.",
       "transferProbe": "Transpose the movement to another root or string set.",
       "humanReviewRequired": true,
@@ -403,7 +424,10 @@
           "descriptor": "Produces the intended chord tones without avoidable gaps or excess noise."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Repeat a short chord-change sequence after a delay without visual prompts.",
       "transferProbe": "Apply the movement strategy to a new chord pair or progression.",
       "humanReviewRequired": true,
@@ -544,7 +568,10 @@
           "descriptor": "Uses the pattern in a short phrase or in a second position/key."
         }
       ],
-      "evidenceTypes": ["performance_recording", "written_or_spoken_response"],
+      "evidenceTypes": [
+        "performance_recording",
+        "written_or_spoken_response"
+      ],
       "retentionProbe": "Play and name a previously learned major-scale fragment after a delay.",
       "transferProbe": "Apply the formula or pattern in a different key or fretboard position.",
       "humanReviewRequired": true,
@@ -627,7 +654,10 @@
           "descriptor": "Performs or explains a short excerpt using the notation."
         }
       ],
-      "evidenceTypes": ["notation_response", "performance_recording"],
+      "evidenceTypes": [
+        "notation_response",
+        "performance_recording"
+      ],
       "retentionProbe": "Read a short previously studied tab excerpt after a delay without the lesson explanation.",
       "transferProbe": "Read an unfamiliar excerpt containing the same notation features.",
       "humanReviewRequired": true,
@@ -652,7 +682,10 @@
           "descriptor": "Uses the review to choose a concrete next practice action."
         }
       ],
-      "evidenceTypes": ["performance_recording", "learner_reflection"],
+      "evidenceTypes": [
+        "performance_recording",
+        "learner_reflection"
+      ],
       "retentionProbe": "Repeat the recording/review process in a later session and compare the same stated criterion.",
       "transferProbe": "Apply the recording-and-review method to a different song, exercise or performance goal.",
       "humanReviewRequired": true,
@@ -735,7 +768,10 @@
           "descriptor": "Maintains rhythmic placement while switching between sounding and muted notes."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Repeat a muted rhythm pattern in a later session without a muting reminder.",
       "transferProbe": "Apply noise control or intentional muting in a different chord shape or rhythmic pattern.",
       "humanReviewRequired": true,
@@ -789,7 +825,10 @@
           "descriptor": "Maintains a steady accompaniment through the full progression."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Play the pattern in a later session without a stroke-direction prompt.",
       "transferProbe": "Apply the same rhythmic pattern to a different chord progression or song context.",
       "humanReviewRequired": true,
@@ -843,7 +882,10 @@
           "descriptor": "Plans string crossings without unintended resets or loss of pulse."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Perform a familiar alternate-picking cell after a delay without verbal stroke cues.",
       "transferProbe": "Use the picking sequence on a different string set, pattern or tempo.",
       "humanReviewRequired": true,
@@ -897,7 +939,10 @@
           "descriptor": "Maintains pulse and articulation through a short legato phrase."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Play a familiar hammer-on/pull-off cell after a delay without a fingering prompt.",
       "transferProbe": "Apply the legato movement to a different string or phrase pattern.",
       "humanReviewRequired": true,
@@ -922,7 +967,10 @@
           "descriptor": "Controls unwanted contact or ringing while crossing adjacent or non-adjacent strings."
         }
       ],
-      "evidenceTypes": ["performance_recording", "teacher_observation"],
+      "evidenceTypes": [
+        "performance_recording",
+        "teacher_observation"
+      ],
       "retentionProbe": "Repeat a two-string crossing sequence in a later session without a picking-path prompt.",
       "transferProbe": "Apply the technique to a new string order or a wider skip pattern.",
       "humanReviewRequired": true,
