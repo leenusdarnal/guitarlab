@@ -556,6 +556,17 @@ try {
   assert.equal(backup.format, 'guitarlab-learner-backup');
   assert.equal(backup.version, 1);
   assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
+  assert.ok(
+    Array.isArray(backup.records.adaptiveRecommendationFeedback),
+    'Learner backups include the feedback history collection'
+  );
+  assert.deepEqual(
+    backup.records.adaptiveRecommendationFeedback
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action),
+    ['correct', 'dismiss'],
+    'Export retains the learner\'s append-only feedback history'
+  );
 
   // Invalid JSON and unsupported backup versions must be rejected without preview.
   const backupInput = page.locator('input[type="file"]');
@@ -697,6 +708,27 @@ try {
         'Your active learner data has been reset. A fresh empty profile is ready.'
     })
     .waitFor();
+  const feedbackAfterReset = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database.transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback').getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return rows.filter((record) => record.learnerId === learnerId);
+  });
+  assert.deepEqual(feedbackAfterReset, [], 'Reset removes feedback owned by the active learner');
 
   // Restore the downloaded backup into a new, empty learner profile.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
@@ -740,6 +772,31 @@ try {
       .isChecked(),
     true,
     'Restoring the exported backup should recover the learner goals'
+  );
+  const restoredFeedback = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database.transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback').getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return rows.filter((record) => record.learnerId === learnerId);
+  });
+  assert.deepEqual(
+    restoredFeedback.filter((record) => record.recommendationId === recommendationId).map((record) => record.action),
+    ['correct', 'dismiss'],
+    'Restore reinstates the learner\'s full adaptive recommendation feedback history'
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
