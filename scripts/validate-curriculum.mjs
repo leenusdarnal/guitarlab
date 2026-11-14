@@ -236,6 +236,21 @@ if (repeatedCriterion && repeatedCriterion[1] >= Math.ceil(lessonCount * 0.8)) {
 if (keyIdeaCount <= Math.ceil(lessonCount * 0.2)) {
   qualityAdvisories.push(`only ${keyIdeaCount} distinct key-idea explanations exist across ${lessonCount} lessons`);
 }
+const specialistLessons = y3Lessons.lessons ?? [];
+const genericSpecialistCheckpointCount = specialistLessons.filter((lesson) =>
+  /^Demonstrate .+ in a short musical example, explain the key choice and identify one next improvement\\.$/i.test(lesson.checkpoint ?? "")
+).length;
+const genericSpecialistWorkedExampleCount = specialistLessons.filter((lesson) =>
+  (lesson.workedExamples ?? []).some((example) =>
+    /^Create or perform an original 4- to 8-bar example demonstrating .+\\.$/i.test(example.content ?? "")
+  )
+).length;
+if (specialistLessons.length > 0 && genericSpecialistCheckpointCount >= Math.ceil(specialistLessons.length * 0.8)) {
+  qualityAdvisories.push(`generic specialist capstone checkpoint template appears in ${genericSpecialistCheckpointCount}/${specialistLessons.length} Year 3+ lessons`);
+}
+if (specialistLessons.length > 0 && genericSpecialistWorkedExampleCount >= Math.ceil(specialistLessons.length * 0.8)) {
+  qualityAdvisories.push(`generic 4–8 bar worked-example template appears in ${genericSpecialistWorkedExampleCount}/${specialistLessons.length} Year 3+ lessons`);
+}
 if (qualityAdvisories.length) {
   console.warn("Curriculum quality advisory (non-blocking):");
   for (const advisory of qualityAdvisories) console.warn(`- ${advisory}`);
