@@ -82,6 +82,8 @@ function standardDeviation(values: readonly number[]): number | null {
  * practice duration/repetition counts as correctness.
  */
 export function buildAdaptivePracticeSnapshot(input: {
+  learnerId: string;
+  curriculumReleaseId: string;
   skills: readonly SkillRecord[];
   attempts: readonly AssessmentAttemptRecord[];
   mastery: readonly SkillMasteryRecord[];
@@ -89,8 +91,21 @@ export function buildAdaptivePracticeSnapshot(input: {
   now: number;
 }): AdaptivePracticeSnapshot {
   const skillById = new Map(input.skills.map((skill) => [skill.id, skill]));
+  const scopedAttempts = input.attempts.filter(
+    (attempt) =>
+      attempt.learnerId === input.learnerId &&
+      attempt.curriculumReleaseId === input.curriculumReleaseId
+  );
+  const scopedMastery = input.mastery.filter(
+    (record) =>
+      record.learnerId === input.learnerId &&
+      record.curriculumReleaseId === input.curriculumReleaseId
+  );
+  const scopedPracticeEvidence = input.practiceEvidence.filter(
+    (record) => record.learnerId === input.learnerId
+  );
   const attemptsBySkill = new Map<string, AssessmentAttemptRecord[]>();
-  for (const attempt of input.attempts) {
+  for (const attempt of scopedAttempts) {
     if (!skillById.has(attempt.skillId)) continue;
     const list = attemptsBySkill.get(attempt.skillId) ?? [];
     list.push(attempt);
@@ -98,7 +113,7 @@ export function buildAdaptivePracticeSnapshot(input: {
   }
 
   const masteryBySkill = new Map(
-    input.mastery.map((record) => [record.skillId, record])
+    scopedMastery.map((record) => [record.skillId, record])
   );
   const recommendations: AdaptivePracticeRecommendation[] = [];
   const skillAnalytics: SkillAnalytics[] = [];
@@ -174,7 +189,7 @@ export function buildAdaptivePracticeSnapshot(input: {
   }
 
   const observationsByExercise = new Map<string, PracticeEvidenceRecord[]>();
-  for (const observation of input.practiceEvidence) {
+  for (const observation of scopedPracticeEvidence) {
     const list = observationsByExercise.get(observation.exerciseId) ?? [];
     list.push(observation);
     observationsByExercise.set(observation.exerciseId, list);

@@ -27,13 +27,26 @@ const index = {
     week: lesson.week,
     title: lesson.title,
     focus: lesson.focus,
-    estimatedMinutes: lesson.estimatedMinutes
+    estimatedMinutes: lesson.estimatedMinutes,
+    skillIds: [...lesson.skillIds]
   }))
 };
 
+const serializedIndex = JSON.stringify(index, null, 2).replace(
+  /("skillIds": )\[\n([\s\S]*?)\n(\s+)\]/g,
+  (match, property, values) => {
+    const items = values
+      .split('\n')
+      .map((value) => value.trim().replace(/,$/, ''))
+      .filter(Boolean);
+    const inline = property + '[' + items.join(', ') + ']';
+    return inline.length <= 80 ? inline : match;
+  }
+);
+
 await writeFile(
   resolve(root, 'content/curriculum/year-1-dashboard-index.json'),
-  JSON.stringify(index, null, 2) + String.fromCharCode(10),
+  serializedIndex + String.fromCharCode(10),
   'utf8'
 );
 console.log(
