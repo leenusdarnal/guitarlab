@@ -532,6 +532,51 @@
         </div>
       </div>
     {/if}
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.skillAnalytics.length > 0}
+      <details class="adaptive-analytics">
+        <summary>Measured scores and consistency by skill</summary>
+        <p class="adaptive-analytics-note">
+          These summaries use measured assessment scores (0–100), not learner-entered
+          repetitions or per-item correctness. Score spread is the standard deviation.
+          A trend compares the latest four scores from the same assessment kind, two
+          earlier versus two recent; at least four comparable scores are required.
+        </p>
+        <ul class="analytics-list">
+          {#each adaptiveSnapshot.skillAnalytics as skill (skill.skillId)}
+            <li>
+              <div class="analytics-skill">
+                <strong>{skill.displayName}</strong>
+                <span>{getSkillCategoryDisplayName(skill.category)}</span>
+              </div>
+              {#if skill.measuredScoreMean === null}
+                <p>No measured score evidence yet.</p>
+              {:else}
+                <p>
+                  {skill.measuredScoreCount} comparable measured score(s) ·
+                  mean {skill.measuredScoreMean.toFixed(1)}/100 ·
+                  spread {skill.measuredScoreSpread?.toFixed(1) ?? '—'} points
+                  (standard deviation) · latest {skill.latestMeasuredScore}/100
+                </p>
+              {/if}
+              <p class="analytics-trend">
+                {#if skill.measuredScoreTrend === 'improving'}
+                  Improving: +{Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else if skill.measuredScoreTrend === 'declining'}
+                  Declining: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else if skill.measuredScoreTrend === 'stable'}
+                  Broadly steady: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else}
+                  Trend unavailable; four comparable measured scores are needed.
+                {/if}
+              </p>
+            </li>
+          {/each}
+        </ul>
+      </details>
+    {/if}
     <p class="adaptive-footnote">
       Assessment coverage is not a mastery score. Exercise difficulty is
       self-reported; repetitions are never treated as verified accuracy.
@@ -1146,6 +1191,67 @@
   .adaptive-footnote {
     margin: 15px 0 0;
     font-size: 0.78rem;
+  }
+
+  .adaptive-analytics {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border, #444);
+  }
+
+  .adaptive-analytics summary {
+    width: fit-content;
+    cursor: pointer;
+    font-weight: 700;
+    text-underline-offset: 3px;
+  }
+
+  .adaptive-analytics summary:focus-visible {
+    outline: 3px solid var(--focus, #80510b);
+    outline-offset: 4px;
+    border-radius: 3px;
+  }
+
+  .adaptive-analytics-note {
+    max-width: 720px;
+    color: var(--muted, #aaa);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .analytics-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+
+  .analytics-list li {
+    display: grid;
+    gap: 4px;
+    padding: 11px 0;
+    border-top: 1px solid var(--border, #444);
+  }
+
+  .analytics-skill {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 12px;
+  }
+
+  .analytics-skill span,
+  .analytics-list p {
+    color: var(--muted, #aaa);
+    font-size: 0.82rem;
+  }
+
+  .analytics-list p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .analytics-trend {
+    font-weight: 600;
   }
 
   .panel,
