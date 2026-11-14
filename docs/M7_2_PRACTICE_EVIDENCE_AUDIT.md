@@ -123,3 +123,37 @@ The recommendation read model and category assessment-coverage view landed in PR
 - `src/lib/storage/practice.ts`
 - `src/routes/practice/+page.svelte`
 - `docs/RESEARCH_INTEGRATION_PLAN.md`
+
+## Follow-up audit — assessment capture and item-level feasibility (main at `60ce2bfbfa678e627631c17d0f6fd5d1a603756e`)
+
+A second pass traced the assessment contract from the lesson UI through application services, repositories, IndexedDB and backup/restore. This changes the implementation order: define the evidence contract only after making the assessment capture path explicit.
+
+### Verified runtime path
+
+- `src/lib/domain/learning/assessment.ts` validates one skill-level assessment attempt. Its `evidence` value is a bounded generic scalar map; it does not define item identities, item outcomes, error codes or item-level provenance.
+- `recordAssessmentAttempt` in `src/lib/application/services.ts` validates the skill and optional lesson against the curriculum release, generates the attempt ID/time and appends one immutable record through `AssessmentAttemptRepository`.
+- `src/lib/storage/indexeddb.ts` creates the `assessmentAttempts` store and append-only repository (including learner/release/skill indexes). The repository is included in the repository factory, but the current learner-facing storage facade does not expose a corresponding `recordActiveAssessmentAttempt` operation.
+- `src/routes/learn/[lessonId]/+page.svelte` currently records lesson progress, completed blocks, a learner-selected checkpoint state (`achieved` / `needs_practice`) and a private checkpoint note. The UI explicitly treats this as a self-check and does not submit an assessment attempt.
+- The lesson checkpoint and exercise success criteria are authored as prose. Exercise `evidenceType` labels describe the intended evidence mode; they do not themselves capture an observed result or identify assessable items.
+- The assessment profile catalogue has 34 skill profiles, but all are `draft`, require human review where specified, and have `automatedDecisionStatus: not_approved`. These profiles are design guidance, not executable assessment definitions.
+- Existing assessment unit tests validate the attempt schema. Application service tests validate append/validation behaviour, but there is no verified learner-facing item assessment flow in the lesson route.
+
+### Consequence for the next implementation
+
+The immediate blocker is not merely a missing item-outcome array. GuitarLab does not yet have a learner-facing, authored assessment instrument that can reliably say which item was presented and what outcome was directly observed. Adding an item-outcome schema now would create a storage shape without a trustworthy producer.
+
+The next slice should therefore be an **assessment capture vertical slice**, scoped to one low-risk, objectively checkable task (for example, a string-name or note-identification response), before generalising across guitar performance skills:
+
+1. Choose an assessment task whose answer can be directly captured and scored without audio inference or a teacher-only judgement.
+2. Author stable assessment and item IDs, versioned with the curriculum release; keep topic/technique/fretboard tags explicit and optional.
+3. Build the learner interaction and capture the presented item, submitted response, scoring rule/version and direct result. Preserve `inconclusive` when the interaction cannot determine an outcome.
+4. Connect the route to a learner-scoped storage facade and append-only assessment service. Do not let lesson completion or checkpoint self-check silently create an assessment attempt.
+5. Only then finalise item-outcome/confusion schemas, including attempt linkage, learner/release scope, item identity, provenance and event timestamps.
+6. Extend export, validation, preview, restore and reset atomically; retain import compatibility for existing version-1 backups.
+7. Keep human-reviewed performance assessments separate. Do not claim that microphone/audio analysis is validated, or automate a mastery decision from draft profiles.
+8. Add browser acceptance for the full capture → persisted attempt → export → restore → read-back path, plus negative tests for missing/invalid item identity and inconclusive responses.
+
+### Explicit boundary
+
+Do not treat the existing lesson checkpoint buttons as correct/incorrect item outcomes. They are learner self-report. Do not infer item correctness from the generic evidence map, prose success criteria, score summaries, repetition counts or exercise IDs. Do not promote any draft assessment profile to automated decision status as part of the initial vertical slice.
+
