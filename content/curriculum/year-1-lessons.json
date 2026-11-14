@@ -5672,7 +5672,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Find the same root in two positions and play an octave jump.",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes", "fretboard.octaves"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes",
+        "fretboard.octaves"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8408,7 +8412,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Transcribe a two-bar melody from sound without first reading TAB, preserving its note order and rhythm and describing one interval movement.",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
