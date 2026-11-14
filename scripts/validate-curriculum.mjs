@@ -13,7 +13,7 @@ const check = (condition, message) => { if (!condition) failures.push(message); 
 const unique = (values) => new Set(values).size === values.length;
 const isText = (value) => typeof value === "string" && value.trim().length > 0;
 
-const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog] = await Promise.all([
+const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatalog, skillAssessmentProfiles] = await Promise.all([
   readJson("content/curriculum/year-1.json"),
   readJson("content/curriculum/year-2.json"),
   readJson("content/curriculum/year-3-specialisations.json"),
@@ -21,7 +21,8 @@ const [y1, y2, y3, y1Lessons, y2Lessons, y3Lessons, y1DashboardIndex, skillCatal
   readJson("content/curriculum/year-2-lessons.json"),
   readJson("content/curriculum/year-3-specialisation-lessons.json"),
   readJson("content/curriculum/year-1-dashboard-index.json"),
-  readJson("content/curriculum/skill-catalog.json")
+  readJson("content/curriculum/skill-catalog.json"),
+  readJson("content/curriculum/skill-assessment-profiles.json")
 ]);
 
 const checkOutline = (name, outline, expectedCount) => {
@@ -128,6 +129,57 @@ for (const skill of catalogSkills) {
 }
 for (const skillId of authoredSkillIds) {
   check(catalogSkillIds.includes(skillId), `Authored lesson skill ID ${skillId}: missing from canonical skill catalogue`);
+}
+
+const assessmentProfiles = skillAssessmentProfiles.profiles ?? [];
+const assessmentProfileIds = assessmentProfiles.map((profile) => profile.skillId);
+const assessmentModes = new Set([
+  "creation_and_performance", "aural_recognition", "aural_transcription",
+  "aural_and_pitch_response", "aural_rhythm_response", "performance",
+  "fretboard_response", "recognition_and_performance", "observed_setup",
+  "instrument_tuning", "performance_and_theory_response",
+  "performance_and_musical_application", "expressive_performance",
+  "notation_reading", "recording_and_reflection", "repertoire_performance",
+  "timed_performance", "performance_and_harmonic_explanation",
+  "rhythm_response_and_performance", "expressive_pitch_performance",
+  "aural_response"
+]);
+const evidenceTypes = new Set([
+  "performance_recording", "arrangement_artifact", "learner_explanation",
+  "aural_response", "instrument_or_voice_response", "transcription_artifact",
+  "measured_pitch_if_validated", "clapped_or_played_performance",
+  "teacher_observation", "fretboard_task", "written_or_spoken_response",
+  "notation_response", "performance_video", "teacher_or_peer_review",
+  "learner_reflection", "timing_measurement_if_validated",
+  "spoken_or_clapped_response", "pitch_measurement_if_validated"
+]);
+check(skillAssessmentProfiles.schemaVersion === 1, "Skill assessment profiles: unsupported schemaVersion");
+check(isText(skillAssessmentProfiles.version), "Skill assessment profiles: missing version");
+check(skillAssessmentProfiles.status === "draft", "Skill assessment profiles must remain draft until approved");
+check(skillAssessmentProfiles.curriculumReleaseId === skillCatalog.curriculumReleaseId, "Skill assessment profiles: curriculum release mismatch");
+check(skillAssessmentProfiles.skillCatalogVersion === skillCatalog.version, "Skill assessment profiles: skill catalogue version mismatch");
+check(isText(skillAssessmentProfiles.scoringPolicy) && isText(skillAssessmentProfiles.feedbackPolicy), "Skill assessment profiles: missing policy guidance");
+check(assessmentProfiles.length === catalogSkills.length, "Skill assessment profiles: expected one profile for every canonical skill");
+check(unique(assessmentProfileIds), "Skill assessment profiles: duplicate skill profile IDs");
+for (const profile of assessmentProfiles) {
+  check(catalogSkillIds.includes(profile.skillId), `Skill assessment profile ${profile.skillId}: unknown catalogue skill`);
+  check(profile.status === "draft", `Skill assessment profile ${profile.skillId}: profile must remain draft until reviewed`);
+  check(assessmentModes.has(profile.assessmentMode), `Skill assessment profile ${profile.skillId}: unknown assessment mode`);
+  check(Array.isArray(profile.criteria) && profile.criteria.length >= 2 && unique(profile.criteria.map((criterion) => criterion.id)), `Skill assessment profile ${profile.skillId}: needs at least two uniquely identified criteria`);
+  for (const criterion of profile.criteria ?? []) {
+    check(isText(criterion.id) && isText(criterion.descriptor), `Skill assessment profile ${profile.skillId}: incomplete criterion`);
+  }
+  check(Array.isArray(profile.evidenceTypes) && profile.evidenceTypes.length > 0 && unique(profile.evidenceTypes), `Skill assessment profile ${profile.skillId}: missing or duplicate evidence types`);
+  for (const type of profile.evidenceTypes ?? []) {
+    check(evidenceTypes.has(type), `Skill assessment profile ${profile.skillId}: unsupported evidence type ${type}`);
+  }
+  check(isText(profile.retentionProbe) && isText(profile.transferProbe), `Skill assessment profile ${profile.skillId}: missing retention or transfer probe`);
+  check(typeof profile.humanReviewRequired === "boolean", `Skill assessment profile ${profile.skillId}: missing human-review flag`);
+  check(profile.automatedDecisionStatus === "not_approved", `Skill assessment profile ${profile.skillId}: automated decisions are not approved`);
+  check(isText(profile.cautions), `Skill assessment profile ${profile.skillId}: missing assessment caution`);
+}
+for (const skillId of catalogSkillIds) {
+  check(assessmentProfileIds.includes(skillId), `Skill ${skillId}: missing draft assessment profile`);
 }
 
 const expectedDashboardLessons = y1Lessons.lessons.map((lesson) => ({
