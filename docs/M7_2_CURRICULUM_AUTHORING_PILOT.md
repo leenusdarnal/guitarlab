@@ -1,6 +1,6 @@
 # M7.2 — Representative Curriculum Authoring Pilot
 
-**Status:** Content authored; full CI and curriculum review pending  
+**Status:** Historical pilot completed; Jazz & Harmony Weeks 1–4 added in curriculum-v1.0.5; full CI and curriculum review pending  
 **Release:** `curriculum-v1.0.4`  
 **Scope:** 12 Year 1 / Year 2 pilot lessons, incorporated alongside the completed 24-lesson Year 3 Rock & Blues and Fingerstyle & Acoustic routes  
 **Stable identifiers:** All lesson IDs and the existing 34 skill IDs are preserved
@@ -69,6 +69,6 @@ The separate mapping decision register documents nine further evidence-backed co
 - [ ] Full curriculum CI and browser acceptance pass on the combined branch.
 - [ ] Curriculum reviewer checks musical correctness, level appropriateness and accessibility of the note/fret examples.
 - [ ] Evaluate the pilot with multiple reviewers/teachers before applying the standard to all remaining lessons.
-- [ ] Continue authoring in small batches; 36 of 152 lessons now have task-specific authoring; 116 still need this level of remediation.
+- [ ] Continue authoring in small batches; 40 of 152 lessons now have task-specific authoring; 112 still need this level of remediation.
 
-**Next stage:** Review the combined 16-lesson sample, resolve the flagged Year 1 mapping gap and continue with the next representative batch only after reviewer feedback.
+**Next stage:** Continue Jazz & Harmony Weeks 5–8 in a separate batch. The v1.0.5 release adds task-specific Jazz & Harmony authoring for Weeks 1–4; the remaining eight Jazz lessons and all 12 All-Round Musician lessons still need this level of remediation. Resolve the flagged Year 1 mapping gap in parallel with research, not by adding an unreviewed skill ID.
