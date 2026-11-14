@@ -436,6 +436,14 @@ export function buildAdaptivePracticeSnapshot(input: {
       (latestAt, group) => Math.max(latestAt, group.latestEvidenceAt),
       0
     );
+    const latestRepeatedItemEvidenceAt =
+      repeatedIncorrectItems.length > 0
+        ? Math.max(
+            ...repeatedIncorrectItems.map(
+              ({ item }) => item.latestEvidenceAt
+            )
+          )
+        : latestItemEvidenceAt;
 
     if (repeatedIncorrectItems.length > 0) {
       const repeatedCount = repeatedIncorrectItems.length;
@@ -473,7 +481,8 @@ export function buildAdaptivePracticeSnapshot(input: {
         explanation,
         evidenceType,
         evidenceCount: latest ? attempts.length : supportingProbeCount,
-        latestEvidenceAt: Math.max(latest?.assessedAt ?? 0, latestItemEvidenceAt) || null
+        latestEvidenceAt:
+          Math.max(latest?.assessedAt ?? 0, latestRepeatedItemEvidenceAt) || null
       });
     }
   }
