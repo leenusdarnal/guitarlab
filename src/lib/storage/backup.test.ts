@@ -262,7 +262,7 @@ describe('learner backup contract', () => {
         scoringRuleVersion: 'two-item-round-trip-test-v1',
         itemCount: 2,
         passThreshold: 100,
-        decisionScope: 'supporting_probe'
+        decisionScope: 'supporting_probe' as const
       },
       itemEvidence: [
         {
