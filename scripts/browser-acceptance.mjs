@@ -1012,9 +1012,9 @@ try {
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
   await page.locator('#duration').fill('2');
-  await page.locator('#authored-exercise').selectOption(
-    'y1-w01-lesson::y1-w01-lesson-focus'
-  );
+  await page
+    .locator('#authored-exercise')
+    .selectOption('y1-w01-lesson::y1-w01-lesson-focus');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
   await page
@@ -1041,7 +1041,9 @@ try {
     .waitFor();
   await page
     .locator('.active-evidence-list')
-    .getByText(/Authored link: y1-w01-lesson · y1-w01-lesson-focus · curriculum-v1.0.6 · 0.1.0/)
+    .getByText(
+      /Authored link: y1-w01-lesson · y1-w01-lesson-focus · curriculum-v1.0.6 · 0.1.0/
+    )
     .waitFor();
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
@@ -1061,7 +1063,9 @@ try {
     .waitFor();
   await page
     .locator('.active-evidence-list')
-    .getByText(/Authored link: y1-w01-lesson · y1-w01-lesson-focus · curriculum-v1.0.6 · 0.1.0/)
+    .getByText(
+      /Authored link: y1-w01-lesson · y1-w01-lesson-focus · curriculum-v1.0.6 · 0.1.0/
+    )
     .waitFor();
   assert.equal(
     await page.locator('.elapsed').innerText(),
