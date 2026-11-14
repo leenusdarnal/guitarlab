@@ -83,7 +83,8 @@ function itemAttempt(
         itemId,
         response,
         outcome,
-        responseSource: response === null ? 'no_response' : 'learner_selected_option'
+        responseSource:
+          response === null ? 'no_response' : 'learner_selected_option'
       }
     ]
   };
@@ -275,7 +276,9 @@ describe('buildAdaptivePracticeSnapshot', () => {
       latestOutcome: 'correct',
       consecutiveIncorrectCount: 0
     });
-    expect(result.categoryCoverage.find((item) => item.category === 'ear')).toEqual({
+    expect(
+      result.categoryCoverage.find((item) => item.category === 'ear')
+    ).toEqual({
       category: 'ear',
       totalSkills: 1,
       assessedSkills: 0,
@@ -323,9 +326,7 @@ describe('buildAdaptivePracticeSnapshot', () => {
       evidenceCount: 2,
       latestEvidenceAt: 200
     });
-    expect(recommendation?.explanation).toContain(
-      '2 consecutive attempts'
-    );
+    expect(recommendation?.explanation).toContain('2 consecutive attempts');
     expect(recommendation?.explanation).toContain(
       'do not establish or change whole-skill mastery'
     );
