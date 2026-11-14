@@ -114,6 +114,32 @@ function makeSource(): LearnerBackupSource {
         difficulty: null,
         recordedAt: 200
       }
+    ],
+    adaptiveRecommendationFeedback: [
+      {
+        id: 'e1e1e1e1-1111-4111-8111-111111111111',
+        learnerId,
+        curriculumReleaseId: 'curriculum-v1.0.6',
+        recommendationId: 'skill:rhythm.pulse',
+        targetType: 'skill',
+        targetId: 'rhythm.pulse',
+        reasonCodes: ['assessment_needs_practice'],
+        action: 'correct',
+        correction: 'too_difficult',
+        createdAt: 300
+      },
+      {
+        id: 'f1f1f1f1-1111-4111-8111-111111111111',
+        learnerId: anotherLearnerId,
+        curriculumReleaseId: 'curriculum-v1.0.6',
+        recommendationId: 'exercise:other',
+        targetType: 'exercise',
+        targetId: 'other',
+        reasonCodes: ['repeated_self_reported_difficulty'],
+        action: 'dismiss',
+        correction: null,
+        createdAt: 300
+      }
     ]
   };
 }
@@ -134,6 +160,12 @@ describe('local learner backup export builder', () => {
     });
     expect(backup.records.practiceEvidence).toHaveLength(1);
     expect(backup.records.practiceEvidence?.[0].learnerId).toBe(learnerId);
+    expect(backup.records.adaptiveRecommendationFeedback).toHaveLength(1);
+    expect(backup.records.adaptiveRecommendationFeedback?.[0]).toMatchObject({
+      learnerId,
+      recommendationId: 'skill:rhythm.pulse',
+      correction: 'too_difficult'
+    });
     expect(backup.records.practiceSessions[0].nextTarget).toBe(
       'Keep the G major scale even at 72 BPM.'
     );

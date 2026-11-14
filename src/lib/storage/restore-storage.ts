@@ -13,6 +13,7 @@ import type {
   LessonCompletionEventRecord,
   LessonProgressRecord,
   PracticeEvidenceRecord,
+  AdaptiveRecommendationFeedbackRecord,
   PracticeSessionRecord,
   SkillMasteryRecord
 } from '../repositories/contracts';
@@ -25,7 +26,8 @@ const storeNames = [
   'assessmentAttempts',
   'skillMastery',
   'practiceSessions',
-  'practiceEvidence'
+  'practiceEvidence',
+  'adaptiveRecommendationFeedback'
 ] as const;
 
 type ActiveMetadata = { key: string; value: string };
@@ -69,30 +71,41 @@ async function readActiveRecords(
       return null;
     }
 
-    const [profiles, progress, events, attempts, mastery, sessions, evidence] =
-      await Promise.all([
-        requestResult<LearnerProfileRecord[]>(
-          transaction.objectStore('learnerProfiles').getAll()
-        ),
-        requestResult<LessonProgressRecord[]>(
-          transaction.objectStore('lessonProgress').getAll()
-        ),
-        requestResult<LessonCompletionEventRecord[]>(
-          transaction.objectStore('lessonCompletionEvents').getAll()
-        ),
-        requestResult<AssessmentAttemptRecord[]>(
-          transaction.objectStore('assessmentAttempts').getAll()
-        ),
-        requestResult<SkillMasteryRecord[]>(
-          transaction.objectStore('skillMastery').getAll()
-        ),
-        requestResult<PracticeSessionRecord[]>(
-          transaction.objectStore('practiceSessions').getAll()
-        ),
-        requestResult<PracticeEvidenceRecord[]>(
-          transaction.objectStore('practiceEvidence').getAll()
-        )
-      ]);
+    const [
+      profiles,
+      progress,
+      events,
+      attempts,
+      mastery,
+      sessions,
+      evidence,
+      adaptiveFeedback
+    ] = await Promise.all([
+      requestResult<LearnerProfileRecord[]>(
+        transaction.objectStore('learnerProfiles').getAll()
+      ),
+      requestResult<LessonProgressRecord[]>(
+        transaction.objectStore('lessonProgress').getAll()
+      ),
+      requestResult<LessonCompletionEventRecord[]>(
+        transaction.objectStore('lessonCompletionEvents').getAll()
+      ),
+      requestResult<AssessmentAttemptRecord[]>(
+        transaction.objectStore('assessmentAttempts').getAll()
+      ),
+      requestResult<SkillMasteryRecord[]>(
+        transaction.objectStore('skillMastery').getAll()
+      ),
+      requestResult<PracticeSessionRecord[]>(
+        transaction.objectStore('practiceSessions').getAll()
+      ),
+      requestResult<PracticeEvidenceRecord[]>(
+        transaction.objectStore('practiceEvidence').getAll()
+      ),
+      requestResult<AdaptiveRecommendationFeedbackRecord[]>(
+        transaction.objectStore('adaptiveRecommendationFeedback').getAll()
+      )
+    ]);
     await completed;
 
     const profile = profiles.find((record) => record.id === metadata.value);
@@ -116,7 +129,8 @@ async function readActiveRecords(
       assessmentAttempts: owned(attempts),
       skillMastery: owned(mastery),
       practiceSessions: owned(sessions),
-      practiceEvidence: owned(evidence)
+      practiceEvidence: owned(evidence),
+      adaptiveRecommendationFeedback: owned(adaptiveFeedback)
     };
   } catch (error) {
     await completed.catch(() => undefined);
@@ -173,6 +187,9 @@ export async function restoreLearnerBackup(
     const masteryStore = transaction.objectStore('skillMastery');
     const practiceStore = transaction.objectStore('practiceSessions');
     const evidenceStore = transaction.objectStore('practiceEvidence');
+    const adaptiveFeedbackStore = transaction.objectStore(
+      'adaptiveRecommendationFeedback'
+    );
 
     try {
       const active = await requestResult<ActiveMetadata | undefined>(
@@ -185,7 +202,8 @@ export async function restoreLearnerBackup(
         assessments,
         mastery,
         sessions,
-        evidence
+        evidence,
+        adaptiveFeedback
       ] = await Promise.all([
         requestResult<LearnerProfileRecord[]>(profileStore.getAll()),
         requestResult<LessonProgressRecord[]>(progressStore.getAll()),
@@ -193,7 +211,10 @@ export async function restoreLearnerBackup(
         requestResult<AssessmentAttemptRecord[]>(assessmentStore.getAll()),
         requestResult<SkillMasteryRecord[]>(masteryStore.getAll()),
         requestResult<PracticeSessionRecord[]>(practiceStore.getAll()),
-        requestResult<PracticeEvidenceRecord[]>(evidenceStore.getAll())
+        requestResult<PracticeEvidenceRecord[]>(evidenceStore.getAll()),
+        requestResult<AdaptiveRecommendationFeedbackRecord[]>(
+          adaptiveFeedbackStore.getAll()
+        )
       ]);
 
       const replacedLearnerIds = new Set(
@@ -243,6 +264,11 @@ export async function restoreLearnerBackup(
           await requestResult(evidenceStore.delete(record.id));
         }
       }
+      for (const record of adaptiveFeedback) {
+        if (replacedLearnerIds.has(record.learnerId)) {
+          await requestResult(adaptiveFeedbackStore.delete(record.id));
+        }
+      }
 
       await requestResult(profileStore.put(backup.records.profile));
       for (const record of backup.records.lessonProgress) {
@@ -262,6 +288,10 @@ export async function restoreLearnerBackup(
       }
       for (const record of backup.records.practiceEvidence ?? []) {
         await requestResult(evidenceStore.put(record));
+      }
+      for (const record of backup.records.adaptiveRecommendationFeedback ??
+        []) {
+        await requestResult(adaptiveFeedbackStore.put(record));
       }
       await requestResult(
         metadataStore.put({ key: 'activeLearnerId', value: backup.learnerId })
@@ -301,6 +331,9 @@ export async function resetActiveLearnerData(
     const mastery = transaction.objectStore('skillMastery');
     const practice = transaction.objectStore('practiceSessions');
     const evidence = transaction.objectStore('practiceEvidence');
+    const adaptiveFeedback = transaction.objectStore(
+      'adaptiveRecommendationFeedback'
+    );
 
     try {
       const active = await requestResult<ActiveMetadata | undefined>(
@@ -314,14 +347,18 @@ export async function resetActiveLearnerData(
           assessmentRows,
           masteryRows,
           practiceRows,
-          evidenceRows
+          evidenceRows,
+          adaptiveFeedbackRows
         ] = await Promise.all([
           requestResult<LessonProgressRecord[]>(progress.getAll()),
           requestResult<LessonCompletionEventRecord[]>(events.getAll()),
           requestResult<AssessmentAttemptRecord[]>(assessments.getAll()),
           requestResult<SkillMasteryRecord[]>(mastery.getAll()),
           requestResult<PracticeSessionRecord[]>(practice.getAll()),
-          requestResult<PracticeEvidenceRecord[]>(evidence.getAll())
+          requestResult<PracticeEvidenceRecord[]>(evidence.getAll()),
+          requestResult<AdaptiveRecommendationFeedbackRecord[]>(
+            adaptiveFeedback.getAll()
+          )
         ]);
 
         for (const record of progressRows) {
@@ -355,6 +392,10 @@ export async function resetActiveLearnerData(
         for (const record of evidenceRows) {
           if (record.learnerId === active.value)
             await requestResult(evidence.delete(record.id));
+        }
+        for (const record of adaptiveFeedbackRows) {
+          if (record.learnerId === active.value)
+            await requestResult(adaptiveFeedback.delete(record.id));
         }
         await requestResult(profiles.delete(active.value));
       }

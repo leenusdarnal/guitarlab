@@ -1,113 +1,97 @@
 # GuitarLab Execution Priority and Resume Plan
 
-**Last updated:** 2026-11-14
-**Repository:** `leenusdarnal/guitarlab`
-**Default branch:** `main`
-**Verified baseline:** `c471d70ac92c6264df092d446d99873f6c731e07` (PR #101 merged; Jazz & Harmony Weeks 1–4 on main)
+**Last updated:** 2026-11-14  
+**Repository:** `leenusdarnal/guitarlab`  
+**Default branch:** `main`  
+**Verified baseline:** `de9b0f3992c258e5dfdc840e48fb45da47276bd2` (PR #102 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
 ## 1. Latest verified checkpoint
 
-- PR #101 (Jazz & Harmony Weeks 1–4) merged to `main` as `c471d70ac92c6264df092d446d99873f6c731e07`; post-merge main CI run #43574440277 and curriculum validation #43574440263 passed.
-- Jazz & Harmony Weeks 5–8 are authored on `curriculum/jazz-harmony-weeks-05-08` as curriculum release candidate `1.0.6`; see `docs/M7_2_Y3_JAZZ_HARMONY_AUTHORING_BATCH_2.md`.
-- Baseline before batch 2: 40/152 task-specific lessons, 28/48 specialist lessons, 389 skill links. Batch 2 adds four task-specific lessons and two mapping associations; confirm final results in CI.
-
-- PR #67, interval recognition, is merged to `main`.
-- The PR required formatting fixes and a missing Intervals selector was discovered by browser acceptance; both were corrected before merge.
-- PR #67 final checks passed: primary application/curriculum validation and Node.js 26 compatibility. The primary job included formatting, lint, type/Svelte checks, unit tests, production build, Worker smoke test, core browser acceptance, music-tools browser acceptance and accessibility browser acceptance.
-- Merge commit: `3b9d76301d09b70a48035fab66ef8b7cec6388f7`.
-- PR #67 post-merge main CI [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239) passed.
-- Research integration documentation PR #70 merged as `06439a3a573ac8dd5388d5f1c8c5770767c2fad2`; post-merge main CI [#43436043487](https://github.com/leenusdarnal/guitarlab/actions/runs/43436043487) is the current verification run.
-- M7.1 practice sessions/evidence/history/skill-state UI is delivered by PRs #50–59.
-- M8.1 ear training includes pulse, pitch and contour (PR #61) plus interval recognition (PR #67).
-- Open product issues include #17 and #18; Issue #16 is closed as completed. Research follow-ups are tracked in Issues #68 and #69.
-- Cloudflare production deployment remains deferred. Do not provision production D1, enable authentication/cloud sync or deploy production without explicit approval.
+- PR #102, Jazz & Harmony Weeks 5–8, merged to `main` as `de9b0f3992c258e5dfdc840e48fb45da47276bd2`.
+- PR #102's final branch checks passed: application/curriculum validation, Node.js 26 compatibility and the dedicated curriculum validator. Post-merge curriculum validation run [#43579576618](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576618) passed. The post-merge application CI run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570) passed.
+- Curriculum v1.0.6 preserves all 152 lesson IDs and 34 canonical skill IDs. Task-specific authoring now covers 44/152 lessons overall and 32/48 Year 3+ specialist lessons; 391 mapping links are retained.
+- Audio implementation Issue #68 is closed. PRs #73–80 added lifecycle tests, explicit session ownership and deterministic teardown; PRs #81–86 added pitch estimation, explicit microphone capture, stable-note tracking, tuner, note-recognition exercises and synthetic benchmarks; PRs #90–91 expanded synthetic validation and added a local real-recording evaluator.
+- Remaining audio evidence is isolated in [Issue #89](https://github.com/leenusdarnal/guitarlab/issues/89): a consented real-guitar corpus, physical-device/browser measurements and resource-cleanup acceptance. Mocked browser tests and synthetic fixtures are not hardware evidence.
+- M7.2 adaptive practice has a baseline audit (PR #92), deterministic evidence-aware read model (PR #93), versioned skill catalogue and Practice Studio recommendation/coverage view (PR #94). Issue #69 remains open: recommendation dismiss/correct feedback with provenance is not implemented; measured per-item accuracy and richer trend analytics remain constrained by current evidence fields.
+- Ear-training foundations and interval recognition are merged in PRs #61 and #67. Jazz & Harmony Weeks 1–8 are merged in PRs #101–102.
+- Preview deployment workflow has previously succeeded for a main-branch commit; verify the exact commit before relying on it. Production deployment, production D1, authentication and cloud sync remain deferred.
+- No open PR was present immediately after PR #102 merged. Refresh PRs, issues and Actions before beginning each new slice.
 
 ## 2. Priority order
 
-### P0 — Reconcile legacy milestone tracking and research plan (completed)
+### P0 — Reconcile curriculum v1.0.6 and the live repository checkpoint (in progress)
 
-1. [x] Merge the research-integration plan and reconcile roadmap, tracker, architecture and execution checkpoint (PR #70).
-2. [x] Close Issue #16 after verifying all five M7.1 acceptance criteria against merged PRs #50–59.
-3. [x] Update Issue #17 with completed PR #61/#67 work and remaining theory/repertoire scope.
-4. [x] Extend Issue #18 with cross-browser audio, microphone privacy, licence and physical-device acceptance.
-5. [x] Create focused Issues #68 (audio/pitch recognition) and #69 (adaptive practice/analytics).
-6. [x] Verify PR #70 CI and merge it.
+1. [x] Review PR #102's curriculum, migration, fingerprint, local-D1 invariants and required checks.
+2. [x] Merge PR #102 after all required PR checks passed.
+3. [x] Verify post-merge application CI result for run #43579576570 — passed.
+4. [ ] Update tracker, roadmap, audio audit and M7.2 curriculum/practice audits to reflect merged PRs and current issue states.
 
-**Exit criteria met:** the research plan, roadmap, tracker, architecture notes and focused GitHub issues are merged; every finding has an adopt/adapt/defer decision and an execution home.
+**Exit criteria:** the current main SHA, CI evidence, curriculum progress and issue owners agree across docs and GitHub.
 
-### P1 — Audio lifecycle regression tests and shared foundation (Issue #68)
+### P1 — Adaptive recommendation feedback and explainability (Issue #69)
 
-**Completed audit:** `docs/AUDIO_ARCHITECTURE_AUDIT.md` inventories metronome, reference-tone and ear-training context ownership; confirms no microphone/tuner capture exists; records duplicated oscillator/gain setup and teardown risks. Issue #68's architecture-audit acceptance criterion is checked.
+**Already implemented:** PR #92 audited practice evidence; PR #93 added a deterministic read model with stable reason codes, active-learner/release scoping, measured-score summaries, missing-evidence states and assessment-category coverage; PR #94 integrated the view into Practice Studio and introduced the canonical 34-skill catalogue plus draft assessment profiles.
 
-1. Add fake-Web-Audio tests for context creation/resume/close, error handling and node cleanup.
-2. Add ear-training teardown/visibility tests and characterize the metronome's already-scheduled click tail.
-3. Introduce a feature-owned audio-session factory and tone voice helper only where the tests support the extraction; no global singleton.
-4. Keep feature-specific scheduling separate and preserve the metronome lookahead clock.
-5. Audit note spelling, intervals, scales, chords and fretboard mapping as a separate music-theory task.
+**Next implementation slice:**
 
-**Exit criteria:** lifecycle behaviour is deterministic and regression-tested; no user-facing timing/sound regression; permission/capture remains opt-in and separate.
+1. Add append-only, learner- and curriculum-release-scoped recommendation feedback records.
+2. Support dismissing a recommendation and correcting it with a bounded reason (for example, already confident, needs a simpler step or not relevant).
+3. Preserve recommendation identity, original reason codes, action, correction reason and timestamp. New feedback supersedes old feedback only in the derived view; never update or delete the historical record.
+4. Hide dismissed or no-longer-relevant recommendations until newer assessment/practice evidence exists; show an explicit simplification cue when the learner says the task is too difficult.
+5. Keep feedback local in IndexedDB. It must not write assessments, mastery, learner notes to telemetry, or remote services.
+6. Add unit, storage, migration and browser tests for ownership, append-only history, deterministic latest-feedback resolution, empty/error states and mastery invariants.
 
-**Exit criteria:** a file-level refactor plan, dependency map and tests that protect existing audio/music behaviour.
+**Known evidence limitation:** current practice observations do not contain per-attempt correctness or structured confusion/fretboard tags. Do not label repetitions or self-reported difficulty as accuracy. Current analytics can summarise comparable measured assessment scores and category assessment coverage; richer accuracy/consistency trends require valid evidence fields first.
 
-### P2 — Adaptive practice and learning analytics (Issue #69)
+**Exit criteria:** learners can dismiss/correct suggestions with an auditable local record; recommendation display is deterministic; no recommendation interaction changes mastery or assessment history.
 
-1. Inspect the existing daily practice planner and skill-state rules.
-2. Define a small deterministic prioritisation model using assessment accuracy, recent evidence, review due dates and coverage gaps.
-3. Track per-item outcomes where evidence is already captured; do not invent precision from elapsed time.
-4. Recommend a focused next drill and explain why it was selected.
-5. Add trend views for accuracy, consistency and fretboard/topic coverage using derived data.
-6. Keep learner corrections and the existing mastery rules authoritative.
+### P2 — Musicianship, connected theory and repertoire (Issue #17)
 
-**Exit criteria:** recommendations are reproducible, explainable, dismissible/correctable and covered by domain/browser tests; practice time alone never grants mastery.
+1. Add chord-movement listening with feedback, retry and accessible visual instructions.
+2. Extend interval work only where new intervals add a distinct learning outcome.
+3. Add music-theory recall prompts connecting name, sound and musical use.
+4. Connect triads, inversions, scales and CAGED positions to one shared music-theory/fretboard domain.
+5. Add song-project notes, section structure, bookmarks and practice targets.
+6. Keep TAB/notation content original, public-domain or properly licensed; external resources remain links and receive no learner-private data.
 
-### P3 — Shared audio and microphone pitch recognition (Issue #68)
+**Exit criteria:** musical examples are original/local or appropriately licensed; learning prompts are specific, accessible and tested; shared theory calculations are reused rather than duplicated.
 
-1. Implement reusable audio-session lifecycle only where the audit shows duplication.
-2. Add explicit microphone permission and device capability handling.
-3. Implement single-note pitch estimation, silence/noise rejection, stable-note tracking and confidence output.
-4. Add the chromatic tuner and then a focused note-recognition exercise.
-5. Benchmark synthetic fixtures and representative real guitar recordings across supported browsers/devices.
-6. Keep raw audio local and ephemeral; do not upload, log or store it by default.
+### P3 — Real-device audio and release evidence (Issues #89 and #18)
 
-**Exit criteria:** uncertain detection is shown as uncertain; measured benchmark results and limitations are documented; microphone denial and unsupported-browser paths remain usable.
+1. Define a consented, local-only real-guitar corpus with ground-truth frequencies and provenance.
+2. Measure per-string detection coverage, median/P95 absolute cents error, false detections during silence/noise and note-on latency.
+3. Record instrument/pickup or microphone, playing dynamics, tuning offsets, room noise and attack/sustain/decay segments.
+4. Run microphone, tuner and resource-cleanup acceptance on physical desktop/mobile devices and supported browser engines.
+5. Continue CSP, WCAG 2.2 AA, privacy, dependency/licence, performance, rollback and offline acceptance.
+6. Record tested and untested browser/device combinations; do not generalise mocked Chromium results.
 
-### P4 — Connected theory, fretboard and ear training (Issue #17)
+**Exit criteria:** a reproducible evidence report and device matrix exist, or the exact missing hardware access is explicitly documented as blocked.
 
-1. Add theory recall prompts for name, sound and musical use.
-2. Extend interval coverage and add chord-movement listening.
-3. Connect triads, inversions, scales and CAGED positions to the existing fretboard model.
-4. Use one shared theory domain for diagrams, prompts and explanations.
-5. Build song workspace and TAB/notation support only for original, public-domain or properly licensed content.
+### P4 — Remaining infrastructure and manual acceptance (Issues #3, #5, #9 and #10)
 
-**Exit criteria:** clear feedback/retry, accessible non-audio instructions, shared theory calculations and content/licensing review.
+1. Verify the CI controlled-failure/recovery path without weakening required checks.
+2. Complete physical desktop/mobile IndexedDB upgrade, reload and offline restart checks.
+3. Complete physical-device backup/restore and destructive-reset confirmation checks.
+4. Review production environment ownership, private-data architecture and access controls. Production provisioning/deployment requires separate explicit approval.
 
-### P5 — Release hardening (Issue #18)
-
-1. Physical-device offline/reload/backup/restore acceptance.
-2. CSP review and full WCAG 2.2 AA audit.
-3. Cross-browser audio timing, lifecycle and permission tests.
-4. Privacy and dependency/licence review.
-5. Performance budgets, safe diagnostics and rollback evidence.
-6. Preview deployment verification with synthetic data only; production remains separately gated.
-
-**Exit criteria:** evidence is recorded for desktop/mobile devices and supported browsers; unresolved risks are explicitly accepted or fixed.
+**Exit criteria:** manual runbook evidence is recorded and production remains isolated until separately approved.
 
 ## 3. Adopt / adapt / defer decisions
 
-**Adopt:** stable-note tracking, confidence/noise handling, per-item accuracy, weak-skill prioritisation, connected CAGED/triad learning, browser audio acceptance, licence register and operational hardening.
+**Adopt:** deterministic evidence-aware prioritisation, explicit recommendation reason codes, append-only learner feedback, confidence/noise handling, stable-note tracking, connected CAGED/triad learning, browser audio acceptance and an operational licence register.
 
-**Adapt:** use a simple explainable adaptive rules engine rather than importing a complex BKT/IRT model; use audio detection patterns as design references rather than copying code; use repertoire concepts only with permitted content.
+**Adapt:** use a simple explainable rules model rather than BKT/IRT; treat repeated self-reported difficulty as a pacing hint, not incorrect-answer evidence; use third-party repositories as design references, not source to copy.
 
-**Defer/reject:** opaque predictive mastery, AI tutor, social competition, automatic polyphonic chord grading without validation, mandatory cloud sync, GPL code reuse without a licensing decision and copyrighted TAB scraping.
+**Defer/reject:** opaque predictive mastery, AI tutor, social competition, polyphonic chord grading without validation, mandatory cloud sync, GPL code reuse without a licensing decision and copyrighted TAB scraping.
 
-See [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md) for the detailed comparative repository decisions.
+See [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md) for the comparative research decisions.
 
 ## 4. Working rules
 
 1. One implementation PR at a time.
 2. Start each task from the latest verified `main` SHA.
-3. Inspect open PRs, issues, active Actions runs and latest main CI before starting.
+3. Inspect open PRs, open issues, active Actions runs and latest main CI before starting.
 4. Use small, independently testable changes with explicit acceptance criteria.
 5. Never weaken assertions, skip required checks or increase timeouts to hide failures.
 6. Keep learner records, notes, recordings, secrets and production data out of source and logs.
@@ -130,14 +114,16 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `3b9d76301d09b70a48035fab66ef8b7cec6388f7` |
-| PR #67 | Merged |
-| Post-merge main CI | Run [#43434837239](https://github.com/leenusdarnal/guitarlab/actions/runs/43434837239); refresh result |
-| Current work | Research integration merged; verify post-merge main CI run #43436043487 |
-| Next engineering task | Audit shared audio and music-theory foundations (Issue #68), then plan adaptive learning (Issue #69) |
-| M7.1 | Complete in PRs #50–59; Issue #16 closed |
-| M8.1 | PRs #61 and #67 merged; Issue #17 remains open |
+| Last verified main SHA | `de9b0f3992c258e5dfdc840e48fb45da47276bd2` |
+| PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
+| PR #102 branch checks | Application/curriculum validation, Node.js 26 and curriculum validator passed |
+| Post-merge main CI | Run [#43579576570](https://github.com/leenusdarnal/guitarlab/actions/runs/43579576570); passed |
+| Current implementation branch | `feat/m7-adaptive-recommendation-feedback`; PR [#103](https://github.com/leenusdarnal/guitarlab/pull/103) open, CI pending |
+| Current engineering task | Append-only adaptive recommendation dismiss/correct feedback implemented in PR #103; merge after required checks pass |
+| Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
+| Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
+| M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |
 | M9 | Physical-device and release acceptance remains open under Issue #18 |
-| Deferred | Production deployment, production D1, authentication, cloud sync, PR #47 CI redesign |
+| Deferred | Production deployment, production D1, authentication, cloud sync and unreviewed CI redesign |
 
 **Source-of-truth hierarchy:** current code/tests on `main` → merged PR evidence → current GitHub Issues/Actions → this checkpoint → historical notes and chat summaries.

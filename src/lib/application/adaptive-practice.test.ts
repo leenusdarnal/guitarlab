@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import type {
+  AdaptiveRecommendationFeedbackRecord,
   AssessmentAttemptRecord,
   PracticeEvidenceRecord,
   SkillMasteryRecord,
   SkillRecord
 } from '../repositories/contracts';
-import { buildAdaptivePracticeSnapshot } from './adaptive-practice';
+import {
+  buildAdaptivePracticeSnapshot,
+  resolveAdaptiveRecommendationFeedback
+} from './adaptive-practice';
 
 const skills: SkillRecord[] = [
   { id: 'rhythm.pulse', category: 'rhythm', displayName: 'Pulse' },
@@ -253,5 +257,106 @@ describe('buildAdaptivePracticeSnapshot', () => {
         (item) => item.targetId === 'other-learners-exercise'
       )
     ).toBe(false);
+  });
+});
+
+describe('resolveAdaptiveRecommendationFeedback', () => {
+  const recommendation = {
+    id: 'skill:rhythm.pulse',
+    targetType: 'skill' as const,
+    targetId: 'rhythm.pulse',
+    title: 'Practise Pulse',
+    priority: 100,
+    reasonCodes: ['assessment_needs_practice' as const],
+    explanation: 'The latest assessment needs practice.',
+    evidenceType: 'assessment' as const,
+    evidenceCount: 1,
+    latestEvidenceAt: 100
+  };
+
+  function feedback(
+    action: AdaptiveRecommendationFeedbackRecord['action'],
+    correction: AdaptiveRecommendationFeedbackRecord['correction'],
+    createdAt: number,
+    id = '00000000-0000-4000-8000-000000000010'
+  ): AdaptiveRecommendationFeedbackRecord {
+    return {
+      id,
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      recommendationId: recommendation.id,
+      targetType: 'skill',
+      targetId: recommendation.targetId,
+      reasonCodes: ['assessment_needs_practice'],
+      action,
+      correction,
+      createdAt
+    };
+  }
+
+  it('hides dismissed recommendations until newer source evidence exists', () => {
+    const dismissed = feedback('dismiss', null, 200);
+    expect(
+      resolveAdaptiveRecommendationFeedback({
+        recommendations: [recommendation],
+        feedback: [dismissed]
+      })
+    ).toEqual([]);
+
+    expect(
+      resolveAdaptiveRecommendationFeedback({
+        recommendations: [{ ...recommendation, latestEvidenceAt: 201 }],
+        feedback: [dismissed]
+      })
+    ).toEqual([
+      {
+        recommendation: { ...recommendation, latestEvidenceAt: 201 },
+        feedback: null
+      }
+    ]);
+  });
+
+  it('hides confident or irrelevant corrections without changing the recommendation model', () => {
+    for (const correction of ['already_confident', 'not_relevant'] as const) {
+      expect(
+        resolveAdaptiveRecommendationFeedback({
+          recommendations: [recommendation],
+          feedback: [feedback('correct', correction, 200)]
+        })
+      ).toEqual([]);
+    }
+    expect(recommendation.priority).toBe(100);
+    expect(recommendation.reasonCodes).toEqual(['assessment_needs_practice']);
+  });
+
+  it('keeps too-difficult recommendations visible with the latest correction', () => {
+    const latest = feedback('correct', 'too_difficult', 200);
+    expect(
+      resolveAdaptiveRecommendationFeedback({
+        recommendations: [recommendation],
+        feedback: [latest]
+      })
+    ).toEqual([{ recommendation, feedback: latest }]);
+  });
+
+  it('uses deterministic latest-feedback ordering when timestamps tie', () => {
+    const older = feedback(
+      'dismiss',
+      null,
+      200,
+      '00000000-0000-4000-8000-000000000010'
+    );
+    const newer = feedback(
+      'correct',
+      'too_difficult',
+      200,
+      '00000000-0000-4000-8000-000000000011'
+    );
+    expect(
+      resolveAdaptiveRecommendationFeedback({
+        recommendations: [recommendation],
+        feedback: [newer, older]
+      })[0].feedback
+    ).toEqual(newer);
   });
 });

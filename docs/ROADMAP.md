@@ -94,9 +94,14 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 - [x] Chord diagrams and chord library (PR #46).
 - [x] Chord-transition observations with clean-change quality tracked separately from elapsed time (PR #46).
 - [x] Metronome with tempo/meter controls and user-initiated reference tone (PR #46).
-- [ ] Chromatic tuner with explicit microphone permission; tracked in [Issue #68](https://github.com/leenusdarnal/guitarlab/issues/68) after shared audio and pitch-detection design.
+- [x] Feature-owned audio sessions and deterministic playback lifecycle tests/fixes (PRs #73–80).
+- [x] Explicit-action microphone input with local-only sample access and track cleanup (PR #82).
+- [x] Confidence-aware single-note pitch estimation and stable-note tracking (PRs #81 and #83).
+- [x] Chromatic tuner and guided note-recognition exercise (PRs #84–85).
+- [x] Synthetic pitch benchmarks and local real-recording evaluation tooling (PRs #86, #90–91).
+- [ ] Real-guitar corpus measurements and physical-browser/device acceptance (Issue #89).
 
-PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard explorer, open-chord library, alternating chord-change observations and Web Audio metronome, with unit and browser acceptance coverage. The chromatic tuner remains a later, explicit-microphone-permission feature.
+PRs #45–46 provide the fretboard, chord library and metronome. The audio follow-up is now implemented through PRs #73–86 and #90–91: feature-owned audio sessions, local opt-in microphone capture, a confidence-aware pitch estimator, stable-note tracking, tuner, guided recognition exercise and synthetic/local-recording evaluation tools. Issue #68 is closed. Issue #89 remains open for consented real-guitar corpus measurements and physical-device/browser acceptance; do not represent synthetic or mocked browser tests as hardware evidence.
 
 ### M7 — Practice studio
 
@@ -106,10 +111,12 @@ PR #45 and PR #46 are merged. Together they deliver the tuning-aware fretboard e
 - [x] Searchable/filterable session history (PR #58).
 - [x] Explainable skill states and learner corrections with provenance (PR #59).
 - [ ] Accuracy-first tempo ladders and richer per-item performance trends.
-- [ ] Adaptive practice recommendations and learning analytics (planned in [Issue #69](https://github.com/leenusdarnal/guitarlab/issues/69)).
+- [x] First adaptive-practice slice: deterministic read model, stable reason codes, active learner/release scoping, measured-score summary, missing-evidence states and assessment-category coverage (PR #93).
+- [x] Practice Studio recommendation list and assessment-coverage view with canonical 34-skill catalogue (PR #94).
+- [ ] Append-only learner dismiss/correct feedback with provenance and richer derived analytics where the evidence supports them (Issue #69).
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
 
-M7.1's core evidence loop is implemented in PRs #50–59. Do not infer mastery from time, lesson completion or repetitions. Adaptive selection and analytics are a distinct follow-up, not a reason to duplicate the existing skill-state engine.
+M7.1's core evidence loop is implemented in PRs #50–59. M7.2 is partially implemented by PRs #92–94: recommendations are derived and read-only, learner/release scoped and evidence-aware. Next is an auditable local dismiss/correct workflow. Do not infer accuracy from self-reported clean repetitions or mastery from time, lesson completion or repetitions; do not invent per-item accuracy where the source records do not contain it.
 
 ### M8 — Musicianship and repertoire
 
@@ -131,11 +138,12 @@ PR #61 and PR #67 deliver the first local, generated-audio listening exercises. 
 - [ ] Accessibility and physical-device mobile usability audit (automated responsive/offline viewport coverage is not a substitute).
 - [ ] Complete security, CSP and privacy review; baseline response-security headers and storage durability controls are implemented (PR #36).
 - [x] Automated Chromium backup/restore/rollback/reset verification (PR #42); [ ] physical-device backup/restore verification.
-- [ ] Cross-browser audio timing, lifecycle and interaction acceptance (in addition to existing Chromium coverage).
+- [x] Automated lifecycle, microphone-permission and tuner browser-acceptance coverage exists for mocked Chromium and regression fixtures (PRs #73–90).
+- [ ] Physical desktop/mobile and supported-browser audio timing, microphone and resource-cleanup acceptance (Issues #89 and #18).
 - [ ] Performance and reliability checks, including audio startup/stop and resource cleanup.
 - [ ] Third-party dependency and licence register; review all optional integrations before adoption.
 - [x] Curriculum validator integrated into the main application CI.
-- [ ] Explicit Cloudflare preview deployment and browser-level verification.
+- [ ] Verify preview deployment and browser smoke check against the current v1.0.6 main commit; the preview workflow has succeeded for an earlier main commit.
 - [ ] Private production deployment, smoke tests and rollback procedure.
 
 Release hardening remains open under [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18). No production deployment is authorised by this roadmap.

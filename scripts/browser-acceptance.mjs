@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 5 &&
+      database.version === 6 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -186,6 +186,11 @@ try {
         .objectStore('practiceSessions')
         .indexNames.contains('byLearnerStatus') &&
       database.objectStoreNames.contains('practiceEvidence') &&
+      database.objectStoreNames.contains('adaptiveRecommendationFeedback') &&
+      database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .indexNames.contains('byLearnerRelease') &&
       database
         .transaction('assessmentAttempts')
         .objectStore('assessmentAttempts')
@@ -246,15 +251,22 @@ try {
       assessmentReleaseIndex:
         assessmentAttempts.indexNames.contains('byLearnerRelease'),
       practiceEvidenceLearnerIndex:
-        practiceEvidence.indexNames.contains('byLearnerId')
+        practiceEvidence.indexNames.contains('byLearnerId'),
+      adaptiveFeedbackStore: database.objectStoreNames.contains(
+        'adaptiveRecommendationFeedback'
+      ),
+      adaptiveFeedbackReleaseIndex: database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .indexNames.contains('byLearnerRelease')
     };
     database.close();
     return result;
   });
   assert.equal(
     upgradeResult.version,
-    5,
-    'The existing v1 database should upgrade to v5'
+    6,
+    'The existing v1 database should upgrade to v6'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
@@ -264,7 +276,10 @@ try {
   assert.equal(upgradeResult.learnerStatusIndex, true);
   assert.equal(upgradeResult.assessmentReleaseIndex, true);
   assert.equal(upgradeResult.practiceEvidenceLearnerIndex, true);
+  assert.equal(upgradeResult.adaptiveFeedbackStore, true);
+  assert.equal(upgradeResult.adaptiveFeedbackReleaseIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
+    'adaptiveRecommendationFeedback',
     'assessmentAttempts',
     'learnerProfiles',
     'lessonCompletionEvents',
@@ -534,6 +549,84 @@ try {
     'Practice recommendations should remain visible on mobile'
   );
 
+  // M7.2 adaptive recommendation feedback is local, append-only and evidence-aware.
+  await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  const adaptiveRecommendation = page
+    .locator('.adaptive-list li[data-target-type="skill"]')
+    .first();
+  await adaptiveRecommendation.waitFor();
+  const recommendationId = await adaptiveRecommendation.getAttribute(
+    'data-recommendation-id'
+  );
+  assert.ok(
+    recommendationId,
+    'A suggested skill needs a stable recommendation ID'
+  );
+
+  await adaptiveRecommendation
+    .getByRole('button', { name: 'Make it easier' })
+    .click();
+  await adaptiveRecommendation
+    .getByText(/You asked for an easier starting step/)
+    .waitFor();
+
+  await page.reload({ waitUntil: 'networkidle' });
+  const persistedRecommendation = page.locator(
+    `.adaptive-list li[data-recommendation-id="${recommendationId}"]`
+  );
+  await persistedRecommendation
+    .getByText(/You asked for an easier starting step/)
+    .waitFor();
+
+  await persistedRecommendation
+    .getByRole('button', { name: 'Dismiss' })
+    .click();
+  await page
+    .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
+    .waitFor({ state: 'detached' });
+
+  const adaptiveFeedbackSnapshot = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .index('byLearnerRelease')
+        .getAll([learnerId, 'curriculum-v1.0.6']);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const hasFeedbackStore = database.objectStoreNames.contains(
+      'adaptiveRecommendationFeedback'
+    );
+    database.close();
+    return { rows, hasFeedbackStore };
+  });
+  assert.equal(adaptiveFeedbackSnapshot.hasFeedbackStore, true);
+  assert.deepEqual(
+    adaptiveFeedbackSnapshot.rows
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action)
+      .sort(),
+    ['correct', 'dismiss'],
+    'Feedback is persisted as a new record for each learner action'
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(origin, { waitUntil: 'networkidle' });
+
   // Backup navigation and export remain available from the learner dashboard.
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
   await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
@@ -556,6 +649,17 @@ try {
   assert.equal(backup.format, 'guitarlab-learner-backup');
   assert.equal(backup.version, 1);
   assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
+  assert.ok(
+    Array.isArray(backup.records.adaptiveRecommendationFeedback),
+    'Learner backups include the feedback history collection'
+  );
+  assert.deepEqual(
+    backup.records.adaptiveRecommendationFeedback
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action),
+    ['correct', 'dismiss'],
+    "Export retains the learner's append-only feedback history"
+  );
 
   // Invalid JSON and unsupported backup versions must be rejected without preview.
   const backupInput = page.locator('input[type="file"]');
@@ -697,6 +801,36 @@ try {
         'Your active learner data has been reset. A fresh empty profile is ready.'
     })
     .waitFor();
+  const feedbackAfterReset = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return rows.filter((record) => record.learnerId === learnerId);
+  });
+  assert.deepEqual(
+    feedbackAfterReset,
+    [],
+    'Reset removes feedback owned by the active learner'
+  );
 
   // Restore the downloaded backup into a new, empty learner profile.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
@@ -740,6 +874,38 @@ try {
       .isChecked(),
     true,
     'Restoring the exported backup should recover the learner goals'
+  );
+  const restoredFeedback = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return rows.filter((record) => record.learnerId === learnerId);
+  });
+  assert.deepEqual(
+    restoredFeedback
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action),
+    ['correct', 'dismiss'],
+    "Restore reinstates the learner's full adaptive recommendation feedback history"
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.

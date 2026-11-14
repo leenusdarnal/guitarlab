@@ -1,5 +1,6 @@
 import type {
   AssessmentAttemptRecord,
+  AdaptiveRecommendationFeedbackRecord,
   PracticeEvidenceRecord,
   SkillMasteryRecord,
   SkillRecord
@@ -256,4 +257,52 @@ export function buildAdaptivePracticeSnapshot(input: {
     assessedSkillCount,
     totalSkillCount: input.skills.length
   };
+}
+
+export type AdaptiveRecommendationFeedbackViewItem = {
+  recommendation: AdaptivePracticeRecommendation;
+  feedback: AdaptiveRecommendationFeedbackRecord | null;
+};
+
+/**
+ * Resolve local learner feedback against the latest recommendation evidence.
+ * A new assessment/observation after feedback makes the recommendation
+ * eligible to return. "Too difficult" stays visible with a simplification cue.
+ */
+export function resolveAdaptiveRecommendationFeedback(input: {
+  recommendations: readonly AdaptivePracticeRecommendation[];
+  feedback: readonly AdaptiveRecommendationFeedbackRecord[];
+}): AdaptiveRecommendationFeedbackViewItem[] {
+  const latestByRecommendation = new Map<
+    string,
+    AdaptiveRecommendationFeedbackRecord
+  >();
+
+  for (const record of input.feedback) {
+    const current = latestByRecommendation.get(record.recommendationId);
+    if (
+      !current ||
+      record.createdAt > current.createdAt ||
+      (record.createdAt === current.createdAt && record.id > current.id)
+    ) {
+      latestByRecommendation.set(record.recommendationId, record);
+    }
+  }
+
+  return input.recommendations.flatMap((recommendation) => {
+    const stored = latestByRecommendation.get(recommendation.id) ?? null;
+    const feedback =
+      stored &&
+      recommendation.latestEvidenceAt !== null &&
+      recommendation.latestEvidenceAt > stored.createdAt
+        ? null
+        : stored;
+
+    const hidesRecommendation =
+      feedback?.action === 'dismiss' ||
+      (feedback?.action === 'correct' &&
+        feedback.correction !== 'too_difficult');
+
+    return hidesRecommendation ? [] : [{ recommendation, feedback }];
+  });
 }

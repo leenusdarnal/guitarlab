@@ -1,14 +1,14 @@
 # M7.2 — Practice Evidence and Planner Audit
 
-**Status:** Baseline audit; implementation design input  
-**Reviewed against:** `main` at `ec3c3c841675af84727d87807c4975a4a5c5a8f0`  
+**Status:** Baseline audit reconciled with partial implementation; recommendation feedback remains open  
+**Reviewed against:** `main` at `de9b0f3992c258e5dfdc840e48fb45da47276bd2` (PRs #92–94 merged)  
 **Scope:** Existing practice planning, activity observations, assessment history and skill-state rules
 
 ## Executive summary
 
 GuitarLab already has the core records needed for a conservative, local-first adaptive practice layer. The existing planner is deterministic and explains its lesson, review, warm-up and musical-application suggestions. Practice observations and assessment attempts are separate records, and the skill-state explanation explicitly excludes practice duration and self-reported repetitions from mastery decisions.
 
-The main gap is not a missing source of truth: it is the absence of a derived read model that joins valid per-exercise observations, assessment evidence, review dates and topic coverage into ranked, explainable recommendations and learner-facing analytics. M7.2 should add that read model without changing the underlying records or mastery rules.
+The first read-model/UI slice has now landed in PRs #93–94. The remaining gap is auditable learner feedback (dismiss/correct) and richer analytics only where source evidence can support them. M7.2 must not invent per-attempt correctness, confusion tags or fretboard coverage from existing free-text activity observations, and must not change the underlying assessment or mastery rules.
 
 ## Existing architecture
 
@@ -51,7 +51,18 @@ The main gap is not a missing source of truth: it is the absence of a derived re
 - The application already communicates that elapsed session time is activity history, not verified active practice or a skill assessment.
 - Session and evidence operations use the active learner's local storage.
 
-**Gap:** no consolidated accuracy/consistency/coverage analytics or dismiss/correct workflow for adaptive recommendations was identified in the reviewed practice planner and evidence contracts. The next implementation should inspect the relevant route/data loading boundaries before choosing where the derived view belongs.
+**Implemented:** the Practice Studio now shows up to six deterministic evidence-aware recommendations and assessment-category coverage from the reached Year 1 skill set (PR #94). It distinguishes assessment evidence from learner-entered exercise observations and shows an explicit missing-evidence state.
+
+**Remaining gap:** recommendations cannot yet be dismissed or corrected by the learner with provenance. There are no append-only feedback records, and feedback is not resolved against newer evidence. Accuracy/consistency trends are limited to measured scored assessments; per-item correctness is not captured by the current practice-observation schema.
+
+## M7.2 implementation state after PRs #92–94 and PR #103
+
+- PR #92 completed the baseline evidence/planner audit.
+- PR #93 added `buildAdaptivePracticeSnapshot` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score mean/spread, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.
+- PR #94 integrated the read model into the Practice Studio, added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.
+- PR #103 adds the next slice: bounded append-only dismiss/correct feedback, learner/release-scoped IndexedDB storage, deterministic latest-feedback resolution and accessible Practice Studio controls. It is open and must not be treated as complete until required CI passes and it is merged.
+- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score.
+- Current feedback choices are dismissal, already confident, too difficult and not relevant. They do not update assessment attempts or mastery. New recommendation evidence after a feedback timestamp can make a recommendation eligible to return.
 
 ## Evidence quality rules for M7.2
 
