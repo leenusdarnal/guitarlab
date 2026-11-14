@@ -11,6 +11,7 @@ import {
 } from '../application/services';
 import { buildDashboardSnapshot } from '../application/dashboard';
 import { buildAdaptivePracticeSnapshot } from '../application/adaptive-practice';
+import { adaptiveRecommendationFeedbackSchema } from '../domain/learning/adaptive-recommendation-feedback';
 import type { AdaptivePracticeSnapshot } from '../application/adaptive-practice';
 import {
   ACTIVE_CURRICULUM_RELEASE_ID,
@@ -20,7 +21,9 @@ import { explainSkillState } from '../domain/learning/skill-state';
 import type { SkillStateExplanation } from '../domain/learning/skill-state';
 import year1DashboardIndex from '../../../content/curriculum/year-1-dashboard-index.json';
 import { systemRuntime } from '../repositories/contracts';
+import type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/adaptive-recommendation-feedback';
 import type {
+  AdaptiveRecommendationFeedbackRepository,
   AssessmentAttemptRecord,
   AssessmentAttemptRepository,
   PracticeEvidenceRecord,
@@ -36,7 +39,7 @@ import type {
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 5;
+export const LOCAL_DATABASE_VERSION = 6;
 
 const stores = {
   metadata: 'metadata',
@@ -46,7 +49,8 @@ const stores = {
   assessmentAttempts: 'assessmentAttempts',
   mastery: 'skillMastery',
   practiceSessions: 'practiceSessions',
-  practiceEvidence: 'practiceEvidence'
+  practiceEvidence: 'practiceEvidence',
+  adaptiveRecommendationFeedback: 'adaptiveRecommendationFeedback'
 } as const;
 
 type MetadataRecord = { key: string; value: string };
@@ -207,6 +211,16 @@ export function openLocalDatabase(
       if (!evidence.indexNames.contains('byLearnerId')) {
         evidence.createIndex('byLearnerId', 'learnerId');
       }
+      if (!database.objectStoreNames.contains(stores.adaptiveRecommendationFeedback)) {
+        const feedback = database.createObjectStore(
+          stores.adaptiveRecommendationFeedback,
+          { keyPath: 'id' }
+        );
+        feedback.createIndex('byLearnerRelease', [
+          'learnerId',
+          'curriculumReleaseId'
+        ]);
+      }
     };
 
     request.onsuccess = () => {
@@ -291,6 +305,7 @@ export type IndexedDbRepositories = {
   mastery: SkillMasteryRepository;
   practice: PracticeSessionRepository;
   practiceEvidence: PracticeEvidenceRepository;
+  adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRepository;
 };
 
 /** IndexedDB adapters implement the same ports used by the application layer. */
@@ -574,13 +589,56 @@ export function createIndexedDbRepositories(
       )
   };
 
+  const adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRepository = {
+    append: async (record) =>
+      inTransaction(
+        database,
+        [stores.adaptiveRecommendationFeedback, stores.profiles],
+        'readwrite',
+        async (tx) => {
+          const validated = adaptiveRecommendationFeedbackSchema.parse(record);
+          const owner = await requestResult<LearnerProfileRecord | undefined>(
+            tx.objectStore(stores.profiles).get(validated.learnerId)
+          );
+          if (!owner) {
+            throw new Error(
+              'Adaptive recommendation feedback must belong to a saved learner profile.'
+            );
+          }
+          // add(), never put(), preserves a complete, append-only decision history.
+          await requestResult(
+            tx.objectStore(stores.adaptiveRecommendationFeedback).add(validated)
+          );
+        }
+      ),
+    listByLearnerRelease: (learnerId, releaseId) =>
+      inTransaction(
+        database,
+        [stores.adaptiveRecommendationFeedback],
+        'readonly',
+        async (tx) => {
+          const records = await requestResult<AdaptiveRecommendationFeedbackRecord[]>(
+            tx
+              .objectStore(stores.adaptiveRecommendationFeedback)
+              .index('byLearnerRelease')
+              .getAll([learnerId, releaseId])
+          );
+          return records.sort(
+            (left, right) =>
+              left.createdAt - right.createdAt || left.id.localeCompare(right.id)
+          );
+        }
+      )
+  };
+
   return {
     profiles,
     progress,
     assessments,
     mastery,
     practice,
-    practiceEvidence
+    practiceEvidence,
+    adaptiveRecommendationFeedback
   };
 }
 
@@ -909,6 +967,48 @@ export async function loadActiveAdaptivePracticeSnapshot(
         });
       }
     );
+  } finally {
+    database.close();
+  }
+}
+
+/** Read only the active learner's append-only feedback for the current release. */
+export async function loadActiveAdaptiveRecommendationFeedback(): Promise<
+  AdaptiveRecommendationFeedbackRecord[]
+> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    return await createIndexedDbRepositories(database).adaptiveRecommendationFeedback.listByLearnerRelease(
+      profile.id,
+      ACTIVE_CURRICULUM_RELEASE_ID
+    );
+  } finally {
+    database.close();
+  }
+}
+
+export type RecordAdaptiveRecommendationFeedbackInput = Pick<
+  AdaptiveRecommendationFeedbackRecord,
+  'recommendationId' | 'targetType' | 'targetId' | 'reasonCodes' | 'action' | 'correction'
+>;
+
+/** Persist an auditable learner response locally; it cannot write mastery. */
+export async function recordActiveAdaptiveRecommendationFeedback(
+  input: RecordAdaptiveRecommendationFeedbackInput
+): Promise<AdaptiveRecommendationFeedbackRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const record = adaptiveRecommendationFeedbackSchema.parse({
+      ...input,
+      id: systemRuntime.newId(),
+      learnerId: profile.id,
+      curriculumReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
+      createdAt: systemRuntime.now()
+    });
+    await createIndexedDbRepositories(database).adaptiveRecommendationFeedback.append(record);
+    return record;
   } finally {
     database.close();
   }
