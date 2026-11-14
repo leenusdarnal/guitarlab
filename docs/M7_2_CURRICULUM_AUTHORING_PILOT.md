@@ -1,6 +1,6 @@
 # M7.2 — Representative Curriculum Authoring Pilot
 
-**Status:** Representative pilot and Jazz & Harmony Weeks 1–8 authored; v1.0.6 PR validation pending  
+**Status:** Representative pilot and Jazz & Harmony Weeks 1–8 merged; curriculum v1.0.6 is current on main  
 **Current release:** `curriculum-v1.0.6`  
 **Scope:** 12 Year 1 / Year 2 pilot lessons, incorporated alongside the completed 24-lesson Year 3 Rock & Blues and Fingerstyle & Acoustic routes  
 **Stable identifiers:** All lesson IDs and the existing 34 skill IDs are preserved
@@ -57,7 +57,7 @@ The separate mapping decision register documents nine further evidence-backed co
 - No numeric cut scores, automated pass/fail decisions or automatic mastery changes are introduced.
 - Practice repetitions and lesson completion do not independently prove mastery.
 - The curriculum release is immutable; previous progress and evidence stay attached to their original release.
-- New progress uses `curriculum-v1.0.4`; prior releases and learner evidence remain unchanged, with no automatic mastery carry-forward.
+- New progress uses the active immutable curriculum release v1.0.6. Prior release rows and learner evidence remain attached to their original release; no automatic mastery carry-forward is performed.
 - Content remains original or properly licensed; no copyrighted TAB or recordings are reproduced.
 
 ## 6. Pilot acceptance and remaining work
@@ -66,12 +66,12 @@ The separate mapping decision register documents nine further evidence-backed co
 - [x] Four Year 3 Rock & Blues lessons have a separate task-specific authoring pilot.
 - [x] Stable lesson IDs and the 34-skill catalogue are preserved.
 - [x] Mapping corrections have written evidence and release versioning.
-- [ ] Full curriculum CI and browser acceptance pass on the combined branch.
+- [x] Full PR application/curriculum CI and dedicated curriculum validation passed for the v1.0.6 branch (PR #102); post-merge application CI is tracked separately.
 - [ ] Curriculum reviewer checks musical correctness, level appropriateness and accessibility of the note/fret examples.
 - [ ] Evaluate the pilot with multiple reviewers/teachers before applying the standard to all remaining lessons.
 - [ ] Continue authoring in small batches; 44 of 152 lessons now have task-specific authoring; 108 still need this level of remediation.
 
-**Next stage:** Continue Jazz & Harmony Weeks 5–8 in a separate batch. The v1.0.5 and v1.0.6 releases now provide task-specific Jazz & Harmony authoring for Weeks 1–8; four Jazz lessons (Weeks 9–12) and all 12 All-Round Musician lessons still need this level of remediation. Resolve the flagged Year 1 mapping gap in parallel with research, not by adding an unreviewed skill ID.
+**Next stage:** Continue Jazz & Harmony Weeks 9–12, followed by All-Round Musician Weeks 1–12, in small, reviewed batches. The v1.0.5 and v1.0.6 releases provide task-specific Jazz & Harmony authoring for Weeks 1–8. Overall coverage is 44/152 lessons; 32/48 specialist lessons are task-specific and 16 specialist lessons remain. The flagged Year 1 mapping gap still requires evidence/review; do not add an unreviewed skill ID.
 
 
 ## 7. Jazz & Harmony batch 2 update
