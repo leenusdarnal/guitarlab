@@ -926,7 +926,7 @@
           </label>
           <select id="authored-exercise" bind:value={selectedAuthoredScopeKey}>
             <option value="">General session — no authored exercise link</option>
-            {#each authoredPracticeScopes as scope}
+            {#each authoredPracticeScopes as scope (`${scope.lessonId}::${scope.exerciseId}`)}
               <option value={`${scope.lessonId}::${scope.exerciseId}`}>
                 Week {scope.week} · {scope.lessonTitle} — {scope.exerciseTitle}
               </option>
