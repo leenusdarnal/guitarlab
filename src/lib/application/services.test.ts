@@ -481,7 +481,8 @@ describe('M2.2 application service boundaries', () => {
       evidenceType: 'observed_or_self_checked',
       outcome: 'passed',
       score: 100,
-      evidenceSummary: 'Correctly identified the open pitch for the sixth string.',
+      evidenceSummary:
+        'Correctly identified the open pitch for the sixth string.',
       evidence: { correctItems: 1, totalItems: 1 },
       assessmentInstrument: {
         definitionId: 'guitar.standard-tuning-open-pitches',
@@ -554,7 +555,10 @@ describe('M2.2 application service boundaries', () => {
     } as const;
 
     await recordAssessmentAttempt(
-      { learnerId, submission: { ...baseSubmission, outcome: 'needs_practice' } },
+      {
+        learnerId,
+        submission: { ...baseSubmission, outcome: 'needs_practice' }
+      },
       dependencies
     );
     await recordAssessmentAttempt(
