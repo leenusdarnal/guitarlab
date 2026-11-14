@@ -45,14 +45,24 @@ export const practiceEvidenceInputSchema = z
   })
   .strict()
   .superRefine((value, context) => {
-    const identity = [value.curriculumReleaseId, value.lessonId, value.authoredExerciseId, value.practiceTaxonomyVersion];
-    const hasAnyIdentity = identity.some((part) => part !== undefined && part !== null);
-    const hasCompleteIdentity = identity.every((part) => typeof part === 'string' && part.length > 0);
+    const identity = [
+      value.curriculumReleaseId,
+      value.lessonId,
+      value.authoredExerciseId,
+      value.practiceTaxonomyVersion
+    ];
+    const hasAnyIdentity = identity.some(
+      (part) => part !== undefined && part !== null
+    );
+    const hasCompleteIdentity = identity.every(
+      (part) => typeof part === 'string' && part.length > 0
+    );
     if (hasAnyIdentity && !hasCompleteIdentity) {
       context.addIssue({
         code: 'custom',
         path: ['authoredExerciseId'],
-        message: 'Authored practice identity must include release, lesson, exercise and taxonomy version.'
+        message:
+          'Authored practice identity must include release, lesson, exercise and taxonomy version.'
       });
     }
     if (value.cleanRepetitions > value.repetitions) {
