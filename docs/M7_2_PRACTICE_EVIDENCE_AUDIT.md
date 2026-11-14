@@ -1,7 +1,7 @@
 # M7.2 — Practice Evidence and Planner Audit
 
-**Status:** Partial implementation verified; next gap is structured item evidence and explicit topic/fretboard taxonomy  
-**Reviewed against:** `main` at `a1da00fe0fb5804464ccb1679c128d1176957041` (PRs #92–94, #103–104 merged)  
+**Status:** Structured item-evidence producers now cover standard tuning, interval recognition and pulse listening; next is comparable item analytics and targeted prioritisation. Explicit topic/fretboard coverage remains open.  
+**Reviewed against:** `main` at `1c99ebb56e054f0ddc7528a36d7002cd6678fcb6` (PRs #92–94, #103–104 and #107–109 merged)  
 **Scope:** Existing practice planning, activity observations, assessment history and skill-state rules
 
 ## Executive summary
@@ -97,7 +97,7 @@ The recommendation read model and category assessment-coverage view landed in PR
 - [x] Add Practice Studio recommendations, catalogue integrity and category assessment coverage (PR #94).
 - [x] Add local append-only dismiss/correct feedback with provenance, persistence, backup/restore/reset and browser tests (PR #103).
 - [x] Add per-skill measured-score summaries, descriptive spread and conservative trend states with unit tests (PR #104).
-- [ ] Define a versioned per-item evidence contract for correctness/confusion only where the assessment flow directly observes an outcome; include provenance, learner/release scope and backup compatibility.
+- [x] Define a versioned per-item evidence contract for correctness only where the assessment flow directly observes an outcome; include provenance, learner/release scope and backup compatibility (PRs #107–109).
 - [ ] Add explicit canonical topic/technique/fretboard metadata where authors can reliably tag the assessed scope; do not guess tags from free text.
 - [ ] Use item outcomes for repeated-confusion prioritisation and item accuracy only after valid source records exist.
 - [ ] Add topic/fretboard exposure coverage only after canonical metadata and corresponding learner evidence exist.
@@ -123,3 +123,38 @@ The recommendation read model and category assessment-coverage view landed in PR
 - `src/lib/storage/practice.ts`
 - `src/routes/practice/+page.svelte`
 - `docs/RESEARCH_INTEGRATION_PLAN.md`
+
+
+## Item-evidence rollout — current main after PRs #107–109
+
+The assessment capture audit was followed by three narrow, learner-facing objective evidence producers. They share the existing versioned assessment-attempt contract and append-only learner-scoped IndexedDB store; no new assessment store or cloud learner-data flow was added.
+
+- **PR #107 — standard tuning recall:** six explicitly selected open-string pitch items, stable string/item identities, a versioned exact-match rule and a five-of-six threshold. Missing responses remain inconclusive. It measures recall of standard open-string pitches, not physical tuning accuracy.
+- **PR #108 — interval recognition:** one explicit interval choice against a browser-generated listening item, with a stable item ID and versioned exact-choice rule. It measures interval listening discrimination, not performed intervals.
+- **PR #109 — Pulse listening:** one explicit steady/uneven choice against a deterministic four-beat pattern, with stable pattern IDs and a versioned exact-choice rule. It maps to `ear.rhythm` as a listening-recognition supporting probe; it does not measure the learner's ability to play or maintain a steady pulse.
+
+All three flows record response provenance and direct item correctness. The two listening flows are explicitly `supporting_probe` evidence. The standard-tuning flow is also a supporting probe. They are not whole-skill mastery assessments; they must not replace a skill-level assessment, award mastery or be conflated with physical performance. No confusion/error code is inferred from an incorrect selection.
+
+### Remaining integration gap
+
+The Practice Studio read model currently excludes supporting probes from whole-skill assessment counts, measured-score trends and mastery recommendations. That boundary is correct for mastery, but it also means valid item outcomes are not yet surfaced as item-level analytics or used for focused-practice ranking.
+
+The next implementation should:
+
+1. Derive item correctness summaries separately from whole-skill score summaries.
+2. Aggregate only within the same assessment definition, definition version and scoring-rule version; do not combine unlike instruments or item identities.
+3. Keep inconclusive outcomes visible but exclude them from the accuracy denominator.
+4. Raise focused-practice priority only after repeated incorrect outcomes on the same stable item in consecutive attempts. A later correct or inconclusive response resets that streak.
+5. Keep item-level recommendations separate from `explainSkillState`; supporting probes must never change whole-skill assessment counts, category assessment coverage or mastery.
+6. Scope every signal to the active learner and curriculum release. Preserve local-only, read-only analytics over existing assessment attempts.
+7. Leave confusion-code and topic/fretboard coverage work open until an exercise has authored, defensible metadata for those dimensions.
+
+### Current sequence
+
+- [x] Trace the assessment capture path and identify the missing learner-facing producer (this follow-up audit; PR #106's unmerged branch is superseded by this update).
+- [x] Add the first objectively scored, learner-facing item evidence producer (PR #107).
+- [x] Extend objective item capture to interval listening (PR #108).
+- [x] Extend objective item capture to Pulse listening (PR #109).
+- [ ] Integrate versioned item accuracy and repeated-miss prioritisation into Practice Studio without changing mastery rules.
+- [ ] Add canonical topic, technique, string and fretboard-position metadata only where authors can explicitly assign it.
+- [ ] Add topic/fretboard exposure coverage only after those tags and corresponding learner evidence exist.

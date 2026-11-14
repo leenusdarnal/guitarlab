@@ -36,6 +36,14 @@ describe('adaptive recommendation feedback schema', () => {
     ).toBe(true);
   });
 
+  it('accepts an explicitly evidenced repeated-item recommendation reason', () => {
+    const record = {
+      ...base,
+      reasonCodes: ['not_yet_assessed', 'repeated_item_incorrect']
+    };
+    expect(adaptiveRecommendationFeedbackSchema.parse(record)).toEqual(record);
+  });
+
   it('rejects mismatched recommendation identity and unknown reason codes', () => {
     expect(
       adaptiveRecommendationFeedbackSchema.safeParse({

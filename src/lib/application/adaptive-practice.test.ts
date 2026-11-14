@@ -46,6 +46,50 @@ function attempt(
   };
 }
 
+function itemAttempt(
+  id: string,
+  skillId: string,
+  itemId: string,
+  response: string | null,
+  outcome: 'correct' | 'incorrect' | 'inconclusive',
+  assessedAt: number,
+  definitionId = 'guitar.ear-training.interval-recognition',
+  scoringRuleVersion = 'exact-interval-choice-v1'
+): AssessmentAttemptRecord {
+  const attemptOutcome =
+    outcome === 'correct'
+      ? 'passed'
+      : outcome === 'incorrect'
+        ? 'needs_practice'
+        : 'inconclusive';
+  return {
+    ...attempt(
+      id,
+      skillId,
+      attemptOutcome,
+      assessedAt,
+      outcome === 'correct' ? 100 : outcome === 'incorrect' ? 0 : null
+    ),
+    assessmentInstrument: {
+      definitionId,
+      definitionVersion: 1,
+      scoringRuleVersion,
+      itemCount: 1,
+      passThreshold: 100,
+      decisionScope: 'supporting_probe'
+    },
+    itemEvidence: [
+      {
+        itemId,
+        response,
+        outcome,
+        responseSource:
+          response === null ? 'no_response' : 'learner_selected_option'
+      }
+    ]
+  };
+}
+
 function observation(
   id: string,
   exerciseId: string,
@@ -157,6 +201,289 @@ describe('buildAdaptivePracticeSnapshot', () => {
       measuredScoreCount: 0
     });
     expect(recommendation?.reasonCodes).toContain('assessment_needs_practice');
+    expect(analytics?.itemEvidenceGroups[0]).toMatchObject({
+      decisionScope: 'supporting_probe',
+      correctItemCount: 1,
+      accuracyPercent: 100
+    });
+  });
+
+  it('summarises item accuracy per instrument and excludes inconclusive items from its denominator', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'item-1',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'item-2',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'perfect_fifth',
+          'correct',
+          200
+        ),
+        itemAttempt(
+          'item-3',
+          'ear.intervals',
+          'interval-recognition.major-third',
+          null,
+          'inconclusive',
+          300
+        )
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 400
+    });
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'ear.intervals'
+    );
+    expect(analytics).toMatchObject({
+      assessmentCount: 0,
+      latestOutcome: null,
+      itemEvidenceGroups: [
+        {
+          definitionId: 'guitar.ear-training.interval-recognition',
+          definitionVersion: 1,
+          scoringRuleVersion: 'exact-interval-choice-v1',
+          decisionScope: 'supporting_probe',
+          assessmentAttemptCount: 3,
+          itemCount: 2,
+          correctItemCount: 1,
+          incorrectItemCount: 1,
+          inconclusiveItemCount: 1,
+          answeredItemCount: 2,
+          accuracyPercent: 50
+        }
+      ]
+    });
+    expect(
+      analytics?.itemEvidenceGroups[0].items.find(
+        (item) => item.itemId === 'interval-recognition.perfect-fifth'
+      )
+    ).toMatchObject({
+      attemptCount: 2,
+      correctCount: 1,
+      incorrectCount: 1,
+      latestOutcome: 'correct',
+      consecutiveIncorrectCount: 0
+    });
+    expect(
+      result.categoryCoverage.find((item) => item.category === 'ear')
+    ).toEqual({
+      category: 'ear',
+      totalSkills: 1,
+      assessedSkills: 0,
+      coverage: 0
+    });
+  });
+
+  it('raises focused practice priority after consecutive incorrect outcomes on the same item', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'miss-1',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'miss-2',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'major_third',
+          'incorrect',
+          200
+        )
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 300
+    });
+    const recommendation = result.recommendations.find(
+      (item) => item.targetId === 'ear.intervals'
+    );
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'ear.intervals'
+    );
+    expect(recommendation).toMatchObject({
+      priority: 85,
+      reasonCodes: ['not_yet_assessed', 'repeated_item_incorrect'],
+      evidenceType: 'supporting_probe',
+      evidenceCount: 2,
+      latestEvidenceAt: 200
+    });
+    expect(recommendation?.explanation).toContain('2 consecutive attempts');
+    expect(recommendation?.explanation).toContain(
+      'do not establish or change whole-skill mastery'
+    );
+    expect(analytics).toMatchObject({
+      assessmentCount: 0,
+      latestOutcome: null,
+      itemEvidenceGroups: [
+        {
+          incorrectItemCount: 2,
+          accuracyPercent: 0,
+          items: [
+            {
+              consecutiveIncorrectCount: 2,
+              latestOutcome: 'incorrect'
+            }
+          ]
+        }
+      ]
+    });
+  });
+
+  it('resets repeated-incorrect priority after a later correct or inconclusive item response', () => {
+    for (const [response, outcome] of [
+      ['perfect_fifth', 'correct'],
+      [null, 'inconclusive']
+    ] as const) {
+      const result = buildAdaptivePracticeSnapshot({
+        learnerId: '00000000-0000-4000-8000-000000000001',
+        curriculumReleaseId: 'curriculum-v1',
+        skills,
+        attempts: [
+          itemAttempt(
+            'miss-1',
+            'ear.intervals',
+            'interval-recognition.perfect-fifth',
+            'minor_third',
+            'incorrect',
+            100
+          ),
+          itemAttempt(
+            'miss-2',
+            'ear.intervals',
+            'interval-recognition.perfect-fifth',
+            'major_third',
+            'incorrect',
+            200
+          ),
+          itemAttempt(
+            'latest',
+            'ear.intervals',
+            'interval-recognition.perfect-fifth',
+            response,
+            outcome,
+            300
+          )
+        ],
+        mastery: [],
+        practiceEvidence: [],
+        now: 400
+      });
+      const recommendation = result.recommendations.find(
+        (item) => item.targetId === 'ear.intervals'
+      );
+      expect(recommendation?.reasonCodes).toEqual(['not_yet_assessed']);
+      expect(recommendation?.priority).toBe(30);
+      expect(
+        result.skillAnalytics.find((item) => item.skillId === 'ear.intervals')
+          ?.itemEvidenceGroups[0].items[0].consecutiveIncorrectCount
+      ).toBe(0);
+    }
+  });
+
+  it('does not let a later response to a different item refresh a repeated-miss signal', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'miss-1',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'miss-2',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'major_third',
+          'incorrect',
+          200
+        ),
+        itemAttempt(
+          'other-item-correct',
+          'ear.intervals',
+          'interval-recognition.minor-third',
+          'minor_third',
+          'correct',
+          300
+        )
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 400
+    });
+    const recommendation = result.recommendations.find(
+      (item) => item.targetId === 'ear.intervals'
+    );
+    expect(recommendation?.reasonCodes).toContain('repeated_item_incorrect');
+    expect(recommendation?.latestEvidenceAt).toBe(200);
+  });
+
+  it('does not combine matching item IDs across different instrument versions or scoring rules', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'version-one',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'version-two',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          200,
+          'guitar.ear-training.interval-recognition',
+          'alternate-interval-choice-v2'
+        )
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 300
+    });
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'ear.intervals'
+    );
+    const recommendation = result.recommendations.find(
+      (item) => item.targetId === 'ear.intervals'
+    );
+    expect(analytics?.itemEvidenceGroups).toHaveLength(2);
+    expect(
+      analytics?.itemEvidenceGroups.every(
+        (group) => group.items[0].consecutiveIncorrectCount === 1
+      )
+    ).toBe(true);
+    expect(recommendation?.reasonCodes).toEqual(['not_yet_assessed']);
+    expect(recommendation?.priority).toBe(30);
   });
 
   it('does not call self-reported clean repetitions verified accuracy', () => {

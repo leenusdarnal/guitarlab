@@ -26,7 +26,8 @@ export const adaptiveRecommendationFeedbackSchema = z
           'assessment_inconclusive',
           'review_overdue',
           'not_yet_assessed',
-          'repeated_self_reported_difficulty'
+          'repeated_self_reported_difficulty',
+          'repeated_item_incorrect'
         ])
       )
       .min(1)

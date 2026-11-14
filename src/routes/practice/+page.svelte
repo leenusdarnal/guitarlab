@@ -378,10 +378,13 @@
     if (recommendation.evidenceType === 'assessment') {
       return `${recommendation.evidenceCount} assessment(s)`;
     }
+    if (recommendation.evidenceType === 'supporting_probe') {
+      return `${recommendation.evidenceCount} supporting probe attempt(s)`;
+    }
     if (recommendation.evidenceType === 'learner_observation') {
       return `${recommendation.evidenceCount} learner notes`;
     }
-    return 'No assessment yet';
+    return 'No whole-skill assessment yet';
   }
 
   function durationLabel(seconds: number) {
@@ -438,8 +441,9 @@
         <h2 id="adaptive-heading">Suggested focus</h2>
         <p class="muted">
           Suggestions use the skills introduced by your current Year 1 learning
-          route, your assessment history and repeated learner-entered exercise
-          difficulty. They do not change your skill states.
+          route, whole-skill assessments, directly scored item outcomes and
+          repeated learner-entered exercise difficulty. Item probes can guide a
+          focused drill, but they do not change your skill states.
         </p>
       </div>
       <span class="catalog-version">Skill catalogue v1.0.0</span>
@@ -534,12 +538,16 @@
     {/if}
     {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.skillAnalytics.length > 0}
       <details class="adaptive-analytics">
-        <summary>Measured scores and consistency by skill</summary>
+        <summary>Measured scores and item outcomes by skill</summary>
         <p class="adaptive-analytics-note">
-          These summaries use measured assessment scores (0–100), not learner-entered
-          repetitions or per-item correctness. Score spread is the standard deviation.
-          A trend compares the latest four scores from the same assessment kind, two
-          earlier versus two recent; at least four comparable scores are required.
+          Whole-skill score summaries use measured assessment scores (0–100);
+          supporting-probe scores are not mixed into them. Item outcomes are
+          summarised separately within the same instrument definition, version and
+          scoring rule. Inconclusive responses are counted but excluded from item
+          accuracy. Supporting probes can guide targeted practice, but cannot
+          establish or change whole-skill mastery. Score spread is standard
+          deviation; a trend requires four comparable scores from the same
+          assessment kind.
         </p>
         <ul class="analytics-list">
           {#each adaptiveSnapshot.skillAnalytics as skill (skill.skillId)}
@@ -572,6 +580,32 @@
                   Trend unavailable; four comparable measured scores are needed.
                 {/if}
               </p>
+              {#if skill.itemEvidenceGroups.length > 0}
+                {#each skill.itemEvidenceGroups as group (group.definitionId + ':' + group.definitionVersion + ':' + group.scoringRuleVersion + ':' + group.decisionScope)}
+                  <p class="analytics-item-evidence">
+                    {group.definitionId} v{group.definitionVersion} ·
+                    {group.correctItemCount} correct / {group.answeredItemCount} scored item response(s) ·
+                    {group.accuracyPercent === null ? 'Item accuracy unavailable' : `${group.accuracyPercent.toFixed(1)}% item accuracy`} ·
+                    {group.inconclusiveItemCount} inconclusive excluded
+                  </p>
+                  {#if group.decisionScope === 'supporting_probe'}
+                    <p class="analytics-item-evidence">
+                      Supporting probe only; this evidence cannot establish or change whole-skill mastery.
+                    </p>
+                  {/if}
+                  {#each group.items as item (group.definitionId + ':' + group.definitionVersion + ':' + item.itemId)}
+                    {#if item.consecutiveIncorrectCount >= 2}
+                      <p class="analytics-item-evidence" role="status">
+                        Same item answered incorrectly {item.consecutiveIncorrectCount} times consecutively. This raises the focused-practice priority.
+                      </p>
+                    {/if}
+                  {/each}
+                {/each}
+              {:else}
+                <p class="analytics-item-evidence">
+                  Item-level accuracy unavailable; no structured item outcomes have been recorded.
+                </p>
+              {/if}
             </li>
           {/each}
         </ul>
