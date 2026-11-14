@@ -453,7 +453,11 @@
       <ol class="adaptive-list">
         {#each adaptiveRecommendations as item (item.recommendation.id)}
           {@const recommendation = item.recommendation}
-          <li>
+          <li
+            data-recommendation-id={item.recommendation.id}
+            data-target-type={item.recommendation.targetType}
+            data-target-id={item.recommendation.targetId}
+          >
             <div class="recommendation-main">
               <span class="recommendation-type">
                 {recommendation.targetType === 'skill' ? 'SKILL' : 'EXERCISE'}
