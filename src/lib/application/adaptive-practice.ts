@@ -11,7 +11,8 @@ export type AdaptiveReasonCode =
   | 'assessment_inconclusive'
   | 'review_overdue'
   | 'not_yet_assessed'
-  | 'repeated_self_reported_difficulty';
+  | 'repeated_self_reported_difficulty'
+  | 'repeated_item_incorrect';
 
 export type AdaptivePracticeRecommendation = {
   id: string;
@@ -21,9 +22,40 @@ export type AdaptivePracticeRecommendation = {
   priority: number;
   reasonCodes: AdaptiveReasonCode[];
   explanation: string;
-  evidenceType: 'assessment' | 'learner_observation' | 'missing';
+  evidenceType:
+    | 'assessment'
+    | 'supporting_probe'
+    | 'learner_observation'
+    | 'missing';
   evidenceCount: number;
   latestEvidenceAt: number | null;
+};
+
+export type ItemEvidenceItemAnalytics = {
+  itemId: string;
+  attemptCount: number;
+  correctCount: number;
+  incorrectCount: number;
+  inconclusiveCount: number;
+  latestOutcome: 'correct' | 'incorrect' | 'inconclusive';
+  consecutiveIncorrectCount: number;
+  latestEvidenceAt: number;
+};
+
+export type ItemEvidenceGroupAnalytics = {
+  definitionId: string;
+  definitionVersion: number;
+  scoringRuleVersion: string;
+  decisionScope: 'skill_level' | 'supporting_probe';
+  assessmentAttemptCount: number;
+  itemCount: number;
+  correctItemCount: number;
+  incorrectItemCount: number;
+  inconclusiveItemCount: number;
+  answeredItemCount: number;
+  accuracyPercent: number | null;
+  latestEvidenceAt: number;
+  items: ItemEvidenceItemAnalytics[];
 };
 
 export type SkillAnalytics = {
@@ -41,6 +73,7 @@ export type SkillAnalytics = {
     'improving' | 'stable' | 'declining' | 'insufficient_evidence';
   measuredScoreTrendDelta: number | null;
   accuracyEvidenceStatus: 'available' | 'insufficient_evidence';
+  itemEvidenceGroups: ItemEvidenceGroupAnalytics[];
 };
 
 export type CategoryCoverage = {
@@ -112,6 +145,150 @@ function summariseMeasuredScoreTrend(scores: readonly number[]): {
 }
 
 /**
+ * Summarise item outcomes only within the same authored instrument definition,
+ * version and scoring rule. Inconclusive answers are retained as counts but
+ * excluded from the accuracy denominator. A later correct or inconclusive
+ * response resets an item's consecutive-incorrect streak.
+ */
+function buildItemEvidenceGroups(
+  attempts: readonly AssessmentAttemptRecord[]
+): ItemEvidenceGroupAnalytics[] {
+  type ItemEvent = {
+    attemptId: string;
+    outcome: 'correct' | 'incorrect' | 'inconclusive';
+    assessedAt: number;
+    recordedAt: number;
+  };
+  type GroupAccumulator = {
+    definitionId: string;
+    definitionVersion: number;
+    scoringRuleVersion: string;
+    decisionScope: 'skill_level' | 'supporting_probe';
+    attemptIds: Set<string>;
+    latestEvidenceAt: number;
+    items: Map<string, ItemEvent[]>;
+  };
+
+  const groups = new Map<string, GroupAccumulator>();
+  for (const attempt of orderedAttempts(attempts)) {
+    const instrument = attempt.assessmentInstrument;
+    if (!instrument || !attempt.itemEvidence?.length) continue;
+
+    const key = JSON.stringify([
+      instrument.definitionId,
+      instrument.definitionVersion,
+      instrument.scoringRuleVersion,
+      instrument.decisionScope
+    ]);
+    let group = groups.get(key);
+    if (!group) {
+      group = {
+        definitionId: instrument.definitionId,
+        definitionVersion: instrument.definitionVersion,
+        scoringRuleVersion: instrument.scoringRuleVersion,
+        decisionScope: instrument.decisionScope,
+        attemptIds: new Set<string>(),
+        latestEvidenceAt: attempt.assessedAt,
+        items: new Map<string, ItemEvent[]>()
+      };
+      groups.set(key, group);
+    }
+
+    group.attemptIds.add(attempt.id);
+    group.latestEvidenceAt = Math.max(
+      group.latestEvidenceAt,
+      attempt.assessedAt
+    );
+    for (const item of attempt.itemEvidence) {
+      const events = group.items.get(item.itemId) ?? [];
+      events.push({
+        attemptId: attempt.id,
+        outcome: item.outcome,
+        assessedAt: attempt.assessedAt,
+        recordedAt: attempt.recordedAt
+      });
+      group.items.set(item.itemId, events);
+    }
+  }
+
+  return [...groups.values()]
+    .map((group) => {
+      const items = [...group.items.entries()]
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([itemId, events]) => {
+          const ordered = [...events].sort(
+            (left, right) =>
+              left.assessedAt - right.assessedAt ||
+              left.recordedAt - right.recordedAt ||
+              left.attemptId.localeCompare(right.attemptId)
+          );
+          const latest = ordered.at(-1)!;
+          let consecutiveIncorrectCount = 0;
+          for (let index = ordered.length - 1; index >= 0; index -= 1) {
+            if (ordered[index].outcome !== 'incorrect') break;
+            consecutiveIncorrectCount += 1;
+          }
+
+          return {
+            itemId,
+            attemptCount: ordered.length,
+            correctCount: ordered.filter(
+              (event) => event.outcome === 'correct'
+            ).length,
+            incorrectCount: ordered.filter(
+              (event) => event.outcome === 'incorrect'
+            ).length,
+            inconclusiveCount: ordered.filter(
+              (event) => event.outcome === 'inconclusive'
+            ).length,
+            latestOutcome: latest.outcome,
+            consecutiveIncorrectCount,
+            latestEvidenceAt: latest.assessedAt
+          };
+        });
+      const correctItemCount = items.reduce(
+        (sum, item) => sum + item.correctCount,
+        0
+      );
+      const incorrectItemCount = items.reduce(
+        (sum, item) => sum + item.incorrectCount,
+        0
+      );
+      const inconclusiveItemCount = items.reduce(
+        (sum, item) => sum + item.inconclusiveCount,
+        0
+      );
+      const answeredItemCount = correctItemCount + incorrectItemCount;
+
+      return {
+        definitionId: group.definitionId,
+        definitionVersion: group.definitionVersion,
+        scoringRuleVersion: group.scoringRuleVersion,
+        decisionScope: group.decisionScope,
+        assessmentAttemptCount: group.attemptIds.size,
+        itemCount: items.length,
+        correctItemCount,
+        incorrectItemCount,
+        inconclusiveItemCount,
+        answeredItemCount,
+        accuracyPercent:
+          answeredItemCount > 0
+            ? (correctItemCount / answeredItemCount) * 100
+            : null,
+        latestEvidenceAt: group.latestEvidenceAt,
+        items
+      };
+    })
+    .sort(
+      (left, right) =>
+        left.definitionId.localeCompare(right.definitionId) ||
+        left.definitionVersion - right.definitionVersion ||
+        left.scoringRuleVersion.localeCompare(right.scoringRuleVersion) ||
+        left.decisionScope.localeCompare(right.decisionScope)
+    );
+}
+
+/**
  * Build a deterministic, read-only adaptive practice view from active-learner
  * records. It never writes mastery, changes assessment history, or treats
  * practice duration/repetition counts as correctness.
@@ -126,10 +303,14 @@ export function buildAdaptivePracticeSnapshot(input: {
   now: number;
 }): AdaptivePracticeSnapshot {
   const skillById = new Map(input.skills.map((skill) => [skill.id, skill]));
-  const scopedAttempts = input.attempts.filter(
+  const scopedLearnerAttempts = input.attempts.filter(
     (attempt) =>
       attempt.learnerId === input.learnerId &&
       attempt.curriculumReleaseId === input.curriculumReleaseId &&
+      skillById.has(attempt.skillId)
+  );
+  const scopedAttempts = scopedLearnerAttempts.filter(
+    (attempt) =>
       attempt.assessmentInstrument?.decisionScope !== 'supporting_probe'
   );
   const scopedMastery = input.mastery.filter(
@@ -148,6 +329,17 @@ export function buildAdaptivePracticeSnapshot(input: {
     attemptsBySkill.set(attempt.skillId, list);
   }
 
+  const itemEvidenceAttemptsBySkill = new Map<
+    string,
+    AssessmentAttemptRecord[]
+  >();
+  for (const attempt of scopedLearnerAttempts) {
+    if (!attempt.assessmentInstrument || !attempt.itemEvidence?.length) continue;
+    const list = itemEvidenceAttemptsBySkill.get(attempt.skillId) ?? [];
+    list.push(attempt);
+    itemEvidenceAttemptsBySkill.set(attempt.skillId, list);
+  }
+
   const masteryBySkill = new Map(
     scopedMastery.map((record) => [record.skillId, record])
   );
@@ -160,6 +352,9 @@ export function buildAdaptivePracticeSnapshot(input: {
     const attempts = orderedAttempts(attemptsBySkill.get(skill.id) ?? []);
     const latest = attempts.at(-1) ?? null;
     const currentMastery = masteryBySkill.get(skill.id) ?? null;
+    const itemEvidenceGroups = buildItemEvidenceGroups(
+      itemEvidenceAttemptsBySkill.get(skill.id) ?? []
+    );
 
     const measuredAttempts = attempts.filter(
       (attempt) => attempt.evidenceType === 'measured' && attempt.score !== null
@@ -192,7 +387,8 @@ export function buildAdaptivePracticeSnapshot(input: {
       measuredScoreTrendDelta: scoreTrend.delta,
       accuracyEvidenceStatus: measuredScores.length
         ? 'available'
-        : 'insufficient_evidence'
+        : 'insufficient_evidence',
+      itemEvidenceGroups
     });
 
     const reasonCodes: AdaptiveReasonCode[] = [];
@@ -221,10 +417,52 @@ export function buildAdaptivePracticeSnapshot(input: {
       reasonCodes.push('not_yet_assessed');
       priority = 30;
       explanation =
-        'There is no assessment evidence for this skill yet; start with a short baseline check.';
+        'There is no whole-skill assessment evidence for this skill yet; item-level probes provide only a focused view.';
+    }
+
+    const repeatedIncorrectItems = itemEvidenceGroups.flatMap((group) =>
+      group.items
+        .filter((item) => item.consecutiveIncorrectCount >= 2)
+        .map((item) => ({ group, item }))
+    );
+    const supportingProbeAttempts = (
+      itemEvidenceAttemptsBySkill.get(skill.id) ?? []
+    ).filter(
+      (attempt) =>
+        attempt.assessmentInstrument?.decisionScope === 'supporting_probe'
+    );
+    const supportingProbeCount = supportingProbeAttempts.length;
+    const latestItemEvidenceAt = itemEvidenceGroups.reduce(
+      (latestAt, group) => Math.max(latestAt, group.latestEvidenceAt),
+      0
+    );
+
+    if (repeatedIncorrectItems.length > 0) {
+      const repeatedCount = repeatedIncorrectItems.length;
+      const longestStreak = Math.max(
+        ...repeatedIncorrectItems.map(
+          ({ item }) => item.consecutiveIncorrectCount
+        )
+      );
+      reasonCodes.push('repeated_item_incorrect');
+      priority = Math.max(priority, 85);
+      const repeatedExplanation =
+        repeatedCount === 1
+          ? `The same scored item has been answered incorrectly in ${longestStreak} consecutive attempts.`
+          : `The same ${repeatedCount} scored items have been answered incorrectly in consecutive attempts.`;
+      const safetyExplanation =
+        'Use this as a focused drill signal only; supporting item probes do not establish or change whole-skill mastery.';
+      explanation = explanation
+        ? `${explanation} ${repeatedExplanation} ${safetyExplanation}`
+        : `${repeatedExplanation} ${safetyExplanation}`;
     }
 
     if (reasonCodes.length) {
+      const evidenceType = latest
+        ? 'assessment'
+        : supportingProbeCount > 0
+          ? 'supporting_probe'
+          : 'missing';
       recommendations.push({
         id: `skill:${skill.id}`,
         targetType: 'skill',
@@ -233,9 +471,9 @@ export function buildAdaptivePracticeSnapshot(input: {
         priority,
         reasonCodes,
         explanation,
-        evidenceType: latest ? 'assessment' : 'missing',
-        evidenceCount: attempts.length,
-        latestEvidenceAt: latest?.assessedAt ?? null
+        evidenceType,
+        evidenceCount: latest ? attempts.length : supportingProbeCount,
+        latestEvidenceAt: Math.max(latest?.assessedAt ?? 0, latestItemEvidenceAt) || null
       });
     }
   }
