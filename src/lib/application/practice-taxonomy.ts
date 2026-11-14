@@ -56,10 +56,7 @@ export const PRACTICE_TAXONOMY_RELEASE_ID =
   practiceTaxonomy.curriculumReleaseId;
 
 export type AuthoredPracticeDimensionCategory =
-  | 'topic'
-  | 'technique'
-  | 'string'
-  | 'fret_position';
+  'topic' | 'technique' | 'string' | 'fret_position';
 
 export type AuthoredPracticeDimension = {
   category: AuthoredPracticeDimensionCategory;
