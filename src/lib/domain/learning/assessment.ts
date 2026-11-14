@@ -121,7 +121,7 @@ export const assessmentAttemptInputSchema = z
         message: 'Instrument provenance and item evidence must be recorded together.'
       });
     }
-    if (attempt.itemEvidence) {
+    if (attempt.itemEvidence && attempt.assessmentInstrument) {
       const itemIds = attempt.itemEvidence.map((item) => item.itemId);
       if (new Set(itemIds).size !== itemIds.length) {
         context.addIssue({
