@@ -86,28 +86,22 @@ const release = quote('curriculum-v1');
 const lesson = quote('y1-w01-lesson');
 const skill = quote('instrument.tuning');
 
-const priorRelease = quote('curriculum-v1.0.1');
-const priorLesson = quote('y3-rock-blues-w01-lesson');
-const secondRelease = quote('curriculum-v1.0.2');
-const secondLesson = quote('y1-w04-lesson');
-const thirdRelease = quote('curriculum-v1.0.3');
-const thirdLesson = quote('y3-rock-blues-w01-lesson');
-const currentRelease = quote('curriculum-v1.0.4');
-const currentLesson = quote('y1-w04-lesson');
 const immutableReleaseIds = [
   'curriculum-v1',
   'curriculum-v1.0.1',
   'curriculum-v1.0.2',
   'curriculum-v1.0.3',
-  'curriculum-v1.0.4'
+  'curriculum-v1.0.4',
+  'curriculum-v1.0.5',
+  'curriculum-v1.0.6'
 ];
 const releaseCountResult = runSql(
-  "SELECT COUNT(*) AS releaseCount FROM curriculum_releases WHERE id IN ('curriculum-v1', 'curriculum-v1.0.1', 'curriculum-v1.0.2', 'curriculum-v1.0.3', 'curriculum-v1.0.4');"
+  "SELECT COUNT(*) AS releaseCount FROM curriculum_releases WHERE id IN ('curriculum-v1', 'curriculum-v1.0.1', 'curriculum-v1.0.2', 'curriculum-v1.0.3', 'curriculum-v1.0.4', 'curriculum-v1.0.5', 'curriculum-v1.0.6');"
 );
 assert.equal(
   Number(findValue(parseOutput(releaseCountResult.stdout), 'releaseCount')),
-  5,
-  'All five immutable curriculum releases must remain available.'
+  7,
+  'All seven immutable curriculum releases must remain available.'
 );
 for (const releaseId of immutableReleaseIds) {
   const lessonCountResult = runSql(
@@ -153,16 +147,15 @@ runSql(
     ');'
 );
 
-const firstReleaseProgressId = quote(randomUUID());
-const secondReleaseProgressId = quote(randomUUID());
-const thirdReleaseProgressId = quote(randomUUID());
-const newReleaseProgressId = quote(randomUUID());
-for (const [progressIdForRelease, releaseId, lessonId] of [
-  [firstReleaseProgressId, priorRelease, priorLesson],
-  [secondReleaseProgressId, secondRelease, secondLesson],
-  [thirdReleaseProgressId, thirdRelease, thirdLesson],
-  [newReleaseProgressId, currentRelease, currentLesson]
-]) {
+const releaseProgressFixtures = [
+  [quote(randomUUID()), quote('curriculum-v1.0.1'), quote('y3-rock-blues-w01-lesson')],
+  [quote(randomUUID()), quote('curriculum-v1.0.2'), quote('y1-w04-lesson')],
+  [quote(randomUUID()), quote('curriculum-v1.0.3'), quote('y3-rock-blues-w01-lesson')],
+  [quote(randomUUID()), quote('curriculum-v1.0.4'), quote('y1-w04-lesson')],
+  [quote(randomUUID()), quote('curriculum-v1.0.5'), quote('y3-jazz-harmony-w01-lesson')],
+  [quote(randomUUID()), quote('curriculum-v1.0.6'), quote('y3-jazz-harmony-w08-lesson')]
+];
+for (const [progressIdForRelease, releaseId, lessonId] of releaseProgressFixtures) {
   runSql(
     'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, updated_at) VALUES (' +
       [
@@ -180,14 +173,14 @@ for (const [progressIdForRelease, releaseId, lessonId] of [
 const versionedProgressResult = runSql(
   'SELECT COUNT(*) AS progressCount FROM lesson_progress WHERE learner_id = ' +
     learner +
-    " AND ((curriculum_release_id = 'curriculum-v1' AND lesson_id = 'y1-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.1' AND lesson_id = 'y3-rock-blues-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.2' AND lesson_id = 'y1-w04-lesson') OR (curriculum_release_id = 'curriculum-v1.0.3' AND lesson_id = 'y3-rock-blues-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.4' AND lesson_id = 'y1-w04-lesson'));"
+    " AND ((curriculum_release_id = 'curriculum-v1' AND lesson_id = 'y1-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.1' AND lesson_id = 'y3-rock-blues-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.2' AND lesson_id = 'y1-w04-lesson') OR (curriculum_release_id = 'curriculum-v1.0.3' AND lesson_id = 'y3-rock-blues-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.4' AND lesson_id = 'y1-w04-lesson') OR (curriculum_release_id = 'curriculum-v1.0.5' AND lesson_id = 'y3-jazz-harmony-w01-lesson') OR (curriculum_release_id = 'curriculum-v1.0.6' AND lesson_id = 'y3-jazz-harmony-w08-lesson'));"
 );
 assert.equal(
   Number(
     findValue(parseOutput(versionedProgressResult.stdout), 'progressCount')
   ),
-  5,
-  'Learner progress must be independently stored against all immutable releases.'
+  7,
+  'Learner progress must be independently stored against all seven immutable releases.'
 );
 
 const result = runSql(
