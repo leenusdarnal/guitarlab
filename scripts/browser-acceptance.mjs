@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 4 &&
+      database.version === 5 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -235,8 +235,8 @@ try {
   });
   assert.equal(
     upgradeResult.version,
-    4,
-    'The existing v1 database should upgrade to v4'
+    5,
+    'The existing v1 database should upgrade to v5'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
