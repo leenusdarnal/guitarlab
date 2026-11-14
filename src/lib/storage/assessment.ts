@@ -1,6 +1,9 @@
 import { recordAssessmentAttempt } from '../application/services';
 import { scoreIntervalRecognitionResponse } from '../domain/learning/ear-training-assessment';
-import type { EarTrainingAnswer, EarTrainingExercise } from '../domain/music/ear-training';
+import type {
+  EarTrainingAnswer,
+  EarTrainingExercise
+} from '../domain/music/ear-training';
 import {
   ACTIVE_CURRICULUM_RELEASE_ID,
   listCurriculumSkills
@@ -153,7 +156,6 @@ export async function loadLatestActiveStandardTuningAssessment(): Promise<Assess
   }
 }
 
-
 /**
  * Append one explicitly selected interval-recognition response to the active
  * learner's local assessment history. This is a supporting probe only.
@@ -170,7 +172,9 @@ export async function recordActiveIntervalRecognitionAssessment(
     const skills: Pick<SkillRepository, 'findForRelease'> = {
       findForRelease: async (releaseId, skillId) => {
         if (releaseId !== ACTIVE_CURRICULUM_RELEASE_ID) return null;
-        return listCurriculumSkills().find((skill) => skill.id === skillId) ?? null;
+        return (
+          listCurriculumSkills().find((skill) => skill.id === skillId) ?? null
+        );
       }
     };
     const curriculum: Pick<CurriculumRepository, 'findLesson'> = {
