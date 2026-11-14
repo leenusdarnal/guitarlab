@@ -28,11 +28,18 @@ export type AdaptivePracticeRecommendation = {
 
 export type SkillAnalytics = {
   skillId: string;
+  displayName: string;
   category: string;
   assessmentCount: number;
   latestOutcome: AssessmentAttemptRecord['outcome'] | null;
+  measuredScoreCount: number;
+  measuredScoreAssessmentKind: AssessmentAttemptRecord['assessmentKind'] | null;
+  latestMeasuredScore: number | null;
   measuredScoreMean: number | null;
   measuredScoreSpread: number | null;
+  measuredScoreTrend:
+    'improving' | 'stable' | 'declining' | 'insufficient_evidence';
+  measuredScoreTrendDelta: number | null;
   accuracyEvidenceStatus: 'available' | 'insufficient_evidence';
 };
 
@@ -75,6 +82,33 @@ function standardDeviation(values: readonly number[]): number | null {
     values.reduce((sum, value) => sum + (value - average) ** 2, 0) /
       values.length
   );
+}
+
+/**
+ * Compare the latest four scores from one assessment kind. Two scores from
+ * each half reduce overreaction to a single result; a five-point threshold
+ * keeps tiny score fluctuations from being presented as a meaningful trend.
+ */
+function summariseMeasuredScoreTrend(scores: readonly number[]): {
+  status: 'improving' | 'stable' | 'declining' | 'insufficient_evidence';
+  delta: number | null;
+} {
+  if (scores.length < 4) {
+    return { status: 'insufficient_evidence', delta: null };
+  }
+
+  const comparison = scores.slice(-4);
+  const earlierMean = mean(comparison.slice(0, 2));
+  const recentMean = mean(comparison.slice(2));
+  if (earlierMean === null || recentMean === null) {
+    return { status: 'insufficient_evidence', delta: null };
+  }
+
+  const delta = recentMean - earlierMean;
+  return {
+    status: delta >= 5 ? 'improving' : delta <= -5 ? 'declining' : 'stable',
+    delta
+  };
 }
 
 /**
@@ -126,19 +160,35 @@ export function buildAdaptivePracticeSnapshot(input: {
     const latest = attempts.at(-1) ?? null;
     const currentMastery = masteryBySkill.get(skill.id) ?? null;
 
-    const measuredScores = attempts
-      .filter(
-        (attempt) =>
-          attempt.evidenceType === 'measured' && attempt.score !== null
-      )
-      .map((attempt) => attempt.score as number);
+    const measuredAttempts = attempts.filter(
+      (attempt) => attempt.evidenceType === 'measured' && attempt.score !== null
+    );
+    // Scores from different assessment kinds may not be comparable. Use only
+    // the most recently used kind for this skill's score summaries and trend.
+    const measuredScoreAssessmentKind =
+      measuredAttempts.at(-1)?.assessmentKind ?? null;
+    const comparableMeasuredAttempts = measuredScoreAssessmentKind
+      ? measuredAttempts.filter(
+          (attempt) => attempt.assessmentKind === measuredScoreAssessmentKind
+        )
+      : [];
+    const measuredScores = comparableMeasuredAttempts.map(
+      (attempt) => attempt.score as number
+    );
+    const scoreTrend = summariseMeasuredScoreTrend(measuredScores);
     skillAnalytics.push({
       skillId: skill.id,
+      displayName: skill.displayName,
       category: skill.category,
       assessmentCount: attempts.length,
       latestOutcome: latest?.outcome ?? null,
+      measuredScoreCount: measuredScores.length,
+      measuredScoreAssessmentKind,
+      latestMeasuredScore: measuredScores.at(-1) ?? null,
       measuredScoreMean: mean(measuredScores),
       measuredScoreSpread: standardDeviation(measuredScores),
+      measuredScoreTrend: scoreTrend.status,
+      measuredScoreTrendDelta: scoreTrend.delta,
       accuracyEvidenceStatus: measuredScores.length
         ? 'available'
         : 'insufficient_evidence'

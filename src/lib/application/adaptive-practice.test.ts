@@ -156,7 +156,77 @@ describe('buildAdaptivePracticeSnapshot', () => {
     );
     expect(analytics?.measuredScoreMean).toBe(90);
     expect(analytics?.measuredScoreSpread).toBe(10);
+    expect(analytics?.measuredScoreCount).toBe(2);
+    expect(analytics?.latestMeasuredScore).toBe(100);
+    expect(analytics?.measuredScoreTrend).toBe('insufficient_evidence');
+    expect(analytics?.measuredScoreTrendDelta).toBeNull();
     expect(analytics?.accuracyEvidenceStatus).toBe('available');
+  });
+
+  it.each([
+    { scores: [40, 40, 60, 60], status: 'improving', delta: 20 },
+    { scores: [50, 50, 53, 53], status: 'stable', delta: 3 },
+    { scores: [90, 90, 70, 70], status: 'declining', delta: -20 }
+  ] as const)(
+    'classifies measured score direction from the latest four comparable scores',
+    ({ scores, status, delta }) => {
+      const result = buildAdaptivePracticeSnapshot({
+        learnerId: '00000000-0000-4000-8000-000000000001',
+        curriculumReleaseId: 'curriculum-v1',
+        skills,
+        attempts: scores.map((score, index) =>
+          attempt(
+            `trend-${index}`,
+            'rhythm.pulse',
+            'passed',
+            (index + 1) * 100,
+            score,
+            'measured'
+          )
+        ),
+        mastery: [],
+        practiceEvidence: [],
+        now: 1000
+      });
+      const analytics = result.skillAnalytics.find(
+        (item) => item.skillId === 'rhythm.pulse'
+      );
+      expect(analytics?.measuredScoreTrend).toBe(status);
+      expect(analytics?.measuredScoreTrendDelta).toBe(delta);
+    }
+  );
+
+  it('keeps score summaries within the most recently used assessment kind', () => {
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        {
+          ...attempt('old-1', 'rhythm.pulse', 'passed', 100, 95),
+          assessmentKind: 'checkpoint'
+        },
+        {
+          ...attempt('old-2', 'rhythm.pulse', 'passed', 150, 90),
+          assessmentKind: 'checkpoint'
+        },
+        attempt('new-1', 'rhythm.pulse', 'passed', 200, 50),
+        attempt('new-2', 'rhythm.pulse', 'passed', 300, 50),
+        attempt('new-3', 'rhythm.pulse', 'passed', 400, 70),
+        attempt('new-4', 'rhythm.pulse', 'passed', 500, 70)
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 600
+    });
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'rhythm.pulse'
+    );
+    expect(analytics?.measuredScoreAssessmentKind).toBe('measured');
+    expect(analytics?.measuredScoreCount).toBe(4);
+    expect(analytics?.measuredScoreMean).toBe(60);
+    expect(analytics?.measuredScoreTrend).toBe('improving');
+    expect(analytics?.measuredScoreTrendDelta).toBe(20);
   });
 
   it('distinguishes missing assessment evidence from a poor score and computes topic coverage', () => {
