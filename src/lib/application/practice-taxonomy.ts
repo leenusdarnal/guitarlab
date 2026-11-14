@@ -55,6 +55,54 @@ export const PRACTICE_TAXONOMY_VERSION = practiceTaxonomy.version;
 export const PRACTICE_TAXONOMY_RELEASE_ID =
   practiceTaxonomy.curriculumReleaseId;
 
+export type AuthoredPracticeDimensionCategory =
+  | 'topic'
+  | 'technique'
+  | 'string'
+  | 'fret_position';
+
+export type AuthoredPracticeDimension = {
+  category: AuthoredPracticeDimensionCategory;
+  id: string;
+  label: string;
+};
+
+/** List only dimensions defined by the active authored taxonomy. */
+export function listAuthoredPracticeDimensions(): AuthoredPracticeDimension[] {
+  if (PRACTICE_TAXONOMY_RELEASE_ID !== ACTIVE_CURRICULUM_RELEASE_ID) {
+    return [];
+  }
+
+  const dimensions: AuthoredPracticeDimension[] = [
+    ...practiceTaxonomy.topics.map((item) => ({
+      category: 'topic' as const,
+      id: item.id,
+      label: item.label
+    })),
+    ...practiceTaxonomy.techniques.map((item) => ({
+      category: 'technique' as const,
+      id: item.id,
+      label: item.label
+    })),
+    ...practiceTaxonomy.strings.map((item) => ({
+      category: 'string' as const,
+      id: String(item.number),
+      label: item.label
+    })),
+    ...practiceTaxonomy.fretPositions.map((item) => ({
+      category: 'fret_position' as const,
+      id: item.id,
+      label: item.label
+    }))
+  ];
+
+  return dimensions.sort(
+    (left, right) =>
+      left.category.localeCompare(right.category) ||
+      left.label.localeCompare(right.label)
+  );
+}
+
 /**
  * Return only exercise scopes tied to the active curriculum release.
  * A missing or stale taxonomy is unavailable, never guessed from free text.
