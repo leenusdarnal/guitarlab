@@ -217,7 +217,14 @@ Use targeted external research only when a specific question cannot be resolved 
 ## 11. Related repository artefacts
 
 - `content/curriculum/skill-catalog.json` — canonical versioned skill catalogue.
-- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.\n- `docs/M7_2_SKILL_DEFINITION_AUDIT.md` — preliminary review of all 34 skill definitions and proposed observable evidence.\n- `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` — source-derived register covering all 152 lessons, current mappings, focus, and checkpoint evidence cues.\n- `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` — evidence-based review of five initially flagged lessons.
+- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.
+- `docs/M7_2_SKILL_DEFINITION_AUDIT.md` — preliminary review of all 34 skill definitions and proposed observable evidence.
+- `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` — source-derived register covering all 152 lessons, current mappings, focus, and checkpoint evidence cues.
+- `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` — evidence-based review of five initially flagged lessons.
+- `docs/M7_2_MAPPING_LEXICAL_SCREEN.md` — advisory scan of 341 mappings, with a manually reviewable phrase-match queue.
+- `docs/M7_2_EVIDENCE_BASED_CURRICULUM_REVIEW.md` — research synthesis and evidence-based improvement roadmap.
+- `docs/M7_2_LESSON_CONTENT_QUALITY_AUDIT.md` — dataset quality findings, including generic objective and Year 3+ capstone templates.
+- `content/curriculum/skill-assessment-profiles.json` — draft assessment profiles for all 34 existing skills; not active scoring rules.
 - `src/lib/application/skill-catalog.ts` — application-level catalogue access.
 - Curriculum validation scripts/tests — automated integrity enforcement.
 - M7.2 adaptive practice implementation — downstream consumer of skill and learner evidence.
