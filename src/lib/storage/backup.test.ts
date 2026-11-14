@@ -259,7 +259,9 @@ describe('learner backup contract', () => {
       assessmentInstrument: {
         definitionId: 'guitar.standard-tuning-open-pitches',
         definitionVersion: 1,
-        scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        scoringRuleVersion: 'two-item-round-trip-test-v1',
+        itemCount: 2,
+        passThreshold: 100,
         decisionScope: 'supporting_probe'
       },
       itemEvidence: [
@@ -290,7 +292,9 @@ describe('learner backup contract', () => {
             {
               assessmentInstrument: {
                 definitionId: 'guitar.standard-tuning-open-pitches',
-                definitionVersion: 1
+                definitionVersion: 1,
+                itemCount: 2,
+                passThreshold: 100
               },
               itemEvidence: [
                 { itemId: 'standard-tuning.string-6-open-pitch', response: 'E2' },
