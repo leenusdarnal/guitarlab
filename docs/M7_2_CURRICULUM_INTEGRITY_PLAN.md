@@ -159,7 +159,7 @@ Use this register as the single high-level progress view. Update it as work is c
 | Workstream | Coverage / target | Status | Evidence / notes |
 |---|---:|---|---|
 | Catalogue definition audit | 34 skills | In progress | Preliminary definition review documented in `docs/M7_2_SKILL_DEFINITION_AUDIT.md`; curriculum-owner approval pending |
-| Lesson mapping audit | 152 lessons | In progress | Complete source-derived register created in `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md`; row-by-row evidence review remains open |
+| Lesson mapping audit | 152 lessons | In progress | Register created; five flagged lessons reviewed in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` (3 provisionally supported, 2 decisions pending); 147 remaining rows need review |
 | Progression and coverage | All 34 skills across curriculum | Not started | |
 | Assessment-readiness | 34 skills | In progress | Draft evidence routes and assessment gaps documented; rubric approval pending |
 | Versioning and learner-data safety | Catalogue policy | In progress | Versioned catalogue exists; policy review remains |
@@ -217,11 +217,11 @@ Use targeted external research only when a specific question cannot be resolved 
 ## 11. Related repository artefacts
 
 - `content/curriculum/skill-catalog.json` — canonical versioned skill catalogue.
-- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.\n- `docs/M7_2_SKILL_DEFINITION_AUDIT.md` — preliminary review of all 34 skill definitions and proposed observable evidence.\n- `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` — source-derived register covering all 152 lessons, current mappings, focus, and checkpoint evidence cues.
+- `docs/M7_2_SKILL_CATALOG_AUDIT.md` — initial skill catalogue and mapping audit.\n- `docs/M7_2_SKILL_DEFINITION_AUDIT.md` — preliminary review of all 34 skill definitions and proposed observable evidence.\n- `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` — source-derived register covering all 152 lessons, current mappings, focus, and checkpoint evidence cues.\n- `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` — evidence-based review of five initially flagged lessons.
 - `src/lib/application/skill-catalog.ts` — application-level catalogue access.
 - Curriculum validation scripts/tests — automated integrity enforcement.
 - M7.2 adaptive practice implementation — downstream consumer of skill and learner evidence.
 
 ---
 
-**Next action:** Review the five flagged lesson candidates against their complete lesson content, then continue row-by-row through the 152-lesson mapping register. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
+**Next action:** Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20, then continue row-by-row through the remaining 147 lessons. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
