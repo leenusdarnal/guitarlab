@@ -1187,7 +1187,6 @@ try {
   ]);
   await competingPage.close();
 
-
   // M7 skill-state transparency: explanations and learner corrections persist locally.
   const skillFixture = await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => {
