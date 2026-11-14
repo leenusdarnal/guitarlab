@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "46bfcb6c-1094-5602-a11a-73436160f66e",
+  "id": "8de75551-ce53-54cd-af05-90a073896303",
   "prevId": "9c6a296d-80c9-5d93-a065-e8335d2a0c1e",
   "tables": {
     "curriculum_lessons": {
@@ -74,7 +74,7 @@
       "indexes": {
         "curriculum_lessons_curriculum_week_idx": {
           "name": "curriculum_lessons_curriculum_week_idx",
-          "columns": ["release_id","curriculum_id","week"],
+          "columns": ["release_id", "curriculum_id", "week"],
           "isUnique": false
         }
       },
@@ -91,7 +91,7 @@
       },
       "compositePrimaryKeys": {
         "curriculum_lessons_release_id_lesson_id_pk": {
-          "columns": ["release_id","lesson_id"],
+          "columns": ["release_id", "lesson_id"],
           "name": "curriculum_lessons_release_id_lesson_id_pk"
         }
       },
@@ -148,7 +148,7 @@
       },
       "compositePrimaryKeys": {
         "curriculum_release_skills_release_id_skill_id_pk": {
-          "columns": ["release_id","skill_id"],
+          "columns": ["release_id", "skill_id"],
           "name": "curriculum_release_skills_release_id_skill_id_pk"
         }
       },
@@ -348,7 +348,7 @@
       "indexes": {
         "lesson_completion_events_learner_completed_idx": {
           "name": "lesson_completion_events_learner_completed_idx",
-          "columns": ["learner_id","completed_at"],
+          "columns": ["learner_id", "completed_at"],
           "isUnique": false
         }
       },
@@ -357,8 +357,8 @@
           "name": "lesson_completion_events_progress_owner_fk",
           "tableFrom": "lesson_completion_events",
           "tableTo": "lesson_progress",
-          "columnsFrom": ["progress_id","learner_id"],
-          "columnsTo": ["id","learner_id"],
+          "columnsFrom": ["progress_id", "learner_id"],
+          "columnsTo": ["id", "learner_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         },
@@ -366,8 +366,8 @@
           "name": "lesson_completion_events_curriculum_lesson_fk",
           "tableFrom": "lesson_completion_events",
           "tableTo": "curriculum_lessons",
-          "columnsFrom": ["curriculum_release_id","lesson_id"],
-          "columnsTo": ["release_id","lesson_id"],
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -447,17 +447,17 @@
       "indexes": {
         "lesson_progress_learner_release_lesson_unique": {
           "name": "lesson_progress_learner_release_lesson_unique",
-          "columns": ["learner_id","curriculum_release_id","lesson_id"],
+          "columns": ["learner_id", "curriculum_release_id", "lesson_id"],
           "isUnique": true
         },
         "lesson_progress_id_learner_unique": {
           "name": "lesson_progress_id_learner_unique",
-          "columns": ["id","learner_id"],
+          "columns": ["id", "learner_id"],
           "isUnique": true
         },
         "lesson_progress_learner_status_idx": {
           "name": "lesson_progress_learner_status_idx",
-          "columns": ["learner_id","status"],
+          "columns": ["learner_id", "status"],
           "isUnique": false
         }
       },
@@ -475,8 +475,8 @@
           "name": "lesson_progress_curriculum_lesson_fk",
           "tableFrom": "lesson_progress",
           "tableTo": "curriculum_lessons",
-          "columnsFrom": ["curriculum_release_id","lesson_id"],
-          "columnsTo": ["release_id","lesson_id"],
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -597,7 +597,7 @@
       "indexes": {
         "practice_sessions_learner_started_idx": {
           "name": "practice_sessions_learner_started_idx",
-          "columns": ["learner_id","started_at"],
+          "columns": ["learner_id", "started_at"],
           "isUnique": false
         }
       },
@@ -615,8 +615,8 @@
           "name": "practice_sessions_primary_lesson_fk",
           "tableFrom": "practice_sessions",
           "tableTo": "curriculum_lessons",
-          "columnsFrom": ["primary_curriculum_release_id","primary_lesson_id"],
-          "columnsTo": ["release_id","lesson_id"],
+          "columnsFrom": ["primary_curriculum_release_id", "primary_lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -753,12 +753,12 @@
       "indexes": {
         "skill_assessment_attempts_mastery_fk_unique": {
           "name": "skill_assessment_attempts_mastery_fk_unique",
-          "columns": ["id","learner_id","skill_id","curriculum_release_id"],
+          "columns": ["id", "learner_id", "skill_id", "curriculum_release_id"],
           "isUnique": true
         },
         "skill_assessment_attempts_learner_skill_time_idx": {
           "name": "skill_assessment_attempts_learner_skill_time_idx",
-          "columns": ["learner_id","skill_id","assessed_at"],
+          "columns": ["learner_id", "skill_id", "assessed_at"],
           "isUnique": false
         }
       },
@@ -776,8 +776,8 @@
           "name": "skill_assessment_attempts_release_skill_fk",
           "tableFrom": "skill_assessment_attempts",
           "tableTo": "curriculum_release_skills",
-          "columnsFrom": ["curriculum_release_id","skill_id"],
-          "columnsTo": ["release_id","skill_id"],
+          "columnsFrom": ["curriculum_release_id", "skill_id"],
+          "columnsTo": ["release_id", "skill_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         },
@@ -785,8 +785,8 @@
           "name": "skill_assessment_attempts_lesson_fk",
           "tableFrom": "skill_assessment_attempts",
           "tableTo": "curriculum_lessons",
-          "columnsFrom": ["curriculum_release_id","lesson_id"],
-          "columnsTo": ["release_id","lesson_id"],
+          "columnsFrom": ["curriculum_release_id", "lesson_id"],
+          "columnsTo": ["release_id", "lesson_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -886,7 +886,7 @@
       "indexes": {
         "skill_mastery_learner_state_idx": {
           "name": "skill_mastery_learner_state_idx",
-          "columns": ["learner_id","state"],
+          "columns": ["learner_id", "state"],
           "isUnique": false
         }
       },
@@ -904,8 +904,8 @@
           "name": "skill_mastery_release_skill_fk",
           "tableFrom": "skill_mastery",
           "tableTo": "curriculum_release_skills",
-          "columnsFrom": ["curriculum_release_id","skill_id"],
-          "columnsTo": ["release_id","skill_id"],
+          "columnsFrom": ["curriculum_release_id", "skill_id"],
+          "columnsTo": ["release_id", "skill_id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         },
@@ -919,14 +919,19 @@
             "skill_id",
             "curriculum_release_id"
           ],
-          "columnsTo": ["id","learner_id","skill_id","curriculum_release_id"],
+          "columnsTo": [
+            "id",
+            "learner_id",
+            "skill_id",
+            "curriculum_release_id"
+          ],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "skill_mastery_learner_id_curriculum_release_id_skill_id_pk": {
-          "columns": ["learner_id","curriculum_release_id","skill_id"],
+          "columns": ["learner_id", "curriculum_release_id", "skill_id"],
           "name": "skill_mastery_learner_id_curriculum_release_id_skill_id_pk"
         }
       },
