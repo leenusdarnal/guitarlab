@@ -209,18 +209,18 @@ The following are known candidates from the initial source audit. They are flagg
 | Year 1 | 52 |
 | Year 2 | 52 |
 | Year 3+ | 48 |
-| Lessons flagged for focused review | 4 |
+| Lessons flagged for focused review | 5 |
 | Lessons still requiring explicit disposition | 152 |
 
-**Important:** Register generation is not the same as mapping validation. The mapping audit remains incomplete until all 152 rows have a recorded disposition and supporting evidence. The five known candidates should be reviewed first, followed by the remaining lessons in curriculum order.
+**Important:** Register generation is not the same as mapping validation. The mapping audit remains incomplete until all 152 rows have a recorded disposition and supporting evidence. The five candidates have an initial evidence review in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md`: three mapping sets are provisionally supported and two need curriculum-owner decisions. Continue with the remaining lessons in curriculum order.
 
 ## 6. Sign-off
 
-- [ ] All 152 lessons reviewed against objectives and checkpoints.
+- [ ] All 152 lessons reviewed against objectives and checkpoints.\n- [x] Five initially flagged lessons received a focused evidence review; three mappings are provisionally supported and two require curriculum-owner decisions.
 - [ ] Every existing skill association has a keep/remove/clarify/escalate disposition.
 - [ ] Missing skill coverage has been recorded without inventing identifiers.
 - [ ] All proposed mapping changes have a written rationale.
 - [ ] Curriculum owner has approved disputed or consequential changes.
 - [ ] Automated curriculum validation passes after any approved changes.
 
-**Next action:** Review the five flagged candidates against their complete lesson content, then proceed through the remaining register in year/week order. Preserve all existing mappings until the evidence and curriculum-owner decision are recorded.
+**Next action:** Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20, then proceed through the remaining register in year/week order. Preserve all existing mappings until the evidence and curriculum-owner decision are recorded.
