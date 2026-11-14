@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   getAuthoredPracticeScope,
+  listAuthoredPracticeDimensions,
   listAuthoredPracticeScopes,
   PRACTICE_TAXONOMY_RELEASE_ID,
   PRACTICE_TAXONOMY_VERSION
@@ -40,6 +41,28 @@ describe('versioned authored exercise practice taxonomy', () => {
       ],
       stringNumbers: []
     });
+  });
+
+  it('lists only dimensions defined by the active authored taxonomy', () => {
+    const dimensions = listAuthoredPracticeDimensions();
+    expect(dimensions).toContainEqual({
+      category: 'topic',
+      id: 'instrument.standard-tuning',
+      label: 'Standard tuning'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'string',
+      id: '1',
+      label: 'High E'
+    });
+    expect(dimensions).toContainEqual({
+      category: 'fret_position',
+      id: 'position.open-position',
+      label: 'Open position'
+    });
+    expect(dimensions.some((dimension) => dimension.id === 'free-text')).toBe(
+      false
+    );
   });
 
   it('returns no scope for generic or unknown exercise IDs instead of guessing', () => {
