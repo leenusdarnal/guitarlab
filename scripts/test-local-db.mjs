@@ -148,14 +148,34 @@ runSql(
 );
 
 const releaseProgressFixtures = [
-  [quote(randomUUID()), quote('curriculum-v1.0.1'), quote('y3-rock-blues-w01-lesson')],
+  [
+    quote(randomUUID()),
+    quote('curriculum-v1.0.1'),
+    quote('y3-rock-blues-w01-lesson')
+  ],
   [quote(randomUUID()), quote('curriculum-v1.0.2'), quote('y1-w04-lesson')],
-  [quote(randomUUID()), quote('curriculum-v1.0.3'), quote('y3-rock-blues-w01-lesson')],
+  [
+    quote(randomUUID()),
+    quote('curriculum-v1.0.3'),
+    quote('y3-rock-blues-w01-lesson')
+  ],
   [quote(randomUUID()), quote('curriculum-v1.0.4'), quote('y1-w04-lesson')],
-  [quote(randomUUID()), quote('curriculum-v1.0.5'), quote('y3-jazz-harmony-w01-lesson')],
-  [quote(randomUUID()), quote('curriculum-v1.0.6'), quote('y3-jazz-harmony-w08-lesson')]
+  [
+    quote(randomUUID()),
+    quote('curriculum-v1.0.5'),
+    quote('y3-jazz-harmony-w01-lesson')
+  ],
+  [
+    quote(randomUUID()),
+    quote('curriculum-v1.0.6'),
+    quote('y3-jazz-harmony-w08-lesson')
+  ]
 ];
-for (const [progressIdForRelease, releaseId, lessonId] of releaseProgressFixtures) {
+for (const [
+  progressIdForRelease,
+  releaseId,
+  lessonId
+] of releaseProgressFixtures) {
   runSql(
     'INSERT INTO lesson_progress (id, learner_id, curriculum_release_id, lesson_id, status, started_at, updated_at) VALUES (' +
       [
