@@ -163,7 +163,7 @@ Use this register as the single high-level progress view. Update it as work is c
 | Progression and coverage | All 34 skills across curriculum | Not started | |
 | Assessment-readiness | 34 skills | In progress | Separate draft machine-readable profiles created for all 34 skills (102 criteria) with evidence, retention, transfer and human-review guidance; no score thresholds or automated pass/fail approved |
 | Versioning and learner-data safety | Catalogue policy | In progress | Versioned catalogue exists; policy review remains |
-| Automated validation | Catalogue + mappings + profiles | In progress | Curriculum validator now checks draft profile coverage, catalogue/release version match, criteria/evidence, retention/transfer probes and automation guardrails; CI rerun pending |
+| Automated validation | Catalogue + mappings + profiles + quality diagnostics | In progress | Validator checks all 34 draft profiles and emits non-blocking duplication advisories for generic objectives, success criteria, key ideas and Year 3+ capstone templates; latest CI rerun pending |
 | Curriculum-owner review | All findings | Not started | |
 | Final sign-off | All workstreams | Not started | |
 
@@ -224,4 +224,4 @@ Use targeted external research only when a specific question cannot be resolved 
 
 ---
 
-**Next action:** Verify CI for the new assessment-profile validator, then continue the mapping audit with the high-reuse `harmony.open-chords` and repeated capstone skill mappings as priority review groups. Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
+**Next action:** Verify CI for the new assessment-profile and content-quality diagnostics. Continue the mapping audit with the 33 `harmony.open-chords` associations and the six lexical-screen priority skill groups. Begin a controlled Year 3+ lesson-authoring pilot after the assessment profile and content standards are reviewed. Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
