@@ -3,7 +3,10 @@
   import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
   import { AudioContextSession } from '../../../lib/audio/audio-context-session';
   import { resolve } from '$app/paths';
-  import { recordActiveIntervalRecognitionAssessment } from '../../../lib/storage/assessment';
+  import {
+    recordActiveIntervalRecognitionAssessment,
+    recordActivePulseRecognitionAssessment
+  } from '../../../lib/storage/assessment';
   import {
     createEarTrainingExercise,
     type EarTrainingAnswer,
@@ -128,10 +131,14 @@
       feedbackState = 'incorrect';
     }
 
-    if (kind === 'interval') {
+    if (kind === 'interval' || kind === 'pulse') {
       evidenceSaveState = 'saving';
       try {
-        await recordActiveIntervalRecognitionAssessment(exercise, answer);
+        if (kind === 'pulse') {
+          await recordActivePulseRecognitionAssessment(exercise, answer);
+        } else {
+          await recordActiveIntervalRecognitionAssessment(exercise, answer);
+        }
         evidenceSaveState = 'saved';
       } catch {
         evidenceSaveState = 'error';
@@ -228,12 +235,18 @@
       </div>
     {/if}
 
-    {#if kind === 'interval' && evidenceSaveState === 'saving'}
-      <p class="audio-caption" role="status">Saving this interval response on this device…</p>
-    {:else if kind === 'interval' && evidenceSaveState === 'saved'}
-      <p class="audio-caption" role="status">Interval item evidence saved locally. This supporting probe does not establish skill mastery.</p>
-    {:else if kind === 'interval' && evidenceSaveState === 'error'}
-      <p class="audio-error" role="alert">This response could not be saved locally. You can retry the answer to try saving again.</p>
+    {#if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'saving'}
+      <p class="audio-caption" role="status">
+        Saving this {kind === 'pulse' ? 'pulse' : 'interval'} response on this device…
+      </p>
+    {:else if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'saved'}
+      <p class="audio-caption" role="status">
+        {kind === 'pulse' ? 'Pulse' : 'Interval'} item evidence saved locally. This supporting probe does not establish skill mastery.
+      </p>
+    {:else if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'error'}
+      <p class="audio-error" role="alert">
+        This response could not be saved locally. You can retry the answer to try saving again.
+      </p>
     {/if}
 
     {#if audioError}

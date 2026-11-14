@@ -1,5 +1,11 @@
 import { recordAssessmentAttempt } from '../application/services';
-import { scoreIntervalRecognitionResponse } from '../domain/learning/ear-training-assessment';
+import {
+  intervalRecognitionAssessment,
+  pulseRecognitionAssessment,
+  scoreIntervalRecognitionResponse,
+  scorePulseRecognitionResponse,
+  type ScoredEarTrainingResponse
+} from '../domain/learning/ear-training-assessment';
 import type {
   EarTrainingAnswer,
   EarTrainingExercise
@@ -157,47 +163,50 @@ export async function loadLatestActiveStandardTuningAssessment(): Promise<Assess
 }
 
 /**
- * Append one explicitly selected interval-recognition response to the active
- * learner's local assessment history. This is a supporting probe only.
+ * Append one objectively scored, locally generated ear-training response.
+ * Each supported exercise kind is explicitly mapped to its authored skill.
  */
-export async function recordActiveIntervalRecognitionAssessment(
-  exercise: EarTrainingExercise,
-  response: EarTrainingAnswer
+async function recordActiveEarTrainingProbe(
+  skillId: string,
+  exerciseKind: 'interval' | 'pulse',
+  scored: ScoredEarTrainingResponse
 ): Promise<AssessmentAttemptRecord> {
-  const scored = scoreIntervalRecognitionResponse(exercise, response);
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
     const repositories = createIndexedDbRepositories(database);
     const skills: Pick<SkillRepository, 'findForRelease'> = {
-      findForRelease: async (releaseId, skillId) => {
+      findForRelease: async (releaseId, requestedSkillId) => {
         if (releaseId !== ACTIVE_CURRICULUM_RELEASE_ID) return null;
         return (
-          listCurriculumSkills().find((skill) => skill.id === skillId) ?? null
+          listCurriculumSkills().find(
+            (skill) => skill.id === requestedSkillId
+          ) ?? null
         );
       }
     };
     const curriculum: Pick<CurriculumRepository, 'findLesson'> = {
       findLesson: async () => null
     };
+    const isCorrect = scored.itemEvidence[0].outcome === 'correct';
+    const label = exerciseKind === 'pulse' ? 'pulse' : 'interval';
 
     return await recordAssessmentAttempt(
       {
         learnerId: profile.id,
         submission: {
           curriculumReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
-          skillId: 'ear.intervals',
+          skillId,
           lessonId: null,
           assessmentKind: 'measured',
           evidenceType: 'measured',
           outcome: scored.outcome,
           score: scored.score,
-          evidenceSummary:
-            scored.outcome === 'passed'
-              ? 'The selected interval matched the generated listening item.'
-              : 'The selected interval did not match the generated listening item.',
+          evidenceSummary: isCorrect
+            ? `The selected ${label} response matched the generated listening item.`
+            : `The selected ${label} response did not match the generated listening item.`,
           evidence: {
-            source: 'locally-generated-interval-recognition',
+            source: `locally-generated-${label}-recognition`,
             itemId: scored.itemEvidence[0].itemId
           },
           assessmentInstrument: scored.assessmentInstrument,
@@ -214,4 +223,30 @@ export async function recordActiveIntervalRecognitionAssessment(
   } finally {
     database.close();
   }
+}
+
+/** Append a supporting-probe outcome for the interval-recognition exercise. */
+export async function recordActiveIntervalRecognitionAssessment(
+  exercise: EarTrainingExercise,
+  response: EarTrainingAnswer
+): Promise<AssessmentAttemptRecord> {
+  const scored = scoreIntervalRecognitionResponse(exercise, response);
+  return recordActiveEarTrainingProbe(
+    intervalRecognitionAssessment.skillId,
+    'interval',
+    scored
+  );
+}
+
+/** Append a supporting-probe outcome for the pulse-recognition exercise. */
+export async function recordActivePulseRecognitionAssessment(
+  exercise: EarTrainingExercise,
+  response: EarTrainingAnswer
+): Promise<AssessmentAttemptRecord> {
+  const scored = scorePulseRecognitionResponse(exercise, response);
+  return recordActiveEarTrainingProbe(
+    pulseRecognitionAssessment.skillId,
+    'pulse',
+    scored
+  );
 }
