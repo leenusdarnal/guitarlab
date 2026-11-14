@@ -8,6 +8,13 @@
       "when": 1794405675487,
       "tag": "0000_overrated_star_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1794614400000,
+      "tag": "0001_curriculum_release_1_0_1",
+      "breakpoints": true
     }
   ]
 }
