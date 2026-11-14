@@ -122,7 +122,7 @@ M7.1's core evidence loop is implemented in PRs #50–59. M7.2 now has determini
 
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
 
-M7.1's core evidence loop is implemented in PRs #50–59. M7.2 is partially implemented by PRs #92–94: recommendations are derived and read-only, learner/release scoped and evidence-aware. Next is an auditable local dismiss/correct workflow. Do not infer accuracy from self-reported clean repetitions or mastery from time, lesson completion or repetitions; do not invent per-item accuracy where the source records do not contain it.
+M7.1's core evidence loop is implemented in PRs #50–59. M7.2 now has deterministic read-only recommendations, category assessment coverage, append-only local learner feedback and comparable measured-score trends (PRs #92–94, #103–104). Issue #69 remains open for item-level correctness/confusion and topic/fretboard coverage because current practice observations are learner-entered activity notes, not item outcomes or structured instrument-location evidence. Do not infer accuracy from clean repetitions or mastery from time, lesson completion or repetitions.
 
 ### M8 — Musicianship and repertoire
 
