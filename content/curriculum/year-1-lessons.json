@@ -680,11 +680,7 @@
       "week": 4,
       "route": "core",
       "title": "First chord shapes",
-      "focus": [
-        "Form Em, pick strings 6 through 1 separately and correct one unclear note.",
-        "Form G and repeat the same six-string check.",
-        "Alternate Em and G after four counted beats; keep the strumming hand moving during the change."
-      ],
+      "focus": "Em and G open-position shapes: clean individual strings and relaxed changes",
       "estimatedMinutes": 30,
       "startingTempoBpm": 52,
       "learningObjectives": [
@@ -1364,11 +1360,7 @@
       "week": 7,
       "route": "core",
       "title": "Strum in time",
-      "focus": [
-        "Play eight evenly spaced down-up strokes on muted strings while saying the count.",
-        "Repeat and skip the string contact on the selected '&' while keeping the hand's motion.",
-        "Add one chord and preserve the same timing; lower the tempo if the subdivision becomes uneven."
-      ],
+      "focus": "Downstrokes, upstrokes, subdivisions and continuous hand motion",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
@@ -2278,11 +2270,7 @@
       "week": 11,
       "route": "core",
       "title": "Your first music map",
-      "focus": [
-        "Find E, F, G and A on the low E string and say the fret number for each.",
-        "Find A, B, C and D on the A string and say the fret number for each.",
-        "Choose a note name and locate it on both strings, explaining the fret movement used."
-      ],
+      "focus": "Open-string names, semitone spacing and natural-note landmarks",
       "estimatedMinutes": 30,
       "startingTempoBpm": 58,
       "learningObjectives": [
@@ -3201,11 +3189,7 @@
       "week": 15,
       "route": "core",
       "title": "Pick control and clean tone",
-      "focus": [
-        "Play a four-note D–U–D–U cell on one string.",
-        "Repeat on two strings, planning the crossing before the first note on the new string.",
-        "Record or listen to one pass and identify whether timing, volume or pick depth changed at the crossing."
-      ],
+      "focus": "Alternate-picking sequence and controlled string crossings",
       "estimatedMinutes": 30,
       "startingTempoBpm": 64,
       "learningObjectives": [
@@ -3435,11 +3419,7 @@
       "week": 16,
       "route": "core",
       "title": "Fingerstyle foundation",
-      "focus": [
-        "Loop the thumb part alone until the bass spacing is steady.",
-        "Add one treble note at a time while the thumb continues its pulse.",
-        "Change the treble-note order and keep the bass role unchanged."
-      ],
+      "focus": "Independent thumb pulse with treble-finger patterns",
       "estimatedMinutes": 30,
       "startingTempoBpm": 54,
       "learningObjectives": [
@@ -3669,11 +3649,7 @@
       "week": 17,
       "route": "core",
       "title": "Build the major scale",
-      "focus": [
-        "Play one octave of C major and name each note while playing.",
-        "Say the A minor pentatonic notes A–C–D–E–G and locate the root A.",
-        "Create a short phrase using only those five notes and finish on A."
-      ],
+      "focus": "Major-scale formula and comparison with A minor pentatonic",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
@@ -5028,11 +5004,7 @@
       "week": 23,
       "route": "core",
       "title": "Minor pentatonic box 1",
-      "focus": [
-        "Play the box 1 shape slowly from low E to high E and back.",
-        "Name the A root when it appears on the low E and high E strings.",
-        "Create a short phrase using the five notes and end on A."
-      ],
+      "focus": "A minor pentatonic box 1: five notes, root locations and phrase resolution",
       "estimatedMinutes": 30,
       "startingTempoBpm": 64,
       "learningObjectives": [
@@ -5726,11 +5698,7 @@
       "week": 26,
       "route": "core",
       "title": "Triads on the top strings",
-      "focus": [
-        "Play each C, F and G triad reference one string at a time.",
-        "Name the root, third and fifth before sounding the triad together.",
-        "Move from one triad to the next and keep the intended three-note voicing clear."
-      ],
+      "focus": "C, F and G triads on the top three strings",
       "estimatedMinutes": 30,
       "startingTempoBpm": 66,
       "learningObjectives": [
@@ -8228,12 +8196,7 @@
       "week": 37,
       "route": "core",
       "title": "Learn a melody by ear",
-      "focus": [
-        "Hum the phrase and repeat it in short fragments of two or three notes.",
-        "Clap the rhythm separately from the pitch task.",
-        "Locate the opening note, work out subsequent interval movement and record note order.",
-        "Replay the source only after the first independent transcription, then correct one specific difference."
-      ],
+      "focus": "Listen, sing, identify interval movement and transcribe a short melody",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
