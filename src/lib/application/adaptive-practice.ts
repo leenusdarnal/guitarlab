@@ -23,10 +23,7 @@ export type AdaptivePracticeRecommendation = {
   reasonCodes: AdaptiveReasonCode[];
   explanation: string;
   evidenceType:
-    | 'assessment'
-    | 'supporting_probe'
-    | 'learner_observation'
-    | 'missing';
+    'assessment' | 'supporting_probe' | 'learner_observation' | 'missing';
   evidenceCount: number;
   latestEvidenceAt: number | null;
 };
@@ -232,9 +229,8 @@ function buildItemEvidenceGroups(
           return {
             itemId,
             attemptCount: ordered.length,
-            correctCount: ordered.filter(
-              (event) => event.outcome === 'correct'
-            ).length,
+            correctCount: ordered.filter((event) => event.outcome === 'correct')
+              .length,
             incorrectCount: ordered.filter(
               (event) => event.outcome === 'incorrect'
             ).length,
@@ -334,7 +330,8 @@ export function buildAdaptivePracticeSnapshot(input: {
     AssessmentAttemptRecord[]
   >();
   for (const attempt of scopedLearnerAttempts) {
-    if (!attempt.assessmentInstrument || !attempt.itemEvidence?.length) continue;
+    if (!attempt.assessmentInstrument || !attempt.itemEvidence?.length)
+      continue;
     const list = itemEvidenceAttemptsBySkill.get(attempt.skillId) ?? [];
     list.push(attempt);
     itemEvidenceAttemptsBySkill.set(attempt.skillId, list);
@@ -439,9 +436,7 @@ export function buildAdaptivePracticeSnapshot(input: {
     const latestRepeatedItemEvidenceAt =
       repeatedIncorrectItems.length > 0
         ? Math.max(
-            ...repeatedIncorrectItems.map(
-              ({ item }) => item.latestEvidenceAt
-            )
+            ...repeatedIncorrectItems.map(({ item }) => item.latestEvidenceAt)
           )
         : latestItemEvidenceAt;
 
@@ -482,7 +477,8 @@ export function buildAdaptivePracticeSnapshot(input: {
         evidenceType,
         evidenceCount: latest ? attempts.length : supportingProbeCount,
         latestEvidenceAt:
-          Math.max(latest?.assessedAt ?? 0, latestRepeatedItemEvidenceAt) || null
+          Math.max(latest?.assessedAt ?? 0, latestRepeatedItemEvidenceAt) ||
+          null
       });
     }
   }
