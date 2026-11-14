@@ -110,6 +110,53 @@ describe('buildAdaptivePracticeSnapshot', () => {
     expect(result.recommendations[2].reasonCodes).toContain('review_overdue');
   });
 
+  it('does not let a supporting probe supersede whole-skill recommendations or analytics', () => {
+    const fullSkillAttempt = attempt(
+      'skill-attempt',
+      'fretting.clean-tone',
+      'needs_practice',
+      100
+    );
+    const supportingProbe = {
+      ...attempt('item-probe', 'fretting.clean-tone', 'passed', 200, 100),
+      assessmentInstrument: {
+        definitionId: 'guitar.standard-tuning-open-pitches',
+        definitionVersion: 1,
+        scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        decisionScope: 'supporting_probe' as const
+      },
+      itemEvidence: [
+        {
+          itemId: 'standard-tuning.string-6-open-pitch',
+          response: 'E2',
+          outcome: 'correct' as const,
+          responseSource: 'learner_selected_option' as const
+        }
+      ]
+    };
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [fullSkillAttempt, supportingProbe],
+      mastery: [],
+      practiceEvidence: [],
+      now: 300
+    });
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'fretting.clean-tone'
+    );
+    const recommendation = result.recommendations.find(
+      (item) => item.targetId === 'fretting.clean-tone'
+    );
+    expect(analytics).toMatchObject({
+      assessmentCount: 1,
+      latestOutcome: 'needs_practice',
+      measuredScoreCount: 0
+    });
+    expect(recommendation?.reasonCodes).toContain('assessment_needs_practice');
+  });
+
   it('does not call self-reported clean repetitions verified accuracy', () => {
     const result = buildAdaptivePracticeSnapshot({
       learnerId: '00000000-0000-4000-8000-000000000001',
