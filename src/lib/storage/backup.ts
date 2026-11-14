@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { assessmentAttemptInputSchema } from '../domain/learning/assessment';
+import { assessmentAttemptRecordSchema } from '../domain/learning/assessment';
 import { skillMasteryUpdateSchema } from '../domain/learning/mastery';
 import { profilePreferencesSchema } from '../domain/profile/preferences';
 import { practiceEvidenceInputSchema } from '../domain/learning/practice-evidence';
@@ -62,9 +62,7 @@ const lessonCompletionEventSchema = z
   })
   .strict();
 
-const assessmentAttemptSchema = assessmentAttemptInputSchema
-  .extend({ recordedAt: timestamp })
-  .strict();
+const assessmentAttemptSchema = assessmentAttemptRecordSchema;
 
 const skillMasterySchema = z.intersection(
   skillMasteryUpdateSchema,

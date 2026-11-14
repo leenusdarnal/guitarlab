@@ -480,9 +480,26 @@ describe('M2.2 application service boundaries', () => {
       assessmentKind: 'checkpoint',
       evidenceType: 'observed_or_self_checked',
       outcome: 'passed',
-      score: 90,
-      evidenceSummary: 'Correctly named all six strings.',
-      evidence: { correctItems: 6, totalItems: 6 }
+      score: 100,
+      evidenceSummary:
+        'Correctly identified the open pitch for the sixth string.',
+      evidence: { correctItems: 1, totalItems: 1 },
+      assessmentInstrument: {
+        definitionId: 'guitar.standard-tuning-open-pitches',
+        definitionVersion: 1,
+        scoringRuleVersion: 'single-item-supporting-probe-v1',
+        itemCount: 1,
+        passThreshold: 100,
+        decisionScope: 'supporting_probe'
+      },
+      itemEvidence: [
+        {
+          itemId: 'standard-tuning.string-6-open-pitch',
+          response: 'E2',
+          outcome: 'correct',
+          responseSource: 'learner_selected_option'
+        }
+      ]
     } as const;
 
     const attempt = await recordAssessmentAttempt(
@@ -497,6 +514,10 @@ describe('M2.2 application service boundaries', () => {
 
     expect(attempt.learnerId).toBe(learnerId);
     expect(attempt.id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(attempt.assessmentInstrument?.definitionId).toBe(
+      'guitar.standard-tuning-open-pitches'
+    );
+    expect(attempt.itemEvidence).toEqual(submission.itemEvidence);
     expect(harness.attempts).toHaveLength(1);
     await expect(
       recordAssessmentAttempt(
@@ -513,6 +534,81 @@ describe('M2.2 application service boundaries', () => {
       )
     ).rejects.toBeInstanceOf(ValidationError);
     expect(harness.attempts).toHaveLength(1);
+  });
+
+  it('does not allow a supporting item probe to replace skill-level evidence for mastery', async () => {
+    const dependencies = {
+      curriculum: harness.curriculumRepository,
+      skills: harness.skillRepository,
+      assessments: harness.assessmentRepository,
+      runtime: harness.runtime
+    };
+    const baseSubmission = {
+      curriculumReleaseId: releaseId,
+      skillId,
+      lessonId,
+      assessmentKind: 'measured',
+      evidenceType: 'measured',
+      score: null,
+      evidenceSummary: null,
+      evidence: {}
+    } as const;
+
+    await recordAssessmentAttempt(
+      {
+        learnerId,
+        submission: { ...baseSubmission, outcome: 'needs_practice' }
+      },
+      dependencies
+    );
+    await recordAssessmentAttempt(
+      {
+        learnerId,
+        submission: {
+          ...baseSubmission,
+          outcome: 'passed',
+          score: 100,
+          assessmentInstrument: {
+            definitionId: 'guitar.standard-tuning-open-pitches',
+            definitionVersion: 1,
+            scoringRuleVersion: 'single-item-supporting-probe-v1',
+            itemCount: 1,
+            passThreshold: 100,
+            decisionScope: 'supporting_probe'
+          },
+          itemEvidence: [
+            {
+              itemId: 'standard-tuning.string-6-open-pitch',
+              response: 'E2',
+              outcome: 'correct',
+              responseSource: 'learner_selected_option'
+            }
+          ]
+        }
+      },
+      dependencies
+    );
+
+    await expect(
+      updateSkillMasteryFromEvidence(
+        {
+          learnerId,
+          releaseId,
+          skillId,
+          state: 'stable',
+          confidence: 90,
+          nextReviewAt: null
+        },
+        {
+          curriculum: harness.curriculumRepository,
+          skills: harness.skillRepository,
+          assessments: harness.assessmentRepository,
+          mastery: harness.masteryRepository,
+          runtime: harness.runtime
+        }
+      )
+    ).rejects.toBeInstanceOf(InvalidStateError);
+    expect(harness.masteryRows.size).toBe(0);
   });
 
   it('does not let stale or failed evidence establish stable mastery', async () => {

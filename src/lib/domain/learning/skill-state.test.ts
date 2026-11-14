@@ -77,6 +77,40 @@ describe('explainSkillState', () => {
     });
   });
 
+  it('ignores a supporting item probe when deriving whole-skill state', () => {
+    const probe: AssessmentAttemptRecord = {
+      ...baseAttempt,
+      id: 'ae35fc81-dc90-4fe7-9c5e-93a84170f0e3',
+      outcome: 'passed',
+      assessedAt: 400,
+      recordedAt: 400,
+      assessmentInstrument: {
+        definitionId: 'guitar.standard-tuning-open-pitches',
+        definitionVersion: 1,
+        scoringRuleVersion: 'exact-pitch-five-of-six-v1',
+        itemCount: 1,
+        passThreshold: 100,
+        decisionScope: 'supporting_probe'
+      },
+      itemEvidence: [
+        {
+          itemId: 'standard-tuning.string-6-open-pitch',
+          response: 'E2',
+          outcome: 'correct',
+          responseSource: 'learner_selected_option'
+        }
+      ]
+    };
+    expect(
+      explainSkillState({ attempts: [probe], current: null, now: 500 })
+    ).toMatchObject({
+      state: 'not_started',
+      evidenceCount: 0,
+      latestOutcome: null,
+      rule: 'no-assessments'
+    });
+  });
+
   it('keeps inconclusive evidence in learning rather than stable', () => {
     const attempt = { ...baseAttempt, outcome: 'inconclusive' as const };
     expect(

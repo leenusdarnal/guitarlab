@@ -3,6 +3,8 @@
   import type { PageData } from './$types';
   import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
   import type { LessonProgressRecord } from '../../../lib/repositories/contracts';
+  import StandardTuningAssessment from '../../../lib/components/assessments/StandardTuningAssessment.svelte';
+  import { standardTuningAssessment } from '../../../lib/domain/learning/standard-tuning-assessment';
 
   let { data }: { data: PageData } = $props();
   const lesson = $derived(data.detail.lesson);
@@ -224,6 +226,10 @@
       {#if progressSaving}<p class="saving-message" role="status">Saving on this device…</p>{/if}
     {/if}
   </section>
+
+  {#if lesson.id === standardTuningAssessment.lessonId}
+    <StandardTuningAssessment />
+  {/if}
 
   <div class="lesson-layout">
     <article class="lesson-content">

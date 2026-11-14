@@ -36,12 +36,19 @@ export function explainSkillState(input: {
   current: SkillMasteryRecord | null;
   now: number;
 }): SkillStateExplanation {
-  const attempts = [...input.attempts].sort(
-    (left, right) =>
-      left.assessedAt - right.assessedAt ||
-      left.recordedAt - right.recordedAt ||
-      left.id.localeCompare(right.id)
-  );
+  const attempts = [...input.attempts]
+    // Supporting probes are useful item evidence, but cannot establish or
+    // replace a whole-skill mastery assessment.
+    .filter(
+      (attempt) =>
+        attempt.assessmentInstrument?.decisionScope !== 'supporting_probe'
+    )
+    .sort(
+      (left, right) =>
+        left.assessedAt - right.assessedAt ||
+        left.recordedAt - right.recordedAt ||
+        left.id.localeCompare(right.id)
+    );
   const latest = attempts.at(-1) ?? null;
   const nextReviewAt = input.current?.nextReviewAt ?? null;
 

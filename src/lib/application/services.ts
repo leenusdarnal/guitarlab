@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  assessmentAttemptSubmissionSchema,
   assessmentAttemptInputSchema,
   type AssessmentAttemptInput
 } from '../domain/learning/assessment';
@@ -371,19 +372,15 @@ export async function completeLesson(
   return result;
 }
 
-const assessmentSubmissionSchema = assessmentAttemptInputSchema.omit({
-  id: true,
-  learnerId: true,
-  assessedAt: true
-});
+const assessmentSubmissionSchema = assessmentAttemptSubmissionSchema;
 
 export type AssessmentSubmission = z.input<typeof assessmentSubmissionSchema>;
 
 export async function recordAssessmentAttempt(
   input: { learnerId: string; submission: unknown },
   dependencies: {
-    curriculum: CurriculumRepository;
-    skills: SkillRepository;
+    curriculum: Pick<CurriculumRepository, 'findLesson'>;
+    skills: Pick<SkillRepository, 'findForRelease'>;
     assessments: AssessmentAttemptRepository;
     runtime: ApplicationRuntime;
   }
@@ -491,7 +488,8 @@ export async function updateSkillMasteryFromEvidence(
       (attempt) =>
         attempt.learnerId === value.learnerId &&
         attempt.curriculumReleaseId === value.releaseId &&
-        attempt.skillId === value.skillId
+        attempt.skillId === value.skillId &&
+        attempt.assessmentInstrument?.decisionScope !== 'supporting_probe'
     )
     .sort(
       (left, right) =>

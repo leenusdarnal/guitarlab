@@ -99,6 +99,74 @@ try {
     /Tune all six strings/
   );
 
+  // M7.2: objectively score standard open-string pitch recall and persist item outcomes.
+  await page
+    .getByRole('heading', { name: 'Standard tuning: open-string pitch check' })
+    .waitFor();
+  const pitchAnswers = ['E2', 'A2', 'D3', 'G3', 'B3', 'E4'];
+  const pitchSelects = page.locator('.assessment-item select');
+  assert.equal(
+    await pitchSelects.count(),
+    6,
+    'The standard-tuning assessment should present six stable items'
+  );
+  for (let index = 0; index < pitchAnswers.length; index += 1) {
+    await pitchSelects.nth(index).selectOption(pitchAnswers[index]);
+  }
+  await page.getByRole('button', { name: 'Check answers' }).click();
+  await page.getByText('Check passed', { exact: true }).waitFor();
+  const savedAssessment = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const [active, attempts] = await Promise.all([
+      new Promise((resolve, reject) => {
+        const request = database
+          .transaction('metadata')
+          .objectStore('metadata')
+          .get('activeLearnerId');
+        request.onsuccess = () => resolve(request.result?.value);
+        request.onerror = () => reject(request.error);
+      }),
+      new Promise((resolve, reject) => {
+        const request = database
+          .transaction('assessmentAttempts')
+          .objectStore('assessmentAttempts')
+          .getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      })
+    ]);
+    database.close();
+    return (
+      attempts.find(
+        (attempt) =>
+          attempt.learnerId === active &&
+          attempt.assessmentInstrument?.definitionId ===
+            'guitar.standard-tuning-open-pitches'
+      ) ?? null
+    );
+  });
+  assert.ok(savedAssessment, 'The objective assessment must be saved locally');
+  assert.equal(savedAssessment.curriculumReleaseId, 'curriculum-v1.0.6');
+  assert.equal(savedAssessment.skillId, 'instrument.tuning');
+  assert.equal(savedAssessment.score, 100);
+  assert.equal(savedAssessment.outcome, 'passed');
+  assert.equal(savedAssessment.itemEvidence.length, 6);
+  assert.ok(
+    savedAssessment.itemEvidence.every((item) => item.outcome === 'correct'),
+    'All six selected pitches should be stored with direct correct outcomes'
+  );
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByText('Check passed', { exact: true }).waitFor();
+  assert.equal(
+    await page.locator('.assessment-item select').count(),
+    0,
+    'The latest saved result should be restored instead of resetting on reload'
+  );
+
   // M4.2: section progress and checkpoint self-check survive reload.
   const sectionCount = await page.locator('.lesson-block').count();
   const progressLabel = `1 of ${sectionCount} sections completed`;

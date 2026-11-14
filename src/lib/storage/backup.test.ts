@@ -236,6 +236,87 @@ describe('learner backup contract', () => {
     });
   });
 
+  it('round-trips versioned objective item evidence and accepts legacy assessment rows', () => {
+    const backup = makeBackup();
+    const attempt = {
+      id: 'f2f2f2f2-2222-4222-8222-222222222222',
+      learnerId,
+      curriculumReleaseId: 'curriculum-v1.0.6',
+      skillId: 'instrument.tuning',
+      lessonId: 'y1-w01-lesson',
+      assessmentKind: 'measured' as const,
+      evidenceType: 'measured' as const,
+      outcome: 'passed' as const,
+      score: 100,
+      evidenceSummary:
+        'Both open-string pitches in this test fixture were identified correctly.',
+      evidence: {
+        source: 'learner-selected-pitch-options',
+        scoringRuleVersion: 'two-item-round-trip-test-v1',
+        correctItems: 2,
+        answeredItems: 2,
+        totalItems: 2
+      },
+      assessmentInstrument: {
+        definitionId: 'guitar.standard-tuning-open-pitches',
+        definitionVersion: 1,
+        scoringRuleVersion: 'two-item-round-trip-test-v1',
+        itemCount: 2,
+        passThreshold: 100,
+        decisionScope: 'supporting_probe' as const
+      },
+      itemEvidence: [
+        {
+          itemId: 'standard-tuning.string-6-open-pitch',
+          response: 'E2',
+          outcome: 'correct' as const,
+          responseSource: 'learner_selected_option' as const
+        },
+        {
+          itemId: 'standard-tuning.string-5-open-pitch',
+          response: 'A2',
+          outcome: 'correct' as const,
+          responseSource: 'learner_selected_option' as const
+        }
+      ],
+      assessedAt: 1_800_000_100_000,
+      recordedAt: 1_800_000_100_000
+    };
+    backup.records.assessmentAttempts.push(attempt);
+
+    const parsed = parseLearnerBackupJson(JSON.stringify(backup));
+    expect(parsed).toMatchObject({
+      success: true,
+      data: {
+        records: {
+          assessmentAttempts: [
+            {
+              assessmentInstrument: {
+                definitionId: 'guitar.standard-tuning-open-pitches',
+                definitionVersion: 1,
+                itemCount: 2,
+                passThreshold: 100
+              },
+              itemEvidence: [
+                {
+                  itemId: 'standard-tuning.string-6-open-pitch',
+                  response: 'E2'
+                },
+                {
+                  itemId: 'standard-tuning.string-5-open-pitch',
+                  response: 'A2'
+                }
+              ]
+            }
+          ]
+        }
+      }
+    });
+
+    // Existing version-1 backups without itemEvidence remain importable.
+    expect(parseLearnerBackup(makeBackup())).toMatchObject({ success: true });
+  });
+
   it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,

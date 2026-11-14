@@ -16,9 +16,146 @@ const valid = {
   assessedAt: 1794355200000
 } as const;
 
+const objectiveEvidence = {
+  assessmentInstrument: {
+    definitionId: 'guitar.standard-tuning-open-pitches',
+    definitionVersion: 1,
+    scoringRuleVersion: 'three-item-test-v1',
+    itemCount: 3,
+    passThreshold: 67,
+    decisionScope: 'supporting_probe'
+  },
+  itemEvidence: [
+    {
+      itemId: 'standard-tuning.string-6-open-pitch',
+      response: 'E2',
+      outcome: 'correct',
+      responseSource: 'learner_selected_option'
+    },
+    {
+      itemId: 'standard-tuning.string-5-open-pitch',
+      response: 'A2',
+      outcome: 'correct',
+      responseSource: 'learner_selected_option'
+    },
+    {
+      itemId: 'standard-tuning.string-4-open-pitch',
+      response: null,
+      outcome: 'inconclusive',
+      responseSource: 'no_response'
+    }
+  ]
+} as const;
+
 describe('assessment attempt validation', () => {
-  it('accepts bounded structured evidence', () => {
+  it('accepts bounded structured evidence and legacy skill-level attempts', () => {
     expect(assessmentAttemptInputSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it('accepts versioned item outcomes with explicit response provenance', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'inconclusive',
+        score: null,
+        ...objectiveEvidence
+      }).success
+    ).toBe(true);
+  });
+
+  it('requires instrument provenance whenever item evidence is present', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        itemEvidence: objectiveEvidence.itemEvidence
+      }).success
+    ).toBe(false);
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        assessmentInstrument: objectiveEvidence.assessmentInstrument
+      }).success
+    ).toBe(false);
+  });
+
+  it('rejects duplicate item IDs and mismatched no-response provenance', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'passed',
+        score: 100,
+        assessmentInstrument: {
+          ...objectiveEvidence.assessmentInstrument,
+          itemCount: 2
+        },
+        itemEvidence: [
+          objectiveEvidence.itemEvidence[0],
+          objectiveEvidence.itemEvidence[0]
+        ]
+      }).success
+    ).toBe(false);
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'inconclusive',
+        score: null,
+        assessmentInstrument: {
+          ...objectiveEvidence.assessmentInstrument,
+          itemCount: 1
+        },
+        itemEvidence: [
+          {
+            itemId: 'standard-tuning.string-6-open-pitch',
+            response: null,
+            outcome: 'correct',
+            responseSource: 'no_response'
+          }
+        ]
+      }).success
+    ).toBe(false);
+  });
+
+  it('rejects scored attempt outcomes when one or more item results are inconclusive', () => {
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'passed',
+        score: 100,
+        ...objectiveEvidence
+      }).success
+    ).toBe(false);
+  });
+
+  it('rejects a score that does not match the captured item outcomes', () => {
+    const complete = [
+      {
+        itemId: 'standard-tuning.string-6-open-pitch',
+        response: 'E2',
+        outcome: 'correct',
+        responseSource: 'learner_selected_option'
+      },
+      {
+        itemId: 'standard-tuning.string-5-open-pitch',
+        response: 'E2',
+        outcome: 'incorrect',
+        responseSource: 'learner_selected_option'
+      },
+      {
+        itemId: 'standard-tuning.string-4-open-pitch',
+        response: 'D3',
+        outcome: 'correct',
+        responseSource: 'learner_selected_option'
+      }
+    ] as const;
+    expect(
+      assessmentAttemptInputSchema.safeParse({
+        ...valid,
+        outcome: 'passed',
+        score: 100,
+        assessmentInstrument: objectiveEvidence.assessmentInstrument,
+        itemEvidence: complete
+      }).success
+    ).toBe(false);
   });
 
   it('rejects out-of-range scores', () => {
