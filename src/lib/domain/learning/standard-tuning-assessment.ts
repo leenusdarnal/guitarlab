@@ -129,7 +129,8 @@ export function scoreStandardTuningAssessment(
     assessmentInstrument: {
       definitionId: standardTuningAssessment.definitionId,
       definitionVersion: standardTuningAssessment.definitionVersion,
-      scoringRuleVersion: standardTuningAssessment.scoringRuleVersion
+      scoringRuleVersion: standardTuningAssessment.scoringRuleVersion,
+      decisionScope: 'supporting_probe'
     },
     itemEvidence,
     correctCount,
