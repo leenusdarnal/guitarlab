@@ -1,12 +1,16 @@
 # GuitarLab Execution Priority and Resume Plan
 
-**Last updated:** 2026-11-13
+**Last updated:** 2026-11-14
 **Repository:** `leenusdarnal/guitarlab`
 **Default branch:** `main`
-**Verified baseline:** `06439a3a573ac8dd5388d5f1c8c5770767c2fad2` (PR #70 merged; PR #67 and research integration are on main)
+**Verified baseline:** `c471d70ac92c6264df092d446d99873f6c731e07` (PR #101 merged; Jazz & Harmony Weeks 1–4 on main)
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
 ## 1. Latest verified checkpoint
+
+- PR #101 (Jazz & Harmony Weeks 1–4) merged to `main` as `c471d70ac92c6264df092d446d99873f6c731e07`; post-merge main CI run #43574440277 and curriculum validation #43574440263 passed.
+- Jazz & Harmony Weeks 5–8 are authored on `curriculum/jazz-harmony-weeks-05-08` as curriculum release candidate `1.0.6`; see `docs/M7_2_Y3_JAZZ_HARMONY_AUTHORING_BATCH_2.md`.
+- Baseline before batch 2: 40/152 task-specific lessons, 28/48 specialist lessons, 389 skill links. Batch 2 adds four task-specific lessons and two mapping associations; confirm final results in CI.
 
 - PR #67, interval recognition, is merged to `main`.
 - The PR required formatting fixes and a missing Intervals selector was discovered by browser acceptance; both were corrected before merge.

@@ -1,7 +1,7 @@
 # M7.2 — Representative Curriculum Authoring Pilot
 
-**Status:** Historical pilot completed; Jazz & Harmony Weeks 1–4 added in curriculum-v1.0.5; full CI and curriculum review pending  
-**Release:** `curriculum-v1.0.4`  
+**Status:** Representative pilot and Jazz & Harmony Weeks 1–8 authored; v1.0.6 PR validation pending  
+**Current release:** `curriculum-v1.0.6`  
 **Scope:** 12 Year 1 / Year 2 pilot lessons, incorporated alongside the completed 24-lesson Year 3 Rock & Blues and Fingerstyle & Acoustic routes  
 **Stable identifiers:** All lesson IDs and the existing 34 skill IDs are preserved
 
@@ -69,6 +69,18 @@ The separate mapping decision register documents nine further evidence-backed co
 - [ ] Full curriculum CI and browser acceptance pass on the combined branch.
 - [ ] Curriculum reviewer checks musical correctness, level appropriateness and accessibility of the note/fret examples.
 - [ ] Evaluate the pilot with multiple reviewers/teachers before applying the standard to all remaining lessons.
-- [ ] Continue authoring in small batches; 40 of 152 lessons now have task-specific authoring; 112 still need this level of remediation.
+- [ ] Continue authoring in small batches; 44 of 152 lessons now have task-specific authoring; 108 still need this level of remediation.
 
-**Next stage:** Continue Jazz & Harmony Weeks 5–8 in a separate batch. The v1.0.5 release adds task-specific Jazz & Harmony authoring for Weeks 1–4; the remaining eight Jazz lessons and all 12 All-Round Musician lessons still need this level of remediation. Resolve the flagged Year 1 mapping gap in parallel with research, not by adding an unreviewed skill ID.
+**Next stage:** Continue Jazz & Harmony Weeks 5–8 in a separate batch. The v1.0.5 and v1.0.6 releases now provide task-specific Jazz & Harmony authoring for Weeks 1–8; four Jazz lessons (Weeks 9–12) and all 12 All-Round Musician lessons still need this level of remediation. Resolve the flagged Year 1 mapping gap in parallel with research, not by adding an unreviewed skill ID.
+
+
+## 7. Jazz & Harmony batch 2 update
+
+The v1.0.6 candidate authors Weeks 5–8 with specific, observable musical tasks:
+
+- Week 5 replaces the generic extension prompt with Dm9, G13 and Cmaj9 spellings, practical partial voicings, the 9-versus-add9 distinction and guide-tone movement.
+- Week 6 uses an eight-bar C-to-F ii–V–I comping study, with pulse/form continuity, recording review and planned musical recovery.
+- Week 7 teaches a clearly labelled GuitarLab starter cell for bossa-inspired accompaniment. It separates thumb bass from upper-chord syncopation and explicitly avoids presenting the practice cell as a canonical transcription.
+- Week 8 teaches the basic quick-change 12-bar A blues and one named jazz variation; the twelve-bar count remains explicit when a bar contains two chords.
+
+The stable lesson/week IDs and all 34 skill IDs remain unchanged. Week 5 is remapped from the unrelated open-chord association to seventh-chord and voice-leading skills; Week 8 adds the existing arrangement/form skill. No new skill identifier or assessment profile is introduced.

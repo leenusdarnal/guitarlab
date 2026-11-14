@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "id": "guitarlab-year-3-specialisation-lessons",
   "title": "Year 3+ — Specialisation lesson library",
   "sourceCurriculumId": "year-3-specialisations",
@@ -6889,218 +6889,232 @@
       "route": "jazz-harmony",
       "routeGoal": "Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
       "title": "Chord extensions",
-      "focus": "Chord extensions — Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
+      "focus": "Spell and compare minor ninth, dominant thirteenth and major ninth chords; build compact guitar voicings that retain guide tones while adding a selected extension.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: chord extensions — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Spell Dm9, G13 and Cmaj9 from their chord tones, and distinguish a chord labelled 9 from an add9 triad.",
+        "Play compact Dm9, G13 and Cmaj9 examples, checking each sounding string and identifying guide tones plus the added 9th or 13th.",
+        "Connect Dm9–G13–Cmaj9 with practical inner-voice movement and explain which notes are intentionally omitted."
       ],
       "prerequisites": [],
-      "priorTopicsToRefresh": [
-        "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
-      ],
+      "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "A chord is a group of notes heard together. Its name describes the root and quality; a guitar shape is one way to arrange those notes. Check the intended strings individually before adding rhythm, and listen for how the chord functions in the progression.",
-        "plainLanguage": "This lesson focuses on chord extensions — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating chord extensions."
+        "keyIdea": "An extension names a chord tone above the octave: the 9th is the 2nd an octave higher and the 13th is the 6th an octave higher. A lead-sheet Dm9 includes the minor seventh as well as the 9th; Dm(add9) adds the 9th to a triad without implying a seventh. A maj9 chord has a major seventh, while a dominant 9 or 13 has a minor seventh. Guitar voicings are partial: keep the third and seventh, then choose a useful colour note. The natural 11th may clash with a major third and is commonly omitted unless the intended sound calls for it.",
+        "plainLanguage": "Keep the chord's identity clear first. Then add one colour note: a 9th for a spacious sound or a 13th for a brighter dominant colour. You do not need every theoretical chord tone at once; a compact voicing can communicate the harmony clearly.",
+        "workedExample": "Dm9 = D–F–A–C–E; G13's full tertian collection is G–B–D–F–A–C–E, while this guitar voicing keeps G–B–F–E (root, 3rd, ♭7th and 13th); Cmaj9 = C–E–G–B–D. Standard-tuning GuitarLab examples: Dm9 x5355xx = D–F–C–E; G13 3x345x = G–F–B–E; Cmaj9 x3243x = C–E–B–D. Cadd9 = C–E–G–D and does not include a seventh."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of chord extensions — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use the original GuitarLab examples and the learner's own guitar. A diagram or recording may be used as a checking aid. Do not copy a protected score, chart, tablature or commercial recording.",
         "steps": [
-          "Name the chord and identify its root; use the stated chord map or a diagram as a starting point.",
-          "Place fingers close to the fret wires and keep excluded strings muted or untouched.",
-          "Pick each intended string separately, correct any buzzing or muted note, then strum a slow pulse."
+          "Say each symbol and spell the chord: Dm9, G13 and Cmaj9.",
+          "Build Dm9 x5355xx. Pick strings 5–2 separately: D–F–C–E. The fifth is deliberately omitted.",
+          "Build G13 3x345x. Check G–F–B–E; identify G as root, B as third, F as ♭7 and E as 13. Mute strings 5 and 1.",
+          "Build Cmaj9 x3243x. Check C–E–B–D; identify B as the major seventh and D as the ninth.",
+          "Move through Dm9–G13–Cmaj9 slowly. Keep common tones where possible and listen for C-to-B and F-to-E semitone resolutions.",
+          "Compare Cadd9 (C–E–G–D) with Cmaj9 (C–E–G–B–D); do not treat the symbols as interchangeable."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y3-jazz-harmony-w05-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Listen for the target",
+          "content": "Compare plain Dm7–G7–Cmaj7 with Dm9–G13–Cmaj9. Hear the extra upper note, then listen for the third and seventh that keep each chord's function recognisable."
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "A chord is a group of notes heard together. Its name describes the root and quality; a guitar shape is one way to arrange those notes. Check the intended strings individually before adding rhythm, and listen for how the chord functions in the progression."
+          "content": "An extension names a chord tone above the octave: the 9th is the 2nd an octave higher and the 13th is the 6th an octave higher. A lead-sheet Dm9 includes the minor seventh as well as the 9th; Dm(add9) adds the 9th to a triad without implying a seventh. A maj9 chord has a major seventh, while a dominant 9 or 13 has a minor seventh. Guitar voicings are partial: keep the third and seventh, then choose a useful colour note. The natural 11th may clash with a major third and is commonly omitted unless the intended sound calls for it."
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Build and check three extended voicings",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Name the chord and identify its root; use the stated chord map or a diagram as a starting point.",
-            "Place fingers close to the fret wires and keep excluded strings muted or untouched.",
-            "Pick each intended string separately, correct any buzzing or muted note, then strum a slow pulse.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating chord extensions.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Say each symbol and spell the chord: Dm9, G13 and Cmaj9.",
+            "Build Dm9 x5355xx. Pick strings 5–2 separately: D–F–C–E. The fifth is deliberately omitted.",
+            "Build G13 3x345x. Check G–F–B–E; identify G as root, B as third, F as ♭7 and E as 13. Mute strings 5 and 1.",
+            "Build Cmaj9 x3243x. Check C–E–B–D; identify B as the major seventh and D as the ninth.",
+            "Move through Dm9–G13–Cmaj9 slowly. Keep common tones where possible and listen for C-to-B and F-to-E semitone resolutions.",
+            "Compare Cadd9 (C–E–G–D) with Cmaj9 (C–E–G–B–D); do not treat the symbols as interchangeable."
           ]
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating chord extensions.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Colour a ii–V–I without losing its function",
+          "content": "Comp a four-bar Dm9–G13–Cmaj9–Cmaj9 phrase. Use one voicing per bar, four light quarter-note attacks per bar, and leave space after the phrase. Keep the third and seventh audible while allowing the 9th or 13th to colour the chord."
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the root of the chord you practised?",
-            "What changed in the sound when the chord quality or voicing changed?"
+            "What does the numeral 9 add to Dm9, and which seventh is included?",
+            "Why can a guitarist omit chord members from a G13 voicing without losing its dominant identity?",
+            "Which notes move by semitone or remain common through Dm9–G13–Cmaj9?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y3-jazz-harmony-w05-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen, count and prepare",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Name the root, quality, seventh and extension in Dm9, G13 and Cmaj9.",
+            "Compare 9 with add9 and identify which seventh is included.",
+            "Choose one observable quality to listen for during the first attempt."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner states the target and can identify the audible or observable evidence of a successful attempt.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-focus",
           "title": "Focused skill drill",
           "type": "focused-practice",
-          "durationMinutes": 10,
+          "durationMinutes": 12,
           "instructions": [
-            "Form each chord or voicing in the lesson. Arpeggiate the intended strings, correct one issue at a time, then change to the next shape without squeezing.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Say each symbol and spell the chord: Dm9, G13 and Cmaj9.",
+            "Build Dm9 x5355xx. Pick strings 5–2 separately: D–F–C–E. The fifth is deliberately omitted.",
+            "Build G13 3x345x. Check G–F–B–E; identify G as root, B as third, F as ♭7 and E as 13. Mute strings 5 and 1.",
+            "Build Cmaj9 x3243x. Check C–E–B–D; identify B as the major seventh and D as the ninth.",
+            "Move through Dm9–G13–Cmaj9 slowly. Keep common tones where possible and listen for C-to-B and F-to-E semitone resolutions."
           ],
-          "successCriterion": "Every intended chord tone is clear, excluded strings are controlled, and the learner can identify the chord name, root or quality.",
+          "successCriterion": "Spells each target chord correctly and plays the intended guide tones and extension with unwanted strings controlled.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-music",
           "title": "Musical application",
           "type": "musical-application",
-          "durationMinutes": 8,
+          "durationMinutes": 10,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating chord extensions..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count in at a comfortable quarter-note pulse.",
+            "Play the named voicings one bar at a time; check each string before adding four light attacks.",
+            "Repeat once and listen specifically for the third/seventh line and upper extension.",
+            "Finish with Cmaj9 and allow it to ring without adding an unrelated fill."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "Plays Dm9–G13–Cmaj9 in order, names the extension in each voicing and explains the notes intentionally omitted.",
           "evidenceType": "recording_reviewed"
         },
         {
           "id": "y3-jazz-harmony-w05-lesson-reflect",
-          "title": "Recall and reflect",
+          "title": "Retrieve and plan",
           "type": "reflection",
-          "durationMinutes": 3,
+          "durationMinutes": 4,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put away the chord map, count grid or form notes and answer the retrieval prompts.",
+            "Record one specific strength and one issue that still needs attention.",
+            "Choose whether the next practice should repeat, simplify, mix or transfer the task."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the main idea without the original prompt and records one specific next practice action.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating chord extensions.",
+        "prompt": "Play an original four-bar Dm9–G13–Cmaj9–Cmaj9 comping phrase and explain the extension and guide-tone choices.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in at a comfortable quarter-note pulse.",
+          "Play the named voicings one bar at a time; check each string before adding four light attacks.",
+          "Repeat once and listen specifically for the third/seventh line and upper extension.",
+          "Finish with Cmaj9 and allow it to ring without adding an unrelated fill."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "Every intended chord tone sounds clearly; excluded strings remain controlled; the learner can identify the root or chord quality being practised."
+          "dimension": "chord-spelling",
+          "criterion": "Correctly spells Dm9, G13 and Cmaj9 and distinguishes Dm9 from Dm(add9) or Cmaj9 from Cadd9."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "voicing-clarity",
+          "criterion": "The intended notes in x5355xx, 3x345x and x3243x sound clearly and excluded strings are controlled."
+        },
+        {
+          "dimension": "extension-choice",
+          "criterion": "Identifies the 9th in Dm9/Cmaj9 and the 13th in the G13 voicing; explains that some stack members are intentionally omitted."
+        },
+        {
+          "dimension": "voice-leading",
+          "criterion": "Connects the three chords while listening for common tones and the C-to-B or F-to-E semitone motion."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
-        },
-        {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
-        },
-        {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement."
+          "criterion": "Plays at a controlled tempo with relaxed movement and pauses if pain, numbness or tingling occurs."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Strumming before checking the strings individually.",
-          "correction": "Arpeggiate each string and isolate the one that needs adjustment."
+          "mistake": "Reading Dm9 as a minor triad with an added ninth and no seventh.",
+          "correction": "Spell D–F–A–C–E; the 9 symbol includes the seventh. Use add9 when the seventh is not part of the chord label."
         },
         {
-          "mistake": "Changing several fingers randomly or squeezing harder to hide a poor angle.",
-          "correction": "Move one finger at a time, round the fingertips and reduce pressure after the shape is stable."
+          "mistake": "Trying to fit every note of a 13th chord onto six strings or leaving the third out accidentally.",
+          "correction": "Keep the root when needed, retain the third and seventh, then choose the 13th. Omit the fifth and avoid a conflicting natural 11th in this example."
+        },
+        {
+          "mistake": "Treating every extension as a replacement for a guide tone.",
+          "correction": "Name the third and seventh before adding the upper colour note; check their role as the progression moves."
         }
       ],
-      "accessibleAlternative": "Practise a two- or three-note shell/partial voicing first, or use a slower chord-change cycle with fewer changes per minute.",
+      "accessibleAlternative": "Use a two-note shell containing the third and seventh, then sing or name the 9th/13th before adding it. Compare chord spellings on paper or use fewer attacks while preserving the harmonic target.",
       "retrievalPrompt": [
-        "What is the root of the chord you practised?",
-        "What changed in the sound when the chord quality or voicing changed?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Spell a minor ninth, a dominant thirteenth and a major ninth chord without looking.",
+        "Explain the difference between add9 and 9.",
+        "Identify the notes retained and omitted in the G13 guitar voicing."
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
         "suggestedChecks": [
           "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
+          "About one week later: repeat the task without the original prompt.",
           "About one month later: apply the skill in a different progression, rhythm or musical context."
         ],
         "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: retrieve the target and listen",
+          "5 min: isolate the main skill",
+          "3 min: perform one musical application"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: retrieve and prepare",
+          "9 min: focused practice in short sets",
+          "6 min: musical application",
+          "2 min: reflect and choose the next target"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
+          "5 min: listen and retrieve related material",
+          "15 min: focused practice in short sets",
+          "12 min: transfer the skill to a second context",
+          "5 min: complete musical application",
           "3 min: reflect"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Choose the highest-value tasks for the available time; do not rush every activity into a short session."
       },
       "instructorNotes": {
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
+        "tempoGuidance": "The outline tempo is a starting reference only. Begin slower if needed; increase only after accuracy, pulse and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["harmony.open-chords"],
+      "checkpoint": "Play Dm9–G13–Cmaj9 with the stated voicings, name the guide tones and added extension in each, and distinguish Cadd9 from Cmaj9.",
+      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"],
       "workedExamples": [
         {
-          "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating chord extensions. Success target: Demonstrate chord extensions in a short musical example, explain the key choice and identify one next improvement."
+          "kind": "voicing-map",
+          "label": "Three compact extended voicings",
+          "content": "Standard tuning, low to high: Dm9 x5355xx = D–F–C–E; G13 3x345x = G–F–B–E; Cmaj9 x3243x = C–E–B–D. These are practical partial voicings, not complete stacks."
+        },
+        {
+          "kind": "chord-symbol-comparison",
+          "label": "9 versus add9",
+          "content": "Dm9 = D–F–A–C–E includes the minor seventh. Dm(add9) = D–F–A–E adds the 9th to a triad without implying C. Cmaj9 = C–E–G–B–D; Cadd9 = C–E–G–D."
         }
       ]
     },
@@ -7112,212 +7126,220 @@
       "route": "jazz-harmony",
       "routeGoal": "Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
       "title": "Quarter review: jazz comp",
-      "focus": "Quarter review: jazz comp — Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
+      "focus": "Review the first quarter of Jazz & Harmony with an eight-bar comping study integrating swing pulse, ii–V–I guide tones, extended voicings, recording review and musical recovery.",
       "estimatedMinutes": 40,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: quarter review: jazz comp — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Prepare and perform an eight-bar comping study in C and F, preserving form and a steady swing pulse through every chord change.",
+        "Use at least one 9th or 13th voicing and identify the third/seventh movement leading into each tonic chord.",
+        "Record one uninterrupted take, review it against specific criteria and choose one targeted improvement without treating one take as proof of mastery."
       ],
       "prerequisites": [],
-      "priorTopicsToRefresh": [
-        "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
-      ],
+      "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "A performance is a complete musical journey, not a collection of perfect fragments. Preparation includes a clear count-in, reliable transitions, an intentional ending and a recovery plan if a note is missed.",
-        "plainLanguage": "This lesson focuses on quarter review: jazz comp — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp."
+        "keyIdea": "A review gathers evidence from several related skills in one musical task. This performance combines chord spelling, comping time, guide-tone connection, extended colour and continuity. A recording makes the result reviewable, but one successful take is evidence of that attempt—not proof of durable mastery.",
+        "plainLanguage": "Play a short piece from count-in to ending. Keep the pulse going if a note is missed, listen for the chord changes and review one quality at a time. The goal is a coherent musical performance, not a perfect take.",
+        "workedExample": "Original eight-bar study: | Dm9 | G13 | Cmaj9 | Cmaj9 | Gm7 | C13 | Fmaj9 | Fmaj9 |. Bars 1–4 are ii–V–I in C; bars 5–8 are ii–V–I in F."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of quarter review: jazz comp — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use the original GuitarLab examples and the learner's own guitar. A diagram or recording may be used as a checking aid. Do not copy a protected score, chart, tablature or commercial recording.",
         "steps": [
-          "Choose a piece or excerpt with a beginning, middle and ending.",
-          "Mark the two hardest transitions and practise each in a short loop before running the full piece.",
-          "Record one uninterrupted take, listen back for one priority and make a short retake only after targeted practice."
+          "Write the eight bar labels in order: Dm9, G13, Cmaj9, Cmaj9, Gm7, C13, Fmaj9, Fmaj9.",
+          "Speak the chord roots and count four quarter-note beats per bar; tap an even pulse before adding swung eighth-note comping.",
+          "Check the Week 5 Dm9, G13 and Cmaj9 voicings. For the F section, name the Gm7–C13–Fmaj9 chord tones and choose compact shapes that keep guide tones clear.",
+          "Play one chord per bar with a light, consistent comping pattern. Leave space at the end of bars 4 and 8 so tonic arrivals are audible.",
+          "Record one uninterrupted take from count-in to final ring. If a note is missed, keep counting and re-enter at the next clear bar or chord root.",
+          "Listen back once for pulse/form, then once for chord clarity and guide-tone movement. Write down one strength and one next target."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y3-jazz-harmony-w06-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Listen for the target",
+          "content": "Listen once to the full eight-bar study. Track the four-bar move from C to the four-bar move in F, and notice whether pulse survives rests and chord changes."
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "A performance is a complete musical journey, not a collection of perfect fragments. Preparation includes a clear count-in, reliable transitions, an intentional ending and a recovery plan if a note is missed."
+          "content": "A review gathers evidence from several related skills in one musical task. This performance combines chord spelling, comping time, guide-tone connection, extended colour and continuity. A recording makes the result reviewable, but one successful take is evidence of that attempt—not proof of durable mastery."
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Prepare, perform and review an integrated take",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Choose a piece or excerpt with a beginning, middle and ending.",
-            "Mark the two hardest transitions and practise each in a short loop before running the full piece.",
-            "Record one uninterrupted take, listen back for one priority and make a short retake only after targeted practice.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Write the eight bar labels in order: Dm9, G13, Cmaj9, Cmaj9, Gm7, C13, Fmaj9, Fmaj9.",
+            "Speak the chord roots and count four quarter-note beats per bar; tap an even pulse before adding swung eighth-note comping.",
+            "Check the Week 5 Dm9, G13 and Cmaj9 voicings. For the F section, name the Gm7–C13–Fmaj9 chord tones and choose compact shapes that keep guide tones clear.",
+            "Play one chord per bar with a light, consistent comping pattern. Leave space at the end of bars 4 and 8 so tonic arrivals are audible.",
+            "Record one uninterrupted take from count-in to final ring. If a note is missed, keep counting and re-enter at the next clear bar or chord root.",
+            "Listen back once for pulse/form, then once for chord clarity and guide-tone movement. Write down one strength and one next target."
           ]
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Perform the eight-bar jazz comp study",
+          "content": "Record | Dm9 | G13 | Cmaj9 | Cmaj9 | Gm7 | C13 | Fmaj9 | Fmaj9 | at a comfortable swing feel. Keep attacks light, preserve the count through transitions and end intentionally on Fmaj9."
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "Where is your planned recovery point?",
-            "What one improvement did you hear or notice in the performance?"
+            "Did the pulse remain even through all eight bars and the change from C to F?",
+            "Which extension or guide-tone movement was clearest in the recording?",
+            "Where is your planned recovery point, and what one improvement will you target on the next take?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y3-jazz-harmony-w06-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen, count and prepare",
           "type": "recall",
-          "durationMinutes": 4,
+          "durationMinutes": 5,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Speak the eight bar labels in order and tap four even beats per bar.",
+            "State the musical roles or form before playing.",
+            "Choose one observable quality to monitor during the first attempt."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner states the target and can identify the audible or observable evidence of a successful attempt.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-focus",
           "title": "Focused skill drill",
           "type": "focused-practice",
-          "durationMinutes": 10,
+          "durationMinutes": 12,
           "instructions": [
-            "Perform the selected excerpt from count-in to ending without stopping. If a mistake occurs, keep the pulse and rejoin at the next safe point.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Write the eight bar labels in order: Dm9, G13, Cmaj9, Cmaj9, Gm7, C13, Fmaj9, Fmaj9.",
+            "Speak the chord roots and count four quarter-note beats per bar; tap an even pulse before adding swung eighth-note comping.",
+            "Check the Week 5 Dm9, G13 and Cmaj9 voicings. For the F section, name the Gm7–C13–Fmaj9 chord tones and choose compact shapes that keep guide tones clear.",
+            "Play one chord per bar with a light, consistent comping pattern. Leave space at the end of bars 4 and 8 so tonic arrivals are audible."
           ],
-          "successCriterion": "The learner completes the form, maintains the pulse or recovers musically, and identifies one specific strength and one next target.",
+          "successCriterion": "Plays the eight-bar study with pulse and form intact, and identifies one specific issue to improve.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-music",
           "title": "Musical application",
           "type": "musical-application",
-          "durationMinutes": 8,
+          "durationMinutes": 18,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Set a comfortable pulse and speak the eight bar labels once.",
+            "Record a single complete take from count-in to ending.",
+            "Keep time through any slip and re-enter at the next agreed bar or root.",
+            "Review pulse/form first and chord quality/voice leading second; write one strength and one next practice target."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate quarter review: jazz comp in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "Completes an uninterrupted eight-bar C-to-F take with a clear count-in, ending and review note.",
           "evidenceType": "recording_reviewed"
         },
         {
           "id": "y3-jazz-harmony-w06-lesson-reflect",
-          "title": "Recall and reflect",
+          "title": "Retrieve and plan",
           "type": "reflection",
-          "durationMinutes": 3,
+          "durationMinutes": 5,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put away the chord map, count grid or form notes and answer the retrieval prompts.",
+            "Record one specific strength and one issue that still needs attention.",
+            "Choose whether the next practice should repeat, simplify, mix or transfer the task."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the main idea without the original prompt and records one specific next practice action.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp.",
+        "prompt": "Perform and record the original eight-bar C-to-F comping study using swing feel, guide-tone movement and at least one extended voicing.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Set a comfortable pulse and speak the eight bar labels once.",
+          "Record a single complete take from count-in to ending.",
+          "Keep time through any slip and re-enter at the next agreed bar or root.",
+          "Review pulse/form first and chord quality/voice leading second; write one strength and one next practice target."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed."
+          "dimension": "form-and-continuity",
+          "criterion": "Performs all eight bars in the stated order from count-in to ending without abandoning the form after a slip."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "pulse-and-swing",
+          "criterion": "Maintains an even quarter-note pulse while using a consistent, context-appropriate swing subdivision."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "harmony-and-extensions",
+          "criterion": "Uses at least one 9th or 13th colour and identifies chord quality and guide-tone movement in both keys."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "recording-review",
+          "criterion": "Creates a usable recording and identifies one audible strength plus one specific, actionable improvement."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate quarter review: jazz comp in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "recovery-and-reflection",
+          "criterion": "Keeps the pulse after a minor error, re-enters at a planned point and records the chosen recovery strategy."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Stopping every time a note is missed.",
-          "correction": "Practise re-entry points and keep counting through small errors."
+          "mistake": "Stopping at every missed chord or note and restarting the recording.",
+          "correction": "Keep counting; re-enter on the next bar line or agreed chord root, then review the slip after the take."
         },
         {
-          "mistake": "Changing many things at once after listening to a recording.",
-          "correction": "Choose one observable target per review take, such as timing, transition or dynamics."
+          "mistake": "Reviewing the take with a vague judgement such as 'good' or 'bad'.",
+          "correction": "Listen once for form/pulse and once for chord sound/voice leading; record one observable strength and one next action."
+        },
+        {
+          "mistake": "Increasing tempo to hide unstable changes.",
+          "correction": "Return to a slower pulse, isolate the transition, and restore the original tempo only when the chord change remains controlled."
         }
       ],
-      "accessibleAlternative": "Record a shorter section or audio-only take; use a click count-in and mark the form on paper.",
+      "accessibleAlternative": "Perform four bars at a time or record audio only. Use a spoken count-in, a printed eight-bar map or a slower pulse; keep the same form, chord-tone and recovery goals.",
       "retrievalPrompt": [
-        "Where is your planned recovery point?",
-        "What one improvement did you hear or notice in the performance?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Name the eight chords in order and identify each ii–V–I pair.",
+        "Which extension did you use, and which notes acted as guide tones?",
+        "Describe one recovery point and one concrete action from the recording review."
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
         "suggestedChecks": [
           "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
+          "About one week later: repeat the task without the original prompt.",
           "About one month later: apply the skill in a different progression, rhythm or musical context."
         ],
         "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: retrieve the target and listen",
+          "5 min: isolate the main skill",
+          "3 min: perform one musical application"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: retrieve and prepare",
+          "9 min: focused practice in short sets",
+          "6 min: musical application",
+          "2 min: reflect and choose the next target"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
+          "5 min: listen and retrieve related material",
+          "15 min: focused practice in short sets",
+          "12 min: transfer the skill to a second context",
+          "5 min: complete musical application",
           "3 min: reflect"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Choose the highest-value tasks for the available time; do not rush every activity into a short session."
       },
       "instructorNotes": {
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
+        "tempoGuidance": "The outline tempo is a starting reference only. Begin slower if needed; increase only after accuracy, pulse and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate quarter review: jazz comp in a short musical example, explain the key choice and identify one next improvement.",
+      "checkpoint": "Perform and review the eight-bar C-to-F comping study in one uninterrupted take, maintaining pulse/form, using an extension and recording one specific next practice target.",
       "skillIds": [
         "repertoire.song-learning",
         "performance.recording",
@@ -7325,14 +7347,14 @@
       ],
       "workedExamples": [
         {
-          "kind": "performance-check",
-          "label": "Performance run-through",
-          "content": "Use a count-in, mark the section order, identify one recovery point and plan the ending. Play one uninterrupted take; review it for one priority only."
+          "kind": "performance-map",
+          "label": "Eight-bar integrated review",
+          "content": "| Dm9 | G13 | Cmaj9 | Cmaj9 | Gm7 | C13 | Fmaj9 | Fmaj9 |. Bars 1–4 are ii–V–I in C; bars 5–8 are ii–V–I in F. Use one chord per bar and leave a small space before each tonic arrival."
         },
         {
-          "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating quarter review: jazz comp. Success target: Demonstrate quarter review: jazz comp in a short musical example, explain the key choice and identify one next improvement."
+          "kind": "review-checklist",
+          "label": "Listen in two passes",
+          "content": "Pass 1: count and form—did pulse continue and did all eight bars arrive in order? Pass 2: harmony—were chord qualities, extension and guide-tone movement clear? Record one strength and one next action."
         }
       ]
     },
@@ -7344,223 +7366,232 @@
       "route": "jazz-harmony",
       "routeGoal": "Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
       "title": "Bossa pattern",
-      "focus": "Bossa pattern — Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
+      "focus": "Coordinate a steady thumb bass with light syncopated upper-chord attacks in a two-bar bossa-inspired guitar study; keep the pulse relaxed and distinguish the groove from swing or shuffle.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: bossa pattern — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Count a steady four-beat pulse with eighth-note subdivisions and explain where bass and chord-block parts fall in the GuitarLab starter pattern.",
+        "Play bass notes and upper chord attacks separately, then coordinate them across a repeating two-bar cycle without losing the pulse.",
+        "Apply the pattern to an original Am7–Dm7–G7–Cmaj7 progression and create one controlled anticipation into a chord change."
       ],
       "prerequisites": [],
-      "priorTopicsToRefresh": [
-        "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
-      ],
+      "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "Rhythm grows from a steady pulse. Subdivisions divide each beat evenly; accents create emphasis, rests create deliberate silence, and the picking/strumming hand can keep moving even when a stroke is skipped.",
-        "plainLanguage": "This lesson focuses on bossa pattern — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating bossa pattern."
+        "keyIdea": "Bossa nova guitar accompaniment often coordinates a thumb-played bass part with a plucked upper-chord part, and the upper rhythm can anticipate the beat. A study of João Gilberto-derived patterns describes recurring two-measure fragments in 2/4, separate thumb and finger-block events, and anticipations; those observations describe a repertoire of patterns, not one universal formula. This lesson uses a deliberately simplified GuitarLab starter cell in 4/4 so the learner can isolate the roles before exploring more authentic two-bar variations.",
+        "plainLanguage": "Let the thumb keep the bass pulse while the fingers add light chord notes between the beats. Do not fill every gap. The rhythm should feel gently forward-moving, not like a swung shuffle.",
+        "workedExample": "GuitarLab starter cell in 4/4: count 1 & 2 & 3 & 4 &. Thumb bass on beats 1 and 3; a light upper-chord block on the '&' of 2 and the '&' of 4. Repeat for two bars, then move the final upper-chord attack to the '&' of 4 before a chord change as an anticipation. This is an original practice cell, not a canonical transcription."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of bossa pattern — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use the original GuitarLab examples and the learner's own guitar. A diagram or recording may be used as a checking aid. Do not copy a protected score, chart, tablature or commercial recording.",
         "steps": [
-          "Tap a steady pulse and count aloud before playing.",
-          "For eighth notes count 1-and-2-and; for sixteenths count 1-e-and-a. Keep the syllables evenly spaced.",
-          "Practise the pattern on muted strings first, then add one chord without changing the hand motion."
+          "Set a relaxed quarter-note pulse. Count aloud: 1 & 2 & 3 & 4 &; keep the count even.",
+          "On muted strings, play only the thumb bass on beats 1 and 3. Keep the sound short and the hand relaxed.",
+          "Mute the bass strings and play a light upper chord block on the '&' of 2 and '&' of 4. Leave the other subdivisions empty.",
+          "Combine the two roles: thumb on 1 and 3, fingers together on the selected offbeats. Repeat the same two-bar cycle without accelerating.",
+          "Apply the pattern to Am7 | Dm7 | G7 | Cmaj7 |, changing the bass root when the chord changes while keeping upper rhythm steady.",
+          "After the pattern is stable, anticipate one chord change by placing the final upper-chord attack on the '&' before the next bar; do not move the bass pulse."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y3-jazz-harmony-w07-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Listen for the target",
+          "content": "Listen for two layers: a grounded bass pulse and a lighter syncopated chord part. Notice the upper attacks can sit between quarter-note beats while the bass gives the bar its orientation."
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Rhythm grows from a steady pulse. Subdivisions divide each beat evenly; accents create emphasis, rests create deliberate silence, and the picking/strumming hand can keep moving even when a stroke is skipped."
+          "content": "Bossa nova guitar accompaniment often coordinates a thumb-played bass part with a plucked upper-chord part, and the upper rhythm can anticipate the beat. A study of João Gilberto-derived patterns describes recurring two-measure fragments in 2/4, separate thumb and finger-block events, and anticipations; those observations describe a repertoire of patterns, not one universal formula. This lesson uses a deliberately simplified GuitarLab starter cell in 4/4 so the learner can isolate the roles before exploring more authentic two-bar variations."
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Separate the bass and chord layers",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Tap a steady pulse and count aloud before playing.",
-            "For eighth notes count 1-and-2-and; for sixteenths count 1-e-and-a. Keep the syllables evenly spaced.",
-            "Practise the pattern on muted strings first, then add one chord without changing the hand motion.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating bossa pattern.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Set a relaxed quarter-note pulse. Count aloud: 1 & 2 & 3 & 4 &; keep the count even.",
+            "On muted strings, play only the thumb bass on beats 1 and 3. Keep the sound short and the hand relaxed.",
+            "Mute the bass strings and play a light upper chord block on the '&' of 2 and '&' of 4. Leave the other subdivisions empty.",
+            "Combine the two roles: thumb on 1 and 3, fingers together on the selected offbeats. Repeat the same two-bar cycle without accelerating.",
+            "Apply the pattern to Am7 | Dm7 | G7 | Cmaj7 |, changing the bass root when the chord changes while keeping upper rhythm steady.",
+            "After the pattern is stable, anticipate one chord change by placing the final upper-chord attack on the '&' before the next bar; do not move the bass pulse."
           ]
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating bossa pattern.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Make a two-bar bossa-inspired comp loop",
+          "content": "Repeat the GuitarLab starter cell over Am7 | Dm7 | G7 | Cmaj7 |. Keep the thumb bass on beats 1 and 3, let upper chord attacks sit on selected offbeats and use one deliberate anticipation into a new chord. The pulse should remain steady and texture light."
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the difference between a beat and a subdivision?",
-            "How can your hand keep time during a rest?"
+            "Which events did the thumb play, and which events did the fingers play?",
+            "How did the upper-chord anticipation change the feel without changing the quarter-note pulse?",
+            "What is different about this subdivision from the long–short swing feel in Week 2?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y3-jazz-harmony-w07-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen, count and prepare",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Count 1 & 2 & 3 & 4 & evenly without touching the strings.",
+            "State the musical roles or form before playing.",
+            "Choose one observable quality to monitor during the first attempt."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner states the target and can identify the audible or observable evidence of a successful attempt.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-focus",
           "title": "Focused skill drill",
           "type": "focused-practice",
-          "durationMinutes": 10,
+          "durationMinutes": 12,
           "instructions": [
-            "Count the target subdivision aloud and play the rhythm on muted strings. Add a chord only after the pulse stays steady.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Set a relaxed quarter-note pulse. Count aloud: 1 & 2 & 3 & 4 &; keep the count even.",
+            "On muted strings, play only the thumb bass on beats 1 and 3. Keep the sound short and the hand relaxed.",
+            "Mute the bass strings and play a light upper chord block on the '&' of 2 and '&' of 4. Leave the other subdivisions empty.",
+            "Combine the two roles: thumb on 1 and 3, fingers together on the selected offbeats. Repeat the same two-bar cycle without accelerating.",
+            "Apply the pattern to Am7 | Dm7 | G7 | Cmaj7 |, changing the bass root when the chord changes while keeping upper rhythm steady."
           ],
-          "successCriterion": "The pulse continues through rests and chord changes; subdivisions and accents are placed intentionally.",
+          "successCriterion": "Coordinates bass and upper chord parts while keeping the eighth-note count even and written rests intact.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-music",
           "title": "Musical application",
           "type": "musical-application",
-          "durationMinutes": 8,
+          "durationMinutes": 10,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating bossa pattern..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Establish an even eighth-note grid before playing the guitar part.",
+            "Practise the thumb bass and upper chord blocks separately.",
+            "Combine the parts for two bars, then repeat over the four-chord progression.",
+            "Add one upper-chord anticipation before a chord change while leaving the bass pulse intact."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "Performs the two-layer starter pattern through Am7–Dm7–G7–Cmaj7 and includes one clear anticipation.",
           "evidenceType": "recording_reviewed"
         },
         {
           "id": "y3-jazz-harmony-w07-lesson-reflect",
-          "title": "Recall and reflect",
+          "title": "Retrieve and plan",
           "type": "reflection",
-          "durationMinutes": 3,
+          "durationMinutes": 4,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put away the chord map, count grid or form notes and answer the retrieval prompts.",
+            "Record one specific strength and one issue that still needs attention.",
+            "Choose whether the next practice should repeat, simplify, mix or transfer the task."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the main idea without the original prompt and records one specific next practice action.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating bossa pattern.",
+        "prompt": "Play an original two-layer bossa-inspired accompaniment over Am7–Dm7–G7–Cmaj7, using a steady thumb pulse and selected offbeat chord attacks.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Establish an even eighth-note grid before playing the guitar part.",
+          "Practise the thumb bass and upper chord blocks separately.",
+          "Combine the parts for two bars, then repeat over the four-chord progression.",
+          "Add one upper-chord anticipation before a chord change while leaving the bass pulse intact."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed."
+          "dimension": "pulse-and-subdivision",
+          "criterion": "The quarter-note pulse remains steady and the eighth-note count stays even; the learner does not convert the pattern into a shuffle."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "bass-role",
+          "criterion": "The thumb plays the stated bass beats independently of the upper-chord attacks."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "syncopated-chords",
+          "criterion": "Upper chord blocks land on the selected offbeats and the rests are preserved."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "two-layer-coordination",
+          "criterion": "Bass and chord parts are coordinated across the two-bar cycle and the Am7–Dm7–G7–Cmaj7 progression."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "musical-anticipation",
+          "criterion": "Adds one deliberate upper-chord anticipation into a chord change without moving or destabilising the bass pulse."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Speeding up during easy bars or slowing down at a chord change.",
-          "correction": "Reduce tempo and count out loud; use a metronome after the internal pulse is steady."
+          "mistake": "Turning the eighth-note count into a shuffle or swung long–short pair.",
+          "correction": "Keep the spoken '&' subdivisions even for this starter cell; syncopation comes from where the chord attacks are placed, not from changing the subdivision ratio."
         },
         {
-          "mistake": "Stopping the strumming hand for every rest or skipped upstroke.",
-          "correction": "Keep a small continuous motion and let the pick miss the strings for a rest."
+          "mistake": "Letting the thumb follow every chord attack and losing its independent bass role.",
+          "correction": "Practise beats 1 and 3 with the thumb alone, then add only the selected upper offbeats."
+        },
+        {
+          "mistake": "Adding chord attacks on every subdivision until the groove becomes crowded.",
+          "correction": "Keep the written rests. Use a light chord block and let the space be part of the pattern."
         }
       ],
-      "accessibleAlternative": "Clap or speak the rhythm first, use only downstrokes, or slow the pulse while keeping subdivisions even.",
+      "accessibleAlternative": "Begin with a single bass note plus one two-note chord shell. Tap the bass pulse if thumb movement is difficult, then add the upper attacks on a muted or simplified voicing. Keep the same count and syncopation.",
       "retrievalPrompt": [
-        "What is the difference between a beat and a subdivision?",
-        "How can your hand keep time during a rest?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Count the starter cell and identify the two bass beats.",
+        "Which upper chord attacks are syncopated in the written exercise?",
+        "Explain why the rhythm is not a shuffle and name one way to anticipate a chord change."
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
         "suggestedChecks": [
           "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
+          "About one week later: repeat the task without the original prompt.",
           "About one month later: apply the skill in a different progression, rhythm or musical context."
         ],
         "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: retrieve the target and listen",
+          "5 min: isolate the main skill",
+          "3 min: perform one musical application"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: retrieve and prepare",
+          "9 min: focused practice in short sets",
+          "6 min: musical application",
+          "2 min: reflect and choose the next target"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
+          "5 min: listen and retrieve related material",
+          "15 min: focused practice in short sets",
+          "12 min: transfer the skill to a second context",
+          "5 min: complete musical application",
           "3 min: reflect"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Choose the highest-value tasks for the available time; do not rush every activity into a short session."
       },
       "instructorNotes": {
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
+        "tempoGuidance": "The outline tempo is a starting reference only. Begin slower if needed; increase only after accuracy, pulse and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement.",
+      "checkpoint": "Perform the two-layer bossa-inspired starter pattern over Am7–Dm7–G7–Cmaj7, keeping the bass pulse steady and adding one intentional upper-chord anticipation.",
       "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
       "workedExamples": [
         {
-          "kind": "rhythm-reference",
-          "label": "Count before playing",
-          "content": "Quarter-note pulse: 1 2 3 4. Eighth notes: 1 & 2 & 3 & 4 &. Sixteenths: 1 e & a 2 e & a. Practise the count on muted strings before adding chords. For a shuffle, use an even triplet subdivision and accent the long-short feel."
+          "kind": "rhythm-grid",
+          "label": "GuitarLab starter cell",
+          "content": "Count: 1 & 2 & 3 & 4 &. Thumb bass: B – – – B – – –. Upper chord: – – – C – – – C. The chord attacks sit on the '&' of 2 and '&' of 4; keep other subdivisions silent."
         },
         {
-          "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating bossa pattern. Success target: Demonstrate bossa pattern in a short musical example, explain the key choice and identify one next improvement."
+          "kind": "two-bar-application",
+          "label": "Progression transfer",
+          "content": "Use the same light two-layer cell over Am7 | Dm7 | G7 | Cmaj7 |. Change the bass root with the harmony, keep upper rhythm stable, then anticipate one chord change with the final upper hit."
         }
       ]
     },
@@ -7572,223 +7603,237 @@
       "route": "jazz-harmony",
       "routeGoal": "Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
       "title": "Jazz blues form",
-      "focus": "Jazz blues form — Develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.",
+      "focus": "Map a 12-bar A jazz blues, compare a simple quick-change form with a jazz-harmony variation, and build short A minor-pentatonic phrases that respond to the changing dominant chords.",
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: jazz blues form — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation..",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Identify the three four-bar sections of a 12-bar blues and play the basic A7–D7–E7 form while counting every bar.",
+        "Compare the basic quick-change form with a jazz variation using a passing diminished chord, applied ii–V progressions and a turnaround; explain that no single variation is universal.",
+        "Create two-bar call-and-response phrases from A minor pentatonic, leaving space and resolving selected notes toward the current chord tones."
       ],
       "prerequisites": [],
-      "priorTopicsToRefresh": [
-        "Core rhythm, clean fretting and basic chord/scale awareness as relevant to the selected specialisation."
-      ],
+      "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "Blues playing combines a repeating form, dominant-seventh colour, shuffle or straight subdivision, concise melodic motifs and expressive articulation. The form and pulse must stay clear even when the lead part becomes more adventurous.",
-        "plainLanguage": "This lesson focuses on jazz blues form — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation.. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Create or perform an original 4- to 8-bar example demonstrating jazz blues form."
+        "keyIdea": "The blues is recognisable by its 12-bar form, but the chord sequence can vary. Begin with the basic I–IV–V plan so the form is clear; then add a quick change, a passing diminished chord or ii–V motion as a deliberate variation. Keep the bar numbers stable while the harmony becomes richer. In A, the basic dominant chords are A7 (A–C♯–E–G), D7 (D–F♯–A–C) and E7 (E–G♯–B–D).",
+        "plainLanguage": "First learn where the 12 bars go. Then learn one jazzier version of those same 12 bars. When you improvise, use a short motif and listen for the chord change—do not run the scale from start to finish without shaping a phrase.",
+        "workedExample": "Basic quick-change A blues: A7 | D7 | A7 | A7 | D7 | D7 | A7 | A7 | E7 | D7 | A7 | E7 (turnaround). One jazz variation: A7 | D7 | A7 | Em7 A7 | D7 | D♯°7 | A7 | C♯m7 F♯7 | Bm7 | E7 | A7 F♯7 | Bm7 E7. Treat this as one useful model, not a universal chart."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of jazz blues form — develop jazz comping, guide-tone movement, extensions, standards and reharmonisation. from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use the original GuitarLab examples and the learner's own guitar. A diagram or recording may be used as a checking aid. Do not copy a protected score, chart, tablature or commercial recording.",
         "steps": [
-          "Count a 12-bar form: I for bars 1–4, IV for bars 5–6, I for bars 7–8, V for bar 9, IV for bar 10, I for bar 11 and V/turnaround material for bar 12.",
-          "Clap straight eighths, then compare the longer-shorter shuffle feel.",
-          "Play a short motif, leave space and resolve deliberately to a chord tone when the harmony changes."
+          "Write twelve numbered bars in three groups: bars 1–4, 5–8 and 9–12.",
+          "Play the basic quick-change form in A: A7 in bar 1, D7 in bar 2, A7 in bars 3–4; D7 in bars 5–6; A7 in bars 7–8; E7, D7, A7 and E7 in bars 9–12.",
+          "Say the chord root at each bar line and tap all four beats. Do not add fills until you can keep the bar numbers without losing the pulse.",
+          "Compare the jazz variation. Notice Em7–A7 in bar 4, D♯°7 in bar 6, C♯m7–F♯7 in bar 8, and the Bm7–E7 turnaround in bars 11–12.",
+          "For a lead chorus, use A minor pentatonic A–C–D–E–G to make a two-bar call, leave a two-bar response space, then answer with a changed rhythm or ending.",
+          "On a chord change, listen for a chord tone: C♯ or G over A7, F♯ or C over D7, and G♯ or D over E7. Treat the minor third colour as expressive blues language and resolve it intentionally."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y3-jazz-harmony-w08-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Listen for the target",
+          "content": "Listen to a 12-bar blues twice. First follow the bass roots and four-bar sections; next, listen for extra chord motion in the jazz variation and notice that the bar count remains twelve."
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-concept",
           "type": "explanation",
           "title": "Understand the idea",
-          "content": "Blues playing combines a repeating form, dominant-seventh colour, shuffle or straight subdivision, concise melodic motifs and expressive articulation. The form and pulse must stay clear even when the lead part becomes more adventurous."
+          "content": "The blues is recognisable by its 12-bar form, but the chord sequence can vary. Begin with the basic I–IV–V plan so the form is clear; then add a quick change, a passing diminished chord or ii–V motion as a deliberate variation. Keep the bar numbers stable while the harmony becomes richer. In A, the basic dominant chords are A7 (A–C♯–E–G), D7 (D–F♯–A–C) and E7 (E–G♯–B–D)."
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Count the form before adding substitutions",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Count a 12-bar form: I for bars 1–4, IV for bars 5–6, I for bars 7–8, V for bar 9, IV for bar 10, I for bar 11 and V/turnaround material for bar 12.",
-            "Clap straight eighths, then compare the longer-shorter shuffle feel.",
-            "Play a short motif, leave space and resolve deliberately to a chord tone when the harmony changes.",
-            "Work on this week's target: Create or perform an original 4- to 8-bar example demonstrating jazz blues form.. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Write twelve numbered bars in three groups: bars 1–4, 5–8 and 9–12.",
+            "Play the basic quick-change form in A: A7 in bar 1, D7 in bar 2, A7 in bars 3–4; D7 in bars 5–6; A7 in bars 7–8; E7, D7, A7 and E7 in bars 9–12.",
+            "Say the chord root at each bar line and tap all four beats. Do not add fills until you can keep the bar numbers without losing the pulse.",
+            "Compare the jazz variation. Notice Em7–A7 in bar 4, D♯°7 in bar 6, C♯m7–F♯7 in bar 8, and the Bm7–E7 turnaround in bars 11–12.",
+            "For a lead chorus, use A minor pentatonic A–C–D–E–G to make a two-bar call, leave a two-bar response space, then answer with a changed rhythm or ending.",
+            "On a chord change, listen for a chord tone: C♯ or G over A7, F♯ or C over D7, and G♯ or D over E7. Treat the minor third colour as expressive blues language and resolve it intentionally."
           ]
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Create or perform an original 4- to 8-bar example demonstrating jazz blues form.. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Play the form and make a short blues chorus",
+          "content": "Comp one complete 12-bar basic A blues, then play the jazz variation once. Add a short A minor-pentatonic call-and-response phrase with rests; make the phrase respond to the harmony rather than filling every bar."
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What is the 12-bar blues chord order in Roman numerals?",
-            "How can you keep the form while improvising?"
+            "Which bars contain I7, IV7 and V7 in the basic form?",
+            "Name two harmonic changes in the jazz variation that are not present in the basic quick-change form.",
+            "Which note or chord tone did you target at a change, and where did you leave space in your phrase?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y3-jazz-harmony-w08-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen, count and prepare",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Speak twelve bar numbers in three groups of four.",
+            "State the musical roles or form before playing.",
+            "Choose one observable quality to monitor during the first attempt."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner states the target and can identify the audible or observable evidence of a successful attempt.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-focus",
           "title": "Focused skill drill",
           "type": "focused-practice",
-          "durationMinutes": 10,
+          "durationMinutes": 12,
           "instructions": [
-            "Loop one four-bar section of the blues form. Count aloud, play the assigned rhythm or motif, and re-enter bar 1 accurately.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Write twelve numbered bars in three groups: bars 1–4, 5–8 and 9–12.",
+            "Play the basic quick-change form in A: A7 in bar 1, D7 in bar 2, A7 in bars 3–4; D7 in bars 5–6; A7 in bars 7–8; E7, D7, A7 and E7 in bars 9–12.",
+            "Say the chord root at each bar line and tap all four beats. Do not add fills until you can keep the bar numbers without losing the pulse.",
+            "Compare the jazz variation. Notice Em7–A7 in bar 4, D♯°7 in bar 6, C♯m7–F♯7 in bar 8, and the Bm7–E7 turnaround in bars 11–12.",
+            "For a lead chorus, use A minor pentatonic A–C–D–E–G to make a two-bar call, leave a two-bar response space, then answer with a changed rhythm or ending."
           ],
-          "successCriterion": "The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand.",
+          "successCriterion": "Counts twelve bars accurately, names basic chord functions and keeps the lead phrase connected to the form.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-music",
           "title": "Musical application",
           "type": "musical-application",
-          "durationMinutes": 8,
+          "durationMinutes": 10,
           "instructions": [
-            "Apply the week's exercise: Create or perform an original 4- to 8-bar example demonstrating jazz blues form..",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count twelve bars aloud while playing the basic A7/D7/E7 changes.",
+            "Repeat with the jazz variation and mark the bars containing two chords.",
+            "Create a short two-bar motif, leave space, and answer it with a changed ending.",
+            "Review whether the bar count, chord changes and phrase endings remain clear."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement.",
+          "successCriterion": "Completes a 12-bar A blues, compares the jazz variation and performs a shaped call-and-response phrase.",
           "evidenceType": "recording_reviewed"
         },
         {
           "id": "y3-jazz-harmony-w08-lesson-reflect",
-          "title": "Recall and reflect",
+          "title": "Retrieve and plan",
           "type": "reflection",
-          "durationMinutes": 3,
+          "durationMinutes": 4,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put away the chord map, count grid or form notes and answer the retrieval prompts.",
+            "Record one specific strength and one issue that still needs attention.",
+            "Choose whether the next practice should repeat, simplify, mix or transfer the task."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the main idea without the original prompt and records one specific next practice action.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Create or perform an original 4- to 8-bar example demonstrating jazz blues form.",
+        "prompt": "Perform the basic and jazz-variation 12-bar A blues forms, then create a short A minor-pentatonic call-and-response chorus with intentional space and chord-tone targets.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count twelve bars aloud while playing the basic A7/D7/E7 changes.",
+          "Repeat with the jazz variation and mark the bars containing two chords.",
+          "Create a short two-bar motif, leave space, and answer it with a changed ending.",
+          "Review whether the bar count, chord changes and phrase endings remain clear."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
-          "dimension": "accuracy",
-          "criterion": "The pulse continues through rests and chord changes; accents and subdivisions are placed intentionally rather than guessed."
+          "dimension": "form-and-count",
+          "criterion": "Completes all twelve bars in order and distinguishes the 1–4, 5–8 and 9–12 sections."
         },
         {
-          "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "dimension": "basic-harmony",
+          "criterion": "Identifies A7 as I7, D7 as IV7 and E7 as V7 in the basic A blues."
         },
         {
-          "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "dimension": "variation-awareness",
+          "criterion": "Explains at least two differences in the jazz variation and keeps bars containing two chords inside the correct 12-bar count."
         },
         {
-          "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "dimension": "lead-vocabulary",
+          "criterion": "Creates a short phrase using A–C–D–E–G with a clear beginning, space and response rather than an unshaped scale run."
         },
         {
-          "dimension": "curriculum-checkpoint",
-          "criterion": "Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement."
+          "dimension": "harmonic-response",
+          "criterion": "Targets or resolves to suitable chord tones at selected changes and explains one expressive pentatonic note choice."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Losing the bar count while concentrating on a lick.",
-          "correction": "Count the form aloud and mark the change bars before adding lead notes."
+          "mistake": "Losing the 12-bar count when a bar contains two chords.",
+          "correction": "Keep counting bars, not chord symbols. A bar with Em7–A7 is still one bar; speak the bar number before each change."
         },
         {
-          "mistake": "Overfilling every space or forcing a bend beyond a comfortable range.",
-          "correction": "Use a fretted target pitch as a reference; use a smaller bend or omit it if it causes discomfort."
+          "mistake": "Treating the basic I–IV–V form and every jazz variation as interchangeable.",
+          "correction": "Play and label the basic map first, then mark each substitution in the variation as an optional reharmonisation."
+        },
+        {
+          "mistake": "Playing a continuous pentatonic run without hearing the harmony.",
+          "correction": "Use a short motif, leave space, and choose a chord tone or expressive blues colour that makes the current change audible."
         }
       ],
-      "accessibleAlternative": "Play roots or a two-note motif through the form; use straight eighths before adding shuffle feel.",
+      "accessibleAlternative": "Use one A7, D7 or E7 shell voicing per bar and speak the twelve bar numbers before playing. For the lead task, sing or speak a two-note motif, then play it on one string; keep the form and phrase-response goals.",
       "retrievalPrompt": [
-        "What is the 12-bar blues chord order in Roman numerals?",
-        "How can you keep the form while improvising?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Recite the three four-bar sections of the basic A blues without looking.",
+        "Name the role of the quick change in bar 2 and the E7 turnaround in bar 12.",
+        "Explain how a two-chord bar can still occupy one bar of the 12-bar form."
       ],
       "nextReviewSuggestion": {
         "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
         "suggestedChecks": [
           "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
+          "About one week later: repeat the task without the original prompt.",
           "About one month later: apply the skill in a different progression, rhythm or musical context."
         ],
         "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: retrieve the target and listen",
+          "5 min: isolate the main skill",
+          "3 min: perform one musical application"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: retrieve and prepare",
+          "9 min: focused practice in short sets",
+          "6 min: musical application",
+          "2 min: reflect and choose the next target"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
+          "5 min: listen and retrieve related material",
+          "15 min: focused practice in short sets",
+          "12 min: transfer the skill to a second context",
+          "5 min: complete musical application",
           "3 min: reflect"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Choose the highest-value tasks for the available time; do not rush every activity into a short session."
       },
       "instructorNotes": {
         "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
+        "tempoGuidance": "The outline tempo is a starting reference only. Begin slower if needed; increase only after accuracy, pulse and comfort remain steady.",
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
-      "checkpoint": "Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement.",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "checkpoint": "Perform a complete 12-bar A blues, identify bar numbers and I7/IV7/V7 roles, compare the jazz variation, and play one shaped A minor-pentatonic call-and-response chorus.",
+      "skillIds": ["arrangement.song-form", "lead.pentatonic", "lead.phrasing"],
       "workedExamples": [
         {
-          "kind": "form-reference",
-          "label": "12-bar blues map",
-          "content": "Common 12-bar form in Roman numerals: I | I | I | I | IV | IV | I | I | V | IV | I | V/turnaround. In A, the dominant-seventh chords are A7, D7 and E7. Count bars aloud before adding fills."
+          "kind": "form-map",
+          "label": "Basic quick-change A blues",
+          "content": "Bars 1–4: A7 | D7 | A7 | A7. Bars 5–8: D7 | D7 | A7 | A7. Bars 9–12: E7 | D7 | A7 | E7 (turnaround). Count bars aloud; the quick change is D7 in bar 2."
         },
         {
-          "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Create or perform an original 4- to 8-bar example demonstrating jazz blues form. Success target: Demonstrate jazz blues form in a short musical example, explain the key choice and identify one next improvement."
+          "kind": "jazz-variation",
+          "label": "One jazz-blues option in A",
+          "content": "A7 | D7 | A7 | Em7 A7 | D7 | D♯°7 | A7 | C♯m7 F♯7 | Bm7 | E7 | A7 F♯7 | Bm7 E7. This uses a passing diminished chord, applied ii–V motion and a turnaround—not a universal form."
+        },
+        {
+          "kind": "lead-phrase",
+          "label": "Original A blues phrase plan",
+          "content": "Use A–C–D–E–G for a two-bar call, leave space/response, then repeat with a changed ending. On changes, listen for C♯/G over A7, F♯/C over D7 and G♯/D over E7; use C or G as expressive blues colour only when you can hear its resolution."
         }
       ]
     },

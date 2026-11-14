@@ -1,10 +1,10 @@
 # M7.2 — Curriculum Skill Progression and Coverage Audit
 
 **Status:** Quantitative progression scan complete; pedagogical sequencing review in progress  
-**Release reviewed:** `curriculum-v1.0.5`  
+**Release reviewed:** `curriculum-v1.0.6`  
 **Source:** All 152 authored lessons across Year 1, Year 2 and four Year 3+ specialist routes  
 **Catalogue:** 34 stable skill IDs across 12 categories  
-**Current mapping links:** 389 (all 152 lessons and 34 stable skill identifiers remain represented)
+**Current mapping links:** 391 (all 152 lessons and 34 stable skill identifiers remain represented)
 
 ## 1. Method and limitations
 
@@ -16,7 +16,7 @@ A high count is not proof of over-teaching, and a low count is not automatically
 
 | Skill ID | Year 1 | Year 2 | Year 3+ | Total |
 |---|---:|---:|---:|---:|
-| `arrangement.song-form` | 4 | 5 | 9 | 18 |
+| `arrangement.song-form` | 4 | 5 | 10 | 19 |
 | `ear.intervals` | 1 | 4 | 3 | 8 |
 | `ear.melody-transcription` | 1 | 3 | 3 | 7 |
 | `ear.pitch` | 1 | 3 | 4 | 8 |
@@ -27,12 +27,12 @@ A high count is not proof of over-teaching, and a low count is not automatically
 | `fretboard.octaves` | 1 | 0 | 0 | 1 |
 | `fretboard.string-map` | 4 | 4 | 2 | 10 |
 | `harmony.barre-chords` | 1 | 2 | 0 | 3 |
-| `harmony.open-chords` | 8 | 7 | 8 | 23 |
+| `harmony.open-chords` | 8 | 7 | 7 | 22 |
 | `harmony.power-chords` | 1 | 1 | 0 | 2 |
-| `harmony.seventh-chords` | 2 | 1 | 6 | 9 |
+| `harmony.seventh-chords` | 2 | 1 | 7 | 10 |
 | `harmony.transitions` | 1 | 0 | 1 | 2 |
 | `harmony.triads` | 3 | 3 | 2 | 8 |
-| `harmony.voice-leading` | 4 | 2 | 10 | 16 |
+| `harmony.voice-leading` | 4 | 2 | 11 | 17 |
 | `instrument.posture` | 1 | 0 | 2 | 3 |
 | `instrument.tuning` | 1 | 0 | 1 | 2 |
 | `lead.major-scale` | 3 | 3 | 2 | 8 |
@@ -87,3 +87,11 @@ A high count is not proof of over-teaching, and a low count is not automatically
 5. Do not add new IDs solely to make the frequency table appear balanced; a genuine missing capability must be described and approved first.
 
 **Completion boundary:** This report completes the initial coverage-count pass. It does not complete the full pedagogical progression review or establish that every skill has sufficient practice and transfer opportunities.
+
+
+## 8. Jazz & Harmony batch 2 mapping update — v1.0.6
+
+- Week 5 now maps to `harmony.seventh-chords` and `harmony.voice-leading`; the previous `harmony.open-chords` link did not describe the extended seventh-chord task.
+- Week 8 adds `arrangement.song-form` alongside its existing pentatonic and phrasing links because learners must identify and retain the 12-bar form while improvising.
+- Net effect: +2 lesson-to-skill associations (389 → 391); all 152 lessons and all 34 stable skill IDs remain represented.
+- Task-specific lesson authoring is now 44/152 overall and 32/48 across Year 3+ specialist routes. Jazz & Harmony is 8/12 authored; All-Round Musician remains 0/12.

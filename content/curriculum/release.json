@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "curriculum-v1.0.5",
-  "version": "1.0.5",
-  "parentReleaseId": "curriculum-v1.0.4",
-  "publishedAt": "2026-11-14T07:45:27.000Z",
+  "id": "curriculum-v1.0.6",
+  "version": "1.0.6",
+  "parentReleaseId": "curriculum-v1.0.5",
+  "publishedAt": "2026-11-14T08:40:00.000Z",
   "changeType": "content_patch",
-  "summary": "Author the first four Jazz & Harmony lessons with task-specific seventh-chord voicings, swing subdivision, guide-tone connections and ii–V–I transfer while preserving all stable lesson and skill identifiers.",
+  "summary": "Author Jazz & Harmony Weeks 5–8 with accurate chord-extension distinctions and partial guitar voicings, an integrated comping review, a two-layer bossa-inspired starter pattern and a 12-bar jazz-blues form with an explicit variation. Preserve all stable lesson and skill identifiers.",
   "compatibility": {
     "skillIdsUnchanged": true,
     "lessonIdsUnchanged": true,
     "mappingsUnchanged": false,
-    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1, curriculum-v1.0.2, curriculum-v1.0.3 and curriculum-v1.0.4. New progress is recorded against curriculum-v1.0.5; no automatic migration or mastery carry-forward is performed."
+    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1, curriculum-v1.0.2, curriculum-v1.0.3, curriculum-v1.0.4 and curriculum-v1.0.5. New progress is recorded against curriculum-v1.0.6; no automatic migration or mastery carry-forward is performed."
   }
 }
