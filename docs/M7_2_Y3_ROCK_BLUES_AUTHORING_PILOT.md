@@ -1,6 +1,6 @@
 # M7.2 — Year 3 Rock & Blues Lesson Authoring Pilot
 
-**Status:** Implementation pilot complete; CI and curriculum review pending  
+**Status:** Weeks 1–4 pilot merged in PR #97; CI passed; curriculum reviewer approval pending  
 **Curriculum dataset version:** 1.0.1  
 **Scope:** Four Year 3 Rock & Blues lessons (Weeks 1–4)  
 **Skill catalogue:** Unchanged at version 1.0.0 / release `curriculum-v1`
@@ -51,8 +51,8 @@ The pilot deliberately preserves an inclusive approach to posture and technique.
 - [x] Stable lesson IDs and skill mappings are preserved.
 - [x] An explicit immutable release manifest and D1 migration seed `curriculum-v1.0.1` alongside the original `curriculum-v1` snapshot.
 - [x] Local D1 checks assert both releases and all 152 lesson metadata rows remain present independently.
-- [ ] Curriculum validation CI passes on the pull request head.
-- [ ] Formatting, application and browser acceptance CI passes.
+- [x] Curriculum validation CI passes on the pull request head.
+- [x] Formatting, application and browser acceptance CI passes.
 - [ ] Curriculum reviewer approves task difficulty and note/fret examples.
 
 ## 6. What this pilot is testing
