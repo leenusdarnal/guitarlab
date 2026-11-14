@@ -210,7 +210,8 @@ The following are known candidates from the initial source audit. They are flagg
 | Year 2 | 52 |
 | Year 3+ | 48 |
 | Lessons flagged for focused review | 5 |
-| Lessons still requiring explicit disposition | 152 |
+| Lessons with a documented mapping disposition in this pilot batch | 25 |
+| Lessons still requiring explicit disposition | 127 |
 
 **Important:** Register generation is not the same as mapping validation. The mapping audit remains incomplete until all 152 rows have a recorded disposition and supporting evidence. The five candidates have an initial evidence review in `docs/M7_2_FLAGGED_MAPPING_REVIEW.md`: three mapping sets are provisionally supported and two need curriculum-owner decisions. Continue with the remaining lessons in curriculum order.
 
@@ -223,4 +224,4 @@ The following are known candidates from the initial source audit. They are flagg
 - [ ] Curriculum owner has approved disputed or consequential changes.
 - [ ] Automated curriculum validation passes after any approved changes.
 
-**Next action:** Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20, then proceed through the remaining register in year/week order. Preserve all existing mappings until the evidence and curriculum-owner decision are recorded.
+**Next action:** Obtain a curriculum-owner decision for Year 1 Week 2 (its clean-fretting outcome has no exact existing skill ID) and confirm Year 1 Week 31's legato/picking scope. Continue the remaining 127 lesson rows in year/week order; do not infer semantic correctness from the lexical screen.
