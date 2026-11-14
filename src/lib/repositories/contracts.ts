@@ -176,7 +176,7 @@ export interface SkillMasteryRepository {
   save(snapshot: SkillMasteryRecord): Promise<void>;
 }
 
-/** Append-only exercise observations, scoped to one learner and session. */
+/** Append-only learner feedback, scoped to one learner and curriculum release. */
 export interface AdaptiveRecommendationFeedbackRepository {
   /** Append-only; feedback never updates assessment or mastery records. */
   append(record: AdaptiveRecommendationFeedbackRecord): Promise<void>;
