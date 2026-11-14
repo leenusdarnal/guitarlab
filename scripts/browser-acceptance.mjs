@@ -1022,6 +1022,75 @@ try {
   ]);
   await competingPage.close();
 
+  // M7.2 adaptive recommendation feedback is local, append-only and evidence-aware.
+  await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  const adaptiveRecommendation = page
+    .locator('.adaptive-list li[data-target-type="skill"]')
+    .first();
+  await adaptiveRecommendation.waitFor();
+  const recommendationId = await adaptiveRecommendation.getAttribute(
+    'data-recommendation-id'
+  );
+  assert.ok(recommendationId, 'A suggested skill needs a stable recommendation ID');
+
+  await adaptiveRecommendation
+    .getByRole('button', { name: 'Make it easier' })
+    .click();
+  await adaptiveRecommendation
+    .getByText(/You asked for an easier starting step/)
+    .waitFor();
+
+  await page.reload({ waitUntil: 'networkidle' });
+  const persistedRecommendation = page.locator(
+    `.adaptive-list li[data-recommendation-id="${recommendationId}"]`
+  );
+  await persistedRecommendation
+    .getByText(/You asked for an easier starting step/)
+    .waitFor();
+
+  await persistedRecommendation.getByRole('button', { name: 'Dismiss' }).click();
+  await page
+    .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
+    .waitFor({ state: 'detached' });
+
+  const adaptiveFeedbackSnapshot = await page.evaluate(async () => {
+    const database = await new Promise((resolve, reject) => {
+      const request = indexedDB.open('guitarlab-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const learnerId = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
+      request.onsuccess = () => resolve(request.result?.value);
+      request.onerror = () => reject(request.error);
+    });
+    const rows = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .index('byLearnerRelease')
+        .getAll([learnerId, 'curriculum-v1.0.6']);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const hasFeedbackStore = database.objectStoreNames.contains(
+      'adaptiveRecommendationFeedback'
+    );
+    database.close();
+    return { rows, hasFeedbackStore };
+  });
+  assert.equal(adaptiveFeedbackSnapshot.hasFeedbackStore, true);
+  assert.deepEqual(
+    adaptiveFeedbackSnapshot.rows
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action),
+    ['correct', 'dismiss'],
+    'Feedback is persisted as a new record for each learner action'
+  );
+
   // M7 skill-state transparency: explanations and learner corrections persist locally.
   const skillFixture = await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => {
