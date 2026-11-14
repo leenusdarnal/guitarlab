@@ -7078,7 +7078,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Identify roots before adding chord names",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -7308,7 +7313,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Sing, locate and verify each note by ear",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -10700,7 +10710,12 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Transcribe 4-8 notes, including rhythm",
-      "skillIds": ["ear.pitch", "ear.rhythm", "ear.melody-transcription", "ear.intervals"],
+      "skillIds": [
+        "ear.pitch",
+        "ear.rhythm",
+        "ear.melody-transcription",
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
