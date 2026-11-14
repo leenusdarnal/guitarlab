@@ -491,7 +491,8 @@ export async function updateSkillMasteryFromEvidence(
       (attempt) =>
         attempt.learnerId === value.learnerId &&
         attempt.curriculumReleaseId === value.releaseId &&
-        attempt.skillId === value.skillId
+        attempt.skillId === value.skillId &&
+        attempt.assessmentInstrument?.decisionScope !== 'supporting_probe'
     )
     .sort(
       (left, right) =>
