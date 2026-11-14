@@ -121,3 +121,34 @@ export async function recordActiveStandardTuningAssessment(
     database.close();
   }
 }
+
+
+/** Load the most recent saved attempt for this authored assessment, if any. */
+export async function loadLatestActiveStandardTuningAssessment(): Promise<AssessmentAttemptRecord | null> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const attempts = await repositories.assessments.listBySkill(
+      profile.id,
+      ACTIVE_CURRICULUM_RELEASE_ID,
+      standardTuningAssessment.skillId
+    );
+    return (
+      attempts
+        .filter(
+          (attempt) =>
+            attempt.assessmentInstrument?.definitionId ===
+            standardTuningAssessment.definitionId
+        )
+        .sort(
+          (left, right) =>
+            right.assessedAt - left.assessedAt ||
+            right.recordedAt - left.recordedAt ||
+            right.id.localeCompare(left.id)
+        )[0] ?? null
+    );
+  } finally {
+    database.close();
+  }
+}
