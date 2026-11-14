@@ -169,7 +169,8 @@ describe('learner backup contract', () => {
     });
 
     const mismatchedAuthoredLink = structuredClone(backup);
-    mismatchedAuthoredLink.records.practiceEvidence![0].authoredExerciseId = 'another-exercise';
+    mismatchedAuthoredLink.records.practiceEvidence![0].authoredExerciseId =
+      'another-exercise';
     expect(parseLearnerBackup(mismatchedAuthoredLink)).toMatchObject({
       success: false,
       message: expect.stringContaining('authored practice observation')
