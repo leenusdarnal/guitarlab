@@ -111,9 +111,15 @@ PRs #45–46 provide the fretboard, chord library and metronome. The audio follo
 - [x] Searchable/filterable session history (PR #58).
 - [x] Explainable skill states and learner corrections with provenance (PR #59).
 - [ ] Accuracy-first tempo ladders and richer per-item performance trends.
-- [x] First adaptive-practice slice: deterministic read model, stable reason codes, active learner/release scoping, measured-score summary, missing-evidence states and assessment-category coverage (PR #93).
-- [x] Practice Studio recommendation list and assessment-coverage view with canonical 34-skill catalogue (PR #94).
-- [ ] Append-only learner dismiss/correct feedback with provenance and richer derived analytics where the evidence supports them (Issue #69).
+- [x] First adaptive-practice read model: deterministic reason codes, active learner/release scoping, measured-score summaries, missing-evidence states and assessment-category coverage (PR #93).
+- [x] Practice Studio recommendation list, category assessment-coverage view and canonical 34-skill catalogue (PR #94).
+- [x] Append-only local dismiss/correct feedback with provenance, deterministic resolution, backup/restore/reset handling and browser acceptance (PR #103).
+- [x] Per-skill measured-score summaries, descriptive score spread and conservative four-score trends within the latest assessment kind (PR #104).
+- [ ] Structured per-item assessment outcomes and confusion metadata with provenance, versioning and privacy-safe backup/restore.
+- [ ] Canonical topic/technique/fretboard tags and derived exposure coverage based only on explicit tags and learner evidence (Issue #69).
+
+M7.1's core evidence loop is implemented in PRs #50–59. M7.2 now has deterministic read-only recommendations, category assessment coverage, append-only local learner feedback and comparable measured-score trends (PRs #92–94, #103–104). Issue #69 remains open for item-level correctness/confusion and topic/fretboard coverage because current practice observations are learner-entered activity notes, not item outcomes or structured instrument-location evidence. Do not infer accuracy from clean repetitions or mastery from time, lesson completion or repetitions.
+
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
 
 M7.1's core evidence loop is implemented in PRs #50–59. M7.2 is partially implemented by PRs #92–94: recommendations are derived and read-only, learner/release scoped and evidence-aware. Next is an auditable local dismiss/correct workflow. Do not infer accuracy from self-reported clean repetitions or mastery from time, lesson completion or repetitions; do not invent per-item accuracy where the source records do not contain it.
