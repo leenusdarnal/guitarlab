@@ -715,13 +715,18 @@ try {
       request.onerror = () => reject(request.error);
     });
     const learnerId = await new Promise((resolve, reject) => {
-      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
       request.onsuccess = () => resolve(request.result?.value);
       request.onerror = () => reject(request.error);
     });
     const rows = await new Promise((resolve, reject) => {
-      const request = database.transaction('adaptiveRecommendationFeedback')
-        .objectStore('adaptiveRecommendationFeedback').getAll();
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .getAll();
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -780,13 +785,18 @@ try {
       request.onerror = () => reject(request.error);
     });
     const learnerId = await new Promise((resolve, reject) => {
-      const request = database.transaction('metadata').objectStore('metadata').get('activeLearnerId');
+      const request = database
+        .transaction('metadata')
+        .objectStore('metadata')
+        .get('activeLearnerId');
       request.onsuccess = () => resolve(request.result?.value);
       request.onerror = () => reject(request.error);
     });
     const rows = await new Promise((resolve, reject) => {
-      const request = database.transaction('adaptiveRecommendationFeedback')
-        .objectStore('adaptiveRecommendationFeedback').getAll();
+      const request = database
+        .transaction('adaptiveRecommendationFeedback')
+        .objectStore('adaptiveRecommendationFeedback')
+        .getAll();
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
@@ -794,7 +804,9 @@ try {
     return rows.filter((record) => record.learnerId === learnerId);
   });
   assert.deepEqual(
-    restoredFeedback.filter((record) => record.recommendationId === recommendationId).map((record) => record.action),
+    restoredFeedback
+      .filter((record) => record.recommendationId === recommendationId)
+      .map((record) => record.action),
     ['correct', 'dismiss'],
     'Restore reinstates the learner\'s full adaptive recommendation feedback history'
   );
@@ -1088,7 +1100,10 @@ try {
   const recommendationId = await adaptiveRecommendation.getAttribute(
     'data-recommendation-id'
   );
-  assert.ok(recommendationId, 'A suggested skill needs a stable recommendation ID');
+  assert.ok(
+    recommendationId,
+    'A suggested skill needs a stable recommendation ID'
+  );
 
   await adaptiveRecommendation
     .getByRole('button', { name: 'Make it easier' })
@@ -1105,7 +1120,9 @@ try {
     .getByText(/You asked for an easier starting step/)
     .waitFor();
 
-  await persistedRecommendation.getByRole('button', { name: 'Dismiss' }).click();
+  await persistedRecommendation
+    .getByRole('button', { name: 'Dismiss' })
+    .click();
   await page
     .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
     .waitFor({ state: 'detached' });
