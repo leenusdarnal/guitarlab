@@ -149,8 +149,8 @@ describe('pulse recognition assessment evidence', () => {
       ...createEarTrainingExercise('pulse', 0),
       answer: 'rising' as EarTrainingAnswer
     };
-    expect(() =>
-      scorePulseRecognitionResponse(invalidKey, 'steady')
-    ).toThrow('The pulse item does not have an authored answer.');
+    expect(() => scorePulseRecognitionResponse(invalidKey, 'steady')).toThrow(
+      'The pulse item does not have an authored answer.'
+    );
   });
 });
