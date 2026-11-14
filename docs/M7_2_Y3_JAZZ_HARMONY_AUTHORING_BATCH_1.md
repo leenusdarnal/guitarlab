@@ -1,7 +1,7 @@
 # M7.2 — Jazz & Harmony Authoring Batch 1 (Weeks 1–4)
 
 **Status:** Draft implementation; release migration and full validation pending  
-**Dataset:** `year-3-specialisation-lessons.json` version `1.0.4`  
+**Dataset:** `year-3-specialisation-lessons.json` version `1.0.5`  
 **Scope:** Jazz & Harmony Weeks 1–4; stable lesson and week IDs preserved  
 **Skill catalogue:** Existing 34 identifiers only
 
