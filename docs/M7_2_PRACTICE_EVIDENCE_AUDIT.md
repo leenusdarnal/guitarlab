@@ -55,7 +55,16 @@ The first read-model/UI slice has now landed in PRs #93–94. The remaining gap 
 
 **Remaining gap:** recommendations cannot yet be dismissed or corrected by the learner with provenance. There are no append-only feedback records, and feedback is not resolved against newer evidence. Accuracy/consistency trends are limited to measured scored assessments; per-item correctness is not captured by the current practice-observation schema.
 
-## M7.2 implementation state after PRs #92–94\n\n- PR #92 completed this baseline audit.\n- PR #93 added \\`buildAdaptivePracticeSnapshot\\` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score mean/spread, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.\n- PR #94 integrated the read model into the Practice Studio, added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.\n- Repeated high difficulty in self-reported exercise observations is a pacing hint only; it is not a wrong-answer count or accuracy score.\n- Recommendation actions and correction provenance are not implemented yet.\n\n## Evidence quality rules for M7.2
+## M7.2 implementation state after PRs #92–94 and PR #103
+
+- PR #92 completed the baseline evidence/planner audit.
+- PR #93 added `buildAdaptivePracticeSnapshot` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score mean/spread, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.
+- PR #94 integrated the read model into the Practice Studio, added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.
+- PR #103 adds the next slice: bounded append-only dismiss/correct feedback, learner/release-scoped IndexedDB storage, deterministic latest-feedback resolution and accessible Practice Studio controls. It is open and must not be treated as complete until required CI passes and it is merged.
+- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score.
+- Current feedback choices are dismissal, already confident, too difficult and not relevant. They do not update assessment attempts or mastery. New recommendation evidence after a feedback timestamp can make a recommendation eligible to return.
+
+## Evidence quality rules for M7.2
 
 | Evidence source | Permitted use | Must not be used for |
 |---|---|---|
