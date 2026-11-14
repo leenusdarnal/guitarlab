@@ -185,6 +185,30 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  publish-required-status:
+    name: Publish required legacy status
+    if: always()
+    needs: [validate]
+    runs-on: ubuntu-24.04
+    permissions:
+      statuses: write
+    steps:
+      - name: Report application and curriculum validation to branch protection
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VALIDATION_RESULT: ${{ needs.validate.result }}
+          STATUS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          case "$VALIDATION_RESULT" in
+            success) state=success ;;
+            failure) state=failure ;;
+            *) state=error ;;
+          esac
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/statuses/${STATUS_SHA}" \
+            -f state="$state" \
+            -f context="Validate application and curriculum" \
+            -f description="Application and curriculum validation: $state"
+
   node-26-compatibility:
     name: Check Node.js 26 compatibility
     runs-on: ubuntu-24.04
