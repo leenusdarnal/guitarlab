@@ -102,7 +102,8 @@ const practiceSessionSchema = z
       context.addIssue({
         code: 'custom',
         path: ['primaryExerciseId'],
-        message: 'An authored session exercise requires release, lesson and taxonomy version.'
+        message:
+          'An authored session exercise requires release, lesson and taxonomy version.'
       });
     }
   });
@@ -236,11 +237,15 @@ export const learnerBackupSchema = z
       });
     }
 
-    const sessionsById = new Map(records.practiceSessions.map((session) => [session.id, session]));
+    const sessionsById = new Map(
+      records.practiceSessions.map((session) => [session.id, session])
+    );
     for (const evidence of records.practiceEvidence ?? []) {
       const hasAuthoredIdentity = Boolean(
-        evidence.curriculumReleaseId || evidence.lessonId ||
-        evidence.authoredExerciseId || evidence.practiceTaxonomyVersion
+        evidence.curriculumReleaseId ||
+          evidence.lessonId ||
+          evidence.authoredExerciseId ||
+          evidence.practiceTaxonomyVersion
       );
       if (!hasAuthoredIdentity) continue;
       const session = sessionsById.get(evidence.sessionId);
@@ -249,12 +254,14 @@ export const learnerBackupSchema = z
         evidence.curriculumReleaseId !== session.primaryCurriculumReleaseId ||
         evidence.lessonId !== session.primaryLessonId ||
         evidence.authoredExerciseId !== (session.primaryExerciseId ?? null) ||
-        evidence.practiceTaxonomyVersion !== (session.practiceTaxonomyVersion ?? null)
+        evidence.practiceTaxonomyVersion !==
+          (session.practiceTaxonomyVersion ?? null)
       ) {
         context.addIssue({
           code: 'custom',
           path: ['records', 'practiceEvidence'],
-          message: 'An authored practice observation must match the linked exercise and taxonomy version on its session.'
+          message:
+            'An authored practice observation must match the linked exercise and taxonomy version on its session.'
         });
         break;
       }
