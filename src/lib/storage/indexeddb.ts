@@ -211,7 +211,11 @@ export function openLocalDatabase(
       if (!evidence.indexNames.contains('byLearnerId')) {
         evidence.createIndex('byLearnerId', 'learnerId');
       }
-      if (!database.objectStoreNames.contains(stores.adaptiveRecommendationFeedback)) {
+      if (
+        !database.objectStoreNames.contains(
+          stores.adaptiveRecommendationFeedback
+        )
+      ) {
         const feedback = database.createObjectStore(
           stores.adaptiveRecommendationFeedback,
           { keyPath: 'id' }
@@ -589,47 +593,54 @@ export function createIndexedDbRepositories(
       )
   };
 
-  const adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRepository = {
-    append: async (record) =>
-      inTransaction(
-        database,
-        [stores.adaptiveRecommendationFeedback, stores.profiles],
-        'readwrite',
-        async (tx) => {
-          const validated = adaptiveRecommendationFeedbackSchema.parse(record);
-          const owner = await requestResult<LearnerProfileRecord | undefined>(
-            tx.objectStore(stores.profiles).get(validated.learnerId)
-          );
-          if (!owner) {
-            throw new Error(
-              'Adaptive recommendation feedback must belong to a saved learner profile.'
+  const adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRepository =
+    {
+      append: async (record) =>
+        inTransaction(
+          database,
+          [stores.adaptiveRecommendationFeedback, stores.profiles],
+          'readwrite',
+          async (tx) => {
+            const validated =
+              adaptiveRecommendationFeedbackSchema.parse(record);
+            const owner = await requestResult<LearnerProfileRecord | undefined>(
+              tx.objectStore(stores.profiles).get(validated.learnerId)
+            );
+            if (!owner) {
+              throw new Error(
+                'Adaptive recommendation feedback must belong to a saved learner profile.'
+              );
+            }
+            // add(), never put(), preserves a complete, append-only decision history.
+            await requestResult(
+              tx
+                .objectStore(stores.adaptiveRecommendationFeedback)
+                .add(validated)
             );
           }
-          // add(), never put(), preserves a complete, append-only decision history.
-          await requestResult(
-            tx.objectStore(stores.adaptiveRecommendationFeedback).add(validated)
-          );
-        }
-      ),
-    listByLearnerRelease: (learnerId, releaseId) =>
-      inTransaction(
-        database,
-        [stores.adaptiveRecommendationFeedback],
-        'readonly',
-        async (tx) => {
-          const records = await requestResult<AdaptiveRecommendationFeedbackRecord[]>(
-            tx
-              .objectStore(stores.adaptiveRecommendationFeedback)
-              .index('byLearnerRelease')
-              .getAll([learnerId, releaseId])
-          );
-          return records.sort(
-            (left, right) =>
-              left.createdAt - right.createdAt || left.id.localeCompare(right.id)
-          );
-        }
-      )
-  };
+        ),
+      listByLearnerRelease: (learnerId, releaseId) =>
+        inTransaction(
+          database,
+          [stores.adaptiveRecommendationFeedback],
+          'readonly',
+          async (tx) => {
+            const records = await requestResult<
+              AdaptiveRecommendationFeedbackRecord[]
+            >(
+              tx
+                .objectStore(stores.adaptiveRecommendationFeedback)
+                .index('byLearnerRelease')
+                .getAll([learnerId, releaseId])
+            );
+            return records.sort(
+              (left, right) =>
+                left.createdAt - right.createdAt ||
+                left.id.localeCompare(right.id)
+            );
+          }
+        )
+    };
 
   return {
     profiles,
@@ -979,7 +990,9 @@ export async function loadActiveAdaptiveRecommendationFeedback(): Promise<
   const database = await openLocalDatabase();
   try {
     const profile = await ensureActiveLearnerProfile(database);
-    return await createIndexedDbRepositories(database).adaptiveRecommendationFeedback.listByLearnerRelease(
+    return await createIndexedDbRepositories(
+      database
+    ).adaptiveRecommendationFeedback.listByLearnerRelease(
       profile.id,
       ACTIVE_CURRICULUM_RELEASE_ID
     );
@@ -990,7 +1003,12 @@ export async function loadActiveAdaptiveRecommendationFeedback(): Promise<
 
 export type RecordAdaptiveRecommendationFeedbackInput = Pick<
   AdaptiveRecommendationFeedbackRecord,
-  'recommendationId' | 'targetType' | 'targetId' | 'reasonCodes' | 'action' | 'correction'
+  | 'recommendationId'
+  | 'targetType'
+  | 'targetId'
+  | 'reasonCodes'
+  | 'action'
+  | 'correction'
 >;
 
 /** Persist an auditable learner response locally; it cannot write mastery. */
@@ -1007,7 +1025,9 @@ export async function recordActiveAdaptiveRecommendationFeedback(
       curriculumReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
       createdAt: systemRuntime.now()
     });
-    await createIndexedDbRepositories(database).adaptiveRecommendationFeedback.append(record);
+    await createIndexedDbRepositories(
+      database
+    ).adaptiveRecommendationFeedback.append(record);
     return record;
   } finally {
     database.close();
