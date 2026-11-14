@@ -1050,9 +1050,9 @@ try {
   const authoredObservationLink = page.locator(
     '.active-evidence-list .authored-observation-link'
   );
-  await reloadedAuthoredObservationLink.waitFor();
+  await authoredObservationLink.waitFor();
   assert.match(
-    await reloadedAuthoredObservationLink.innerText(),
+    await authoredObservationLink.innerText(),
     /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus[\\s\\S]*curriculum-v1\\.0\\.6[\\s\\S]*0\\.1\\.0/
   );
   await delay(1_200);
