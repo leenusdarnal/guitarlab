@@ -1,6 +1,6 @@
 # M7.2 Curriculum Integrity Audit & Tracking Plan
 
-**Status:** Planned — audit not yet completed  
+**Status:** Active — catalogue foundation merged; first mapping and authoring batch implemented; full audit still open  
 **Scope:** Existing GuitarLab curriculum skill catalogue and lesson-to-skill mappings  
 **Related work:** M7.2 versioned skill catalogue and adaptive practice  
 **Baseline:** 34 distinct skill identifiers across 152 lessons
@@ -158,14 +158,14 @@ Use this register as the single high-level progress view. Update it as work is c
 
 | Workstream | Coverage / target | Status | Evidence / notes |
 |---|---:|---|---|
-| Catalogue definition audit | 34 skills | In progress | Preliminary definition review documented in `docs/M7_2_SKILL_DEFINITION_AUDIT.md`; curriculum-owner approval pending |
-| Lesson mapping audit | 152 lessons | In progress | Complete register plus advisory lexical scan; focused triage covers 33 `harmony.open-chords` mappings and 54 associations across five other skill groups. Five initial lessons received full focused review; curriculum-owner decisions and remaining row-by-row dispositions are still open |
-| Progression and coverage | All 34 skills across curriculum | Not started | |
-| Assessment-readiness | 34 skills | In progress | Separate draft machine-readable profiles created for all 34 skills (102 criteria) with evidence, retention, transfer and human-review guidance; no score thresholds or automated pass/fail approved |
-| Versioning and learner-data safety | Catalogue policy | In progress | Versioned catalogue exists; policy review remains |
-| Automated validation | Catalogue + mappings + profiles + quality diagnostics | In progress | Validator checks all 34 draft profiles and emits non-blocking duplication advisories for generic objectives, success criteria, key ideas and Year 3+ capstone templates; latest CI rerun pending |
-| Curriculum-owner review | All findings | Not started | |
-| Final sign-off | All workstreams | Not started | |
+| Catalogue definition audit | 34 skills | Preliminary review complete | PR #94 merged the versioned 34-skill catalogue; the preliminary definition audit is documented. Curriculum-owner validation and approval remain pending |
+| Lesson mapping audit | 152 lessons / 331 current associations | In progress | Batch 1 records decisions for 25 lesson rows (12 authoring-pilot lessons, nine additional mapping corrections and four Year 3 pilot lessons); 127 rows still need explicit disposition. See `M7_2_MAPPING_DECISIONS_BATCH_1.md` and the updated register |
+| Progression and coverage | All 34 skills across curriculum | Initial quantitative scan complete | `M7_2_PROGRESS_AND_COVERAGE_AUDIT.md` reports skill occurrences by year; prerequisite, retention and transfer sequencing review remains open |
+| Assessment-readiness | 34 skills | Draft foundation complete | Profiles for all 34 skills (102 criteria) remain draft; 12 Year 1/2 lessons now have task-specific lesson criteria. No score thresholds or automated pass/fail are approved |
+| Versioning and learner-data safety | Catalogue policy | Implemented foundation | Immutable releases `curriculum-v1`, `curriculum-v1.0.1` and `curriculum-v1.0.2` preserve earlier progress and assessment evidence; no automatic carry-forward |
+| Automated validation | Catalogue + mappings + profiles + quality diagnostics | Implemented; combined CI pending | Validator checks all 34 profiles and active release metadata, all lesson mappings and non-blocking duplication diagnostics; the combined branch CI is the next acceptance gate |
+| Curriculum-owner review | All findings | In progress | Batch 1 decisions are documented; Year 1 W2 remains unresolved because clean fretting has no precise existing ID. Reviewers must validate musical examples, difficulty and transfer prompts |
+| Final sign-off | All workstreams | Not started | Full 152-lesson mapping dispositions and the remaining curriculum progression review are still required |
 
 ### Status definitions
 - **Not started:** No systematic review has been completed.
@@ -233,4 +233,4 @@ Use targeted external research only when a specific question cannot be resolved 
 
 ---
 
-**Next action:** Verify CI for the new assessment-profile and content-quality diagnostics. Obtain curriculum-owner decisions for the 33 open-chord associations and the 54 priority skill associations; then begin a controlled Year 3+ lesson-authoring pilot. Obtain curriculum-owner decisions for Year 1 Weeks 2 and 20. The preliminary 34-skill definition review is documented, but curriculum-owner approval and assessment rubric design remain open. Do not change curriculum identifiers or mappings until the evidence and proposed disposition are recorded.
+**Next action:** Complete combined CI for release `curriculum-v1.0.2`, obtain curriculum-owner review of the 16-lesson pilot sample and resolve Year 1 Week 2 / Week 31 mapping questions. Continue detailed review of the remaining 127 lesson rows. The full audit must remain open until all 152 lessons have a recorded disposition and the progression/assessment review is signed off.
