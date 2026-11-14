@@ -1,14 +1,14 @@
 # M7.2 — Practice Evidence and Planner Audit
 
-**Status:** Baseline audit reconciled with partial implementation; recommendation feedback remains open  
-**Reviewed against:** `main` at `de9b0f3992c258e5dfdc840e48fb45da47276bd2` (PRs #92–94 merged)  
+**Status:** Partial implementation verified; next gap is structured item evidence and explicit topic/fretboard taxonomy  
+**Reviewed against:** `main` at `a1da00fe0fb5804464ccb1679c128d1176957041` (PRs #92–94, #103–104 merged)  
 **Scope:** Existing practice planning, activity observations, assessment history and skill-state rules
 
 ## Executive summary
 
 GuitarLab already has the core records needed for a conservative, local-first adaptive practice layer. The existing planner is deterministic and explains its lesson, review, warm-up and musical-application suggestions. Practice observations and assessment attempts are separate records, and the skill-state explanation explicitly excludes practice duration and self-reported repetitions from mastery decisions.
 
-The first read-model/UI slice has now landed in PRs #93–94. The remaining gap is auditable learner feedback (dismiss/correct) and richer analytics only where source evidence can support them. M7.2 must not invent per-attempt correctness, confusion tags or fretboard coverage from existing free-text activity observations, and must not change the underlying assessment or mastery rules.
+The recommendation read model and category assessment-coverage view landed in PRs #93–94; append-only local learner feedback landed in PR #103; comparable measured-score summaries, spread and cautious trends landed in PR #104. The remaining gap is not another display of the same score aggregates: item-level correctness/confusion and true topic/fretboard exposure require explicit source fields and canonical metadata. Do not invent them from free-text exercise IDs, lesson titles or repetition logs, and do not change the underlying assessment or mastery rules.
 
 ## Existing architecture
 
@@ -22,7 +22,7 @@ The first read-model/UI slice has now landed in PRs #93–94. The remaining gap 
 - Recent completed-session focus and difficulty are used as context for musical application, not as performance grades.
 - Existing tests cover duration budgets, due-review ordering, missing evidence, learner goals and recent-session context.
 
-**Gap:** the planner does not currently consume per-item correctness/accuracy, repeated confusions, neglected topic/fretboard coverage, or learner feedback about prior recommendations. The current review candidate carries state, confidence and next-review timestamp, but not assessment trend or evidence recency.
+**Remaining gap:** the planner still cannot consume per-item correctness or repeated confusion because current persisted evidence is skill-level, not item-level. The read model includes assessment outcome, review-due and explicit learner-difficulty signals, plus category-level assessment coverage; it does not measure exposure to a topic, string or fretboard position. PR #104 adds a descriptive measured-score trend, but the planner does not yet use it to override assessment state or change recommendation priority.
 
 ### 2. Exercise observations
 
@@ -53,15 +53,16 @@ The first read-model/UI slice has now landed in PRs #93–94. The remaining gap 
 
 **Implemented:** the Practice Studio now shows up to six deterministic evidence-aware recommendations and assessment-category coverage from the reached Year 1 skill set (PR #94). It distinguishes assessment evidence from learner-entered exercise observations and shows an explicit missing-evidence state.
 
-**Remaining gap:** recommendations cannot yet be dismissed or corrected by the learner with provenance. There are no append-only feedback records, and feedback is not resolved against newer evidence. Accuracy/consistency trends are limited to measured scored assessments; per-item correctness is not captured by the current practice-observation schema.
+**Delivered in PR #103:** recommendations can be dismissed or corrected with a bounded reason; records are append-only, learner/release scoped and local in IndexedDB, with deterministic latest-feedback resolution and reappearance after newer evidence. Backup, restore and confirmed reset account for the new store. **Delivered in PR #104:** the analytics disclosure presents measured-score count/latest/mean/spread and a four-score trend by assessment kind. It explicitly distinguishes missing evidence and does not use self-entered practice repetitions. **Remaining gap:** item-level accuracy/confusion and topic/fretboard practice coverage remain unavailable until explicit structured records and taxonomy metadata exist.
 
-## M7.2 implementation state after PRs #92–94 and PR #103
+## M7.2 implementation state after PRs #92–94 and #103–104
 
 - PR #92 completed the baseline evidence/planner audit.
-- PR #93 added `buildAdaptivePracticeSnapshot` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score mean/spread, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.
-- PR #94 integrated the read model into the Practice Studio, added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.
-- PR #103 adds the next slice: bounded append-only dismiss/correct feedback, learner/release-scoped IndexedDB storage, deterministic latest-feedback resolution and accessible Practice Studio controls. It is open and must not be treated as complete until required CI passes and it is merged.
-- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score.
+- PR #93 added `buildAdaptivePracticeSnapshot` as a pure deterministic read model with active-learner/release scoping, stable reason codes, review-due and assessment signals, measured-score summaries, explicit missing evidence and assessment-category coverage. It does not write or mutate mastery.
+- PR #94 integrated the read model into Practice Studio and added the canonical versioned catalogue for the existing 34 skill IDs, draft-only assessment profiles and integrity validation.
+- PR #103 added bounded append-only dismiss/correct feedback, learner/release-scoped IndexedDB storage, deterministic latest-feedback resolution and accessible Practice Studio controls. Backup/restore/reset handling and browser acceptance are included; feedback does not alter assessments or mastery.
+- PR #104 added comparable measured-score count/latest/mean/spread and conservative improving/stable/declining trends. Only the most recently used assessment kind is summarized. A trend requires four comparable measured scores, compares two earlier with two recent scores, and uses a five-point threshold.
+- Repeated high difficulty in self-reported exercise observations remains a pacing hint only; it is not a wrong-answer count or accuracy score. Score spread/trends are descriptive summaries, not mastery decisions or verified item-level accuracy.
 - Current feedback choices are dismissal, already confident, too difficult and not relevant. They do not update assessment attempts or mastery. New recommendation evidence after a feedback timestamp can make a recommendation eligible to return.
 
 ## Evidence quality rules for M7.2
@@ -91,13 +92,17 @@ The first read-model/UI slice has now landed in PRs #93–94. The remaining gap 
 
 ## Implementation sequence
 
-- [x] Audit current planner, activity evidence, assessment history and skill-state rules.
-- [ ] Specify and test the recommendation scoring/reason-code contract.
-- [ ] Implement deterministic prioritisation using only supported evidence.
-- [ ] Add local learner feedback (dismiss/correct) with provenance.
-- [ ] Add derived accuracy, consistency and coverage views with missing-data states.
-- [ ] Add unit, application and browser tests, including deterministic tie-breaks and mastery invariants.
-- [ ] Update the M7.2 issue and implementation checkpoint with merged evidence.
+- [x] Audit current planner, activity evidence, assessment history and skill-state rules (PR #92).
+- [x] Specify and test deterministic reason codes, evidence scoping and recommendation ordering (PR #93).
+- [x] Add Practice Studio recommendations, catalogue integrity and category assessment coverage (PR #94).
+- [x] Add local append-only dismiss/correct feedback with provenance, persistence, backup/restore/reset and browser tests (PR #103).
+- [x] Add per-skill measured-score summaries, descriptive spread and conservative trend states with unit tests (PR #104).
+- [ ] Define a versioned per-item evidence contract for correctness/confusion only where the assessment flow directly observes an outcome; include provenance, learner/release scope and backup compatibility.
+- [ ] Add explicit canonical topic/technique/fretboard metadata where authors can reliably tag the assessed scope; do not guess tags from free text.
+- [ ] Use item outcomes for repeated-confusion prioritisation and item accuracy only after valid source records exist.
+- [ ] Add topic/fretboard exposure coverage only after canonical metadata and corresponding learner evidence exist.
+- [x] Keep session duration, repetitions, feedback and recommendations outside mastery decisions; preserve explicit missing-data states.
+- [ ] Update the M7.2 issue and implementation checkpoint when the structured evidence slice is merged.
 
 ## Explicit non-goals
 
