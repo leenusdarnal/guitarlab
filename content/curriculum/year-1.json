@@ -71,8 +71,12 @@
       "week": 4,
       "phaseId": "beginner-base",
       "title": "First chord shapes",
-      "focus": "Em and G; checking each string",
-      "checkpoint": "Form Em and G and move between them without squeezing.",
+      "focus": [
+        "Form Em, pick strings 6 through 1 separately and correct one unclear note.",
+        "Form G and repeat the same six-string check.",
+        "Alternate Em and G after four counted beats; keep the strumming hand moving during the change."
+      ],
+      "checkpoint": "Form Em (022000) and G (320003), sound each intended string clearly, then change between the shapes while keeping a steady four-beat pulse.",
       "practiceExercise": "Em-G pulse: one chord per bar",
       "startingTempoBpm": 52
     },
@@ -101,8 +105,12 @@
       "week": 7,
       "phaseId": "beginner-base",
       "title": "Strum in time",
-      "focus": "Downstrokes, upstrokes and subdivisions",
-      "checkpoint": "Keep a steady hand motion through both played and skipped strokes.",
+      "focus": [
+        "Play eight evenly spaced down-up strokes on muted strings while saying the count.",
+        "Repeat and skip the string contact on the selected '&' while keeping the hand's motion.",
+        "Add one chord and preserve the same timing; lower the tempo if the subdivision becomes uneven."
+      ],
+      "checkpoint": "Count eighth notes evenly, play a down-up pattern on muted strings, and keep the hand moving through one deliberately skipped stroke.",
       "practiceExercise": "Muted down/up groove",
       "startingTempoBpm": 60
     },
@@ -141,8 +149,12 @@
       "week": 11,
       "phaseId": "beginner-base",
       "title": "Your first music map",
-      "focus": "Open-string map, semitone steps and first fretboard landmarks",
-      "checkpoint": "Name the six open strings, explain that adjacent frets are a semitone apart, and locate a selected note on two strings",
+      "focus": [
+        "Find E, F, G and A on the low E string and say the fret number for each.",
+        "Find A, B, C and D on the A string and say the fret number for each.",
+        "Choose a note name and locate it on both strings, explaining the fret movement used."
+      ],
+      "checkpoint": "Name the open strings E–A–D–G–B–E, explain that adjacent frets are one semitone apart, and locate two requested natural notes on the low E and A strings.",
       "practiceExercise": "Two-string note-finding pattern",
       "startingTempoBpm": 58
     },
@@ -181,8 +193,12 @@
       "week": 15,
       "phaseId": "skills-in-context",
       "title": "Pick control and clean tone",
-      "focus": "Alternate picking and string crossing",
-      "checkpoint": "Use down-up picking on one string, then cross between two strings.",
+      "focus": [
+        "Play a four-note D–U–D–U cell on one string.",
+        "Repeat on two strings, planning the crossing before the first note on the new string.",
+        "Record or listen to one pass and identify whether timing, volume or pick depth changed at the crossing."
+      ],
+      "checkpoint": "Play a down-up-down-up sequence on one string, then carry the alternating sequence across two neighbouring strings without losing an even attack.",
       "practiceExercise": "Alternate-pick pulse cell",
       "startingTempoBpm": 64
     },
@@ -191,8 +207,12 @@
       "week": 16,
       "phaseId": "skills-in-context",
       "title": "Fingerstyle foundation",
-      "focus": "Thumb and fingers as separate roles",
-      "checkpoint": "Play a four-note arpeggio with a steady thumb and relaxed fingers.",
+      "focus": [
+        "Loop the thumb part alone until the bass spacing is steady.",
+        "Add one treble note at a time while the thumb continues its pulse.",
+        "Change the treble-note order and keep the bass role unchanged."
+      ],
+      "checkpoint": "Keep a steady bass-thumb pulse while adding a four-note treble pattern without interrupting the bass role.",
       "practiceExercise": "Thumb-3-2-1 arpeggio",
       "startingTempoBpm": 54
     },
@@ -201,8 +221,12 @@
       "week": 17,
       "phaseId": "skills-in-context",
       "title": "Build the major scale",
-      "focus": "Whole-step/half-step formula and a small C major pattern",
-      "checkpoint": "Play a one-octave C major fragment and say the note names.",
+      "focus": [
+        "Play one octave of C major and name each note while playing.",
+        "Say the A minor pentatonic notes A–C–D–E–G and locate the root A.",
+        "Create a short phrase using only those five notes and finish on A."
+      ],
+      "checkpoint": "Play and name a one-octave C major fragment, then identify A–C–D–E–G as A minor pentatonic and resolve a short phrase to A.",
       "practiceExercise": "C major scale fragment",
       "startingTempoBpm": 60
     },
@@ -261,8 +285,12 @@
       "week": 23,
       "phaseId": "skills-in-context",
       "title": "Minor pentatonic box 1",
-      "focus": "Map the five notes and find the roots",
-      "checkpoint": "Play A minor pentatonic box 1 slowly and end on A.",
+      "focus": [
+        "Play the box 1 shape slowly from low E to high E and back.",
+        "Name the A root when it appears on the low E and high E strings.",
+        "Create a short phrase using the five notes and end on A."
+      ],
+      "checkpoint": "Play A minor pentatonic box 1 across the six strings, identify the root A locations and end a short phrase on A.",
       "practiceExercise": "A minor pentatonic call-and-response",
       "startingTempoBpm": 64
     },
@@ -291,8 +319,12 @@
       "week": 26,
       "phaseId": "early-intermediate",
       "title": "Triads on the top strings",
-      "focus": "Compact voicings and inversions",
-      "checkpoint": "Play C, F and G triads on the top three strings.",
+      "focus": [
+        "Play each C, F and G triad reference one string at a time.",
+        "Name the root, third and fifth before sounding the triad together.",
+        "Move from one triad to the next and keep the intended three-note voicing clear."
+      ],
+      "checkpoint": "Play C, F and G triads on the top three strings, name each root and identify the three chord tones in the selected voicing.",
       "practiceExercise": "Top-string triad walk",
       "startingTempoBpm": 66
     },
@@ -401,8 +433,13 @@
       "week": 37,
       "phaseId": "intermediate-bridge",
       "title": "Learn a melody by ear",
-      "focus": "Listen, sing, find and verify notes",
-      "checkpoint": "Transcribe a two-bar melody from sound without first reading TAB.",
+      "focus": [
+        "Hum the phrase and repeat it in short fragments of two or three notes.",
+        "Clap the rhythm separately from the pitch task.",
+        "Locate the opening note, work out subsequent interval movement and record note order.",
+        "Replay the source only after the first independent transcription, then correct one specific difference."
+      ],
+      "checkpoint": "Transcribe a two-bar melody from sound without first reading TAB, preserving its note order and rhythm and describing one interval movement.",
       "practiceExercise": "Four-note call-and-response",
       "startingTempoBpm": 60
     },
