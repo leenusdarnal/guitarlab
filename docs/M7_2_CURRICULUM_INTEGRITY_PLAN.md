@@ -222,7 +222,7 @@ Use targeted external research only when a specific question cannot be resolved 
 - `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` — source-derived register covering all 152 lessons, current mappings, focus, and checkpoint evidence cues.
 - `docs/M7_2_FLAGGED_MAPPING_REVIEW.md` — evidence-based review of five initially flagged lessons.
 - `docs/M7_2_MAPPING_LEXICAL_SCREEN.md` — advisory scan of 341 mappings, with a manually reviewable phrase-match queue.
-- `docs/M7_2_OPEN_CHORD_MAPPING_REVIEW.md` — focused review of all 33 `harmony.open-chords` associations (2 direct, 5 contextual, 26 likely misaligned; owner decision pending).
+- `docs/M7_2_OPEN_CHORD_MAPPING_REVIEW.md` — focused review of the original 33 `harmony.open-chords` associations; release v1.0.2 corrected nine high-confidence cases, leaving 24 for further review.
 - `docs/M7_2_PRIORITY_SKILL_MAPPING_REVIEW.md` — focused triage of 54 associations across triads, voice-leading, ear-rhythm, fingerstyle thumb independence and pentatonic skills.
 - `docs/M7_2_EVIDENCE_BASED_CURRICULUM_REVIEW.md` — research synthesis and evidence-based improvement roadmap.
 - `docs/M7_2_LESSON_CONTENT_QUALITY_AUDIT.md` — dataset quality findings, including generic objective and Year 3+ capstone templates.
