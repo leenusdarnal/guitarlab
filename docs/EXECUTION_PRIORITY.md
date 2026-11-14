@@ -20,14 +20,14 @@
 
 ## 2. Priority order
 
-### P0 — Reconcile curriculum v1.0.6 and the live repository checkpoint (in progress)
+### P0 — Reconcile curriculum v1.0.6 and the live repository checkpoint (complete)
 
-1. [x] Review PR #102's curriculum, migration, fingerprint, local-D1 invariants and required checks.
-2. [x] Merge PR #102 after all required PR checks passed.
-3. [x] Verify post-merge application CI result for run #43579576570 — passed.
-4. [ ] Update tracker, roadmap, audio audit and M7.2 curriculum/practice audits to reflect merged PRs and current issue states.
+1. [x] Review and merge PR #102 after curriculum and application checks passed.
+2. [x] Verify post-merge application CI run #43579576570 and curriculum validation run #43579576618.
+3. [x] Merge PRs #103–104 and verify PR #104 application/curriculum plus Node.js 26 checks (run #43584492437).
+4. [x] Reconcile execution priority, implementation tracker, M7.2 evidence audit, roadmap and Issue #69 (documentation PR #105).
 
-**Exit criteria:** the current main SHA, CI evidence, curriculum progress and issue owners agree across docs and GitHub.
+**Exit criteria:** current main SHA, CI evidence, curriculum progress and issue state are aligned across the repository tracker and GitHub.
 
 ### P1 — Adaptive recommendations and evidence-backed analytics (Issue #69)
 
