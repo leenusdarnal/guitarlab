@@ -200,6 +200,11 @@ export const assessmentAttemptSubmissionSchema =
     })
     .superRefine(validateAssessmentAttemptEvidence);
 
+export const assessmentAttemptRecordSchema = assessmentAttemptObjectSchema
+  .extend({ recordedAt: z.number().int().nonnegative() })
+  .strict()
+  .superRefine(validateAssessmentAttemptEvidence);
+
 export type AssessmentAttemptInput = z.infer<
   typeof assessmentAttemptInputSchema
 >;
