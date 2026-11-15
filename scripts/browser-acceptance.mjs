@@ -17,7 +17,10 @@ const skillIdFor = (displayName) => {
   const skill = skillCatalog.skills.find(
     (item) => item.displayName === displayName
   );
-  assert.ok(skill, `The curriculum catalogue must include ${displayName}.`);
+  assert.ok(
+    skill,
+    `The curriculum catalogue must include ${displayName}.`
+  );
   return skill.id;
 };
 const alternatePickingSkillId = skillIdFor('Alternate picking');
@@ -1446,75 +1449,75 @@ try {
       alternatePickingSkillId,
       chordTransitionsSkillId
     }) => {
-    const database = await new Promise((resolve, reject) => {
-      const request = indexedDB.open('guitarlab-local');
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const active = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('metadata')
-        .objectStore('metadata')
-        .get('activeLearnerId');
-      request.onsuccess = () => resolve(request.result?.value);
-      request.onerror = () => reject(request.error);
-    });
-    const now = Date.now();
-    const passedAttemptId = 'aaaaaaaa-1111-4111-8111-111111111111';
-    const transaction = database.transaction(
-      ['assessmentAttempts', 'skillMastery'],
-      'readwrite'
-    );
-    transaction.objectStore('assessmentAttempts').add({
-      id: passedAttemptId,
-      learnerId: active,
-      curriculumReleaseId: activeCurriculumReleaseId,
-      skillId: alternatePickingSkillId,
-      lessonId: null,
-      assessmentKind: 'guided_self_check',
-      evidenceType: 'observed_or_self_checked',
-      outcome: 'passed',
-      score: 85,
-      evidenceSummary: 'Consistent alternate picking at target tempo.',
-      evidence: {},
-      assessedAt: now,
-      recordedAt: now
-    });
-    transaction.objectStore('skillMastery').put({
-      learnerId: active,
-      curriculumReleaseId: activeCurriculumReleaseId,
-      skillId: alternatePickingSkillId,
-      state: 'stable',
-      evidenceCount: 1,
-      confidence: 85,
-      lastAssessmentId: passedAttemptId,
-      lastAssessedAt: now,
-      nextReviewAt: now + 86400000,
-      decisionSource: 'evidence',
-      correctionNote: null,
-      updatedAt: now
-    });
-    transaction.objectStore('skillMastery').put({
-      learnerId: active,
-      curriculumReleaseId: activeCurriculumReleaseId,
-      skillId: chordTransitionsSkillId,
-      state: 'not_started',
-      evidenceCount: 0,
-      confidence: null,
-      lastAssessmentId: null,
-      lastAssessedAt: null,
-      nextReviewAt: null,
-      decisionSource: 'evidence',
-      correctionNote: null,
-      updatedAt: now
-    });
-    await new Promise((resolve, reject) => {
-      transaction.oncomplete = resolve;
-      transaction.onerror = () => reject(transaction.error);
-      transaction.onabort = () => reject(transaction.error);
-    });
-    database.close();
-    return { active };
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const active = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('metadata')
+          .objectStore('metadata')
+          .get('activeLearnerId');
+        request.onsuccess = () => resolve(request.result?.value);
+        request.onerror = () => reject(request.error);
+      });
+      const now = Date.now();
+      const passedAttemptId = 'aaaaaaaa-1111-4111-8111-111111111111';
+      const transaction = database.transaction(
+        ['assessmentAttempts', 'skillMastery'],
+        'readwrite'
+      );
+      transaction.objectStore('assessmentAttempts').add({
+        id: passedAttemptId,
+        learnerId: active,
+        curriculumReleaseId: activeCurriculumReleaseId,
+        skillId: alternatePickingSkillId,
+        lessonId: null,
+        assessmentKind: 'guided_self_check',
+        evidenceType: 'observed_or_self_checked',
+        outcome: 'passed',
+        score: 85,
+        evidenceSummary: 'Consistent alternate picking at target tempo.',
+        evidence: {},
+        assessedAt: now,
+        recordedAt: now
+      });
+      transaction.objectStore('skillMastery').put({
+        learnerId: active,
+        curriculumReleaseId: activeCurriculumReleaseId,
+        skillId: alternatePickingSkillId,
+        state: 'stable',
+        evidenceCount: 1,
+        confidence: 85,
+        lastAssessmentId: passedAttemptId,
+        lastAssessedAt: now,
+        nextReviewAt: now + 86400000,
+        decisionSource: 'evidence',
+        correctionNote: null,
+        updatedAt: now
+      });
+      transaction.objectStore('skillMastery').put({
+        learnerId: active,
+        curriculumReleaseId: activeCurriculumReleaseId,
+        skillId: chordTransitionsSkillId,
+        state: 'not_started',
+        evidenceCount: 0,
+        confidence: null,
+        lastAssessmentId: null,
+        lastAssessedAt: null,
+        nextReviewAt: null,
+        decisionSource: 'evidence',
+        correctionNote: null,
+        updatedAt: now
+      });
+      await new Promise((resolve, reject) => {
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+        transaction.onabort = () => reject(transaction.error);
+      });
+      database.close();
+      return { active };
     },
     {
       activeCurriculumReleaseId,
@@ -1568,29 +1571,33 @@ try {
     .waitFor();
   const correctedSnapshot = await page.evaluate(
     async ({ activeCurriculumReleaseId, chordTransitionsSkillId }) => {
-    const database = await new Promise((resolve, reject) => {
-      const request = indexedDB.open('guitarlab-local');
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const learnerId = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('metadata')
-        .objectStore('metadata')
-        .get('activeLearnerId');
-      request.onsuccess = () => resolve(request.result?.value);
-      request.onerror = () => reject(request.error);
-    });
-    const row = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('skillMastery')
-        .objectStore('skillMastery')
-        .get([learnerId, activeCurriculumReleaseId, chordTransitionsSkillId]);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    database.close();
-    return row;
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const learnerId = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('metadata')
+          .objectStore('metadata')
+          .get('activeLearnerId');
+        request.onsuccess = () => resolve(request.result?.value);
+        request.onerror = () => reject(request.error);
+      });
+      const row = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('skillMastery')
+          .objectStore('skillMastery')
+          .get([
+            learnerId,
+            activeCurriculumReleaseId,
+            chordTransitionsSkillId
+          ]);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      database.close();
+      return row;
     },
     { activeCurriculumReleaseId, chordTransitionsSkillId }
   );
