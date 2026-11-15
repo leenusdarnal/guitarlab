@@ -47,6 +47,15 @@ export type AdaptivePracticeRecommendation = {
   latestEvidenceAt: number | null;
 };
 
+export type ItemResponseMismatchAnalytics = {
+  /** Stable label for an explicit expected/selected interval contrast. */
+  code: string;
+  expectedResponse: string;
+  selectedResponse: string;
+  count: number;
+  latestEvidenceAt: number;
+};
+
 export type ItemEvidenceItemAnalytics = {
   itemId: string;
   attemptCount: number;
@@ -56,6 +65,7 @@ export type ItemEvidenceItemAnalytics = {
   latestOutcome: 'correct' | 'incorrect' | 'inconclusive';
   consecutiveIncorrectCount: number;
   latestEvidenceAt: number;
+  responseMismatches: ItemResponseMismatchAnalytics[];
 };
 
 export type ItemEvidenceGroupAnalytics = {
@@ -182,6 +192,8 @@ function buildItemEvidenceGroups(
 ): ItemEvidenceGroupAnalytics[] {
   type ItemEvent = {
     attemptId: string;
+    response: string | null;
+    responseSource: 'learner_selected_option' | 'no_response';
     outcome: 'correct' | 'incorrect' | 'inconclusive';
     assessedAt: number;
     recordedAt: number;
@@ -230,6 +242,8 @@ function buildItemEvidenceGroups(
       const events = group.items.get(item.itemId) ?? [];
       events.push({
         attemptId: attempt.id,
+        response: item.response,
+        responseSource: item.responseSource,
         outcome: item.outcome,
         assessedAt: attempt.assessedAt,
         recordedAt: attempt.recordedAt
@@ -256,6 +270,60 @@ function buildItemEvidenceGroups(
             consecutiveIncorrectCount += 1;
           }
 
+          const intervalAnswers = new Set([
+            'unison',
+            'minor_third',
+            'major_third',
+            'perfect_fifth'
+          ]);
+          const expectedIntervalPrefix = 'interval-recognition.';
+          const expectedInterval = itemId.startsWith(expectedIntervalPrefix)
+            ? itemId.slice(expectedIntervalPrefix.length)
+            : '';
+          const supportsExactIntervalContrast =
+            group.definitionId === 'guitar.ear-training.interval-recognition' &&
+            group.definitionVersion === 1 &&
+            group.scoringRuleVersion === 'exact-interval-choice-v1' &&
+            group.decisionScope === 'supporting_probe' &&
+            intervalAnswers.has(expectedInterval);
+          const mismatchCounts = new Map<
+            string,
+            { count: number; latestEvidenceAt: number }
+          >();
+          if (supportsExactIntervalContrast) {
+            for (const event of ordered) {
+              if (
+                event.outcome !== 'incorrect' ||
+                event.responseSource !== 'learner_selected_option' ||
+                event.response === null ||
+                !intervalAnswers.has(event.response) ||
+                event.response === expectedInterval
+              ) {
+                continue;
+              }
+              const current = mismatchCounts.get(event.response) ?? {
+                count: 0,
+                latestEvidenceAt: event.assessedAt
+              };
+              current.count += 1;
+              current.latestEvidenceAt = Math.max(
+                current.latestEvidenceAt,
+                event.assessedAt
+              );
+              mismatchCounts.set(event.response, current);
+            }
+          }
+
+          const responseMismatches = [...mismatchCounts.entries()]
+            .sort(([left], [right]) => left.localeCompare(right))
+            .map(([selectedResponse, value]) => ({
+              code: `interval.${expectedInterval}.selected.${selectedResponse}`,
+              expectedResponse: expectedInterval,
+              selectedResponse,
+              count: value.count,
+              latestEvidenceAt: value.latestEvidenceAt
+            }));
+
           return {
             itemId,
             attemptCount: ordered.length,
@@ -269,7 +337,8 @@ function buildItemEvidenceGroups(
             ).length,
             latestOutcome: latest.outcome,
             consecutiveIncorrectCount,
-            latestEvidenceAt: latest.assessedAt
+            latestEvidenceAt: latest.assessedAt,
+            responseMismatches
           };
         });
       const correctItemCount = items.reduce(
