@@ -109,6 +109,14 @@
     }
   }
 
+  function recordBackupDownloadDate(timestamp: number): boolean {
+    try {
+      return recordLastBackupExportAt(window.localStorage, timestamp);
+    } catch {
+      return false;
+    }
+  }
+
   async function downloadBackup() {
     isExporting = true;
     showMessage('export', '');
@@ -127,7 +135,7 @@
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      const metadataSaved = recordLastBackupExportAt(window.localStorage, exportedAt);
+      const metadataSaved = recordBackupDownloadDate(exportedAt);
       lastBackupExportAt = metadataSaved ? exportedAt : null;
       showMessage(
         'export',
