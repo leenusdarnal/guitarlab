@@ -516,7 +516,7 @@
           </article>
         </section>
 
-        {#if (!dashboard.isFreshStart || dashboard.recentPractice.length > 0 || dashboard.dueReviews.length > 0) && shouldShowBackupReminder(lastBackupExportAt)}
+        {#if shouldShowBackupReminder(lastBackupExportAt)}
           <section class="backup-reminder" id="backup-reminder" aria-label="Backup reminder">
             <div class="backup-reminder-copy">
               <div class="eyebrow">KEEP YOUR PROGRESS SAFE</div>
