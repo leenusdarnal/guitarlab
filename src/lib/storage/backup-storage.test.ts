@@ -140,6 +140,41 @@ function makeSource(): LearnerBackupSource {
         correction: null,
         createdAt: 300
       }
+    ],
+    songProjects: [
+      {
+        id: '123e4567-e89b-42d3-a456-426614174000',
+        learnerId,
+        title: 'My arrangement',
+        artist: 'Practice reference',
+        sourceType: 'reference_link',
+        sourceUrl: 'https://example.com/song',
+        notes: 'Use a relaxed downstroke feel.',
+        sections: [
+          {
+            id: '223e4567-e89b-42d3-a456-426614174000',
+            title: 'Verse',
+            order: 0,
+            notes: 'Keep the bass note steady.',
+            bookmark: 'Reference starts at 0:42',
+            practiceTarget: 'Play the chord change four times cleanly.'
+          }
+        ],
+        createdAt: 100,
+        updatedAt: 200
+      },
+      {
+        id: '323e4567-e89b-42d3-a456-426614174000',
+        learnerId: anotherLearnerId,
+        title: 'Another learner project',
+        artist: null,
+        sourceType: 'original',
+        sourceUrl: null,
+        notes: '',
+        sections: [],
+        createdAt: 100,
+        updatedAt: 200
+      }
     ]
   };
 }
@@ -169,6 +204,18 @@ describe('local learner backup export builder', () => {
     expect(backup.records.practiceSessions[0].nextTarget).toBe(
       'Keep the G major scale even at 72 BPM.'
     );
+    expect(backup.records.songProjects).toHaveLength(1);
+    expect(backup.records.songProjects?.[0]).toMatchObject({
+      learnerId,
+      title: 'My arrangement',
+      sections: [
+        {
+          title: 'Verse',
+          bookmark: 'Reference starts at 0:42',
+          practiceTarget: 'Play the chord change four times cleanly.'
+        }
+      ]
+    });
   });
 
   it('refuses to export when the active profile is missing', () => {

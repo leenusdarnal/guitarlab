@@ -1,3 +1,4 @@
+import type { SongProjectRecord } from '../domain/repertoire/song-project';
 import { openLocalDatabase, ensureActiveLearnerProfile } from './indexeddb';
 import {
   LEARNER_BACKUP_FORMAT,
@@ -25,6 +26,7 @@ export type LearnerBackupSource = {
   practiceSessions: PracticeSessionRecord[];
   practiceEvidence: PracticeEvidenceRecord[];
   adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRecord[];
+  songProjects: SongProjectRecord[];
 };
 
 /** Build a portable snapshot from store rows, retaining only one learner's data. */
@@ -58,7 +60,8 @@ export function buildLearnerBackup(
       practiceEvidence: owned(source.practiceEvidence),
       adaptiveRecommendationFeedback: owned(
         source.adaptiveRecommendationFeedback
-      )
+      ),
+      songProjects: owned(source.songProjects)
     }
   });
 }
@@ -97,7 +100,8 @@ export async function exportActiveLearnerBackup(
         'skillMastery',
         'practiceSessions',
         'practiceEvidence',
-        'adaptiveRecommendationFeedback'
+        'adaptiveRecommendationFeedback',
+        'songProjects'
       ],
       'readonly'
     );
@@ -112,7 +116,8 @@ export async function exportActiveLearnerBackup(
         skillMastery,
         practiceSessions,
         practiceEvidence,
-        adaptiveRecommendationFeedback
+        adaptiveRecommendationFeedback,
+        songProjects
       ] = await Promise.all([
         requestResult<LearnerProfileRecord[]>(
           transaction.objectStore('learnerProfiles').getAll()
@@ -137,6 +142,9 @@ export async function exportActiveLearnerBackup(
         ),
         requestResult<AdaptiveRecommendationFeedbackRecord[]>(
           transaction.objectStore('adaptiveRecommendationFeedback').getAll()
+        ),
+        requestResult<SongProjectRecord[]>(
+          transaction.objectStore('songProjects').getAll()
         )
       ] as const);
 
@@ -149,7 +157,8 @@ export async function exportActiveLearnerBackup(
         skillMastery,
         practiceSessions,
         practiceEvidence,
-        adaptiveRecommendationFeedback
+        adaptiveRecommendationFeedback,
+        songProjects
       });
     } catch (error) {
       await completed.catch(() => undefined);
