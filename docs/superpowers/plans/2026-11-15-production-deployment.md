@@ -44,7 +44,7 @@
 - [ ] Restrict to dispatches on `main` with explicit `deploy_production=true`.
 - [ ] Check both latest exact-SHA CI check names.
 - [ ] Build, dry-run and deploy the same selected commit.
-- [ ] Smoke-test `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`.
+- [ ] Smoke-test `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`; capture Wrangler's version ID/deployment time/URL and upload the evidence JSON artifact for 90 days.
 - [ ] Verify CSP, HSTS, MIME, frame and referrer headers; reject unsafe script-src allowances.
 - [ ] Configure the GitHub production environment with required credentials and main-only deployment policy before first live run. Use Workers Admin only for the first Worker creation, then rotate to a Worker Editor token scoped to `guitarlab`.
 
