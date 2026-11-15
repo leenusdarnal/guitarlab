@@ -239,15 +239,15 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-08 — Improve musical tool ergonomics and feedback
 
 **Priority:** P1 for assistive/essential interactions; P2 for enhancements  
-**Status:** READY  
+**Status:** IN PROGRESS — metronome feedback and control slice implemented on `feat/ux-08-metronome-feedback`; tuner and note-recognition work remains open  
 **Depends on:** UX-02, UX-03 and UX-04  
 **Related findings:** M1–M3, TU1–TU3, N1–N3
 
-- [ ] Add a clear visual beat pulse and beat/downbeat indication to the metronome; respect reduced-motion settings.
-- [ ] Add Screen Wake Lock while the metronome is actively running, reacquire after visibility changes when appropriate, and release on stop/destroy.
-- [ ] Handle denied, unsupported and automatically released wake locks without breaking audio playback.
-- [ ] Improve tempo control with step buttons, direct numeric entry, tap tempo and useful presets; retain the current slider as an accessible option.
-- [ ] Make the metronome toggle semantics consistent: fixed label plus pressed state, or changing label without aria-pressed.
+- [x] Add an accessible visual beat pulse and distinct downbeat indication; pulse updates are visual only and respect reduced-motion settings.
+- [x] Request Screen Wake Lock only while the metronome is running; release on stop/destroy and retry after a release while the visible page remains active. Physical-browser behaviour still requires device acceptance.
+- [x] Handle denied, unsupported and automatically released wake locks as non-blocking enhancement states; audio playback remains available.
+- [x] Add +/- step buttons, direct numeric entry, tap tempo and 60/80/100/120 BPM presets while retaining the labelled slider.
+- [x] Use changing Start/Stop labels without an aria-pressed state.
 - [ ] Reduce tuner live-region announcements to meaningful state changes; keep high-frequency readings visual rather than announcing them repeatedly.
 - [ ] Persist tuner calibration preference where appropriate and add clear target-string, reference-tone, input-level and microphone-permission guidance as separate enhancements.
 - [ ] Record note-recognition first-attempt accuracy and total attempts; do not count eventual retries as first-try success.
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Started UX-08 metronome slice: visual downbeat/beat indicator, motion-safe feedback, tap/direct/step/preset tempo controls and conditional Screen Wake Lock with fallback states. Unit/browser validation pending; tuner, note-recognition and physical-device acceptance remain open. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |

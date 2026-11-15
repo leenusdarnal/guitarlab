@@ -142,11 +142,43 @@ try {
   await page.waitForFunction(() =>
     document.querySelector('.tempo-display')?.textContent?.includes('112')
   );
+  await page.getByLabel('Beats per minute', { exact: true }).fill('113');
+  assert.equal(
+    await page.getByLabel('Tempo in beats per minute').inputValue(),
+    '113'
+  );
+  await page.getByRole('button', { name: 'Increase tempo' }).click();
+  assert.equal(
+    await page.getByLabel('Tempo in beats per minute').inputValue(),
+    '114'
+  );
+  await page.getByRole('button', { name: '100 BPM' }).click();
+  assert.equal(
+    await page.getByLabel('Tempo in beats per minute').inputValue(),
+    '100'
+  );
+  await page.getByRole('button', { name: 'Tap tempo' }).click();
+  await page.waitForTimeout(500);
+  await page.getByRole('button', { name: /Tap tempo/ }).click();
+  assert.ok(
+    Number(await page.getByLabel('Tempo in beats per minute').inputValue()) >= 40
+  );
   await page.getByLabel('Beats per bar').selectOption('3');
 
   // Audio starts only from an explicit user action and can be stopped.
   await page.getByRole('button', { name: 'Start metronome' }).click();
   await page.getByText('Playing', { exact: true }).waitFor();
+  await page.locator('.beat-visual').waitFor();
+  assert.equal(await page.locator('.beat-visual span').count(), 3);
+  assert.equal(
+    await page.locator('.tempo-display').getAttribute('aria-live'),
+    null
+  );
+  assert.equal(
+    await page.getByRole('button', { name: 'Stop metronome' }).getAttribute('aria-pressed'),
+    null,
+    'The metronome uses a changing label without a pressed state'
+  );
   await page.getByRole('button', { name: 'Stop metronome' }).click();
   await page.getByText('Stopped', { exact: true }).waitFor();
 

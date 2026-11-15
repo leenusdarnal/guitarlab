@@ -159,6 +159,24 @@ describe('WebAudioMetronome audio lifecycle', () => {
     await metronome.dispose();
   });
 
+  it('reports scheduled beat number and downbeat for visual feedback', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const onBeat = vi.fn();
+    const metronome = new WebAudioMetronome({
+      bpm: 120,
+      beatsPerBar: 3,
+      onBeat
+    });
+
+    await metronome.start();
+    await vi.advanceTimersByTimeAsync(60);
+
+    expect(onBeat).toHaveBeenCalledWith(1, true);
+    await metronome.dispose();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('stops scheduling and removes its visibility listener without closing the context', async () => {
     const { documentMock } = installAudioEnvironment();
     vi.useFakeTimers();
