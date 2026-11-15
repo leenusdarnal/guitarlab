@@ -325,12 +325,13 @@ try {
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
-  await restrictedStoragePage
-    .getByRole('button', { name: 'Toggle colour theme' })
-    .click();
+  const restrictedAppearance = restrictedStoragePage.getByRole('combobox', {
+    name: 'Appearance'
+  });
+  await restrictedAppearance.selectOption('dark');
   assert.equal(
     await restrictedStoragePage.locator('html').getAttribute('data-theme'),
-    'light',
+    'dark',
     'The theme should still change in memory when localStorage is blocked'
   );
   assert.deepEqual(
