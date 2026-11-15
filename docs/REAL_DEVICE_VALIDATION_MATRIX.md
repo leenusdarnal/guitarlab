@@ -12,7 +12,7 @@
 
 ## 1. Real-guitar corpus register
 
-For each segment, record instrument/string, pickup or microphone/interface and gain, native sample rate, channel count, tuning reference and uncertainty, browser/OS/device where relevant, room/noise, dynamic, and attack/sustain/decay/muted/silence labels. Use non-identifying segment IDs.
+For each segment, record instrument/string, pickup or microphone/interface and gain, native sample rate, channel count, tuning reference and uncertainty, browser/OS/device where relevant, room/noise, dynamic, and attack/sustain/decay/muted/silence labels. Use non-identifying segment IDs. The local evaluator accepts approved non-identifying categorical facets (`instrumentType`, `stringPosition`, `capturePath`, `segmentPhase`, `dynamic`, `noiseCondition`, `tuningCondition`) and emits per-facet aggregate breakdowns; exact device/browser models, gain values, tuning uncertainty and consent/provenance details stay in the private lab notebook.
 
 | Segment ID | Instrument / string | Capture path | Tuning / ground truth | Dynamic / phase | Room / noise | Consent / provenance | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -20,7 +20,7 @@ For each segment, record instrument/string, pickup or microphone/interface and g
 
 ## 2. Required measurements
 
-Run `node scripts/evaluate-pitch-recordings.mjs <private-manifest.json>` locally. Retain recordings and manifests privately.
+Run `node scripts/evaluate-pitch-recordings.mjs <private-manifest.json>` locally. Retain recordings and manifests privately. The version-2 report groups window-weighted detection/false-note rates and detected-window cents-error percentiles by each supplied approved dimension. Compare per-string, capture-path, instrument-family and segment-phase breakdowns; keep the raw manifest and WAV files private.
 
 | Measurement | Required breakdown | Result | Status |
 | --- | --- | --- | --- |

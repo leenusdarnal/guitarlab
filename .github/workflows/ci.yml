@@ -99,11 +99,11 @@ jobs:
           changed_files=()
           while IFS= read -r file; do
             case "$file" in
-              src/lib/*.ts|src/app.d.ts|*.js|*.json|*.ts|wrangler*.jsonc|\
+              src/lib/*.ts|src/lib/audio/*.ts|src/app.d.ts|*.js|*.json|*.ts|wrangler*.jsonc|\
               scripts/generate-curriculum-index.mjs|scripts/validate-design-tokens.mjs|scripts/finalize-db-migration.mjs|\
               scripts/test-local-db.mjs|scripts/browser-acceptance.mjs|\
               scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs|\
-              scripts/accessibility-browser-acceptance.mjs|scripts/install-git-hooks.mjs)
+              scripts/accessibility-browser-acceptance.mjs|scripts/install-git-hooks.mjs|scripts/evaluate-pitch-recordings.mjs)
                 changed_files+=("$file")
                 ;;
             esac
