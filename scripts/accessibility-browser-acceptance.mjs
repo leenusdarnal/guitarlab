@@ -202,7 +202,14 @@ try {
     await context.addInitScript({ content: axeSource });
     await context.addInitScript((savedTheme) => {
       try {
-        window.localStorage.setItem('guitarlab-theme', savedTheme);
+        const storedTheme = window.localStorage.getItem('guitarlab-theme');
+        if (
+          storedTheme !== 'system' &&
+          storedTheme !== 'light' &&
+          storedTheme !== 'dark'
+        ) {
+          window.localStorage.setItem('guitarlab-theme', savedTheme);
+        }
       } catch {
         // Theme persistence is optional in restricted browser contexts.
       }
