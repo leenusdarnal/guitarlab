@@ -30,9 +30,7 @@ describe('backup download metadata', () => {
     const exportedAt = 1_800_000_000_000;
 
     expect(recordLastBackupExportAt(storage, exportedAt)).toBe(true);
-    expect(storage.getItem(LAST_BACKUP_EXPORT_AT_KEY)).toBe(
-      String(exportedAt)
-    );
+    expect(storage.getItem(LAST_BACKUP_EXPORT_AT_KEY)).toBe(String(exportedAt));
     expect(readLastBackupExportAt(storage, exportedAt + 10)).toBe(exportedAt);
   });
 
@@ -84,9 +82,9 @@ describe('backup download metadata', () => {
     };
 
     expect(readLastBackupExportAt(unavailableStorage)).toBeNull();
-    expect(recordLastBackupExportAt(unavailableStorage, 1_800_000_000_000)).toBe(
-      false
-    );
+    expect(
+      recordLastBackupExportAt(unavailableStorage, 1_800_000_000_000)
+    ).toBe(false);
     expect(clearLastBackupExportAt(unavailableStorage)).toBe(false);
   });
 
