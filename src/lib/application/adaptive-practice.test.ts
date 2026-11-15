@@ -54,7 +54,8 @@ function itemAttempt(
   outcome: 'correct' | 'incorrect' | 'inconclusive',
   assessedAt: number,
   definitionId = 'guitar.ear-training.interval-recognition',
-  scoringRuleVersion = 'exact-interval-choice-v1'
+  scoringRuleVersion = 'exact-interval-choice-v1',
+  definitionVersion = 1
 ): AssessmentAttemptRecord {
   const attemptOutcome =
     outcome === 'correct'
@@ -72,7 +73,7 @@ function itemAttempt(
     ),
     assessmentInstrument: {
       definitionId,
-      definitionVersion: 1,
+      definitionVersion,
       scoringRuleVersion,
       itemCount: 1,
       passThreshold: 100,
@@ -569,7 +570,19 @@ describe('buildAdaptivePracticeSnapshot', () => {
           'incorrect',
           200,
           'guitar.ear-training.interval-recognition',
-          'alternate-interval-choice-v2'
+          'exact-interval-choice-v2',
+          2
+        ),
+        itemAttempt(
+          'version-three',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          300,
+          'guitar.ear-training.interval-recognition',
+          'exact-interval-choice-v3',
+          3
         )
       ],
       mastery: [],
@@ -582,7 +595,18 @@ describe('buildAdaptivePracticeSnapshot', () => {
     const recommendation = result.recommendations.find(
       (item) => item.targetId === 'ear.intervals'
     );
-    expect(analytics?.itemEvidenceGroups).toHaveLength(2);
+    expect(
+      analytics?.itemEvidenceGroups.map(
+        ({ definitionVersion, scoringRuleVersion }) => [
+          definitionVersion,
+          scoringRuleVersion
+        ]
+      )
+    ).toEqual([
+      [1, 'exact-interval-choice-v1'],
+      [2, 'exact-interval-choice-v2'],
+      [3, 'exact-interval-choice-v3']
+    ]);
     expect(
       analytics?.itemEvidenceGroups.every(
         (group) => group.items[0].consecutiveIncorrectCount === 1

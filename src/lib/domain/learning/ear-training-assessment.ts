@@ -35,8 +35,8 @@ export type IntervalRecognitionAnswer = (typeof intervalAnswers)[number];
 
 export const intervalRecognitionAssessment = {
   definitionId: 'guitar.ear-training.interval-recognition',
-  definitionVersion: 2,
-  scoringRuleVersion: 'exact-interval-choice-v2',
+  definitionVersion: 3,
+  scoringRuleVersion: 'exact-interval-choice-v3',
   skillId: 'ear.intervals',
   decisionScope: 'supporting_probe' as const
 };

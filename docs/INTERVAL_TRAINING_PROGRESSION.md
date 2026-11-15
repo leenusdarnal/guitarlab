@@ -67,9 +67,11 @@ Product implication: test transfer across starting pitches and registers before 
 
 Source: [Kendüzler, Intervals as musical fingerprints: perceptual and pedagogical insights — a scoping review](https://doi.org/10.3389/fpsyg.2026.1740840).
 
-## Next implementation decision: vary starting pitch and register
+## Implementation decision: vary starting pitch and register
 
-This is the next bounded improvement because the existing code fixes the first tone at 440 Hz, while the interval is meant to represent a relative pitch relationship. It improves stimulus variety without changing the skill being assessed.
+The fixed A4 starting tone is replaced by a deterministic traversal of all 24 chromatic MIDI roots from C3 (48) to B4 (71) **for each interval class**. Root selection is based on the interval's position in its set and that interval's appearance cycle, rather than the global sequence alone. The four-choice sets use a stride of five; the five-choice Wide leaps set uses a stride of seven. Both strides are coprime with 24, so every interval class is heard from every root before repeating. This avoids fixing a particular starting pitch class to a particular interval answer. The second tone is derived from the selected root plus the authored interval's semitone count, so the interval class and ascending direction remain unchanged. All generated tones stay between C3 and B5 (MIDI 48–83, approximately 130.81–987.77 Hz).
+
+This changes the stimulus distribution enough to warrant a new interval instrument version. New attempts use definition v3 / scoring rule v3 while retaining the supporting-probe-only boundary. Existing v2 attempts remain append-only and are grouped separately by the evidence read model; no backfill or score migration is performed.
 
 ### Acceptance criteria
 
@@ -78,10 +80,14 @@ This is the next bounded improvement because the existing code fixes the first t
 3. Make selection deterministic from the exercise sequence (or an explicit seed) so tests and replay remain reproducible; avoid nondeterministic global randomness.
 4. Ensure a useful sequence of exercises covers multiple starting pitches and registers rather than repeatedly returning to A4.
 5. Keep choice labels, explanations and answer keys independent of the selected absolute pitch. Do not expose the answer through prompt text, DOM attributes or filenames.
-6. Add unit tests for bounded frequency output, semitone-distance invariance, deterministic replay, and root-pitch variation across a representative sequence for all three interval sets.
+6. Add unit tests proving that every interval class traverses all 24 roots, with bounded frequency output, semitone-distance invariance, deterministic replay and root-pitch variation in all three sets; explicitly guard against interval identity becoming fixed to a pitch class.
 7. Extend browser acceptance to confirm the learner-facing prompt and feedback remain correct, playback can be stopped/cleaned up, and no permission or network dependency is introduced.
-8. Preserve the v2 supporting-probe boundary. If the exact stimulus definition changes comparability, version the instrument rather than silently combining old and new attempts.
+8. Preserve the supporting-probe-only boundary. Because the varied-root stimulus distribution changes the instrument definition, use definition v3 and scoring rule v3 so new attempts remain separate from historical v2 attempts.
 9. Run curriculum validation, formatting, lint, Svelte/TypeScript checks, unit tests, browser acceptance, accessibility checks and production build. Fix formatting at its root cause; do not weaken checks.
+
+### Implementation status
+
+The current implementation branch applies the decision above. Automated verification covers deterministic traversal of all 24 roots for each interval class, every interval semitone distance, the C3–B5 frequency bounds, instrument-version separation and the learner-facing playback/answer flow. Required CI remains the merge gate.
 
 ### Separate follow-up dimensions — do not bundle into this slice
 

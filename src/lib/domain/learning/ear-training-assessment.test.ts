@@ -12,8 +12,8 @@ describe('interval recognition assessment evidence', () => {
   it('uses a versioned supporting-probe instrument for the interval skill', () => {
     expect(intervalRecognitionAssessment).toEqual({
       definitionId: 'guitar.ear-training.interval-recognition',
-      definitionVersion: 2,
-      scoringRuleVersion: 'exact-interval-choice-v2',
+      definitionVersion: 3,
+      scoringRuleVersion: 'exact-interval-choice-v3',
       skillId: 'ear.intervals',
       decisionScope: 'supporting_probe'
     });
@@ -58,7 +58,7 @@ describe('interval recognition assessment evidence', () => {
     expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
   });
 
-  it('records new interval classes as version-2 supporting-probe items', () => {
+  it('records new interval classes as version-3 supporting-probe items', () => {
     const cases = [
       ['steps-and-tritone', 0, 'minor_second'],
       ['steps-and-tritone', 3, 'tritone'],
@@ -71,8 +71,8 @@ describe('interval recognition assessment evidence', () => {
       const result = scoreIntervalRecognitionResponse(exercise, answer);
       expect(result.assessmentInstrument).toMatchObject({
         definitionId: 'guitar.ear-training.interval-recognition',
-        definitionVersion: 2,
-        scoringRuleVersion: 'exact-interval-choice-v2',
+        definitionVersion: 3,
+        scoringRuleVersion: 'exact-interval-choice-v3',
         decisionScope: 'supporting_probe'
       });
       expect(result.itemEvidence[0]).toMatchObject({

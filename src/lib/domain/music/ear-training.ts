@@ -102,6 +102,24 @@ const intervalDefinitions: Record<
   ]
 };
 
+/**
+ * Each interval class cycles through all 24 chromatic roots from C3 to B4.
+ * The stride is coprime with 24 for both supported set sizes (four and five),
+ * so every interval is heard from every root before repeating.
+ */
+const intervalRootMidiNotes = [
+  48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66,
+  67, 68, 69, 70, 71
+] as const;
+
+function intervalRootStride(intervalCount: number): number {
+  return intervalCount === 4 ? 5 : 7;
+}
+
+function midiToFrequency(midiNote: number): number {
+  return 440 * Math.pow(2, (midiNote - 69) / 12);
+}
+
 const contourChoices = [
   { value: 'rising', label: 'Rising' },
   { value: 'falling', label: 'Falling' },
@@ -188,9 +206,18 @@ export function createEarTrainingExercise(
       throw new RangeError('Choose a supported interval practice set.');
     }
     const interval = intervals[sequence % intervals.length];
-    const firstFrequency = 440;
-    const secondFrequency =
-      firstFrequency * Math.pow(2, interval.semitones / 12);
+    const intervalPosition = sequence % intervals.length;
+    const intervalCycle = Math.floor(sequence / intervals.length);
+    const rootStride = intervalRootStride(intervals.length);
+    const firstMidiNote =
+      intervalRootMidiNotes[
+        (intervalPosition + intervalCycle * rootStride) %
+          intervalRootMidiNotes.length
+      ];
+    const firstFrequency = midiToFrequency(firstMidiNote);
+    const secondFrequency = midiToFrequency(
+      firstMidiNote + interval.semitones
+    );
     const visualHint =
       intervalSet === 'foundation'
         ? 'Start with familiar anchors: a repeated note, thirds and a fifth. Listen for the distance, not the absolute pitch.'

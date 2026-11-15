@@ -3,20 +3,22 @@
 **Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
+**Verified baseline:** `2cc859fea62eacd5838e9ee5cbeb41005a4b0131` (PR #129 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-15 after PR #124
+## Live checkpoint — 2026-11-15 after PR #129
 
-- Verified `main` HEAD: `a78da53dc82457326663ae2d6a93f00ef64cda60`, the squash merge of governance PR #124. All prior priority PRs #117–#125 are merged.
-- Post-merge main GuitarLab CI run [#43677525851](https://github.com/leenusdarnal/guitarlab/actions/runs/43677525851) passed, including application/curriculum validation and Node.js 26 compatibility.
-- The next M8.1 implementation is PR #127, [extended interval ear-training sets](https://github.com/leenusdarnal/guitarlab/pull/127), for Issue #17. It adds nine interval classes in focused Foundations, Steps & tritone, and Wide leaps sets; local audio, supporting-probe assessment v2, unit tests and browser acceptance are included.
-- PR #127 head `1829a80f59e6c3baf5f96089afb4003e30420b1e` is up to date with main. Node.js 26 compatibility has passed on the previous head; the latest required application/curriculum workflow run [#43677940024](https://github.com/leenusdarnal/guitarlab/actions/runs/43677940024) is still running after a browser-acceptance assertion was restored. Re-check the latest head and all required checks before merge.
-- Issue #17 remains open after PR #127: review TAB/notation provenance and licensing, and only add further learning outcomes where the authored content supports them. The current PR covers ascending listening intervals, not descending interval recognition or notation-aware enharmonic spelling.
+- Verified `main` HEAD: `2cc859fea62eacd5838e9ee5cbeb41005a4b0131`, the squash merge of PR #129. PRs #127, #128 and #129 were merged in priority order after the earlier governance and M7 work.
+- Post-merge main GuitarLab CI run [#43682019382](https://github.com/leenusdarnal/guitarlab/actions/runs/43682019382) passed, including application/curriculum validation and Node.js 26 compatibility.
+- PR #127 added all 12 simple ascending melodic interval classes across three focused sets, with generated local audio and version-2 supporting-probe evidence.
+- PR #128 added [the interval progression and stimulus research](https://github.com/leenusdarnal/guitarlab/blob/main/docs/INTERVAL_TRAINING_PROGRESSION.md), identifying fixed A4 as the next bounded stimulus limitation.
+- PR #129 added the [content provenance and licensing audit](https://github.com/leenusdarnal/guitarlab/blob/main/docs/CONTENT_PROVENANCE_AUDIT.md). Its audited 265-entry tracked tree contained no standalone TAB, notation, image, audio or MIDI assets. This clears the current bundled-content acceptance check only; every future bundled asset still needs item-level rights evidence.
+- Issue #17 is complete and closed. Its checklist now records all shipped listening, theory, repertoire and current-content provenance work. Descending/harmonic intervals, notation spelling and pitch/register variation are separate follow-ups, not silently claimed as complete.
+- The active next slice is [Issue #130 — deterministic interval starting-pitch and register variation](https://github.com/leenusdarnal/guitarlab/issues/130), on branch `feat/m8-interval-register-variation`. Each interval class independently cycles all 24 chromatic roots C3–B4 deterministically (stride 5 for the four-choice sets, 7 for the five-choice set); the second tone is derived from the authored semitone distance. The changed stimulus policy uses supporting-probe v3 so historical v2 evidence remains separate.
 - Issue #5 remains open until the controlled workflow is manually dispatched in both modes (expected failure and clean recovery), and the real run URLs are recorded.
 - Issue #3 remains open pending explicit owner decisions on account ownership, hostname, access model, data architecture and release approval. No production resources, secrets, D1 database, routes, authentication or production deployment have been created or authorized.
 - Physical-device and recording evidence remains outstanding under Issues #89, #9, #10 and #18. Synthetic fixtures and automated browser checks do not count as hardware sign-off.
-- After PR #127 passes and is merged, verify post-merge main CI, then continue Issue #17's provenance/licensing work and the remaining manual release evidence.
+- After Issue #130's PR passes and is merged, verify post-merge main CI before moving to the next priority. Production deployment remains deferred.
 
 ## Historical checkpoint — 2026-11-14 after PR #113
 
@@ -80,16 +82,26 @@
 
 **Exit criteria:** canonical tags have authored source evidence, taxonomy validation passes, and later exposure analytics are grounded in local records linked to stable lesson/exercise IDs. No taxonomy metadata or practice activity changes mastery.
 
-### P2 — Musicianship, connected theory and repertoire (Issue #17)
+### P2 — Musicianship, connected theory and repertoire (Issue #17) — complete
 
-1. Add chord-movement listening with feedback, retry and accessible visual instructions.
-2. Extend interval work only where new intervals add a distinct learning outcome.
-3. Add music-theory recall prompts connecting name, sound and musical use.
-4. Connect triads, inversions, scales and CAGED positions to one shared music-theory/fretboard domain.
-5. Add song-project notes, section structure, bookmarks and practice targets.
-6. Keep TAB/notation content original, public-domain or properly licensed; external resources remain links and receive no learner-private data.
+- [x] Chord-movement listening with feedback, retry and accessible visual instructions (PR #118).
+- [x] Theory recall prompts connecting name, sound and musical use (PR #119).
+- [x] Shared scale, triad, inversion and CAGED calculations (PR #120).
+- [x] Local repertoire notes, section structure, bookmarks, practice targets and backup/restore (PR #121).
+- [x] All 12 simple interval classes across three focused ascending melodic sets (PR #127).
+- [x] Current bundled-content provenance and future asset-level licensing gate (PR #129); Issue #17 closed.
 
-**Exit criteria:** musical examples are original/local or appropriately licensed; learning prompts are specific, accessible and tested; shared theory calculations are reused rather than duplicated.
+**Exit criteria:** met for the current built-in GuitarLab content. The licensing audit is not blanket clearance for user-entered material or external links. Future bundled files still need per-asset rights evidence.
+
+### P2 follow-up — Deterministic interval starting pitch and register (Issue #130)
+
+1. Cycle each interval class through the documented chromatic MIDI range C3–B4; use deterministic root strides of five for four-choice sets and seven for the five-choice set, each coprime with 24.
+2. Preserve the authored semitone interval and ascending melodic presentation; keep every generated tone within C3–B5.
+3. Version the changed interval stimulus as definition v3 / scoring rule v3 while keeping the supporting-probe-only decision scope and historical v2 records separate.
+4. Verify root coverage, frequency bounds, semitone invariance and replay determinism in all three interval sets.
+5. Retain learner-facing relative-interval prompts, retry/next behaviour and owned Web Audio teardown.
+
+**Exit criteria:** CI and browser acceptance pass on the focused implementation PR; supporting-probe evidence v2 and v3 remain separately grouped.
 
 ### P3 — Real-device audio and release evidence (Issues #89 and #18)
 
