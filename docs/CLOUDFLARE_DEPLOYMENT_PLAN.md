@@ -6,7 +6,7 @@
 **Framework:** SvelteKit with `@sveltejs/adapter-cloudflare`  
 **Local persistence:** IndexedDB / browser-local storage  
 **Remote database:** Cloudflare D1 is configured in the repository's local development setup, but remote learner-data persistence is not currently enabled  
-**Status:** Planning and audit; no production deployment authorized  
+**Status:** First local-first production release is P0 by owner direction; live deployment awaits workflow and environment prerequisites  
 **Last reviewed:** 13 November 2026
 
 ---
@@ -185,7 +185,7 @@ The existing workflow's HTTP smoke test is a useful first check, not the complet
 
 ### Phase E — Production release (CF-11 / CF-12 / CF-13)
 
-Production deployment is not authorized by this document. Obtain explicit release approval first.
+The owner set the first local-first production release as the top priority on 2026-11-15. Live execution remains gated on exact-SHA CI, production environment credentials, manual workflow dispatch and post-deploy smoke checks. This does not authorize remote D1 provisioning/migrations, authentication/cloud-sync activation, or domain/DNS changes.
 
 Release sequence:
 
@@ -275,9 +275,9 @@ Verify domain ownership, DNS, Worker routing and TLS/HTTPS. The previous Vercel 
 | CF-08 | Verify production Worker and production configuration | Critical | Pending |
 | CF-09 | Review production migrations and recovery, if D1 is in scope | Critical | Pending |
 | CF-10 | Complete production readiness checks | Critical | Pending |
-| CF-11 | Obtain explicit production release approval | Critical | Pending |
-| CF-12 | Deploy production Worker | Critical | Not authorized |
-| CF-13 | Complete production smoke tests | Critical | Pending |
+| CF-11 | Obtain explicit production release approval | Critical | Owner priority/authorization recorded on 2026-11-15 for the first local-first release; no remote data/migration approval implied |
+| CF-12 | Deploy production Worker | Critical | Isolated config and manual workflow being added; live deployment pending GitHub production environment setup and successful dispatch |
+| CF-13 | Complete production smoke tests | Critical | Route and response-header checks included in the release workflow; live results pending deployment |
 | CF-14 | Harden CI/CD and implement gated production workflow | High | Pending |
 | CF-15 | Document monitoring, rollback and recovery | High | Pending |
 | CF-16 | Configure custom domain | Medium | Deferred |
@@ -405,3 +405,49 @@ The proposed package scripts are:
 - No production deployment script is introduced until the production target and release gates are verified and separately approved.
 
 The manual preview workflow is updated to call these named scripts, keeping the config selection in one place. This change does not run a deployment and does not modify Cloudflare resources. Merge only after CI passes.
+
+
+## 13. First local-first production release — priority update (2026-11-15)
+
+The owner has moved production deployment to the top of the implementation queue. The selected first-release scope is the already implemented local-first GuitarLab application, not authenticated cloud sync.
+
+### Verified account state
+
+The connected Cloudflare account currently contains:
+- One Worker: `guitarlab-preview`
+- No production Worker named `guitarlab`
+- No D1 databases
+- No Worker custom domains
+- No zones available through this connected account
+- Workers.dev account subdomain: `leenusdarnal`
+
+### First-release target and boundary
+
+- Worker name: `guitarlab`
+- Temporary public URL: `https://guitarlab.leenusdarnal.workers.dev`
+- Config: `wrangler.production.jsonc`
+- The production config uses Workers Static Assets only and deliberately has no D1 binding, route, database ID, identity/session store, authentication route or remote learner-data API.
+- Profiles, lesson progress, practice data, preferences and exports remain browser-local. Login and cloud sync are not implemented and are not claimed by this release.
+
+Cloudflare recommends a custom domain or Worker route rather than workers.dev for long-term production; workers.dev is intended for personal/hobby workloads, not business-critical use. The connected account has no zones or Worker custom domains, so the first workflow uses workers.dev as a temporary host. Attach an owned custom domain/route before treating this as a long-term business-critical hostname.
+
+### Release pipeline
+
+The new `.github/workflows/deploy-production.yml`:
+1. Is manual-only and restricted to `main`, with explicit `deploy_production=true`.
+2. Requires the latest `Validate application and curriculum` and `Check Node.js 26 compatibility` checks for the exact selected SHA to succeed.
+3. Uses a GitHub Actions `production` environment.
+4. Requires `CLOUDFLARE_API_TOKEN` as an Actions secret and `CLOUDFLARE_ACCOUNT_ID` as an Actions variable.
+5. Builds and dry-runs the selected SHA, then deploys that same build.
+6. Smoke-tests `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`, and checks CSP, HSTS, MIME, frame and referrer-policy headers.
+7. Records the exact commit and production URL in the workflow run.
+
+Configure the GitHub `production` environment with a branch policy restricted to `main` and a required reviewer where supported. Do not expose or commit secret values.
+
+### Data/authentication scope
+
+Account registration, login/logout, secure sessions, server-side ownership, outbox sync and conflict recovery remain unimplemented M5 work. This first production deployment is deliberately local-first and does not create a public multi-user data service. Do not add D1 or enable cloud learner data until authentication, server-side ownership and sync acceptance have been implemented and reviewed.
+
+### Rollback
+
+Cloudflare Workers rollback activates a previously uploaded version as a new deployment. Record the last known-good production version ID with every release. For an incident, identify the last verified version and use Wrangler's `wrangler rollback` command or the Worker's Deployments dashboard; then verify the public routes and security headers again. A Worker rollback does not reverse storage-resource data changes, which is why this first release makes no production D1 changes.
