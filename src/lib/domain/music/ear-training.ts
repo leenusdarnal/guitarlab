@@ -1,4 +1,5 @@
-export type EarTrainingKind = 'pulse' | 'pitch' | 'contour' | 'interval';
+export type EarTrainingKind =
+  'pulse' | 'pitch' | 'contour' | 'interval' | 'chord-movement';
 export type EarTrainingAnswer =
   | 'steady'
   | 'uneven'
@@ -10,7 +11,9 @@ export type EarTrainingAnswer =
   | 'unison'
   | 'minor_third'
   | 'major_third'
-  | 'perfect_fifth';
+  | 'perfect_fifth'
+  | 'subdominant'
+  | 'dominant';
 
 export interface EarTrainingTone {
   frequencyHz: number;
@@ -49,6 +52,11 @@ const contourChoices = [
   { value: 'rising', label: 'Rising' },
   { value: 'falling', label: 'Falling' },
   { value: 'level', label: 'Staying level' }
+] as const;
+
+const chordMovementChoices = [
+  { value: 'subdominant', label: 'F major (IV)' },
+  { value: 'dominant', label: 'G major (V)' }
 ] as const;
 
 function assertSequence(sequence: number): void {
@@ -170,6 +178,44 @@ export function createEarTrainingExercise(
       choices: intervalChoices,
       answer: interval.answer,
       explanation: interval.explanation
+    };
+  }
+
+  if (kind === 'chord-movement') {
+    // C major (I) anchors both ends. The middle chord alternates between
+    // F major (IV) and G major (V), so the answer is an explicit chord choice.
+    const middleAnswer = sequence % 2 === 0 ? 'subdominant' : 'dominant';
+    const chordMidis =
+      middleAnswer === 'subdominant'
+        ? [
+            [60, 64, 67],
+            [65, 69, 72],
+            [60, 64, 67]
+          ]
+        : [
+            [60, 64, 67],
+            [67, 71, 74],
+            [60, 64, 67]
+          ];
+    const startMilliseconds = [0, 900, 1_800];
+    return {
+      kind,
+      prompt: 'Which chord was heard between the two C major chords?',
+      visualHint:
+        'The first and final chords are both C major. Listen to the middle chord and compare its sound and movement.',
+      tones: chordMidis.flatMap((chord, chordIndex) =>
+        chord.map((midi) => ({
+          frequencyHz: 440 * 2 ** ((midi - 69) / 12),
+          startMilliseconds: startMilliseconds[chordIndex],
+          durationMilliseconds: 640
+        }))
+      ),
+      choices: chordMovementChoices,
+      answer: middleAnswer,
+      explanation:
+        middleAnswer === 'subdominant'
+          ? 'The middle chord was F major, the IV chord in C major.'
+          : 'The middle chord was G major, the V chord in C major.'
     };
   }
 
