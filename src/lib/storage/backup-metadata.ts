@@ -19,11 +19,7 @@ export function readLastBackupExportAt(
     if (stored === null) return null;
 
     const timestamp = Number(stored);
-    if (
-      !Number.isSafeInteger(timestamp) ||
-      timestamp <= 0 ||
-      timestamp > now
-    ) {
+    if (!Number.isSafeInteger(timestamp) || timestamp <= 0 || timestamp > now) {
       return null;
     }
 
