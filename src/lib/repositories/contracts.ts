@@ -1,3 +1,4 @@
+import type { SongProjectRecord } from '../domain/repertoire/song-project';
 import type { AssessmentAttemptInput } from '../domain/learning/assessment';
 import type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/adaptive-recommendation-feedback';
 import type { PracticeEvidenceInput } from '../domain/learning/practice-evidence';
@@ -209,6 +210,22 @@ export interface PracticeSessionRepository {
     session: PracticeSessionRecord,
     expectedStatus: 'in_progress' | 'paused'
   ): Promise<boolean>;
+}
+
+export interface SongProjectRepository {
+  /** Insert a new project owned by an existing learner profile. */
+  create(record: SongProjectRecord): Promise<void>;
+  findById(
+    learnerId: string,
+    projectId: string
+  ): Promise<SongProjectRecord | null>;
+  listByLearner(learnerId: string): Promise<SongProjectRecord[]>;
+  /** Compare-and-set update protects edits from stale tabs. */
+  update(
+    record: SongProjectRecord,
+    expectedUpdatedAt: number
+  ): Promise<boolean>;
+  delete(learnerId: string, projectId: string): Promise<boolean>;
 }
 
 /** Injectable system boundary keeps use cases deterministic and testable. */

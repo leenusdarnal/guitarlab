@@ -4,6 +4,7 @@ import { skillMasteryUpdateSchema } from '../domain/learning/mastery';
 import { profilePreferencesSchema } from '../domain/profile/preferences';
 import { practiceEvidenceInputSchema } from '../domain/learning/practice-evidence';
 import { adaptiveRecommendationFeedbackSchema } from '../domain/learning/adaptive-recommendation-feedback';
+import { songProjectRecordSchema } from '../domain/repertoire/song-project';
 
 export const LEARNER_BACKUP_FORMAT = 'guitarlab-learner-backup' as const;
 export const LEARNER_BACKUP_VERSION = 1 as const;
@@ -121,7 +122,9 @@ export const learnerBackupRecordsSchema = z
     // Optional so existing version-1 backups remain importable.
     adaptiveRecommendationFeedback: boundedRecords(
       adaptiveRecommendationFeedbackSchema
-    ).optional()
+    ).optional(),
+    // Optional for compatibility with version-1 backups made before song projects.
+    songProjects: boundedRecords(songProjectRecordSchema).optional()
   })
   .strict();
 
@@ -156,7 +159,8 @@ export const learnerBackupSchema = z
       ...(records.practiceEvidence ?? []).map((record) => record.learnerId),
       ...(records.adaptiveRecommendationFeedback ?? []).map(
         (record) => record.learnerId
-      )
+      ),
+      ...(records.songProjects ?? []).map((record) => record.learnerId)
     ];
 
     if (learnerIds.some((recordLearnerId) => recordLearnerId !== learnerId)) {
@@ -192,7 +196,8 @@ export const learnerBackupSchema = z
         (records.adaptiveRecommendationFeedback ?? []).map(
           (record) => record.id
         )
-      ]
+      ],
+      ['songProjects', (records.songProjects ?? []).map((record) => record.id)]
     ];
 
     for (const [collection, keys] of uniqueCollections) {
@@ -356,6 +361,7 @@ export type RestorePreview = {
     practiceSessions: RecordChange;
     practiceEvidence: RecordChange;
     adaptiveRecommendationFeedback: RecordChange;
+    songProjects: RecordChange;
   };
   totals: RecordChange;
 };
@@ -405,6 +411,11 @@ export function createRestorePreview(
     adaptiveRecommendationFeedback: compareRecords(
       incoming.records.adaptiveRecommendationFeedback ?? [],
       existing?.adaptiveRecommendationFeedback ?? [],
+      (record) => record.id
+    ),
+    songProjects: compareRecords(
+      incoming.records.songProjects ?? [],
+      existing?.songProjects ?? [],
       (record) => record.id
     )
   };

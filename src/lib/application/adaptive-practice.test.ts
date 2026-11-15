@@ -286,6 +286,112 @@ describe('buildAdaptivePracticeSnapshot', () => {
     });
   });
 
+  it('derives explicit interval response mismatch labels from keyed choices only', () => {
+    const unsupportedVersion = itemAttempt(
+      'unsupported-version',
+      'ear.intervals',
+      'interval-recognition.perfect-fifth',
+      'major_third',
+      'incorrect',
+      400
+    );
+    unsupportedVersion.assessmentInstrument = {
+      ...unsupportedVersion.assessmentInstrument!,
+      definitionVersion: 2
+    };
+
+    const result = buildAdaptivePracticeSnapshot({
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1',
+      skills,
+      attempts: [
+        itemAttempt(
+          'contrast-minor',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'minor_third',
+          'incorrect',
+          100
+        ),
+        itemAttempt(
+          'contrast-major',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'major_third',
+          'incorrect',
+          200
+        ),
+        itemAttempt(
+          'correct-response',
+          'ear.intervals',
+          'interval-recognition.perfect-fifth',
+          'perfect_fifth',
+          'correct',
+          300
+        ),
+        itemAttempt(
+          'unknown-item',
+          'ear.intervals',
+          'interval-recognition.unknown',
+          'minor_third',
+          'incorrect',
+          350
+        ),
+        unsupportedVersion
+      ],
+      mastery: [],
+      practiceEvidence: [],
+      now: 500
+    });
+
+    const analytics = result.skillAnalytics.find(
+      (item) => item.skillId === 'ear.intervals'
+    );
+    const standardItem = analytics?.itemEvidenceGroups
+      .find(
+        (group) =>
+          group.definitionId === 'guitar.ear-training.interval-recognition' &&
+          group.definitionVersion === 1
+      )
+      ?.items.find(
+        (item) => item.itemId === 'interval-recognition.perfect-fifth'
+      );
+
+    expect(standardItem?.responseMismatches).toEqual([
+      {
+        code: 'interval.perfect_fifth.selected.major_third',
+        expectedResponse: 'perfect_fifth',
+        selectedResponse: 'major_third',
+        count: 1,
+        latestEvidenceAt: 200
+      },
+      {
+        code: 'interval.perfect_fifth.selected.minor_third',
+        expectedResponse: 'perfect_fifth',
+        selectedResponse: 'minor_third',
+        count: 1,
+        latestEvidenceAt: 100
+      }
+    ]);
+    expect(
+      analytics?.itemEvidenceGroups.find(
+        (group) =>
+          group.definitionId === 'guitar.ear-training.interval-recognition' &&
+          group.definitionVersion === 2
+      )?.items[0].responseMismatches
+    ).toEqual([]);
+    expect(
+      analytics?.itemEvidenceGroups
+        .find(
+          (group) =>
+            group.definitionId === 'guitar.ear-training.interval-recognition' &&
+            group.definitionVersion === 1
+        )
+        ?.items.find((item) => item.itemId === 'interval-recognition.unknown')
+        ?.responseMismatches
+    ).toEqual([]);
+  });
+
   it('raises focused practice priority after consecutive incorrect outcomes on the same item', () => {
     const result = buildAdaptivePracticeSnapshot({
       learnerId: '00000000-0000-4000-8000-000000000001',

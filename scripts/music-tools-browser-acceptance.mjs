@@ -237,6 +237,31 @@ try {
   await page.getByRole('button', { name: 'Perfect fifth' }).click();
   await page.getByText("That's right.").waitFor();
 
+  await page.getByRole('button', { name: 'Chord movement' }).click();
+  await page
+    .getByRole('heading', {
+      name: 'Which chord was heard between the two C major chords?'
+    })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'G major (V)' }).click();
+  await page.getByText('Not quite — give it another listen.').waitFor();
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await page.getByRole('button', { name: 'F major (IV)' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('The middle chord was F major, the IV chord in C major.')
+    .waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'G major (V)' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('The middle chord was G major, the V chord in C major.')
+    .waitFor();
+
   // Hiding the tab stops the exercise and releases its page-owned audio context.
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'Playing example…' }).waitFor();
@@ -273,6 +298,52 @@ try {
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.getByRole('button', { name: 'Listen to example' }).waitFor();
+
+  // Theory recall connects names, generated triad sounds and chord function.
+  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
+  await page.getByRole('link', { name: /Open theory recall/ }).click();
+  await page.getByRole('heading', { name: 'Make theory musical.' }).waitFor();
+  await page.getByRole('button', { name: 'F major' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('F major is the IV chord in C major.', { exact: false })
+    .waitFor();
+
+  await page.getByRole('button', { name: 'Sound' }).click();
+  await page
+    .getByRole('heading', {
+      name: 'Listen to the triad. Is its quality major or minor?'
+    })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await page.getByRole('button', { name: 'Playing example…' }).waitFor();
+  await page.getByRole('button', { name: 'Minor' }).click();
+  await page.getByText('Not quite — review the clue and try again.').waitFor();
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await page.getByRole('button', { name: 'Major' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('This is C major: C, E and G.', { exact: false })
+    .waitFor();
+  await page.getByRole('button', { name: 'Next prompt' }).click();
+  await page.getByRole('button', { name: 'Minor' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).waitFor();
+
+  await page.getByRole('button', { name: 'Use' }).click();
+  await page
+    .getByRole('heading', {
+      name: 'Which chord is the dominant that creates a pull back to C major?'
+    })
+    .waitFor();
+  await page.getByRole('button', { name: 'G major' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('G major is the V chord in C major.', { exact: false })
+    .waitFor();
 
   // The chromatic tuner must not request microphone access on page load.
   await page.getByRole('link', { name: 'Practice tools' }).click();

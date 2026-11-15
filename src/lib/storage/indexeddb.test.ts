@@ -1,3 +1,4 @@
+import type { SongProjectRecord } from '../domain/repertoire/song-project';
 import { describe, expect, it } from 'vitest';
 import type {
   AdaptiveRecommendationFeedbackRecord,
@@ -116,6 +117,10 @@ class FakeStore {
     });
   }
 
+  delete(key: IDBValidKey) {
+    return this.tx().request(() => this.records.delete(this.key(key)));
+  }
+
   index(name: string) {
     const fields =
       name === 'byLearnerReleaseLesson'
@@ -131,7 +136,10 @@ class FakeStore {
                 : ['learnerId', 'status'];
     const matches = (record: unknown, key: IDBValidKey) => {
       const value = record as Record<string, unknown>;
-      const candidate = fields.map((field) => value[field]);
+      const candidate =
+        fields.length === 1
+          ? value[fields[0]]
+          : fields.map((field) => value[field]);
       return JSON.stringify(candidate) === JSON.stringify(key);
     };
     return {
@@ -179,7 +187,8 @@ function makeDatabase(): IDBDatabase {
     ],
     ['practiceSessions', new FakeStore('id')],
     ['practiceEvidence', new FakeStore('id')],
-    ['adaptiveRecommendationFeedback', new FakeStore('id')]
+    ['adaptiveRecommendationFeedback', new FakeStore('id')],
+    ['songProjects', new FakeStore('id')]
   ]);
 
   return {
@@ -327,6 +336,68 @@ describe('local learner profile persistence', () => {
     ).resolves.toBe(false);
   });
 
+  it('stores song projects for their owner and protects stale or foreign edits', async () => {
+    const database = makeDatabase();
+    const profile = await ensureActiveLearnerProfile(database);
+    const repositories = createIndexedDbRepositories(database);
+    const project: SongProjectRecord = {
+      id: '123e4567-e89b-42d3-a456-426614174000',
+      learnerId: profile.id,
+      title: 'My arrangement',
+      artist: null,
+      sourceType: 'original',
+      sourceUrl: null,
+      notes: 'Keep the pulse relaxed.',
+      sections: [
+        {
+          id: '223e4567-e89b-42d3-a456-426614174000',
+          title: 'Verse',
+          order: 0,
+          notes: 'Bass note first.',
+          bookmark: null,
+          practiceTarget: 'Four clean changes.'
+        }
+      ],
+      createdAt: 100,
+      updatedAt: 100
+    };
+
+    await repositories.songProjects.create(project);
+    await expect(
+      repositories.songProjects.listByLearner(profile.id)
+    ).resolves.toMatchObject([{ id: project.id, title: 'My arrangement' }]);
+    await expect(
+      repositories.songProjects.findById(
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+        project.id
+      )
+    ).resolves.toBeNull();
+
+    const updated = {
+      ...project,
+      notes: 'Keep the pulse even.',
+      updatedAt: 200
+    };
+    await expect(repositories.songProjects.update(updated, 100)).resolves.toBe(
+      true
+    );
+    await expect(repositories.songProjects.update(project, 100)).resolves.toBe(
+      false
+    );
+    await expect(
+      repositories.songProjects.delete(
+        'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+        project.id
+      )
+    ).resolves.toBe(false);
+    await expect(
+      repositories.songProjects.delete(profile.id, project.id)
+    ).resolves.toBe(true);
+    await expect(
+      repositories.songProjects.listByLearner(profile.id)
+    ).resolves.toEqual([]);
+  });
+
   it('prevents a second active practice session for the same learner', async () => {
     const database = makeDatabase();
     const profile = await ensureActiveLearnerProfile(database);
@@ -397,7 +468,7 @@ describe('local learner profile persistence', () => {
       createdAt: 200
     };
 
-    expect(LOCAL_DATABASE_VERSION).toBe(6);
+    expect(LOCAL_DATABASE_VERSION).toBe(7);
     await repository.append(record);
     await expect(
       repository.listByLearnerRelease(profile.id, 'curriculum-v1.0.6')
