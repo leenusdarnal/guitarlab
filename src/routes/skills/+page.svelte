@@ -170,7 +170,6 @@
     );
   }
 
-  function stateDescription(state: SkillState) {
   function formatDate(timestamp: number | null) {
     return timestamp === null
       ? 'Not recorded'
