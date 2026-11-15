@@ -754,15 +754,28 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin, { waitUntil: 'networkidle' });
 
+  // Active learners see a quiet backup reminder until a recent download is started.
+  await page.locator('#backup-reminder').waitFor({ state: 'visible' });
+
   // Backup navigation and export remain available from the learner dashboard.
   await page.getByRole('button', { name: 'Toggle navigation' }).click();
   await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
   await page
     .getByRole('heading', { name: 'Keep your learning safe.' })
     .waitFor();
+  await page
+    .getByText('No backup download has been started from this browser yet.')
+    .waitFor();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: /Download backup/ }).click();
   const download = await downloadPromise;
+  await page.getByText(/Last backup download started:/).waitFor();
+  await page
+    .getByRole('status')
+    .filter({
+      hasText: 'Backup download started. Your browser decides where the file is saved.'
+    })
+    .waitFor();
   assert.match(
     download.suggestedFilename(),
     /^guitarlab-backup-\d{4}-\d{2}-\d{2}\.json$/
@@ -773,6 +786,13 @@ try {
     'Backup download should be available to the browser test'
   );
   const backup = JSON.parse(await readFile(downloadPath, 'utf8'));
+  assert.equal(
+    await page.evaluate(() =>
+      Number(localStorage.getItem('guitarlab.last-backup-export-at'))
+    ),
+    backup.exportedAt,
+    'The last-download date matches the exported backup timestamp'
+  );
   assert.equal(backup.format, 'guitarlab-learner-backup');
   assert.equal(backup.version, 1);
   assert.equal(backup.records.profile.preferences.practiceMinutes, 20);
@@ -810,6 +830,13 @@ try {
     "Export retains the learner's append-only feedback history"
   );
 
+  // A recent download removes the reminder from Today without changing learner data.
+  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.waitForFunction(
+    () => document.querySelector('#backup-reminder') === null
+  );
+  await page.goto(origin + '/settings/data', { waitUntil: 'networkidle' });
+
   // Invalid JSON and unsupported backup versions must be rejected without preview.
   const backupInput = page.locator('input[type="file"]');
   await backupInput.setInputFiles({
@@ -818,7 +845,7 @@ try {
     buffer: Buffer.from('{')
   });
   await page
-    .getByRole('status')
+    .getByRole('alert')
     .filter({ hasText: 'The selected file is not valid JSON.' })
     .waitFor();
 
@@ -895,7 +922,7 @@ try {
   await page.locator('.confirm-choice input').check();
   await restoreButton.click();
   await page
-    .getByRole('status')
+    .getByRole('alert')
     .filter({
       hasText:
         'Restore failed. The database transaction was rolled back and the existing learner data was preserved.'
@@ -941,6 +968,12 @@ try {
     acceptedDialogMessage = dialog.message();
     await dialog.accept();
   });
+  await page.evaluate(() =>
+    localStorage.setItem(
+      'guitarlab.last-backup-export-at',
+      String(Date.now())
+    )
+  );
   await page.getByRole('button', { name: 'Reset active learner data' }).click();
   assert.match(acceptedDialogMessage, /Reset GuitarLab learner data/);
   await page
@@ -950,6 +983,13 @@ try {
         'Your active learner data has been reset. A fresh empty profile is ready.'
     })
     .waitFor();
+  assert.equal(
+    await page.evaluate(() =>
+      localStorage.getItem('guitarlab.last-backup-export-at')
+    ),
+    null,
+    'A successful reset clears the previous backup date'
+  );
   const feedbackAfterReset = await page.evaluate(async () => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
@@ -1007,6 +1047,12 @@ try {
     'Reset should create a fresh profile with no assumed practice duration'
   );
   await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.evaluate(() =>
+    localStorage.setItem(
+      'guitarlab.last-backup-export-at',
+      String(Date.now())
+    )
+  );
   await page.locator('input[type="file"]').setInputFiles(downloadPath);
   await page.getByRole('heading', { name: 'Restore preview' }).waitFor();
   await page
@@ -1023,6 +1069,13 @@ try {
         'Restore completed. Your learner profile and local learning records have been replaced.'
     })
     .waitFor();
+  assert.equal(
+    await page.evaluate(() =>
+      localStorage.getItem('guitarlab.last-backup-export-at')
+    ),
+    null,
+    'A successful restore clears the previous backup date for the replaced profile'
+  );
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
   assert.equal(
