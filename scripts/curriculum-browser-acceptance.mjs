@@ -261,24 +261,40 @@ try {
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
     .fill('Fretboard map 1');
+  const yearTwoLessonLink = page.getByRole('link', {
+    name: 'Open lesson: Fretboard map 1',
+    exact: true
+  });
+  assert.match(
+    (await yearTwoLessonLink.getAttribute('href')) ?? '',
+    /\\/learn\\/y2-w01-lesson$/
+  );
+  await yearTwoLessonLink.click();
+  await page.waitForURL('**/learn/y2-w01-lesson');
   await page
-    .getByRole('link', { name: 'Open lesson: Fretboard map 1' })
-    .click();
-  await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
-  assert.match(page.url(), /y2-w01-lesson/);
+    .getByRole('heading', { name: 'Fretboard map 1', level: 1 })
+    .waitFor();
+  assert.match(page.url(), /\\/learn\\/y2-w01-lesson$/);
 
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
   await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
     .fill('Right-hand independence');
+  const specialistLessonLink = page.getByRole('link', {
+    name: 'Open lesson: Right-hand independence',
+    exact: true
+  });
+  assert.match(
+    (await specialistLessonLink.getAttribute('href')) ?? '',
+    /\\/learn\\/y3-fingerstyle-acoustic-w01-lesson$/
+  );
+  await specialistLessonLink.click();
+  await page.waitForURL('**/learn/y3-fingerstyle-acoustic-w01-lesson');
   await page
-    .getByRole('link', { name: 'Open lesson: Right-hand independence' })
-    .click();
-  await page
-    .getByRole('heading', { name: 'Right-hand independence' })
+    .getByRole('heading', { name: 'Right-hand independence', level: 1 })
     .waitFor();
-  assert.match(page.url(), /y3-fingerstyle-acoustic-w01-lesson/);
+  assert.match(page.url(), /\\/learn\\/y3-fingerstyle-acoustic-w01-lesson$/);
 
   // Invalid IDs render the explicit not-found state rather than a blank page.
   await page.goto(origin + '/learn/not-a-real-lesson', {
