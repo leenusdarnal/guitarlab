@@ -1,12 +1,28 @@
 # GuitarLab Execution Priority and Resume Plan
 
-**Last updated:** 2026-11-14  
+**Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-14 after PR #113
+## Live coordination checkpoint — 2026-11-15 after PR #116
+
+- Verified baseline: main contains PR #116 merge commit `b8c3e7100e77642bad6e7c86141540f43e95a40b`. Its branch GuitarLab CI and curriculum validation passed; PR #116 is merged.
+- Implementation is now deliberately parallelised across independent branches. Every PR remains focused and has its own tests; merge order is still strictly sequential and follows the priority queue below.
+- Open implementation queue (do not merge out of order): **#117 → #118 → #119 → #120 → #121 → #122 → #123 → #124**.
+  - #117 — P1 M7.2: explicit, deterministic interval response contrasts for authored v1 item keys only.
+  - #118 — P2: chord-movement listening.
+  - #119 — P2: theory recall (name, sound and musical use).
+  - #120 — P2: shared harmony calculations and fretboard/CAGED integration.
+  - #121 — P2: learner-owned local song projects, IndexedDB, backup/restore/reset.
+  - #122 — P3: real-recording and physical-device evidence matrix. All hardware/recording results remain not run or blocked until supplied.
+  - #123 — P4: isolated manual CI failure/recovery rehearsal. Actual workflow dispatch occurs after merge; Issue #5 remains open until both runs are recorded.
+  - #124 — this process/priority documentation update.
+- Current PRs were initially opened against the same main baseline to allow parallel work. Before merging each one, refresh its head SHA and required checks. After each merge, verify main CI and rebase/update the next PR if the base changed. Re-run all affected checks after rebase.
+- Physical-device evidence must never be marked complete from synthetic audio, mocked permissions or automated Chromium runs. Production deployment remains deferred pending explicit approval and data-protection design.
+
+## Historical checkpoint — 2026-11-14 after PR #113
 
 - Verified `main`: `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; PR #113 is merged and its post-merge GuitarLab CI run [#43623315478](https://github.com/leenusdarnal/guitarlab/actions/runs/43623315478) passed.
 - PR #112 links newly created sessions/observations to the exact authored lesson/exercise pair, curriculum release and taxonomy version.
@@ -111,7 +127,7 @@ See [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md) for the comparativ
 
 ## 4. Working rules
 
-1. One implementation PR at a time.
+1. Implement independent, bounded PRs in parallel when dependencies permit. Do not make a branch depend on another unmerged PR unless it is explicitly based on that branch.
 2. Start each task from the latest verified `main` SHA.
 3. Inspect open PRs, open issues, active Actions runs and latest main CI before starting.
 4. Use small, independently testable changes with explicit acceptance criteria.
@@ -129,8 +145,8 @@ When the user says “resume GuitarLab” or “continue implementation”:
 2. List open PRs, open issues and active workflow runs.
 3. Read this file, `docs/IMPLEMENTATION_TRACKER.md` and the relevant GitHub issue.
 4. Reconcile acceptance criteria against current code and merged PRs; do not repeat completed work.
-5. Continue the highest-priority incomplete task above, one slice at a time.
-6. Record PR, CI evidence, manual QA and the next exact task before pausing.
+5. Continue the highest-priority incomplete task above; independent lower-priority work may proceed on parallel branches, but merge strictly in priority order.
+6. Before merging, verify PR head SHA and required checks; after every merge verify main CI, then rebase and revalidate the next queued PR. Record PR, CI evidence, manual QA and the next exact task before pausing.
 
 ## 6. Current hand-off
 
