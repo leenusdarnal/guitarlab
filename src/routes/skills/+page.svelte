@@ -38,7 +38,10 @@
     error = '';
     try {
       reviews = await loadActiveSkillStateReview();
-      if (!reviews.some((review) => review.skillId === selectedSkillId)) {
+      const requestedSkillId = new URLSearchParams(window.location.search).get('skillId');
+      if (requestedSkillId && reviews.some((review) => review.skillId === requestedSkillId)) {
+        selectedSkillId = requestedSkillId;
+      } else if (!reviews.some((review) => review.skillId === selectedSkillId)) {
         selectedSkillId = reviews[0]?.skillId ?? '';
       }
       if (selectedReview) selectedState = selectedReview.mastery.state;
