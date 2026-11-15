@@ -237,6 +237,31 @@ try {
   await page.getByRole('button', { name: 'Perfect fifth' }).click();
   await page.getByText("That's right.").waitFor();
 
+  await page.getByRole('button', { name: 'Chord movement' }).click();
+  await page
+    .getByRole('heading', {
+      name: 'Which chord was heard between the two C major chords?'
+    })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'G major (V)' }).click();
+  await page.getByText('Not quite — give it another listen.').waitFor();
+  await page.getByRole('button', { name: 'Try again' }).click();
+  await page.getByRole('button', { name: 'F major (IV)' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('The middle chord was F major, the IV chord in C major.')
+    .waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'G major (V)' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('The middle chord was G major, the V chord in C major.')
+    .waitFor();
+
   // Hiding the tab stops the exercise and releases its page-owned audio context.
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'Playing example…' }).waitFor();

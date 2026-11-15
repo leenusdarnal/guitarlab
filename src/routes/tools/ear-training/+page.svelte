@@ -186,11 +186,12 @@
     <button type="button" class:active={kind === 'pitch'} aria-pressed={kind === 'pitch'} onclick={() => selectKind('pitch')}>High / low</button>
     <button type="button" class:active={kind === 'contour'} aria-pressed={kind === 'contour'} onclick={() => selectKind('contour')}>Melodic contour</button>
     <button type="button" class:active={kind === 'interval'} aria-pressed={kind === 'interval'} onclick={() => selectKind('interval')}>Intervals</button>
+    <button type="button" class:active={kind === 'chord-movement'} aria-pressed={kind === 'chord-movement'} onclick={() => selectKind('chord-movement')}>Chord movement</button>
   </nav>
 
   <section class="panel exercise-panel" aria-labelledby="exercise-title">
     <div class="exercise-meta">
-      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : kind === 'contour' ? 'MELODY SHAPE' : 'INTERVAL RECOGNITION'}</span>
+      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : kind === 'contour' ? 'MELODY SHAPE' : kind === 'interval' ? 'INTERVAL RECOGNITION' : 'CHORD FUNCTION'}</span>
       <span class="score" aria-label="Session score">{correctCount} correct · {attemptCount} attempts</span>
     </div>
     <h2 id="exercise-title">{exercise.prompt}</h2>
@@ -198,7 +199,7 @@
 
     <div class="listening-card">
       <div class="sound-symbol" aria-hidden="true">{kind === 'pulse' ? '♩' : kind === 'pitch' ? '♪' : '♫'}</div>
-      <p>{kind === 'pulse' ? 'Four beats' : kind === 'pitch' ? 'Two notes' : kind === 'contour' ? 'Three notes' : 'Two notes · interval'}</p>
+      <p>{kind === 'pulse' ? 'Four beats' : kind === 'pitch' ? 'Two notes' : kind === 'contour' ? 'Three notes' : kind === 'interval' ? 'Two notes · interval' : 'Three simultaneous chords'}</p>
       <button type="button" class="primary-button" onclick={playExercise} disabled={isPlaying}>
         {isPlaying ? 'Playing example…' : 'Listen to example'}
       </button>
@@ -206,7 +207,7 @@
     </div>
 
     <fieldset class="answer-fieldset" disabled={selectedAnswer !== null}>
-      <legend>{kind === 'pulse' ? 'How did the beats feel?' : kind === 'pitch' ? 'Which note was higher?' : kind === 'contour' ? 'Which way did the melody move?' : 'What was the distance between the notes?'}</legend>
+      <legend>{kind === 'pulse' ? 'How did the beats feel?' : kind === 'pitch' ? 'Which note was higher?' : kind === 'contour' ? 'Which way did the melody move?' : kind === 'interval' ? 'What was the distance between the notes?' : 'Which chord was in the middle?'}</legend>
       <div class="answer-options" class:three-options={exercise.choices.length === 3}>
         {#each exercise.choices as choice (choice.value)}
           <button
