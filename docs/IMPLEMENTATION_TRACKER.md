@@ -17,23 +17,26 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Parallel implementation queue — 2026-11-15
 
-Independent work proceeds in parallel on separate branches. Merging is strictly ordered by priority. PR #117 and #118 have completed the first two merge positions; remaining order is #119 → #120 → #121 → #122 → #123 → #125 → #124.
+Independent work proceeds on separate branches; merges remain strictly priority-ordered. PRs #117–#120 are merged. PR #126 was a duplicate of #120's identical head/tree and had no file delta.
 
 | Merge order | PR | Priority / issue | Scope | Current gate |
 | --- | --- | --- | --- | --- |
-| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Exact v1 interval response mismatch read model; no mastery mutation | Merged as `64054bb2ae8bb17bc0997aba58cfd0fd1a917c68`; all branch and post-merge checks passed |
-| Merged 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Merged as `aff8cfe50366fd78871858bc7dde3a4b6e3872b7`; branch CI passed, post-merge main validation pending at this checkpoint |
-| 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Name/sound/use theory recall | Rebased on #118; fresh CI running |
-| 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scale/triad/inversion/CAGED and fretboard model | Prior branch CI passed; re-run after base update |
-| 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local song projects with learner-scoped IndexedDB v7 and backup/restore/reset | Browser acceptance updated for v7 store; CI rerunning |
-| 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real-device and recording evidence matrix | Documentation only; physical evidence not run |
-| 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Manual-only controlled CI failure/recovery rehearsal | Workflow dispatch after merge; Issue #5 remains open until both runs recorded |
-| 8 | [#125](https://github.com/leenusdarnal/guitarlab/pull/125) | P4 / #3 | Production environment decision and release approval gates | Documentation only; no production configuration/resources authorized |
-| 9 | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation and priority-ordered merge process | Final governance PR; merge last |
+| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval-response mismatch evidence labels; no mastery mutation | Merged; branch and post-merge checks passed |
+| Merged 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Merged; branch and post-merge validation passed |
+| Merged 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Theory recall: name, sound and musical use | Merged; checks passed |
+| Merged 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scales, triads, inversions, CAGED and canonical fretboard notes | Merged as `99fcb305723e0c3c18007e371a93a052974038a2`; identical tree to duplicate #126 |
+| 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local repertoire projects, learner-scoped IndexedDB v7 and backup/restore/reset | Latest head `fc290be38793e4bc3a37870eb272b547cbca7f6b`; Node.js 26 passed, application/browser validation in progress |
+| 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real recording, physical-device, storage and recovery evidence matrix | CI passed; hardware and recording evidence remains not run |
+| 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Isolated manual CI failure/recovery rehearsal | CI passed; both manual workflow runs remain pending after merge |
+| 8 | [#125](https://github.com/leenusdarnal/guitarlab/pull/125) | P4 / #3 | Production environment decision and explicit release gates | CI passed; no production resource or deployment is authorized |
+| 9 | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation, strict merge order and durable status tracking | Final documentation PR; re-check CI after this refresh and merge last |
 
-**Merge protocol:** verify the current branch head and every required status; merge only the next PR using squash; verify post-merge main CI; then rebase the next PR and rerun its affected checks. Do not merge later PRs because their checks finish first. Never weaken or bypass required checks.
+**Remaining merge order:** #121 → #122 → #123 → #125 → #124.
 
-**Honest completion rule:** a code merge completes only its explicitly stated scope. Physical device/recording acceptance, manual WCAG/privacy review, controlled workflow dispatch and production approval remain open until evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
+**Merge protocol:** verify each PR head SHA, mergeability and required checks; squash-merge only the next PR; verify post-merge main CI; then revalidate the next PR against the updated base. A later green PR does not move ahead of an earlier item.
+
+**Honest completion rule:** physical-device/recording acceptance, manual WCAG/privacy review, controlled workflow dispatch and production approval remain open until their evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
+
 
 ## Current status
 
