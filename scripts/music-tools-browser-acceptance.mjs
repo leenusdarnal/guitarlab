@@ -515,7 +515,7 @@ try {
   await page.getByLabel('A4 reference frequency').selectOption('442');
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
-  await page.getByLabel('A4 reference frequency').toHaveValue('442');
+  assert.equal(await page.getByLabel('A4 reference frequency').inputValue(), '442');
   await page.getByText('442 Hz reference', { exact: true }).waitFor();
   const tunerReference = page.getByRole('button', { name: 'Hear A4 reference tone' });
   await tunerReference.click();
