@@ -234,7 +234,7 @@
     </div>
 
     <div class="tempo-presets" aria-label="Tempo presets">
-      {#each tempoPresets as preset}
+      {#each tempoPresets as preset (preset)}
         <button
           type="button"
           class:chosen={tempo === preset}
@@ -267,7 +267,7 @@
     </label>
 
     <div class="beat-indicator" aria-hidden="true">
-      {#each Array.from({ length: beatsPerBar }, (_, index) => index + 1) as beat}
+      {#each Array.from({ length: beatsPerBar }, (_, index) => index + 1) as beat (beat)}
         <span class:active={activeBeat === beat} class:downbeat={beat === 1}></span>
       {/each}
     </div>
@@ -285,8 +285,6 @@
       <button
         type="button"
         class="primary-button"
-        aria-label="Metronome playback"
-        aria-pressed={isMetronomeRunning}
         disabled={isStarting}
         onclick={toggleMetronome}
       >
