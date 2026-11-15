@@ -199,3 +199,11 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - The previous v0.2.0 catalogue is retained as a full snapshot alongside v0.1.0. Observations are evaluated only against the exact taxonomy version stored with the session; new dimensions never apply retroactively.
 - The overlapping y1-w16-lesson-music fingerstyle scope is retained from v0.2.0 rather than duplicated or redefined.
 - CI and curriculum validation are required again after rebasing this PR onto the merged v0.2.0 main branch.
+
+
+## M7.2 source-evidence validation — 2026-11-15
+
+- PR #115 merged as `bd1a7f82b9585ade6fa02f420e3ca49a4046c4a3`; active taxonomy is v0.3.0 with 24 current exercise scopes and retained v0.1.0/v0.2.0 snapshots.
+- Current slice: `feat/m7-validate-exercise-source-evidence`. Every scope's evidence is being changed from descriptive paraphrase to an exact excerpt from the corresponding exercise's own instructions or success criterion.
+- `scripts/validate-practice-taxonomy.mjs` now checks exact source membership for current and historical snapshots. Negative guards cover fabricated and cross-exercise evidence.
+- CI and curriculum validation are pending. This validator change does not add tags, change exposure denominators, relabel learner records or affect mastery.

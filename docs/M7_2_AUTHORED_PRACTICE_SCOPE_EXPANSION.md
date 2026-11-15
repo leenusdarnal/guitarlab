@@ -54,3 +54,10 @@ The source excerpts and mappings have been checked against the authored lesson d
 ## Coverage boundary
 
 The catalogue contains 24 source-evidenced authored exercise scopes across three immutable taxonomy snapshots. Exposure counts remain activity coverage for those explicitly mapped scopes only. They are not full-curriculum coverage, correctness, completion or mastery.
+
+
+## Source-evidence validation follow-up — 2026-11-15
+
+The taxonomy validator now treats `sourceEvidence` as a verbatim excerpt, not an explanatory paraphrase. Each excerpt must be present in the exact exercise identified by the scope's lesson and exercise IDs, in either that exercise's authored instruction list or its success criterion. The rule applies equally to v0.1.0, v0.2.0 and v0.3.0 snapshots; it does not resolve evidence from another exercise or from lesson-level context.
+
+Negative matcher guards reject fabricated excerpts and excerpts that are absent from the selected exercise. This is a provenance-integrity check, not a semantic proof that every assigned dimension is musically correct; curriculum-owner review remains separate.
