@@ -215,9 +215,7 @@ export function createEarTrainingExercise(
           intervalRootMidiNotes.length
       ];
     const firstFrequency = midiToFrequency(firstMidiNote);
-    const secondFrequency = midiToFrequency(
-      firstMidiNote + interval.semitones
-    );
+    const secondFrequency = midiToFrequency(firstMidiNote + interval.semitones);
     const visualHint =
       intervalSet === 'foundation'
         ? 'Start with familiar anchors: a repeated note, thirds and a fifth. Listen for the distance, not the absolute pitch.'
