@@ -529,6 +529,7 @@
                 }}
                 data-string={note.stringNumber}
                 data-fret={note.fret}
+                data-pitch-class={note.pitchClass}
                 data-display-column={getDisplayFretColumn(note.fret, maxFret, handedness)}
                 style={`grid-column: ${getDisplayFretColumn(note.fret, maxFret, handedness) + 1};`}
                 onclick={() => activateNote(note)}
