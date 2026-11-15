@@ -146,6 +146,7 @@
     try {
       await correctActiveSkillState({
         skillId: selectedReview.skill.id,
+        curriculumReleaseId: selectedReview.mastery.curriculumReleaseId,
         state: selectedState,
         note: correctionNote
       });
@@ -170,9 +171,6 @@
   }
 
   function stateDescription(state: SkillState) {
-    return stateGuides.find((guide) => guide.state === state)?.description ?? '';
-  }
-
   function formatDate(timestamp: number | null) {
     return timestamp === null
       ? 'Not recorded'
