@@ -7,6 +7,11 @@
   } from '../../../lib/audio/microphone-input';
   import { estimatePitch } from '../../../lib/audio/pitch-estimator';
   import { StableNoteTracker } from '../../../lib/audio/stable-note-tracker';
+  import {
+    createNoteRecognitionScore,
+    recordNoteRecognitionAttempt,
+    resetNoteRecognitionTarget
+  } from '../../../lib/audio/note-recognition-scoring';
 
   const targets = [
     { midiNote: 40, noteName: 'E2', stringName: '6th · Low E' },
@@ -30,9 +35,12 @@
   let isRunning = $state(false);
   let roundIndex = $state(0);
   let correctCount = $state(0);
+  let score = $state(createNoteRecognitionScore());
+  const firstTryCorrectCount = $derived(score.firstTryMatches);
+  const totalAttemptCount = $derived(score.totalAttempts);
+  const attemptsForRound = $derived(score.attemptsForCurrentTarget);
   let roundState = $state<'ready' | 'listening' | 'waiting' | 'retry' | 'correct' | 'complete'>('ready');
   let detectedNote = $state('');
-  let confidence = $state<number | null>(null);
   let errorMessage = $state('');
   let awaitingRelease = false;
   let processedAt = 0;
@@ -51,7 +59,6 @@
     if (isStarting || isRunning) return;
     errorMessage = '';
     detectedNote = '';
-    confidence = null;
     tracker.reset();
     awaitingRelease = false;
     isStarting = true;
@@ -93,7 +100,6 @@
     isStarting = false;
     tracker.reset();
     awaitingRelease = false;
-    confidence = null;
     detectedNote = '';
     roundState = 'ready';
     if (activeMicrophone) await activeMicrophone.dispose();
@@ -109,14 +115,12 @@
         const update = tracker.update(estimate, timestamp);
         if (update.note) {
           detectedNote = update.note.noteName;
-          confidence = update.note.confidence;
         }
         if (update.event === 'note-off') {
           awaitingRelease = false;
           if (roundState === 'retry' || roundState === 'waiting') {
             roundState = 'listening';
             detectedNote = '';
-            confidence = null;
           }
         } else if (
           (update.event === 'note-on' || update.event === 'note-change') &&
@@ -124,13 +128,17 @@
           !awaitingRelease &&
           target
         ) {
-          if (update.note?.midiNote === target.midiNote) {
-            correctCount += 1;
-            roundState = 'correct';
-            awaitingRelease = true;
-          } else if (update.note) {
-            roundState = 'retry';
-            awaitingRelease = true;
+          if (update.note) {
+            const isTargetNote = update.note.midiNote === target.midiNote;
+            score = recordNoteRecognitionAttempt(score, isTargetNote);
+            if (isTargetNote) {
+              correctCount += 1;
+              roundState = 'correct';
+              awaitingRelease = true;
+            } else {
+              roundState = 'retry';
+              awaitingRelease = true;
+            }
           }
         }
       } catch (error) {
@@ -151,16 +159,16 @@
       return;
     }
     roundIndex += 1;
+    score = resetNoteRecognitionTarget(score);
     detectedNote = '';
-    confidence = null;
     roundState = awaitingRelease ? 'waiting' : 'listening';
   }
 
   function restartExercise() {
     roundIndex = 0;
     correctCount = 0;
+    score = createNoteRecognitionScore();
     detectedNote = '';
-    confidence = null;
     awaitingRelease = false;
     tracker.reset();
     roundState = isRunning ? 'listening' : 'ready';
@@ -195,6 +203,7 @@
         <div class="target-note">Well played.</div>
         <h2 id="exercise-title">All six strings checked.</h2>
         <p>You matched {correctCount} of {targets.length} target notes.</p>
+        <p>First-try matches: {firstTryCorrectCount} of {targets.length}. Total detected attempts: {totalAttemptCount}.</p>
         <button type="button" class="primary-button" onclick={restartExercise}>Play again</button>
       </div>
     {:else if target}
@@ -215,12 +224,15 @@
           <p>The next round will listen when the sound has settled.</p>
         {:else if roundState === 'listening'}
           <strong>Listening for {target.noteName}…</strong>
-          <p>{detectedNote ? `Hearing ${detectedNote} · confidence ${Math.round((confidence ?? 0) * 100)}%` : 'Pluck the open string and hold the note.'}</p>
+          <p>{detectedNote ? `A stable ${detectedNote} is coming through. Keep playing for ${target.noteName}.` : 'Pluck the open string and hold the note.'}</p>
         {:else}
           <strong>Ready when you are.</strong>
           <p>Start the exercise to enable microphone-based note checking.</p>
         {/if}
       </div>
+      {#if roundState !== 'correct'}
+        <p class="attempt-count">Attempts for this note: {attemptsForRound}</p>
+      {/if}
       {#if roundState === 'correct'}
         <button type="button" class="primary-button" onclick={nextNote}>Next note</button>
       {/if}
@@ -276,9 +288,10 @@
   .feedback strong { font-size: 13px; }
   .feedback p, .result-state p { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
   .positive { color: var(--success); }
+  .attempt-count { margin: 10px 0 0; color: var(--muted); font-size: 11px; text-align: center; font-variant-numeric: tabular-nums; }
   .caution { color: var(--warning); }
   .controls { display: grid; justify-items: center; gap: 10px; margin-top: 18px; }
-  .primary-button, .secondary-button { min-height: 44px; padding: 11px 18px; border: 1px solid var(--primary); border-radius: 10px; background: var(--primary); color: var(--primary-ink); font-size: 12px; font-weight: 750; cursor: pointer; }
+  .primary-button, .secondary-button { min-height: 48px; padding: 11px 18px; border: 1px solid var(--primary); border-radius: 10px; background: var(--primary); color: var(--primary-ink); font-size: 12px; font-weight: 750; cursor: pointer; }
   .secondary-button { border-color: var(--border); background: var(--surface-raised); color: var(--text); }
   button:disabled { cursor: wait; opacity: .6; }
   .capture-state { display: flex; align-items: center; gap: 7px; }

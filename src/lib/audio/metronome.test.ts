@@ -146,6 +146,37 @@ describe('WebAudioMetronome audio lifecycle', () => {
     await metronome.dispose();
   });
 
+  it('publishes visual beat cues when the scheduled audio beat occurs', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const onBeat = vi.fn();
+    const metronome = new WebAudioMetronome({ onBeat });
+
+    await metronome.start();
+    expect(onBeat).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(49);
+    expect(onBeat).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(1);
+    expect(onBeat).toHaveBeenCalledWith(1, true);
+
+    await metronome.dispose();
+  });
+
+  it('cancels pending visual beat cues when stopped', async () => {
+    installAudioEnvironment();
+    vi.useFakeTimers();
+    const onBeat = vi.fn();
+    const metronome = new WebAudioMetronome({ onBeat });
+
+    await metronome.start();
+    metronome.stop();
+    vi.advanceTimersByTime(100);
+
+    expect(onBeat).not.toHaveBeenCalled();
+    await metronome.dispose();
+  });
+
   it('does not create duplicate contexts or schedulers when started twice', async () => {
     installAudioEnvironment();
     vi.useFakeTimers();

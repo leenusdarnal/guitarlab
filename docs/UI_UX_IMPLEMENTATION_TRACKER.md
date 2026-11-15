@@ -239,20 +239,20 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-08 — Improve musical tool ergonomics and feedback
 
 **Priority:** P1 for assistive/essential interactions; P2 for enhancements  
-**Status:** READY  
+**Status:** IN REVIEW — implementation complete; required automated CI checks passed on the PR head. Physical-device, keyboard-only, screen-reader and wake-lock lifecycle checks remain in UX-14  
 **Depends on:** UX-02, UX-03 and UX-04  
 **Related findings:** M1–M3, TU1–TU3, N1–N3
 
-- [ ] Add a clear visual beat pulse and beat/downbeat indication to the metronome; respect reduced-motion settings.
-- [ ] Add Screen Wake Lock while the metronome is actively running, reacquire after visibility changes when appropriate, and release on stop/destroy.
-- [ ] Handle denied, unsupported and automatically released wake locks without breaking audio playback.
-- [ ] Improve tempo control with step buttons, direct numeric entry, tap tempo and useful presets; retain the current slider as an accessible option.
-- [ ] Make the metronome toggle semantics consistent: fixed label plus pressed state, or changing label without aria-pressed.
-- [ ] Reduce tuner live-region announcements to meaningful state changes; keep high-frequency readings visual rather than announcing them repeatedly.
-- [ ] Persist tuner calibration preference where appropriate and add clear target-string, reference-tone, input-level and microphone-permission guidance as separate enhancements.
-- [ ] Record note-recognition first-attempt accuracy and total attempts; do not count eventual retries as first-try success.
-- [ ] Keep automatic note advance optional and make hands-busy controls large enough to use while holding a guitar.
-- [ ] Use learner-facing descriptions instead of unexplained confidence percentages.
+- [x] Add a visual beat pulse with a distinct downbeat; respect reduced-motion settings.
+- [x] Request Screen Wake Lock while running, retry after visibility changes, and release on stop/destroy.
+- [x] Report denied, unsupported and automatically released wake locks without interrupting audio playback.
+- [x] Add tempo step buttons, direct numeric entry, tap tempo and presets while retaining the accessible slider.
+- [x] Use a stable metronome control label with an explicit pressed state.
+- [x] Announce stable note changes only; keep high-frequency tuner readings visual.
+- [x] Persist calibration and add target-string, reference-tone, input-level and microphone-permission guidance.
+- [x] Show first-try matches separately from total detected attempts; retries do not become first-try successes.
+- [x] Keep next-note advancement learner-controlled and raise primary hands-busy controls to 48px.
+- [x] Replace raw confidence percentages with a plain-language stable-note message.
 
 **Acceptance:** tools work with keyboard and touch; assistive technology receives concise state changes; the metronome has a non-audio cue; note-recognition results reflect first-attempt performance rather than eventual success.
 
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | PR #144 implementation and automated CI validation complete for UX-08; physical-device, keyboard-only, screen-reader and wake-lock lifecycle acceptance remain open under UX-14. |
 | 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |
 | 2026-11-15 | Standardised practice duration to 5–180 minutes, with 10/20/40/60 presets and blur-committed custom preference entry in onboarding; dashboard overrides remain day-only. |
 | 2026-11-15 | Started UX-05/UX-06 on `feat/ux-05-actionable-practice-plans`: real plan-to-session review hand-off, task/review/phase/history links, blur-based custom-duration validation, session-first practice layout, positive recommendation action and quick observation logging. Automated validation pending; full wake-lock/idle recovery and physical-device acceptance remain open. |

@@ -38,6 +38,8 @@ export class WebAudioMetronome {
   private bpm: number;
   private beatsPerBar: number;
   private readonly onStateChange?: (running: boolean) => void;
+  private readonly onBeat?: (beat: number, accented: boolean) => void;
+  private readonly scheduledBeatCues = new Set<ReturnType<typeof setTimeout>>();
 
   private readonly tickMilliseconds = 25;
   private readonly lookaheadSeconds = 0.1;
@@ -46,9 +48,11 @@ export class WebAudioMetronome {
     bpm?: number;
     beatsPerBar?: number;
     onStateChange?: (running: boolean) => void;
+    onBeat?: (beat: number, accented: boolean) => void;
   }) {
     this.bpm = validateMetronomeTempo(options?.bpm ?? 80);
     this.onStateChange = options?.onStateChange;
+    this.onBeat = options?.onBeat;
     this.beatsPerBar = options?.beatsPerBar ?? 4;
     if (
       !Number.isInteger(this.beatsPerBar) ||
@@ -120,6 +124,8 @@ export class WebAudioMetronome {
       }
     }
     this.scheduledOscillators.clear();
+    for (const cue of this.scheduledBeatCues) clearTimeout(cue);
+    this.scheduledBeatCues.clear();
     document.removeEventListener(
       'visibilitychange',
       this.handleVisibilityChange
@@ -145,13 +151,26 @@ export class WebAudioMetronome {
 
     while (this.nextBeatTime < context.currentTime + this.lookaheadSeconds) {
       const accented = this.beatIndex % this.beatsPerBar === 0;
+      const beat = (this.beatIndex % this.beatsPerBar) + 1;
       this.scheduleClick(this.nextBeatTime, accented);
+      this.scheduleBeatCue(this.nextBeatTime, beat, accented);
       this.nextBeatTime += 60 / this.bpm;
       this.beatIndex += 1;
     }
 
     this.timer = setTimeout(this.schedule, this.tickMilliseconds);
   };
+
+  private scheduleBeatCue(when: number, beat: number, accented: boolean): void {
+    const context = this.context;
+    if (!context || !this.onBeat) return;
+    const delay = Math.max(0, (when - context.currentTime) * 1_000);
+    const cue = setTimeout(() => {
+      this.scheduledBeatCues.delete(cue);
+      if (this.running) this.onBeat?.(beat, accented);
+    }, delay);
+    this.scheduledBeatCues.add(cue);
+  }
 
   private scheduleClick(when: number, accented: boolean): void {
     const context = this.context;

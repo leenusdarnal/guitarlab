@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     MAX_METRONOME_BPM,
@@ -8,6 +8,10 @@
     WebAudioMetronome
   } from '../../../lib/audio/metronome';
 
+  type WakeLockSentinelLike = EventTarget & { release(): Promise<void> };
+  type WakeLockApiLike = { request(type: 'screen'): Promise<WakeLockSentinelLike> };
+
+  const tempoPresets = [60, 80, 100, 120];
   let tempo = $state(80);
   let beatsPerBar = $state(4);
   let metronome = $state<WebAudioMetronome | null>(null);
@@ -15,19 +19,105 @@
   let isStarting = $state(false);
   let isPlayingReference = $state(false);
   let audioError = $state('');
+  let activeBeat = $state<number | null>(null);
+  let isWakeLockActive = $state(false);
+  let wakeLockStatus = $state<'idle' | 'active' | 'unavailable' | 'released'>('idle');
+  let wakeLock: WakeLockSentinelLike | null = null;
+  let tapMessage = $state('Tap in a steady rhythm to set the tempo.');
+  let tapTimes: number[] = [];
+
+  onMount(() => {
+    const requestedTempo = Number(new URLSearchParams(window.location.search).get('bpm'));
+    if (Number.isInteger(requestedTempo) && requestedTempo >= MIN_METRONOME_BPM && requestedTempo <= MAX_METRONOME_BPM) {
+      setTempo(requestedTempo);
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  });
 
   onDestroy(() => {
+    releaseWakeLock();
     void metronome?.dispose();
   });
 
+  function setTempo(nextTempo: number) {
+    if (!Number.isInteger(nextTempo) || nextTempo < MIN_METRONOME_BPM || nextTempo > MAX_METRONOME_BPM) return;
+    tempo = nextTempo;
+    metronome?.setTempo(nextTempo);
+  }
+
   function updateTempo(event: Event) {
-    tempo = Number((event.currentTarget as HTMLInputElement).value);
-    metronome?.setTempo(tempo);
+    setTempo(Number((event.currentTarget as HTMLInputElement).value));
+  }
+
+  function adjustTempo(amount: number) {
+    setTempo(tempo + amount);
+  }
+
+  function tapTempo() {
+    const now = performance.now();
+    if (tapTimes.length && now - tapTimes[tapTimes.length - 1] > 2_000) tapTimes = [];
+    tapTimes = [...tapTimes, now].slice(-5);
+    if (tapTimes.length < 2) {
+      tapMessage = 'Tap once more to calculate your tempo.';
+      return;
+    }
+    const intervals = tapTimes.slice(1).map((tap, index) => tap - tapTimes[index]);
+    const averageInterval = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
+    const tappedTempo = Math.round(60_000 / averageInterval);
+    if (tappedTempo < MIN_METRONOME_BPM || tappedTempo > MAX_METRONOME_BPM) {
+      tapMessage = 'Keep tapping between ' + MIN_METRONOME_BPM + ' and ' + MAX_METRONOME_BPM + ' BPM.';
+      return;
+    }
+    setTempo(tappedTempo);
+    tapMessage = 'Tempo set to ' + tappedTempo + ' BPM.';
   }
 
   function updateMeter(event: Event) {
     beatsPerBar = Number((event.currentTarget as HTMLSelectElement).value);
     metronome?.setBeatsPerBar(beatsPerBar);
+    activeBeat = null;
+  }
+
+  function handleVisibilityChange() {
+    if (document.visibilityState === 'visible' && isMetronomeRunning && !wakeLock) {
+      void requestWakeLock();
+    }
+  }
+
+  async function requestWakeLock() {
+    const wakeLockApi = (navigator as Navigator & { wakeLock?: WakeLockApiLike }).wakeLock;
+    if (!wakeLockApi) {
+      wakeLockStatus = 'unavailable';
+      return;
+    }
+    try {
+      const requestedLock = await wakeLockApi.request('screen');
+      if (!isMetronomeRunning) {
+        await requestedLock.release();
+        return;
+      }
+      wakeLock = requestedLock;
+      isWakeLockActive = true;
+      wakeLockStatus = 'active';
+      requestedLock.addEventListener('release', () => {
+        if (wakeLock === requestedLock) {
+          wakeLock = null;
+          isWakeLockActive = false;
+          wakeLockStatus = 'released';
+        }
+      });
+    } catch {
+      // Wake Lock is optional; a denied request must not interrupt audio.
+      wakeLockStatus = 'unavailable';
+    }
+  }
+
+  function releaseWakeLock() {
+    const activeLock = wakeLock;
+    wakeLock = null;
+    isWakeLockActive = false;
+    if (activeLock) void activeLock.release().catch(() => undefined);
   }
 
   async function toggleMetronome() {
@@ -36,33 +126,40 @@
     if (isMetronomeRunning) {
       metronome?.stop();
       isMetronomeRunning = false;
+      activeBeat = null;
+      releaseWakeLock();
       return;
     }
 
     isStarting = true;
-    const player =
-      metronome ??
-      new WebAudioMetronome({
-        bpm: tempo,
-        beatsPerBar,
-        onStateChange: (running) => {
-          isMetronomeRunning = running;
+    const player = metronome ?? new WebAudioMetronome({
+      bpm: tempo,
+      beatsPerBar,
+      onStateChange: (running) => {
+        isMetronomeRunning = running;
+        if (!running) {
+          activeBeat = null;
+          releaseWakeLock();
         }
-      });
+      },
+      onBeat: (beat) => { activeBeat = beat; }
+    });
     player.setTempo(tempo);
     player.setBeatsPerBar(beatsPerBar);
     metronome = player;
     try {
       await player.start();
       isMetronomeRunning = player.isRunning;
+      if (player.isRunning) await requestWakeLock();
     } catch (error) {
       await player.dispose();
       metronome = null;
       isMetronomeRunning = false;
-      audioError =
-        error instanceof Error
-          ? error.message
-          : 'The metronome could not start in this browser.';
+      activeBeat = null;
+      releaseWakeLock();
+      audioError = error instanceof Error
+        ? error.message
+        : 'The metronome could not start in this browser.';
     } finally {
       isStarting = false;
     }
@@ -74,10 +171,9 @@
     try {
       await playReferenceTone(440, 900);
     } catch (error) {
-      audioError =
-        error instanceof Error
-          ? error.message
-          : 'The reference tone could not be played.';
+      audioError = error instanceof Error
+        ? error.message
+        : 'The reference tone could not be played.';
     } finally {
       isPlayingReference = false;
     }
@@ -115,9 +211,42 @@
       </span>
     </div>
 
-    <div class="tempo-display" aria-live="polite">
+    <div class="tempo-display">
       <strong>{tempo}</strong>
       <span>BPM</span>
+    </div>
+
+    <div class="tempo-adjusters" aria-label="Tempo adjustment">
+      <button type="button" class="step-button" aria-label="Decrease tempo by 1 BPM" onclick={() => adjustTempo(-1)}>−</button>
+      <label class="tempo-entry">
+        <span>Tempo in BPM</span>
+        <input
+          type="number"
+          min={MIN_METRONOME_BPM}
+          max={MAX_METRONOME_BPM}
+          step="1"
+          value={tempo}
+          oninput={updateTempo}
+          aria-label="Enter tempo in beats per minute"
+        />
+      </label>
+      <button type="button" class="step-button" aria-label="Increase tempo by 1 BPM" onclick={() => adjustTempo(1)}>+</button>
+    </div>
+
+    <div class="tempo-presets" aria-label="Tempo presets">
+      {#each tempoPresets as preset (preset)}
+        <button
+          type="button"
+          class:chosen={tempo === preset}
+          aria-pressed={tempo === preset}
+          onclick={() => setTempo(preset)}
+        >{preset} BPM</button>
+      {/each}
+    </div>
+
+    <div class="tap-tempo">
+      <button type="button" class="secondary-button" onclick={tapTempo}>Tap tempo</button>
+      <p role="status" aria-live="polite">{tapMessage}</p>
     </div>
 
     <label class="tempo-slider">
@@ -137,6 +266,12 @@
       </span>
     </label>
 
+    <div class="beat-indicator" aria-hidden="true">
+      {#each Array.from({ length: beatsPerBar }, (_, index) => index + 1) as beat (beat)}
+        <span class:active={activeBeat === beat} class:downbeat={beat === 1}></span>
+      {/each}
+    </div>
+
     <label class="field meter-field">
       <span>Beats per bar</span>
       <select value={String(beatsPerBar)} onchange={updateMeter} aria-label="Beats per bar">
@@ -150,7 +285,6 @@
       <button
         type="button"
         class="primary-button"
-        aria-pressed={isMetronomeRunning}
         disabled={isStarting}
         onclick={toggleMetronome}
       >
@@ -172,6 +306,13 @@
 
     {#if audioError}
       <p class="input-error" role="alert">{audioError}</p>
+    {/if}
+    {#if isMetronomeRunning && isWakeLockActive}
+      <p class="wake-lock-note" role="status">Screen stays awake while the metronome is playing.</p>
+    {:else if isMetronomeRunning && wakeLockStatus === 'unavailable'}
+      <p class="wake-lock-note">Your browser may dim the screen; metronome audio will continue.</p>
+    {:else if isMetronomeRunning && wakeLockStatus === 'released'}
+      <p class="wake-lock-note" role="status">The screen lock was released. Metronome audio is still playing.</p>
     {/if}
   </section>
 
@@ -281,6 +422,111 @@
     font-weight: 800;
     letter-spacing: 1px;
   }
+  .tempo-adjusters {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 12px;
+    margin: 18px 0 12px;
+  }
+  .step-button {
+    width: 48px;
+    min-height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .tempo-entry {
+    display: grid;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .tempo-entry input {
+    width: 112px;
+    min-height: 48px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font: 700 20px/1 system-ui, sans-serif;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .tempo-presets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0 18px;
+  }
+  .tempo-presets button {
+    min-height: 44px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .tempo-presets button.chosen {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+    color: var(--primary);
+  }
+  .tap-tempo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 22px;
+  }
+  .tap-tempo p,
+  .wake-lock-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .beat-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    min-height: 46px;
+    margin: 18px 0;
+  }
+  .beat-indicator span {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--surface-raised);
+    transition: transform 90ms ease, background-color 90ms ease, border-color 90ms ease;
+  }
+  .beat-indicator span.downbeat {
+    width: 20px;
+    height: 20px;
+    border-color: var(--primary);
+  }
+  .beat-indicator span.active {
+    transform: scale(1.2);
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  .beat-indicator span.active.downbeat {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+  .wake-lock-note {
+    margin: 14px 0 0;
+  }
   .tempo-slider {
     display: grid;
     gap: 10px;
@@ -376,6 +622,10 @@
   select:focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beat-indicator span { transition: none; }
+    .beat-indicator span.active { transform: none; }
   }
   @media (max-width: 600px) {
     .metronome-page {
