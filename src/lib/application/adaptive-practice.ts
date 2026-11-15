@@ -276,10 +276,19 @@ function buildItemEvidenceGroups(
             'major_third',
             'perfect_fifth'
           ]);
+          const expectedIntervalByItemId: Record<string, string> = {
+            unison: 'unison',
+            'minor-third': 'minor_third',
+            'major-third': 'major_third',
+            'perfect-fifth': 'perfect_fifth'
+          };
           const expectedIntervalPrefix = 'interval-recognition.';
-          const expectedInterval = itemId.startsWith(expectedIntervalPrefix)
-            ? itemId.slice(expectedIntervalPrefix.length)
-            : '';
+          const expectedInterval =
+            itemId.startsWith(expectedIntervalPrefix)
+              ? (expectedIntervalByItemId[
+                  itemId.slice(expectedIntervalPrefix.length)
+                ] ?? '')
+              : '';
           const supportsExactIntervalContrast =
             group.definitionId === 'guitar.ear-training.interval-recognition' &&
             group.definitionVersion === 1 &&
