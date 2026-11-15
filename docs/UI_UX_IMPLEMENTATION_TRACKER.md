@@ -239,20 +239,20 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-08 — Improve musical tool ergonomics and feedback
 
 **Priority:** P1 for assistive/essential interactions; P2 for enhancements  
-**Status:** READY  
+**Status:** IN PROGRESS — metronome timing/controls, tuner feedback and note-recognition scoring implemented on `feat/ux-08-music-tool-ergonomics`; automated validation pending  
 **Depends on:** UX-02, UX-03 and UX-04  
 **Related findings:** M1–M3, TU1–TU3, N1–N3
 
-- [ ] Add a clear visual beat pulse and beat/downbeat indication to the metronome; respect reduced-motion settings.
-- [ ] Add Screen Wake Lock while the metronome is actively running, reacquire after visibility changes when appropriate, and release on stop/destroy.
-- [ ] Handle denied, unsupported and automatically released wake locks without breaking audio playback.
-- [ ] Improve tempo control with step buttons, direct numeric entry, tap tempo and useful presets; retain the current slider as an accessible option.
-- [ ] Make the metronome toggle semantics consistent: fixed label plus pressed state, or changing label without aria-pressed.
-- [ ] Reduce tuner live-region announcements to meaningful state changes; keep high-frequency readings visual rather than announcing them repeatedly.
-- [ ] Persist tuner calibration preference where appropriate and add clear target-string, reference-tone, input-level and microphone-permission guidance as separate enhancements.
-- [ ] Record note-recognition first-attempt accuracy and total attempts; do not count eventual retries as first-try success.
-- [ ] Keep automatic note advance optional and make hands-busy controls large enough to use while holding a guitar.
-- [ ] Use learner-facing descriptions instead of unexplained confidence percentages.
+- [x] Add a visual beat pulse with a distinct downbeat; respect reduced-motion settings.
+- [x] Request Screen Wake Lock while running, retry after visibility changes, and release on stop/destroy.
+- [x] Report denied, unsupported and automatically released wake locks without interrupting audio playback.
+- [x] Add tempo step buttons, direct numeric entry, tap tempo and presets while retaining the accessible slider.
+- [x] Use a stable metronome control label with an explicit pressed state.
+- [x] Announce stable note changes only; keep high-frequency tuner readings visual.
+- [x] Persist calibration and add target-string, reference-tone, input-level and microphone-permission guidance.
+- [x] Show first-try matches separately from total detected attempts; retries do not become first-try successes.
+- [x] Keep next-note advancement learner-controlled and raise primary hands-busy controls to 48px.
+- [x] Replace raw confidence percentages with a plain-language stable-note message.
 
 **Acceptance:** tools work with keyboard and touch; assistive technology receives concise state changes; the metronome has a non-audio cue; note-recognition results reflect first-attempt performance rather than eventual success.
 
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Started UX-08 music-tool ergonomics: scheduled non-audio metronome beat cues, tempo entry/steps/tap/presets, optional Screen Wake Lock, persisted tuner calibration, concise tuner announcements, A4 reference tone and setup guidance, plus first-try note-recognition scoring. Automated validation pending. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
