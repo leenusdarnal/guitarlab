@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import { onMount } from 'svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -7,6 +8,11 @@
   let selectedRoute = $state('all');
   let durationFilter = $state('all');
   let visibleCount = $state(12);
+  let catalogHydrated = $state(false);
+
+  onMount(() => {
+    catalogHydrated = true;
+  });
 
   const allLessons = $derived(
     data.routes.flatMap((route) =>
@@ -90,7 +96,11 @@
     </div>
   </header>
 
-  <section class="finder" aria-labelledby="finder-title">
+  <section
+    class="finder"
+    aria-labelledby="finder-title"
+    data-catalog-hydrated={catalogHydrated ? 'true' : 'false'}
+  >
     <div class="finder-heading">
       <div>
         <div class="eyebrow">LESSON FINDER</div>
