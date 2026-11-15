@@ -325,12 +325,13 @@ try {
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
-  await restrictedStoragePage
-    .getByRole('button', { name: 'Toggle colour theme' })
-    .click();
+  const restrictedAppearance = restrictedStoragePage.getByRole('combobox', {
+    name: 'Appearance'
+  });
+  await restrictedAppearance.selectOption('dark');
   assert.equal(
     await restrictedStoragePage.locator('html').getAttribute('data-theme'),
-    'light',
+    'dark',
     'The theme should still change in memory when localStorage is blocked'
   );
   assert.deepEqual(
@@ -426,8 +427,11 @@ try {
     'IndexedDB should be available in the browser'
   );
 
-  // Theme selection persists across a full reload.
-  await page.getByRole('button', { name: 'Toggle colour theme' }).click();
+  // Appearance preference persists across a full reload.
+  const dashboardAppearance = page.getByRole('combobox', {
+    name: 'Appearance'
+  });
+  await dashboardAppearance.selectOption('light');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   assert.equal(
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),

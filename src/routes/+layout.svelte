@@ -61,6 +61,8 @@
   }
 
   afterNavigate(() => {
+    const savedPreference = document.documentElement.dataset.themePreference;
+    if (isThemePreference(savedPreference)) themePreference = savedPreference;
     void tick().then(() => {
       const mainContent = document.querySelector<HTMLElement>('main');
       if (mainContent) {
