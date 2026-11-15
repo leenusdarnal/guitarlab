@@ -9,9 +9,7 @@
   } from '../lib/application/practice-plan';
 
   type ThemePreference = 'system' | 'light' | 'dark';
-  type ResolvedTheme = 'dark' | 'light';
   let themePreference = $state<ThemePreference>('system');
-  let theme = $state<ResolvedTheme>('dark');
   let menuOpen = $state(false);
   let mobileMenuTrigger: HTMLButtonElement | null = null;
   let dashboard = $state<DashboardSnapshot | null>(null);
@@ -79,7 +77,6 @@
           ? 'light'
           : 'dark'
         : preference;
-    theme = resolved;
     document.documentElement.dataset.themePreference = preference;
     document.documentElement.dataset.theme = resolved;
     document
