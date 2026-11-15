@@ -14,6 +14,33 @@ const check = (condition, message) => {
   if (!condition) fail.push(message);
 };
 const unique = (values) => new Set(values).size === values.length;
+function evidenceMatchesExercise(evidence, exercise) {
+  if (!isText(evidence) || !exercise) return false;
+  const authoredText = [
+    ...(Array.isArray(exercise.instructions) ? exercise.instructions : []),
+    exercise.successCriterion
+  ].filter(isText);
+  return authoredText.some((text) => text.includes(evidence));
+}
+
+// Guard the evidence matcher against fabricated and cross-exercise excerpts.
+const evidenceFixture = {
+  instructions: ['Play the C major scale slowly.'],
+  successCriterion: 'Name all seven notes in order.'
+};
+check(
+  evidenceMatchesExercise('Play the C major scale slowly.', evidenceFixture),
+  'Practice taxonomy: exact evidence matcher rejected an authored excerpt'
+);
+check(
+  !evidenceMatchesExercise('Play a fabricated scale exercise.', evidenceFixture),
+  'Practice taxonomy: exact evidence matcher accepted fabricated evidence'
+);
+check(
+  !evidenceMatchesExercise('Play the G major scale slowly.', evidenceFixture),
+  'Practice taxonomy: exact evidence matcher accepted evidence from another exercise'
+);
+
 const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 
 const [release, taxonomy, y1, y2, y3] = await Promise.all([
@@ -106,7 +133,12 @@ function validateSnapshot(snapshot) {
   for (const scope of scopes) {
     const key = `${scope.lessonId}:${scope.exerciseId}`;
     check(exercises.has(key), `Practice taxonomy ${version}: unknown authored exercise ${key}`);
-    check(isText(scope.sourceEvidence), `Practice taxonomy ${key}: missing source evidence`);
+    const authored = exercises.get(key)?.exercise;
+    check(
+      isText(scope.sourceEvidence) &&
+        evidenceMatchesExercise(scope.sourceEvidence, authored),
+      `Practice taxonomy ${version} ${key}: source evidence must be an exact excerpt from this exercise's instructions or success criterion`
+    );
 
     for (const [field, allowed] of [
       ['topicIds', topicIds],
