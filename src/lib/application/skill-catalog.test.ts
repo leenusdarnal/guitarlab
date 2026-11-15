@@ -3,7 +3,9 @@ import {
   ACTIVE_CURRICULUM_RELEASE_ID,
   SKILL_CATALOG_VERSION,
   getSkillCategoryDisplayName,
+  getSkillDescription,
   listCurriculumSkills,
+  listLessonsForSkill,
   listSkillsForLessons
 } from './skill-catalog';
 
@@ -24,6 +26,24 @@ describe('versioned curriculum skill catalogue', () => {
       listSkillsForLessons(['y1-w01-lesson']).map((skill) => skill.id)
     ).toEqual(['instrument.posture', 'instrument.tuning']);
     expect(listSkillsForLessons(['unknown-lesson'])).toEqual([]);
+  });
+
+  it('links skills only to lessons that explicitly include their skill ID', () => {
+    expect(listLessonsForSkill('instrument.tuning')).toEqual([
+      expect.objectContaining({
+        id: 'y1-w01-lesson',
+        week: 1,
+        title: 'Meet your guitar'
+      })
+    ]);
+    expect(listLessonsForSkill('unknown-skill')).toEqual([]);
+  });
+
+  it('provides a published description for catalogue skills', () => {
+    expect(getSkillDescription('instrument.tuning')).toEqual(
+      expect.any(String)
+    );
+    expect(getSkillDescription('unknown-skill')).toBeNull();
   });
 
   it('resolves category labels without inventing unknown categories', () => {
