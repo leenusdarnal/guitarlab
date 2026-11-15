@@ -46,7 +46,7 @@
 - [ ] Build, dry-run and deploy the same selected commit.
 - [ ] Smoke-test `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`.
 - [ ] Verify CSP, HSTS, MIME, frame and referrer headers; reject unsafe script-src allowances.
-- [ ] Configure the GitHub production environment with required credentials and main-only deployment policy before first live run.
+- [ ] Configure the GitHub production environment with required credentials and main-only deployment policy before first live run. Use Workers Admin only for the first Worker creation, then rotate to a Worker Editor token scoped to `guitarlab`.
 
 ### Task 3: Reconcile release priority and launch boundary
 
