@@ -188,11 +188,12 @@
   </header>
 
   <section class="panel tuner-panel" aria-labelledby="tuner-title">
+    <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{screenReaderMessage}</p>
     <div class="panel-meta">
       <span class="eyebrow">CHROMATIC TUNER</span>
       <label class="calibration">
         A4 reference
-        <select bind:value={calibration} aria-label="A4 reference frequency">
+        <select value={calibration} onchange={saveCalibration} aria-label="A4 reference frequency">
           <option value={440}>440 Hz</option>
           <option value={442}>442 Hz</option>
           <option value={432}>432 Hz</option>
@@ -200,7 +201,7 @@
       </label>
     </div>
 
-    <div class="note-display" aria-live="polite" aria-atomic="true">
+    <div class="note-display">
       {#if result.note}
         <div class="note-name">{result.note.noteName}</div>
         <div class="frequency">{result.note.frequencyHz.toFixed(1)} <span>Hz</span></div>
@@ -232,6 +233,13 @@
       <div class="meter-labels"><span>Flat</span><span>In tune</span><span>Sharp</span></div>
     </div>
 
+    <div class="reference-actions">
+      <button type="button" class="reference-button" onclick={playA4Reference} disabled={isPlayingReference}>
+        {isPlayingReference ? 'Playing A4 reference…' : 'Hear A4 reference tone'}
+      </button>
+      <span>440 Hz reference</span>
+    </div>
+
     <div class="capture-controls">
       {#if isRunning}
         <button type="button" class="stop-button" onclick={stopTuner}>Stop microphone</button>
@@ -260,11 +268,20 @@
       <div><strong>B3</strong><span>2nd · B</span><small>246.9 Hz</small></div>
       <div><strong>E4</strong><span>1st · High E</span><small>329.6 Hz</small></div>
     </div>
+    <div class="tuning-guidance">
+      <h3>Choose a target string</h3>
+      <p>Use the table above from the thickest string (low E2) to the thinnest (high E4). Tune one open string at a time, and use the matching note as your target.</p>
+      <h3>Get a clear input level</h3>
+      <p>Place your device microphone roughly a handspan from the guitar. Pluck firmly but comfortably, mute the other strings, and reduce nearby noise. Raise your device input level if the tuner never detects a stable note.</p>
+      <h3>Microphone permission</h3>
+      <p>Choose Start tuner to request microphone access. When permission is blocked, allow microphone access for this site in your browser or device settings, then try again. The tuner does not listen until you press Start.</p>
+      <h3>Use a reference tone</h3>
+      <p>The A4 button plays a 440 Hz reference pitch. Compare it by ear if useful; the chromatic tuner still measures the string you play.</p>
+    </div>
     <ul>
-      <li>Mute the other strings and pluck a single open string.</li>
-      <li>Let the note ring steadily; avoid touching the string while it vibrates.</li>
+      <li>Let each note ring steadily; avoid touching the string while it vibrates.</li>
       <li>Adjust the tuning peg in small movements. Stop when the needle is centred.</li>
-      <li>If the reading is uncertain, pluck again closer to the guitar and reduce background noise.</li>
+      <li>If the reading is uncertain, pause and pluck the string again.</li>
     </ul>
   </section>
 
@@ -402,6 +419,17 @@
     transform-origin: center bottom;
     transition: transform 120ms ease-out;
   }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .reference-actions { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 10px 0 20px; }
+  .reference-actions span { color: var(--muted); font-size: 10px; }
+  .reference-button { min-height: 46px; padding: 11px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-raised); color: var(--text); font-size: 12px; font-weight: 750; cursor: pointer; }
+  .reference-button:disabled { cursor: wait; opacity: .65; }
+  .tuning-guidance { display: grid; gap: 6px; margin: 16px 0; padding: 14px 16px; border-radius: 10px; background: var(--surface-raised); }
+  .tuning-guidance h3 { margin: 8px 0 0; font-size: 12px; }
+  .tuning-guidance p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
   .meter-labels {
     display: flex;
     justify-content: space-between;
