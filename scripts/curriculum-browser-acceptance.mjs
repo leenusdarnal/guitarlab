@@ -296,7 +296,10 @@ try {
   await page
     .getByRole('heading', { name: 'Right-hand independence', level: 1 })
     .waitFor();
-  assert.equal(new URL(page.url()).pathname, '/learn/y3-fingerstyle-acoustic-w01-lesson');
+  assert.equal(
+    new URL(page.url()).pathname,
+    '/learn/y3-fingerstyle-acoustic-w01-lesson'
+  );
 
   // Invalid IDs render the explicit not-found state rather than a blank page.
   await page.goto(origin + '/learn/not-a-real-lesson', {
