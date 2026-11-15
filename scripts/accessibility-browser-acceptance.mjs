@@ -67,6 +67,57 @@ async function waitForPreview() {
   throw new Error('Wrangler preview did not become ready.\n' + serverOutput);
 }
 
+function assertResponseSecurityHeaders(response) {
+  const headers = response?.headers() ?? {};
+
+  assert.equal(headers['x-content-type-options'], 'nosniff');
+  assert.equal(headers['x-frame-options'], 'DENY');
+  assert.equal(headers['referrer-policy'], 'strict-origin-when-cross-origin');
+  assert.equal(headers['cross-origin-opener-policy'], 'same-origin');
+  assert.match(headers['permissions-policy'] ?? '', /camera=\(\)/);
+  assert.match(headers['permissions-policy'] ?? '', /microphone=\(self\)/);
+  assert.match(headers['permissions-policy'] ?? '', /geolocation=\(\)/);
+
+  const policy = headers['content-security-policy'];
+  assert.ok(policy, 'HTML responses must include an enforced Content-Security-Policy header.');
+
+  const directives = new Map(
+    policy
+      .split(';')
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .map((part) => {
+        const [name, ...values] = part.split(/\\s+/);
+        return [name, values];
+      })
+  );
+  const requireSource = (directive, source) => {
+    assert.ok(
+      directives.get(directive)?.includes(source),
+      'CSP directive ' + directive + ' must include ' + source
+    );
+  };
+
+  requireSource('default-src', "'self'");
+  requireSource('base-uri', "'self'");
+  requireSource('connect-src', "'self'");
+  requireSource('form-action', "'self'");
+  requireSource('img-src', "'self'");
+  requireSource('object-src', "'none'");
+  requireSource('frame-ancestors', "'none'");
+  requireSource('script-src', "'self'");
+
+  const scriptSources = directives.get('script-src') ?? [];
+  assert.ok(
+    !scriptSources.includes("'unsafe-inline'"),
+    'CSP must not allow inline JavaScript.'
+  );
+  assert.ok(
+    !scriptSources.includes("'unsafe-eval'"),
+    'CSP must not allow eval-based JavaScript.'
+  );
+}
+
 async function scanPage(page, route, theme, viewport) {
   await page.addScriptTag({ content: axeSource });
   const results = await page.evaluate(async (tags) => {
@@ -168,6 +219,10 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
+
+      if (route === '/') {
+        assertResponseSecurityHeaders(mobileResponse);
+      }
       await page.locator('main').first().waitFor({ state: 'visible' });
       await page.evaluate(async () => {
         if (document.fonts?.ready) await document.fonts.ready;
