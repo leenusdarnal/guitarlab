@@ -1218,7 +1218,7 @@ try {
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
-    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.3\.0/
+    /Linked exercise: Meet your guitar.*Focused skill drill/
   );
 
   // Reject impossible learner-entered counts before any observation is saved.
