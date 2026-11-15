@@ -52,12 +52,8 @@ try {
 
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Curriculum' }).first().click();
-  await page
-    .getByRole('heading', { name: /Find your next lesson/ })
-    .waitFor();
-  await page
-    .getByRole('navigation', { name: 'Primary navigation' })
-    .waitFor();
+  await page.getByRole('heading', { name: /Find your next lesson/ }).waitFor();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).waitFor();
   await page.getByRole('searchbox', { name: 'Search lessons' }).waitFor();
 
   assert.equal(
@@ -93,14 +89,15 @@ try {
     await page.locator('.stats').innerText(),
     /48 specialist lessons/
   );
-  assert.match(await page.locator('.stats').innerText(), /152 lessons in total/);
+  assert.match(
+    await page.locator('.stats').innerText(),
+    /152 lessons in total/
+  );
 
   // Search, route and duration filters must make a specific lesson easy to find.
   const lessonSearch = page.getByRole('searchbox', { name: 'Search lessons' });
   await lessonSearch.fill('fretboard map 1');
-  await page
-    .getByText('1 lesson found', { exact: false })
-    .waitFor();
+  await page.getByText('1 lesson found', { exact: false }).waitFor();
   await page.getByLabel('Learning path').selectOption('year-2');
   await page.getByLabel('Lesson length').selectOption('21-30');
   assert.equal(await page.locator('.lesson-result').count(), 1);
@@ -110,7 +107,9 @@ try {
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
   await lessonSearch.fill('zzzz-no-matching-lesson');
-  await page.getByRole('heading', { name: 'No lessons match those filters.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'No lessons match those filters.' })
+    .waitFor();
   await page.getByRole('button', { name: 'Clear filters' }).click();
   await page.locator('.lesson-result').first().waitFor();
 
@@ -241,13 +240,19 @@ try {
 
   // Year 2 route and an optional specialist route use the same reader contract.
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  await page.getByRole('searchbox', { name: 'Search lessons' }).fill('Fretboard map 1');
-  await page.getByRole('link', { name: 'Open lesson: Fretboard map 1' }).click();
+  await page
+    .getByRole('searchbox', { name: 'Search lessons' })
+    .fill('Fretboard map 1');
+  await page
+    .getByRole('link', { name: 'Open lesson: Fretboard map 1' })
+    .click();
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
   assert.match(page.url(), /y2-w01-lesson/);
 
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  await page.getByRole('searchbox', { name: 'Search lessons' }).fill('Right-hand independence');
+  await page
+    .getByRole('searchbox', { name: 'Search lessons' })
+    .fill('Right-hand independence');
   await page
     .getByRole('link', { name: 'Open lesson: Right-hand independence' })
     .click();
