@@ -159,19 +159,23 @@ try {
   await page.getByRole('status').filter({ hasText: 'Tap once more' }).waitFor();
 
   // A valid BPM deep link pre-fills tempo without starting audio.
-  await page.goto(`${origin}/tools/metronome?bpm=96`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/metronome?bpm=96`, {
+    waitUntil: 'networkidle'
+  });
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
-  assert.equal(await page.getByRole('spinbutton', { name: 'Enter tempo in beats per minute' }).inputValue(), '96');
-  assert.equal(await page.getByRole('button', { name: 'Metronome playback' }).getAttribute('aria-pressed'), 'false');
+  assert.equal(
+    await page
+      .getByRole('spinbutton', { name: 'Enter tempo in beats per minute' })
+      .inputValue(),
+    '96'
+  );
+  await page.getByRole('button', { name: 'Start metronome' }).waitFor();
 
   // Audio starts only from an explicit user action and can be stopped.
-  const metronomeToggle = page.getByRole('button', { name: 'Metronome playback' });
-  await metronomeToggle.click();
+  await page.getByRole('button', { name: 'Start metronome' }).click();
   await page.getByText('Playing', { exact: true }).waitFor();
-  assert.equal(await metronomeToggle.getAttribute('aria-pressed'), 'true');
-  await metronomeToggle.click();
+  await page.getByRole('button', { name: 'Stop metronome' }).click();
   await page.getByText('Stopped', { exact: true }).waitFor();
-  assert.equal(await metronomeToggle.getAttribute('aria-pressed'), 'false');
 
   // Reference tone is a separate user-initiated action; no microphone is requested.
   await page.getByRole('button', { name: 'Play A4 reference tone' }).click();
@@ -511,7 +515,10 @@ try {
     null,
     'High-frequency tuner measurements must not be announced continuously'
   );
-  await page.getByRole('status').filter({ hasText: 'The tuner is ready' }).waitFor();
+  await page
+    .getByRole('status')
+    .filter({ hasText: 'The tuner is ready' })
+    .waitFor();
   await page.getByLabel('A4 reference frequency').selectOption('442');
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
