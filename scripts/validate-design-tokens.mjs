@@ -6,6 +6,12 @@ const blocks = [
   ...css.matchAll(/:root(?:\[data-theme='light'\])?\s*\{([^}]+)\}/g)
 ];
 
+const requiredTokens = [
+  'bg', 'surface', 'surface-raised', 'surface-overlay', 'text', 'muted',
+  'text-subtle', 'border', 'border-strong', 'primary', 'primary-ink',
+  'secondary', 'success', 'warning', 'danger', 'focus'
+];
+
 function tokensFrom(block) {
   return Object.fromEntries(
     [...block.matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{6})/g)].map((match) => [
@@ -35,14 +41,18 @@ function contrast(foreground, background) {
 const checks = [
   ['text', 'bg', 4.5],
   ['text', 'surface', 4.5],
+  ['text', 'surface-raised', 4.5],
   ['muted', 'bg', 4.5],
   ['muted', 'surface', 4.5],
+  ['text-subtle', 'surface', 4.5],
   ['primary', 'bg', 4.5],
+  ['primary', 'surface', 4.5],
   ['secondary', 'bg', 4.5],
   ['success', 'bg', 4.5],
   ['warning', 'bg', 4.5],
   ['danger', 'bg', 4.5],
   ['primary-ink', 'primary', 4.5],
+  ['border-strong', 'surface', 3],
   ['focus', 'bg', 3]
 ];
 
@@ -58,22 +68,25 @@ const themes = [
 const failures = [];
 
 for (const [themeName, tokens] of themes) {
+  for (const token of requiredTokens) {
+    if (!tokens[token]) {
+      failures.push(themeName + ': missing required semantic token --' + token);
+    }
+  }
+
   for (const [foregroundKey, backgroundKey, minimum] of checks) {
     const foreground = tokens[foregroundKey];
     const background = tokens[backgroundKey];
-    if (!foreground || !background) {
-      failures.push(
-        `${themeName}: missing token --${!foreground ? foregroundKey : backgroundKey}`
-      );
-      continue;
-    }
+    if (!foreground || !background) continue;
     const ratio = contrast(foreground, background);
     console.log(
-      `${themeName}: --${foregroundKey} / --${backgroundKey} = ${ratio.toFixed(2)}:1 (min ${minimum}:1)`
+      themeName + ': --' + foregroundKey + ' / --' + backgroundKey +
+      ' = ' + ratio.toFixed(2) + ':1 (min ' + minimum + ':1)'
     );
     if (ratio < minimum) {
       failures.push(
-        `${themeName}: --${foregroundKey} on --${backgroundKey} is below ${minimum}:1`
+        themeName + ': --' + foregroundKey + ' on --' + backgroundKey +
+        ' is ' + ratio.toFixed(2) + ':1; minimum is ' + minimum + ':1'
       );
     }
   }
