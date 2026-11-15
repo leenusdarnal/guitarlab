@@ -4,9 +4,22 @@
 **Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
+## Current top priority — first production release (2026-11-15)
+
+Production deployment is now the highest-priority implementation stream by owner direction. The first release uses the existing local-first architecture; it is not an authenticated cloud-sync release.
+
+- Latest main baseline before this PR: `555b27c1ba230a87a59e4d75c5f7348127f8fd28`; post-merge GuitarLab CI run [#43690672271](https://github.com/leenusdarnal/guitarlab/actions/runs/43690672271) passed application/curriculum and Node.js 26 compatibility jobs.
+- Cloudflare account audit: only `guitarlab-preview` exists; no production Worker, D1 database, Worker custom domain or zone was returned.
+- First-release target: Worker `guitarlab` at `https://guitarlab.leenusdarnal.workers.dev`; the separate production config contains Workers Static Assets only and no D1 binding.
+- The release workflow is manual-only, main-only, requires an explicit boolean confirmation and successful exact-SHA application/curriculum plus Node 26 checks. It builds, dry-runs, deploys and smoke-tests key routes and security headers.
+- Required GitHub Actions values: production environment secret `CLOUDFLARE_API_TOKEN` and variable `CLOUDFLARE_ACCOUNT_ID`. Never commit or print secret values.
+- Login, accounts and cloud sync are still unimplemented M5 work. They are not enabled in this local-first production release; no server-side learner records are stored.
+- Live deployment remains pending until the production workflow is merged, the GitHub production environment is configured and the exact-main workflow completes with recorded evidence.
+
+
 GitHub Issues remain the execution records. A task is complete only when its code is merged and its stated checks pass. Manual acceptance checks are called out separately; merging an implementation slice does not silently mark those checks complete.
 
-## Current checkpoint — 2026-11-15 after PR #135
+## Historical checkpoint — 2026-11-15 after PR #135 (superseded by the production-priority update above)
 
 - Verified `main`: `18515ec7bb1ab6d76b4f19a5e9a424585945d890`. PR [#135](https://github.com/leenusdarnal/guitarlab/pull/135) merged the SvelteKit-managed CSP, restrictive script/resource directives, regression assertions for actual CSP/security response headers, and `docs/SECURITY_RESPONSE_POLICY.md`.
 - PR CI [run #43689404424](https://github.com/leenusdarnal/guitarlab/actions/runs/43689404424) passed. Post-merge main CI [run #43689790086](https://github.com/leenusdarnal/guitarlab/actions/runs/43689790086) also passed both required jobs, including Node.js 26, formatting, lint, type/Svelte checks, tests, production build, Worker smoke, standard browser, music-tools browser, axe accessibility/CSP and curriculum browser acceptance.
@@ -73,7 +86,7 @@ Independent implementation branches may be developed in parallel, but merges rem
 | Product definition, architecture and curriculum | Complete | M0 documents; 152 authored lessons across six routes; versioned content contract and validator |
 | Visual direction and design tokens | Implemented | Approved hybrid direction; both-theme contrast validation runs in CI. Full component-level accessibility audit remains in M9 |
 | Application foundation | Merged | PR #21: SvelteKit, Svelte 5, TypeScript, Tailwind, Cloudflare adapter, responsive shell and onboarding |
-| Cloudflare runtime | Preview workflow implemented; no deployment performed | PR #32 provides the isolated preview Worker. PR #36 adds an exact-current-`main` SHA gate and checks the latest successful application/curriculum and Node 26 compatibility runs before deployment. Preview environment credentials and a synthetic-data deployment remain unverified; production is unconfigured |
+| Cloudflare runtime | Preview Worker exists; first production deployment is now P0 | The new production slice adds an isolated no-D1 Worker config and a manual, main-only, exact-SHA, explicitly confirmed release workflow with route/security-header smoke tests. Production environment credentials must be configured before its first run; no deployment is claimed until that run succeeds |
 | CI quality gates | Core checks passing; active ruleset requires PRs and primary CI | Main CI runs on Node 22.23.5 and has a separate Node 26.13.1 compatibility job. The active `Protect main branch` ruleset requires PRs and the `Validate application and curriculum` status check with strict up-to-date enforcement; Node 26 compatibility is not separately required. Controlled failing-check verification and ongoing dependency/action maintenance remain follow-ups under Issue #5 |
 | M2.1 data schema | Merged | PR #22: versioned Drizzle schema, local D1 migration, 152 lesson metadata references, 34 stable skill IDs and database integrity tests |
 | M2.2 application boundary | Merged | PR #23: repository ports, validated use cases, typed errors and in-memory tests; no remote D1 access |
@@ -83,7 +96,7 @@ Independent implementation branches may be developed in parallel, but merges rem
 | M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
 | M4.2 interactive lesson progress | Merged — PR #33; manual QA pending | Local section progress, checkpoint self-check, private next-practice note and explicit completion/resume. Lesson completion remains separate from skill mastery; Chromium coverage was added in the PR |
 | Music tools, practice studio and musicianship | M6 audio implementation complete; M7.1 complete; M7.2 evidence analytics delivered with remaining source-backed taxonomy work tracked under Issue #69; M8.1 Issue #17 complete; Issue #130 interval stimulus follow-up active | PRs #45–46 deliver fretboard, chords and metronome. PRs #78–86 and #90–91 add owned audio sessions, microphone capture, pitch estimation, stable-note tracking, tuner, note-recognition and benchmarks; Issue #68 is closed and Issue #89 holds real-recording/physical-device validation. PRs #50–59 deliver the practice/evidence loop. PRs #92–94 add adaptive recommendations and the canonical skill catalogue; PRs #103–117 add append-only feedback, comparable-score trends, objective item outcomes, evidence-scoped analytics and explicit v1 interval-response contrasts without changing whole-skill mastery. Issue #69 remains open for further source-backed taxonomy and evidence work. PRs #61/#67 add pulse, contour and initial interval classes. PR #118 delivers chord-movement listening; #119 adds name/sound/use theory recall; #120 shares scale/triad/inversion/CAGED calculations with the canonical fretboard model; #121 adds local repertoire projects; PR #127 completes all 12 simple ascending interval classes; #128 records progression research; #129 audits current bundled-content provenance and closes Issue #17. Issue #130 separately tracks deterministic starting-pitch/register variation, using v3 supporting-probe evidence |
-| Release hardening | Not ready | PR #135 now adds SvelteKit-managed CSP and automated response-header assertions; PRs #35, #36 and #42 provide the offline app shell, runtime/security/storage hardening and automated backup/restore recovery coverage. Remaining: physical-device offline/storage/backup checks (Issues #9/#10), real-guitar and physical-device audio evidence (Issue #89), manual accessibility/privacy/cross-browser/performance/rollback review (Issue #18), authenticated controlled failure/recovery workflow dispatches (Issue #5), and production ownership/authorization decisions (Issue #3). Production D1, authentication, cloud sync and deployment remain deferred |
+| Release hardening | First local-first production release is P0; full sign-off remains open | PR #135 adds managed CSP and response-header regression checks. Production has no D1/auth/cloud-sync binding. After first smoke-tested deployment, remaining work includes physical-device offline/storage/backup (#9/#10), real audio/device evidence (#89), full accessibility/privacy/cross-browser/performance/rollback review (#18), and the pending CI rehearsal (#5). Account login and secure cloud sync remain M5 follow-up work |
 
 ## M1 — Application foundation
 
