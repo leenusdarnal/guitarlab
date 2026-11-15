@@ -416,6 +416,30 @@ try {
     'camera=(), microphone=(self), geolocation=()'
   );
 
+  // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
+  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  assert.equal(await page.locator('.tool-group').count(), 4);
+  assert.equal(await page.locator('.tool-row').count(), 8);
+  assert.equal(await page.getByText('Available now', { exact: true }).count(), 0);
+  await page.getByText(/tuner and note recognition[\s\S]*only after you press Start/).waitFor();
+
+  // Microphone tools explain capture and permission before any Start action.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  await page
+    .locator('.microphone-permission-note')
+    .getByText(/only after you press Start tuner/)
+    .waitFor();
+  await page.getByRole('button', { name: 'Start tuner' }).waitFor();
+  await page.goto(`${origin}/tools/note-recognition`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
+  await page
+    .locator('.microphone-permission-note')
+    .getByText(/only after you press Start exercise/)
+    .waitFor();
+  await page.getByRole('button', { name: 'Start exercise' }).waitFor();
+
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
@@ -460,7 +484,16 @@ try {
     .first()
     .click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
-  await page.getByRole('radio', { name: 'Acoustic guitar' }).check();
+  assert.equal(
+    await page.getByRole('radio', { name: 'Acoustic guitar' }).count(),
+    0,
+    'Setup should not offer an instrument choice until it changes the learning experience'
+  );
+  assert.equal(
+    await page.getByLabel('Preferred lesson presentation').count(),
+    0,
+    'Setup should not promise a lesson-presentation effect that is not implemented'
+  );
   await page.getByRole('checkbox', { name: 'Acoustic & fingerstyle' }).check();
   await page.getByRole('radio', { name: '20 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
@@ -468,7 +501,8 @@ try {
     .getByRole('status')
     .filter({ hasText: 'saved privately on this device' })
     .waitFor();
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.getByRole('link', { name: 'Go to Today' }).click();
+  await page.waitForURL((url) => url.pathname === '/');
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
