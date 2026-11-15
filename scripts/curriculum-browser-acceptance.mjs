@@ -137,13 +137,50 @@ try {
   await page.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
   await page.getByRole('heading', { name: 'What you will learn' }).waitFor();
   await page.getByRole('navigation', { name: 'Lesson sections' }).waitFor();
+  const lessonOutline = page.locator('.lesson-outline a');
+  const invalidOutlineLinks = await lessonOutline.evaluateAll((links) =>
+    links
+      .map((link) => link.getAttribute('href'))
+      .filter(
+        (href) =>
+          !href?.startsWith('#') || !document.getElementById(href.slice(1))
+      )
+  );
+  assert.deepEqual(
+    invalidOutlineLinks,
+    [],
+    'Every lesson section shortcut must target an existing section ID'
+  );
+  assert.equal(
+    await page.locator('#lesson-progress').evaluate((progressPanel) =>
+      Boolean(
+        progressPanel.compareDocumentPosition(
+          document.querySelector('.lesson-layout')
+        ) & Node.DOCUMENT_POSITION_PRECEDING
+      )
+    ),
+    true,
+    'Progress and completion actions should follow the learning sequence'
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('link', { name: 'Key idea', exact: true }).click();
+  assert.equal(new URL(page.url()).hash, '#lesson-section-key-idea');
+  assert.ok(
+    await page.locator('.lesson-outline').evaluate(
+      (outline) => outline.getBoundingClientRect().width <= window.innerWidth
+    ),
+    'The section rail should fit the phone viewport'
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole('link', { name: 'Exercises', exact: true }).click();
   await page.locator('#lesson-section-exercises').waitFor();
   await page.getByRole('heading', { name: 'Guided demonstration' }).waitFor();
   await page.getByRole('heading', { name: 'Focused exercises' }).waitFor();
+  await page.locator('.lesson-adaptation').waitFor();
   await page
-    .getByRole('heading', { name: 'Make the task manageable' })
+    .getByRole('navigation', { name: 'Tools for this lesson' })
     .waitFor();
+  await page.getByRole('link', { name: /Open tuner/ }).waitFor();
   assert.match(
     await page.locator('.checkpoint').innerText(),
     /Tune all six strings/
@@ -256,6 +293,16 @@ try {
     'true',
     'The final checkpoint choice must survive earlier in-flight saves'
   );
+  await page.context().setOffline(true);
+  await page
+    .locator('.lesson-block')
+    .nth(1)
+    .getByRole('button', { name: 'Mark section complete' })
+    .click();
+  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
+  await page.context().setOffline(false);
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {
