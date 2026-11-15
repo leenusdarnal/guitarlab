@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import { SvelteMap } from 'svelte/reactivity';
   import {
     createChordTransitionObservation,
     getCleanChangeRate,
@@ -39,7 +40,7 @@
       : [...selectedChord.strings]
   );
   const chordBarres = $derived.by(() => {
-    const groups = new Map<
+    const groups = new SvelteMap<
       string,
       { fret: number; finger: number; indexes: number[] }
     >();
