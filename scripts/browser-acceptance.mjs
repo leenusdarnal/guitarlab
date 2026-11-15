@@ -1196,7 +1196,7 @@ try {
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
-  await page.getByRole('link', { name: /Open explorer/ }).click();
+  await page.getByRole('link', { name: /Open fretboard explorer/ }).click();
   await page.getByRole('heading', { name: 'Fretboard explorer.' }).waitFor();
   assert.equal(
     await page.locator('.fret-cell').count(),
