@@ -114,7 +114,7 @@
 {#if showPrimaryNavigation}
   <header class="global-nav">
     <div class="global-nav-inner">
-      <a class="global-brand" href={resolve('/')} aria-label="GuitarLab home">
+      <a class="global-brand" href={resolve('/')}>
         <span class="global-brand-mark" aria-hidden="true">G</span>
         <span>GuitarLab</span>
       </a>
@@ -138,7 +138,7 @@
             <option value="dark">Dark</option>
           </select>
         </label>
-        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-primary-navigation" aria-label="Open navigation">
+        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-primary-navigation" aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}>
           <span aria-hidden="true">☰</span><span>Menu</span>
         </button>
       </div>
