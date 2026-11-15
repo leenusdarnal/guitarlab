@@ -251,6 +251,25 @@ try {
           JSON.stringify(mobileLayout)
       );
 
+      const undersizedTextControls = await page.evaluate(() =>
+        Array.from(
+          document.querySelectorAll(
+            'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]), select, textarea'
+          )
+        )
+          .map((control) => ({
+            element: control.tagName.toLowerCase(),
+            type: control.getAttribute('type'),
+            fontSize: Number.parseFloat(getComputedStyle(control).fontSize)
+          }))
+          .filter((control) => control.fontSize < 16)
+      );
+      assert.deepEqual(
+        undersizedTextControls,
+        [],
+        route + ' has text controls below 16px in ' + theme + ' theme'
+      );
+
       await scanPage(page, route, theme, '320px');
 
       await page.setViewportSize({ width: 1440, height: 1000 });
