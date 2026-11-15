@@ -36,7 +36,7 @@ The public preview URL `https://guitarlab-preview.leenus-darnal.workers.dev/` co
 3. **Narrow the list.** Filter by one of the six learning paths and by lesson duration.
 4. **Open a lesson.** Results show the lesson title, focus, route, week and estimated length with a direct open action.
 5. **Move around the lesson.** A section outline jumps to overview, key idea, demonstration, walkthrough, exercises, musical application, review and saved progress.
-6. **Move to another part of GuitarLab.** A responsive primary navigation stays available on secondary pages, with a keyboard-dismissable mobile menu.
+6. **Move to another part of GuitarLab.** A responsive primary navigation stays available on secondary pages; mobile learners get five frequent destinations in a bottom bar and secondary links in a keyboard-dismissable menu.
 
 ## Preservation and safety
 

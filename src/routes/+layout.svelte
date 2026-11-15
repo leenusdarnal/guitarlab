@@ -120,16 +120,6 @@
   </header>
 {/if}
 
-{#if currentPath !== '/onboarding'}
-  <nav class="mobile-bottom-navigation" aria-label="Mobile primary navigation">
-    <a class:active={activeSection === 'today'} aria-current={activeSection === 'today' ? 'page' : undefined} href={resolve('/')}><span aria-hidden="true">⌂</span><small>Today</small></a>
-    <a class:active={activeSection === 'learn'} aria-current={activeSection === 'learn' ? 'page' : undefined} href={resolve('/learn')}><span aria-hidden="true">♫</span><small>Learn</small></a>
-    <a class:active={activeSection === 'practice'} aria-current={activeSection === 'practice' ? 'page' : undefined} href={resolve('/practice')}><span aria-hidden="true">◷</span><small>Practice</small></a>
-    <a class:active={activeSection === 'tools'} aria-current={activeSection === 'tools' ? 'page' : undefined} href={resolve('/tools')}><span aria-hidden="true">⌁</span><small>Tools</small></a>
-    <a class:active={activeSection === 'progress'} aria-current={activeSection === 'progress' ? 'page' : undefined} href={resolve('/skills')}><span aria-hidden="true">◈</span><small>Progress</small></a>
-  </nav>
-{/if}
-
 <div id="main-content" tabindex="-1">
   <slot />
 </div>
@@ -151,23 +141,10 @@
   .theme-toggle,.mobile-nav-trigger{min-height:42px;padding:8px 12px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
   .mobile-nav-trigger{display:none;align-items:center;gap:8px}
   .mobile-primary-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:8px 16px 16px;border-top:1px solid var(--border);background:var(--surface)}
-  .mobile-bottom-navigation{display:none}
   .mobile-primary-navigation a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
   .mobile-primary-navigation a:hover,.mobile-primary-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-toggle:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){
-    .desktop-primary-navigation{display:none}
-    .global-nav-inner{justify-content:space-between;min-height:60px}
-    .mobile-nav-trigger{display:inline-flex}
-    .theme-toggle{min-height:40px}
-    #main-content{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-    .mobile-bottom-navigation{position:fixed;left:0;right:0;bottom:0;z-index:220;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:color-mix(in srgb,var(--surface) 96%,transparent);backdrop-filter:blur(16px)}
-    .mobile-bottom-navigation a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:48px;border-radius:8px;color:var(--muted)}
-    .mobile-bottom-navigation a>span{font-size:18px;line-height:1}
-    .mobile-bottom-navigation small{font-size:10px;font-weight:750}
-    .mobile-bottom-navigation a.active{background:color-mix(in srgb,var(--primary) 13%,var(--surface));color:var(--primary)}
-    .mobile-bottom-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-  }
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;min-height:60px}.mobile-nav-trigger{display:inline-flex}.theme-toggle{min-height:40px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
 </style>

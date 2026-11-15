@@ -55,7 +55,9 @@ try {
   await page
     .getByRole('heading', { name: /Find your next lesson/ })
     .waitFor();
-  await page.getByRole('navigation', { name: 'Primary navigation' }).waitFor();
+  await page
+    .getByRole('navigation', { name: 'Primary navigation' })
+    .waitFor();
   await page.getByRole('searchbox', { name: 'Search lessons' }).waitFor();
 
   assert.equal(
@@ -68,9 +70,10 @@ try {
     12,
     'The finder should show a useful first page of lessons'
   );
-  assert.equal(
-    await page.locator('.stats').innerText().then((text) => /152 lessons in total/.test(text)),
-    true,
+  const initialStats = await page.locator('.stats').innerText();
+  assert.match(
+    initialStats,
+    /152 lessons in total/,
     'The complete 152-lesson catalogue should be identified'
   );
   assert.equal(
@@ -95,11 +98,15 @@ try {
   // Search, route and duration filters must make a specific lesson easy to find.
   const lessonSearch = page.getByRole('searchbox', { name: 'Search lessons' });
   await lessonSearch.fill('fretboard map 1');
-  await page.getByText('1 lesson found', { exact: false }).waitFor();
+  await page
+    .getByText('1 lesson found', { exact: false })
+    .waitFor();
   await page.getByLabel('Learning path').selectOption('year-2');
   await page.getByLabel('Lesson length').selectOption('21-30');
   assert.equal(await page.locator('.lesson-result').count(), 1);
-  await page.getByRole('link', { name: 'Open lesson: Fretboard map 1' }).click();
+  await page
+    .getByRole('link', { name: 'Open lesson: Fretboard map 1' })
+    .click();
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
   await lessonSearch.fill('zzzz-no-matching-lesson');
@@ -108,7 +115,9 @@ try {
   await page.locator('.lesson-result').first().waitFor();
 
   // Year 1 content, instructional sections and stable next-lesson navigation.
-  await page.getByRole('link', { name: 'Open lesson: Meet your guitar' }).click();
+  await page
+    .getByRole('link', { name: 'Open lesson: Meet your guitar' })
+    .click();
   await page.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
   await page.getByRole('heading', { name: 'What you will learn' }).waitFor();
   await page.getByRole('navigation', { name: 'Lesson sections' }).waitFor();
@@ -239,7 +248,9 @@ try {
 
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
   await page.getByRole('searchbox', { name: 'Search lessons' }).fill('Right-hand independence');
-  await page.getByRole('link', { name: 'Open lesson: Right-hand independence' }).click();
+  await page
+    .getByRole('link', { name: 'Open lesson: Right-hand independence' })
+    .click();
   await page
     .getByRole('heading', { name: 'Right-hand independence' })
     .waitFor();
@@ -257,9 +268,16 @@ try {
   // The route index remains within the mobile viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  const mobileTabs = page.getByRole('navigation', {
+    name: 'Mobile primary navigation'
+  });
+  await mobileTabs.getByRole('link', { name: 'Learn' }).waitFor();
   await page.getByRole('button', { name: 'Open navigation' }).click();
-  await page.locator('#mobile-primary-navigation').getByRole('link', { name: 'Learn' }).waitFor();
-  await page.locator('#mobile-primary-navigation').getByRole('link', { name: 'Learn' }).click();
+  const mobileMenuLearn = page
+    .locator('#mobile-primary-navigation')
+    .getByRole('link', { name: 'Learn' });
+  await mobileMenuLearn.waitFor();
+  await mobileMenuLearn.click();
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth
