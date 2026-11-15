@@ -52,7 +52,7 @@ When recommendations conflict, follow the approved design direction or record a 
 | VERIFIED | DONE plus required manual/device/usability checks have been completed and evidence recorded |
 | DEFERRED | Deliberately moved out of the current release, with a reason recorded |
 
-A task is not DONE because code exists in an open PR. Manual-only acceptance is not VERIFIED until the device, browser, assistive technology or learner check is recorded.
+A task is not DONE because code exists in an open PR. Manual-only acceptance is not VERIFIED until the device, browser, assistive technology or learner check is recorded. Within task lists, [x] means the implementation is present in the current working branch/PR; it does not mean the parent task is DONE or VERIFIED until the merge and acceptance rules above are met.
 
 Priority definitions: **P1** = learner-critical or an accessibility barrier; **P2** = meaningful usability improvement after P1; **P3** = polish or lower-risk enhancement.
 
@@ -66,12 +66,14 @@ Priority definitions: **P1** = learner-critical or an accessibility barrier; **P
 |---|---|
 | PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) |
 | Branch | feat/ui-ux-lesson-discovery |
-| Reviewed head | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
+| UI code head exercised by the failing check | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
 | Base | main at 555b27c1ba230a87a59e4d75c5f7348127f8fd28 |
 | PR state | Open; not merged |
 | CI run checked | [GuitarLab CI run 43693912725](https://github.com/leenusdarnal/guitarlab/actions/runs/43693912725) |
-| CI result | Failed in Accessibility browser acceptance; the other application checks before that step passed |
+| Previous UI-code CI result | Failed in Accessibility browser acceptance; the other application checks before that step passed |
 | Blocking failure | /learn has 359px content width at a 320px viewport in dark theme; test location: scripts/accessibility-browser-acceptance.mjs, line 238 |
+| Tracker commit | 72bb04e0c39ecd27f0b65ce1c1fa950e24c9ae24 |
+| CI for tracker commit | [GuitarLab CI run 43699096684](https://github.com/leenusdarnal/guitarlab/actions/runs/43699096684) was in progress at the time this tracker was updated; do not treat it as passed |
 
 The current PR already introduces a searchable lesson finder, route and duration filters, no-results recovery, a route directory, a dashboard browse action, shared navigation on secondary routes, reader section shortcuts and learner-facing lesson summary information.
 
