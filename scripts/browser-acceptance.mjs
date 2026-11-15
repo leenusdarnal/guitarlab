@@ -6,6 +6,20 @@ import { chromium } from 'playwright';
 
 const port = Number(process.env.GUITARLAB_PREVIEW_PORT ?? 8787);
 const origin = `http://127.0.0.1:${port}`;
+const skillCatalog = JSON.parse(
+  await readFile(
+    new URL('../content/curriculum/skill-catalog.json', import.meta.url),
+    'utf8'
+  )
+);
+const activeCurriculumReleaseId = skillCatalog.curriculumReleaseId;
+const skillIdFor = (displayName) => {
+  const skill = skillCatalog.skills.find((item) => item.displayName === displayName);
+  assert.ok(skill, `The curriculum catalogue must include ${displayName}.`);
+  return skill.id;
+};
+const alternatePickingSkillId = skillIdFor('Alternate picking');
+const chordTransitionsSkillId = skillIdFor('Chord transitions');
 const server = spawn(
   'npm',
   ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
@@ -1424,7 +1438,8 @@ try {
   await competingPage.close();
 
   // M7 skill-state transparency: explanations and learner corrections persist locally.
-  const skillFixture = await page.evaluate(async () => {
+  const skillFixture = await page.evaluate(
+    async ({ activeCurriculumReleaseId, alternatePickingSkillId, chordTransitionsSkillId }) => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
@@ -1447,8 +1462,8 @@ try {
     transaction.objectStore('assessmentAttempts').add({
       id: passedAttemptId,
       learnerId: active,
-      curriculumReleaseId: 'curriculum-v1',
-      skillId: 'alternate-picking',
+      curriculumReleaseId: activeCurriculumReleaseId,
+      skillId: alternatePickingSkillId,
       lessonId: null,
       assessmentKind: 'guided_self_check',
       evidenceType: 'observed_or_self_checked',
@@ -1461,8 +1476,8 @@ try {
     });
     transaction.objectStore('skillMastery').put({
       learnerId: active,
-      curriculumReleaseId: 'curriculum-v1',
-      skillId: 'alternate-picking',
+      curriculumReleaseId: activeCurriculumReleaseId,
+      skillId: alternatePickingSkillId,
       state: 'stable',
       evidenceCount: 1,
       confidence: 85,
@@ -1475,8 +1490,8 @@ try {
     });
     transaction.objectStore('skillMastery').put({
       learnerId: active,
-      curriculumReleaseId: 'curriculum-v1',
-      skillId: 'chord-transition',
+      curriculumReleaseId: activeCurriculumReleaseId,
+      skillId: chordTransitionsSkillId,
       state: 'not_started',
       evidenceCount: 0,
       confidence: null,
@@ -1494,7 +1509,9 @@ try {
     });
     database.close();
     return { active };
-  });
+    },
+    { activeCurriculumReleaseId, alternatePickingSkillId, chordTransitionsSkillId }
+  );
   assert.ok(
     skillFixture.active,
     'The skill-state fixture needs an active learner'
@@ -1539,7 +1556,8 @@ try {
     .getByRole('status')
     .filter({ hasText: 'Your correction has been saved on this device.' })
     .waitFor();
-  const correctedSnapshot = await page.evaluate(async () => {
+  const correctedSnapshot = await page.evaluate(
+    async ({ activeCurriculumReleaseId, chordTransitionsSkillId }) => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
@@ -1557,13 +1575,15 @@ try {
       const request = database
         .transaction('skillMastery')
         .objectStore('skillMastery')
-        .get([learnerId, 'curriculum-v1', 'chord-transition']);
+        .get([learnerId, activeCurriculumReleaseId, chordTransitionsSkillId]);
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
     database.close();
     return row;
-  });
+    },
+    { activeCurriculumReleaseId, chordTransitionsSkillId }
+  );
   assert.equal(correctedSnapshot.state, 'practising');
   assert.equal(correctedSnapshot.decisionSource, 'learner');
   assert.equal(
