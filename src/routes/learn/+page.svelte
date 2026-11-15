@@ -279,14 +279,14 @@
   .route-jump a:hover,.route-jump a:focus-visible{border-color:var(--primary)}
   .routes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .route-card{min-width:0;padding:19px;border:1px solid var(--border);background:var(--surface);border-radius:14px;scroll-margin-top:84px}
-  .route-card-top,.route-card-footer{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .route-card-top,.route-card-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;min-width:0;flex-wrap:wrap}
   .route-kind,.route-count{font-size:12px;color:var(--muted)}
   .route-kind{text-transform:uppercase;letter-spacing:.5px;font-weight:750}
   .route-card h3{font:500 21px/1.25 Georgia,serif;margin:13px 0 7px}
   .route-card p{min-height:48px;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
   .route-card-footer{padding-top:14px;margin-top:15px;border-top:1px solid var(--border)}
   .route-card-footer>span{font-size:11px;color:var(--muted)}
-  .route-card-footer a{font-size:13px;font-weight:800;color:var(--primary);white-space:nowrap}
+  .route-card-footer a{font-size:13px;font-weight:800;color:var(--primary);white-space:normal;overflow-wrap:anywhere}
   footer{margin-top:25px;padding-top:16px;border-top:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--muted)}
   a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:760px){.lesson-results,.routes{grid-template-columns:1fr}.finder{padding:17px}.finder-heading,.directory-heading{align-items:flex-start;flex-direction:column}.browse-paths-link,.directory-heading>a{white-space:normal}.directory-heading h2{font-size:25px}.route-card p{min-height:0}}
