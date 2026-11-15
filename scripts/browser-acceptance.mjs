@@ -773,7 +773,8 @@ try {
   await page
     .getByRole('status')
     .filter({
-      hasText: 'Backup download started. Your browser decides where the file is saved.'
+      hasText:
+        'Backup download started. Your browser decides where the file is saved.'
     })
     .waitFor();
   assert.match(
@@ -969,10 +970,7 @@ try {
     await dialog.accept();
   });
   await page.evaluate(() =>
-    localStorage.setItem(
-      'guitarlab.last-backup-export-at',
-      String(Date.now())
-    )
+    localStorage.setItem('guitarlab.last-backup-export-at', String(Date.now()))
   );
   await page.getByRole('button', { name: 'Reset active learner data' }).click();
   assert.match(acceptedDialogMessage, /Reset GuitarLab learner data/);
@@ -1048,10 +1046,7 @@ try {
   );
   await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
   await page.evaluate(() =>
-    localStorage.setItem(
-      'guitarlab.last-backup-export-at',
-      String(Date.now())
-    )
+    localStorage.setItem('guitarlab.last-backup-export-at', String(Date.now()))
   );
   await page.locator('input[type="file"]').setInputFiles(downloadPath);
   await page.getByRole('heading', { name: 'Restore preview' }).waitFor();
