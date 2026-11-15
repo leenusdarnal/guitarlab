@@ -254,7 +254,7 @@
             <text class="chord-svg-fret-number" x="15" y={40 + (fretLine - 0.5) * 36}>{fretLine}</text>
           {/if}
         {/each}
-        {#each chordBarres as barre (`${'${barre.fret}'}-${'${barre.finger}'}`)}
+        {#each chordBarres as barre (`${barre.fret}-${barre.finger}`)}
           <line
             class="chord-svg-barre"
             x1={44 + Math.min(...barre.indexes) * 32}
@@ -271,7 +271,7 @@
       </svg>
     </div>
 
-    <div class="diagram-legend"    <div class="diagram-legend" aria-label="Chord diagram legend">
+    <div class="diagram-legend" aria-label="Chord diagram legend">
       <span><i class="open-key">○</i> Open string</span>
       <span><i class="muted-key">×</i> Muted string</span>
       <span><i class="finger-key">1</i> Finger number</span>
