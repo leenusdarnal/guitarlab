@@ -3,7 +3,7 @@
 **Date:** 2026-11-14  
 **Curriculum release:** `curriculum-v1.0.6`  
 **Taxonomy:** `0.3.0`  
-**Baseline:** taxonomy `0.2.0` contains 15 reviewed exercise scopes.
+**Baseline:** taxonomy `0.2.0` contains 15 source-evidenced exercise scopes.
 
 ## Decision rule
 
@@ -16,7 +16,6 @@ Nine new scopes are added to the 15-scope v0.2.0 catalogue. Fingerstyle thumb in
 | Lesson / exercise | Authored evidence | Scope added |
 |---|---|---|
 | `y1-w13-lesson-music` | “G-D string answer melody (TAB core; staff optional)”; success criterion names G- and D-string notes | TAB reading; strings 3 and 4 |
-
 | `y1-w45-lesson-music` | Success criterion: “Read a short melody on strings 1-4 with rests and repeated notes.” | Strings 1–4; no TAB or position tag inferred |
 | `y2-w01-lesson-music` | “Low E/A note map”; success criterion: “Find and name every natural note to fret 5” | Natural-note landmarks; strings 5 and 6; no minimum fret inferred |
 | `y3-rock-blues-w03-lesson-focus` | “Fret B-string fret 8”; bend until it matches fretted A at fret 10 | Target-pitch bending; string 2; fret range 8–10 |
@@ -36,9 +35,9 @@ Existing dimensions are reused only when the exercise evidence directly supports
 
 ## Observation-version compatibility
 
-The taxonomy increments from `0.1.0` to `0.3.0`. The original ten scope definitions are retained unchanged and explicitly declare `compatibleObservationVersions: ["0.1.0"]`. This keeps linked observations recorded under the original mapping for those exact pairs visible.
+The taxonomy stores complete, immutable scope snapshots: v0.1.0 contains 10 scopes, v0.2.0 contains 15, and the current v0.3.0 catalogue contains 24. Each practice observation stores the taxonomy version used when it was created. The exposure read model resolves its exact lesson/exercise pair only against the snapshot with that stored version.
 
-The ten newly added scopes accept only `0.3.0` observations. An old-version record cannot be reinterpreted under a newly added scope. This compatibility is per exercise pair, not global. If an existing scope's topic, technique, string, fret or position meaning changes in a future release, remove its older compatible version unless a reviewed migration proves the mapping is equivalent.
+This is snapshot-based compatibility, not a per-scope `compatibleObservationVersions` flag. An observation recorded under v0.1.0 or v0.2.0 is interpreted only with the dimensions present in that historical snapshot. The nine v0.3.0 additions are not applied retroactively to older observations. Unsupported taxonomy versions, incomplete identities, unmatched lesson/exercise pairs and stale curriculum releases are excluded from exposure.
 
 ## Explicit exclusions
 
@@ -48,6 +47,10 @@ The ten newly added scopes accept only `0.3.0` observations. An old-version reco
 - Sight-reading is not automatically treated as TAB reading.
 - Repetitions, free-text learner labels and lesson titles are not taxonomy evidence.
 
+## Manual content review
+
+The source excerpts and mappings have been checked against the authored lesson data for this implementation. A separate curriculum-owner / guitar-educator review has not been completed and remains a manual follow-up; this document does not claim external approval.
+
 ## Coverage boundary
 
-The catalog now has 24 reviewed authored exercise scopes across three immutable taxonomy snapshots. Exposure counts remain activity coverage for those explicitly mapped scopes only. They are not full-curriculum coverage, correctness, completion or mastery.
+The catalogue contains 24 source-evidenced authored exercise scopes across three immutable taxonomy snapshots. Exposure counts remain activity coverage for those explicitly mapped scopes only. They are not full-curriculum coverage, correctness, completion or mastery.
