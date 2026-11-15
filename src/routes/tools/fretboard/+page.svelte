@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     FLAT_NOTE_NAMES,
@@ -44,6 +44,14 @@
   let saveStatus = $state('');
   let profilePreferences = $state<ProfilePreferences | null>(null);
   let isSaving = $state(false);
+  let foundPositionKeys = $state<string[]>([]);
+  let revealedPositionKeys = $state<string[]>([]);
+  let attemptCount = $state(0);
+  let firstAttemptCorrect = $state<boolean | null>(null);
+  let hintVisible = $state(false);
+  let noteAudioContext: AudioContext | null = null;
+  let activeNoteOscillator: OscillatorNode | null = null;
+  let audioStatus = $state('');
 
   let fretboardRows = $derived(
     getFretboardLayout(maxFret, STANDARD_GUITAR_TUNING, spelling)
@@ -106,6 +114,11 @@
   let targetNoteName = $derived(
     (spelling === 'flat' ? FLAT_NOTE_NAMES : SHARP_NOTE_NAMES)[targetPitchClass]
   );
+  let targetPositions = $derived(
+    fretboardRows.flat().filter((note) => note.pitchClass === targetPitchClass)
+  );
+  let foundCount = $derived(foundPositionKeys.length);
+  const inlayFrets = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
   let selectedNote = $derived(
     selectedPosition
       ? getNoteAtPosition(
@@ -138,15 +151,97 @@
     };
   });
 
+  function positionKey(note: Pick<FretboardNote, 'stringNumber' | 'fret'>): string {
+    return `${note.stringNumber}:${note.fret}`;
+  }
+
   function cellLabel(note: FretboardNote): string {
-    if (findMode) return `String ${note.stringNumber}, fret ${note.fret}, position`;
+    const key = positionKey(note);
+    if (
+      findMode &&
+      !foundPositionKeys.includes(key) &&
+      !revealedPositionKeys.includes(key)
+    ) {
+      return `String ${note.stringNumber}, fret ${note.fret}, position`;
+    }
     return `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`;
   }
 
+  function resetFindExercise() {
+    foundPositionKeys = [];
+    revealedPositionKeys = [];
+    attemptCount = 0;
+    firstAttemptCorrect = null;
+    hintVisible = false;
+    feedback = '';
+    selectedPosition = null;
+  }
+
+  function showFindHint() {
+    hintVisible = true;
+    const openStringMatches = targetPositions.filter((note) => note.fret === 0).length;
+    feedback = openStringMatches > 0
+      ? `Hint: ${targetNoteName} occurs on ${openStringMatches} open string${openStringMatches === 1 ? '' : 's'} as well as fretted positions.`
+      : `Hint: ${targetNoteName} appears on ${new Set(targetPositions.map((note) => note.stringNumber)).size} different strings.`;
+  }
+
+  function revealNextPosition() {
+    const next = targetPositions.find((note) =>
+      !foundPositionKeys.includes(positionKey(note)) &&
+      !revealedPositionKeys.includes(positionKey(note))
+    );
+    if (!next) {
+      feedback = 'All matching positions have already been found or revealed.';
+      return;
+    }
+    revealedPositionKeys = [...revealedPositionKeys, positionKey(next)];
+    selectedPosition = { stringNumber: next.stringNumber, fret: next.fret };
+    feedback = `Revealed ${targetNoteName} on string ${next.stringNumber}, fret ${next.fret}. Keep finding the remaining positions.`;
+  }
+
+  async function playSelectedNote() {
+    if (!selectedNote) return;
+    audioStatus = '';
+    try {
+      const context = noteAudioContext ?? new AudioContext();
+      noteAudioContext = context;
+      if (context.state === 'suspended') await context.resume();
+      activeNoteOscillator?.stop();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = selectedNote.frequencyHz;
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.18, context.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.65);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      activeNoteOscillator = oscillator;
+      oscillator.onended = () => {
+        oscillator.disconnect();
+        gain.disconnect();
+        if (activeNoteOscillator === oscillator) activeNoteOscillator = null;
+      };
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.66);
+    } catch {
+      audioStatus = 'Note playback is unavailable in this browser. You can still read the note and frequency.';
+    }
+  }
+
+  onDestroy(() => {
+    try {
+      activeNoteOscillator?.stop();
+    } catch {
+      // The oscillator may already have ended naturally.
+    }
+    void noteAudioContext?.close();
+    noteAudioContext = null;
+  });
+
   function changeTargetNote(event: Event) {
     targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
-    selectedPosition = null;
-    feedback = '';
+    resetFindExercise();
   }
 
   function changeMaxFret(event: Event) {
@@ -155,21 +250,29 @@
       focusedPosition = { stringNumber: 1, fret: 0 };
     }
     selectedPosition = null;
-    feedback = '';
+    resetFindExercise();
   }
 
   function activateNote(note: FretboardNote) {
     if (findMode) {
-      if (note.pitchClass !== targetPitchClass) {
+      const wasFirstAttempt = attemptCount === 0;
+      attemptCount += 1;
+      const isCorrect = note.pitchClass === targetPitchClass;
+      if (wasFirstAttempt) firstAttemptCorrect = isCorrect;
+      if (!isCorrect) {
         selectedPosition = null;
         feedback = `Not quite. Find ${targetNoteName} on another position.`;
         return;
       }
-      selectedPosition = {
-        stringNumber: note.stringNumber,
-        fret: note.fret
-      };
-      feedback = `Correct — ${targetNoteName} is at string ${note.stringNumber}, fret ${note.fret}.`;
+      const key = positionKey(note);
+      selectedPosition = { stringNumber: note.stringNumber, fret: note.fret };
+      if (!foundPositionKeys.includes(key)) {
+        foundPositionKeys = [...foundPositionKeys, key];
+      }
+      const remaining = targetPositions.length - foundPositionKeys.length;
+      feedback = remaining === 0
+        ? `All ${targetNoteName} positions found. First attempt ${firstAttemptCorrect ? 'was correct' : 'needed another try'}.`
+        : `Correct — ${targetNoteName} on string ${note.stringNumber}, fret ${note.fret}. ${foundPositionKeys.length} of ${targetPositions.length} positions found.`;
       return;
     }
 
@@ -206,8 +309,7 @@
 
   function startFindMode() {
     findMode = !findMode;
-    selectedPosition = null;
-    feedback = '';
+    resetFindExercise();
   }
 
   async function saveOrientation() {
@@ -252,49 +354,7 @@
     </p>
   </header>
 
-  <section class="panel settings-panel" aria-labelledby="settings-title">
-    <div class="section-heading">
-      <div>
-        <div class="eyebrow">YOUR VIEW</div>
-        <h2 id="settings-title">Fretboard settings</h2>
-      </div>
-      <span class="local-label">Runs locally</span>
-    </div>
 
-    <div class="controls">
-      <label>
-        <span>Diagram orientation</span>
-        <select aria-label="Diagram orientation" bind:value={handedness}>
-          <option value="right">Right-handed</option>
-          <option value="left">Left-handed</option>
-        </select>
-      </label>
-      <label>
-        <span>Note spelling</span>
-        <select aria-label="Note spelling" bind:value={spelling}>
-          <option value="sharp">Sharps (♯)</option>
-          <option value="flat">Flats (♭)</option>
-        </select>
-      </label>
-      <label>
-        <span>Fret range</span>
-        <select aria-label="Fret range" value={maxFret} onchange={changeMaxFret}>
-          <option value={12}>Open to 12th fret</option>
-          <option value={24}>Open to 24th fret</option>
-        </select>
-      </label>
-    </div>
-
-    <div class="preference-actions">
-      <p>Save the diagram orientation as a preference on this learner profile.</p>
-      <button class="secondary-button" type="button" onclick={saveOrientation} disabled={isSaving}>
-        {isSaving ? 'Saving…' : 'Save this orientation to my profile'}
-      </button>
-    </div>
-    {#if saveStatus}
-      <p class="save-status" role="status">{saveStatus}</p>
-    {/if}
-  </section>
 
   <section class="panel explorer-panel" aria-labelledby="diagram-title">
     <div class="section-heading">
@@ -353,7 +413,21 @@
             <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
         </select>
-        <p>Choose any matching position. The exercise checks note identity, not speed.</p>
+        <p>Find every matching position. Accuracy matters more than speed; you can use a hint or reveal one position when you need it.</p>
+        <div class="find-progress">
+          <strong>{foundCount} of {targetPositions.length} positions found</strong>
+          <span>{attemptCount} attempt{attemptCount === 1 ? '' : 's'}</span>
+          {#if firstAttemptCorrect !== null}
+            <span>First attempt: {firstAttemptCorrect ? 'correct' : 'keep practising'}</span>
+          {/if}
+        </div>
+        <div class="find-actions">
+          <button type="button" class="secondary-button" onclick={showFindHint}>Show a hint</button>
+          <button type="button" class="secondary-button" onclick={revealNextPosition}>Reveal one position</button>
+        </div>
+        {#if hintVisible}
+          <p class="find-hint">Look across the open strings first, then move one fret at a time. A revealed position does not count as a found answer.</p>
+        {/if}
       </div>
     {:else}
       <p class="diagram-hint" id="keyboard-help">
@@ -364,6 +438,47 @@
 
     <div class="fretboard-scroll" tabindex="0" aria-label="Scrollable fretboard diagram">
       <div class="fretboard">
+        <svg
+          class="fretboard-diagram"
+          viewBox="0 0 1000 320"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <rect x="30" y="17" width="965" height="285" rx="9" class="neck-fill" />
+          {#each Array.from({ length: maxFret + 1 }, (_, fret) => fret) as fret (fret)}
+            {@const column = getDisplayFretColumn(fret, maxFret, handedness)}
+            {@const cellWidth = 965 / (maxFret + 1)}
+            {@const wireX = 30 + (column + (handedness === 'left' ? 0 : 1)) * cellWidth}
+            <line
+              x1={wireX}
+              y1="18"
+              x2={wireX}
+              y2="301"
+              class:neck-nut={fret === 0}
+              class="fret-wire"
+            />
+          {/each}
+          {#each Array.from({ length: 6 }, (_, index) => index) as stringIndex (stringIndex)}
+            <line
+              x1="30"
+              y1={40 + stringIndex * 44}
+              x2="995"
+              y2={40 + stringIndex * 44}
+              class="guitar-string"
+            />
+          {/each}
+          {#each inlayFrets.filter((fret) => fret <= maxFret) as fret (fret)}
+            {@const column = getDisplayFretColumn(fret, maxFret, handedness)}
+            {@const cellWidth = 965 / (maxFret + 1)}
+            {@const markerX = 30 + (column + 0.5) * cellWidth}
+            {#if fret === 12 || fret === 24}
+              <circle cx={markerX} cy="128" r="8" class="fret-inlay" />
+              <circle cx={markerX} cy="212" r="8" class="fret-inlay" />
+            {:else}
+              <circle cx={markerX} cy="170" r="8" class="fret-inlay" />
+            {/if}
+          {/each}
+        </svg>
         <div
           class="fret-numbers"
           data-frets={maxFret}
@@ -396,6 +511,8 @@
                 class="fret-cell"
                 class:open-string={note.fret === 0}
                 class:is-target={findMode && selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret && note.pitchClass === targetPitchClass}
+                class:is-found={findMode && foundPositionKeys.includes(positionKey(note))}
+                class:is-revealed={findMode && revealedPositionKeys.includes(positionKey(note))}
                 class:is-selected={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
                 class:is-harmony-note={isHarmonyHighlighted(note)}
                 type="button"
@@ -417,7 +534,7 @@
                 onclick={() => activateNote(note)}
                 onkeydown={(event) => moveFocus(event, note)}
               >
-                {#if !findMode || (selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret)}
+                {#if !findMode || (selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret) || foundPositionKeys.includes(positionKey(note)) || revealedPositionKeys.includes(positionKey(note))}
                   <span>{note.noteName}</span><small>{note.octave}</small>
                 {:else}
                   <span class="visually-hidden">Position</span>
@@ -445,12 +562,60 @@
         <div class="frequency">
           <span>Frequency</span>
           <strong>{selectedNote.frequencyHz.toFixed(2)} Hz</strong>
+          <button class="play-note" type="button" onclick={playSelectedNote}>Play note</button>
         </div>
       </div>
     {/if}
 
     {#if feedback}
       <p class="feedback" role="status">{feedback}</p>
+    {/if}
+    {#if audioStatus}
+      <p class="feedback" role="alert">{audioStatus}</p>
+    {/if}
+  </section>
+
+  <section class="panel settings-panel" aria-labelledby="settings-title">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">YOUR VIEW</div>
+        <h2 id="settings-title">Fretboard settings</h2>
+      </div>
+      <span class="local-label">Runs locally</span>
+    </div>
+
+    <div class="controls">
+      <label>
+        <span>Diagram orientation</span>
+        <select aria-label="Diagram orientation" bind:value={handedness}>
+          <option value="right">Right-handed</option>
+          <option value="left">Left-handed</option>
+        </select>
+      </label>
+      <label>
+        <span>Note spelling</span>
+        <select aria-label="Note spelling" bind:value={spelling}>
+          <option value="sharp">Sharps (♯)</option>
+          <option value="flat">Flats (♭)</option>
+        </select>
+      </label>
+      <label>
+        <span>Fret range</span>
+        <select aria-label="Fret range" value={maxFret} onchange={changeMaxFret}>
+          <option value={12}>Open to 12th fret</option>
+          <option value={24}>Open to 24th fret</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="preference-actions">
+      <p>Save the diagram orientation as a preference on this learner profile.</p>
+      <button class="secondary-button" type="button" onclick={saveOrientation} disabled={isSaving}>
+        {isSaving ? 'Saving…' : 'Save this orientation to my profile'}
+      </button>
+    </div>
+    {#if saveStatus}
+      <p class="save-status" role="status">{saveStatus}</p>
     {/if}
   </section>
 
@@ -621,6 +786,40 @@
     grid-column: 2;
     grid-row: 1 / span 2;
   }
+  .find-progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    grid-column: 1 / -1;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: var(--surface);
+    font-size: 12px;
+  }
+  .find-progress strong {
+    color: var(--primary);
+  }
+  .find-progress span {
+    color: var(--muted);
+  }
+  .find-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    grid-column: 1 / -1;
+  }
+  .find-actions button {
+    min-height: 44px;
+  }
+  .find-hint {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    margin: 0;
+    padding: 10px 12px;
+    border-left: 3px solid var(--primary);
+    background: var(--surface);
+  }
   .fretboard-scroll {
     width: 100%;
     overflow-x: auto;
@@ -631,9 +830,41 @@
     padding: 8px;
   }
   .fretboard {
+    position: relative;
+    isolation: isolate;
     display: grid;
     gap: 4px;
     min-width: 100%;
+  }
+  .fretboard-diagram {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .neck-fill {
+    fill: var(--surface-raised);
+    stroke: var(--border);
+    stroke-width: 1.5;
+  }
+  .fret-wire {
+    stroke: var(--border-strong);
+    stroke-width: 2;
+  }
+  .fret-wire.neck-nut {
+    stroke: var(--text);
+    stroke-width: 6;
+  }
+  .guitar-string {
+    stroke: var(--text);
+    stroke-opacity: 0.58;
+    stroke-width: 1.5;
+  }
+  .fret-inlay {
+    fill: var(--text);
+    fill-opacity: 0.12;
   }
   .fret-numbers,
   .fret-row {
@@ -670,12 +901,17 @@
     justify-content: center;
     gap: 1px;
     padding: 2px 0;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface);
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
     color: var(--text);
-    font-size: clamp(7px, 1.8vw, 10px);
+    font-size: clamp(9px, 1.8vw, 12px);
+    font-weight: 750;
     cursor: pointer;
+  }
+  .fret-cell:hover {
+    border-color: var(--border-strong);
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
   }
   .fret-cell small {
     color: var(--muted);
@@ -748,8 +984,17 @@
     font-weight: 800;
   }
   .fret-cell.is-selected {
-    outline: 2px solid var(--primary);
+    outline: 3px solid var(--primary);
     outline-offset: -2px;
+    background: color-mix(in srgb, var(--primary) 20%, var(--surface));
+  }
+  .fret-cell.is-found {
+    border-color: var(--success, #2d8a5a);
+    background: color-mix(in srgb, var(--success, #2d8a5a) 16%, var(--surface));
+  }
+  .fret-cell.is-revealed {
+    border: 2px dashed var(--warning, #a77a25);
+    background: color-mix(in srgb, var(--warning, #a77a25) 15%, var(--surface));
   }
   .fret-cell:focus-visible {
     position: relative;
@@ -819,6 +1064,17 @@
     font-size: 12px;
     font-weight: 700;
     line-height: 1.2;
+  }
+  .play-note {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 750;
+    cursor: pointer;
   }
   .privacy-note {
     margin-top: 18px;
