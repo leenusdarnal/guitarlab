@@ -103,7 +103,7 @@
 
 <svelte:head>
   <title>Learner setup — GuitarLab</title>
-  <meta name="description" content="Configure your guitar, goals and learning preferences. Every question is optional." />
+  <meta name="description" content="Choose musical goals and a daily practice target for GuitarLab. Every choice is optional." />
 </svelte:head>
 
 <main class="setup-page">
