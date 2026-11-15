@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export const profilePreferencesSchema = z.object({
   schemaVersion: z.literal(1),
+  // These profile fields are retained for compatibility with existing local records and backups.
+  // They are intentionally not shown in setup until an active feature consumes them.
   instrument: z.enum(['acoustic', 'electric', 'classical', 'other']).nullable(),
   handedness: z.enum(['right', 'left']).nullable(),
   tuning: z.string().trim().min(1).max(80).nullable(),
