@@ -227,7 +227,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Verify every section shortcut targets a real section ID; add desktop and narrow-phone browser acceptance. The section rail scrolls horizontally on small screens.
 - [x] Move the lesson checkpoint and completion panel after the instructional sequence, before previous/next lesson navigation.
 - [x] Place the accessible alternative next to the focused exercises where learners may need it.
-- [x] Add metronome and tuner launchers beside the exercise section; pass only the authored starting BPM through the validated `bpm` query parameter.
+- [x] Add separate-tab metronome and tuner launchers beside the exercise section; starting-tempo deep-link hand-off is tracked with UX-08.
 - [x] Serialise checkpoint/note/section progress writes with revision-aware queued snapshots so a later action cannot be dropped by an earlier in-flight save (PR #141).
 - [x] Keep the active control enabled during ordinary save operations and expose a concise saving status without putting the entire progress panel in a live region (PR #141).
 - [x] Reduce duplicate completion/mastery warnings to one page-level explanation while keeping progress counts and status clear.

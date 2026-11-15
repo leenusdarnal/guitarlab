@@ -350,7 +350,7 @@
           <p>{lesson.accessibleAlternative}</p>
         </aside>
         <nav class="lesson-tool-links" aria-label="Tools for this lesson">
-          <a href={resolve('/tools/metronome') + (lesson.startingTempoBpm ? '?bpm=' + String(lesson.startingTempoBpm) : '')} target="_blank" rel="noopener noreferrer">
+          <a href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">
             Open metronome{#if lesson.startingTempoBpm} at {lesson.startingTempoBpm} BPM{/if}
           </a>
           <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
