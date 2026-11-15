@@ -58,7 +58,10 @@ export function listLessonsForSkill(skillId: string): SkillLessonLink[] {
 
 /** Read the published catalogue description for a known skill. */
 export function getSkillDescription(skillId: string): string | null {
-  return skillCatalog.skills.find((skill) => skill.id === skillId)?.description ?? null;
+  return (
+    skillCatalog.skills.find((skill) => skill.id === skillId)?.description ??
+    null
+  );
 }
 
 export function getSkillCategoryDisplayName(categoryId: string): string {

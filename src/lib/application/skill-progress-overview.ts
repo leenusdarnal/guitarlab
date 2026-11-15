@@ -28,9 +28,10 @@ export function buildSkillProgressOverview(input: {
       .filter((record) => record.skillId === skill.id)
       .sort((left, right) => right.updatedAt - left.updatedAt);
 
-    const activeMastery = skillMastery.find(
-      (record) => record.curriculumReleaseId === input.activeReleaseId
-    ) ?? null;
+    const activeMastery =
+      skillMastery.find(
+        (record) => record.curriculumReleaseId === input.activeReleaseId
+      ) ?? null;
 
     const skillAttempts = input.attempts
       .filter((attempt) => attempt.skillId === skill.id)
@@ -47,9 +48,9 @@ export function buildSkillProgressOverview(input: {
         (attempt) => attempt.curriculumReleaseId === input.activeReleaseId
       )
         ? input.activeReleaseId
-        : skillMastery[0]?.curriculumReleaseId ??
+        : (skillMastery[0]?.curriculumReleaseId ??
           skillAttempts[0]?.curriculumReleaseId ??
-          input.activeReleaseId);
+          input.activeReleaseId));
     const mastery =
       skillMastery.find((record) => record.curriculumReleaseId === releaseId) ??
       null;

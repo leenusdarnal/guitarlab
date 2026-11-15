@@ -371,9 +371,9 @@
               </p>
             {/if}
             <div class="related-actions">
-              <a href={resolve('/practice')}>Open Practice Studio <span aria-hidden="true">→</span></a>
-              <a href={resolve('/practice') + '#history-heading'}>
-                View full practice history <span aria-hidden="true">→</span>
+              <a href={resolve('/practice')}>
+                Open Practice Studio and full practice history
+                <span aria-hidden="true">→</span>
               </a>
             </div>
             <p class="related-note">
