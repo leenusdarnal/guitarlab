@@ -349,6 +349,46 @@ try {
       'dark'
     );
 
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(origin, { waitUntil: 'networkidle' });
+    const dashboardAppearance = page.locator('select[aria-label="Appearance"]');
+    assert.equal(await dashboardAppearance.inputValue(), 'dark');
+    await dashboardAppearance.selectOption('light');
+    assert.deepEqual(
+      await page.evaluate(() => ({
+        preference: document.documentElement.dataset.themePreference,
+        theme: document.documentElement.dataset.theme,
+        stored: localStorage.getItem('guitarlab-theme'),
+        themeColor: document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
+      })),
+      {
+        preference: 'light',
+        theme: 'light',
+        stored: 'light',
+        themeColor: '#F5F4F0'
+      }
+    );
+    await page.goto(origin + '/practice', { waitUntil: 'networkidle' });
+    const sharedAppearance = page.locator('select[aria-label="Appearance"]');
+    assert.equal(
+      await sharedAppearance.inputValue(),
+      'light',
+      'Shared navigation must reflect the appearance selected on Today'
+    );
+    await sharedAppearance.selectOption('system');
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#101318'
+    );
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#F5F4F0'
+    );
+
     if (theme === 'dark') {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(origin, { waitUntil: 'networkidle' });

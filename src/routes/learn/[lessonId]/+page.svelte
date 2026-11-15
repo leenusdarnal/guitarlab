@@ -13,6 +13,8 @@
   let progressLoading = $state(true);
   let progressSaving = $state(false);
   let progressRequestId = 0;
+  let progressSaveQueue: Promise<void> = Promise.resolve();
+  let progressSaveRequestCounts = new Map<number, number>();
   let progressError = $state('');
   let completedBlockIds = $state<string[]>([]);
   let checkpointOutcome = $state<'achieved' | 'needs_practice' | null>(null);
@@ -70,64 +72,74 @@
     checkpointNote: string | null;
   }> = {}) {
     const currentProgress = progress;
-    if (
-      !currentProgress ||
-      currentProgress.status === 'completed' ||
-      progressSaving
-    ) {
-      return;
-    }
+    if (!currentProgress || currentProgress.status === 'completed') return;
 
     const lessonId = lesson.id;
     const blockIds = lesson.lessonBlocks.map((block) => block.id);
     const requestId = progressRequestId;
+    const snapshot = {
+      lastBlockId:
+        overrides.lastBlockId !== undefined
+          ? overrides.lastBlockId
+          : currentProgress.lastBlockId,
+      completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
+      checkpointOutcome:
+        overrides.checkpointOutcome !== undefined
+          ? overrides.checkpointOutcome
+          : checkpointOutcome,
+      checkpointNote:
+        overrides.checkpointNote !== undefined
+          ? overrides.checkpointNote
+          : checkpointNote
+    };
+
+    progressSaveRequestCounts.set(
+      requestId,
+      (progressSaveRequestCounts.get(requestId) ?? 0) + 1
+    );
     progressSaving = true;
     progressError = '';
 
-    try {
-      const saved = await saveActiveLessonProgress(
-        lessonId,
-        {
-          expectedRevision: currentProgress.revision ?? 0,
-          lastBlockId:
-            overrides.lastBlockId !== undefined
-              ? overrides.lastBlockId
-              : currentProgress.lastBlockId,
-          completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
-          checkpointOutcome:
-            overrides.checkpointOutcome !== undefined
-              ? overrides.checkpointOutcome
-              : checkpointOutcome,
-          checkpointNote:
-            overrides.checkpointNote !== undefined
-              ? overrides.checkpointNote
-              : checkpointNote
-        },
-        blockIds,
-        curriculumReleaseId
-      );
-
+    const write = async () => {
       if (requestId !== progressRequestId) return;
-      progress = saved;
-      completedBlockIds = saved.completedBlockIds ?? [];
-      checkpointOutcome = saved.checkpointOutcome ?? null;
-      checkpointNote = saved.checkpointNote ?? '';
-    } catch (error) {
-      if (requestId === progressRequestId) {
-        completedBlockIds = currentProgress.completedBlockIds ?? [];
-        checkpointOutcome = currentProgress.checkpointOutcome ?? null;
-        checkpointNote = currentProgress.checkpointNote ?? '';
-        progressError = error instanceof Error
-          ? error.message
-          : 'Your lesson progress could not be saved. Please try again.';
+      const latestProgress = progress;
+      if (!latestProgress || latestProgress.status === 'completed') return;
+      try {
+        const saved = await saveActiveLessonProgress(
+          lessonId,
+          { expectedRevision: latestProgress.revision ?? 0, ...snapshot },
+          blockIds,
+          curriculumReleaseId
+        );
+        if (requestId !== progressRequestId) return;
+        progress = saved;
+        progressError = '';
+      } catch (error) {
+        if (requestId === progressRequestId) {
+          progressError = error instanceof Error
+            ? error.message
+            : 'Your lesson progress could not be saved. Please try again.';
+        }
       }
+    };
+
+    const operation = progressSaveQueue.then(write, write);
+    progressSaveQueue = operation.catch(() => undefined);
+    try {
+      await operation;
     } finally {
-      if (requestId === progressRequestId) progressSaving = false;
+      const pending = Math.max(
+        0,
+        (progressSaveRequestCounts.get(requestId) ?? 1) - 1
+      );
+      if (pending === 0) progressSaveRequestCounts.delete(requestId);
+      else progressSaveRequestCounts.set(requestId, pending);
+      if (requestId === progressRequestId) progressSaving = pending > 0;
     }
   }
 
   async function toggleBlock(blockId: string) {
-    if (!progress || progress.status === 'completed' || progressSaving) return;
+    if (!progress || progress.status === 'completed') return;
     const next = completedBlockIds.includes(blockId) ? completedBlockIds.filter((id) => id !== blockId) : [...completedBlockIds, blockId];
     const lastBlockId = next.includes(blockId) ? blockId : (progress.lastBlockId === blockId ? next[next.length - 1] ?? null : progress.lastBlockId);
     completedBlockIds = next;
@@ -207,7 +219,7 @@
     <a href="#lesson-progress">My progress</a>
   </nav>
 
-  <section class="progress-panel" id="lesson-progress" aria-label="Your lesson progress" aria-live="polite">
+  <section class="progress-panel" id="lesson-progress" aria-label="Your lesson progress">
     {#if progressLoading}
       <p class="progress-message">Loading your saved lesson progress…</p>
     {:else if progressError && !progress}
@@ -221,17 +233,17 @@
       {#if progress.status === 'completed'}
         <p class="progress-complete"><strong>Lesson completed</strong> · Your checkpoint self-check is recorded. Skill mastery is tracked separately through assessment evidence.</p>
       {:else}
-        {#if progress.lastBlockId}<button class="resume-button" type="button" onclick={continueFromSavedSection} disabled={progressSaving}>Continue from saved section</button>{/if}
+        {#if progress.lastBlockId}<button class="resume-button" type="button" onclick={continueFromSavedSection}>Continue from saved section</button>{/if}
         <div class="checkpoint-check">
           <div><span class="eyebrow">LEARNER CHECKPOINT</span><p>Can you meet the observable target above with comfortable, controlled playing?</p></div>
           <div class="checkpoint-actions">
-            <button type="button" class:chosen={checkpointOutcome === 'achieved'} aria-pressed={checkpointOutcome === 'achieved'} onclick={() => chooseCheckpoint('achieved')} disabled={progressSaving}>I can meet this target</button>
-            <button type="button" class:chosen={checkpointOutcome === 'needs_practice'} aria-pressed={checkpointOutcome === 'needs_practice'} onclick={() => chooseCheckpoint('needs_practice')} disabled={progressSaving}>I need more practice</button>
+            <button type="button" class:chosen={checkpointOutcome === 'achieved'} aria-pressed={checkpointOutcome === 'achieved'} onclick={() => chooseCheckpoint('achieved')}>I can meet this target</button>
+            <button type="button" class:chosen={checkpointOutcome === 'needs_practice'} aria-pressed={checkpointOutcome === 'needs_practice'} onclick={() => chooseCheckpoint('needs_practice')}>I need more practice</button>
           </div>
         </div>
         <label class="note-label" for="checkpoint-note">Next practice note <span>(optional, private to this browser)</span></label>
-        <textarea id="checkpoint-note" bind:value={checkpointNote} maxlength="500" rows="2" onblur={saveCheckpointNote} disabled={progressSaving} placeholder="What should you focus on next time?"></textarea>
-        <div class="completion-actions"><button type="button" onclick={markLessonComplete} disabled={progressSaving || checkpointOutcome !== 'achieved'}>Mark lesson complete</button><small>Completion records your learning activity; it never automatically grants skill mastery.</small></div>
+        <textarea id="checkpoint-note" bind:value={checkpointNote} maxlength="500" rows="2" onblur={saveCheckpointNote} placeholder="What should you focus on next time?"></textarea>
+        <div class="completion-actions"><button type="button" onclick={markLessonComplete} disabled={progressSaving || checkpointOutcome !== 'achieved'} aria-busy={progressSaving}>{progressSaving ? 'Saving…' : 'Mark lesson complete'}</button><small>Completion records your learning activity; it never automatically grants skill mastery.</small></div>
       {/if}
       {#if progressError}<p class="progress-error" role="alert">{progressError}</p>{/if}
       {#if progressSaving}<p class="saving-message" role="status">Saving on this device…</p>{/if}
@@ -296,7 +308,7 @@
                 {#if Array.isArray(block.content)}
                   <ul>{#each block.content as item, itemIndex (itemIndex)}<li>{item}</li>{/each}</ul>
                 {:else}<p>{block.content}</p>{/if}
-                <button class="block-complete" type="button" aria-pressed={completedBlockIds.includes(block.id)} onclick={() => toggleBlock(block.id)} disabled={progressSaving || progress?.status === 'completed' || progressLoading}>
+                <button class="block-complete" type="button" aria-pressed={completedBlockIds.includes(block.id)} onclick={() => toggleBlock(block.id)} disabled={progress?.status === 'completed' || progressLoading}>
                   {completedBlockIds.includes(block.id) ? 'Section completed' : 'Mark section complete'}
                 </button>
               </div>
@@ -415,7 +427,7 @@
   .breadcrumbs a:hover{color:var(--primary)}.lesson-header{max-width:850px;margin-bottom:28px}
   .eyebrow,.kicker{font-size:9px;font-weight:800;letter-spacing:1.25px;color:var(--muted)}
   .lesson-header h1{font:500 clamp(36px,6vw,56px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:12px 0}
-  .focus{font-size:14px;color:var(--muted);line-height:1.6;margin:0}.lesson-meta{display:flex;flex-wrap:wrap;gap:8px;margin:17px 0}
+  .focus{font-size:16px;color:var(--muted);line-height:1.65;margin:0}.lesson-meta{display:flex;flex-wrap:wrap;gap:8px;margin:17px 0}
   .lesson-meta span{border:1px solid var(--border);border-radius:99px;padding:7px 10px;color:var(--muted);font-size:9px}
   .checkpoint{margin-top:21px;padding:19px 21px;border:1px solid color-mix(in srgb,var(--primary) 45%,var(--border));border-radius:var(--radius);background:color-mix(in srgb,var(--primary) 6%,var(--surface))}
   .checkpoint p{font:500 18px/1.45 Georgia,serif;margin:8px 0}.checkpoint small{font-size:10px;line-height:1.5;color:var(--muted)}
@@ -473,7 +485,8 @@
   .lesson-outline a:hover,.lesson-outline a:focus-visible{background:var(--surface-raised);color:var(--primary)}
   .content-section{scroll-margin-top:126px}
   .content-section h3{font-size:15px}
-  .content-section p,.content-section li{font-size:14px;line-height:1.75}
+  .content-section p,.content-section li{font-size:1rem;line-height:1.7;color:var(--text)}
+  @media(min-width:900px){.content-section p,.content-section li{font-size:1.0625rem}}
   .block-type,.exercise-meta,.references article>span{font-size:11px}
   .exercise>small{font-size:11px}
   .sidebar-card p{font-size:12px}
