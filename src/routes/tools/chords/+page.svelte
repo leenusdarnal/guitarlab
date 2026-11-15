@@ -33,6 +33,16 @@
   const selectedChord = $derived(
     OPEN_CHORDS.find((chord) => chord.id === selectedChordId) ?? OPEN_CHORDS[0]
   );
+  const frettedPositions = $derived(
+    selectedChord.strings.filter(
+      (string) => string.state === 'fretted' && string.fret !== null
+    )
+  );
+  const diagramFirstFret = $derived.by(() => {
+    const lowest = Math.min(...frettedPositions.map((string) => string.fret ?? 1));
+    return lowest > 4 ? lowest : 1;
+  });
+  const diagramFrets = [0, 1, 2, 3, 4] as const;
   const displayStrings = $derived(
     handedness === 'left'
       ? [...selectedChord.strings].reverse()
@@ -179,14 +189,57 @@
       <p>{selectedChord.description}</p>
     </div>
 
-    <div
-      class="chord-diagram"
-      role="img"
-      aria-label={`${selectedChord.name} chord, ${handedness}-handed view. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
-    >
-      {#each displayStrings as string (string.stringNumber)}
-        <div class="chord-string">
-          <span class="string-name">
+    <div class="chord-diagram">
+      <svg
+        class="chord-illustration"
+        viewBox="0 0 620 390"
+        role="img"
+        aria-label={`${selectedChord.name} chord, ${handedness}-handed view. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
+      >
+        <rect x="38" y="54" width="544" height="270" rx="10" class="chord-neck" />
+        {#each diagramFrets as fretLine (fretLine)}
+          <line
+            x1="62"
+            y1={88 + fretLine * 54}
+            x2="558"
+            y2={88 + fretLine * 54}
+            class:chord-nut={fretLine === 0 && diagramFirstFret === 1}
+            class="chord-fret-wire"
+          />
+        {/each}
+        {#if diagramFirstFret > 1}
+          <text x="22" y="125" class="fret-index">{diagramFirstFret}</text>
+        {/if}
+        {#each displayStrings as string, index (string.stringNumber)}
+          {@const x = 82 + index * 91}
+          <line
+            x1={x}
+            y1="88"
+            x2={x}
+            y2="304"
+            class="chord-string-wire"
+            stroke-width={string.stringNumber === 6 || string.stringNumber === 1 ? 1.3 : 2}
+          />
+          <text x={x} y="73" class="chord-string-state">
+            {string.state === 'muted' ? '×' : string.state === 'open' ? '○' : ''}
+          </text>
+          {#if string.state === 'fretted' && string.fret !== null}
+            {@const relativeFret = string.fret - diagramFirstFret}
+            {#if relativeFret >= 0 && relativeFret < 4}
+              <circle
+                cx={x}
+                cy={88 + (relativeFret + 0.5) * 54}
+                r="19"
+                class="chord-finger"
+              />
+              <text
+                x={x}
+                y={94 + (relativeFret + 0.5) * 54}
+                class="chord-finger-number"
+              >{string.finger}</text>
+            {/if}
+          {/if}
+          <text x={x} y="355" class="chord-string-name">
             {string.stringNumber === 1
               ? 'e'
               : string.stringNumber === 2
@@ -198,19 +251,17 @@
                     : string.stringNumber === 5
                       ? 'A'
                       : 'E'}
-          </span>
-          {#if string.state === 'muted'}
-            <span class="string-marker muted" aria-hidden="true">×</span>
-            <small>Mute</small>
-          {:else if string.state === 'open'}
-            <span class="string-marker open" aria-hidden="true">○</span>
-            <small>Open</small>
-          {:else}
-            <span class="string-marker fretted" aria-hidden="true">{string.finger}</span>
-            <small>Fret {string.fret}</small>
-          {/if}
-        </div>
-      {/each}
+          </text>
+        {/each}
+        <text x="310" y="382" class="chord-hand-label">
+          {handedness === 'left' ? 'Left-handed view' : 'Right-handed view'}
+        </text>
+      </svg>
+      <p class="visually-hidden">
+        {#each displayStrings as string, index}
+          String {string.stringNumber} ({index + 1} from left): {stringDescription(string)}.
+        {/each}
+      </p>
     </div>
 
     <div class="diagram-legend" aria-label="Chord diagram legend">
@@ -428,12 +479,72 @@
     line-height: 1.7;
   }
   .chord-diagram {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 7px;
-    max-width: 600px;
+    width: min(100%, 600px);
     margin: 22px auto 14px;
-    padding: 8px 0;
+    padding: 4px 0;
+  }
+  .chord-illustration {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .chord-neck {
+    fill: var(--surface-raised);
+    stroke: var(--border);
+    stroke-width: 1.5;
+  }
+  .chord-fret-wire {
+    stroke: var(--border-strong);
+    stroke-width: 2;
+  }
+  .chord-fret-wire.chord-nut {
+    stroke: var(--text);
+    stroke-width: 8;
+  }
+  .chord-string-wire {
+    stroke: var(--text);
+    stroke-width: 1.8;
+    stroke-opacity: 0.8;
+  }
+  .chord-string-state,
+  .chord-string-name {
+    fill: var(--text);
+    font-size: 18px;
+    font-weight: 800;
+    text-anchor: middle;
+  }
+  .chord-string-name {
+    font-size: 15px;
+  }
+  .chord-finger {
+    fill: var(--primary);
+    stroke: var(--primary-ink);
+    stroke-width: 1.5;
+  }
+  .chord-finger-number {
+    fill: var(--primary-ink);
+    font-size: 17px;
+    font-weight: 850;
+    text-anchor: middle;
+  }
+  .fret-index {
+    fill: var(--muted);
+    font-size: 16px;
+    font-weight: 750;
+  }
+  .chord-hand-label {
+    fill: var(--muted);
+    font-size: 11px;
+    text-anchor: middle;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
   }
   .chord-string {
     display: grid;
@@ -654,12 +765,8 @@
     .chord-summary {
       gap: 10px;
     }
-    .chord-string {
-      min-height: 96px;
-    }
-    .string-marker {
-      width: 30px;
-      height: 30px;
+    .chord-diagram {
+      margin: 16px auto 12px;
     }
     .observation-fields,
     .drill-choices {
