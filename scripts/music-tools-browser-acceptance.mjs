@@ -332,6 +332,7 @@ try {
     .waitFor();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).waitFor();
 
   // Theory recall connects names, generated triad sounds and chord function.
   await page.getByRole('link', { name: 'Practice tools' }).click();
