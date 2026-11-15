@@ -427,8 +427,11 @@ try {
     'IndexedDB should be available in the browser'
   );
 
-  // Theme selection persists across a full reload.
-  await page.getByRole('button', { name: 'Toggle colour theme' }).click();
+  // Appearance preference persists across a full reload.
+  const dashboardAppearance = page.getByRole('combobox', {
+    name: 'Appearance'
+  });
+  await dashboardAppearance.selectOption('light');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   assert.equal(
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
