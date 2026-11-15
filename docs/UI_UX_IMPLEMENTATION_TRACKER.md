@@ -279,7 +279,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-10 — Make Progress useful to new and returning learners
 
 **Priority:** P1/P2  
-**Status:** IN REVIEW — full 34-skill map, evidence-aware state explanations, release-scoped corrections and related learning links implemented; automated CI is being rerun after branch synchronization. Manual learner testing remains under UX-14  
+**Status:** COMPLETE — PR #146 merged; required CI passed. Manual learner testing remains tracked under UX-14  
 **Depends on:** existing skill catalogue and learner-state model  
 **Related findings:** K1, K2, D7, X10
 
@@ -404,7 +404,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 |---|---|
 | 2026-11-16 | PR #147 (UX-11) merged as `857560b`; run #1434 passed required CI, including backup, accessibility, music-tool and curriculum browser acceptance. Backup recency is local-only and describes download start, not confirmed file retention. Web Share is deferred pending device/consent tests. |
 | 2026-11-16 | UX-12 groups all eight tools by task, explains microphone access before Start on tuner and note recognition, removes generic availability badges, and limits setup to effective goals/practice-duration preferences while preserving unused legacy schema fields. CI pending. |
-| 2026-11-15 | PR #146 implements the canonical 34-skill map, evidence-aware learner states, active-release scoping, published lesson links, search/category filters and mobile master/detail navigation. CI rerun after synchronization is pending; manual learner acceptance remains under UX-14. |
+| 2026-11-16 | PR #146 (UX-10) merged after the canonical skill fixture was corrected to seed catalogue IDs and the active curriculum release. Final required CI passed; manual learner acceptance remains under UX-14. |
 | 2026-11-15 | PR #145 implements fretboard structure/inlays, prompted note-finding, selected-pitch playback and chord-box diagrams. CI rerun after synchronization is pending; manual device and assistive-technology checks remain under UX-14. |
 | 2026-11-15 | PR #144 implementation and automated CI validation complete for UX-08; physical-device, keyboard-only, screen-reader and wake-lock lifecycle acceptance remain open under UX-14. |
 | 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |
