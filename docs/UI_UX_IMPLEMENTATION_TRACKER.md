@@ -5,6 +5,7 @@
 **Last reviewed:** 15 November 2026  
 **Implementation source:** UX_REVIEW.md (advisory review supplied for this work) and the source audit in [UI/UX audit](UI_UX_AUDIT_2026-11-15.md)  
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
+**Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
 **Active implementation:** [PR #138 — lesson discovery and navigation](https://github.com/leenusdarnal/guitarlab/pull/138)
 
@@ -24,7 +25,8 @@ This is an implementation plan, not a declaration that every advisory recommenda
 2. **IMPLEMENTATION_GUIDELINES.md** defines implementation guidance and acceptance expectations.
 3. **UX_REVIEW.md** supplies the detailed advisory findings and recommendations for this work.
 4. **UI_UX_AUDIT_2026-11-15.md** records the repository-specific audit and the first lesson-discovery implementation.
-5. **ROADMAP.md** remains the master product roadmap. This document tracks the UI/UX work; it does not replace or silently rewrite the milestone roadmap.
+5. **UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md** records external Svelte/Tailwind component options and adoption guidance. It is informational research, not an approval to add a dependency or override the design authority.  
+6. **ROADMAP.md** remains the master product roadmap. This document tracks the UI/UX work; it does not replace or silently rewrite the milestone roadmap.
 
 When recommendations conflict, follow the approved design direction or record a decision here before coding. In particular, the audit's five-item mobile bottom-tab proposal was not user-tested. The current PR implements an expandable mobile menu. Do not mark the navigation design final until it has been checked against the approved compact-mobile-navigation direction and tested with learners.
 
@@ -403,3 +405,4 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | Committed a narrow-screen lesson-catalogue footer wrapping fix after CI identified /learn overflow at 320px; validation remains pending. |
 | 2026-11-15 | Reworked `docs/DESIGN_DIRECTION.md` into the Modern Music Studio target system and aligned `docs/IMPLEMENTATION_GUIDELINES.md`; the design is documented but not yet implemented in the application. |
+| 2026-11-15 | Added `docs/research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md`, comparing the supplied Tailwind sources and Svelte-native options. No component dependency was added; adoption is deferred to a specific UX task and compatibility/accessibility gate. |
