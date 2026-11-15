@@ -440,7 +440,7 @@ The new `.github/workflows/deploy-production.yml`:
 4. Requires `CLOUDFLARE_API_TOKEN` as an Actions secret and `CLOUDFLARE_ACCOUNT_ID` as an Actions variable. The first deployment creates a new Worker and therefore needs Workers Admin at product scope; after the first creation, rotate to a Worker Editor token scoped only to `guitarlab`. The release does not change routes or custom domains.
 5. Builds and dry-runs the selected SHA, then deploys that same build.
 6. Smoke-tests `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`, and checks CSP, HSTS, MIME, frame and referrer-policy headers.
-7. Records the exact commit and production URL in the workflow run.
+7. Captures Wrangler's structured deploy event and uploads a 90-day GitHub Actions artifact containing the Worker version ID, deployment timestamp, commit SHA, target URL and successful route/security-header smoke-test results.
 
 Configure the GitHub `production` environment with a branch policy restricted to `main` and a required reviewer where supported. Do not expose or commit secret values.
 
