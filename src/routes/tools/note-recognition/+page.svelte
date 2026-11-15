@@ -30,9 +30,11 @@
   let isRunning = $state(false);
   let roundIndex = $state(0);
   let correctCount = $state(0);
+  let firstTryCorrectCount = $state(0);
+  let totalAttemptCount = $state(0);
+  let attemptsForRound = $state(0);
   let roundState = $state<'ready' | 'listening' | 'waiting' | 'retry' | 'correct' | 'complete'>('ready');
   let detectedNote = $state('');
-  let confidence = $state<number | null>(null);
   let errorMessage = $state('');
   let awaitingRelease = false;
   let processedAt = 0;
@@ -51,7 +53,6 @@
     if (isStarting || isRunning) return;
     errorMessage = '';
     detectedNote = '';
-    confidence = null;
     tracker.reset();
     awaitingRelease = false;
     isStarting = true;
@@ -109,14 +110,12 @@
         const update = tracker.update(estimate, timestamp);
         if (update.note) {
           detectedNote = update.note.noteName;
-          confidence = update.note.confidence;
         }
         if (update.event === 'note-off') {
           awaitingRelease = false;
           if (roundState === 'retry' || roundState === 'waiting') {
             roundState = 'listening';
             detectedNote = '';
-            confidence = null;
           }
         } else if (
           (update.event === 'note-on' || update.event === 'note-change') &&
@@ -124,13 +123,19 @@
           !awaitingRelease &&
           target
         ) {
-          if (update.note?.midiNote === target.midiNote) {
-            correctCount += 1;
-            roundState = 'correct';
-            awaitingRelease = true;
-          } else if (update.note) {
-            roundState = 'retry';
-            awaitingRelease = true;
+          if (update.note) {
+            const isTargetNote = update.note.midiNote === target.midiNote;
+            totalAttemptCount += 1;
+            if (attemptsForRound === 0 && isTargetNote) firstTryCorrectCount += 1;
+            attemptsForRound += 1;
+            if (isTargetNote) {
+              correctCount += 1;
+              roundState = 'correct';
+              awaitingRelease = true;
+            } else {
+              roundState = 'retry';
+              awaitingRelease = true;
+            }
           }
         }
       } catch (error) {
@@ -151,6 +156,7 @@
       return;
     }
     roundIndex += 1;
+    attemptsForRound = 0;
     detectedNote = '';
     confidence = null;
     roundState = awaitingRelease ? 'waiting' : 'listening';
@@ -159,6 +165,9 @@
   function restartExercise() {
     roundIndex = 0;
     correctCount = 0;
+    firstTryCorrectCount = 0;
+    totalAttemptCount = 0;
+    attemptsForRound = 0;
     detectedNote = '';
     confidence = null;
     awaitingRelease = false;
