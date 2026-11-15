@@ -185,7 +185,7 @@
 </svelte:head>
 
 <main class="exercise-page">
-  <a class="back-link" href={resolve('/tools')}>← Practice tools</a>
+  <a class="back-link" href={resolve('/tools')}>← Tools</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · PITCH</div>
     <h1>Play the <em>right note.</em></h1>
