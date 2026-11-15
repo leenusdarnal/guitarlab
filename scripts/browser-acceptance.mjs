@@ -17,10 +17,7 @@ const skillIdFor = (displayName) => {
   const skill = skillCatalog.skills.find(
     (item) => item.displayName === displayName
   );
-  assert.ok(
-    skill,
-    `The curriculum catalogue must include ${displayName}.`
-  );
+  assert.ok(skill, `The curriculum catalogue must include ${displayName}.`);
   return skill.id;
 };
 const alternatePickingSkillId = skillIdFor('Alternate picking');
@@ -1588,11 +1585,7 @@ try {
         const request = database
           .transaction('skillMastery')
           .objectStore('skillMastery')
-          .get([
-            learnerId,
-            activeCurriculumReleaseId,
-            chordTransitionsSkillId
-          ]);
+          .get([learnerId, activeCurriculumReleaseId, chordTransitionsSkillId]);
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
