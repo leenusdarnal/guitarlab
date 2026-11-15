@@ -427,7 +427,9 @@ try {
   );
 
   // Appearance preference persists across a full reload.
-  await page.getByRole('combobox', { name: 'Appearance' }).selectOption('light');
+  await page
+    .getByRole('combobox', { name: 'Appearance' })
+    .selectOption('light');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   assert.equal(
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
@@ -488,9 +490,13 @@ try {
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     /\/ 10 min planned/
   );
-  await planner.getByRole('button', { name: 'Review in Practice Studio' }).click();
+  await planner
+    .getByRole('button', { name: 'Review in Practice Studio' })
+    .click();
   await page.waitForURL(/\/practice\?minutes=10/);
-  await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
+    .waitFor();
   assert.equal(await page.locator('#duration').inputValue(), '10');
   assert.equal(
     await page.locator('#duration').getAttribute('min'),
@@ -500,7 +506,9 @@ try {
   assert.ok((await page.locator('#focus').inputValue()).length > 0);
   await page.getByText(/No session has started yet/).waitFor();
   assert.equal(
-    await page.getByRole('heading', { name: 'Your session is in progress' }).count(),
+    await page
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .count(),
     0,
     'The dashboard plan should prefill a session, not silently start it'
   );
@@ -509,8 +517,13 @@ try {
     'Practice history has a stable destination'
   );
   await page.goto(origin, { waitUntil: 'networkidle' });
-  const actionLinks = await planner.locator('.practice-task .task-action').count();
-  assert.ok(actionLinks > 0, 'Every suggested task should expose a useful action');
+  const actionLinks = await planner
+    .locator('.practice-task .task-action')
+    .count();
+  assert.ok(
+    actionLinks > 0,
+    'Every suggested task should expose a useful action'
+  );
 
   // Dismiss and restore suggestions without touching learner progress.
   await planner.getByRole('button', { name: 'Dismiss' }).click();
@@ -539,13 +552,17 @@ try {
     .getByText('Enter a whole number from 5 to 180 minutes.')
     .waitFor();
   assert.equal(
-    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
+    await planner
+      .getByRole('button', { name: 'Review in Practice Studio' })
+      .isDisabled(),
     true
   );
   await customDuration.fill('15');
   await customDuration.blur();
   assert.equal(
-    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
+    await planner
+      .getByRole('button', { name: 'Review in Practice Studio' })
+      .isDisabled(),
     false
   );
 
