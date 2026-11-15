@@ -94,7 +94,6 @@
     isStarting = false;
     tracker.reset();
     awaitingRelease = false;
-    confidence = null;
     detectedNote = '';
     roundState = 'ready';
     if (activeMicrophone) await activeMicrophone.dispose();
@@ -158,7 +157,6 @@
     roundIndex += 1;
     attemptsForRound = 0;
     detectedNote = '';
-    confidence = null;
     roundState = awaitingRelease ? 'waiting' : 'listening';
   }
 
@@ -169,7 +167,6 @@
     totalAttemptCount = 0;
     attemptsForRound = 0;
     detectedNote = '';
-    confidence = null;
     awaitingRelease = false;
     tracker.reset();
     roundState = isRunning ? 'listening' : 'ready';
