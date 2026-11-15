@@ -17,22 +17,23 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Parallel implementation queue — 2026-11-15
 
-Independent work may proceed concurrently on separate branches. Each PR remains isolated and tested; merging is strictly ordered by priority. The queue reflects the current priority sequence and is not a promise that all items have passed CI.
+Independent work proceeds in parallel on separate branches. Merging is strictly ordered by priority. PR #117 and #118 have completed the first two merge positions; remaining order is #119 → #120 → #121 → #122 → #123 → #125 → #124.
 
 | Merge order | PR | Priority / issue | Scope | Current gate |
 | --- | --- | --- | --- | --- |
-| 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval response-mismatch read model, tightly scoped to authored v1 interval choices | Fix/verify CI before merge |
-| 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Fix/verify CI before merge |
-| 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Name/sound/use theory recall | Fix/verify CI before merge |
-| 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scale/triad/inversion/CAGED and fretboard model | CI passed on recorded head; rerun after base updates |
-| 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local song projects with learner-scoped IndexedDB and backup/restore/reset | Fix/verify CI before merge |
-| 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real-device and recording evidence matrix | Documentation only; physical evidence still not run |
-| 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Manual-only controlled CI failure/recovery rehearsal | Workflow dispatch after merge; Issue #5 remains open until evidence is recorded |
-| 8 | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation and ordered-merge process | Documentation PR |
+| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Exact v1 interval response mismatch read model; no mastery mutation | Merged as `64054bb2ae8bb17bc0997aba58cfd0fd1a917c68`; all branch and post-merge checks passed |
+| Merged 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Merged as `aff8cfe50366fd78871858bc7dde3a4b6e3872b7`; branch CI passed, post-merge main validation pending at this checkpoint |
+| 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Name/sound/use theory recall | Rebased on #118; fresh CI running |
+| 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scale/triad/inversion/CAGED and fretboard model | Prior branch CI passed; re-run after base update |
+| 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local song projects with learner-scoped IndexedDB v7 and backup/restore/reset | Browser acceptance updated for v7 store; CI rerunning |
+| 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real-device and recording evidence matrix | Documentation only; physical evidence not run |
+| 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Manual-only controlled CI failure/recovery rehearsal | Workflow dispatch after merge; Issue #5 remains open until both runs recorded |
+| 8 | [#125](https://github.com/leenusdarnal/guitarlab/pull/125) | P4 / #3 | Production environment decision and release approval gates | Documentation only; no production configuration/resources authorized |
+| 9 | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation and priority-ordered merge process | Final governance PR; merge last |
 
-**Merge protocol:** verify the current branch head and all required checks; merge only the next PR in this table using squash; confirm post-merge main CI; then refresh/rebase the next PR onto the new main and rerun affected checks. Do not merge later PRs merely because their checks finish first. No check is bypassed or softened.
+**Merge protocol:** verify the current branch head and every required status; merge only the next PR using squash; verify post-merge main CI; then rebase the next PR and rerun its affected checks. Do not merge later PRs because their checks finish first. Never weaken or bypass required checks.
 
-**Honest completion rule:** a merged code PR completes only its stated code scope. Physical device/recording acceptance, manual WCAG/privacy review, controlled workflow dispatch and production approval remain separately open until their evidence exists. Synthetic/mock testing is not hardware sign-off. Production resources and deployment are outside this queue without explicit approval.
+**Honest completion rule:** a code merge completes only its explicitly stated scope. Physical device/recording acceptance, manual WCAG/privacy review, controlled workflow dispatch and production approval remain open until evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
 
 ## Current status
 
