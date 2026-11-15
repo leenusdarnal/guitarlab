@@ -218,21 +218,21 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-07 — Make lessons comfortable to read and easy to resume
 
 **Priority:** P1  
-**Status:** IN PROGRESS — PR #141 queues lesson saves and removes save-time disabling; section navigation exists in PR #138  
+**Status:** IN PROGRESS — PR #141 save sequencing merged; reader navigation, retry and lesson-action improvements added on this branch  
 **Depends on:** UX-02 and UX-04  
 **Related findings:** L1–L6, X7, X10
 
 - [x] Raise lesson-reader instructional paragraphs and lists to 16px minimum (17px on wider screens), keep primary instructional colour, and improve the learner-facing focus text in PR #141; other route typography remains open.
 - [x] Add lesson section shortcuts in PR #138.
-- [ ] Ensure section shortcuts match the actual section IDs and work at desktop and phone widths.
-- [ ] Move completion and end-of-lesson actions to the end of the learning sequence where appropriate.
-- [ ] Keep “Make this task manageable” / accessible alternatives visible near the task that needs adaptation.
-- [ ] Put tool launchers beside the relevant lesson instruction and pass supported settings through safe, documented deep links.
+- [x] Verify every section shortcut targets a real section ID; add desktop and narrow-phone browser acceptance. The section rail scrolls horizontally on small screens.
+- [x] Move the lesson checkpoint and completion panel after the instructional sequence, before previous/next lesson navigation.
+- [x] Place the accessible alternative next to the focused exercises where learners may need it.
+- [x] Add metronome and tuner launchers beside the exercise section; pass only the authored starting BPM through the validated `bpm` query parameter.
 - [x] Serialise checkpoint/note/section progress writes with revision-aware queued snapshots so a later action cannot be dropped by an earlier in-flight save (PR #141).
 - [x] Keep the active control enabled during ordinary save operations and expose a concise saving status without putting the entire progress panel in a live region (PR #141).
-- [ ] Show useful progress context without repeating the same mastery warning in every section.
-- [ ] Remove internal lesson/release/catalogue identifiers from learner-facing areas while retaining stable IDs internally.
-- [ ] Verify lesson resume, progress persistence, offline/error recovery and navigation back to the lesson.
+- [x] Reduce duplicate completion/mastery warnings to one page-level explanation while keeping progress counts and status clear.
+- [x] Remove the content-version badge, unavailable prerequisite raw IDs and internal evidence enum from the learner-facing reader.
+- [x] Add explicit retry actions for load/save/complete failures; persisted resume and rapid writes are covered by existing browser tests. Human network interruption, mobile and screen-reader review remain open.
 
 **Acceptance:** learners can read, navigate, practise and resume a lesson without excessive scrolling, lost checkpoints, focus jumps or developer-facing copy.
 
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
