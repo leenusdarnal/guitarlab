@@ -181,6 +181,97 @@ function summariseMeasuredScoreTrend(scores: readonly number[]): {
   };
 }
 
+const intervalResponseAnswers = [
+  'unison',
+  'minor_second',
+  'major_second',
+  'minor_third',
+  'major_third',
+  'perfect_fourth',
+  'tritone',
+  'perfect_fifth',
+  'minor_sixth',
+  'major_sixth',
+  'minor_seventh',
+  'major_seventh',
+  'octave'
+] as const;
+
+const intervalResponseAnswerSet = new Set<string>(intervalResponseAnswers);
+const legacyIntervalResponseAnswerSet = new Set([
+  'unison',
+  'minor_third',
+  'major_third',
+  'perfect_fifth'
+]);
+const legacyIntervalItemIdAnswers: Record<string, string> = {
+  unison: 'unison',
+  'minor-third': 'minor_third',
+  'major-third': 'major_third',
+  'perfect-fifth': 'perfect_fifth'
+};
+
+type IntervalContrastGroup = {
+  definitionId: string;
+  definitionVersion: number;
+  scoringRuleVersion: string;
+  decisionScope: 'skill_level' | 'supporting_probe';
+};
+
+type IntervalContrastDefinition = {
+  expectedResponse: string;
+  allowedResponses: ReadonlySet<string>;
+};
+
+/**
+ * Resolve only known, version-matched interval instruments. Version 1 stored
+ * the original hyphenated four-item IDs; versions 2 and 3 use the complete
+ * underscore answer keys. Unsupported versions/rules never produce labels.
+ */
+function resolveIntervalContrast(
+  group: IntervalContrastGroup,
+  itemId: string
+): IntervalContrastDefinition | null {
+  const prefix = 'interval-recognition.';
+  if (
+    group.definitionId !== 'guitar.ear-training.interval-recognition' ||
+    group.decisionScope !== 'supporting_probe' ||
+    !itemId.startsWith(prefix)
+  ) {
+    return null;
+  }
+
+  const itemKey = itemId.slice(prefix.length);
+  if (
+    group.definitionVersion === 1 &&
+    group.scoringRuleVersion === 'exact-interval-choice-v1'
+  ) {
+    const expectedResponse = legacyIntervalItemIdAnswers[itemKey];
+    return expectedResponse
+      ? {
+          expectedResponse,
+          allowedResponses: legacyIntervalResponseAnswerSet
+        }
+      : null;
+  }
+
+  if (
+    (group.definitionVersion === 2 &&
+      group.scoringRuleVersion === 'exact-interval-choice-v2') ||
+    (group.definitionVersion === 3 &&
+      group.scoringRuleVersion === 'exact-interval-choice-v3')
+  ) {
+    return intervalResponseAnswerSet.has(itemKey)
+      ? {
+          expectedResponse: itemKey,
+          allowedResponses: intervalResponseAnswerSet
+        }
+      : null;
+  }
+
+  return null;
+}
+
 /**
  * Summarise item outcomes only within the same authored instrument definition,
  * version and scoring rule. Inconclusive answers are retained as counts but
@@ -270,42 +361,19 @@ function buildItemEvidenceGroups(
             consecutiveIncorrectCount += 1;
           }
 
-          const intervalAnswers = new Set([
-            'unison',
-            'minor_third',
-            'major_third',
-            'perfect_fifth'
-          ]);
-          const expectedIntervalByItemId: Record<string, string> = {
-            unison: 'unison',
-            'minor-third': 'minor_third',
-            'major-third': 'major_third',
-            'perfect-fifth': 'perfect_fifth'
-          };
-          const expectedIntervalPrefix = 'interval-recognition.';
-          const expectedInterval = itemId.startsWith(expectedIntervalPrefix)
-            ? (expectedIntervalByItemId[
-                itemId.slice(expectedIntervalPrefix.length)
-              ] ?? '')
-            : '';
-          const supportsExactIntervalContrast =
-            group.definitionId === 'guitar.ear-training.interval-recognition' &&
-            group.definitionVersion === 1 &&
-            group.scoringRuleVersion === 'exact-interval-choice-v1' &&
-            group.decisionScope === 'supporting_probe' &&
-            intervalAnswers.has(expectedInterval);
+          const contrastDefinition = resolveIntervalContrast(group, itemId);
           const mismatchCounts = new Map<
             string,
             { count: number; latestEvidenceAt: number }
           >();
-          if (supportsExactIntervalContrast) {
+          if (contrastDefinition) {
             for (const event of ordered) {
               if (
                 event.outcome !== 'incorrect' ||
                 event.responseSource !== 'learner_selected_option' ||
                 event.response === null ||
-                !intervalAnswers.has(event.response) ||
-                event.response === expectedInterval
+                !contrastDefinition.allowedResponses.has(event.response) ||
+                event.response === contrastDefinition.expectedResponse
               ) {
                 continue;
               }
@@ -322,15 +390,17 @@ function buildItemEvidenceGroups(
             }
           }
 
-          const responseMismatches = [...mismatchCounts.entries()]
-            .sort(([left], [right]) => left.localeCompare(right))
-            .map(([selectedResponse, value]) => ({
-              code: `interval.${expectedInterval}.selected.${selectedResponse}`,
-              expectedResponse: expectedInterval,
-              selectedResponse,
-              count: value.count,
-              latestEvidenceAt: value.latestEvidenceAt
-            }));
+          const responseMismatches = contrastDefinition
+            ? [...mismatchCounts.entries()]
+                .sort(([left], [right]) => left.localeCompare(right))
+                .map(([selectedResponse, value]) => ({
+                  code: `interval.${contrastDefinition.expectedResponse}.selected.${selectedResponse}`,
+                  expectedResponse: contrastDefinition.expectedResponse,
+                  selectedResponse,
+                  count: value.count,
+                  latestEvidenceAt: value.latestEvidenceAt
+                }))
+            : [];
 
           return {
             itemId,

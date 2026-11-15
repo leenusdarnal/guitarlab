@@ -6,15 +6,16 @@
 
 GitHub Issues remain the execution records. A task is complete only when its code is merged and its stated checks pass. Manual acceptance checks are called out separately; merging an implementation slice does not silently mark those checks complete.
 
-## Current checkpoint — 2026-11-15 after PR #129
+## Current checkpoint — 2026-11-15 after PR #131
 
-- Verified `main`: `2cc859fea62eacd5838e9ee5cbeb41005a4b0131`; post-merge application/curriculum and Node.js 26 CI run [#43682019382](https://github.com/leenusdarnal/guitarlab/actions/runs/43682019382) passed.
-- PRs #127–#129 are merged in order. PR #127 delivers all 12 simple ascending interval classes in Foundations, Steps & tritone, and Wide leaps; PR #128 records progression/stimulus research; PR #129 audits current bundled-content provenance and defines a future asset-level rights gate.
-- Issue #17 is closed. The PR #129 audit inspected all 265 tracked tree entries and found no standalone TAB, notation, image, audio or MIDI assets at the audited baseline. This is not blanket rights clearance for external links or learner-entered content; future bundled files need item-level evidence.
-- **Active next slice:** Issue [#130 — deterministic interval starting pitch and register](https://github.com/leenusdarnal/guitarlab/issues/130), branch `feat/m8-interval-register-variation`. Each interval class cycles independently through all 24 chromatic roots C3–B4: stride 5 for the four-choice sets and stride 7 for the five-choice set. The second tone adds the authored semitone distance; output remains within C3–B5.
-- The changed stimulus uses interval assessment definition v3 / `exact-interval-choice-v3`, still `supporting_probe`. Historical v2 attempts remain append-only and separately grouped; no backfill or mastery mutation is introduced.
-- Added unit checks cover all 24 roots for each interval class in each set, semitone invariance, deterministic replay, frequency bounds and v1/v2/v3 evidence-group separation. Music-tools browser acceptance exercises the next interval after the varied-root step. PR [#131](https://github.com/leenusdarnal/guitarlab/pull/131) is open; the latest full required CI is running and merge remains gated on every required check.
-- Issue #89 real-guitar recording and physical-device audio checks, Issues #9/#10 physical storage/backup checks, Issue #18 release hardening, Issue #5 controlled CI failure/recovery and Issue #3 production ownership/approval remain separate open gates. Synthetic/browser CI is not hardware sign-off; production resources and deployment remain unauthorized.
+- Verified `main`: `b34578c4c295e83c5fc95e5350a92d3f664a398e`; PR #131 is merged and Issue #130 is closed.
+- PR #131 CI run [#43683213960](https://github.com/leenusdarnal/guitarlab/actions/runs/43683213960) passed the full application/curriculum suite, including formatting, lint, Svelte/type checks, unit tests, build, Worker smoke and browser/music/accessibility/curriculum acceptance. The Node.js 26 compatibility job passed.
+- PRs #127–#129 and #131 are merged. Issue #17 is complete and closed; all simple ascending interval classes, progression research, current-content provenance and deterministic per-interval C3–B4 root cycling have shipped.
+- PR #131 uses interval stimulus definition v3 / `exact-interval-choice-v3`, retains `supporting_probe`, and keeps historical v2 evidence separately grouped. It does not surface absolute pitch or change mastery.
+- **Next P1 implementation:** extend Issue #69's explicit expected-versus-selected interval response read model to all 13 interval answers and all 12 wrong selections for both v2 and v3, preserving the original v1 mapping. The new analytics remain read-only and non-diagnostic; no learner-record fields, migrations, backup changes or mastery updates are introduced. Working branch: `feat/m7-interval-response-contrasts-v2-v3-main131`.
+- The branch tests all 156 wrong-choice pairs per v2/v3 instrument, plus v1 compatibility, version/rule/scope isolation, unsupported choices, no-response, inconclusive and correct outcomes.
+- Issue #89 real-guitar and physical-device audio evidence, Issues #9/#10 physical IndexedDB/offline and backup/restore QA, Issue #18 release hardening, Issue #5 manual CI failure/recovery, and Issue #3 production ownership/approval remain separate open gates. Automated browser tests are not physical-device sign-off; production remains unauthorized.
+- No separate post-merge main workflow run for #131 was returned at this checkpoint; verify main CI before the next merge.
 
 ## Historical issue reconciliation checkpoint — 2026-11-14
 
@@ -27,11 +28,11 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## Parallel implementation and merge queue — 2026-11-15
 
-Independent implementation branches may be developed in parallel, but merges remain priority-ordered. The M8.1 Issue #17 implementation and audit are complete; the current branch addresses the separately scoped Issue #130 follow-up.
+Independent implementation branches may be developed in parallel, but merges remain priority-ordered. Issue #17 and its Issue #130 stimulus follow-up are complete; the current P1 slice is the version-aware continuation of Issue #69.
 
 | Merge order | PR | Priority / issue | Scope | Current gate |
 |---|---|---|---|---|
-| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval-response mismatch evidence labels; no mastery mutation | Merged; checks passed |
+| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval-response mismatch evidence labels for the original v1 four-choice instrument; no mastery mutation | Merged; checks passed |
 | Merged 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Merged; checks passed |
 | Merged 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Theory recall: name, sound and musical use | Merged; checks passed |
 | Merged 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scales, triads, inversions, CAGED and canonical fretboard notes | Merged; duplicate #126 added no implementation delta |
@@ -43,11 +44,12 @@ Independent implementation branches may be developed in parallel, but merges rem
 | Merged 10 | [#127](https://github.com/leenusdarnal/guitarlab/pull/127) | P2 / #17 | All 12 simple ascending interval classes across three focused practice sets; supporting-probe v2 | Merged; checks passed |
 | Merged 11 | [#128](https://github.com/leenusdarnal/guitarlab/pull/128) | P2 / #17 | Interval progression research and stimulus-validity decision | Merged; post-merge main CI passed |
 | Merged 12 | [#129](https://github.com/leenusdarnal/guitarlab/pull/129) | P2 / #17 | Current-content provenance inventory and future per-asset rights gate | Merged; required CI passed; Issue #17 closed |
-| Current | [#131](https://github.com/leenusdarnal/guitarlab/pull/131) | P2 follow-up / Issue #130 | Per-interval C3–B4 root cycles (stride 5 or 7), C3–B5 output bound, interval instrument v3, historical v2 separation | Open; based on current `main`; required application/curriculum and Node.js 26 CI running; not merged |
+| Merged 13 | [#131](https://github.com/leenusdarnal/guitarlab/pull/131) | P2 follow-up / Issue #130 | Per-interval C3–B4 root cycles, C3–B5 bounds, interval instrument v3 and historical v2 separation | Merged as `b34578c4c295e83c5fc95e5350a92d3f664a398e`; full PR CI and Node.js 26 passed; Issue #130 closed |
+| Current | [#132](https://github.com/leenusdarnal/guitarlab/pull/132) | P1 / #69 | Extend explicit expected-versus-selected interval contrasts to all 13-class v2/v3 instruments; preserve v1 | Open; based on post-#131 main; required application/curriculum and Node.js 26 CI in progress |
 
-**Remaining merge order:** Issue #130's focused PR only. Once it passes, merge it and verify post-merge main CI before moving to the remaining release-evidence gates.
+**Remaining merge order:** merge PR #132 only after all required checks pass and its exact head is verified. Then reconcile Issue #69 against shipped acceptance criteria. The next implementation after P1 is the P3 physical-device/real-guitar evidence under Issues #89 and #18; Issues #9/#10 remain device-level storage/backup QA.
 
-**Recent CI evidence:** post-#129 main run [#43682019382](https://github.com/leenusdarnal/guitarlab/actions/runs/43682019382) passed application/curriculum and Node.js 26 checks.
+**Recent CI evidence:** PR #131 full workflow [#43683213960](https://github.com/leenusdarnal/guitarlab/actions/runs/43683213960) passed application/curriculum and Node.js 26 checks. PR #132 current workflow [#43683680546](https://github.com/leenusdarnal/guitarlab/actions/runs/43683680546) is in progress.
 
 **Honest completion rule:** physical-device/recording acceptance, manual accessibility/privacy review, controlled workflow dispatch and production approval remain open until their evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
 
@@ -113,8 +115,8 @@ Independent implementation branches may be developed in parallel, but merges rem
 | M5 | Local-first state and optional sync | Partially implemented | IndexedDB v2, local backup/restore, and the privacy-safe offline app shell are implemented. CI covers schema upgrade/data retention and desktop/mobile viewport offline reload/fallback. Physical-device acceptance, outbox, conflict handling, authentication and cloud sync remain |
 | M6.1 | [#15 — Fretboard, chord library and metronome](https://github.com/leenusdarnal/guitarlab/issues/15) | Complete — PRs #45 and #46 merged; Issue #15 closed | Fretboard is live with tuning-aware pitch mapping, note spelling, handedness and accessible note finding. PR #46 adds open-chord diagrams, separate clean-change/time observations and a local Web Audio metronome with tempo, meter and reference tone; unit and browser acceptance are included |
 | M7.1 | [#16 — Practice sessions and evidence capture](https://github.com/leenusdarnal/guitarlab/issues/16) | Complete — PRs #50–59 merged | Local sessions, pause/resume, append-only exercise observations, reflection/next target, searchable history and explainable/correctable skill states. |
-| M7.2 | [#69 — Adaptive practice and learning analytics](https://github.com/leenusdarnal/guitarlab/issues/69) | Partially implemented — PRs #92–94, #103–104 and #107–112 merged; PR #113 in validation | Evidence audit, deterministic recommendations, canonical skill catalogue, category assessment coverage, append-only feedback, comparable measured scores, objective item outcomes, item accuracy, authored taxonomy, exact session/observation identity and initial exposure-coverage read model. Remaining: broaden only author-evidenced taxonomy scopes; add deterministic confusion labels only where exercises identify a specific misconception. |
-| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Complete — Issue #17 closed after PRs #127–#129 | All 12 simple ascending interval classes, chord movement, theory recall, shared harmony/CAGED, local repertoire and the current-content provenance audit are merged. Deterministic starting-pitch/register variation is a separate follow-up in Issue #130; descending/harmonic/notation-aware intervals are out of scope here |
+| M7.2 | [#69 — Adaptive practice and learning analytics](https://github.com/leenusdarnal/guitarlab/issues/69) | Core analytics and taxonomy merged; P1 follow-up PR in progress | PRs #92–94, #103–104, #107–117 deliver recommendations, local feedback, comparable measured scores, objective item outcomes, taxonomy/source-evidence validation, authored exposure and v1 explicit interval response contrasts. Current slice extends exact expected-versus-selected contrasts to all 13 v2/v3 interval classes without diagnosis, persistence changes or mastery mutation.
+| M8.1 | [#17 — Ear training, theory and repertoire](https://github.com/leenusdarnal/guitarlab/issues/17) | Complete — Issue #17 closed after PRs #127–#129 | All 12 simple ascending interval classes, chord movement, theory recall, shared harmony/CAGED, local repertoire, the current-content provenance audit and deterministic C3–B4 root/register variation (PR #131, Issue #130 closed) are merged. Descending/harmonic/notation-aware intervals remain separate research items |
 | M6.2 | [#68 — Shared audio and microphone pitch recognition](https://github.com/leenusdarnal/guitarlab/issues/68) | Implementation complete — Issue #68 closed | PRs #73–80 cover lifecycle tests/fixes and owned audio sessions; PRs #81–86 add pitch estimator, microphone input, stable-note tracker, tuner, guided recognition and synthetic benchmarks; PRs #90–91 add benchmark expansion and a local real-recording evaluator. Physical-device and real-guitar evidence remains separately tracked in Issue #89. |
 | M9.1 | [#18 — Offline, accessibility, privacy and release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Not ready | Physical-device offline/backup QA, CSP, WCAG accessibility, privacy, cross-browser audio, licensing, performance, deployment and rollback checks |
 
@@ -166,11 +168,12 @@ Independent implementation branches may be developed in parallel, but merges rem
 
 ## Immediate next actions
 
-1. Complete Issue #130's varied-root interval PR and verify its full CI matrix; keep definition-v2 and definition-v3 supporting-probe groups separate.
-2. After merge, verify post-merge main CI and update Issue #130 plus the execution documents with the merged SHA and test evidence.
-3. Continue P3 physical-device and real-guitar recording validation under Issue #89, using consented local-only recordings and the documented device/evidence matrix.
-4. Complete physical-device offline/IndexedDB and backup/restore QA in Issues #9 and #10; complete the controlled CI failure/recovery dispatches in Issue #5.
-5. Review production environment architecture under Issue #3 only when the data-protection and ownership gates are ready. Production deployment, production D1, authentication and cloud sync remain deferred.
+1. Complete the P1 Issue #69 response-contrast extension for instrument v2/v3; preserve v1 compatibility and do not infer misconceptions or alter mastery.
+2. Open and validate the new PR against current `main`; run formatting, lint, TypeScript/Svelte, unit, build, Worker, browser, accessibility and Node.js 26 checks.
+3. After the PR merges, reconcile Issue #69's checklist to the actual delivered evidence and close it only if every remaining criterion is complete or explicitly out of scope.
+4. Continue the P3 real-guitar/physical-device evidence under Issues #89 and #18; complete physical IndexedDB/offline and backup/restore QA in Issues #9 and #10.
+5. Complete both controlled CI rehearsal dispatches and record their actual run URLs in Issue #5. Keep production under Issue #3 blocked pending explicit owner approval.
+
 
 ## M7.2 implementation slice (2026-11-12)
 
