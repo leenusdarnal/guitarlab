@@ -347,13 +347,15 @@ describe('buildAdaptivePracticeSnapshot', () => {
     const analytics = result.skillAnalytics.find(
       (item) => item.skillId === 'ear.intervals'
     );
-    const standardItem = analytics?.itemEvidenceGroups.find(
-      (group) =>
-        group.definitionId === 'guitar.ear-training.interval-recognition' &&
-        group.definitionVersion === 1
-    )?.items.find(
-      (item) => item.itemId === 'interval-recognition.perfect-fifth'
-    );
+    const standardItem = analytics?.itemEvidenceGroups
+      .find(
+        (group) =>
+          group.definitionId === 'guitar.ear-training.interval-recognition' &&
+          group.definitionVersion === 1
+      )
+      ?.items.find(
+        (item) => item.itemId === 'interval-recognition.perfect-fifth'
+      );
 
     expect(standardItem?.responseMismatches).toEqual([
       {
@@ -372,21 +374,17 @@ describe('buildAdaptivePracticeSnapshot', () => {
       }
     ]);
     expect(
-      analytics?.itemEvidenceGroups
-        .find(
-          (group) =>
-            group.definitionId ===
-              'guitar.ear-training.interval-recognition' &&
-            group.definitionVersion === 2
-        )
-        ?.items[0].responseMismatches
+      analytics?.itemEvidenceGroups.find(
+        (group) =>
+          group.definitionId === 'guitar.ear-training.interval-recognition' &&
+          group.definitionVersion === 2
+      )?.items[0].responseMismatches
     ).toEqual([]);
     expect(
       analytics?.itemEvidenceGroups
         .find(
           (group) =>
-            group.definitionId ===
-              'guitar.ear-training.interval-recognition' &&
+            group.definitionId === 'guitar.ear-training.interval-recognition' &&
             group.definitionVersion === 1
         )
         ?.items.find((item) => item.itemId === 'interval-recognition.unknown')
