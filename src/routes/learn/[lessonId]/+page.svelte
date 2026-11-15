@@ -17,6 +17,8 @@
   let progressSaveQueue: Promise<void> = Promise.resolve();
   let progressSaveRequestCounts = new SvelteMap<number, number>();
   let progressError = $state('');
+  let progressRetryAction = $state<'load' | 'save' | 'complete' | null>(null);
+  let requestedLastBlockId = $state<string | null>(null);
   let completedBlockIds = $state<string[]>([]);
   let checkpointOutcome = $state<'achieved' | 'needs_practice' | null>(null);
   let checkpointNote = $state('');
@@ -38,6 +40,8 @@
     progressLoading = true;
     progressSaving = false;
     progressError = '';
+    progressRetryAction = null;
+    requestedLastBlockId = null;
     completedBlockIds = [];
     checkpointOutcome = null;
     checkpointNote = '';
@@ -46,6 +50,8 @@
       .then((record) => {
         if (!active || requestId !== progressRequestId) return;
         progress = record;
+        requestedLastBlockId = record.lastBlockId ?? null;
+        progressRetryAction = null;
         completedBlockIds = record.completedBlockIds ?? [];
         checkpointOutcome = record.checkpointOutcome ?? null;
         checkpointNote = record.checkpointNote ?? '';
@@ -55,6 +61,7 @@
           progressError = error instanceof Error
             ? error.message
             : 'Local lesson progress could not be loaded.';
+          progressRetryAction = 'load';
         }
       })
       .finally(() => {
@@ -65,6 +72,46 @@
       active = false;
     };
   });
+
+  async function retryProgressLoad() {
+    const lessonId = lesson.id;
+    const blockIds = lesson.lessonBlocks.map((block) => block.id);
+    const requestId = ++progressRequestId;
+    progressLoading = true;
+    progressError = '';
+    progressRetryAction = null;
+    try {
+      const record = await loadActiveLessonProgress(lessonId, blockIds, curriculumReleaseId);
+      if (requestId !== progressRequestId) return;
+      progress = record;
+      requestedLastBlockId = record.lastBlockId ?? null;
+      completedBlockIds = record.completedBlockIds ?? [];
+      checkpointOutcome = record.checkpointOutcome ?? null;
+      checkpointNote = record.checkpointNote ?? '';
+    } catch (error) {
+      if (requestId === progressRequestId) {
+        progressError = error instanceof Error ? error.message : 'Local lesson progress could not be loaded.';
+        progressRetryAction = 'load';
+      }
+    } finally {
+      if (requestId === progressRequestId) progressLoading = false;
+    }
+  }
+
+  async function retryProgressActionNow() {
+    if (progressRetryAction === 'load') {
+      await retryProgressLoad();
+    } else if (progressRetryAction === 'complete') {
+      await markLessonComplete();
+    } else if (progressRetryAction === 'save') {
+      await persistProgress({
+        lastBlockId: requestedLastBlockId,
+        completedBlockIds,
+        checkpointOutcome,
+        checkpointNote
+      });
+    }
+  }
 
   async function persistProgress(overrides: Partial<{
     lastBlockId: string | null;
@@ -82,7 +129,7 @@
       lastBlockId:
         overrides.lastBlockId !== undefined
           ? overrides.lastBlockId
-          : currentProgress.lastBlockId,
+          : requestedLastBlockId,
       completedBlockIds: overrides.completedBlockIds ?? completedBlockIds,
       checkpointOutcome:
         overrides.checkpointOutcome !== undefined
@@ -114,12 +161,15 @@
         );
         if (requestId !== progressRequestId) return;
         progress = saved;
+        requestedLastBlockId = saved.lastBlockId ?? null;
         progressError = '';
+        progressRetryAction = null;
       } catch (error) {
         if (requestId === progressRequestId) {
           progressError = error instanceof Error
             ? error.message
             : 'Your lesson progress could not be saved. Please try again.';
+          progressRetryAction = 'save';
         }
       }
     };
@@ -144,6 +194,7 @@
     const next = completedBlockIds.includes(blockId) ? completedBlockIds.filter((id) => id !== blockId) : [...completedBlockIds, blockId];
     const lastBlockId = next.includes(blockId) ? blockId : (progress.lastBlockId === blockId ? next[next.length - 1] ?? null : progress.lastBlockId);
     completedBlockIds = next;
+    requestedLastBlockId = lastBlockId;
     await persistProgress({ lastBlockId, completedBlockIds: next });
   }
 
@@ -172,8 +223,11 @@
     progressError = '';
     try {
       progress = await completeActiveLessonProgress(lesson.id, curriculumReleaseId);
+      progressError = '';
+      progressRetryAction = null;
     } catch (error) {
       progressError = error instanceof Error ? error.message : 'The lesson could not be marked complete. Please try again.';
+      progressRetryAction = 'complete';
     } finally { progressSaving = false; }
   }
 
@@ -199,7 +253,6 @@
     <div class="lesson-meta">
       <span>{lesson.estimatedMinutes} min lesson guide</span>
       {#if lesson.startingTempoBpm}<span>{lesson.startingTempoBpm} BPM starting reference</span>{/if}
-      <span>Content v{data.detail.route.contentVersion}</span>
     </div>
     <div class="checkpoint">
       <span class="eyebrow">LESSON CHECKPOINT</span>
@@ -220,36 +273,7 @@
     <a href="#lesson-progress">My progress</a>
   </nav>
 
-  <section class="progress-panel" id="lesson-progress" aria-label="Your lesson progress">
-    {#if progressLoading}
-      <p class="progress-message">Loading your saved lesson progress…</p>
-    {:else if progressError && !progress}
-      <p class="progress-error" role="alert">{progressError}</p>
-    {:else if progress}
-      <div class="progress-summary">
-        <div><span class="eyebrow">YOUR PROGRESS</span><strong>{completedBlockCount} of {lesson.lessonBlocks.length} sections completed</strong></div>
-        <span class="progress-percent">{progressPercent}%</span>
-      </div>
-      <div class="progress-track" role="progressbar" aria-label="Lesson sections completed" aria-valuemin="0" aria-valuemax={lesson.lessonBlocks.length} aria-valuenow={completedBlockCount}><span style={`width: ${progressPercent}%`}></span></div>
-      {#if progress.status === 'completed'}
-        <p class="progress-complete"><strong>Lesson completed</strong> · Your checkpoint self-check is recorded. Skill mastery is tracked separately through assessment evidence.</p>
-      {:else}
-        {#if progress.lastBlockId}<button class="resume-button" type="button" onclick={continueFromSavedSection}>Continue from saved section</button>{/if}
-        <div class="checkpoint-check">
-          <div><span class="eyebrow">LEARNER CHECKPOINT</span><p>Can you meet the observable target above with comfortable, controlled playing?</p></div>
-          <div class="checkpoint-actions">
-            <button type="button" class:chosen={checkpointOutcome === 'achieved'} aria-pressed={checkpointOutcome === 'achieved'} onclick={() => chooseCheckpoint('achieved')}>I can meet this target</button>
-            <button type="button" class:chosen={checkpointOutcome === 'needs_practice'} aria-pressed={checkpointOutcome === 'needs_practice'} onclick={() => chooseCheckpoint('needs_practice')}>I need more practice</button>
-          </div>
-        </div>
-        <label class="note-label" for="checkpoint-note">Next practice note <span>(optional, private to this browser)</span></label>
-        <textarea id="checkpoint-note" bind:value={checkpointNote} maxlength="500" rows="2" onblur={saveCheckpointNote} placeholder="What should you focus on next time?"></textarea>
-        <div class="completion-actions"><button type="button" onclick={markLessonComplete} disabled={progressSaving || checkpointOutcome !== 'achieved'} aria-busy={progressSaving}>{progressSaving ? 'Saving…' : 'Mark lesson complete'}</button><small>Completion records your learning activity; it never automatically grants skill mastery.</small></div>
-      {/if}
-      {#if progressError}<p class="progress-error" role="alert">{progressError}</p>{/if}
-      {#if progressSaving}<p class="saving-message" role="status">Saving on this device…</p>{/if}
-    {/if}
-  </section>
+
 
   {#if lesson.id === standardTuningAssessment.lessonId}
     <StandardTuningAssessment />
@@ -269,7 +293,7 @@
         {#if data.detail.prerequisiteReferences.length > 0}
           <ul>
             {#each data.detail.prerequisiteReferences as prerequisite (prerequisite.id)}
-              <li>{#if prerequisite.available}<a href={resolve('/learn/[lessonId]', { lessonId: prerequisite.id })}>{prerequisite.title}</a>{:else}{prerequisite.id}{/if}</li>
+              <li>{#if prerequisite.available}<a href={resolve('/learn/[lessonId]', { lessonId: prerequisite.id })}>{prerequisite.title}</a>{:else}<span>Not available in this curriculum version</span>{/if}</li>
             {/each}
           </ul>
         {:else}
@@ -321,6 +345,16 @@
       <section class="content-section" id="lesson-section-exercises">
         <div class="kicker">05 · PRACTISE</div>
         <h2>Focused exercises</h2>
+        <aside class="lesson-adaptation" aria-label="A manageable alternative for this lesson">
+          <strong>Need a smaller starting point?</strong>
+          <p>{lesson.accessibleAlternative}</p>
+        </aside>
+        <nav class="lesson-tool-links" aria-label="Tools for this lesson">
+          <a href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">
+            Open metronome{#if lesson.startingTempoBpm} at {lesson.startingTempoBpm} BPM{/if}
+          </a>
+          <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
+        </nav>
         <div class="exercise-list">
           {#each lesson.exercises as exercise, exerciseIndex (exercise.title ?? `${exercise.type}-${exerciseIndex}`)}
             <article class="exercise">
@@ -328,7 +362,6 @@
               <h3>{exercise.title ?? exercise.type}</h3>
               <ol>{#each exercise.instructions as instruction, instructionIndex (instructionIndex)}<li>{instruction}</li>{/each}</ol>
               <div class="success-target"><strong>Success looks like</strong><p>{exercise.successCriterion}</p></div>
-              <small>Evidence: {exercise.evidenceType.replaceAll('_', ' ')}</small>
             </article>
           {/each}
         </div>
@@ -369,12 +402,6 @@
         </div>
       </section>
 
-      <section class="content-section alternative" id="lesson-section-accessible">
-        <div class="kicker">ACCESSIBLE ALTERNATIVE</div>
-        <h2>Make the task manageable</h2>
-        <p>{lesson.accessibleAlternative}</p>
-      </section>
-
       <section class="content-section" id="lesson-section-recall">
         <div class="kicker">08 · REFLECT AND RETRIEVE</div>
         <h2>Recall without looking</h2>
@@ -413,6 +440,43 @@
       </div>
     </aside>
   </div>
+
+  <section class="progress-panel" id="lesson-progress" aria-label="Your lesson progress">
+    {#if progressLoading}
+      <p class="progress-message">Loading your saved lesson progress…</p>
+    {:else if progressError && !progress}
+      <p class="progress-error" role="alert">{progressError}</p>
+      <button class="retry-progress" type="button" onclick={retryProgressActionNow}>Try again</button>
+    {:else if progress}
+      <div class="progress-summary">
+        <div><span class="eyebrow">YOUR PROGRESS</span><strong>{completedBlockCount} of {lesson.lessonBlocks.length} sections completed</strong></div>
+        <span class="progress-percent">{progressPercent}%</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Lesson sections completed" aria-valuemin="0" aria-valuemax={lesson.lessonBlocks.length} aria-valuenow={completedBlockCount}><span style={`width: ${progressPercent}%`}></span></div>
+      {#if progress.status === 'completed'}
+        <p class="progress-complete"><strong>Lesson completed.</strong> Your progress is saved on this device.</p>
+      {:else}
+        {#if progress.lastBlockId}<button class="resume-button" type="button" onclick={continueFromSavedSection}>Continue from saved section</button>{/if}
+        <div class="checkpoint-check">
+          <div><span class="eyebrow">LEARNER CHECKPOINT</span><p>Can you meet the observable target above with comfortable, controlled playing?</p></div>
+          <div class="checkpoint-actions">
+            <button type="button" class:chosen={checkpointOutcome === 'achieved'} aria-pressed={checkpointOutcome === 'achieved'} onclick={() => chooseCheckpoint('achieved')}>I can meet this target</button>
+            <button type="button" class:chosen={checkpointOutcome === 'needs_practice'} aria-pressed={checkpointOutcome === 'needs_practice'} onclick={() => chooseCheckpoint('needs_practice')}>I need more practice</button>
+          </div>
+        </div>
+        <label class="note-label" for="checkpoint-note">Next practice note <span>(optional, private to this browser)</span></label>
+        <textarea id="checkpoint-note" bind:value={checkpointNote} maxlength="500" rows="2" onblur={saveCheckpointNote} placeholder="What should you focus on next time?"></textarea>
+        <div class="completion-actions"><button type="button" onclick={markLessonComplete} disabled={progressSaving || checkpointOutcome !== 'achieved'} aria-busy={progressSaving}>{progressSaving ? 'Saving…' : 'Mark lesson complete'}</button></div>
+      {/if}
+      {#if progressError}
+        <p class="progress-error" role="alert">{progressError}</p>
+        <button class="retry-progress" type="button" onclick={retryProgressActionNow} disabled={progressSaving}>
+          {progressRetryAction === 'complete' ? 'Try completing again' : 'Retry save'}
+        </button>
+      {/if}
+      {#if progressSaving}<p class="saving-message" role="status">Saving on this device…</p>{/if}
+    {/if}
+  </section>
 
   <nav class="lesson-pagination" aria-label="Lesson pagination">
     {#if data.previousLessonId}<a href={resolve('/learn/[lessonId]', { lessonId: data.previousLessonId })}>← Previous lesson</a>{:else}<span>Start of this route</span>{/if}
@@ -459,13 +523,20 @@
   .sidebar-card strong{font-size:12px}.sidebar-card>span:not(.eyebrow){font-size:10px;color:var(--muted);overflow-wrap:anywhere}
   .sidebar-card p{font-size:10px;line-height:1.6;color:var(--muted);margin:0}.sidebar-card a{font-size:10px;color:var(--primary);font-weight:750;margin-top:5px}
   .lesson-pagination{display:flex;justify-content:space-between;gap:10px;margin-top:30px;padding:15px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-  .lesson-pagination a,.lesson-pagination span{font-size:10px;color:var(--primary)}.lesson-pagination span{color:var(--muted)}
+  .lesson-pagination a,.lesson-pagination span{display:inline-flex;align-items:center;min-height:44px;font-size:11px;color:var(--primary)}.lesson-pagination span{color:var(--muted)}
   .mastery-note{font-size:10px;line-height:1.6;color:var(--muted);margin-top:16px}
 
   .progress-panel{margin:22px 0 28px;padding:18px 20px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
   .progress-summary{display:flex;justify-content:space-between;align-items:center;gap:12px}.progress-summary>div{display:grid;gap:6px}.progress-summary strong{font-size:12px}.progress-percent{font:500 22px Georgia,serif;color:var(--primary)}
   .progress-track{height:7px;margin:13px 0 16px;border-radius:99px;background:var(--surface-raised);overflow:hidden}.progress-track span{display:block;height:100%;background:var(--primary);border-radius:99px;transition:width .2s ease}
   .progress-message,.saving-message{font-size:10px;color:var(--muted);margin:8px 0}.progress-error{font-size:11px;color:var(--danger,#b45309);margin:9px 0}
+  .retry-progress{min-height:44px;padding:9px 13px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface-raised);color:var(--text);font:inherit;font-size:12px;font-weight:700}
+  .lesson-adaptation{padding:14px 16px;margin:14px 0;border-left:3px solid var(--primary);border-radius:9px;background:var(--surface-raised)}
+  .lesson-adaptation strong{font-size:13px;color:var(--text)}
+  .lesson-adaptation p{margin:6px 0 0;font-size:1rem;line-height:1.65;color:var(--text)}
+  .lesson-tool-links{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 18px}
+  .lesson-tool-links a{display:inline-flex;align-items:center;min-height:44px;padding:9px 13px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--primary);font-size:12px;font-weight:750;text-decoration:none}
+  .lesson-tool-links a:hover{background:var(--surface-raised)}
   .progress-complete{font-size:11px;line-height:1.6;color:var(--muted);margin:5px 0}.progress-complete strong{color:var(--primary)}
   .resume-button,.checkpoint-actions button,.completion-actions button,.block-complete{min-height:40px;border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-size:10px;font-weight:700}
   .resume-button{color:var(--primary);margin:0 0 12px}.checkpoint-check{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--border)}
@@ -482,9 +553,10 @@
   @media(max-width:600px){.lesson-page{padding:20px 16px 55px}.breadcrumbs{margin-bottom:23px}.lesson-header h1{font-size:39px}.content-section{padding:22px 0}.content-section h2{font-size:22px}.practice-options{grid-template-columns:1fr}.lesson-sidebar{grid-template-columns:1fr}.lesson-pagination{flex-wrap:wrap}.lesson-pagination>*{flex:1 1 30%}.lesson-pagination>*:last-child{text-align:right}}
 
   .lesson-outline{position:sticky;top:66px;z-index:30;display:flex;gap:6px;overflow-x:auto;margin:0 0 17px;padding:9px;border:1px solid var(--border);border-radius:12px;background:color-mix(in srgb,var(--surface) 96%,transparent);backdrop-filter:blur(12px);scrollbar-width:thin}
-  .lesson-outline a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;flex:none;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:750;white-space:nowrap}
+  .lesson-outline a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;flex:none;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:750;white-space:nowrap}
   .lesson-outline a:hover,.lesson-outline a:focus-visible{background:var(--surface-raised);color:var(--primary)}
   .content-section{scroll-margin-top:126px}
+  #lesson-progress{scroll-margin-top:126px}
   .content-section h3{font-size:15px}
   .content-section p,.content-section li{font-size:1rem;line-height:1.7;color:var(--text)}
   @media(min-width:900px){.content-section p,.content-section li{font-size:1.0625rem}}
@@ -493,6 +565,6 @@
   .sidebar-card p{font-size:12px}
   .sidebar-card>span:not(.eyebrow){font-size:12px}
   .glance-card strong{font:500 21px Georgia,serif;color:var(--primary)}
-  @media(max-width:760px){.lesson-outline{top:60px;margin-inline:-2px;padding:6px}.lesson-outline a{min-height:42px;padding:8px 10px;font-size:12px}.content-section{scroll-margin-top:116px}}
+  @media(max-width:760px){.lesson-outline{top:60px;margin-inline:-2px;padding:6px}.lesson-outline a{min-height:44px;padding:8px 10px;font-size:12px}.content-section,#lesson-progress{scroll-margin-top:116px}.lesson-tool-links a{flex:1 1 140px;justify-content:center}}
   
 </style>
