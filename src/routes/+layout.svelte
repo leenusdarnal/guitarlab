@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
+  import { afterNavigate } from '$app/navigation';
   import { page } from '$app/state';
   import { resolve } from '$app/paths';
   import '../app.css';
@@ -58,6 +59,16 @@
       setThemePreference(selected.value);
     }
   }
+
+  afterNavigate(() => {
+    void tick().then(() => {
+      const mainContent = document.querySelector<HTMLElement>('main');
+      if (mainContent) {
+        mainContent.id = 'main-content';
+        mainContent.tabIndex = -1;
+      }
+    });
+  });
 
   onMount(() => {
     const initialPreference = document.documentElement.dataset.themePreference;
@@ -159,9 +170,7 @@
   </header>
 {/if}
 
-<div id="main-content" tabindex="-1">
-  <slot />
-</div>
+<slot />
 
 <style>
   .skip-link{position:fixed;z-index:1000;top:.75rem;left:.75rem;padding:.75rem 1rem;transform:translateY(calc(-100% - 1rem));border:1px solid var(--primary);border-radius:.75rem;background:var(--primary);color:var(--primary-ink);font-size:.875rem;font-weight:700;box-shadow:0 6px 24px #0004;transition:transform 140ms ease-out}
@@ -173,7 +182,7 @@
   .global-brand{display:inline-flex;align-items:center;gap:9px;flex:none;font-size:17px;font-weight:850;letter-spacing:-.35px}
   .global-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:800 17px Georgia,serif}
   .desktop-primary-navigation{display:flex;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0}
-  .desktop-primary-navigation a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:8px 11px;border-radius:9px;color:var(--muted);font-size:13px;font-weight:700;white-space:nowrap}
+  .desktop-primary-navigation a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 11px;border-radius:9px;color:var(--muted);font-size:13px;font-weight:700;white-space:nowrap}
   .desktop-primary-navigation a:hover{background:var(--surface);color:var(--text)}
   .desktop-primary-navigation a.active{background:color-mix(in srgb,var(--primary) 13%,var(--surface));color:var(--primary)}
   .global-nav-actions{display:flex;align-items:center;gap:8px;flex:none}

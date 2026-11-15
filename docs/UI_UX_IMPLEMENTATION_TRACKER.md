@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** [PR #138 — lesson discovery and navigation](https://github.com/leenusdarnal/guitarlab/pull/138)
+**Active implementation:** UX-02 — global accessibility and mobile interaction blockers ([branch](https://github.com/leenusdarnal/guitarlab/tree/feat/ux-02-accessibility-mobile))
 
 ---
 
@@ -62,22 +62,22 @@ Priority definitions: **P1** = learner-critical or an accessibility barrier; **P
 
 ## 5. Current implementation baseline
 
-### Active lesson-discovery PR
+### Latest completed UX implementation — lesson discovery
 
 | Item | Current state |
 |---|---|
-| PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) |
+| PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) — merged |
 | Branch | feat/ui-ux-lesson-discovery |
 | Previous UI code head with overflow | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
 | Responsive overflow fix commit | ca0059cbcc79e6dca761165788ffcd19fda0bbbb |
 | Base | main at 555b27c1ba230a87a59e4d75c5f7348127f8fd28 |
-| PR state | Open; not merged |
-| CI run checked | [GuitarLab CI run 43693912725](https://github.com/leenusdarnal/guitarlab/actions/runs/43693912725) |
-| Previous UI-code CI result | Failed in Accessibility browser acceptance; the other application checks before that step passed |
-| Blocking failure | /learn has 359px content width at a 320px viewport in dark theme; test location: scripts/accessibility-browser-acceptance.mjs, line 238 |
-| Tracker commit | 72bb04e0c39ecd27f0b65ce1c1fa950e24c9ae24 |
-| CI for tracker commit | [GuitarLab CI run 43699096684](https://github.com/leenusdarnal/guitarlab/actions/runs/43699096684) was in progress at the time this tracker was updated; do not treat it as passed |
-| Fix validation | CI triggered by commit `ca0059c`; pending at time of this update |
+| PR state | Merged; automated CI green |
+| Final CI run | [GuitarLab CI run 43707602085](https://github.com/leenusdarnal/guitarlab/actions/runs/43707602085) — all required jobs passed |
+| Earlier CI failures | Resolved before merge; numeric token matching, regex escaping and exact accessible-label selectors corrected |
+| Blocking failure | None outstanding in final automated run; /learn 320px overflow was fixed and revalidated |
+| Merge commit | `98c0f7267ce2192594267670889cb4ee37fdfb14` |
+| Manual acceptance | Finder search coverage, device/browser and screen-reader checks remain open; do not mark UX-01 VERIFIED |
+| Final validation | CI run #1349 passed Node 26 compatibility, application/curriculum validation and required legacy status |
 
 The current PR already introduces a searchable lesson finder, route and duration filters, no-results recovery, a route directory, a dashboard browse action, shared navigation on secondary routes, reader section shortcuts and learner-facing lesson summary information.
 
@@ -96,7 +96,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-01 — Make every lesson easy to find
 
 **Priority:** P1  
-**Status:** IN PROGRESS — PR #138; responsive overflow fix committed, awaiting CI verification  
+**Status:** DONE — merged in PR #138; automated CI green, manual/device acceptance remains open  
 **Depends on:** None  
 **Related findings:** lesson discovery, curriculum navigation, X2, C1/C2  
 **Implementation:** [PR #138](https://github.com/leenusdarnal/guitarlab/pull/138)
@@ -107,7 +107,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Separate route exploration from the lesson results.
 - [x] Add a prominent dashboard entry point to browse all lessons.
 - [x] Fix the narrow-screen route-card footer wrapping that caused the 320px /learn horizontal overflow; CI must still confirm the fix.
-- [ ] Re-run the full CI suite, including axe and responsive browser acceptance, on the final PR head.
+- [x] Re-run the full CI suite, including axe and responsive browser acceptance, on the final PR head.
 - [ ] Verify that search can find lessons by title, focus/topic, checkpoint, route and stage.
 - [ ] Verify all 152 lessons remain available in the correct six routes and original order.
 - [ ] Test the finder in dark and light themes at 320, 360, 390, 768 and 1280px.
@@ -120,16 +120,16 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-02 — Fix global accessibility and mobile interaction blockers
 
 **Priority:** P1  
-**Status:** READY  
-**Depends on:** UX-01 may proceed in parallel where files do not conflict  
+**Status:** IN PROGRESS — [implementation branch](https://github.com/leenusdarnal/guitarlab/tree/feat/ux-02-accessibility-mobile); automated assertions added  
+**Depends on:** UX-01 automated acceptance is complete; manual finder/device acceptance remains open  
 **Related findings:** X3, X4, X6, X7, X9, B2
 
-- [ ] Set a global minimum computed font size of 16px for input, select and textarea controls, including component-level overrides.
-- [ ] Move the skip-link target to the actual main content landmark; ensure it skips global navigation and lands on the page's main content.
-- [ ] Make primary and hands-busy controls comfortably tappable; target 44px for primary controls and treat 24px as the minimum floor where WCAG exceptions apply.
-- [ ] Improve control-boundary contrast in both themes; verify the relevant non-text UI contrast rather than relying on visual estimation.
-- [ ] Add visible keyboard focus to the restore-file picker and all custom controls.
-- [ ] Replace disable-on-every-save behaviour with safe in-flight guards where disabling causes focus loss.
+- [x] Set and retain a global minimum computed font size of 16px for input, select and textarea controls, including component-level overrides; existing mobile browser acceptance verifies computed sizes.
+- [x] Move the skip-link target to the actual page `main` landmark after navigation; browser acceptance asserts that keyboard activation focuses `MAIN`.
+- [x] Set 44px minimum height for buttons and text-entry controls, 44px minimum button width, and 44px desktop primary-navigation links.
+- [x] Add dedicated higher-contrast control-border tokens for dark and light themes and apply them to form controls.
+- [x] Add a visible `:focus-within` treatment to the backup restore file picker and an automated keyboard-focus assertion.
+- [ ] Replace disable-on-every-save behaviour with safe in-flight guards where disabling causes focus loss. (Remaining; lesson-save sequencing is tracked with UX-07.)
 - [ ] Keep focus stable after save and move it deliberately when a view is replaced.
 - [ ] Review icon-only controls for accessible names, hit area and visible focus.
 - [ ] Test keyboard-only operation and browser zoom at 200% without disabling user zoom.
@@ -403,6 +403,8 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 | Date | Change |
 |---|---|
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
+| 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
+| 2026-11-15 | Started UX-02: strengthened 44px control targets and theme-safe control borders, made skip navigation focus the actual page main landmark, exposed restore-picker keyboard focus and added browser acceptance assertions. Save sequencing, full icon-control audit, 200% zoom and physical-device/assistive-technology checks remain open. |
 | 2026-11-15 | Committed a narrow-screen lesson-catalogue footer wrapping fix after CI identified /learn overflow at 320px; validation remains pending. |
 | 2026-11-15 | Reworked `docs/DESIGN_DIRECTION.md` into the Modern Music Studio target system and aligned `docs/IMPLEMENTATION_GUIDELINES.md`; the design is documented but not yet implemented in the application. |
 | 2026-11-15 | Added `docs/research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md`, comparing the supplied Tailwind sources and Svelte-native options. No component dependency was added; adoption is deferred to a specific UX task and compatibility/accessibility gate. |

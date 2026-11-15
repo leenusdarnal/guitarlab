@@ -234,6 +234,20 @@ try {
         assertResponseSecurityHeaders(mobileResponse);
       }
       await page.locator('main').first().waitFor({ state: 'visible' });
+      await page.waitForFunction(() => {
+        const main = document.querySelector('main');
+        return (
+          main?.id === 'main-content' &&
+          document.querySelectorAll('#main-content').length === 1
+        );
+      });
+      assert.equal(
+        await page
+          .locator('#main-content')
+          .evaluate((element) => element.tagName),
+        'MAIN',
+        route + ' must expose one unique main-content landmark in ' + theme
+      );
       await page.evaluate(async () => {
         if (document.fonts?.ready) await document.fonts.ready;
       });
@@ -359,7 +373,27 @@ try {
       await page.waitForFunction(
         () => document.activeElement?.id === 'main-content'
       );
+      assert.equal(
+        await page.evaluate(() => document.activeElement?.tagName),
+        'MAIN',
+        'Skip navigation must focus the actual page main landmark'
+      );
     }
+
+    await page.goto(origin + '/settings/data', { waitUntil: 'networkidle' });
+    const restorePicker = page
+      .locator('label.file-picker')
+      .filter({ has: page.locator('input[type="file"]') });
+    const restoreInput = page.locator('input[type="file"]');
+    await restoreInput.focus();
+    const restorePickerFocus = await restorePicker.evaluate((label) => ({
+      outlineStyle: getComputedStyle(label).outlineStyle,
+      outlineWidth: Number.parseFloat(getComputedStyle(label).outlineWidth),
+      height: label.getBoundingClientRect().height
+    }));
+    assert.equal(restorePickerFocus.outlineStyle, 'solid');
+    assert.ok(restorePickerFocus.outlineWidth >= 3);
+    assert.ok(restorePickerFocus.height >= 44);
 
     assert.deepEqual(
       pageErrors,
@@ -372,7 +406,7 @@ try {
   console.log(
     'Accessibility checks passed: 11 routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
-      'narrow-screen reflow, and keyboard skip-link focus.'
+      'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
   );
 } catch (error) {
   console.error(error);
