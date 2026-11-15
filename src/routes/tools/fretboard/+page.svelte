@@ -410,7 +410,7 @@
       </p>
     {/if}
 
-    <div class="fretboard-scroll" tabindex="0" aria-label="Scrollable fretboard diagram">
+    <div class="fretboard-scroll" aria-label="Scrollable fretboard diagram">
       <div class="fretboard">
         <div
           class="fret-numbers"
