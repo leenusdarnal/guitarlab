@@ -13,6 +13,12 @@
     type NoteSpelling
   } from '../../../lib/domain/music/fretboard';
   import {
+    getCagedShapePositions,
+    getMajorScalePitchClasses,
+    getTriadInversionPositions,
+    getTriadPitchClasses
+  } from '../../../lib/domain/music/harmony';
+  import {
     loadActiveLearnerProfile,
     saveActiveLearnerPreferences
   } from '../../../lib/storage/indexeddb';
@@ -20,8 +26,17 @@
 
   let handedness = $state<GuitarHandedness>('right');
   let spelling = $state<NoteSpelling>('sharp');
+  type HarmonyLayer =
+    | 'all'
+    | 'c-major-scale'
+    | 'c-major-triad'
+    | 'c-major-first-inversion'
+    | 'c-major-second-inversion'
+    | 'caged';
+
   let maxFret = $state(12);
   let targetPitchClass = $state(0);
+  let harmonyLayer = $state<HarmonyLayer>('all');
   let findMode = $state(false);
   let selectedPosition = $state<{ stringNumber: number; fret: number } | null>(null);
   let focusedPosition = $state({ stringNumber: 1, fret: 0 });
@@ -33,6 +48,61 @@
   let fretboardRows = $derived(
     getFretboardLayout(maxFret, STANDARD_GUITAR_TUNING, spelling)
   );
+
+  const cagedShapes = getCagedShapePositions(0);
+  const cagedPositionKeys = new Set(
+    cagedShapes.flatMap((shape) =>
+      shape.notes.flatMap((note) =>
+        note ? [`${note.stringNumber}:${note.fret}`] : []
+      )
+    )
+  );
+  const inversionPositionKeys = $derived.by(() => {
+    const inversion =
+      harmonyLayer === 'c-major-first-inversion'
+        ? 'first'
+        : harmonyLayer === 'c-major-second-inversion'
+          ? 'second'
+          : harmonyLayer === 'c-major-triad'
+            ? 'root'
+            : null;
+    return new Set(
+      inversion
+        ? getTriadInversionPositions(0, inversion).map(
+            (note) => `${note.stringNumber}:${note.fret}`
+          )
+        : []
+    );
+  });
+  const harmonyPitchClasses = $derived.by(() => {
+    switch (harmonyLayer) {
+      case 'c-major-scale':
+        return getMajorScalePitchClasses(0);
+      case 'c-major-triad':
+        return getTriadPitchClasses(0, 'major', 'root');
+      case 'c-major-first-inversion':
+        return getTriadPitchClasses(0, 'major', 'first');
+      case 'c-major-second-inversion':
+        return getTriadPitchClasses(0, 'major', 'second');
+      default:
+        return [];
+    }
+  });
+  function isHarmonyHighlighted(note: FretboardNote): boolean {
+    const positionKey = `${note.stringNumber}:${note.fret}`;
+    if (harmonyLayer === 'caged') {
+      return cagedPositionKeys.has(positionKey);
+    }
+    if (
+      harmonyLayer === 'c-major-triad' ||
+      harmonyLayer === 'c-major-first-inversion' ||
+      harmonyLayer === 'c-major-second-inversion'
+    ) {
+      return inversionPositionKeys.has(positionKey);
+    }
+    return harmonyLayer !== 'all' && harmonyPitchClasses.includes(note.pitchClass);
+  }
+
   let targetNoteName = $derived(
     (spelling === 'flat' ? FLAT_NOTE_NAMES : SHARP_NOTE_NAMES)[targetPitchClass]
   );
@@ -237,6 +307,44 @@
       </button>
     </div>
 
+    <div class="harmony-control">
+      <label for="harmony-layer">Harmony learning layer</label>
+      <select id="harmony-layer" bind:value={harmonyLayer}>
+        <option value="all">All fretboard notes</option>
+        <option value="c-major-scale">C major scale</option>
+        <option value="c-major-triad">C major triad · root position</option>
+        <option value="c-major-first-inversion">C major triad · first inversion</option>
+        <option value="c-major-second-inversion">C major triad · second inversion</option>
+        <option value="caged">C major · CAGED shapes</option>
+      </select>
+      <p>
+        {#if harmonyLayer === 'c-major-scale'}
+          Highlighting the seven notes of C major across the same standard-tuning fretboard model.
+        {:else if harmonyLayer === 'c-major-triad'}
+          Highlighting one playable C-major triad voicing with C in the bass.
+        {:else if harmonyLayer === 'c-major-first-inversion'}
+          Highlighting a playable first-inversion voicing with E in the bass.
+        {:else if harmonyLayer === 'c-major-second-inversion'}
+          Highlighting a playable second-inversion voicing with G in the bass.
+        {:else if harmonyLayer === 'caged'}
+          Highlighting the five CAGED C-major voicings. Frets are shown low E to high e; x means muted.
+        {:else}
+          Choose a scale, triad or inversion to connect chord theory to note positions.
+        {/if}
+      </p>
+    </div>
+    {#if harmonyLayer === 'caged'}
+      <div class="caged-shapes" aria-label="CAGED C-major shape positions">
+        {#each cagedShapes as shape (shape.shape)}
+          <div class="caged-shape">
+            <strong>{shape.shape}-form</strong>
+            <span>{shape.fretLabel}</span>
+            <small>Low E → high e</small>
+          </div>
+        {/each}
+      </div>
+    {/if}
+
     {#if findMode}
       <div class="find-panel">
         <label for="target-note">Find this note</label>
@@ -289,6 +397,7 @@
                 class:open-string={note.fret === 0}
                 class:is-target={findMode && selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret && note.pitchClass === targetPitchClass}
                 class:is-selected={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
+                class:is-harmony-note={isHarmonyHighlighted(note)}
                 type="button"
                 aria-label={cellLabel(note)}
                 aria-pressed={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
@@ -578,6 +687,66 @@
   .fret-cell.is-target {
     background: color-mix(in srgb, var(--secondary) 22%, var(--surface));
   }
+  .harmony-control {
+    display: grid;
+    grid-template-columns: minmax(190px, 250px) minmax(0, 1fr);
+    gap: 7px 14px;
+    align-items: center;
+    margin: 0 0 16px;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-raised);
+  }
+  .harmony-control label {
+    grid-column: 1;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 750;
+  }
+  .harmony-control select {
+    grid-column: 1;
+  }
+  .harmony-control p {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin: 0;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .caged-shapes {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin: -5px 0 16px;
+  }
+  .caged-shape {
+    display: grid;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+  }
+  .caged-shape strong {
+    font-size: 10px;
+  }
+  .caged-shape span {
+    font-variant-numeric: tabular-nums;
+    font-size: 11px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+  .caged-shape small {
+    color: var(--muted);
+    font-size: 8px;
+  }
+  .fret-cell.is-harmony-note {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 16%, var(--surface));
+    font-weight: 800;
+  }
   .fret-cell.is-selected {
     outline: 2px solid var(--primary);
     outline-offset: -2px;
@@ -662,6 +831,16 @@
   @media (max-width: 640px) {
     .fretboard-page {
       padding-top: 22px;
+    }
+    .harmony-control {
+      grid-template-columns: 1fr;
+    }
+    .harmony-control p {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .caged-shapes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .controls {
       grid-template-columns: 1fr;

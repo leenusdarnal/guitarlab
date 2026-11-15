@@ -986,6 +986,37 @@ try {
     .filter({ hasText: 'Saved left-handed diagram orientation' })
     .waitFor();
 
+  // Shared harmony overlays resolve scale degrees and chord tones on the fretboard.
+  await page.locator('#harmony-layer').selectOption('c-major-scale');
+  const scaleHighlightCount = await page
+    .locator('.fret-cell.is-harmony-note')
+    .count();
+  assert.ok(
+    scaleHighlightCount > 0,
+    'C-major scale should highlight fretboard positions'
+  );
+  await page.locator('#harmony-layer').selectOption('c-major-triad');
+  const triadHighlightCount = await page
+    .locator('.fret-cell.is-harmony-note')
+    .count();
+  assert.ok(
+    triadHighlightCount > 0 && triadHighlightCount < scaleHighlightCount,
+    'A triad overlay should highlight fewer positions than its parent scale'
+  );
+  await page.locator('#harmony-layer').selectOption('c-major-first-inversion');
+  assert.ok(
+    (await page.locator('.fret-cell.is-harmony-note').count()) > 0,
+    'First inversion should resolve to fretboard positions'
+  );
+  await page.locator('#harmony-layer').selectOption('c-major-second-inversion');
+  assert.ok(
+    (await page.locator('.fret-cell.is-harmony-note').count()) > 0,
+    'Second inversion should resolve to fretboard positions'
+  );
+  await page.locator('#harmony-layer').selectOption('caged');
+  assert.equal(await page.locator('.caged-shape').count(), 5);
+  await page.getByText('xx10121312', { exact: true }).waitFor();
+
   const fretboardMobileContext = await browser.newContext({
     viewport: { width: 390, height: 844 }
   });
