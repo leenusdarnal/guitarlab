@@ -79,6 +79,31 @@ describe('skill progress overview', () => {
     expect(result.explanation.reason).toContain('suggestion');
   });
 
+  it('prefers active-release assessments over a stale mastery snapshot', () => {
+    const oldReleaseMastery: SkillMasteryRecord = {
+      learnerId: '00000000-0000-4000-8000-000000000001',
+      curriculumReleaseId: 'curriculum-v1.0.5',
+      skillId: skill.id,
+      state: 'stable',
+      evidenceCount: 1,
+      confidence: 90,
+      lastAssessmentId: '00000000-0000-4000-8000-000000000002',
+      lastAssessedAt: 40,
+      nextReviewAt: null,
+      decisionSource: 'evidence',
+      correctionNote: null,
+      updatedAt: 40
+    };
+    const result = build({
+      mastery: [oldReleaseMastery],
+      attempts: [attempt('needs_practice', 50)]
+    });
+
+    expect(result.mastery).toBeNull();
+    expect(result.explanation.state).toBe('practising');
+    expect(result.explanation.evidenceCount).toBe(1);
+  });
+
   it('does not mix assessment evidence across curriculum releases', () => {
     const oldReleaseAttempt = {
       ...attempt('passed', 40),
