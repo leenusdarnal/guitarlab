@@ -662,10 +662,13 @@ try {
     .filter({ hasText: 'Changes saved on this device.' });
   const saveFailure = page.locator('.status.error[role="alert"]');
   await Promise.race([saveSuccess.waitFor(), saveFailure.waitFor()]);
+  const saveFailureCount = await saveFailure.count();
   assert.equal(
-    await saveFailure.count(),
+    saveFailureCount,
     0,
-    (await saveFailure.textContent()) ?? 'The song project did not save.'
+    saveFailureCount > 0
+      ? (await saveFailure.first().textContent()) ?? 'The song project did not save.'
+      : 'The song project did not save.'
   );
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByLabel('Section 1 title').waitFor();
