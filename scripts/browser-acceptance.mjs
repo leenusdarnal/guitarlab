@@ -325,13 +325,12 @@ try {
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
-  const restrictedAppearance = restrictedStoragePage.getByRole('combobox', {
-    name: 'Appearance'
-  });
-  await restrictedAppearance.selectOption('dark');
+  await restrictedStoragePage
+    .getByRole('combobox', { name: 'Appearance' })
+    .selectOption('dark');
   assert.equal(
     await restrictedStoragePage.locator('html').getAttribute('data-theme'),
-    'dark',
+    'light',
     'The theme should still change in memory when localStorage is blocked'
   );
   assert.deepEqual(
@@ -428,10 +427,7 @@ try {
   );
 
   // Appearance preference persists across a full reload.
-  const dashboardAppearance = page.getByRole('combobox', {
-    name: 'Appearance'
-  });
-  await dashboardAppearance.selectOption('light');
+  await page.getByRole('combobox', { name: 'Appearance' }).selectOption('light');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   assert.equal(
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
@@ -492,11 +488,29 @@ try {
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     /\/ 10 min planned/
   );
-  await planner.getByRole('button', { name: 'Use this plan' }).click();
-  await planner
-    .getByRole('status')
-    .filter({ hasText: 'does not record practice' })
-    .waitFor();
+  await planner.getByRole('button', { name: 'Review in Practice Studio' }).click();
+  await page.waitForURL(/\/practice\?minutes=10/);
+  await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
+  assert.equal(await page.locator('#duration').inputValue(), '10');
+  assert.equal(
+    await page.locator('#duration').getAttribute('min'),
+    '5',
+    'Practice Studio must use the shared 5–180 minute duration range'
+  );
+  assert.ok((await page.locator('#focus').inputValue()).length > 0);
+  await page.getByText(/No session has started yet/).waitFor();
+  assert.equal(
+    await page.getByRole('heading', { name: 'Your session is in progress' }).count(),
+    0,
+    'The dashboard plan should prefill a session, not silently start it'
+  );
+  assert.ok(
+    await page.locator('#practice-history').count(),
+    'Practice history has a stable destination'
+  );
+  await page.goto(origin, { waitUntil: 'networkidle' });
+  const actionLinks = await planner.locator('.practice-task .task-action').count();
+  assert.ok(actionLinks > 0, 'Every suggested task should expose a useful action');
 
   // Dismiss and restore suggestions without touching learner progress.
   await planner.getByRole('button', { name: 'Dismiss' }).click();
@@ -514,23 +528,35 @@ try {
     .click();
   const customDuration = page.getByLabel('Custom duration (5–180 minutes)');
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     '15 / 15 min planned'
   );
   await customDuration.fill('4');
+  await customDuration.blur();
   await planner
     .getByText('Enter a whole number from 5 to 180 minutes.')
     .waitFor();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
     true
   );
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
     false
   );
+
+  assert.equal(
+    await page.locator('.phase-card .phase-action').count(),
+    await page.locator('.phase-card').count(),
+    'Every phase card should expose a route destination'
+  );
+  await page.getByRole('link', { name: 'View all sessions' }).click();
+  await page.getByRole('heading', { name: 'Practice history' }).waitFor();
+  await page.goto(origin, { waitUntil: 'networkidle' });
 
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });

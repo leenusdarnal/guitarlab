@@ -15,12 +15,18 @@
   let message = $state('');
   let isLoading = $state(true);
   let isSaving = $state(false);
+  let customPracticeMinutes = $state('30');
+  let customPracticeTouched = $state(false);
+  let customPracticeError = $state('');
 
   onMount(() => {
     let active = true;
     void loadActiveLearnerProfile()
       .then((profile) => {
-        if (active) preferences = profile.preferences;
+        if (active) {
+          preferences = profile.preferences;
+          customPracticeMinutes = String(profile.preferences.practiceMinutes ?? 30);
+        }
       })
       .catch(() => {
         if (active) {
@@ -57,8 +63,27 @@
   ] as const;
   const practiceOptions = [10, 20, 40, 60] as const;
 
+  function updateCustomPracticeMinutes(event: Event) {
+    customPracticeMinutes = (event.currentTarget as HTMLInputElement).value;
+    customPracticeTouched = true;
+  }
+
+  function commitCustomPracticeMinutes() {
+    if (!customPracticeTouched) return true;
+    const minutes = Number(customPracticeMinutes);
+    if (!Number.isSafeInteger(minutes) || minutes < 5 || minutes > 180) {
+      customPracticeError = 'Choose a whole number from 5 to 180 minutes.';
+      return false;
+    }
+    preferences.practiceMinutes = minutes;
+    customPracticeError = '';
+    customPracticeTouched = false;
+    return true;
+  }
+
   async function submitSetup(event: SubmitEvent) {
     event.preventDefault();
+    if (!commitCustomPracticeMinutes()) return;
     const result = profilePreferencesSchema.safeParse(preferences);
     if (!result.success) {
       message = 'Please review the selected preferences.';
@@ -127,9 +152,16 @@
         <legend>05 · How long would you like to practise?</legend>
         <div class="choices four">
           {#each practiceOptions as minutes (minutes)}
-            <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} checked={preferences.practiceMinutes===minutes} onchange={()=>preferences.practiceMinutes=minutes}/><span>{minutes} min</span></label>
+            <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} checked={preferences.practiceMinutes===minutes} onchange={()=>{preferences.practiceMinutes=minutes;customPracticeMinutes=String(minutes);customPracticeTouched=false;customPracticeError='';}}/><span>{minutes} min</span></label>
           {/each}
         </div>
+        <label class="custom-practice">
+          Or choose any duration from 5 to 180 minutes
+          <input id="custom-practice-minutes" type="number" min="5" max="180" step="1" value={customPracticeMinutes} oninput={updateCustomPracticeMinutes} onblur={commitCustomPracticeMinutes} aria-invalid={Boolean(customPracticeError)} aria-describedby="custom-practice-help" />
+        </label>
+        <p id="custom-practice-help" class="custom-practice-help">
+          {customPracticeError || 'Your saved target is a starting point, not a daily quota.'}
+        </p>
       </fieldset>
       <fieldset>
         <legend>06 · How do you prefer to learn?</legend>
@@ -151,5 +183,5 @@
 </main>
 
 <style>
-  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:700 22px Georgia,serif}.brand strong{font-size:15px}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button span{padding-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
+  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:flex;align-items:center;gap:10px}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:700 22px Georgia,serif}.brand strong{font-size:15px}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.custom-practice{display:grid;gap:7px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:650}.custom-practice input{width:100%;max-width:220px;min-height:44px;border:1px solid var(--border);border-radius:9px;padding:8px 11px;background:var(--surface-raised);color:var(--text);font:inherit}.custom-practice-help{min-height:20px;margin:7px 0 0;color:var(--muted);font-size:11px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button span{padding-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
 </style>

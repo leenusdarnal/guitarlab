@@ -30,6 +30,7 @@
   import {
     loadActiveAdaptivePracticeSnapshot,
     loadActiveAdaptiveRecommendationFeedback,
+    loadActiveLearnerProfile,
     recordActiveAdaptiveRecommendationFeedback
   } from '../../lib/storage/indexeddb';
 
@@ -51,6 +52,7 @@
   let selectedAuthoredScopeKey = $state('');
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
+  let planContext = $state('');
   let exerciseName = $state('');
   let repetitions = $state<number | undefined>();
   let cleanRepetitions = $state<number | undefined>();
@@ -154,6 +156,33 @@
 
   onMount(() => {
     const clock = window.setInterval(() => (now = Date.now()), 1000);
+    const query = new URLSearchParams(window.location.search);
+    const requestedMinutes = Number(query.get('minutes'));
+    const hasRequestedMinutes =
+      query.has('minutes') &&
+      Number.isSafeInteger(requestedMinutes) &&
+      requestedMinutes >= 5 &&
+      requestedMinutes <= 180;
+    if (hasRequestedMinutes) plannedMinutes = requestedMinutes;
+
+    const requestedFocus = query.get('focus')?.trim();
+    if (requestedFocus) focus = requestedFocus.slice(0, 180);
+    if (query.get('source') === 'today-plan') {
+      planContext = 'Your Today practice plan is ready to review.';
+    } else if (query.get('source') === 'today-task') {
+      planContext = 'Your selected practice task is ready.';
+    }
+
+    void loadActiveLearnerProfile()
+      .then((profile) => {
+        if (!hasRequestedMinutes) {
+          plannedMinutes = profile.preferences.practiceMinutes ?? 20;
+        }
+      })
+      .catch(() => {
+        // Keep the safe 20-minute fallback when the local profile is unavailable.
+      });
+
     void refresh()
       .catch(() => {
         error =
@@ -175,10 +204,10 @@
     const minutes = plannedMinutes ?? null;
     if (
       minutes !== null &&
-      (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 180)
+      (!Number.isSafeInteger(minutes) || minutes < 5 || minutes > 180)
     ) {
       error =
-        'Choose a whole-number plan between 1 and 180 minutes, or leave it blank.';
+        'Choose a whole-number plan between 5 and 180 minutes, or leave it blank.';
       return;
     }
 
@@ -371,6 +400,46 @@
   }
 
 
+  function recommendationPracticeHref(recommendation: AdaptivePracticeRecommendation) {
+    const query = new URLSearchParams({
+      focus: recommendation.title.slice(0, 180),
+      source: 'recommended-focus'
+    });
+    return resolve('/practice') + '?' + query.toString() + '#practice-session';
+  }
+
+  async function quickLogAttempt(kind: 'clean' | 'correction') {
+    if (!activeSession || evidenceSaving || saving) return;
+    evidenceSaving = true;
+    evidenceError = '';
+    evidenceNotice = '';
+    const exerciseId =
+      exerciseName.trim() || activeSession.focus?.trim() || 'Practice attempt';
+    try {
+      await recordActivePracticeEvidence({
+        sessionId: activeSession.id,
+        exerciseId: exerciseId.slice(0, 160),
+        repetitions: 1,
+        cleanRepetitions: kind === 'clean' ? 1 : 0,
+        tempoBpm: tempoBpm ?? null,
+        difficulty: exerciseDifficulty ?? null
+      });
+      await loadActiveEvidence(activeSession.id);
+      await refreshAdaptivePractice();
+      evidenceNotice =
+        kind === 'clean'
+          ? 'One clean attempt was recorded as a learner-entered observation.'
+          : 'One attempt needing correction was recorded as a learner-entered observation.';
+    } catch (cause) {
+      evidenceError =
+        cause instanceof Error
+          ? cause.message
+          : 'Could not save this quick practice observation.';
+    } finally {
+      evidenceSaving = false;
+    }
+  }
+
   async function saveAdaptiveRecommendationFeedback(
     recommendation: AdaptivePracticeRecommendation,
     action: AdaptiveRecommendationFeedbackRecord['action'],
@@ -453,7 +522,7 @@
   </header>
 
   <section class="intro">
-    <p class="eyebrow">MILESTONE M7 · PRACTICE STUDIO</p>
+    <p class="eyebrow">YOUR PRACTICE SPACE</p>
     <h1>Make practice <em>count.</em></h1>
     <p>
       Track a session, record what you worked on and choose one useful next
@@ -461,225 +530,7 @@
     </p>
   </section>
 
-  <section class="adaptive-panel" aria-labelledby="adaptive-heading">
-    <div class="adaptive-heading">
-      <div>
-        <p class="eyebrow">EVIDENCE-AWARE GUIDANCE</p>
-        <h2 id="adaptive-heading">Suggested focus</h2>
-        <p class="muted">
-          Suggestions use the skills introduced by your current Year 1 learning
-          route, whole-skill assessments, directly scored item outcomes and
-          repeated learner-entered exercise difficulty. Item probes can guide a
-          focused drill, but they do not change your skill states.
-        </p>
-      </div>
-      <span class="catalog-version">Skill catalogue v1.0.0</span>
-    </div>
 
-    {#if adaptiveLoading}
-      <p class="muted" role="status">Loading your learning evidence…</p>
-    {:else if adaptiveError}
-      <p class="message error" role="alert">{adaptiveError}</p>
-    {:else if adaptiveRecommendations.length > 0}
-      <ol class="adaptive-list">
-        {#each adaptiveRecommendations as item (item.recommendation.id)}
-          {@const recommendation = item.recommendation}
-          <li
-            data-recommendation-id={item.recommendation.id}
-            data-target-type={item.recommendation.targetType}
-            data-target-id={item.recommendation.targetId}
-          >
-            <div class="recommendation-main">
-              <span class="recommendation-type">
-                {recommendation.targetType === 'skill' ? 'SKILL' : 'EXERCISE'}
-              </span>
-              <strong>{recommendation.title}</strong>
-              <p>{recommendation.explanation}</p>
-              {#if item.feedback?.correction === 'too_difficult'}
-                <p class="feedback-guidance" role="status">
-                  You asked for an easier starting step. Keep this focus, but
-                  reduce the tempo, simplify the shape or practise a smaller part.
-                </p>
-              {/if}
-              <div class="recommendation-actions" aria-label={`Feedback for ${recommendation.title}`}>
-                <button
-                  class="text-button"
-                  type="button"
-                  disabled={adaptiveFeedbackSavingId === recommendation.id}
-                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'dismiss')}
-                >
-                  Dismiss
-                </button>
-                <button
-                  class="text-button"
-                  type="button"
-                  disabled={adaptiveFeedbackSavingId === recommendation.id}
-                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'already_confident')}
-                >
-                  I’m confident
-                </button>
-                <button
-                  class="text-button"
-                  type="button"
-                  disabled={adaptiveFeedbackSavingId === recommendation.id}
-                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'too_difficult')}
-                >
-                  Make it easier
-                </button>
-                <button
-                  class="text-button"
-                  type="button"
-                  disabled={adaptiveFeedbackSavingId === recommendation.id}
-                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'not_relevant')}
-                >
-                  Not relevant
-                </button>
-              </div>
-            </div>
-            <span class="recommendation-evidence">
-              {adaptiveEvidenceLabel(recommendation)}
-            </span>
-          </li>
-        {/each}
-      </ol>
-    {:else}
-      <p class="empty-inline">
-        {adaptiveSnapshot?.recommendations.length
-          ? 'No active suggestions remain after your feedback. New assessment or exercise evidence can bring a focus back.'
-          : 'No current priority has been identified. Continue your next lesson or record an assessment when you are ready.'}
-      </p>
-    {/if}
-
-    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.categoryCoverage.length > 0}
-      <div class="adaptive-coverage">
-        <p class="eyebrow">ASSESSMENT COVERAGE FOR SKILLS REACHED SO FAR</p>
-        <div class="coverage-list">
-          {#each adaptiveSnapshot.categoryCoverage as category (category.category)}
-            <span>
-              <strong>{getSkillCategoryDisplayName(category.category)}</strong>
-              {category.assessedSkills} of {category.totalSkills} assessed
-            </span>
-          {/each}
-        </div>
-      </div>
-    {/if}
-    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.practiceExposureCoverage.length > 0}
-      <details class="adaptive-analytics">
-        <summary>Authored exercise exposure coverage</summary>
-        <p class="adaptive-analytics-note">
-          Counts distinct tagged exercises with at least one observation linked
-          to the exact authored lesson, exercise and taxonomy version. Unlinked
-          historical notes are excluded. This is activity coverage, not accuracy,
-          completion or skill mastery; repetitions do not increase the count.
-        </p>
-        <div class="coverage-list">
-          {#each adaptiveSnapshot.practiceExposureCoverage as coverage (coverage.category + ':' + coverage.dimensionId)}
-            <span>
-              <strong>
-                {coverage.category === 'fret_position'
-                  ? 'Fret position'
-                  : coverage.category}
-                · {coverage.label}
-              </strong>
-              {coverage.observedExerciseCount} of {coverage.availableExerciseCount}
-              tagged exercises observed
-              {#if coverage.observedSessionCount > 0}
-                · {coverage.observedSessionCount} session(s)
-              {/if}
-            </span>
-          {/each}
-        </div>
-      </details>
-    {/if}
-    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.skillAnalytics.length > 0}
-      <details class="adaptive-analytics">
-        <summary>Measured scores and item outcomes by skill</summary>
-        <p class="adaptive-analytics-note">
-          Whole-skill score summaries use measured assessment scores (0–100);
-          supporting-probe scores are not mixed into them. Item outcomes are
-          summarised separately within the same instrument definition, version and
-          scoring rule. Inconclusive responses are counted but excluded from item
-          accuracy. Supporting probes can guide targeted practice, but cannot
-          establish or change whole-skill mastery. Score spread is standard
-          deviation; a trend requires four comparable scores from the same
-          assessment kind.
-        </p>
-        <ul class="analytics-list">
-          {#each adaptiveSnapshot.skillAnalytics as skill (skill.skillId)}
-            <li>
-              <div class="analytics-skill">
-                <strong>{skill.displayName}</strong>
-                <span>{getSkillCategoryDisplayName(skill.category)}</span>
-              </div>
-              {#if skill.measuredScoreMean === null}
-                <p>No measured score evidence yet.</p>
-              {:else}
-                <p>
-                  {skill.measuredScoreCount} comparable measured score(s) ·
-                  mean {skill.measuredScoreMean.toFixed(1)}/100 ·
-                  spread {skill.measuredScoreSpread?.toFixed(1) ?? '—'} points
-                  (standard deviation) · latest {skill.latestMeasuredScore}/100
-                </p>
-              {/if}
-              <p class="analytics-trend">
-                {#if skill.measuredScoreTrend === 'improving'}
-                  Improving: +{Math.round(skill.measuredScoreTrendDelta ?? 0)} points
-                  between the earlier and recent score pairs.
-                {:else if skill.measuredScoreTrend === 'declining'}
-                  Declining: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
-                  between the earlier and recent score pairs.
-                {:else if skill.measuredScoreTrend === 'stable'}
-                  Broadly steady: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
-                  between the earlier and recent score pairs.
-                {:else}
-                  Trend unavailable; four comparable measured scores are needed.
-                {/if}
-              </p>
-              {#if skill.itemEvidenceGroups.length > 0}
-                {#each skill.itemEvidenceGroups as group (group.definitionId + ':' + group.definitionVersion + ':' + group.scoringRuleVersion + ':' + group.decisionScope)}
-                  <p class="analytics-item-evidence">
-                    {group.definitionId} v{group.definitionVersion} ·
-                    {group.correctItemCount} correct / {group.answeredItemCount} scored item response(s) ·
-                    {group.accuracyPercent === null ? 'Item accuracy unavailable' : `${group.accuracyPercent.toFixed(1)}% item accuracy`} ·
-                    {group.inconclusiveItemCount} inconclusive excluded
-                  </p>
-                  {#if group.decisionScope === 'supporting_probe'}
-                    <p class="analytics-item-evidence">
-                      Supporting probe only; this evidence cannot establish or change whole-skill mastery.
-                    </p>
-                  {/if}
-                  {#each group.items as item (group.definitionId + ':' + group.definitionVersion + ':' + item.itemId)}
-                    {#each item.responseMismatches as mismatch (mismatch.code)}
-                      <p class="analytics-item-evidence" role="status">
-                        Explicit interval response contrast: expected
-                        {mismatch.expectedResponse.replaceAll('_', ' ')} but selected
-                        {mismatch.selectedResponse.replaceAll('_', ' ')}
-                        ({mismatch.count} response{mismatch.count === 1 ? '' : 's'}).
-                        This records the chosen option only; it does not diagnose a misconception or affect mastery.
-                      </p>
-                    {/each}
-                    {#if item.consecutiveIncorrectCount >= 2}
-                      <p class="analytics-item-evidence" role="status">
-                        Same item answered incorrectly {item.consecutiveIncorrectCount} times consecutively. This raises the focused-practice priority.
-                      </p>
-                    {/if}
-                  {/each}
-                {/each}
-              {:else}
-                <p class="analytics-item-evidence">
-                  Item-level accuracy unavailable; no structured item outcomes have been recorded.
-                </p>
-              {/if}
-            </li>
-          {/each}
-        </ul>
-      </details>
-    {/if}
-    <p class="adaptive-footnote">
-      Assessment coverage is not a mastery score. Exercise difficulty is
-      self-reported; repetitions are never treated as verified accuracy.
-    </p>
-  </section>
 
   {#if error}
     <p class="message error" role="alert">{error}</p>
@@ -693,11 +544,16 @@
   {:else}
     <section class="panel" aria-labelledby="session-heading">
       <p class="eyebrow">SESSION</p>
+      {#if planContext}
+        <p class="plan-context" role="status">
+          {planContext} Review the duration and focus below, then choose Start practice when you are ready. No session has started yet.
+        </p>
+      {/if}
       {#if activeSession}
         <h2 id="session-heading">
           {activeSession.status === 'paused'
             ? 'Your session is paused'
-            : 'Your session is in progress'}
+            : activeSession.focus || 'Your session is in progress'}
         </h2>
         <p class="muted">
           Started {dateLabel(activeSession.startedAt)}. Paused intervals are
@@ -727,15 +583,10 @@
         {/if}
         {#if activeSession.primaryExerciseId}
           <p class="authored-session-link">
-            <strong>Authored exercise:</strong>
+            <strong>Linked exercise:</strong>
             {activeSessionAuthoredScope
               ? activeSessionAuthoredScope.lessonTitle + ' — ' + activeSessionAuthoredScope.exerciseTitle
-              : activeSession.primaryExerciseId}
-            <span>
-              {activeSession.primaryCurriculumReleaseId} ·
-              {activeSession.primaryLessonId} ·
-              {activeSession.practiceTaxonomyVersion}
-            </span>
+              : 'Reviewed curriculum exercise'}
           </p>
         {:else}
           <p class="muted authored-session-link">
@@ -744,6 +595,8 @@
         {/if}
 
         <div class="session-actions">
+          <a class="session-tool-link" href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">Open metronome in a new tab</a>
+          <a class="session-tool-link" href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner in a new tab</a>
           <button
             class="primary"
             type="button"
@@ -757,6 +610,19 @@
                 : 'Pause session'}
           </button>
         </div>
+
+        <section class="quick-log" aria-label="Quick practice observations">
+          <h3>Quick log</h3>
+          <p>Record one attempt at a time. These notes do not grade you or change skill mastery.</p>
+          <div class="quick-log-actions">
+            <button type="button" class="quick-log-clean" onclick={() => void quickLogAttempt('clean')} disabled={evidenceSaving || saving}>
+              + Clean attempt
+            </button>
+            <button type="button" class="quick-log-correction" onclick={() => void quickLogAttempt('correction')} disabled={evidenceSaving || saving}>
+              + Needs correction
+            </button>
+          </div>
+        </section>
 
         <section class="exercise-log" aria-labelledby="exercise-log-heading">
           <div class="section-heading">
@@ -942,6 +808,7 @@
         </form>
       {:else}
         <h2 id="session-heading">Start a practice session</h2>
+        <p class="muted">Choose a duration and focus. Nothing is recorded until you start.</p>
         <form
           class="start-form"
           onsubmit={(event) => {
@@ -953,7 +820,7 @@
           <input
             id="duration"
             type="number"
-            min="1"
+            min="5"
             max="180"
             step="1"
             bind:value={plannedMinutes}
@@ -970,8 +837,7 @@
             {/each}
           </select>
           <p class="muted">
-            Only reviewed lesson/exercise pairs are selectable. New observations
-            inherit the selected release, exercise and taxonomy version.
+            Choose a reviewed exercise when your session belongs to a specific lesson. General practice stays unlinked.
           </p>
           <label for="focus">What will you focus on? <span>optional</span></label>
           <input
@@ -987,7 +853,228 @@
       {/if}
     </section>
 
-    <section class="history" aria-labelledby="history-heading">
+  <section class="adaptive-panel" aria-labelledby="adaptive-heading">
+    <div class="adaptive-heading">
+      <div>
+        <p class="eyebrow">EVIDENCE-AWARE GUIDANCE</p>
+        <h2 id="adaptive-heading">Suggested focus</h2>
+        <p class="muted">
+          Suggestions reflect lesson work and recorded assessments. They can
+          guide what to practise next, but practice time alone does not change a
+          skill state.
+        </p>
+      </div>
+
+    </div>
+
+    {#if adaptiveLoading}
+      <p class="muted" role="status">Loading your learning evidence…</p>
+    {:else if adaptiveError}
+      <p class="message error" role="alert">{adaptiveError}</p>
+    {:else if adaptiveRecommendations.length > 0}
+      <ol class="adaptive-list">
+        {#each adaptiveRecommendations as item (item.recommendation.id)}
+          {@const recommendation = item.recommendation}
+          <li
+            data-recommendation-id={item.recommendation.id}
+            data-target-type={item.recommendation.targetType}
+            data-target-id={item.recommendation.targetId}
+          >
+            <div class="recommendation-main">
+              <span class="recommendation-type">
+                {recommendation.targetType === 'skill' ? 'SKILL' : 'EXERCISE'}
+              </span>
+              <strong>{recommendation.title}</strong>
+              <p>{recommendation.explanation}</p>
+              {#if item.feedback?.correction === 'too_difficult'}
+                <p class="feedback-guidance" role="status">
+                  You asked for an easier starting step. Keep this focus, but
+                  reduce the tempo, simplify the shape or practise a smaller part.
+                </p>
+              {/if}
+              <a class="recommendation-practice" href={recommendationPracticeHref(recommendation)}>
+                Practise this <span aria-hidden="true">→</span>
+              </a>
+              <div class="recommendation-actions" aria-label={`Feedback for ${recommendation.title}`}>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'dismiss')}
+                >
+                  Dismiss
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'already_confident')}
+                >
+                  I’m confident
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'too_difficult')}
+                >
+                  Make it easier
+                </button>
+                <button
+                  class="text-button"
+                  type="button"
+                  disabled={adaptiveFeedbackSavingId === recommendation.id}
+                  onclick={() => void saveAdaptiveRecommendationFeedback(recommendation, 'correct', 'not_relevant')}
+                >
+                  Not relevant
+                </button>
+              </div>
+            </div>
+            <span class="recommendation-evidence">
+              {adaptiveEvidenceLabel(recommendation)}
+            </span>
+          </li>
+        {/each}
+      </ol>
+    {:else}
+      <p class="empty-inline">
+        {adaptiveSnapshot?.recommendations.length
+          ? 'No active suggestions remain after your feedback. New assessment or exercise evidence can bring a focus back.'
+          : 'No current priority has been identified. Continue your next lesson or record an assessment when you are ready.'}
+      </p>
+    {/if}
+
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.categoryCoverage.length > 0}
+      <div class="adaptive-coverage">
+        <p class="eyebrow">ASSESSMENT COVERAGE FOR SKILLS REACHED SO FAR</p>
+        <div class="coverage-list">
+          {#each adaptiveSnapshot.categoryCoverage as category (category.category)}
+            <span>
+              <strong>{getSkillCategoryDisplayName(category.category)}</strong>
+              {category.assessedSkills} of {category.totalSkills} assessed
+            </span>
+          {/each}
+        </div>
+      </div>
+    {/if}
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.practiceExposureCoverage.length > 0}
+      <details class="adaptive-analytics">
+        <summary>Authored exercise exposure coverage</summary>
+        <p class="adaptive-analytics-note">
+          Counts distinct tagged exercises with at least one observation linked
+          to the exact authored lesson, exercise and taxonomy version. Unlinked
+          historical notes are excluded. This is activity coverage, not accuracy,
+          completion or skill mastery; repetitions do not increase the count.
+        </p>
+        <div class="coverage-list">
+          {#each adaptiveSnapshot.practiceExposureCoverage as coverage (coverage.category + ':' + coverage.dimensionId)}
+            <span>
+              <strong>
+                {coverage.category === 'fret_position'
+                  ? 'Fret position'
+                  : coverage.category}
+                · {coverage.label}
+              </strong>
+              {coverage.observedExerciseCount} of {coverage.availableExerciseCount}
+              tagged exercises observed
+              {#if coverage.observedSessionCount > 0}
+                · {coverage.observedSessionCount} session(s)
+              {/if}
+            </span>
+          {/each}
+        </div>
+      </details>
+    {/if}
+    {#if !adaptiveLoading && adaptiveSnapshot && adaptiveSnapshot.skillAnalytics.length > 0}
+      <details class="adaptive-analytics">
+        <summary>Measured scores and item outcomes by skill</summary>
+        <p class="adaptive-analytics-note">
+          Whole-skill score summaries use measured assessment scores (0–100);
+          supporting-probe scores are not mixed into them. Item outcomes are
+          summarised separately within the same instrument definition, version and
+          scoring rule. Inconclusive responses are counted but excluded from item
+          accuracy. Supporting probes can guide targeted practice, but cannot
+          establish or change whole-skill mastery. Score spread is standard
+          deviation; a trend requires four comparable scores from the same
+          assessment kind.
+        </p>
+        <ul class="analytics-list">
+          {#each adaptiveSnapshot.skillAnalytics as skill (skill.skillId)}
+            <li>
+              <div class="analytics-skill">
+                <strong>{skill.displayName}</strong>
+                <span>{getSkillCategoryDisplayName(skill.category)}</span>
+              </div>
+              {#if skill.measuredScoreMean === null}
+                <p>No measured score evidence yet.</p>
+              {:else}
+                <p>
+                  {skill.measuredScoreCount} comparable measured score(s) ·
+                  mean {skill.measuredScoreMean.toFixed(1)}/100 ·
+                  spread {skill.measuredScoreSpread?.toFixed(1) ?? '—'} points
+                  (standard deviation) · latest {skill.latestMeasuredScore}/100
+                </p>
+              {/if}
+              <p class="analytics-trend">
+                {#if skill.measuredScoreTrend === 'improving'}
+                  Improving: +{Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else if skill.measuredScoreTrend === 'declining'}
+                  Declining: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else if skill.measuredScoreTrend === 'stable'}
+                  Broadly steady: {Math.round(skill.measuredScoreTrendDelta ?? 0)} points
+                  between the earlier and recent score pairs.
+                {:else}
+                  Trend unavailable; four comparable measured scores are needed.
+                {/if}
+              </p>
+              {#if skill.itemEvidenceGroups.length > 0}
+                {#each skill.itemEvidenceGroups as group (group.definitionId + ':' + group.definitionVersion + ':' + group.scoringRuleVersion + ':' + group.decisionScope)}
+                  <p class="analytics-item-evidence">
+                    {group.definitionId} v{group.definitionVersion} ·
+                    {group.correctItemCount} correct / {group.answeredItemCount} scored item response(s) ·
+                    {group.accuracyPercent === null ? 'Item accuracy unavailable' : `${group.accuracyPercent.toFixed(1)}% item accuracy`} ·
+                    {group.inconclusiveItemCount} inconclusive excluded
+                  </p>
+                  {#if group.decisionScope === 'supporting_probe'}
+                    <p class="analytics-item-evidence">
+                      Supporting probe only; this evidence cannot establish or change whole-skill mastery.
+                    </p>
+                  {/if}
+                  {#each group.items as item (group.definitionId + ':' + group.definitionVersion + ':' + item.itemId)}
+                    {#each item.responseMismatches as mismatch (mismatch.code)}
+                      <p class="analytics-item-evidence" role="status">
+                        Explicit interval response contrast: expected
+                        {mismatch.expectedResponse.replaceAll('_', ' ')} but selected
+                        {mismatch.selectedResponse.replaceAll('_', ' ')}
+                        ({mismatch.count} response{mismatch.count === 1 ? '' : 's'}).
+                        This records the chosen option only; it does not diagnose a misconception or affect mastery.
+                      </p>
+                    {/each}
+                    {#if item.consecutiveIncorrectCount >= 2}
+                      <p class="analytics-item-evidence" role="status">
+                        Same item answered incorrectly {item.consecutiveIncorrectCount} times consecutively. This raises the focused-practice priority.
+                      </p>
+                    {/if}
+                  {/each}
+                {/each}
+              {:else}
+                <p class="analytics-item-evidence">
+                  Item-level accuracy unavailable; no structured item outcomes have been recorded.
+                </p>
+              {/if}
+            </li>
+          {/each}
+        </ul>
+      </details>
+    {/if}
+    <p class="adaptive-footnote">
+      Your observations help guide practice; they are not automatic accuracy scores or mastery awards.
+    </p>
+  </section>
+
+    <section class="history" id="practice-history" aria-labelledby="history-heading">
       <div class="history-heading">
         <div>
           <p class="eyebrow">YOUR RECORD</p>
@@ -1482,6 +1569,82 @@
     background: transparent;
     border: 1px solid var(--border, #666);
     color: inherit;
+  }
+
+  .plan-context {
+    padding: 12px 14px;
+    margin: 12px 0 18px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+    line-height: 1.6;
+  }
+
+  .session-tool-link,
+  .recommendation-practice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    border: 1px solid var(--border, #666);
+    color: var(--primary, #b77b32);
+    font-weight: 750;
+    font-size: 0.88rem;
+    text-decoration: none;
+  }
+
+  .recommendation-practice {
+    margin-top: 10px;
+    background: var(--surface, #fff);
+  }
+
+  .recommendation-actions {
+    margin-top: 8px;
+  }
+
+  .quick-log {
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid var(--border, #444);
+    border-radius: 12px;
+    background: var(--surface, #222);
+  }
+
+  .quick-log h3 {
+    margin: 0 0 6px;
+  }
+
+  .quick-log p {
+    color: var(--muted, #aaa);
+    line-height: 1.55;
+    margin: 0 0 12px;
+  }
+
+  .quick-log-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .quick-log-actions button {
+    min-height: 56px;
+    border: 1px solid var(--border, #666);
+    border-radius: 10px;
+    padding: 12px;
+    font: inherit;
+    font-weight: 750;
+    background: var(--surface-raised, #333);
+    color: var(--text, #fff);
+  }
+
+  .quick-log-actions .quick-log-clean {
+    border-color: var(--success, #28734d);
+  }
+
+  .quick-log-actions .quick-log-correction {
+    border-color: var(--warning, #8a6500);
   }
 
   .session-actions {
