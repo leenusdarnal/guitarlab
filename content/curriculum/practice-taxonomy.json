@@ -159,27 +159,16 @@
     {
       "lessonId": "y1-w01-lesson",
       "exerciseId": "y1-w01-lesson-focus",
-      "topicIds": [
-        "instrument.standard-tuning"
-      ],
+      "topicIds": ["instrument.standard-tuning"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
+      "stringNumbers": [1,2,3,4,5,6],
       "fretPositionIds": [],
       "sourceEvidence": "Tune all six strings, then play four even quarter notes on each string."
     },
     {
       "lessonId": "y1-w03-lesson",
       "exerciseId": "y1-w03-lesson-focus",
-      "topicIds": [
-        "notation.tab-reading"
-      ],
+      "topicIds": ["notation.tab-reading"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -188,32 +177,17 @@
     {
       "lessonId": "y1-w04-lesson",
       "exerciseId": "y1-w04-lesson-focus",
-      "topicIds": [
-        "harmony.open-chord-voicings"
-      ],
+      "topicIds": ["harmony.open-chord-voicings"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "fretPositionIds": [
-        "position.open-position"
-      ],
+      "stringNumbers": [1,2,3,4,5,6],
+      "fretPositionIds": ["position.open-position"],
       "sourceEvidence": "Form Em, pick strings 6 through 1 separately and correct one unclear note."
     },
     {
       "lessonId": "y1-w07-lesson",
       "exerciseId": "y1-w07-lesson-focus",
-      "topicIds": [
-        "rhythm.eighth-note-subdivision"
-      ],
-      "techniqueIds": [
-        "technique.down-up-strumming"
-      ],
+      "topicIds": ["rhythm.eighth-note-subdivision"],
+      "techniqueIds": ["technique.down-up-strumming"],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "Play eight evenly spaced down-up strokes on muted strings while saying the count."
@@ -221,30 +195,18 @@
     {
       "lessonId": "y1-w08-lesson",
       "exerciseId": "y1-w08-lesson-focus",
-      "topicIds": [
-        "notation.tab-reading"
-      ],
+      "topicIds": ["notation.tab-reading"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2
-      ],
-      "fretPositionIds": [
-        "position.first-position"
-      ],
+      "stringNumbers": [1,2],
+      "fretPositionIds": ["position.first-position"],
       "sourceEvidence": "The learner translates the phrase into the correct string/fret sequence and preserves the order and rhythm."
     },
     {
       "lessonId": "y1-w11-lesson",
       "exerciseId": "y1-w11-lesson-focus",
-      "topicIds": [
-        "fretboard.natural-note-landmarks"
-      ],
+      "topicIds": ["fretboard.natural-note-landmarks"],
       "techniqueIds": [],
-      "stringNumbers": [
-        5,
-        6
-      ],
+      "stringNumbers": [5,6],
       "fretPositionIds": [],
       "fretRange": {
         "minFret": 0,
@@ -256,10 +218,7 @@
       "lessonId": "y1-w15-lesson",
       "exerciseId": "y1-w15-lesson-focus",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.alternate-picking",
-        "technique.string-crossing"
-      ],
+      "techniqueIds": ["technique.alternate-picking","technique.string-crossing"],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -267,35 +226,18 @@
     {
       "lessonId": "y1-w23-lesson",
       "exerciseId": "y1-w23-lesson-focus",
-      "topicIds": [
-        "lead.a-minor-pentatonic-box-1"
-      ],
+      "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "fretPositionIds": [
-        "position.pentatonic-box-1"
-      ],
+      "stringNumbers": [1,2,3,4,5,6],
+      "fretPositionIds": ["position.pentatonic-box-1"],
       "sourceEvidence": "Play the box 1 shape slowly from low E to high E and back."
     },
     {
       "lessonId": "y1-w26-lesson",
       "exerciseId": "y1-w26-lesson-focus",
-      "topicIds": [
-        "harmony.triad-voicings"
-      ],
+      "topicIds": ["harmony.triad-voicings"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3
-      ],
+      "stringNumbers": [1,2,3],
       "fretPositionIds": [],
       "sourceEvidence": "Play each C, F and G triad reference one string at a time."
     },
@@ -303,12 +245,8 @@
       "lessonId": "y1-w31-lesson",
       "exerciseId": "y1-w31-lesson-music",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.legato"
-      ],
-      "stringNumbers": [
-        1
-      ],
+      "techniqueIds": ["technique.legato"],
+      "stringNumbers": [1],
       "fretPositionIds": [],
       "sourceEvidence": "Demonstrate this week's checkpoint: Play a hammer-on and pull-off without re-picking every note."
     },
@@ -316,22 +254,15 @@
       "lessonId": "y1-w16-lesson",
       "exerciseId": "y1-w16-lesson-music",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.fingerstyle-thumb-independence"
-      ],
-      "stringNumbers": [
-        6
-      ],
+      "techniqueIds": ["technique.fingerstyle-thumb-independence"],
+      "stringNumbers": [6],
       "fretPositionIds": [],
       "sourceEvidence": "Play the low E bass note with the thumb and the treble notes with i–m–a."
     },
     {
       "lessonId": "y1-w17-lesson",
       "exerciseId": "y1-w17-lesson-focus",
-      "topicIds": [
-        "theory.major-scale-construction",
-        "lead.a-minor-pentatonic-note-set"
-      ],
+      "topicIds": ["theory.major-scale-construction","lead.a-minor-pentatonic-note-set"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -340,9 +271,7 @@
     {
       "lessonId": "y1-w37-lesson",
       "exerciseId": "y1-w37-lesson-focus",
-      "topicIds": [
-        "ear.melody-transcription"
-      ],
+      "topicIds": ["ear.melody-transcription"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -351,9 +280,7 @@
     {
       "lessonId": "y2-w04-lesson",
       "exerciseId": "y2-w04-lesson-focus",
-      "topicIds": [
-        "harmony.triad-inversions"
-      ],
+      "topicIds": ["harmony.triad-inversions"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -362,9 +289,7 @@
     {
       "lessonId": "y2-w30-lesson",
       "exerciseId": "y2-w30-lesson-focus",
-      "topicIds": [
-        "rhythm.groove-transcription"
-      ],
+      "topicIds": ["rhythm.groove-transcription"],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -373,14 +298,9 @@
     {
       "lessonId": "y1-w13-lesson",
       "exerciseId": "y1-w13-lesson-music",
-      "topicIds": [
-        "notation.tab-reading"
-      ],
+      "topicIds": ["notation.tab-reading"],
       "techniqueIds": [],
-      "stringNumbers": [
-        3,
-        4
-      ],
+      "stringNumbers": [3,4],
       "fretPositionIds": [],
       "sourceEvidence": "Apply the week's exercise: G-D string answer melody (TAB core; staff optional)."
     },
@@ -389,26 +309,16 @@
       "exerciseId": "y1-w45-lesson-music",
       "topicIds": [],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        4
-      ],
+      "stringNumbers": [1,2,3,4],
       "fretPositionIds": [],
       "sourceEvidence": "Demonstrate this week's checkpoint: Read a short melody on strings 1-4 with rests and repeated notes."
     },
     {
       "lessonId": "y2-w01-lesson",
       "exerciseId": "y2-w01-lesson-music",
-      "topicIds": [
-        "fretboard.natural-note-landmarks"
-      ],
+      "topicIds": ["fretboard.natural-note-landmarks"],
       "techniqueIds": [],
-      "stringNumbers": [
-        5,
-        6
-      ],
+      "stringNumbers": [5,6],
       "fretPositionIds": [],
       "sourceEvidence": "Demonstrate this week's checkpoint: Find and name every natural note to fret 5"
     },
@@ -416,12 +326,8 @@
       "lessonId": "y3-rock-blues-w03-lesson",
       "exerciseId": "y3-rock-blues-w03-lesson-focus",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.pitch-bending"
-      ],
-      "stringNumbers": [
-        2
-      ],
+      "techniqueIds": ["technique.pitch-bending"],
+      "stringNumbers": [2],
       "fretPositionIds": [],
       "fretRange": {
         "minFret": 8,
@@ -438,11 +344,7 @@
         "technique.legato",
         "technique.string-crossing"
       ],
-      "stringNumbers": [
-        2,
-        3,
-        4
-      ],
+      "stringNumbers": [2,3,4],
       "fretPositionIds": [],
       "fretRange": {
         "minFret": 5,
@@ -453,21 +355,10 @@
     {
       "lessonId": "y3-rock-blues-w08-lesson",
       "exerciseId": "y3-rock-blues-w08-lesson-focus",
-      "topicIds": [
-        "lead.a-minor-pentatonic-box-1"
-      ],
+      "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "fretPositionIds": [
-        "position.pentatonic-box-1"
-      ],
+      "stringNumbers": [1,2,3,4,5,6],
+      "fretPositionIds": ["position.pentatonic-box-1"],
       "fretRange": {
         "minFret": 5,
         "maxFret": 8
@@ -477,33 +368,19 @@
     {
       "lessonId": "y3-rock-blues-w02-lesson",
       "exerciseId": "y3-rock-blues-w02-lesson-focus",
-      "topicIds": [
-        "lead.a-minor-pentatonic-box-1"
-      ],
+      "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
       "stringNumbers": [],
-      "fretPositionIds": [
-        "position.pentatonic-box-1",
-        "position.pentatonic-box-2"
-      ],
+      "fretPositionIds": ["position.pentatonic-box-1","position.pentatonic-box-2"],
       "sourceEvidence": "Play the adjacent box 2 and name the notes as they are reached."
     },
     {
       "lessonId": "y3-fingerstyle-acoustic-w02-lesson",
       "exerciseId": "y3-fingerstyle-acoustic-w02-lesson-focus",
       "topicIds": [],
-      "techniqueIds": [
-        "technique.pima-fingerstyle"
-      ],
-      "stringNumbers": [
-        1,
-        2,
-        3,
-        5
-      ],
-      "fretPositionIds": [
-        "position.open-position"
-      ],
+      "techniqueIds": ["technique.pima-fingerstyle"],
+      "stringNumbers": [1,2,3,5],
+      "fretPositionIds": ["position.open-position"],
       "fretRange": {
         "minFret": 0,
         "maxFret": 3
@@ -513,17 +390,9 @@
     {
       "lessonId": "y3-jazz-harmony-w05-lesson",
       "exerciseId": "y3-jazz-harmony-w05-lesson-focus",
-      "topicIds": [
-        "harmony.extended-chord-voicings"
-      ],
+      "topicIds": ["harmony.extended-chord-voicings"],
       "techniqueIds": [],
-      "stringNumbers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
+      "stringNumbers": [2,3,4,5,6],
       "fretPositionIds": [],
       "fretRange": {
         "minFret": 2,
@@ -641,27 +510,16 @@
         {
           "lessonId": "y1-w01-lesson",
           "exerciseId": "y1-w01-lesson-focus",
-          "topicIds": [
-            "instrument.standard-tuning"
-          ],
+          "topicIds": ["instrument.standard-tuning"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
           "fretPositionIds": [],
           "sourceEvidence": "Tune all six strings, then play four even quarter notes on each string."
         },
         {
           "lessonId": "y1-w03-lesson",
           "exerciseId": "y1-w03-lesson-focus",
-          "topicIds": [
-            "notation.tab-reading"
-          ],
+          "topicIds": ["notation.tab-reading"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
@@ -670,32 +528,17 @@
         {
           "lessonId": "y1-w04-lesson",
           "exerciseId": "y1-w04-lesson-focus",
-          "topicIds": [
-            "harmony.open-chord-voicings"
-          ],
+          "topicIds": ["harmony.open-chord-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "fretPositionIds": [
-            "position.open-position"
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
+          "fretPositionIds": ["position.open-position"],
           "sourceEvidence": "Form Em, pick strings 6 through 1 separately and correct one unclear note."
         },
         {
           "lessonId": "y1-w07-lesson",
           "exerciseId": "y1-w07-lesson-focus",
-          "topicIds": [
-            "rhythm.eighth-note-subdivision"
-          ],
-          "techniqueIds": [
-            "technique.down-up-strumming"
-          ],
+          "topicIds": ["rhythm.eighth-note-subdivision"],
+          "techniqueIds": ["technique.down-up-strumming"],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play eight evenly spaced down-up strokes on muted strings while saying the count."
@@ -703,30 +546,18 @@
         {
           "lessonId": "y1-w08-lesson",
           "exerciseId": "y1-w08-lesson-focus",
-          "topicIds": [
-            "notation.tab-reading"
-          ],
+          "topicIds": ["notation.tab-reading"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2
-          ],
-          "fretPositionIds": [
-            "position.first-position"
-          ],
+          "stringNumbers": [1,2],
+          "fretPositionIds": ["position.first-position"],
           "sourceEvidence": "The learner translates the phrase into the correct string/fret sequence and preserves the order and rhythm."
         },
         {
           "lessonId": "y1-w11-lesson",
           "exerciseId": "y1-w11-lesson-focus",
-          "topicIds": [
-            "fretboard.natural-note-landmarks"
-          ],
+          "topicIds": ["fretboard.natural-note-landmarks"],
           "techniqueIds": [],
-          "stringNumbers": [
-            5,
-            6
-          ],
+          "stringNumbers": [5,6],
           "fretPositionIds": [],
           "fretRange": {
             "minFret": 0,
@@ -738,10 +569,7 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.alternate-picking",
-            "technique.string-crossing"
-          ],
+          "techniqueIds": ["technique.alternate-picking","technique.string-crossing"],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -749,35 +577,18 @@
         {
           "lessonId": "y1-w23-lesson",
           "exerciseId": "y1-w23-lesson-focus",
-          "topicIds": [
-            "lead.a-minor-pentatonic-box-1"
-          ],
+          "topicIds": ["lead.a-minor-pentatonic-box-1"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "fretPositionIds": [
-            "position.pentatonic-box-1"
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
+          "fretPositionIds": ["position.pentatonic-box-1"],
           "sourceEvidence": "Play the box 1 shape slowly from low E to high E and back."
         },
         {
           "lessonId": "y1-w26-lesson",
           "exerciseId": "y1-w26-lesson-focus",
-          "topicIds": [
-            "harmony.triad-voicings"
-          ],
+          "topicIds": ["harmony.triad-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3
-          ],
+          "stringNumbers": [1,2,3],
           "fretPositionIds": [],
           "sourceEvidence": "Play each C, F and G triad reference one string at a time."
         },
@@ -785,12 +596,8 @@
           "lessonId": "y1-w31-lesson",
           "exerciseId": "y1-w31-lesson-music",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.legato"
-          ],
-          "stringNumbers": [
-            1
-          ],
+          "techniqueIds": ["technique.legato"],
+          "stringNumbers": [1],
           "fretPositionIds": [],
           "sourceEvidence": "Demonstrate this week's checkpoint: Play a hammer-on and pull-off without re-picking every note."
         }
@@ -934,27 +741,16 @@
         {
           "lessonId": "y1-w01-lesson",
           "exerciseId": "y1-w01-lesson-focus",
-          "topicIds": [
-            "instrument.standard-tuning"
-          ],
+          "topicIds": ["instrument.standard-tuning"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
           "fretPositionIds": [],
           "sourceEvidence": "Tune all six strings, then play four even quarter notes on each string."
         },
         {
           "lessonId": "y1-w03-lesson",
           "exerciseId": "y1-w03-lesson-focus",
-          "topicIds": [
-            "notation.tab-reading"
-          ],
+          "topicIds": ["notation.tab-reading"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
@@ -963,32 +759,17 @@
         {
           "lessonId": "y1-w04-lesson",
           "exerciseId": "y1-w04-lesson-focus",
-          "topicIds": [
-            "harmony.open-chord-voicings"
-          ],
+          "topicIds": ["harmony.open-chord-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "fretPositionIds": [
-            "position.open-position"
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
+          "fretPositionIds": ["position.open-position"],
           "sourceEvidence": "Form Em, pick strings 6 through 1 separately and correct one unclear note."
         },
         {
           "lessonId": "y1-w07-lesson",
           "exerciseId": "y1-w07-lesson-focus",
-          "topicIds": [
-            "rhythm.eighth-note-subdivision"
-          ],
-          "techniqueIds": [
-            "technique.down-up-strumming"
-          ],
+          "topicIds": ["rhythm.eighth-note-subdivision"],
+          "techniqueIds": ["technique.down-up-strumming"],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play eight evenly spaced down-up strokes on muted strings while saying the count."
@@ -996,30 +777,18 @@
         {
           "lessonId": "y1-w08-lesson",
           "exerciseId": "y1-w08-lesson-focus",
-          "topicIds": [
-            "notation.tab-reading"
-          ],
+          "topicIds": ["notation.tab-reading"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2
-          ],
-          "fretPositionIds": [
-            "position.first-position"
-          ],
+          "stringNumbers": [1,2],
+          "fretPositionIds": ["position.first-position"],
           "sourceEvidence": "The learner translates the phrase into the correct string/fret sequence and preserves the order and rhythm."
         },
         {
           "lessonId": "y1-w11-lesson",
           "exerciseId": "y1-w11-lesson-focus",
-          "topicIds": [
-            "fretboard.natural-note-landmarks"
-          ],
+          "topicIds": ["fretboard.natural-note-landmarks"],
           "techniqueIds": [],
-          "stringNumbers": [
-            5,
-            6
-          ],
+          "stringNumbers": [5,6],
           "fretPositionIds": [],
           "fretRange": {
             "minFret": 0,
@@ -1031,10 +800,7 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.alternate-picking",
-            "technique.string-crossing"
-          ],
+          "techniqueIds": ["technique.alternate-picking","technique.string-crossing"],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -1042,35 +808,18 @@
         {
           "lessonId": "y1-w23-lesson",
           "exerciseId": "y1-w23-lesson-focus",
-          "topicIds": [
-            "lead.a-minor-pentatonic-box-1"
-          ],
+          "topicIds": ["lead.a-minor-pentatonic-box-1"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ],
-          "fretPositionIds": [
-            "position.pentatonic-box-1"
-          ],
+          "stringNumbers": [1,2,3,4,5,6],
+          "fretPositionIds": ["position.pentatonic-box-1"],
           "sourceEvidence": "Play the box 1 shape slowly from low E to high E and back."
         },
         {
           "lessonId": "y1-w26-lesson",
           "exerciseId": "y1-w26-lesson-focus",
-          "topicIds": [
-            "harmony.triad-voicings"
-          ],
+          "topicIds": ["harmony.triad-voicings"],
           "techniqueIds": [],
-          "stringNumbers": [
-            1,
-            2,
-            3
-          ],
+          "stringNumbers": [1,2,3],
           "fretPositionIds": [],
           "sourceEvidence": "Play each C, F and G triad reference one string at a time."
         },
@@ -1078,12 +827,8 @@
           "lessonId": "y1-w31-lesson",
           "exerciseId": "y1-w31-lesson-music",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.legato"
-          ],
-          "stringNumbers": [
-            1
-          ],
+          "techniqueIds": ["technique.legato"],
+          "stringNumbers": [1],
           "fretPositionIds": [],
           "sourceEvidence": "Demonstrate this week's checkpoint: Play a hammer-on and pull-off without re-picking every note."
         },
@@ -1091,22 +836,15 @@
           "lessonId": "y1-w16-lesson",
           "exerciseId": "y1-w16-lesson-music",
           "topicIds": [],
-          "techniqueIds": [
-            "technique.fingerstyle-thumb-independence"
-          ],
-          "stringNumbers": [
-            6
-          ],
+          "techniqueIds": ["technique.fingerstyle-thumb-independence"],
+          "stringNumbers": [6],
           "fretPositionIds": [],
           "sourceEvidence": "Play the low E bass note with the thumb and the treble notes with i–m–a."
         },
         {
           "lessonId": "y1-w17-lesson",
           "exerciseId": "y1-w17-lesson-focus",
-          "topicIds": [
-            "theory.major-scale-construction",
-            "lead.a-minor-pentatonic-note-set"
-          ],
+          "topicIds": ["theory.major-scale-construction","lead.a-minor-pentatonic-note-set"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
@@ -1115,9 +853,7 @@
         {
           "lessonId": "y1-w37-lesson",
           "exerciseId": "y1-w37-lesson-focus",
-          "topicIds": [
-            "ear.melody-transcription"
-          ],
+          "topicIds": ["ear.melody-transcription"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
@@ -1126,9 +862,7 @@
         {
           "lessonId": "y2-w04-lesson",
           "exerciseId": "y2-w04-lesson-focus",
-          "topicIds": [
-            "harmony.triad-inversions"
-          ],
+          "topicIds": ["harmony.triad-inversions"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
@@ -1137,9 +871,7 @@
         {
           "lessonId": "y2-w30-lesson",
           "exerciseId": "y2-w30-lesson-focus",
-          "topicIds": [
-            "rhythm.groove-transcription"
-          ],
+          "topicIds": ["rhythm.groove-transcription"],
           "techniqueIds": [],
           "stringNumbers": [],
           "fretPositionIds": [],
