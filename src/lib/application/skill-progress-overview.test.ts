@@ -81,12 +81,16 @@ describe('skill progress overview', () => {
 
   it('does not mix assessment evidence across curriculum releases', () => {
     const oldReleaseAttempt = {
-      ...attempt('passed', 50),
+      ...attempt('passed', 40),
       curriculumReleaseId: 'curriculum-v1.0.5'
     };
-    const result = build({ attempts: [oldReleaseAttempt] });
+    const activeReleaseAttempt = attempt('needs_practice', 50);
+    const result = build({
+      attempts: [oldReleaseAttempt, activeReleaseAttempt]
+    });
 
-    expect(result.explanation.state).toBe('stable');
+    expect(result.explanation.state).toBe('practising');
     expect(result.explanation.evidenceCount).toBe(1);
+    expect(result.explanation.latestOutcome).toBe('needs_practice');
   });
 });
