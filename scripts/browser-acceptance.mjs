@@ -663,12 +663,12 @@ try {
   const saveFailure = page.locator('.status.error[role="alert"]');
   await Promise.race([saveSuccess.waitFor(), saveFailure.waitFor()]);
   const saveFailureCount = await saveFailure.count();
+  const saveFailureMessage =
+    saveFailureCount > 0 ? await saveFailure.first().textContent() : null;
   assert.equal(
     saveFailureCount,
     0,
-    saveFailureCount > 0
-      ? (await saveFailure.first().textContent()) ?? 'The song project did not save.'
-      : 'The song project did not save.'
+    saveFailureMessage ?? 'The song project did not save.'
   );
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByLabel('Section 1 title').waitFor();
