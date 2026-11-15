@@ -152,13 +152,15 @@ try {
     'Every lesson section shortcut must target an existing section ID'
   );
   assert.equal(
-    await page.locator('#lesson-progress').evaluate((progressPanel) =>
-      Boolean(
-        progressPanel.compareDocumentPosition(
-          document.querySelector('.lesson-layout')
-        ) & Node.DOCUMENT_POSITION_PRECEDING
-      )
-    ),
+    await page
+      .locator('#lesson-progress')
+      .evaluate((progressPanel) =>
+        Boolean(
+          progressPanel.compareDocumentPosition(
+            document.querySelector('.lesson-layout')
+          ) & Node.DOCUMENT_POSITION_PRECEDING
+        )
+      ),
     true,
     'Progress and completion actions should follow the learning sequence'
   );
@@ -166,9 +168,11 @@ try {
   await page.getByRole('link', { name: 'Key idea', exact: true }).click();
   assert.equal(new URL(page.url()).hash, '#lesson-section-key-idea');
   assert.ok(
-    await page.locator('.lesson-outline').evaluate(
-      (outline) => outline.getBoundingClientRect().width <= window.innerWidth
-    ),
+    await page
+      .locator('.lesson-outline')
+      .evaluate(
+        (outline) => outline.getBoundingClientRect().width <= window.innerWidth
+      ),
     'The section rail should fit the phone viewport'
   );
   await page.setViewportSize({ width: 1440, height: 1000 });
