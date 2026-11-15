@@ -6,20 +6,18 @@
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live coordination checkpoint — 2026-11-15 after PR #116
+## Live coordination checkpoint — 2026-11-15 after PR #118
 
-- Verified baseline: main contains PR #116 merge commit `b8c3e7100e77642bad6e7c86141540f43e95a40b`. Its branch GuitarLab CI and curriculum validation passed; PR #116 is merged.
-- Implementation is now deliberately parallelised across independent branches. Every PR remains focused and has its own tests; merge order is still strictly sequential and follows the priority queue below.
-- Open implementation queue (do not merge out of order): **#117 → #118 → #119 → #120 → #121 → #122 → #123 → #124**.
-  - #117 — P1 M7.2: explicit, deterministic interval response contrasts for authored v1 item keys only.
-  - #118 — P2: chord-movement listening.
-  - #119 — P2: theory recall (name, sound and musical use).
-  - #120 — P2: shared harmony calculations and fretboard/CAGED integration.
-  - #121 — P2: learner-owned local song projects, IndexedDB, backup/restore/reset.
+- Main includes PR #117 (P1 M7.2) merge commit `64054bb2ae8bb17bc0997aba58cfd0fd1a917c68` and PR #118 (P2 chord-movement listening) merge commit `aff8cfe50366fd78871858bc7dde3a4b6e3872b7`. PR #117's post-merge CI is green; PR #118's branch CI passed before merge and its post-merge main validation is running.
+- Independent workstreams are developed concurrently on separate branches. The merge sequence is still strict: **#119 → #120 → #121 → #122 → #123 → #125 → #124**.
+  - #119 — P2: theory recall (name, sound and musical use); rebased onto #118, fresh CI running.
+  - #120 — P2: shared harmony calculations and fretboard/CAGED integration; prior branch CI passed; revalidate after #119.
+  - #121 — P2: learner-owned local song projects, IndexedDB v7, backup/restore/reset; schema migration browser assertion corrected and CI rerunning.
   - #122 — P3: real-recording and physical-device evidence matrix. All hardware/recording results remain not run or blocked until supplied.
   - #123 — P4: isolated manual CI failure/recovery rehearsal. Actual workflow dispatch occurs after merge; Issue #5 remains open until both runs are recorded.
-  - #124 — this process/priority documentation update.
-- Current PRs were initially opened against the same main baseline to allow parallel work. Before merging each one, refresh its head SHA and required checks. After each merge, verify main CI and rebase/update the next PR if the base changed. Re-run all affected checks after rebase.
+  - #125 — P4: production environment decision and release approval gates. No production resource or deployment is authorized; Issue #3 remains open.
+  - #124 — final process/priority documentation update.
+- Before each merge, refresh the PR head SHA, base, mergeability and every required check. After each merge, verify post-merge main CI, then rebase/revalidate the next PR. Overlapping files must preserve all earlier merged changes.
 - Physical-device evidence must never be marked complete from synthetic audio, mocked permissions or automated Chromium runs. Production deployment remains deferred pending explicit approval and data-protection design.
 
 ## Historical checkpoint — 2026-11-14 after PR #113
