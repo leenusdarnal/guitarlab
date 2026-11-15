@@ -3,24 +3,21 @@
 **Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Verified baseline:** `2cc859fea62eacd5838e9ee5cbeb41005a4b0131` (PR #129 merged; curriculum release v1.0.6)  
+**Verified baseline:** `b34578c4c295e83c5fc95e5350a92d3f664a398e` (PR #131 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-15 after PR #129
+## Live checkpoint — 2026-11-15 after PR #131
 
-- Verified `main` HEAD: `2cc859fea62eacd5838e9ee5cbeb41005a4b0131`, the squash merge of PR #129. PRs #127, #128 and #129 were merged in priority order after the earlier governance and M7 work.
-- Post-merge main GuitarLab CI run [#43682019382](https://github.com/leenusdarnal/guitarlab/actions/runs/43682019382) passed, including application/curriculum validation and Node.js 26 compatibility.
-- PR #127 added all 12 simple ascending melodic interval classes across three focused sets, with generated local audio and version-2 supporting-probe evidence.
-- PR #128 added [the interval progression and stimulus research](https://github.com/leenusdarnal/guitarlab/blob/main/docs/INTERVAL_TRAINING_PROGRESSION.md), identifying fixed A4 as the next bounded stimulus limitation.
-- PR #129 added the [content provenance and licensing audit](https://github.com/leenusdarnal/guitarlab/blob/main/docs/CONTENT_PROVENANCE_AUDIT.md). Its audited 265-entry tracked tree contained no standalone TAB, notation, image, audio or MIDI assets. This clears the current bundled-content acceptance check only; every future bundled asset still needs item-level rights evidence.
-- Issue #17 is complete and closed. Its checklist now records all shipped listening, theory, repertoire and current-content provenance work. Descending/harmonic intervals, notation spelling and pitch/register variation are separate follow-ups, not silently claimed as complete.
-- The active next slice is [Issue #130 — deterministic interval starting-pitch and register variation](https://github.com/leenusdarnal/guitarlab/issues/130), on branch `feat/m8-interval-register-variation`. Each interval class independently cycles all 24 chromatic roots C3–B4 deterministically (stride 5 for the four-choice sets, 7 for the five-choice set); the second tone is derived from the authored semitone distance. The changed stimulus policy uses supporting-probe v3 so historical v2 evidence remains separate.
-- Focused implementation PR [#131](https://github.com/leenusdarnal/guitarlab/pull/131) is open on the current `main` base. Its application/curriculum and Node.js 26 CI checks are running on the latest head; do not merge until every required check passes.
-- Issue #5 remains open until the controlled workflow is manually dispatched in both modes (expected failure and clean recovery), and the real run URLs are recorded.
-- Issue #3 remains open pending explicit owner decisions on account ownership, hostname, access model, data architecture and release approval. No production resources, secrets, D1 database, routes, authentication or production deployment have been created or authorized.
-- Physical-device and recording evidence remains outstanding under Issues #89, #9, #10 and #18. Synthetic fixtures and automated browser checks do not count as hardware sign-off.
-- After Issue #130's PR passes and is merged, verify post-merge main CI before moving to the next priority. Production deployment remains deferred.
-
+- Verified `main` HEAD: `b34578c4c295e83c5fc95e5350a92d3f664a398e`, squash merge of PR #131. Issue #130 is closed.
+- PR #131's complete required workflow [#43683213960](https://github.com/leenusdarnal/guitarlab/actions/runs/43683213960) passed: application/curriculum checks, formatting, lint, type/Svelte, unit, production build, Worker smoke, browser, music-tools, accessibility and curriculum browser acceptance; the Node.js 26 compatibility job also passed.
+- PRs #127–#129 remain merged in order. PR #127 shipped all 12 simple ascending melodic interval classes, #128 recorded the progression/stimulus research, and #129 completed the current bundled-content provenance audit. Issue #17 is closed.
+- PR #131 completes the bounded stimulus follow-up: each interval class deterministically traverses all 24 chromatic roots C3–B4 using the documented coprime strides; intervals retain their authored semitone distances and stay within C3–B5. Stimulus evidence is versioned as supporting-probe v3 and kept separate from historical v2.
+- **Current P1 implementation:** extend the explicit expected-versus-selected interval response contrast read model for Issue #69 to support the complete 13-class v2/v3 instruments, while preserving the legacy v1 four-item mapping. Only exact version/scoring-rule matches and explicit incorrect learner-selected responses are eligible; this is descriptive contrast evidence, not a diagnosis or mastery signal. No learner-record schema or backup format changes are planned.
+- The implementation is on branch `feat/m7-interval-response-contrasts-v2-v3-main131`. It includes exhaustive expected/selected response coverage for all 156 wrong-choice pairs in each of v2 and v3, plus tests for legacy v1, version isolation, unsupported versions/rules, non-response, inconclusive and correct outcomes.
+- After the Issue #69 slice passes its own CI and is merged, the next priority is P3 physical-device and real-guitar evidence under Issues #89 and #18, with Issues #9/#10 for physical storage/backup QA. Synthetic/browser CI is not hardware sign-off.
+- Issue #5 remains open until controlled failure-injection and recovery are manually dispatched and their real run URLs are recorded. Issue #3 remains open pending explicit owner decisions; no production resources, secrets, D1 database, routes, authentication or production deployment are authorized.
+- The PR-head CI for #131 passed before merge. No separate post-merge main workflow run was returned by Actions at this checkpoint; verify main CI before the next merge.
+ 
 ## Historical checkpoint — 2026-11-14 after PR #113
 
 - Verified `main`: `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; PR #113 is merged and its post-merge GuitarLab CI run [#43623315478](https://github.com/leenusdarnal/guitarlab/actions/runs/43623315478) passed.
@@ -58,31 +55,19 @@
 - PRs #92–94: evidence audit, deterministic learner/release-scoped read model, canonical 34-skill catalogue and Practice Studio recommendations/category assessment coverage.
 - PR #103: append-only local recommendation feedback with provenance and backup/restore/reset integration.
 - PR #104: comparable measured-score summaries, descriptive spread and conservative trends.
-- PRs #107–109: objectively keyed item evidence for standard tuning, interval recognition and pulse listening.
-- PR #110: separate item accuracy and repeated-miss prioritisation, without changing whole-skill mastery.
+- PRs #107–110: objectively keyed item outcomes, comparable item accuracy and repeated-same-item-miss prioritisation without changing whole-skill mastery.
+- PRs #111–115: explicitly authored practice taxonomy, stable session/observation links, exact topic/technique/string/fret-position exposure, and retained historical taxonomy snapshots.
+- PR #116: verbatim source-evidence validation for each scope against its exact exercise instructions or success criterion, including negative guards for fabricated/cross-exercise text.
+- PR #117: explicit expected-versus-selected response contrasts for the original four-choice interval instrument, without diagnosing misconceptions or affecting mastery.
 
-**Delivered authored exercise scope (PR #111):**
-1. Versioned public taxonomy with separate topic, technique, string, fret-position and numeric fret-range dimensions.
-2. Exact stable lesson/exercise links only where authored instructions or success criteria support the tag.
-3. Unknown string/fret values remain empty; no inference from free text, titles or broad skill categories.
-4. Taxonomy terms, release identity, exercise references and numeric bounds are validated in curriculum CI.
-5. Taxonomy metadata remains separate from learner-owned observations.
+**Current focused implementation — versioned interval response contrasts (Issue #69):**
+1. Extend descriptive response contrasts to exact interval instrument v2 and v3, covering all 13 expected interval classes and all 12 alternative learner-selected answers for each expected class.
+2. Preserve the original v1 hyphenated item-ID mapping and its four-answer allow-list.
+3. Require matching definition version, scoring-rule version and `supporting_probe` scope; ignore malformed IDs, unsupported versions, mismatched rules, unsupported selections, correct outcomes, no-response and inconclusive evidence.
+4. Keep the analytics read-only. Do not add misconception inference, learner-record fields, database migrations, backup changes or mastery mutation.
 
-**Current implementation slice — stable local observation links:**
-1. Offer an optional Practice Studio selector of exact authored lesson/exercise pairs for the active release.
-2. Persist selected release, lesson ID, exercise ID and taxonomy version on the session; inherit them on new observations.
-3. Keep general sessions and prior free-text history unlinked; no retroactive classification.
-4. Validate session/observation identity and preserve optional fields in existing version-1 backups.
-5. Do not calculate topic/string/fretboard exposure until a separate definition and read model are reviewed.
-
-**Next after PR #113:**
-1. Expand authored exercise scope only through exact source review; the next bounded batch covers five Year 1 / Year 2 exercises and keeps unsupported string/fret values empty.
-2. Version taxonomy additions and retain prior snapshots so old records remain interpretable under their original taxonomy.
-3. Preserve the PR #113 exposure definition: one or more exact linked observations constitute activity exposure, not completion, accuracy or mastery.
-4. Add confusion codes only when an exercise deterministically identifies a specific error.
-
-**Exit criteria:** canonical tags have authored source evidence, taxonomy validation passes, and later exposure analytics are grounded in local records linked to stable lesson/exercise IDs. No taxonomy metadata or practice activity changes mastery.
-
+**Exit criteria:** all versioned expected/selected pairs are covered by unit tests; v1 compatibility and v2/v3 separation are verified; formatting, lint, type/Svelte, unit, build and required browser/accessibility CI pass. Issue #69 is not closed until its remaining acceptance criteria are reconciled against merged evidence.
+ 
 ### P2 — Musicianship, connected theory and repertoire (Issue #17) — complete
 
 - [x] Chord-movement listening with feedback, retry and accessible visual instructions (PR #118).
@@ -94,16 +79,16 @@
 
 **Exit criteria:** met for the current built-in GuitarLab content. The licensing audit is not blanket clearance for user-entered material or external links. Future bundled files still need per-asset rights evidence.
 
-### P2 follow-up — Deterministic interval starting pitch and register (Issue #130)
+### P2 follow-up — Deterministic interval starting pitch and register (Issue #130) — complete
 
-1. Cycle each interval class through the documented chromatic MIDI range C3–B4; use deterministic root strides of five for four-choice sets and seven for the five-choice set, each coprime with 24.
-2. Preserve the authored semitone interval and ascending melodic presentation; keep every generated tone within C3–B5.
-3. Version the changed interval stimulus as definition v3 / scoring rule v3 while keeping the supporting-probe-only decision scope and historical v2 records separate.
-4. Verify root coverage, frequency bounds, semitone invariance and replay determinism in all three interval sets.
-5. Retain learner-facing relative-interval prompts, retry/next behaviour and owned Web Audio teardown.
+- [x] Cycle each interval class through all 24 chromatic MIDI roots C3–B4 with deterministic strides of five for four-choice sets and seven for the five-choice set.
+- [x] Preserve authored semitone distance and ascending melodic presentation; all generated tones remain within C3–B5.
+- [x] Version the stimulus as definition v3 / `exact-interval-choice-v3`, retain `supporting_probe`, and keep historical v2 records separate.
+- [x] Verify full root coverage, frequency bounds, semitone invariance, deterministic replay, retry/next behaviour and Web Audio teardown.
+- [x] Merge PR #131 as `b34578c4c295e83c5fc95e5350a92d3f664a398e`; required workflow #43683213960 passed, including Node.js 26 compatibility.
 
-**Exit criteria:** CI and browser acceptance pass on the focused implementation PR; supporting-probe evidence v2 and v3 remain separately grouped.
-
+**Exit criteria:** met. Issue #130 is closed. Descending/harmonic intervals and notation spelling remain separate, unclaimed work.
+ 
 ### P3 — Real-device audio and release evidence (Issues #89 and #18)
 
 1. Define a consented, local-only real-guitar corpus with ground-truth frequencies and provenance.
@@ -161,16 +146,15 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `a78da53dc82457326663ae2d6a93f00ef64cda60` (PR #124 merged); post-merge CI run #43677525851 passed |
-| PRs #117–#125 | Merged in priority order; interval feedback, chord movement, theory recall, shared harmony/CAGED, local repertoire, real-device evidence matrix, isolated CI rehearsal and production approval gates |
-| PR #124 | Merged as `a78da53dc82457326663ae2d6a93f00ef64cda60`; execution governance and tracker updated |
-| PR #127 | Open; Issue #17 extended interval recognition. Current head `1829a80f59e6c3baf5f96089afb4003e30420b1`; up to date with main; full CI run #43677940024 is pending/in progress |
-| Post-merge main CI | [Run #43677525851](https://github.com/leenusdarnal/guitarlab/actions/runs/43677525851) passed application/curriculum and Node.js 26 jobs |
-| PR #127 CI | [Run #43677940024](https://github.com/leenusdarnal/guitarlab/actions/runs/43677940024); required application/curriculum workflow in progress; Node.js 26 compatibility passed |
-| Current product follow-up | Issue #17: PR #127 extends ascending interval listening; remaining TAB/notation provenance/licensing review remains open |
-| Audio and device evidence | Issue #89 real-guitar/physical audio evidence; Issues #9 and #10 physical-device storage and backup/restore; Issue #18 accessibility, privacy and release acceptance |
-| Controlled CI evidence | Issue #5 remains open until real failure-injection and recovery run URLs are recorded |
-| Production | Issue #3 remains open pending owner decisions and explicit approval; no production provisioning or deployment |
+| Last verified main SHA | `b34578c4c295e83c5fc95e5350a92d3f664a398e` (PR #131 merged) |
+| PRs #117–#131 | Merged in priority order for adaptive response contrast v1, musicianship/repertoire, real-device evidence planning, CI rehearsal, production approval gates, interval progression/research/licensing and interval root/register variation |
+| PR #131 | Merged as `b34578c4c295e83c5fc95e5350a92d3f664a398e`; required workflow #43683213960 passed application/curriculum and Node.js 26 jobs |
+| Current P1 branch | `feat/m7-interval-response-contrasts-v2-v3-main131`; extends explicit interval response contrasts to 13-class v2/v3 instruments while retaining v1 compatibility; open a PR and verify its full CI |
+| Issue #69 | Open; remaining focused slice is version-aware response contrast coverage and final acceptance reconciliation. No misconception inference or mastery mutation |
+| Issue #17 / #130 | Closed; current musicianship and bundled-content provenance work and deterministic interval roots shipped |
+| Physical evidence | Issues #89 and #18 real-guitar/device/release validation; Issues #9/#10 physical offline storage and backup/restore QA |
+| Controlled CI evidence | Issue #5 remains open until both manual failure-injection and recovery run URLs are recorded |
+| Production | Issue #3 remains open pending owner decisions and explicit approval; production provisioning/deployment remains unauthorized |
 | Deferred | Production D1, authentication, cloud sync and production deployment |
 
 **Source-of-truth hierarchy:** current code/tests on `main` → merged PR evidence → current GitHub Issues/Actions → this checkpoint → historical notes and chat summaries.
