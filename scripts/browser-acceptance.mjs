@@ -1192,7 +1192,7 @@ try {
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
-  await page.locator('#duration').fill('2');
+  await page.locator('#duration').fill('5');
   await page
     .locator('#authored-exercise')
     .selectOption('y1-w01-lesson::y1-w01-lesson-focus');
