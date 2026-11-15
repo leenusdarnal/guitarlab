@@ -1,0 +1,39 @@
+name: Controlled CI failure and recovery rehearsal
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Choose the controlled failure or the clean recovery run
+        required: true
+        type: choice
+        options:
+          - failure-injection
+          - recovery
+
+permissions: {}
+
+jobs:
+  controlled-rehearsal:
+    name: Controlled ${{ inputs.mode }} rehearsal
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Explain the rehearsal
+        run: |
+          echo "This is an intentionally isolated, manually dispatched workflow."
+          echo "It does not run in pull requests, main CI, deploy workflows, or production."
+          echo "Mode: ${{ inputs.mode }}"
+
+      - name: Inject the expected failure
+        if: inputs.mode == 'failure-injection'
+        run: |
+          echo "::error title=Controlled failure injection::This non-required rehearsal deliberately exits with status 1."
+          exit 1
+
+      - name: Verify the recovery path
+        if: inputs.mode == 'recovery'
+        run: |
+          test -n "${{ github.sha }}"
+          echo "Recovery path passed for commit ${{ github.sha }}."
+          echo "The required GuitarLab CI workflow was not changed or bypassed."
