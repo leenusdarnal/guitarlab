@@ -38,6 +38,29 @@
       ? [...selectedChord.strings].reverse()
       : [...selectedChord.strings]
   );
+  const chordBarres = $derived.by(() => {
+    const groups = new Map<
+      string,
+      { fret: number; finger: number; indexes: number[] }
+    >();
+    displayStrings.forEach((string, index) => {
+      if (string.state !== 'fretted') return;
+      const key = `${string.fret}:${string.finger}`;
+      const group = groups.get(key) ?? {
+        fret: string.fret,
+        finger: string.finger,
+        indexes: []
+      };
+      group.indexes.push(index);
+      groups.set(key, group);
+    });
+    return [...groups.values()].filter(
+      (barre) =>
+        barre.indexes.length > 1 &&
+        Math.max(...barre.indexes) - Math.min(...barre.indexes) + 1 ===
+          barre.indexes.length
+    );
+  });
   const cleanChangeObservation = $derived.by(() => {
     // Svelte coerces values from type="number" inputs to numbers. Normalize
     // before trimming so editing one field cannot break the derived view.
@@ -132,6 +155,27 @@
     if (string.state === 'open') return 'open';
     return `fret ${string.fret}, finger ${string.finger}`;
   }
+
+  function stringName(stringNumber: number): string {
+    return ['E', 'A', 'D', 'G', 'B', 'e'][stringNumber - 1];
+  }
+
+  function isBarrePosition(string: ChordString): boolean {
+    return (
+      string.state === 'fretted' &&
+      chordBarres.some(
+        (barre) =>
+          barre.fret === string.fret &&
+          barre.finger === string.finger &&
+          displayStrings.findIndex(
+            (candidate) => candidate.stringNumber === string.stringNumber
+          ) >= Math.min(...barre.indexes) &&
+          displayStrings.findIndex(
+            (candidate) => candidate.stringNumber === string.stringNumber
+          ) <= Math.max(...barre.indexes)
+      )
+    );
+  }
 </script>
 
 <svelte:head>
@@ -182,38 +226,52 @@
     <div
       class="chord-diagram"
       role="img"
-      aria-label={`${selectedChord.name} chord, ${handedness}-handed view. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
+      aria-label={`${selectedChord.name} chord, ${handedness}-handed chord box. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
     >
-      {#each displayStrings as string (string.stringNumber)}
-        <div class="chord-string">
-          <span class="string-name">
-            {string.stringNumber === 1
-              ? 'e'
-              : string.stringNumber === 2
-                ? 'B'
-                : string.stringNumber === 3
-                  ? 'G'
-                  : string.stringNumber === 4
-                    ? 'D'
-                    : string.stringNumber === 5
-                      ? 'A'
-                      : 'E'}
-          </span>
+      <svg class="chord-box" viewBox="0 0 240 230" aria-hidden="true" focusable="false">
+        {#each displayStrings as string, index (string.stringNumber)}
+          <line class="chord-svg-string" x1={44 + index * 32} x2={44 + index * 32} y1="36" y2="180" />
+          <text class="chord-svg-string-name" x={44 + index * 32} y="215">{stringName(string.stringNumber)}</text>
           {#if string.state === 'muted'}
-            <span class="string-marker muted" aria-hidden="true">×</span>
-            <small>Mute</small>
+            <text class="chord-svg-status muted" x={44 + index * 32} y="22">×</text>
           {:else if string.state === 'open'}
-            <span class="string-marker open" aria-hidden="true">○</span>
-            <small>Open</small>
-          {:else}
-            <span class="string-marker fretted" aria-hidden="true">{string.finger}</span>
-            <small>Fret {string.fret}</small>
+            <text class="chord-svg-status open" x={44 + index * 32} y="22">○</text>
+          {:else if string.state === 'fretted' && !isBarrePosition(string)}
+            <circle class="chord-svg-finger" cx={44 + index * 32} cy={36 + (string.fret - 0.5) * 36} r="11" />
+            <text class="chord-svg-finger-number" x={44 + index * 32} y={40 + (string.fret - 0.5) * 36}>{string.finger}</text>
           {/if}
-        </div>
-      {/each}
+        {/each}
+        {#each Array.from({ length: 5 }, (_, index) => index) as fretLine (fretLine)}
+          <line
+            class:chord-nut={fretLine === 0}
+            class="chord-svg-fret"
+            x1="28"
+            x2="220"
+            y1={36 + fretLine * 36}
+            y2={36 + fretLine * 36}
+          />
+          {#if fretLine > 0}
+            <text class="chord-svg-fret-number" x="15" y={40 + (fretLine - 0.5) * 36}>{fretLine}</text>
+          {/if}
+        {/each}
+        {#each chordBarres as barre (`${'${barre.fret}'}-${'${barre.finger}'}`)}
+          <line
+            class="chord-svg-barre"
+            x1={44 + Math.min(...barre.indexes) * 32}
+            x2={44 + Math.max(...barre.indexes) * 32}
+            y1={36 + (barre.fret - 0.5) * 36}
+            y2={36 + (barre.fret - 0.5) * 36}
+          />
+          <text
+            class="chord-svg-finger-number"
+            x={44 + Math.min(...barre.indexes) * 32}
+            y={40 + (barre.fret - 0.5) * 36}
+          >{barre.finger}</text>
+        {/each}
+      </svg>
     </div>
 
-    <div class="diagram-legend" aria-label="Chord diagram legend">
+    <div class="diagram-legend"    <div class="diagram-legend" aria-label="Chord diagram legend">
       <span><i class="open-key">○</i> Open string</span>
       <span><i class="muted-key">×</i> Muted string</span>
       <span><i class="finger-key">1</i> Finger number</span>
