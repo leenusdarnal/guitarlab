@@ -176,7 +176,7 @@ try {
         );
     });
     const upgraded =
-      database.version === 6 &&
+      database.version === 7 &&
       database
         .transaction('practiceSessions')
         .objectStore('practiceSessions')
@@ -187,6 +187,11 @@ try {
         .indexNames.contains('byLearnerStatus') &&
       database.objectStoreNames.contains('practiceEvidence') &&
       database.objectStoreNames.contains('adaptiveRecommendationFeedback') &&
+      database.objectStoreNames.contains('songProjects') &&
+      database
+        .transaction('songProjects')
+        .objectStore('songProjects')
+        .indexNames.contains('byLearnerId') &&
       database
         .transaction('adaptiveRecommendationFeedback')
         .objectStore('adaptiveRecommendationFeedback')
@@ -258,15 +263,20 @@ try {
       adaptiveFeedbackReleaseIndex: database
         .transaction('adaptiveRecommendationFeedback')
         .objectStore('adaptiveRecommendationFeedback')
-        .indexNames.contains('byLearnerRelease')
+        .indexNames.contains('byLearnerRelease'),
+      songProjectsStore: database.objectStoreNames.contains('songProjects'),
+      songProjectsLearnerIndex: database
+        .transaction('songProjects')
+        .objectStore('songProjects')
+        .indexNames.contains('byLearnerId')
     };
     database.close();
     return result;
   });
   assert.equal(
     upgradeResult.version,
-    6,
-    'The existing v1 database should upgrade to v6'
+    7,
+    'The existing v1 database should upgrade to v7'
   );
   assert.equal(upgradeResult.activeLearnerId, 'legacy-learner-001');
   assert.equal(upgradeResult.practiceMinutes, 20);
@@ -278,6 +288,8 @@ try {
   assert.equal(upgradeResult.practiceEvidenceLearnerIndex, true);
   assert.equal(upgradeResult.adaptiveFeedbackStore, true);
   assert.equal(upgradeResult.adaptiveFeedbackReleaseIndex, true);
+  assert.equal(upgradeResult.songProjectsStore, true);
+  assert.equal(upgradeResult.songProjectsLearnerIndex, true);
   assert.deepEqual(upgradeResult.stores.sort(), [
     'adaptiveRecommendationFeedback',
     'assessmentAttempts',
@@ -287,7 +299,8 @@ try {
     'metadata',
     'practiceEvidence',
     'practiceSessions',
-    'skillMastery'
+    'skillMastery',
+    'songProjects'
   ]);
   await upgradeContext.close();
 
@@ -624,6 +637,48 @@ try {
     'Feedback is persisted as a new record for each learner action'
   );
 
+  // M8 repertoire workspace: create, edit and reload learner-authored song notes.
+  await page.goto(`${origin}/repertoire`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Build your repertoire.' }).waitFor();
+  await page
+    .getByLabel('New song or study project')
+    .fill('My Guitar Arrangement');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('heading', { name: 'My Guitar Arrangement' }).waitFor();
+  await page.getByRole('button', { name: 'Add section' }).click();
+  await page.getByLabel('Section 1 title').fill('Verse');
+  await page
+    .getByLabel('Your notes')
+    .fill('Keep the bass note relaxed and even.');
+  await page
+    .getByLabel('Bookmark / reference position')
+    .fill('Reference at 0:42');
+  await page
+    .getByLabel('Practice target')
+    .fill('Play four clean changes without pausing.');
+  await page.getByRole('button', { name: 'Save project' }).click();
+  const saveSuccess = page
+    .getByRole('status')
+    .filter({ hasText: 'Changes saved on this device.' });
+  const saveFailure = page.locator('.status.error[role="alert"]');
+  await Promise.race([saveSuccess.waitFor(), saveFailure.waitFor()]);
+  assert.equal(
+    await saveFailure.count(),
+    0,
+    (await saveFailure.textContent()) ?? 'The song project did not save.'
+  );
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByLabel('Section 1 title').waitFor();
+  assert.equal(await page.getByLabel('Section 1 title').inputValue(), 'Verse');
+  assert.equal(
+    await page.getByLabel('Bookmark / reference position').inputValue(),
+    'Reference at 0:42'
+  );
+  assert.equal(
+    await page.getByLabel('Practice target').inputValue(),
+    'Play four clean changes without pausing.'
+  );
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin, { waitUntil: 'networkidle' });
 
@@ -652,6 +707,27 @@ try {
   assert.ok(
     Array.isArray(backup.records.adaptiveRecommendationFeedback),
     'Learner backups include the feedback history collection'
+  );
+  assert.ok(
+    Array.isArray(backup.records.songProjects),
+    'Learner backups include the local repertoire collection'
+  );
+  assert.deepEqual(
+    backup.records.songProjects
+      .filter((project) => project.title === 'My Guitar Arrangement')
+      .map((project) => ({
+        section: project.sections[0]?.title,
+        bookmark: project.sections[0]?.bookmark,
+        practiceTarget: project.sections[0]?.practiceTarget
+      })),
+    [
+      {
+        section: 'Verse',
+        bookmark: 'Reference at 0:42',
+        practiceTarget: 'Play four clean changes without pausing.'
+      }
+    ],
+    'Backup retains learner-authored song section notes and practice targets'
   );
   assert.deepEqual(
     backup.records.adaptiveRecommendationFeedback
@@ -824,13 +900,31 @@ try {
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
+    const songProjects = await new Promise((resolve, reject) => {
+      const request = database
+        .transaction('songProjects')
+        .objectStore('songProjects')
+        .getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
     database.close();
-    return rows.filter((record) => record.learnerId === learnerId);
+    return {
+      feedback: rows.filter((record) => record.learnerId === learnerId),
+      songProjects: songProjects.filter(
+        (record) => record.learnerId === learnerId
+      )
+    };
   });
   assert.deepEqual(
-    feedbackAfterReset,
+    feedbackAfterReset.feedback,
     [],
     'Reset removes feedback owned by the active learner'
+  );
+  assert.deepEqual(
+    feedbackAfterReset.songProjects,
+    [],
+    'Reset removes song projects owned by the active learner'
   );
 
   // Restore the downloaded backup into a new, empty learner profile.
@@ -986,7 +1080,7 @@ try {
     .filter({ hasText: 'Saved left-handed diagram orientation' })
     .waitFor();
 
-  // Shared harmony overlays resolve scale degrees and chord tones on the fretboard.
+// Shared harmony overlays resolve scale degrees and chord tones on the fretboard.
   await page.locator('#harmony-layer').selectOption('c-major-scale');
   const scaleHighlightCount = await page
     .locator('.fret-cell.is-harmony-note')
