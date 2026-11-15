@@ -524,7 +524,7 @@ try {
   await page.getByRole('button', { name: 'Hint' }).click();
   await page.getByRole('button', { name: 'Reveal positions' }).click();
   assert.ok((await page.locator('.fret-cell.is-revealed').count()) > 0);
-  await page.locator('.fret-cell[data-string="2"][data-fret="3"]').click();
+  await page.locator('.fret-cell[data-string="2"][data-fret="2"]').click();
   await page.getByText('2 found', { exact: true }).waitFor();
   await page.getByText('1 first-try · 2 selections', { exact: true }).waitFor();
   await page.getByRole('button', { name: 'Exit find mode' }).click();
