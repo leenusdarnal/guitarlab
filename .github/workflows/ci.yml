@@ -77,6 +77,7 @@ jobs:
 
       - name: Verify generated database migrations are committed
         if: ${{ !cancelled() && steps.generate-migrations.outcome == 'success' }}
+        id: verify-migration-drift
         shell: bash
         run: |
           migration_changes="$(git status --short --untracked-files=all -- drizzle/migrations)"
@@ -89,7 +90,7 @@ jobs:
           echo "Generated database migrations match the committed repository state."
 
       - name: Apply migrations to local-only D1
-        if: ${{ !cancelled() && steps.generate-migrations.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.verify-migration-drift.outcome == 'success' }}
         id: apply-local-migrations
         run: npm run db:migrate:local
 
@@ -264,6 +265,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        id: install-dependencies
         run: npm ci --no-audit --no-fund
 
       - name: Type and Svelte checks
