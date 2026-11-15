@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { SvelteMap } from 'svelte/reactivity';
   import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
@@ -14,7 +15,7 @@
   let progressSaving = $state(false);
   let progressRequestId = 0;
   let progressSaveQueue: Promise<void> = Promise.resolve();
-  let progressSaveRequestCounts = new Map<number, number>();
+  let progressSaveRequestCounts = new SvelteMap<number, number>();
   let progressError = $state('');
   let completedBlockIds = $state<string[]>([]);
   let checkpointOutcome = $state<'achieved' | 'needs_practice' | null>(null);
