@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     MicrophoneInput,
@@ -7,6 +7,7 @@
   } from '../../../lib/audio/microphone-input';
   import { estimatePitch } from '../../../lib/audio/pitch-estimator';
   import { StableNoteTracker } from '../../../lib/audio/stable-note-tracker';
+  import { playReferenceTone } from '../../../lib/audio/metronome';
   import type { StableNoteUpdate } from '../../../lib/audio/stable-note-tracker';
 
   const tracker = new StableNoteTracker({
@@ -32,6 +33,8 @@
   let errorMessage = $state('');
   let processedAt = 0;
   let calibration = $state(440);
+  let screenReaderMessage = $state('The tuner is ready. Start the microphone when you are ready.');
+  let isPlayingReference = $state(false);
 
   const centsOff = $derived(
     result.note
@@ -42,6 +45,35 @@
       : 0
   );
   const needleAngle = $derived(Math.max(-50, Math.min(50, centsOff)) * 1.35);
+  onMount(() => {
+    try {
+      const savedCalibration = Number(localStorage.getItem('guitarlab.tuner.calibration'));
+      if ([432, 440, 442].includes(savedCalibration)) calibration = savedCalibration;
+    } catch {
+      // Calibration remains usable for this visit when storage is unavailable.
+    }
+  });
+
+  function saveCalibration(event: Event) {
+    calibration = Number((event.currentTarget as HTMLSelectElement).value);
+    try {
+      localStorage.setItem('guitarlab.tuner.calibration', String(calibration));
+    } catch {
+      // Keep the selected value in memory when browser storage is unavailable.
+    }
+  }
+
+  async function playA4Reference() {
+    errorMessage = '';
+    isPlayingReference = true;
+    try {
+      await playReferenceTone(440, 900);
+    } catch (error) {
+      errorMessage = error instanceof Error ? error.message : 'The A4 reference tone could not be played.';
+    } finally {
+      isPlayingReference = false;
+    }
+  }
 
   onDestroy(() => {
     if (animationFrame !== null) cancelAnimationFrame(animationFrame);
@@ -106,7 +138,15 @@
           sampleBuffer,
           microphone.sampleRate ?? 48_000
         );
-        result = tracker.update(estimate, timestamp);
+        const update = tracker.update(estimate, timestamp);
+        if (update.event === 'note-on' && update.note) {
+          screenReaderMessage = 'Detected ' + update.note.noteName + '.';
+        } else if (update.event === 'note-change' && update.note) {
+          screenReaderMessage = 'Note changed to ' + update.note.noteName + '.';
+        } else if (update.event === 'note-off') {
+          screenReaderMessage = 'No stable note is being detected.';
+        }
+        result = update;
       } catch (error) {
         errorMessage =
           error instanceof Error
