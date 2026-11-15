@@ -122,7 +122,6 @@ function assertResponseSecurityHeaders(response) {
 }
 
 async function scanPage(page, route, theme, viewport) {
-  await page.addScriptTag({ content: axeSource });
   const results = await page.evaluate(async (tags) => {
     return window.axe.run(document, {
       runOnly: { type: 'tag', values: tags }
@@ -200,6 +199,7 @@ try {
     const context = await browser.newContext({
       viewport: { width: 1440, height: 1000 }
     });
+    await context.addInitScript({ content: axeSource });
     await context.addInitScript((savedTheme) => {
       try {
         window.localStorage.setItem('guitarlab-theme', savedTheme);
