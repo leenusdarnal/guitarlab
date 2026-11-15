@@ -98,7 +98,6 @@ try {
     await chordDiagram.getAttribute('aria-label'),
     /string 5: fret 2, finger 2/
   );
-  await page.getByText('The G major shape', { exact: false }).waitFor().catch(() => {});
 
   // The two-chord drill alternates targets and records outcomes separately.
   await page.getByLabel('First drill chord').selectOption('c-major');
