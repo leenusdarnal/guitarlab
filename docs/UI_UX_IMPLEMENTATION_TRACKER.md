@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** [PR #138 — lesson discovery and navigation](https://github.com/leenusdarnal/guitarlab/pull/138)
+**Active implementation:** UX-02 / UX-03 / UX-07 — theme consistency and reliable lesson saving ([PR #141](https://github.com/leenusdarnal/guitarlab/pull/141))
 
 ---
 
@@ -62,22 +62,22 @@ Priority definitions: **P1** = learner-critical or an accessibility barrier; **P
 
 ## 5. Current implementation baseline
 
-### Active lesson-discovery PR
+### Latest completed UX implementation — lesson discovery
 
 | Item | Current state |
 |---|---|
-| PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) |
+| PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) — merged |
 | Branch | feat/ui-ux-lesson-discovery |
 | Previous UI code head with overflow | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
 | Responsive overflow fix commit | ca0059cbcc79e6dca761165788ffcd19fda0bbbb |
 | Base | main at 555b27c1ba230a87a59e4d75c5f7348127f8fd28 |
-| PR state | Open; not merged |
-| CI run checked | [GuitarLab CI run 43693912725](https://github.com/leenusdarnal/guitarlab/actions/runs/43693912725) |
-| Previous UI-code CI result | Failed in Accessibility browser acceptance; the other application checks before that step passed |
-| Blocking failure | /learn has 359px content width at a 320px viewport in dark theme; test location: scripts/accessibility-browser-acceptance.mjs, line 238 |
-| Tracker commit | 72bb04e0c39ecd27f0b65ce1c1fa950e24c9ae24 |
-| CI for tracker commit | [GuitarLab CI run 43699096684](https://github.com/leenusdarnal/guitarlab/actions/runs/43699096684) was in progress at the time this tracker was updated; do not treat it as passed |
-| Fix validation | CI triggered by commit `ca0059c`; pending at time of this update |
+| PR state | Merged; automated CI green |
+| Final CI run | [GuitarLab CI run 43707602085](https://github.com/leenusdarnal/guitarlab/actions/runs/43707602085) — all required jobs passed |
+| Earlier CI failures | Resolved before merge; numeric token matching, regex escaping and exact accessible-label selectors corrected |
+| Blocking failure | None outstanding in final automated run; /learn 320px overflow was fixed and revalidated |
+| Merge commit | `98c0f7267ce2192594267670889cb4ee37fdfb14` |
+| Manual acceptance | Finder search coverage, device/browser and screen-reader checks remain open; do not mark UX-01 VERIFIED |
+| Final validation | CI run #1349 passed Node 26 compatibility, application/curriculum validation and required legacy status |
 
 The current PR already introduces a searchable lesson finder, route and duration filters, no-results recovery, a route directory, a dashboard browse action, shared navigation on secondary routes, reader section shortcuts and learner-facing lesson summary information.
 
@@ -96,7 +96,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-01 — Make every lesson easy to find
 
 **Priority:** P1  
-**Status:** IN PROGRESS — PR #138; responsive overflow fix committed, awaiting CI verification  
+**Status:** DONE — merged in PR #138; automated CI green, manual/device acceptance remains open  
 **Depends on:** None  
 **Related findings:** lesson discovery, curriculum navigation, X2, C1/C2  
 **Implementation:** [PR #138](https://github.com/leenusdarnal/guitarlab/pull/138)
@@ -107,7 +107,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Separate route exploration from the lesson results.
 - [x] Add a prominent dashboard entry point to browse all lessons.
 - [x] Fix the narrow-screen route-card footer wrapping that caused the 320px /learn horizontal overflow; CI must still confirm the fix.
-- [ ] Re-run the full CI suite, including axe and responsive browser acceptance, on the final PR head.
+- [x] Re-run the full CI suite, including axe and responsive browser acceptance, on the final PR head.
 - [ ] Verify that search can find lessons by title, focus/topic, checkpoint, route and stage.
 - [ ] Verify all 152 lessons remain available in the correct six routes and original order.
 - [ ] Test the finder in dark and light themes at 320, 360, 390, 768 and 1280px.
@@ -120,17 +120,17 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-02 — Fix global accessibility and mobile interaction blockers
 
 **Priority:** P1  
-**Status:** READY  
-**Depends on:** UX-01 may proceed in parallel where files do not conflict  
+**Status:** IN PROGRESS — first implementation slice in [PR #141](https://github.com/leenusdarnal/guitarlab/pull/141); keyboard-only and 200% zoom review remain open  
+**Depends on:** UX-01 automated acceptance is complete; manual finder/device acceptance remains open  
 **Related findings:** X3, X4, X6, X7, X9, B2
 
-- [ ] Set a global minimum computed font size of 16px for input, select and textarea controls, including component-level overrides.
-- [ ] Move the skip-link target to the actual main content landmark; ensure it skips global navigation and lands on the page's main content.
-- [ ] Make primary and hands-busy controls comfortably tappable; target 44px for primary controls and treat 24px as the minimum floor where WCAG exceptions apply.
-- [ ] Improve control-boundary contrast in both themes; verify the relevant non-text UI contrast rather than relying on visual estimation.
-- [ ] Add visible keyboard focus to the restore-file picker and all custom controls.
-- [ ] Replace disable-on-every-save behaviour with safe in-flight guards where disabling causes focus loss.
-- [ ] Keep focus stable after save and move it deliberately when a view is replaced.
+- [x] Set and retain a global minimum computed font size of 16px for input, select and textarea controls, including component-level overrides; existing mobile browser acceptance verifies computed sizes.
+- [x] Move the skip-link target to the actual page `main` landmark after navigation; browser acceptance asserts that keyboard activation focuses `MAIN`.
+- [x] Set 44px minimum height for buttons and text-entry controls, 44px minimum button width, and 44px desktop primary-navigation links.
+- [x] Add dedicated higher-contrast control-border tokens for dark and light themes and apply them to form controls.
+- [x] Add a visible `:focus-within` treatment to the backup restore file picker and an automated keyboard-focus assertion.
+- [x] Queue lesson-progress writes and keep section/checkpoint/note controls enabled while an ordinary save is in flight; avoid disabling the learner's current control (PR #141, automated rapid-edit regression added).
+- [x] Preserve focus during normal saves by removing save-time control disabling; focus after explicit view/route replacement remains subject to manual keyboard review.
 - [ ] Review icon-only controls for accessible names, hit area and visible focus.
 - [ ] Test keyboard-only operation and browser zoom at 200% without disabling user zoom.
 
@@ -139,26 +139,26 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-03 — Make theme behaviour reliable
 
 **Priority:** P1  
-**Status:** READY — target visual system documented; code migration pending  
+**Status:** IN PROGRESS — pre-paint theme setup and shared selector existed in the shell; PR #141 brings Today into the same three-state preference model  
 **Depends on:** UX-02  
 **Related findings:** X5
 
 - [x] Document the target dark/light palette and semantic colour roles in `docs/DESIGN_DIRECTION.md`.
-- [ ] Apply the saved or system-selected theme before first paint to prevent a flash of the wrong theme.
-- [ ] Support System, Light and Dark preferences, with a safe fallback when storage is unavailable.
-- [ ] Provide correct browser theme-colour metadata for both themes and update it when the theme changes.
+- [x] Apply the saved or system-selected theme before first paint to prevent a flash of the wrong theme (inline bootstrap in `src/app.html`).
+- [x] Support System, Light and Dark preferences, with a safe fallback when storage is unavailable (PR #141 removes the dashboard's separate two-state model).
+- [x] Provide correct browser theme-colour metadata for both themes and update it when the theme changes (shared shell + dashboard selection, automated assertions in PR #141).
 - [ ] Replace hard-coded component colours with semantic tokens.
 - [ ] Add and consistently use semantic text tokens for danger, primary and other coloured surfaces.
 - [ ] Fix the dark-theme reset-button contrast and the light-theme practice error-text contrast.
-- [ ] Make the theme control announce the available action and expose the current state clearly.
-- [ ] Verify all major routes in both themes, not only the dashboard.
+- [x] Make the theme control announce its purpose and expose the selected System / Light / Dark preference through a labelled select.
+- [x] Run the axe/responsive browser suite on the configured learner routes in both themes; manual visual/device review remains part of UX-14.
 
 **Acceptance:** no wrong-theme flash on first load; theme selection survives reload when storage is available; key text and controls remain readable on every route in dark and light modes.
 
 ### UX-04 — Establish readable type, spacing and shared UI patterns
 
 **Priority:** P1 for learning text; P2 for broader consistency  
-**Status:** READY — target type, spacing and component guidance documented; code migration pending  
+**Status:** IN PROGRESS — PR #141 starts the lesson-reader readability migration; the shared component and other-route sweep remains open  
 **Depends on:** UX-02 and UX-03  
 **Related findings:** X1, X6, X9, X11, X12
 
@@ -218,18 +218,18 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-07 — Make lessons comfortable to read and easy to resume
 
 **Priority:** P1  
-**Status:** PARTIALLY IN PROGRESS — reader section navigation exists in PR #138  
+**Status:** IN PROGRESS — PR #141 queues lesson saves and removes save-time disabling; section navigation exists in PR #138  
 **Depends on:** UX-02 and UX-04  
 **Related findings:** L1–L6, X7, X10
 
-- [ ] Complete readable lesson typography, line length and spacing using the shared reading styles.
+- [x] Raise lesson-reader instructional paragraphs and lists to 16px minimum (17px on wider screens), keep primary instructional colour, and improve the learner-facing focus text in PR #141; other route typography remains open.
 - [x] Add lesson section shortcuts in PR #138.
 - [ ] Ensure section shortcuts match the actual section IDs and work at desktop and phone widths.
 - [ ] Move completion and end-of-lesson actions to the end of the learning sequence where appropriate.
 - [ ] Keep “Make this task manageable” / accessible alternatives visible near the task that needs adaptation.
 - [ ] Put tool launchers beside the relevant lesson instruction and pass supported settings through safe, documented deep links.
-- [ ] Fix the checkpoint/note persistence race so a rapid checkpoint action is not silently lost while another save is in flight.
-- [ ] Avoid disabling the control the learner just used during an ordinary save; announce save state without disrupting focus.
+- [x] Serialise checkpoint/note/section progress writes with revision-aware queued snapshots so a later action cannot be dropped by an earlier in-flight save (PR #141).
+- [x] Keep the active control enabled during ordinary save operations and expose a concise saving status without putting the entire progress panel in a live region (PR #141).
 - [ ] Show useful progress context without repeating the same mastery warning in every section.
 - [ ] Remove internal lesson/release/catalogue identifiers from learner-facing areas while retaining stable IDs internally.
 - [ ] Verify lesson resume, progress persistence, offline/error recovery and navigation back to the lesson.
@@ -402,7 +402,10 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
+| 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
+| 2026-11-15 | Started UX-02: strengthened 44px control targets and theme-safe control borders, made skip navigation focus the actual page main landmark, exposed restore-picker keyboard focus and added browser acceptance assertions. Save sequencing, full icon-control audit, 200% zoom and physical-device/assistive-technology checks remain open. |
 | 2026-11-15 | Committed a narrow-screen lesson-catalogue footer wrapping fix after CI identified /learn overflow at 320px; validation remains pending. |
 | 2026-11-15 | Reworked `docs/DESIGN_DIRECTION.md` into the Modern Music Studio target system and aligned `docs/IMPLEMENTATION_GUIDELINES.md`; the design is documented but not yet implemented in the application. |
 | 2026-11-15 | Added `docs/research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md`, comparing the supplied Tailwind sources and Svelte-native options. No component dependency was added; adoption is deferred to a specific UX task and compatibility/accessibility gate. |

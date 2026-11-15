@@ -226,13 +226,36 @@ try {
     .getByRole('button', { name: 'Mark section complete' })
     .click();
   await page.getByText(progressLabel).waitFor();
+  const checkpointNote = page.locator('#checkpoint-note');
+  await checkpointNote.fill(
+    'A first note queued while another save is in flight.'
+  );
   await page.getByRole('button', { name: 'I need more practice' }).click();
+  await page.getByRole('button', { name: 'I can meet this target' }).click();
+  await checkpointNote.fill('Keep the final chord change relaxed.');
+  await checkpointNote.blur();
+  await page.waitForFunction(
+    () => !document.querySelector('.saving-message'),
+    null,
+    { timeout: 10000 }
+  );
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByText(progressLabel).waitFor();
   await page
     .getByRole('button', { name: 'Continue from saved section' })
     .waitFor();
-  await page.getByRole('button', { name: 'I can meet this target' }).click();
+  assert.equal(
+    await checkpointNote.inputValue(),
+    'Keep the final chord change relaxed.',
+    'The final checkpoint note must survive rapid queued edits'
+  );
+  assert.equal(
+    await page
+      .getByRole('button', { name: 'I can meet this target' })
+      .getAttribute('aria-pressed'),
+    'true',
+    'The final checkpoint choice must survive earlier in-flight saves'
+  );
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {

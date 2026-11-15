@@ -202,7 +202,14 @@ try {
     await context.addInitScript({ content: axeSource });
     await context.addInitScript((savedTheme) => {
       try {
-        window.localStorage.setItem('guitarlab-theme', savedTheme);
+        const storedTheme = window.localStorage.getItem('guitarlab-theme');
+        if (
+          storedTheme !== 'system' &&
+          storedTheme !== 'light' &&
+          storedTheme !== 'dark'
+        ) {
+          window.localStorage.setItem('guitarlab-theme', savedTheme);
+        }
       } catch {
         // Theme persistence is optional in restricted browser contexts.
       }
@@ -234,6 +241,20 @@ try {
         assertResponseSecurityHeaders(mobileResponse);
       }
       await page.locator('main').first().waitFor({ state: 'visible' });
+      await page.waitForFunction(() => {
+        const main = document.querySelector('main');
+        return (
+          main?.id === 'main-content' &&
+          document.querySelectorAll('#main-content').length === 1
+        );
+      });
+      assert.equal(
+        await page
+          .locator('#main-content')
+          .evaluate((element) => element.tagName),
+        'MAIN',
+        route + ' must expose one unique main-content landmark in ' + theme
+      );
       await page.evaluate(async () => {
         if (document.fonts?.ready) await document.fonts.ready;
       });
@@ -335,6 +356,52 @@ try {
       'dark'
     );
 
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(origin, { waitUntil: 'networkidle' });
+    const dashboardAppearance = page.locator('select[aria-label="Appearance"]');
+    assert.equal(await dashboardAppearance.inputValue(), 'dark');
+    await dashboardAppearance.selectOption('light');
+    assert.deepEqual(
+      await page.evaluate(() => ({
+        preference: document.documentElement.dataset.themePreference,
+        theme: document.documentElement.dataset.theme,
+        stored: localStorage.getItem('guitarlab-theme'),
+        themeColor: document
+          .querySelector('meta[name="theme-color"]')
+          ?.getAttribute('content')
+      })),
+      {
+        preference: 'light',
+        theme: 'light',
+        stored: 'light',
+        themeColor: '#F5F4F0'
+      }
+    );
+    await page.goto(origin + '/practice', { waitUntil: 'networkidle' });
+    const sharedAppearance = page.locator('select[aria-label="Appearance"]');
+    assert.equal(
+      await sharedAppearance.inputValue(),
+      'light',
+      'Shared navigation must reflect the appearance selected on Today'
+    );
+    await sharedAppearance.selectOption('system');
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'dark'
+    );
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#101318'
+    );
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'light'
+    );
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#F5F4F0'
+    );
+
     if (theme === 'dark') {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(origin, { waitUntil: 'networkidle' });
@@ -359,7 +426,27 @@ try {
       await page.waitForFunction(
         () => document.activeElement?.id === 'main-content'
       );
+      assert.equal(
+        await page.evaluate(() => document.activeElement?.tagName),
+        'MAIN',
+        'Skip navigation must focus the actual page main landmark'
+      );
     }
+
+    await page.goto(origin + '/settings/data', { waitUntil: 'networkidle' });
+    const restorePicker = page
+      .locator('label.file-picker')
+      .filter({ has: page.locator('input[type="file"]') });
+    const restoreInput = page.locator('input[type="file"]');
+    await restoreInput.focus();
+    const restorePickerFocus = await restorePicker.evaluate((label) => ({
+      outlineStyle: getComputedStyle(label).outlineStyle,
+      outlineWidth: Number.parseFloat(getComputedStyle(label).outlineWidth),
+      height: label.getBoundingClientRect().height
+    }));
+    assert.equal(restorePickerFocus.outlineStyle, 'solid');
+    assert.ok(restorePickerFocus.outlineWidth >= 3);
+    assert.ok(restorePickerFocus.height >= 44);
 
     assert.deepEqual(
       pageErrors,
@@ -372,7 +459,7 @@ try {
   console.log(
     'Accessibility checks passed: 11 routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
-      'narrow-screen reflow, and keyboard skip-link focus.'
+      'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
   );
 } catch (error) {
   console.error(error);
