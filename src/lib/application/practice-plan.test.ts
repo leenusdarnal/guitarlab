@@ -10,7 +10,7 @@ const lesson = {
 };
 
 describe('explainable practice planning', () => {
-  it.each([10, 20, 40])('fits a %i-minute plan without exceeding the budget', (minutes) => {
+  it.each([10, 20, 40, 60])('fits a %i-minute plan without exceeding the budget', (minutes) => {
     const plan = buildPracticePlan({
       minutes,
       currentLesson: lesson,

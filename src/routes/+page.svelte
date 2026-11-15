@@ -30,7 +30,8 @@
             selectedPracticePreset ??
             (selectedPracticeMinutes === 10 ||
             selectedPracticeMinutes === 20 ||
-            selectedPracticeMinutes === 40
+            selectedPracticeMinutes === 40 ||
+            selectedPracticeMinutes === 60
               ? selectedPracticeMinutes
               : 'custom'),
           currentLesson: dashboard.nextLesson
@@ -118,7 +119,8 @@
               ? null
               : selectedPracticeMinutes === 10 ||
                   selectedPracticeMinutes === 20 ||
-                  selectedPracticeMinutes === 40
+                  selectedPracticeMinutes === 40 ||
+                  selectedPracticeMinutes === 60
                 ? selectedPracticeMinutes
                 : 'custom';
           customPracticeValue =
@@ -133,7 +135,7 @@
     };
   });
 
-  function selectPracticePreset(minutes: 10 | 20 | 40) {
+  function selectPracticePreset(minutes: 10 | 20 | 40 | 60) {
     selectedPracticeMinutes = minutes;
     selectedPracticePreset = minutes;
     customPracticeValue = String(minutes);
@@ -380,6 +382,7 @@
             <button type="button" class:choice-active={selectedPracticePreset === 10} aria-pressed={selectedPracticePreset === 10} onclick={() => selectPracticePreset(10)}>10 min</button>
             <button type="button" class:choice-active={selectedPracticePreset === 20} aria-pressed={selectedPracticePreset === 20} onclick={() => selectPracticePreset(20)}>20 min</button>
             <button type="button" class:choice-active={selectedPracticePreset === 40} aria-pressed={selectedPracticePreset === 40} onclick={() => selectPracticePreset(40)}>40 min</button>
+            <button type="button" class:choice-active={selectedPracticePreset === 60} aria-pressed={selectedPracticePreset === 60} onclick={() => selectPracticePreset(60)}>60 min</button>
             <button type="button" class:choice-active={selectedPracticePreset === 'custom'} aria-pressed={selectedPracticePreset === 'custom'} onclick={selectCustomPracticePreset}>Custom</button>
           </div>
 

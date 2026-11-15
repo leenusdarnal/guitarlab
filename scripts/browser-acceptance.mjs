@@ -492,6 +492,11 @@ try {
   await page.waitForURL(/\/practice\?minutes=10/);
   await page.getByRole('heading', { name: 'Start a practice session' }).waitFor();
   assert.equal(await page.locator('#duration').inputValue(), '10');
+  assert.equal(
+    await page.locator('#duration').getAttribute('min'),
+    '5',
+    'Practice Studio must use the shared 5–180 minute duration range'
+  );
   assert.ok((await page.locator('#focus').inputValue()).length > 0);
   await page.getByText(/No session has started yet/).waitFor();
   assert.equal(
@@ -523,21 +528,24 @@ try {
     .click();
   const customDuration = page.getByLabel('Custom duration (5–180 minutes)');
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     '15 / 15 min planned'
   );
   await customDuration.fill('4');
+  await customDuration.blur();
   await planner
     .getByText('Enter a whole number from 5 to 180 minutes.')
     .waitFor();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
     true
   );
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner.getByRole('button', { name: 'Review in Practice Studio' }).isDisabled(),
     false
   );
 

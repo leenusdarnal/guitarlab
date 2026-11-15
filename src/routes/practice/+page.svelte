@@ -204,10 +204,10 @@
     const minutes = plannedMinutes ?? null;
     if (
       minutes !== null &&
-      (!Number.isSafeInteger(minutes) || minutes < 1 || minutes > 180)
+      (!Number.isSafeInteger(minutes) || minutes < 5 || minutes > 180)
     ) {
       error =
-        'Choose a whole-number plan between 1 and 180 minutes, or leave it blank.';
+        'Choose a whole-number plan between 5 and 180 minutes, or leave it blank.';
       return;
     }
 
@@ -820,7 +820,7 @@
           <input
             id="duration"
             type="number"
-            min="1"
+            min="5"
             max="180"
             step="1"
             bind:value={plannedMinutes}

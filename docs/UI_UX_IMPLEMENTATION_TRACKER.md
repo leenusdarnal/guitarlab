@@ -184,8 +184,8 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Replace the notice-only plan CTA with a Practice Studio review hand-off that pre-fills duration and focus without automatically starting or recording a session.
 - [x] Make lesson tasks open their lesson, skill reviews open the selected skill, and general tasks open a pre-filled Practice Studio task.
 - [x] Make due-review rows open the selected skill and Year 1 phase cards open the full Year 1 route.
-- [ ] Unify saved practice-duration preferences so dashboard, onboarding and Practice Studio do not offer conflicting defaults/ranges.
-- [ ] Keep a clearly labelled one-day override separate from the saved preference.
+- [x] Unify the saved practice duration contract to whole minutes from 5 to 180 across onboarding, dashboard planning and Practice Studio; expose 10, 20, 40 and 60-minute presets plus custom entry.
+- [x] Keep a clearly labelled one-day override separate from the saved profile preference; the dashboard override is not written back to onboarding.
 - [ ] Put the next useful learning action and today's plan first on mobile after onboarding.
 - [ ] Reduce the first-run welcome content once it is no longer useful; keep preferences discoverable without dominating the first screen.
 - [x] Validate custom-duration input on blur; keep the value editable while the learner is typing.
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Standardised practice duration to 5–180 minutes, with 10/20/40/60 presets and blur-committed custom preference entry in onboarding; dashboard overrides remain day-only. |
 | 2026-11-15 | Started UX-05/UX-06 on `feat/ux-05-actionable-practice-plans`: real plan-to-session review hand-off, task/review/phase/history links, blur-based custom-duration validation, session-first practice layout, positive recommendation action and quick observation logging. Automated validation pending; full wake-lock/idle recovery and physical-device acceptance remain open. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
