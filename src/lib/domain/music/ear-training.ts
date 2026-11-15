@@ -1,14 +1,8 @@
 export type EarTrainingKind =
-  | 'pulse'
-  | 'pitch'
-  | 'contour'
-  | 'interval'
-  | 'chord-movement';
+  'pulse' | 'pitch' | 'contour' | 'interval' | 'chord-movement';
 
 export type EarTrainingIntervalSet =
-  | 'foundation'
-  | 'steps-and-tritone'
-  | 'wide-leaps';
+  'foundation' | 'steps-and-tritone' | 'wide-leaps';
 
 export type EarTrainingAnswer =
   | 'steady'
