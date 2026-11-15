@@ -101,7 +101,11 @@ try {
   // Search, route and duration filters must make a specific lesson easy to find.
   const lessonSearch = page.getByRole('searchbox', { name: 'Search lessons' });
   await lessonSearch.fill('fretboard map 1');
-  await page.getByText('1 lesson found', { exact: false }).waitFor();
+  await page.waitForFunction(() =>
+    document.querySelector('.result-count')?.textContent?.trim().startsWith('1 lesson found')
+  );
+  assert.equal(await page.locator('.lesson-result').count(), 1);
+  assert.equal(await page.locator('.lesson-result h3').first().innerText(), 'Fretboard map 1');
   await page.getByLabel('Learning path').selectOption('year-2');
   await page.getByLabel('Lesson length').selectOption('21-30');
   assert.equal(await page.locator('.lesson-result').count(), 1);
