@@ -7,6 +7,11 @@
   } from '../../../lib/audio/microphone-input';
   import { estimatePitch } from '../../../lib/audio/pitch-estimator';
   import { StableNoteTracker } from '../../../lib/audio/stable-note-tracker';
+  import {
+    createNoteRecognitionScore,
+    recordNoteRecognitionAttempt,
+    resetNoteRecognitionTarget
+  } from '../../../lib/audio/note-recognition-scoring';
 
   const targets = [
     { midiNote: 40, noteName: 'E2', stringName: '6th · Low E' },
@@ -30,9 +35,10 @@
   let isRunning = $state(false);
   let roundIndex = $state(0);
   let correctCount = $state(0);
-  let firstTryCorrectCount = $state(0);
-  let totalAttemptCount = $state(0);
-  let attemptsForRound = $state(0);
+  let score = $state(createNoteRecognitionScore());
+  const firstTryCorrectCount = $derived(score.firstTryMatches);
+  const totalAttemptCount = $derived(score.totalAttempts);
+  const attemptsForRound = $derived(score.attemptsForCurrentTarget);
   let roundState = $state<'ready' | 'listening' | 'waiting' | 'retry' | 'correct' | 'complete'>('ready');
   let detectedNote = $state('');
   let errorMessage = $state('');
@@ -124,9 +130,7 @@
         ) {
           if (update.note) {
             const isTargetNote = update.note.midiNote === target.midiNote;
-            totalAttemptCount += 1;
-            if (attemptsForRound === 0 && isTargetNote) firstTryCorrectCount += 1;
-            attemptsForRound += 1;
+            score = recordNoteRecognitionAttempt(score, isTargetNote);
             if (isTargetNote) {
               correctCount += 1;
               roundState = 'correct';
@@ -155,7 +159,7 @@
       return;
     }
     roundIndex += 1;
-    attemptsForRound = 0;
+    score = resetNoteRecognitionTarget(score);
     detectedNote = '';
     roundState = awaitingRelease ? 'waiting' : 'listening';
   }
@@ -163,9 +167,7 @@
   function restartExercise() {
     roundIndex = 0;
     correctCount = 0;
-    firstTryCorrectCount = 0;
-    totalAttemptCount = 0;
-    attemptsForRound = 0;
+    score = createNoteRecognitionScore();
     detectedNote = '';
     awaitingRelease = false;
     tracker.reset();
