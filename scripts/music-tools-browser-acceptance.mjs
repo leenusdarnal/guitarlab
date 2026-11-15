@@ -161,7 +161,7 @@ try {
   // A valid BPM deep link pre-fills tempo without starting audio.
   await page.goto(`${origin}/tools/metronome?bpm=96`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
-  await page.getByRole('spinbutton', { name: 'Enter tempo in beats per minute' }).toHaveValue('96');
+  assert.equal(await page.getByRole('spinbutton', { name: 'Enter tempo in beats per minute' }).inputValue(), '96');
   assert.equal(await page.getByRole('button', { name: 'Metronome playback' }).getAttribute('aria-pressed'), 'false');
 
   // Audio starts only from an explicit user action and can be stopped.
