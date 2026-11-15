@@ -88,6 +88,19 @@
     </article>
 
     <article class="tool-row available">
+      <div class="tool-symbol" aria-hidden="true">♮</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Harmony · Chords · Musical function</span></div>
+        <h2>Theory recall</h2>
+        <p>
+          Connect chord names, locally synthesized triad sounds and their role
+          in a key through short name, sound and use prompts.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/theory-recall')}>Open theory recall <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">◷</div>
       <div class="tool-copy">
         <div class="tool-meta"><span class="available-label">Available now</span><span>Tempo · Pulse · Reference tones</span></div>
