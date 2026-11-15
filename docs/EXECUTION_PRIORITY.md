@@ -1,12 +1,24 @@
 # GuitarLab Execution Priority and Resume Plan
 
-**Last updated:** 2026-11-14  
+**Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-14 after PR #113
+## Live checkpoint — 2026-11-15 after PR #125
+
+- Verified `main` HEAD: `4e7ee50b7b39e68c5593b30289562330acb7c727`, the squash merge of PR #125. PR #123 is also merged as `fea5c4ca07f1836ff946002eead8c807dfc50d1c`.
+- The priority implementation sequence #117–#123 is merged: interval-response evidence labels, chord-movement listening, theory recall, shared harmony/fretboard/CAGED, local repertoire projects and the real-device evidence matrix, followed by the isolated manual CI rehearsal.
+- PR #125 is merged: production environment decision and release gates are documented. No production resources, secrets, D1 database, routes, authentication or production deployment were created or authorized.
+- PR #124 is the only remaining open PR and is the final governance/tracker update. Its docs branch is being refreshed onto this main commit; required CI must pass on the refreshed head before merge.
+- CI evidence: PR #123 post-merge main run [#43676456055](https://github.com/leenusdarnal/guitarlab/actions/runs/43676456055) passed. PR #125 refreshed-head run [#43676639833](https://github.com/leenusdarnal/guitarlab/actions/runs/43676639833) passed. Post-merge main run [#43677053099](https://github.com/leenusdarnal/guitarlab/actions/runs/43677053099) is running for the current main SHA; confirm it before merging #124.
+- Issue #5 remains open until the controlled workflow is manually dispatched in both modes (expected failure and clean recovery), and the real run URLs are recorded.
+- Issue #3 remains open pending explicit owner decisions on account ownership, hostname, access model, data architecture and release approval. The production decision record is preparation, not authorization.
+- Physical-device and recording evidence remains outstanding under Issues #89, #9, #10 and #18. Synthetic fixtures and automated browser checks do not count as hardware sign-off.
+- After #124 is merged, verify final main CI, then continue with Issue #17's remaining interval/content-provenance work and the outstanding manual release evidence.
+
+## Historical checkpoint — 2026-11-14 after PR #113
 
 - Verified `main`: `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; PR #113 is merged and its post-merge GuitarLab CI run [#43623315478](https://github.com/leenusdarnal/guitarlab/actions/runs/43623315478) passed.
 - PR #112 links newly created sessions/observations to the exact authored lesson/exercise pair, curriculum release and taxonomy version.
@@ -111,7 +123,7 @@ See [Research Integration Plan](RESEARCH_INTEGRATION_PLAN.md) for the comparativ
 
 ## 4. Working rules
 
-1. One implementation PR at a time.
+1. Implement independent, bounded PRs in parallel when dependencies permit. Do not make a branch depend on another unmerged PR unless it is explicitly based on that branch.
 2. Start each task from the latest verified `main` SHA.
 3. Inspect open PRs, open issues, active Actions runs and latest main CI before starting.
 4. Use small, independently testable changes with explicit acceptance criteria.
@@ -129,28 +141,26 @@ When the user says “resume GuitarLab” or “continue implementation”:
 2. List open PRs, open issues and active workflow runs.
 3. Read this file, `docs/IMPLEMENTATION_TRACKER.md` and the relevant GitHub issue.
 4. Reconcile acceptance criteria against current code and merged PRs; do not repeat completed work.
-5. Continue the highest-priority incomplete task above, one slice at a time.
-6. Record PR, CI evidence, manual QA and the next exact task before pausing.
+5. Continue the highest-priority incomplete task above; independent lower-priority work may proceed on parallel branches, but merge strictly in priority order.
+6. Before merging, verify PR head SHA and required checks; after every merge verify main CI, then rebase and revalidate the next queued PR. Record PR, CI evidence, manual QA and the next exact task before pausing.
 
 ## 6. Current hand-off
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf` (PR #113 merged) |
-| PR #102 | Merged; Jazz & Harmony Weeks 5–8; curriculum v1.0.6 |
-| PR #103 | Merged; append-only local recommendation feedback; merge commit `b27eed5e27e805d43259019fa304f80df20f356a` |
-| PR #104 | Merged; comparable measured-score summaries/trends; merge commit `a1da00fe0fb5804464ccb1679c128d1176957041` |
-| PR #110 | Merged; item accuracy and repeated-miss analytics; merge commit `a04d284e82447707de6b4d70a01115f2b2982e0b` |
-| PR #111 | Merged; authored practice taxonomy v0.1.0 for ten evidenced Year 1 exercises; merge commit `9fa940474ebe650552ed70f222dc1cf44b506aba` |
-| PR #112 | Merged; exact authored exercise identity on new sessions and observations; merge commit `f402b8f307425d1c70b8f9f7f7d303438643948e` |
-| PR #113 | Merged; read-only authored exercise exposure coverage; merge commit `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; post-merge CI run #43623315478 passed |
-| PR #104 validation | Run [#43584492437](https://github.com/leenusdarnal/guitarlab/actions/runs/43584492437); primary application/curriculum and Node.js 26 jobs passed |
-| Current engineering task | Expand the taxonomy to v0.2.0 with five exact source-evidenced exercises and version-compatible history; PR #114 is the intended slice |
-| Audio | Issue #68 closed; real-device evidence remains in Issue #89 |
-| Curriculum | 44/152 lessons task-specific; 32/48 Year 3+ specialist lessons; next specialist authoring is Jazz Weeks 9–12 and All-Round Musician |
-| M8 | PRs #61/#67 merged; theory recall, chord movement, connected fretboard theory and repertoire remain in Issue #17 |
-| M9 | Physical-device and release acceptance remains open under Issue #18 |
-| Deferred | Production deployment, production D1, authentication, cloud sync and unreviewed CI redesign |
+| Last verified main SHA | `4e7ee50b7b39e68c5593b30289562330acb7c727` (PR #125 merged); post-merge CI run #43677053099 is still running |
+| PRs #117–#122 | Merged; interval evidence, chord movement, theory recall, shared harmony/CAGED, local repertoire and the real-device evidence matrix |
+| PR #123 | Merged as `fea5c4ca07f1836ff946002eead8c807dfc50d1c`; isolated manual CI rehearsal is available on main; both manual dispatches remain pending |
+| PR #125 | Merged as `4e7ee50b7b39e68c5593b30289562330acb7c727`; production decision and release gates documented, with no production changes authorized |
+| PR #124 | Only remaining open PR; final governance/tracker update. Refresh onto latest main, rerun required CI and merge last |
+| PR #123 post-merge CI | [Run #43676456055](https://github.com/leenusdarnal/guitarlab/actions/runs/43676456055) passed |
+| PR #125 refreshed-head CI | [Run #43676639833](https://github.com/leenusdarnal/guitarlab/actions/runs/43676639833) passed |
+| Current main CI | [Run #43677053099](https://github.com/leenusdarnal/guitarlab/actions/runs/43677053099); pending at this checkpoint |
+| Current product follow-up | Issue #17: broader interval learning and content provenance/licensing review |
+| Audio and device evidence | Issue #89 real-guitar/physical audio evidence; Issues #9 and #10 physical-device storage and backup/restore; Issue #18 accessibility, privacy and release acceptance |
+| Controlled CI evidence | Issue #5 remains open until real failure-injection and recovery run URLs are recorded |
+| Production | Issue #3 remains open pending owner decisions and explicit approval; no production provisioning or deployment |
+| Deferred | Production D1, authentication, cloud sync and production deployment |
 
 **Source-of-truth hierarchy:** current code/tests on `main` → merged PR evidence → current GitHub Issues/Actions → this checkpoint → historical notes and chat summaries.
 

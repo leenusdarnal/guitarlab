@@ -1,6 +1,6 @@
 # GuitarLab Implementation Tracker
 
-**Last updated:** 2026-11-14  
+**Last updated:** 2026-11-15  
 **Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
@@ -14,6 +14,30 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - **Adaptive practice expanded:** PRs #92–94 provide the evidence audit, deterministic read model, canonical skill catalogue and Practice Studio recommendations/category assessment coverage. PR #103 adds append-only local dismiss/correct feedback; PR #104 adds comparable measured-score summaries/trends; PRs #107–109 add objective item outcomes; PR #110 adds item accuracy and repeated-miss prioritisation; PR #111 adds the first explicitly evidenced taxonomy; PR #112 links new sessions/observations to exact authored exercise, lesson, release and taxonomy identity; PR #113 (merged as `fbe9e75`) derives local exposure from exact links. PR #114 merged taxonomy v0.2.0 with 15 scopes and retained the v0.1.0 snapshot. This follow-up advances to v0.3.0 with nine additional evidence-backed scopes, preserving immutable v0.1.0 and v0.2.0 snapshots so historical observations are never reclassified. Legacy free-text records and unsupported taxonomy versions remain excluded. No exposure data is accuracy, completion or mastery evidence.
 - **Musicianship and release work remain:** Issue #17 covers chord-movement listening, theory recall, connected theory/CAGED and repertoire. Issue #18 and Issues #3, #5, #9 and #10 retain release, infrastructure and physical-device acceptance gates.
 - PRs #102–104 and #110 are merged; refresh live open-PR and Actions state before starting another implementation slice.
+
+## Parallel implementation queue — 2026-11-15
+
+Independent implementation branches may be developed in parallel, but merges remain priority-ordered. The current sequence through PR #125 is merged; #124 is the only remaining PR in this queue.
+
+| Merge order | PR | Priority / issue | Scope | Current gate |
+|---|---|---|---|---|
+| Merged 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval-response mismatch evidence labels; no mastery mutation | Merged; checks passed |
+| Merged 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Merged; checks passed |
+| Merged 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Theory recall: name, sound and musical use | Merged; checks passed |
+| Merged 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scales, triads, inversions, CAGED and canonical fretboard notes | Merged; duplicate #126 added no implementation delta |
+| Merged 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local repertoire projects, learner-scoped IndexedDB v7 and backup/restore/reset | Merged; application and Node.js 26 checks passed |
+| Merged 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real recording, physical-device, storage and recovery evidence matrix | Merged; physical hardware and recording evidence remain not run |
+| Merged 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Isolated manual CI failure/recovery rehearsal | Merged; actual failure-injection and recovery dispatches remain pending |
+| Merged 8 | [#125](https://github.com/leenusdarnal/guitarlab/pull/125) | P4 / #3 | Production environment decision and explicit release gates | Merged; owner decisions remain pending; no production resource or deployment authorized |
+| Final | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation, strict merge order and durable status tracking | Only remaining open PR; refreshed against latest main; required CI and post-merge main validation remain |
+
+**Remaining merge order:** #124 only. After its merge, verify final main CI before starting the next implementation batch.
+
+**Recent CI evidence:** PR #123 post-merge main run [#43676456055](https://github.com/leenusdarnal/guitarlab/actions/runs/43676456055) passed; PR #125 refreshed-head run [#43676639833](https://github.com/leenusdarnal/guitarlab/actions/runs/43676639833) passed. Post-merge main run [#43677053099](https://github.com/leenusdarnal/guitarlab/actions/runs/43677053099) is running for main SHA `4e7ee50b7b39e68c5593b30289562330acb7c727`.
+
+**Honest completion rule:** physical-device/recording acceptance, manual accessibility/privacy review, controlled workflow dispatch and production approval remain open until their evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
+
+
 
 ## Current status
 
@@ -31,10 +55,8 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 | M3 dashboard and planning | Merged | PR #26 dashboard and PR #28 explainable 10/20/40/custom practice planner; browser acceptance covers key planning journeys |
 | M4.1 curriculum reader | Merged | PR #29: six routes, all 152 lessons, lesson reader, previous/next navigation and Chromium acceptance |
 | M4.2 interactive lesson progress | Merged — PR #33; manual QA pending | Local section progress, checkpoint self-check, private next-practice note and explicit completion/resume. Lesson completion remains separate from skill mastery; Chromium coverage was added in the PR |
-| Music tools, practice studio and musicianship | M6 audio implementation complete; M7.1 complete; M7.2 partially implemented; M8.1 in progress | PRs #45–46 deliver fretboard, chords and metronome. PRs #78–86 and #90–91 add owned audio sessions, microphone capture, pitch estimation, stable-note tracking, tuner, note-recognition and benchmarks; Issue #68 is closed and Issue #89 holds real-device validation. PRs #50–59 deliver the practice/evidence loop. PRs #92–94 add adaptive recommendations, skill catalogue and Practice Studio category assessment coverage; PR #103 adds append-only feedback; PR #104 adds comparable measured-score trends and descriptive spread; PRs #107–109 add objective item outcomes; PR #110 adds item accuracy and repeated-miss signals. Issue #69 remains open for author-reviewed practice taxonomy expansion and stable exercise-linked practice exposure coverage. PRs #61/#67 add pulse, contour and four interval classes. Theory recall, chord movement, connected CAGED/triad learning and repertoire remain in Issue #17 |
-| Release hardening | Not ready | PR #35 adds the first offline app shell; PR #36 adds P1 reliability/security-header/storage-persistence and exact-SHA preview-gate hardening; PR #42 adds backup/restore/rollback/reset browser coverage; PR #43 adds IndexedDB v1-to-v2 upgrade and desktop/mobile offline browser acceptance. Physical-device acceptance, CSP, full accessibility/privacy review, environment isolation, preview deployment and rollback verification remain |
-
-**Repository state (2026-11-14):** PR #112 is merged into `main` as `f402b8f307425d1c70b8f9f7f7d303438643948e`; PR #113 (`feat(m7): report authored exercise exposure coverage`) is merged as `fbe9e75dc9640d31a8b5c9d281cac60b6d503ddf`; post-merge GuitarLab CI run #43623315478 passed. PR #114 is merged as `9e652e81efbb7ae74e8b13b83d3576583623ec0b`; its v0.2.0 taxonomy has 15 scopes. PR #115 carries v0.3.0 with nine further scopes and retained v0.1.0/v0.2.0 history. PR #111 is merged as `9fa940474ebe650552ed70f222dc1cf44b506aba`; the current curriculum release is v1.0.6 with 152 stable lesson IDs, 34 skill IDs and 391 lesson-to-skill links. PR #112 persists optional exact authored lesson/exercise identity and taxonomy release/version for new sessions and observations while leaving historical free-text data unchanged. PR #113 adds a read-only, local exposure summary from exact linked records only; its denominator is limited to currently reviewed taxonomy scopes, not the full curriculum. Issues #68 and #15 are closed; Issue #89 tracks real-recording and physical-device evidence. Issue #69 remains open for author-reviewed taxonomy expansion and any deterministic exercise-specific confusion labels. M7.1 remains complete in PRs #50–59; Issue #17 and #18 remain open. Physical-device IndexedDB and backup/restore checks remain in Issues #9 and #10; controlled CI failure/recovery remains in #5; production environment design remains in #3. The active `main` ruleset requires pull requests and the `Validate application and curriculum` status check. Production D1, authentication and cloud sync remain unconfigured and deferred.
+| Music tools, practice studio and musicianship | M6 audio implementation complete; M7.1 complete; M7.2 evidence analytics delivered with further taxonomy work open; M8.1 core delivered, with interval/licensing follow-ups open | PRs #45–46 deliver fretboard, chords and metronome. PRs #78–86 and #90–91 add owned audio sessions, microphone capture, pitch estimation, stable-note tracking, tuner, note-recognition and benchmarks; Issue #68 is closed and Issue #89 holds real-recording/physical-device validation. PRs #50–59 deliver the practice/evidence loop. PRs #92–94 add adaptive recommendations and the canonical skill catalogue; PRs #103–117 add append-only feedback, comparable-score trends, objective item outcomes, evidence-scoped analytics and explicit v1 interval-response contrasts without changing whole-skill mastery. Issue #69 remains open for further source-backed taxonomy and evidence work. PRs #61/#67 add pulse, contour and four interval classes. PR #118 delivers chord-movement listening; #119 adds name/sound/use theory recall; #120 shares scale/triad/inversion/CAGED calculations with the canonical fretboard model; #121 adds local repertoire projects with backup/restore integration. Issue #17 remains open for broader interval coverage and content-provenance/licensing review |
+| Release hardening | Not ready | PR #35 adds the first offline app shell; PR #36 adds P1 reliability/security-header/storage-persistence and exact-SHA preview-gate hardening; PR #42 adds backup/restore/rollback/re**Repository state (2026-11-15 after PR #125):** `main` is at `4e7ee50b7b39e68c5593b30289562330acb7c727`. PRs #117–#123 and #125 are merged. PR #124 is the only remaining open PR and is the final governance/tracker update. Post-merge main CI run #43677053099 is running. Issue #17 remains open for broader interval coverage and content provenance/licensing review. Issue #89 tracks real recordings and physical audio acceptance; Issues #9 and #10 retain physical-device storage and backup/restore checks; Issue #18 retains release/accessibility/privacy review; Issue #5 remains open until both controlled failure and recovery workflow runs are recorded; Issue #3 remains open pending production ownership and approval. Production D1, authentication, cloud sync and production deployment remain deferred.
 
 ## M1 — Application foundation
 
@@ -113,10 +135,10 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## How progress is recorded
 
-1. Use one pull request per small implementation slice where practical; link it to its issue with `Closes #N` when all acceptance criteria are complete.
+1. Use one focused PR per implementation slice. Independent slices may be developed on parallel branches; record their dependency and merge order. Link to the issue and use `Closes #N` only when every acceptance criterion is complete.
 2. Include CI results and manual verification evidence in the pull request description.
 3. Update this page when a slice changes state or an acceptance criterion changes.
-4. Keep `main` buildable and protected by pull-request and required-status-check rules.
+4. Keep `main` buildable and protected by pull-request and required-status-check rules. Merge in the documented priority order, verifying main CI after each merge and revalidating the next PR against the updated base.
 5. Keep learner records, recordings, credentials and runtime databases out of this public repository.
 
 ## Definition of done
