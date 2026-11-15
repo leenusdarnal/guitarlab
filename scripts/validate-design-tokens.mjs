@@ -22,6 +22,7 @@ const requiredTokens = [
   'success',
   'warning',
   'danger',
+  'danger-ink',
   'focus'
 ];
 
@@ -64,6 +65,7 @@ const checks = [
   ['success', 'bg', 4.5],
   ['warning', 'bg', 4.5],
   ['danger', 'bg', 4.5],
+  ['danger-ink', 'danger', 4.5],
   ['primary-ink', 'primary', 4.5],
   ['border-strong', 'surface', 3],
   ['focus', 'bg', 3]

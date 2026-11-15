@@ -16,12 +16,14 @@
   --text-subtle: #8592a2;
   --border: #303a48;
   --border-strong: #6b7888;
+  --control-border: #718096;
   --primary: #f0b65a;
   --primary-ink: #20160a;
   --secondary: #a7a4ea;
   --success: #76c6a0;
   --warning: #e9bc68;
   --danger: #f08a80;
+  --danger-ink: #20160a;
   --focus: #ffd17a;
 
   /* Layout and type roles */
@@ -64,12 +66,14 @@
   --text-subtle: #626e7c;
   --border: #d7dce1;
   --border-strong: #7a8795;
+  --control-border: #7a8795;
   --primary: #8a5210;
   --primary-ink: #ffffff;
   --secondary: #5b50a8;
   --success: #216a4a;
   --warning: #805400;
   --danger: #a5352b;
+  --danger-ink: #ffffff;
   --focus: #744600;
 }
 
@@ -100,11 +104,26 @@ textarea {
   font: inherit;
 }
 
+button,
+select,
+input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']) {
+  min-height: 44px;
+}
+
+button {
+  min-width: 44px;
+}
+
+textarea {
+  min-height: 5.5rem;
+}
+
 input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='hidden']),
 select,
 textarea {
   /* Prevent route-level styles from shrinking mobile form text below 16px. */
   font-size: max(1rem, 16px) !important;
+  border-color: var(--control-border) !important;
 }
 
 button,
