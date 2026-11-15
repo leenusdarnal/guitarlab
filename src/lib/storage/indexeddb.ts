@@ -1356,6 +1356,7 @@ export async function loadActiveSkillStateReview(): Promise<
 /** Persist a learner correction locally; only an already-known skill snapshot can be corrected. */
 export async function correctActiveSkillState(input: {
   skillId: string;
+  curriculumReleaseId?: string;
   state: SkillMasteryRecord['state'];
   note: string;
 }): Promise<SkillMasteryRecord> {
@@ -1365,7 +1366,7 @@ export async function correctActiveSkillState(input: {
     const repositories = createIndexedDbRepositories(database);
     const existing = await repositories.mastery.find(
       profile.id,
-      'curriculum-v1',
+      input.curriculumReleaseId ?? ACTIVE_CURRICULUM_RELEASE_ID,
       input.skillId
     );
     if (!existing) {
