@@ -253,6 +253,17 @@
         <span class="capture-state">Microphone starts only when you press Start</span>
       {/if}
     </div>
+    {#if !isRunning && !isStarting}
+      <aside class="microphone-permission-note" aria-labelledby="microphone-access-title">
+        <h2 id="microphone-access-title">Microphone access</h2>
+        <p>
+          Your browser asks for microphone permission only after you press Start tuner.
+          Pitch is analysed on this device; audio is not uploaded or saved. If access was
+          blocked, open this site's permissions in your browser settings, allow Microphone,
+          reload this page and try again.
+        </p>
+      </aside>
+    {/if}
 
     {#if errorMessage}
       <p class="error-message" role="alert">{errorMessage}</p>
@@ -275,8 +286,8 @@
       <p>Use the table above from the thickest string (low E2) to the thinnest (high E4). Tune one open string at a time, and use the matching note as your target.</p>
       <h3>Get a clear input level</h3>
       <p>Place your device microphone roughly a handspan from the guitar. Pluck firmly but comfortably, mute the other strings, and reduce nearby noise. Raise your device input level if the tuner never detects a stable note.</p>
-      <h3>Microphone permission</h3>
-      <p>Choose Start tuner to request microphone access. When permission is blocked, allow microphone access for this site in your browser or device settings, then try again. The tuner does not listen until you press Start.</p>
+      <h3>If microphone access is blocked</h3>
+      <p>Open this site's permissions from your browser's address-bar or site-settings menu. Allow Microphone, reload the page, then choose Start tuner. You can stop capture at any time with the Stop microphone button.</p>
       <h3>Use a reference tone</h3>
       <p>The A4 button plays a reference pitch at your selected {calibration} Hz calibration. Compare it by ear if useful; the chromatic tuner still measures the string you play.</p>
     </div>
@@ -496,5 +507,23 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .needle { transition: none; }
+  }
+
+  .microphone-permission-note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+  }
+  .microphone-permission-note h2 {
+    margin: 0 0 6px;
+    font-size: 12px;
+  }
+  .microphone-permission-note p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.65;
   }
 </style>
