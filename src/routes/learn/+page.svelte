@@ -42,7 +42,12 @@
         'week ' + lesson.week
       ].join(' ').toLocaleLowerCase();
 
-      if (!terms.every((term) => searchableText.includes(term))) return false;
+      const searchableTokens = new Set(searchableText.match(/[\\p{L}\\p{N}]+/gu) ?? []);
+      if (
+        !terms.every((term) =>
+          /^\\d+$/.test(term) ? searchableTokens.has(term) : searchableText.includes(term)
+        )
+      ) return false;
 
       if (durationFilter === 'up-to-20' && lesson.estimatedMinutes > 20) return false;
       if (durationFilter === '21-30' && (lesson.estimatedMinutes < 21 || lesson.estimatedMinutes > 30)) return false;
