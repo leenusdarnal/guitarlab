@@ -227,7 +227,9 @@ try {
     .click();
   await page.getByText(progressLabel).waitFor();
   const checkpointNote = page.locator('#checkpoint-note');
-  await checkpointNote.fill('A first note queued while another save is in flight.');
+  await checkpointNote.fill(
+    'A first note queued while another save is in flight.'
+  );
   await page.getByRole('button', { name: 'I need more practice' }).click();
   await page.getByRole('button', { name: 'I can meet this target' }).click();
   await checkpointNote.fill('Keep the final chord change relaxed.');

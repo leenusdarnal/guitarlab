@@ -359,7 +359,9 @@ try {
         preference: document.documentElement.dataset.themePreference,
         theme: document.documentElement.dataset.theme,
         stored: localStorage.getItem('guitarlab-theme'),
-        themeColor: document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
+        themeColor: document
+          .querySelector('meta[name="theme-color"]')
+          ?.getAttribute('content')
       })),
       {
         preference: 'light',
@@ -377,13 +379,17 @@ try {
     );
     await sharedAppearance.selectOption('system');
     await page.emulateMedia({ colorScheme: 'dark' });
-    await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'dark'
+    );
     assert.equal(
       await page.locator('meta[name="theme-color"]').getAttribute('content'),
       '#101318'
     );
     await page.emulateMedia({ colorScheme: 'light' });
-    await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'light'
+    );
     assert.equal(
       await page.locator('meta[name="theme-color"]').getAttribute('content'),
       '#F5F4F0'
