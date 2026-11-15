@@ -333,49 +333,7 @@
     </p>
   </header>
 
-  <section class="panel settings-panel" aria-labelledby="settings-title">
-    <div class="section-heading">
-      <div>
-        <div class="eyebrow">YOUR VIEW</div>
-        <h2 id="settings-title">Fretboard settings</h2>
-      </div>
-      <span class="local-label">Runs locally</span>
-    </div>
 
-    <div class="controls">
-      <label>
-        <span>Diagram orientation</span>
-        <select aria-label="Diagram orientation" bind:value={handedness}>
-          <option value="right">Right-handed</option>
-          <option value="left">Left-handed</option>
-        </select>
-      </label>
-      <label>
-        <span>Note spelling</span>
-        <select aria-label="Note spelling" bind:value={spelling}>
-          <option value="sharp">Sharps (♯)</option>
-          <option value="flat">Flats (♭)</option>
-        </select>
-      </label>
-      <label>
-        <span>Fret range</span>
-        <select aria-label="Fret range" value={maxFret} onchange={changeMaxFret}>
-          <option value={12}>Open to 12th fret</option>
-          <option value={24}>Open to 24th fret</option>
-        </select>
-      </label>
-    </div>
-
-    <div class="preference-actions">
-      <p>Save the diagram orientation as a preference on this learner profile.</p>
-      <button class="secondary-button" type="button" onclick={saveOrientation} disabled={isSaving}>
-        {isSaving ? 'Saving…' : 'Save this orientation to my profile'}
-      </button>
-    </div>
-    {#if saveStatus}
-      <p class="save-status" role="status">{saveStatus}</p>
-    {/if}
-  </section>
 
   <section class="panel explorer-panel" aria-labelledby="diagram-title">
     <div class="section-heading">
@@ -434,7 +392,16 @@
             <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
         </select>
-        <p>Choose any matching position. The exercise checks note identity, not speed.</p>
+        <div class="find-progress" aria-label="Find a note progress">
+          <strong>{foundCount} found</strong>
+          <span>{firstTryCount} first-try · {attemptCount} selections</span>
+        </div>
+        <div class="find-actions">
+          <button type="button" class="secondary-button" onclick={showHint} disabled={targetFound}>Hint</button>
+          <button type="button" class="secondary-button" onclick={revealPositions} disabled={targetFound}>Reveal positions</button>
+          <button type="button" class="primary-button" onclick={nextTargetNote}>Next note</button>
+        </div>
+        <p>Find one matching position. Hints and reveals help you learn the neck, but do not count as a first-try answer.</p>
       </div>
     {:else}
       <p class="diagram-hint" id="keyboard-help">
@@ -460,6 +427,35 @@
           {/each}
         </div>
 
+        <div class="fret-rows">
+          <svg
+            class="fretboard-structure"
+            viewBox={`0 0 ${maxFret + 1} 6`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {#each Array.from({ length: 6 }, (_, row) => row) as row (row)}
+              <line class="board-string" x1="0" x2={maxFret + 1} y1={row + 0.5} y2={row + 0.5} />
+            {/each}
+            {#each fretWires as fret (fret)}
+              <line
+                class:nut={fret === (handedness === 'left' ? maxFret : 1)}
+                class="board-fret-wire"
+                x1={fret}
+                x2={fret}
+                y1="0"
+                y2="6"
+              />
+            {/each}
+            {#each inlayFrets as fret (fret)}
+              {#if fret === 12 || fret === 24}
+                <circle class="board-inlay" cx={getDisplayFretColumn(fret, maxFret, handedness) - 0.5} cy="1.6" r="0.12" />
+                <circle class="board-inlay" cx={getDisplayFretColumn(fret, maxFret, handedness) - 0.5} cy="4.4" r="0.12" />
+              {:else}
+                <circle class="board-inlay" cx={getDisplayFretColumn(fret, maxFret, handedness) - 0.5} cy="3" r="0.12" />
+              {/if}
+            {/each}
+          </svg>
         {#each fretboardRows as notes, rowIndex (rowIndex + 1)}
           <div
             class="fret-row"
@@ -479,6 +475,8 @@
                 class:is-target={findMode && selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret && note.pitchClass === targetPitchClass}
                 class:is-selected={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
                 class:is-harmony-note={isHarmonyHighlighted(note)}
+                class:is-hint={findMode && hintPosition?.stringNumber === note.stringNumber && hintPosition?.fret === note.fret}
+                class:is-revealed={findMode && revealedPositions && note.pitchClass === targetPitchClass}
                 type="button"
                 aria-label={cellLabel(note)}
                 aria-pressed={selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret}
@@ -498,7 +496,7 @@
                 onclick={() => activateNote(note)}
                 onkeydown={(event) => moveFocus(event, note)}
               >
-                {#if !findMode || (selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret)}
+                {#if !findMode || (revealedPositions && note.pitchClass === targetPitchClass) || (selectedPosition?.stringNumber === note.stringNumber && selectedPosition?.fret === note.fret)}
                   <span>{note.noteName}</span><small>{note.octave}</small>
                 {:else}
                   <span class="visually-hidden">Position</span>
@@ -506,13 +504,15 @@
               </button>
             {/each}
           </div>
-        {/each}
+          {/each}
+        </div>
       </div>
     </div>
 
     <div class="legend" aria-label="Fretboard legend">
       <span><i class="open-marker"></i> Open string</span>
       <span><i class="target-marker"></i> Target note</span>
+      <span><i class="inlay-marker"></i> Standard fret position inlay</span>
       <span>String 1 is the highest pitch; string 6 is the lowest.</span>
     </div>
 
@@ -526,12 +526,62 @@
         <div class="frequency">
           <span>Frequency</span>
           <strong>{selectedNote.frequencyHz.toFixed(2)} Hz</strong>
+          <button type="button" class="secondary-button" onclick={playSelectedNote} disabled={isPlayingNote}>
+            {isPlayingNote ? 'Playing note…' : `Hear ${selectedNote.noteName}${selectedNote.octave}`}
+          </button>
         </div>
       </div>
+      {#if playbackMessage}
+        <p class="feedback" role="status">{playbackMessage}</p>
+      {/if}
     {/if}
 
     {#if feedback}
       <p class="feedback" role="status">{feedback}</p>
+    {/if}
+  </section>
+
+  <section class="panel settings-panel" aria-labelledby="settings-title">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">YOUR VIEW</div>
+        <h2 id="settings-title">Fretboard settings</h2>
+      </div>
+      <span class="local-label">Runs locally</span>
+    </div>
+
+    <div class="controls">
+      <label>
+        <span>Diagram orientation</span>
+        <select aria-label="Diagram orientation" bind:value={handedness}>
+          <option value="right">Right-handed</option>
+          <option value="left">Left-handed</option>
+        </select>
+      </label>
+      <label>
+        <span>Note spelling</span>
+        <select aria-label="Note spelling" bind:value={spelling}>
+          <option value="sharp">Sharps (♯)</option>
+          <option value="flat">Flats (♭)</option>
+        </select>
+      </label>
+      <label>
+        <span>Fret range</span>
+        <select aria-label="Fret range" value={maxFret} onchange={changeMaxFret}>
+          <option value={12}>Open to 12th fret</option>
+          <option value={24}>Open to 24th fret</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="preference-actions">
+      <p>Save the diagram orientation as a preference on this learner profile.</p>
+      <button class="secondary-button" type="button" onclick={saveOrientation} disabled={isSaving}>
+        {isSaving ? 'Saving…' : 'Save this orientation to my profile'}
+      </button>
+    </div>
+    {#if saveStatus}
+      <p class="save-status" role="status">{saveStatus}</p>
     {/if}
   </section>
 
