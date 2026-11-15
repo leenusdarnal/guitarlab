@@ -53,8 +53,10 @@ try {
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Curriculum' }).first().click();
   await page
-    .getByRole('heading', { name: /Choose your next chapter/ })
+    .getByRole('heading', { name: /Find your next lesson/ })
     .waitFor();
+  await page.getByRole('navigation', { name: 'Primary navigation' }).waitFor();
+  await page.getByRole('searchbox', { name: 'Search lessons' }).waitFor();
 
   assert.equal(
     await page.locator('.route-card').count(),
@@ -62,9 +64,14 @@ try {
     'All six learning routes should render'
   );
   assert.equal(
-    await page.locator('.week-link').count(),
-    152,
-    'Every authored lesson should have a stable navigation link'
+    await page.locator('.lesson-result').count(),
+    12,
+    'The finder should show a useful first page of lessons'
+  );
+  assert.equal(
+    await page.locator('.stats').innerText().then((text) => /152 lessons in total/.test(text)),
+    true,
+    'The complete 152-lesson catalogue should be identified'
   );
   assert.equal(
     await page.locator('.route-jump a').count(),
@@ -85,10 +92,28 @@ try {
   );
   assert.match(await page.locator('.stats').innerText(), /152 total lessons/);
 
+  // Search, route and duration filters must make a specific lesson easy to find.
+  const lessonSearch = page.getByRole('searchbox', { name: 'Search lessons' });
+  await lessonSearch.fill('fretboard map 1');
+  await page.getByText('1 lesson found', { exact: false }).waitFor();
+  await page.getByLabel('Learning path').selectOption('year-2');
+  await page.getByLabel('Lesson length').selectOption('21-30');
+  assert.equal(await page.locator('.lesson-result').count(), 1);
+  await page.getByRole('link', { name: 'Open lesson: Fretboard map 1' }).click();
+  await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
+  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await lessonSearch.fill('zzzz-no-matching-lesson');
+  await page.getByRole('heading', { name: 'No lessons match those filters.' }).waitFor();
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await page.locator('.lesson-result').first().waitFor();
+
   // Year 1 content, instructional sections and stable next-lesson navigation.
-  await page.locator('#route-year-1 .week-link').first().click();
+  await page.getByRole('link', { name: 'Open lesson: Meet your guitar' }).click();
   await page.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
   await page.getByRole('heading', { name: 'What you will learn' }).waitFor();
+  await page.getByRole('navigation', { name: 'Lesson sections' }).waitFor();
+  await page.getByRole('link', { name: 'Exercises', exact: true }).click();
+  await page.locator('#lesson-section-exercises').waitFor();
   await page.getByRole('heading', { name: 'Guided demonstration' }).waitFor();
   await page.getByRole('heading', { name: 'Focused exercises' }).waitFor();
   await page
@@ -207,17 +232,14 @@ try {
 
   // Year 2 route and an optional specialist route use the same reader contract.
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  await page.locator('#route-year-2 .phase summary').first().click();
-  await page.locator('#route-year-2 .week-link').first().click();
+  await page.getByRole('searchbox', { name: 'Search lessons' }).fill('Fretboard map 1');
+  await page.getByRole('link', { name: 'Open lesson: Fretboard map 1' }).click();
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
   assert.match(page.url(), /y2-w01-lesson/);
 
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  await page
-    .locator('#route-fingerstyle-acoustic .phase summary')
-    .first()
-    .click();
-  await page.locator('#route-fingerstyle-acoustic .week-link').first().click();
+  await page.getByRole('searchbox', { name: 'Search lessons' }).fill('Right-hand independence');
+  await page.getByRole('link', { name: 'Open lesson: Right-hand independence' }).click();
   await page
     .getByRole('heading', { name: 'Right-hand independence' })
     .waitFor();
@@ -235,6 +257,9 @@ try {
   // The route index remains within the mobile viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'Open navigation' }).click();
+  await page.locator('#mobile-primary-navigation').getByRole('link', { name: 'Learn' }).waitFor();
+  await page.locator('#mobile-primary-navigation').getByRole('link', { name: 'Learn' }).click();
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth
@@ -334,7 +359,7 @@ try {
     `Browser runtime errors: ${pageErrors.join('; ')}`
   );
   console.log(
-    'Curriculum browser acceptance passed: six routes, 152 stable lesson links, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and desktop/mobile offline layout.'
+    'Curriculum browser acceptance passed: six routes, searchable/filterable 152-lesson finder, shared navigation, lesson section outline, lesson reading, progress save/reload/resume, checkpoint self-check/completion, next-lesson navigation, 404 handling and desktop/mobile offline layout.'
   );
 } catch (error) {
   console.error(error);
