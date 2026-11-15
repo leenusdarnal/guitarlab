@@ -1054,9 +1054,14 @@
     .find-panel {
       grid-template-columns: 1fr;
     }
+    .find-progress,
+    .find-actions,
     .find-panel p {
       grid-column: 1;
       grid-row: auto;
+    }
+    .find-progress {
+      justify-content: flex-start;
     }
   }
   @media (prefers-reduced-motion: reduce) {
