@@ -576,7 +576,6 @@
     line-height: 1.5;
   }
   .drill-actions {
-    gap: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 9px;
@@ -605,6 +604,7 @@
     color: var(--text);
   }
   .finish-button {
+    min-height: 48px;
     color: var(--muted);
   }
   button:disabled,
