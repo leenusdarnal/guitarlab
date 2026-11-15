@@ -427,7 +427,7 @@
           {/each}
         </div>
 
-        <div class="fret-rows">
+        <div class="fret-rows" data-frets={maxFret}>
           <svg
             class="fretboard-structure"
             viewBox={`0 0 ${maxFret + 1} 6`}
@@ -736,22 +736,90 @@
   }
   .find-panel {
     display: grid;
-    grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+    gap: 9px 14px;
     align-items: center;
-    gap: 6px 14px;
-    margin: 0 0 15px;
+    margin: 0 0 16px;
     padding: 13px;
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--surface-raised);
   }
-  .find-panel select {
-    grid-column: 1;
-  }
-  .find-panel p {
+  .find-panel label,
+  .find-panel select { grid-column: 1; }
+  .find-progress {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px 14px;
     grid-column: 2;
-    grid-row: 1 / span 2;
+    color: var(--muted);
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
   }
+  .find-progress strong { color: var(--text); font-size: 15px; }
+  .find-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    grid-column: 1 / -1;
+  }
+  .find-actions button { min-height: 44px; padding-inline: 14px; }
+  .find-panel p {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin: 0;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .fretboard-structure {
+    position: absolute;
+    top: 0;
+    left: 34px;
+    z-index: 0;
+    width: calc(100% - 34px);
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .fret-rows {
+    position: relative;
+    display: grid;
+    grid-auto-rows: minmax(48px, auto);
+    gap: 0;
+    min-width: 100%;
+  }
+  .fret-rows[data-frets='24'] { min-width: 700px; }
+  .board-string { stroke: var(--border-strong); stroke-width: 0.035; }
+  .board-fret-wire { stroke: var(--border); stroke-width: 0.035; }
+  .board-fret-wire.nut { stroke: var(--text); stroke-width: 0.12; }
+  .board-inlay { fill: color-mix(in srgb, var(--muted) 24%, transparent); }
+  .fretboard { gap: 3px; }
+  .fret-row { position: relative; z-index: 1; min-height: 48px; gap: 0; }
+  .fret-cell {
+    min-width: 24px;
+    min-height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .fret-cell.is-hint {
+    outline: 3px solid var(--focus);
+    outline-offset: -3px;
+    background: color-mix(in srgb, var(--secondary) 28%, var(--surface));
+  }
+  .fret-cell.is-revealed {
+    background: color-mix(in srgb, var(--secondary) 14%, var(--surface));
+    font-weight: 850;
+  }
+  .inlay-marker {
+    border-color: var(--muted) !important;
+    border-radius: 50% !important;
+    background: color-mix(in srgb, var(--muted) 24%, var(--surface-raised));
+  }
+  .frequency .secondary-button { min-height: 44px; margin-top: 7px; }
   .fretboard-scroll {
     width: 100%;
     overflow-x: auto;
