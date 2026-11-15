@@ -1366,8 +1366,8 @@ try {
       .waitFor()
   ]);
   await Promise.all([
-    page.locator('#duration').fill('2'),
-    competingPage.locator('#duration').fill('2')
+    page.locator('#duration').fill('5'),
+    competingPage.locator('#duration').fill('5')
   ]);
   await Promise.all([
     page.locator('#focus').fill('Concurrent tab A'),
