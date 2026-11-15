@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     MAX_METRONOME_BPM,
@@ -8,6 +8,10 @@
     WebAudioMetronome
   } from '../../../lib/audio/metronome';
 
+  type WakeLockSentinelLike = EventTarget & { release(): Promise<void> };
+  type WakeLockApiLike = { request(type: 'screen'): Promise<WakeLockSentinelLike> };
+
+  const tempoPresets = [60, 80, 100, 120];
   let tempo = $state(80);
   let beatsPerBar = $state(4);
   let metronome = $state<WebAudioMetronome | null>(null);
@@ -15,19 +19,105 @@
   let isStarting = $state(false);
   let isPlayingReference = $state(false);
   let audioError = $state('');
+  let activeBeat = $state<number | null>(null);
+  let isWakeLockActive = $state(false);
+  let wakeLockStatus = $state<'idle' | 'active' | 'unavailable' | 'released'>('idle');
+  let wakeLock: WakeLockSentinelLike | null = null;
+  let tapMessage = $state('Tap in a steady rhythm to set the tempo.');
+  let tapTimes: number[] = [];
+
+  onMount(() => {
+    const requestedTempo = Number(new URLSearchParams(window.location.search).get('bpm'));
+    if (Number.isInteger(requestedTempo) && requestedTempo >= MIN_METRONOME_BPM && requestedTempo <= MAX_METRONOME_BPM) {
+      setTempo(requestedTempo);
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  });
 
   onDestroy(() => {
+    releaseWakeLock();
     void metronome?.dispose();
   });
 
+  function setTempo(nextTempo: number) {
+    if (!Number.isInteger(nextTempo) || nextTempo < MIN_METRONOME_BPM || nextTempo > MAX_METRONOME_BPM) return;
+    tempo = nextTempo;
+    metronome?.setTempo(nextTempo);
+  }
+
   function updateTempo(event: Event) {
-    tempo = Number((event.currentTarget as HTMLInputElement).value);
-    metronome?.setTempo(tempo);
+    setTempo(Number((event.currentTarget as HTMLInputElement).value));
+  }
+
+  function adjustTempo(amount: number) {
+    setTempo(tempo + amount);
+  }
+
+  function tapTempo() {
+    const now = performance.now();
+    if (tapTimes.length && now - tapTimes[tapTimes.length - 1] > 2_000) tapTimes = [];
+    tapTimes = [...tapTimes, now].slice(-5);
+    if (tapTimes.length < 2) {
+      tapMessage = 'Tap once more to calculate your tempo.';
+      return;
+    }
+    const intervals = tapTimes.slice(1).map((tap, index) => tap - tapTimes[index]);
+    const averageInterval = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
+    const tappedTempo = Math.round(60_000 / averageInterval);
+    if (tappedTempo < MIN_METRONOME_BPM || tappedTempo > MAX_METRONOME_BPM) {
+      tapMessage = 'Keep tapping between ' + MIN_METRONOME_BPM + ' and ' + MAX_METRONOME_BPM + ' BPM.';
+      return;
+    }
+    setTempo(tappedTempo);
+    tapMessage = 'Tempo set to ' + tappedTempo + ' BPM.';
   }
 
   function updateMeter(event: Event) {
     beatsPerBar = Number((event.currentTarget as HTMLSelectElement).value);
     metronome?.setBeatsPerBar(beatsPerBar);
+    activeBeat = null;
+  }
+
+  function handleVisibilityChange() {
+    if (document.visibilityState === 'visible' && isMetronomeRunning && !wakeLock) {
+      void requestWakeLock();
+    }
+  }
+
+  async function requestWakeLock() {
+    const wakeLockApi = (navigator as Navigator & { wakeLock?: WakeLockApiLike }).wakeLock;
+    if (!wakeLockApi) {
+      wakeLockStatus = 'unavailable';
+      return;
+    }
+    try {
+      const requestedLock = await wakeLockApi.request('screen');
+      if (!isMetronomeRunning) {
+        await requestedLock.release();
+        return;
+      }
+      wakeLock = requestedLock;
+      isWakeLockActive = true;
+      wakeLockStatus = 'active';
+      requestedLock.addEventListener('release', () => {
+        if (wakeLock === requestedLock) {
+          wakeLock = null;
+          isWakeLockActive = false;
+          wakeLockStatus = 'released';
+        }
+      });
+    } catch {
+      // Wake Lock is optional; a denied request must not interrupt audio.
+      wakeLockStatus = 'unavailable';
+    }
+  }
+
+  function releaseWakeLock() {
+    const activeLock = wakeLock;
+    wakeLock = null;
+    isWakeLockActive = false;
+    if (activeLock) void activeLock.release().catch(() => undefined);
   }
 
   async function toggleMetronome() {
@@ -36,33 +126,40 @@
     if (isMetronomeRunning) {
       metronome?.stop();
       isMetronomeRunning = false;
+      activeBeat = null;
+      releaseWakeLock();
       return;
     }
 
     isStarting = true;
-    const player =
-      metronome ??
-      new WebAudioMetronome({
-        bpm: tempo,
-        beatsPerBar,
-        onStateChange: (running) => {
-          isMetronomeRunning = running;
+    const player = metronome ?? new WebAudioMetronome({
+      bpm: tempo,
+      beatsPerBar,
+      onStateChange: (running) => {
+        isMetronomeRunning = running;
+        if (!running) {
+          activeBeat = null;
+          releaseWakeLock();
         }
-      });
+      },
+      onBeat: (beat) => { activeBeat = beat; }
+    });
     player.setTempo(tempo);
     player.setBeatsPerBar(beatsPerBar);
     metronome = player;
     try {
       await player.start();
       isMetronomeRunning = player.isRunning;
+      if (player.isRunning) await requestWakeLock();
     } catch (error) {
       await player.dispose();
       metronome = null;
       isMetronomeRunning = false;
-      audioError =
-        error instanceof Error
-          ? error.message
-          : 'The metronome could not start in this browser.';
+      activeBeat = null;
+      releaseWakeLock();
+      audioError = error instanceof Error
+        ? error.message
+        : 'The metronome could not start in this browser.';
     } finally {
       isStarting = false;
     }
@@ -74,10 +171,9 @@
     try {
       await playReferenceTone(440, 900);
     } catch (error) {
-      audioError =
-        error instanceof Error
-          ? error.message
-          : 'The reference tone could not be played.';
+      audioError = error instanceof Error
+        ? error.message
+        : 'The reference tone could not be played.';
     } finally {
       isPlayingReference = false;
     }
