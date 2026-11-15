@@ -308,11 +308,11 @@ try {
   await page.reload({ waitUntil: 'networkidle' });
   await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
-  await page.getByText('Lesson completed', { exact: true }).waitFor();
+  await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {
     waitUntil: 'networkidle'
   });
-  await page.getByText('Lesson completed', { exact: true }).waitFor();
+  await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.getByText(progressLabel).waitFor();
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
@@ -322,7 +322,7 @@ try {
     .getByText(`0 of ${secondLessonSections} sections completed`)
     .waitFor();
   await page.getByRole('link', { name: /Previous lesson/ }).click();
-  await page.getByText('Lesson completed', { exact: true }).waitFor();
+  await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   await page
