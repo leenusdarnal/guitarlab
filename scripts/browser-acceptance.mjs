@@ -14,7 +14,9 @@ const skillCatalog = JSON.parse(
 );
 const activeCurriculumReleaseId = skillCatalog.curriculumReleaseId;
 const skillIdFor = (displayName) => {
-  const skill = skillCatalog.skills.find((item) => item.displayName === displayName);
+  const skill = skillCatalog.skills.find(
+    (item) => item.displayName === displayName
+  );
   assert.ok(skill, `The curriculum catalogue must include ${displayName}.`);
   return skill.id;
 };
@@ -1439,7 +1441,11 @@ try {
 
   // M7 skill-state transparency: explanations and learner corrections persist locally.
   const skillFixture = await page.evaluate(
-    async ({ activeCurriculumReleaseId, alternatePickingSkillId, chordTransitionsSkillId }) => {
+    async ({
+      activeCurriculumReleaseId,
+      alternatePickingSkillId,
+      chordTransitionsSkillId
+    }) => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
@@ -1510,7 +1516,11 @@ try {
     database.close();
     return { active };
     },
-    { activeCurriculumReleaseId, alternatePickingSkillId, chordTransitionsSkillId }
+    {
+      activeCurriculumReleaseId,
+      alternatePickingSkillId,
+      chordTransitionsSkillId
+    }
   );
   assert.ok(
     skillFixture.active,
