@@ -13,6 +13,7 @@ const fail = [];
 const check = (condition, message) => {
   if (!condition) fail.push(message);
 };
+const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 const unique = (values) => new Set(values).size === values.length;
 function evidenceMatchesExercise(evidence, exercise) {
   if (!isText(evidence) || !exercise) return false;
@@ -41,7 +42,6 @@ check(
   'Practice taxonomy: exact evidence matcher accepted evidence from another exercise'
 );
 
-const isText = (value) => typeof value === 'string' && value.trim().length > 0;
 
 const [release, taxonomy, y1, y2, y3] = await Promise.all([
   readJson('content/curriculum/release.json'),
