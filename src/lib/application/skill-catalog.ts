@@ -36,6 +36,31 @@ export function listSkillsForLessons(
   );
 }
 
+export type SkillLessonLink = {
+  id: string;
+  week: number;
+  title: string;
+  focus: string;
+};
+
+/** Resolve only lessons explicitly linked to a canonical skill in the curriculum index. */
+export function listLessonsForSkill(skillId: string): SkillLessonLink[] {
+  return year1DashboardIndex.lessons
+    .filter((lesson) => (lesson.skillIds ?? []).includes(skillId))
+    .map((lesson) => ({
+      id: lesson.id,
+      week: lesson.week,
+      title: lesson.title,
+      focus: lesson.focus
+    }))
+    .sort((left, right) => left.week - right.week);
+}
+
+/** Read the published catalogue description for a known skill. */
+export function getSkillDescription(skillId: string): string | null {
+  return skillCatalog.skills.find((skill) => skill.id === skillId)?.description ?? null;
+}
+
 export function getSkillCategoryDisplayName(categoryId: string): string {
   return (
     skillCatalog.categories.find((category) => category.id === categoryId)

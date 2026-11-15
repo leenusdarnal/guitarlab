@@ -19,8 +19,13 @@ import { adaptiveRecommendationFeedbackSchema } from '../domain/learning/adaptiv
 import type { AdaptivePracticeSnapshot } from '../application/adaptive-practice';
 import {
   ACTIVE_CURRICULUM_RELEASE_ID,
+  listCurriculumSkills,
   listSkillsForLessons
 } from '../application/skill-catalog';
+import {
+  buildSkillProgressOverview,
+  type SkillProgressOverviewItem
+} from '../application/skill-progress-overview';
 import {
   listAuthoredPracticeDimensions,
   listAuthoredPracticeScopeSnapshots
@@ -1258,6 +1263,47 @@ export type ActiveSkillStateReview = {
   explanation: SkillStateExplanation;
 };
 
+/** Load the full canonical skill map and explain only evidence that belongs to this learner. */
+export async function loadSkillProgressOverview(): Promise<
+  SkillProgressOverviewItem[]
+> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const records = await inTransaction(
+      database,
+      [stores.mastery, stores.assessmentAttempts],
+      'readonly',
+      async (transaction) => {
+        const mastery = await requestResult<SkillMasteryRecord[]>(
+          transaction
+            .objectStore(stores.mastery)
+            .index('byLearnerId')
+            .getAll(IDBKeyRange.only(profile.id))
+        );
+        const attempts = await requestResult<AssessmentAttemptRecord[]>(
+          transaction.objectStore(stores.assessmentAttempts).getAll()
+        );
+        return { mastery, attempts };
+      }
+    );
+
+    return buildSkillProgressOverview({
+      skills: listCurriculumSkills(),
+      mastery: records.mastery.filter(
+        (record) => record.learnerId === profile.id
+      ),
+      attempts: records.attempts.filter(
+        (attempt) => attempt.learnerId === profile.id
+      ),
+      activeReleaseId: ACTIVE_CURRICULUM_RELEASE_ID,
+      now: Date.now()
+    });
+  } finally {
+    database.close();
+  }
+}
+
 /** Read existing learner skill snapshots and explain each from its assessment history. */
 export async function loadActiveSkillStateReview(): Promise<
   ActiveSkillStateReview[]
@@ -1310,6 +1356,7 @@ export async function loadActiveSkillStateReview(): Promise<
 /** Persist a learner correction locally; only an already-known skill snapshot can be corrected. */
 export async function correctActiveSkillState(input: {
   skillId: string;
+  curriculumReleaseId?: string;
   state: SkillMasteryRecord['state'];
   note: string;
 }): Promise<SkillMasteryRecord> {
@@ -1319,7 +1366,7 @@ export async function correctActiveSkillState(input: {
     const repositories = createIndexedDbRepositories(database);
     const existing = await repositories.mastery.find(
       profile.id,
-      'curriculum-v1',
+      input.curriculumReleaseId ?? ACTIVE_CURRICULUM_RELEASE_ID,
       input.skillId
     );
     if (!existing) {

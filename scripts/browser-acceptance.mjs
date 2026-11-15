@@ -1501,7 +1501,14 @@ try {
   );
   await page.goto(`${origin}/skills`, { waitUntil: 'networkidle' });
   await page
-    .getByRole('heading', { name: 'Skill states, explained.' })
+    .getByRole('heading', { name: 'See the skills behind the music.' })
+    .waitFor();
+  await page
+    .getByText('Showing 34 of 34 skills', { exact: true })
+    .waitFor();
+  await page.getByLabel('Find a skill').fill('chord transition');
+  await page
+    .getByText('Showing 1 of 34 skills', { exact: true })
     .waitFor();
   const chordTransitionChoice = page.getByRole('button', {
     name: /Chord Transition/
@@ -1511,6 +1518,7 @@ try {
   await page
     .getByText(/No assessment has been recorded for this skill yet/)
     .waitFor();
+  await page.getByLabel('Find a skill').fill('');
   await page.locator('#corrected-state').selectOption('stable');
   await page
     .locator('#correction-note')
