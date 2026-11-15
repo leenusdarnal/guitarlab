@@ -79,7 +79,10 @@ function assertResponseSecurityHeaders(response) {
   assert.match(headers['permissions-policy'] ?? '', /geolocation=\(\)/);
 
   const policy = headers['content-security-policy'];
-  assert.ok(policy, 'HTML responses must include an enforced Content-Security-Policy header.');
+  assert.ok(
+    policy,
+    'HTML responses must include an enforced Content-Security-Policy header.'
+  );
 
   const directives = new Map(
     policy
@@ -87,7 +90,7 @@ function assertResponseSecurityHeaders(response) {
       .map((part) => part.trim())
       .filter(Boolean)
       .map((part) => {
-        const [name, ...values] = part.split(/\\s+/);
+        const [name, ...values] = part.split(/\s+/);
         return [name, values];
       })
   );
