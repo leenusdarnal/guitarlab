@@ -105,6 +105,14 @@
   }
 
   onMount(() => {
+    const requestedBpm = Number(new URLSearchParams(window.location.search).get('bpm'));
+    if (
+      Number.isInteger(requestedBpm) &&
+      requestedBpm >= MIN_METRONOME_BPM &&
+      requestedBpm <= MAX_METRONOME_BPM
+    ) {
+      setTempo(requestedBpm);
+    }
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);

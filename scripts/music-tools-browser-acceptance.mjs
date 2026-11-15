@@ -130,6 +130,19 @@ try {
   await page.getByRole('link', { name: 'Practice tools' }).click();
   await page.getByRole('link', { name: /Open metronome/ }).click();
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
+  await page.goto(origin + '/tools/metronome?bpm=112', { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
+  assert.equal(
+    await page.getByLabel('Tempo in beats per minute').inputValue(),
+    '112',
+    'A supported starting tempo should be passed from the lesson link'
+  );
+  await page.goto(origin + '/tools/metronome?bpm=999', { waitUntil: 'networkidle' });
+  assert.equal(
+    await page.getByLabel('Tempo in beats per minute').inputValue(),
+    '80',
+    'An out-of-range deep-link tempo should fall back to the default'
+  );
 
   // Tempo and meter can be changed before audio begins.
   const tempoSlider = page.getByRole('slider', {
