@@ -392,7 +392,7 @@
             <option value={index}>{spelling === 'flat' ? FLAT_NOTE_NAMES[index] : noteName}</option>
           {/each}
         </select>
-        <div class="find-progress" aria-label="Find a note progress">
+        <div class="find-progress" role="status" aria-live="polite" aria-atomic="true" aria-label="Find a note progress">
           <strong>{foundCount} found</strong>
           <span>{firstTryCount} first-try · {attemptCount} selections</span>
         </div>
