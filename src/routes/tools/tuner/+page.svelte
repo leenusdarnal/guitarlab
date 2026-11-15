@@ -67,7 +67,7 @@
     errorMessage = '';
     isPlayingReference = true;
     try {
-      await playReferenceTone(440, 900);
+      await playReferenceTone(calibration, 900);
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : 'The A4 reference tone could not be played.';
     } finally {
@@ -239,7 +239,7 @@
       <button type="button" class="reference-button" onclick={playA4Reference} disabled={isPlayingReference}>
         {isPlayingReference ? 'Playing A4 reference…' : 'Hear A4 reference tone'}
       </button>
-      <span>440 Hz reference</span>
+      <span>{calibration} Hz reference</span>
     </div>
 
     <div class="capture-controls">
@@ -278,7 +278,7 @@
       <h3>Microphone permission</h3>
       <p>Choose Start tuner to request microphone access. When permission is blocked, allow microphone access for this site in your browser or device settings, then try again. The tuner does not listen until you press Start.</p>
       <h3>Use a reference tone</h3>
-      <p>The A4 button plays a 440 Hz reference pitch. Compare it by ear if useful; the chromatic tuner still measures the string you play.</p>
+      <p>The A4 button plays a reference pitch at your selected {calibration} Hz calibration. Compare it by ear if useful; the chromatic tuner still measures the string you play.</p>
     </div>
     <ul>
       <li>Let each note ring steadily; avoid touching the string while it vibrates.</li>
