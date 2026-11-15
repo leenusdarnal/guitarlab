@@ -161,7 +161,7 @@ function validateEntry(entry, index) {
     !entry.file.trim()
   ) {
     throw new Error(
-      `Manifest entry ${index + 1} needs a non-identifying segment id (1–64 letters, numbers, dots, underscores or hyphens) and a local file path.`
+      `Manifest entry ${index + 1} needs a bounded ASCII segment id (1–64 letters, numbers, dots, underscores or hyphens) and a local file path. Use an opaque, non-identifying label.`
     );
   }
   if (
@@ -419,7 +419,7 @@ async function main() {
       frequencyRangeHz: [MIN_FREQUENCY_HZ, MAX_FREQUENCY_HZ],
       breakdownMethod:
         'Each dimension groups only entries with an explicitly supplied approved category. Detection and false-note rates are window-weighted; cents error and onset latency percentiles use qualifying detected windows/segments.',
-      note: 'Metrics are computed locally. No audio, file paths, arbitrary metadata or recording identifiers are included beyond caller-supplied non-identifying segment IDs and approved category labels.'
+      note: 'Metrics are computed locally. No audio or file paths are included. Segment IDs are emitted verbatim as supplied, so callers must use opaque, non-identifying labels; only approved category labels are accepted as additional metadata.'
     },
     summary: {
       segments: results.length,
