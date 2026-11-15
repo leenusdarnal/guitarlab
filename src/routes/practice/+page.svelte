@@ -649,6 +649,15 @@
                     </p>
                   {/if}
                   {#each group.items as item (group.definitionId + ':' + group.definitionVersion + ':' + item.itemId)}
+                    {#each item.responseMismatches as mismatch (mismatch.code)}
+                      <p class="analytics-item-evidence" role="status">
+                        Explicit interval response contrast: expected
+                        {mismatch.expectedResponse.replaceAll('_', ' ')} but selected
+                        {mismatch.selectedResponse.replaceAll('_', ' ')}
+                        ({mismatch.count} response{mismatch.count === 1 ? '' : 's'}).
+                        This records the chosen option only; it does not diagnose a misconception or affect mastery.
+                      </p>
+                    {/each}
                     {#if item.consecutiveIncorrectCount >= 2}
                       <p class="analytics-item-evidence" role="status">
                         Same item answered incorrectly {item.consecutiveIncorrectCount} times consecutively. This raises the focused-practice priority.
