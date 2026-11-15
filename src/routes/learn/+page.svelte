@@ -42,10 +42,10 @@
         'week ' + lesson.week
       ].join(' ').toLocaleLowerCase();
 
-      const searchableTokens = new Set(searchableText.match(/[\\p{L}\\p{N}]+/gu) ?? []);
+      const searchableTokens = new Set(searchableText.match(/[\p{L}\p{N}]+/gu) ?? []);
       if (
         !terms.every((term) =>
-          /^\\d+$/.test(term) ? searchableTokens.has(term) : searchableText.includes(term)
+          /^\d+$/.test(term) ? searchableTokens.has(term) : searchableText.includes(term)
         )
       ) return false;
 
