@@ -91,6 +91,24 @@ try {
     await chordDiagram.getAttribute('aria-label'),
     /string 1: fret 3, finger 4/
   );
+  const chordSvg = chordDiagram.locator('svg.chord-illustration');
+  assert.equal(await chordSvg.locator('.chord-string-wire').count(), 6);
+  assert.equal(await chordSvg.locator('.chord-fret-wire').count(), 5);
+  assert.ok(await chordSvg.locator('.chord-finger').count() >= 3);
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.ok(
+    await chordSvg.evaluate((svg) => svg.getBoundingClientRect().width) <= 390,
+    'The chord diagram should fit a narrow phone viewport'
+  );
+  const chordDimensions = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    page: document.documentElement.scrollWidth
+  }));
+  assert.ok(
+    chordDimensions.page <= chordDimensions.viewport,
+    'The chord diagram must not cause page-level horizontal scrolling'
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
 
   // The two-chord drill alternates targets and records outcomes separately.
   await page.getByLabel('First drill chord').selectOption('c-major');
@@ -510,6 +528,11 @@ try {
   await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'networkidle' });
   const firstFretCell = page.locator('.fret-cell').first();
   await firstFretCell.waitFor();
+  const fretboardDiagram = page.locator('.fretboard-diagram');
+  await fretboardDiagram.waitFor();
+  assert.equal(await fretboardDiagram.locator('.guitar-string').count(), 6);
+  assert.equal(await fretboardDiagram.locator('.fret-wire').count(), 13);
+  assert.equal(await fretboardDiagram.locator('.fret-inlay').count(), 6);
   const fretCellSize = await firstFretCell.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     return { width: rect.width, height: rect.height };
@@ -526,6 +549,22 @@ try {
     ),
     '1',
     'Fretboard arrow-key navigation should move to the adjacent fret'
+  );
+
+  // Guided note-finding supports hints, reveal and first-attempt feedback.
+  await page.getByLabel('Find a note').click();
+  await page.getByLabel('Target note').selectOption('0');
+  await page.getByRole('button', { name: 'Show a hint' }).click();
+  await page.getByText(/Look across the open strings first/).waitFor();
+  await page.getByRole('button', { name: 'Reveal one position' }).click();
+  await page.locator('.fret-cell[data-pitch-class="1"]').first().click();
+  await page.getByText(/First attempt: keep practising/).waitFor();
+  await page.locator('.fret-cell[data-pitch-class="0"]').first().click();
+  await page.getByText(/1 of .* positions found/).waitFor();
+  assert.equal(
+    await page.locator('.fret-cell.is-found').count(),
+    1,
+    'A correct note position should be visibly marked as found'
   );
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
