@@ -112,8 +112,8 @@ try {
     await page.locator('.lesson-result h3').first().innerText(),
     'Fretboard map 1'
   );
-  await page.getByLabel('Learning path').selectOption('year-2');
-  await page.getByLabel('Lesson length').selectOption('21-30');
+  await page.getByLabel('Learning path', { exact: true }).selectOption('year-2');
+  await page.getByLabel('Lesson length', { exact: true }).selectOption('21-30');
   assert.equal(await page.locator('.lesson-result').count(), 1);
   await page
     .getByRole('link', { name: 'Open lesson: Fretboard map 1' })
