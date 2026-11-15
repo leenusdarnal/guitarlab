@@ -8,6 +8,11 @@
   } from '../../../lib/storage/persistence';
   import { exportActiveLearnerBackup } from '../../../lib/storage/backup-storage';
   import {
+    clearLastBackupExportAt,
+    readLastBackupExportAt,
+    recordLastBackupExportAt
+  } from '../../../lib/storage/backup-metadata';
+  import {
     resetActiveLearnerData,
     restoreLearnerBackup,
     reviewLearnerBackup,
@@ -18,8 +23,13 @@
   let isReviewing = $state(false);
   let isRestoring = $state(false);
   let isResetting = $state(false);
-  let message = $state('');
-  let messageIsError = $state(false);
+  let feedback = $state({
+    storage: { text: '', isError: false },
+    export: { text: '', isError: false },
+    restore: { text: '', isError: false },
+    reset: { text: '', isError: false }
+  });
+  let lastBackupExportAt = $state<number | null>(null);
   let review = $state<Extract<RestoreReview, { success: true }> | null>(null);
   let selectedFileName = $state('');
   let restoreConfirmed = $state(false);
@@ -29,6 +39,11 @@
   let isRequestingPersistence = $state(false);
 
   onMount(() => {
+    try {
+      lastBackupExportAt = readLastBackupExportAt(window.localStorage);
+    } catch {
+      lastBackupExportAt = null;
+    }
     void refreshStorageStatus();
   });
 
@@ -46,11 +61,11 @@
     try {
       storageStatus = await requestLearnerStoragePersistence();
       if (storageStatus.persisted || storageStatus.requestGranted) {
-        showMessage('This browser has granted persistent storage. Keep exporting backups for recovery.');
+        showMessage('storage', 'This browser has granted persistent storage. Keep exporting backups for recovery.');
       } else if (storageStatus.canRequest) {
-        showMessage('The browser did not grant persistent storage. Your data remains best-effort; keep a downloaded backup.', true);
+        showMessage('storage', 'The browser did not grant persistent storage. Keep a downloaded backup for recovery.', true);
       } else {
-        showMessage('This browser does not support a persistent-storage request. Keep a downloaded backup.', true);
+        showMessage('storage', 'This browser cannot make a keep-data request. Keep a downloaded backup for recovery.', true);
       }
     } finally {
       isRequestingPersistence = false;
@@ -69,16 +84,45 @@
     return `${value.toFixed(value >= 10 ? 0 : 1)} ${units[unit]}`;
   }
 
-  function showMessage(value: string, error = false) {
-    message = value;
-    messageIsError = error;
+  type FeedbackTarget = 'storage' | 'export' | 'restore' | 'reset';
+
+  function showMessage(target: FeedbackTarget, value: string, error = false) {
+    feedback = {
+      ...feedback,
+      [target]: { text: value, isError: error }
+    };
+  }
+
+  function formatBackupDate(timestamp: number): string {
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    }).format(timestamp);
+  }
+
+  function forgetBackupDownloadDate() {
+    lastBackupExportAt = null;
+    try {
+      clearLastBackupExportAt(window.localStorage);
+    } catch {
+      // The learner data action still succeeds when local storage is unavailable.
+    }
+  }
+
+  function recordBackupDownloadDate(timestamp: number): boolean {
+    try {
+      return recordLastBackupExportAt(window.localStorage, timestamp);
+    } catch {
+      return false;
+    }
   }
 
   async function downloadBackup() {
     isExporting = true;
-    showMessage('');
+    showMessage('export', '');
     try {
-      const backup = await exportActiveLearnerBackup();
+      const exportedAt = Date.now();
+      const backup = await exportActiveLearnerBackup(exportedAt);
       const file = new Blob([JSON.stringify(backup, null, 2)], {
         type: 'application/json'
       });
@@ -91,9 +135,17 @@
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      showMessage('Your learner backup has been prepared and downloaded to this device.');
+      const metadataSaved = recordBackupDownloadDate(exportedAt);
+      lastBackupExportAt = metadataSaved ? exportedAt : null;
+      showMessage(
+        'export',
+        metadataSaved
+          ? 'Backup download started. Your browser decides where the file is saved.'
+          : 'Backup download started, but this browser could not save its download date.'
+      );
     } catch {
       showMessage(
+        'export',
         'GuitarLab could not create a backup. Your existing learner data has not been changed.',
         true
       );
@@ -107,7 +159,7 @@
     const file = input.files?.[0];
     review = null;
     restoreConfirmed = false;
-    showMessage('');
+    showMessage('restore', '');
     if (!file) {
       selectedFileName = '';
       return;
@@ -115,7 +167,7 @@
 
     selectedFileName = file.name;
     if (file.size > 10_000_000) {
-      showMessage('This file is too large. Choose a backup smaller than 10 MB.', true);
+      showMessage('restore', 'This file is too large. Choose a backup smaller than 10 MB.', true);
       input.value = '';
       return;
     }
@@ -124,13 +176,13 @@
     try {
       const result = await reviewLearnerBackup(await file.text());
       if (!result.success) {
-        showMessage(result.message, true);
+        showMessage('restore', result.message, true);
         return;
       }
       review = result;
-      showMessage('Backup validated. Review the replacement preview before restoring.');
+      showMessage('restore', 'Backup validated. Review the replacement preview before restoring.');
     } catch {
-      showMessage('GuitarLab could not read this backup from the selected file.', true);
+      showMessage('restore', 'GuitarLab could not read this backup from the selected file.', true);
     } finally {
       isReviewing = false;
     }
@@ -139,15 +191,17 @@
   async function applyRestore() {
     if (!review || !restoreConfirmed) return;
     isRestoring = true;
-    showMessage('');
+    showMessage('restore', '');
     try {
       await restoreLearnerBackup(review.backup, true);
+      forgetBackupDownloadDate();
       review = null;
       restoreConfirmed = false;
       selectedFileName = '';
-      showMessage('Restore completed. Your learner profile and local learning records have been replaced.');
+      showMessage('restore', 'Restore completed. Your learner profile and local learning records have been replaced.');
     } catch {
       showMessage(
+        'restore',
         'Restore failed. The database transaction was rolled back and the existing learner data was preserved.',
         true
       );
@@ -164,16 +218,18 @@
     if (!confirmed) return;
 
     isResetting = true;
-    showMessage('');
+    showMessage('reset', '');
     try {
       await resetActiveLearnerData(true);
+      forgetBackupDownloadDate();
       review = null;
       restoreConfirmed = false;
       selectedFileName = '';
       resetPhrase = '';
-      showMessage('Your active learner data has been reset. A fresh empty profile is ready.');
+      showMessage('reset', 'Your active learner data has been reset. A fresh empty profile is ready.');
     } catch {
       showMessage(
+        'reset',
         'Reset failed. The database transaction was rolled back and your existing learner data was preserved.',
         true
       );
@@ -204,23 +260,52 @@
       Export a portable copy of your learner profile, preferences, lesson progress,
       assessment evidence, skill snapshots and practice sessions.
     </p>
+    <section class="backup-panel export-panel" aria-labelledby="export-title">
+      <div class="backup-icon" aria-hidden="true">↓</div>
+      <div>
+        <h2 id="export-title">Export learner backup</h2>
+        <p>
+          Create a portable JSON copy of your active learner profile, preferences,
+          lesson progress, assessments and practice history. The file stays on this
+          device; GuitarLab does not upload it.
+        </p>
+        <button class="primary-button" type="button" onclick={downloadBackup} disabled={isExporting}>
+          {isExporting ? 'Preparing backup…' : 'Download backup'} <span>→</span>
+        </button>
+        {#if lastBackupExportAt !== null}
+          <p class="backup-recency">
+            Last backup download started:
+            <time datetime={new Date(lastBackupExportAt).toISOString()}>{formatBackupDate(lastBackupExportAt)}</time>.
+            Your browser does not confirm where the file is saved.
+          </p>
+        {:else}
+          <p class="backup-recency">No backup download has been started from this browser yet.</p>
+        {/if}
+        {#if feedback.export.text}
+          <p class:error={feedback.export.isError} class="status-message" role={feedback.export.isError ? 'alert' : 'status'}>
+            {feedback.export.text}
+          </p>
+        {/if}
+      </div>
+    </section>
+
     <section class="backup-panel" aria-labelledby="storage-protection-title">
       <div class="backup-icon" aria-hidden="true">◈</div>
       <div>
-        <h2 id="storage-protection-title">Browser storage protection</h2>
+        <h2 id="storage-protection-title">Protect data in this browser</h2>
         {#if isCheckingStorage}
-          <p role="status">Checking this browser's storage status…</p>
+          <p role="status">Checking this browser's data-protection options…</p>
         {:else if storageStatus?.persisted === true}
-          <p>Your browser has granted persistent storage, which reduces automatic eviction risk. Browser settings can still remove site data, so keep a backup.</p>
+          <p>This browser has agreed to keep GuitarLab's local data available. Browser settings or clearing site data can still remove it, so keep a downloaded backup too.</p>
         {:else if storageStatus?.persisted === false && storageStatus.canRequest}
-          <p>Storage is currently best-effort and may be cleared by the browser under storage pressure. You can ask the browser to preserve this site's data.</p>
+          <p>GuitarLab stores your profile in this browser. The browser may clear it to save space. You can ask it to keep this site's data, but a backup is still the safest copy.</p>
         {:else if storageStatus?.persisted === false}
-          <p>Storage is currently best-effort and this browser does not offer a persistence request. Export a backup regularly and keep it somewhere private.</p>
+          <p>This browser cannot offer a keep-data request. It may clear site data, so download a backup and keep it somewhere safe.</p>
         {:else}
-          <p>This browser does not report whether storage is persistent. Export a backup regularly and keep it somewhere private.</p>
+          <p>This browser does not report whether it may clear site data. Download a backup before changing browsers or clearing this site's data.</p>
         {/if}
         {#if storageStatus?.usageBytes !== null && storageStatus?.usageBytes !== undefined && storageStatus.quotaBytes !== null && storageStatus.quotaBytes !== undefined}
-          <p>Estimated storage used: {formatStorageBytes(storageStatus.usageBytes)} of {formatStorageBytes(storageStatus.quotaBytes)}.</p>
+          <p>Approximate space used: {formatStorageBytes(storageStatus.usageBytes)} of {formatStorageBytes(storageStatus.quotaBytes)}.</p>
         {/if}
         <div class="storage-actions">
           {#if storageStatus?.persisted !== true && storageStatus?.canRequest}
@@ -230,7 +315,7 @@
               onclick={requestPersistentStorage}
               disabled={isRequestingPersistence}
             >
-              {isRequestingPersistence ? 'Requesting…' : 'Request persistent storage'}
+              {isRequestingPersistence ? 'Asking…' : 'Ask this browser to keep GuitarLab data'}
             </button>
           {/if}
           <button
@@ -239,23 +324,14 @@
             onclick={refreshStorageStatus}
             disabled={isCheckingStorage || isRequestingPersistence}
           >
-            Refresh status
+            Check again
           </button>
         </div>
-      </div>
-    </section>
-
-    <section class="backup-panel" aria-labelledby="export-title">
-      <div class="backup-icon" aria-hidden="true">↓</div>
-      <div>
-        <h2 id="export-title">Export learner backup</h2>
-        <p>
-          Create a versioned JSON file from your active learner profile. The export
-          stays on this device; nothing is uploaded to a server.
-        </p>
-        <button class="primary-button" type="button" onclick={downloadBackup} disabled={isExporting}>
-          {isExporting ? 'Preparing backup…' : 'Download backup'} <span>→</span>
-        </button>
+        {#if feedback.storage.text}
+          <p class:error={feedback.storage.isError} class="status-message" role={feedback.storage.isError ? 'alert' : 'status'}>
+            {feedback.storage.text}
+          </p>
+        {/if}
       </div>
     </section>
 
@@ -267,7 +343,7 @@
         local data is changed.
       </p>
       <label class="file-picker">
-        <span>{isReviewing ? 'Checking backup…' : 'Choose backup JSON file'}</span>
+        <span>{isReviewing ? 'Checking backup…' : 'Choose a backup file (JSON)'}</span>
         <input
           type="file"
           accept=".json,application/json"
@@ -320,6 +396,11 @@
           </button>
         </div>
       {/if}
+      {#if feedback.restore.text}
+        <p class:error={feedback.restore.isError} class="status-message" role={feedback.restore.isError ? 'alert' : 'status'}>
+          {feedback.restore.text}
+        </p>
+      {/if}
     </section>
 
     <section class="section danger-zone" aria-labelledby="reset-title">
@@ -348,11 +429,12 @@
       >
         {isResetting ? 'Resetting…' : 'Reset active learner data'}
       </button>
+      {#if feedback.reset.text}
+        <p class:error={feedback.reset.isError} class="status-message" role={feedback.reset.isError ? 'alert' : 'status'}>
+          {feedback.reset.text}
+        </p>
+      {/if}
     </section>
-
-    {#if message}
-      <p class:error={messageIsError} class="status-message" role="status">{message}</p>
-    {/if}
 
     <p class="privacy-note">
       Your backup contains learner-owned records only. Audio recordings and media files
