@@ -157,7 +157,7 @@
   }
 
   function stringName(stringNumber: number): string {
-    return ['E', 'A', 'D', 'G', 'B', 'e'][stringNumber - 1];
+    return ['e', 'B', 'G', 'D', 'A', 'E'][stringNumber - 1];
   }
 
   function isBarrePosition(string: ChordString): boolean {
@@ -486,56 +486,25 @@
     line-height: 1.7;
   }
   .chord-diagram {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 7px;
-    max-width: 600px;
-    margin: 22px auto 14px;
-    padding: 8px 0;
+    width: min(100%, 360px);
+    margin: 20px auto 14px;
+    padding: 12px 10px 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
   }
-  .chord-string {
-    display: grid;
-    min-width: 0;
-    min-height: 112px;
-    align-content: center;
-    justify-items: center;
-    gap: 8px;
-    border-left: 1px solid var(--border);
-  }
-  .chord-string:first-child {
-    border-left: 0;
-  }
-  .string-name {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 800;
-  }
-  .string-marker {
-    display: grid;
-    width: 38px;
-    height: 38px;
-    place-items: center;
-    font-size: 23px;
-    line-height: 1;
-  }
-  .string-marker.open {
-    color: var(--success);
-  }
-  .string-marker.muted {
-    color: var(--danger);
-    font-weight: 850;
-  }
-  .string-marker.fretted {
-    border-radius: 50%;
-    background: var(--primary);
-    color: var(--primary-ink);
-    font-size: 14px;
-    font-weight: 850;
-  }
-  .chord-string small {
-    color: var(--muted);
-    font-size: 10px;
-  }
+  .chord-box { display: block; width: 100%; height: auto; overflow: visible; }
+  .chord-svg-string { stroke: var(--text); stroke-width: 1.7; }
+  .chord-svg-fret { stroke: var(--border-strong); stroke-width: 1.5; }
+  .chord-svg-fret.chord-nut { stroke: var(--text); stroke-width: 5; }
+  .chord-svg-fret-number { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+  .chord-svg-string-name { fill: var(--muted); font-size: 12px; font-weight: 800; text-anchor: middle; }
+  .chord-svg-status { font-size: 21px; font-weight: 800; text-anchor: middle; }
+  .chord-svg-status.open { fill: var(--success); }
+  .chord-svg-status.muted { fill: var(--danger); }
+  .chord-svg-finger { fill: var(--primary); stroke: var(--surface); stroke-width: 1.5; }
+  .chord-svg-finger-number { fill: var(--primary-ink); font-size: 11px; font-weight: 850; text-anchor: middle; }
+  .chord-svg-barre { stroke: var(--primary); stroke-width: 20; stroke-linecap: round; }
   .diagram-legend {
     display: flex;
     flex-wrap: wrap;
@@ -607,6 +576,7 @@
     line-height: 1.5;
   }
   .drill-actions {
+    gap: 10px;
     display: flex;
     flex-wrap: wrap;
     gap: 9px;
@@ -614,6 +584,7 @@
   }
   .primary-button,
   .secondary-button,
+  .drill-actions button { min-height: 48px; padding-inline: 13px; }
   .finish-button {
     min-height: 40px;
     padding: 9px 12px;
