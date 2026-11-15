@@ -5,7 +5,9 @@
     FLAT_NOTE_NAMES,
     SHARP_NOTE_NAMES,
     STANDARD_GUITAR_TUNING,
+    findFretboardPositions,
     getDisplayFretColumn,
+    getFretboardInlayFrets,
     getFretboardLayout,
     getNoteAtPosition,
     type FretboardNote,
@@ -23,6 +25,7 @@
     saveActiveLearnerPreferences
   } from '../../../lib/storage/indexeddb';
   import type { ProfilePreferences } from '../../../lib/domain/profile/preferences';
+  import { playReferenceTone } from '../../../lib/audio/metronome';
 
   let handedness = $state<GuitarHandedness>('right');
   let spelling = $state<NoteSpelling>('sharp');
@@ -44,9 +47,24 @@
   let saveStatus = $state('');
   let profilePreferences = $state<ProfilePreferences | null>(null);
   let isSaving = $state(false);
+  let targetFound = $state(false);
+  let foundCount = $state(0);
+  let firstTryCount = $state(0);
+  let attemptCount = $state(0);
+  let attemptsForTarget = $state(0);
+  let hintUsed = $state(false);
+  let hintPosition = $state<{ stringNumber: number; fret: number } | null>(null);
+  let revealedPositions = $state(false);
+  let isPlayingNote = $state(false);
+  let playbackMessage = $state('');
 
   let fretboardRows = $derived(
     getFretboardLayout(maxFret, STANDARD_GUITAR_TUNING, spelling)
+  );
+  const inlayFrets = $derived(getFretboardInlayFrets(maxFret));
+  const fretWires = $derived(Array.from({ length: maxFret }, (_, index) => index + 1));
+  const targetPositions = $derived(
+    findFretboardPositions(targetPitchClass, maxFret, STANDARD_GUITAR_TUNING)
   );
 
   const cagedShapes = getCagedShapePositions(0);
@@ -143,10 +161,41 @@
     return `String ${note.stringNumber}, fret ${note.fret}, ${note.noteName}${note.octave}`;
   }
 
-  function changeTargetNote(event: Event) {
-    targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
+  function resetFindTarget() {
     selectedPosition = null;
     feedback = '';
+    targetFound = false;
+    attemptsForTarget = 0;
+    hintUsed = false;
+    hintPosition = null;
+    revealedPositions = false;
+  }
+
+  function changeTargetNote(event: Event) {
+    targetPitchClass = Number((event.currentTarget as HTMLSelectElement).value);
+    resetFindTarget();
+  }
+
+  function nextTargetNote() {
+    targetPitchClass = (targetPitchClass + 1) % SHARP_NOTE_NAMES.length;
+    resetFindTarget();
+  }
+
+  function showHint() {
+    const firstPosition = targetPositions[0];
+    if (!firstPosition) return;
+    hintUsed = true;
+    hintPosition = { stringNumber: firstPosition.stringNumber, fret: firstPosition.fret };
+    feedback = `Hint: look at string ${firstPosition.stringNumber}, fret ${firstPosition.fret}.`;
+  }
+
+  function revealPositions() {
+    hintUsed = true;
+    revealedPositions = true;
+    const descriptions = targetPositions.slice(0, 8).map((position) =>
+      `string ${position.stringNumber}, fret ${position.fret}`
+    );
+    feedback = `All visible ${targetNoteName} positions: ${descriptions.join('; ')}.`;
   }
 
   function changeMaxFret(event: Event) {
@@ -154,22 +203,28 @@
     if (focusedPosition.fret > maxFret) {
       focusedPosition = { stringNumber: 1, fret: 0 };
     }
-    selectedPosition = null;
-    feedback = '';
+    resetFindTarget();
   }
 
   function activateNote(note: FretboardNote) {
     if (findMode) {
+      if (targetFound) {
+        feedback = `You have already found ${targetNoteName}. Choose Next note to continue.`;
+        return;
+      }
+      const isFirstTry = attemptsForTarget === 0 && !hintUsed;
+      attemptCount += 1;
+      attemptsForTarget += 1;
       if (note.pitchClass !== targetPitchClass) {
         selectedPosition = null;
         feedback = `Not quite. Find ${targetNoteName} on another position.`;
         return;
       }
-      selectedPosition = {
-        stringNumber: note.stringNumber,
-        fret: note.fret
-      };
-      feedback = `Correct — ${targetNoteName} is at string ${note.stringNumber}, fret ${note.fret}.`;
+      if (isFirstTry) firstTryCount += 1;
+      foundCount += 1;
+      targetFound = true;
+      selectedPosition = { stringNumber: note.stringNumber, fret: note.fret };
+      feedback = `Correct — ${targetNoteName} is at string ${note.stringNumber}, fret ${note.fret}. You have found ${foundCount} note targets.`;
       return;
     }
 
@@ -208,6 +263,32 @@
     findMode = !findMode;
     selectedPosition = null;
     feedback = '';
+    targetFound = false;
+    attemptsForTarget = 0;
+    hintUsed = false;
+    hintPosition = null;
+    revealedPositions = false;
+    if (findMode) {
+      foundCount = 0;
+      firstTryCount = 0;
+      attemptCount = 0;
+    }
+  }
+
+  async function playSelectedNote() {
+    if (!selectedNote || isPlayingNote) return;
+    isPlayingNote = true;
+    playbackMessage = '';
+    try {
+      await playReferenceTone(selectedNote.frequencyHz, 700);
+      playbackMessage = `Played ${selectedNote.noteName}${selectedNote.octave}.`;
+    } catch (error) {
+      playbackMessage = error instanceof Error
+        ? error.message
+        : 'The note could not be played in this browser.';
+    } finally {
+      isPlayingNote = false;
+    }
   }
 
   async function saveOrientation() {
