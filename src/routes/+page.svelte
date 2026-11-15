@@ -9,6 +9,7 @@
   } from '../lib/application/practice-plan';
 
   type ThemePreference = 'system' | 'light' | 'dark';
+  type ResolvedTheme = 'dark' | 'light';
   let themePreference = $state<ThemePreference>('system');
   let menuOpen = $state(false);
   let mobileMenuTrigger: HTMLButtonElement | null = null;
