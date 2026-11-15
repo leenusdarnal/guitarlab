@@ -249,6 +249,17 @@
         <span class="capture-state">Microphone access begins only after Start</span>
       {/if}
     </div>
+    {#if !isRunning && !isStarting}
+      <aside class="microphone-permission-note" aria-labelledby="microphone-access-title">
+        <h3 id="microphone-access-title">Microphone access</h3>
+        <p>
+          Your browser asks for microphone permission only after you press Start exercise.
+          Notes are analysed on this device; audio is not uploaded or saved. If access was
+          blocked, open this site's permissions in your browser settings, allow Microphone,
+          reload this page and try again.
+        </p>
+      </aside>
+    {/if}
     {#if errorMessage}
       <p class="error-message" role="alert">{errorMessage}</p>
     {/if}
@@ -302,4 +313,22 @@
   .privacy-note { margin-top: 18px; font-size: 10px; }
   a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+
+  .microphone-permission-note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+  }
+  .microphone-permission-note h3 {
+    margin: 0 0 6px;
+    font-size: 12px;
+  }
+  .microphone-permission-note p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.65;
+  }
 </style>
