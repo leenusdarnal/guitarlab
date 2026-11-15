@@ -426,7 +426,7 @@ The connected Cloudflare account currently contains:
 - Worker name: `guitarlab`
 - Temporary public URL: `https://guitarlab.leenusdarnal.workers.dev`
 - Config: `wrangler.production.jsonc`
-- The production config uses Workers Static Assets only and deliberately has no D1 binding, route, database ID, identity/session store, authentication route or remote learner-data API.
+- The production config uses Workers Static Assets only and deliberately has no D1 binding, route, database ID, identity/session store, authentication route or remote learner-data API. Workers Logs and Traces are enabled; query strings are redacted and traces are sampled at 1%.
 - Profiles, lesson progress, practice data, preferences and exports remain browser-local. Login and cloud sync are not implemented and are not claimed by this release.
 
 Cloudflare recommends a custom domain or Worker route rather than workers.dev for long-term production; workers.dev is intended for personal/hobby workloads, not business-critical use. The connected account has no zones or Worker custom domains, so the first workflow uses workers.dev as a temporary host. Attach an owned custom domain/route before treating this as a long-term business-critical hostname.
@@ -437,7 +437,7 @@ The new `.github/workflows/deploy-production.yml`:
 1. Is manual-only and restricted to `main`, with explicit `deploy_production=true`.
 2. Requires the latest `Validate application and curriculum` and `Check Node.js 26 compatibility` checks for the exact selected SHA to succeed.
 3. Uses a GitHub Actions `production` environment.
-4. Requires `CLOUDFLARE_API_TOKEN` as an Actions secret and `CLOUDFLARE_ACCOUNT_ID` as an Actions variable.
+4. Requires `CLOUDFLARE_API_TOKEN` as an Actions secret and `CLOUDFLARE_ACCOUNT_ID` as an Actions variable. The first deployment creates a new Worker and therefore needs Workers Admin at product scope; after the first creation, rotate to a Worker Editor token scoped only to `guitarlab`. The release does not change routes or custom domains.
 5. Builds and dry-runs the selected SHA, then deploys that same build.
 6. Smoke-tests `/`, `/learn`, `/practice`, `/tools/tuner` and `/settings/data`, and checks CSP, HSTS, MIME, frame and referrer-policy headers.
 7. Records the exact commit and production URL in the workflow run.
