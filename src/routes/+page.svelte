@@ -189,16 +189,6 @@
     window.location.assign(resolve('/practice') + '?' + query.toString() + '#practice-session');
   }
 
-  function practiceTaskHref(task: {
-    lessonId?: string;
-    skillId?: string;
-  }) {
-    if (task.lessonId) {
-      return resolve('/learn/[lessonId]', { lessonId: task.lessonId });
-    }
-    return task.skillId ? resolve('/skills') : resolve('/practice');
-  }
-
   function openPracticeTask(event: MouseEvent, task: {
     lessonId?: string;
     skillId?: string;
