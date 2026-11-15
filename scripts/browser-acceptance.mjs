@@ -1080,7 +1080,7 @@ try {
     .filter({ hasText: 'Saved left-handed diagram orientation' })
     .waitFor();
 
-// Shared harmony overlays resolve scale degrees and chord tones on the fretboard.
+  // Shared harmony overlays resolve scale degrees and chord tones on the fretboard.
   await page.locator('#harmony-layer').selectOption('c-major-scale');
   const scaleHighlightCount = await page
     .locator('.fret-cell.is-harmony-note')
