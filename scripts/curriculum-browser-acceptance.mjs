@@ -313,14 +313,12 @@ try {
   // The route index remains within the mobile viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  const mobileTabs = page.getByRole('navigation', {
-    name: 'Mobile primary navigation'
-  });
-  await mobileTabs.getByRole('link', { name: 'Learn' }).waitFor();
-  await page.getByRole('button', { name: 'Open navigation' }).click();
+  const openMobileMenu = page.getByRole('button', { name: 'Open menu' });
+  await openMobileMenu.waitFor();
+  await openMobileMenu.click();
   const mobileMenuLearn = page
     .locator('#mobile-primary-navigation')
-    .getByRole('link', { name: 'Learn' });
+    .getByRole('link', { name: 'Learn', exact: true });
   await mobileMenuLearn.waitFor();
   await mobileMenuLearn.click();
   const dimensions = await page.evaluate(() => ({
