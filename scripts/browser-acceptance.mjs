@@ -1198,9 +1198,17 @@ try {
     .selectOption('y1-w01-lesson::y1-w01-lesson-focus');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
-  await page
-    .getByRole('heading', { name: 'Your session is in progress' })
-    .waitFor();
+  try {
+    await page
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .waitFor({ timeout: 10_000 });
+  } catch {
+    const startFailure = await page.getByRole('alert').allTextContents();
+    throw new Error(
+      'Practice session did not start. Visible validation: ' +
+        startFailure.join(' | ')
+    );
+  }
   const authoredSessionLabel = await page
     .locator('.authored-session-link')
     .innerText();
