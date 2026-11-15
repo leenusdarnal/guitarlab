@@ -96,7 +96,7 @@ try {
   assert.equal(await chordDiagram.locator('.chord-svg-finger').count(), 3);
   assert.match(
     await chordDiagram.getAttribute('aria-label'),
-    /string 5: fret 2, finger 2/
+    /string 5: fret 2, finger 1/
   );
 
   // The two-chord drill alternates targets and records outcomes separately.
@@ -523,7 +523,7 @@ try {
   await page.getByRole('button', { name: 'Next note' }).click();
   await page.getByRole('button', { name: 'Hint' }).click();
   await page.getByRole('button', { name: 'Reveal positions' }).click();
-  assert.ok(await page.locator('.fret-cell.is-revealed').count() > 0);
+  assert.ok((await page.locator('.fret-cell.is-revealed').count()) > 0);
   await page.locator('.fret-cell[data-string="2"][data-fret="3"]').click();
   await page.getByText('2 found', { exact: true }).waitFor();
   await page.getByText('1 first-try · 2 selections', { exact: true }).waitFor();
