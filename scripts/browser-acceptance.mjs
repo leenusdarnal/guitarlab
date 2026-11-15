@@ -431,13 +431,18 @@ try {
 
   // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
   await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
-  await page.getByRole('heading', { name: 'Tools for your practice.' }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
   assert.equal(await page.locator('.tool-group').count(), 4);
   assert.equal(await page.locator('.tool-row').count(), 8);
-  assert.equal(await page.getByText('Available now', { exact: true }).count(), 0);
+  assert.equal(
+    await page.getByText('Available now', { exact: true }).count(),
+    0
+  );
   assert.match(
     await page.locator('.page-heading p').innerText(),
-    /tuner and note recognition[\\s\\S]*only after you press Start/
+    /The tuner and note recognition use your microphone only after you press Start/
   );
 
   // Microphone tools explain capture and permission before any Start action.
@@ -454,7 +459,9 @@ try {
     0,
     'Opening the tuner must not request microphone access'
   );
-  await page.goto(`${origin}/tools/note-recognition`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/note-recognition`, {
+    waitUntil: 'networkidle'
+  });
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   await page
     .locator('.microphone-permission-note')
