@@ -1043,7 +1043,7 @@ try {
     'Arrow-key navigation should move one fret while preserving the string'
   );
   await page.getByRole('button', { name: 'String 6, fret 8, C3' }).click();
-  await page.locator('.note-detail').getByText('C3').waitFor();
+  await page.locator('.note-detail').getByText('C3', { exact: true }).waitFor();
 
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('#target-note').selectOption('0');
