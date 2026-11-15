@@ -237,6 +237,41 @@ try {
   await page.getByRole('button', { name: 'Perfect fifth' }).click();
   await page.getByText("That's right.").waitFor();
 
+  // Extended interval sets retain a focused answer pool and save supporting evidence.
+  await page.getByRole('button', { name: 'Steps & tritone' }).click();
+  await page
+    .getByRole('heading', { name: 'How far apart were the two notes?' })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Minor second' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('Interval item evidence saved locally.', { exact: false })
+    .waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Major second' }).click();
+  await page.getByText("That's right.").waitFor();
+
+  await page.getByRole('button', { name: 'Wide leaps' }).click();
+  await page
+    .getByRole('heading', { name: 'How far apart were the two notes?' })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Minor sixth' }).click();
+  await page.getByText("That's right.").waitFor();
+  await page
+    .getByText('Interval item evidence saved locally.', { exact: false })
+    .waitFor();
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Major sixth' }).click();
+  await page.getByText("That's right.").waitFor();
+
   await page.getByRole('button', { name: 'Chord movement' }).click();
   await page
     .getByRole('heading', {

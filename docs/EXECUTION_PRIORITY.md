@@ -6,17 +6,17 @@
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-15 after PR #125
+## Live checkpoint — 2026-11-15 after PR #124
 
-- Verified `main` HEAD: `4e7ee50b7b39e68c5593b30289562330acb7c727`, the squash merge of PR #125. PR #123 is also merged as `fea5c4ca07f1836ff946002eead8c807dfc50d1c`.
-- The priority implementation sequence #117–#123 is merged: interval-response evidence labels, chord-movement listening, theory recall, shared harmony/fretboard/CAGED, local repertoire projects and the real-device evidence matrix, followed by the isolated manual CI rehearsal.
-- PR #125 is merged: production environment decision and release gates are documented. No production resources, secrets, D1 database, routes, authentication or production deployment were created or authorized.
-- PR #124 is the only remaining open PR and is the final governance/tracker update. Its docs branch is being refreshed onto this main commit; required CI must pass on the refreshed head before merge.
-- CI evidence: PR #123 post-merge main run [#43676456055](https://github.com/leenusdarnal/guitarlab/actions/runs/43676456055) passed. PR #125 refreshed-head run [#43676639833](https://github.com/leenusdarnal/guitarlab/actions/runs/43676639833) passed. Post-merge main run [#43677053099](https://github.com/leenusdarnal/guitarlab/actions/runs/43677053099) is running for the current main SHA; confirm it before merging #124.
+- Verified `main` HEAD: `a78da53dc82457326663ae2d6a93f00ef64cda60`, the squash merge of governance PR #124. All prior priority PRs #117–#125 are merged.
+- Post-merge main GuitarLab CI run [#43677525851](https://github.com/leenusdarnal/guitarlab/actions/runs/43677525851) passed, including application/curriculum validation and Node.js 26 compatibility.
+- The next M8.1 implementation is PR #127, [extended interval ear-training sets](https://github.com/leenusdarnal/guitarlab/pull/127), for Issue #17. It adds nine interval classes in focused Foundations, Steps & tritone, and Wide leaps sets; local audio, supporting-probe assessment v2, unit tests and browser acceptance are included.
+- PR #127 head `1829a80f59e6c3baf5f96089afb4003e30420b1e` is up to date with main. Node.js 26 compatibility has passed on the previous head; the latest required application/curriculum workflow run [#43677940024](https://github.com/leenusdarnal/guitarlab/actions/runs/43677940024) is still running after a browser-acceptance assertion was restored. Re-check the latest head and all required checks before merge.
+- Issue #17 remains open after PR #127: review TAB/notation provenance and licensing, and only add further learning outcomes where the authored content supports them. The current PR covers ascending listening intervals, not descending interval recognition or notation-aware enharmonic spelling.
 - Issue #5 remains open until the controlled workflow is manually dispatched in both modes (expected failure and clean recovery), and the real run URLs are recorded.
-- Issue #3 remains open pending explicit owner decisions on account ownership, hostname, access model, data architecture and release approval. The production decision record is preparation, not authorization.
+- Issue #3 remains open pending explicit owner decisions on account ownership, hostname, access model, data architecture and release approval. No production resources, secrets, D1 database, routes, authentication or production deployment have been created or authorized.
 - Physical-device and recording evidence remains outstanding under Issues #89, #9, #10 and #18. Synthetic fixtures and automated browser checks do not count as hardware sign-off.
-- After #124 is merged, verify final main CI, then continue with Issue #17's remaining interval/content-provenance work and the outstanding manual release evidence.
+- After PR #127 passes and is merged, verify post-merge main CI, then continue Issue #17's provenance/licensing work and the remaining manual release evidence.
 
 ## Historical checkpoint — 2026-11-14 after PR #113
 
@@ -148,15 +148,13 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | `4e7ee50b7b39e68c5593b30289562330acb7c727` (PR #125 merged); post-merge CI run #43677053099 is still running |
-| PRs #117–#122 | Merged; interval evidence, chord movement, theory recall, shared harmony/CAGED, local repertoire and the real-device evidence matrix |
-| PR #123 | Merged as `fea5c4ca07f1836ff946002eead8c807dfc50d1c`; isolated manual CI rehearsal is available on main; both manual dispatches remain pending |
-| PR #125 | Merged as `4e7ee50b7b39e68c5593b30289562330acb7c727`; production decision and release gates documented, with no production changes authorized |
-| PR #124 | Only remaining open PR; final governance/tracker update. Refresh onto latest main, rerun required CI and merge last |
-| PR #123 post-merge CI | [Run #43676456055](https://github.com/leenusdarnal/guitarlab/actions/runs/43676456055) passed |
-| PR #125 refreshed-head CI | [Run #43676639833](https://github.com/leenusdarnal/guitarlab/actions/runs/43676639833) passed |
-| Current main CI | [Run #43677053099](https://github.com/leenusdarnal/guitarlab/actions/runs/43677053099); pending at this checkpoint |
-| Current product follow-up | Issue #17: broader interval learning and content provenance/licensing review |
+| Last verified main SHA | `a78da53dc82457326663ae2d6a93f00ef64cda60` (PR #124 merged); post-merge CI run #43677525851 passed |
+| PRs #117–#125 | Merged in priority order; interval feedback, chord movement, theory recall, shared harmony/CAGED, local repertoire, real-device evidence matrix, isolated CI rehearsal and production approval gates |
+| PR #124 | Merged as `a78da53dc82457326663ae2d6a93f00ef64cda60`; execution governance and tracker updated |
+| PR #127 | Open; Issue #17 extended interval recognition. Current head `1829a80f59e6c3baf5f96089afb4003e30420b1`; up to date with main; full CI run #43677940024 is pending/in progress |
+| Post-merge main CI | [Run #43677525851](https://github.com/leenusdarnal/guitarlab/actions/runs/43677525851) passed application/curriculum and Node.js 26 jobs |
+| PR #127 CI | [Run #43677940024](https://github.com/leenusdarnal/guitarlab/actions/runs/43677940024); required application/curriculum workflow in progress; Node.js 26 compatibility passed |
+| Current product follow-up | Issue #17: PR #127 extends ascending interval listening; remaining TAB/notation provenance/licensing review remains open |
 | Audio and device evidence | Issue #89 real-guitar/physical audio evidence; Issues #9 and #10 physical-device storage and backup/restore; Issue #18 accessibility, privacy and release acceptance |
 | Controlled CI evidence | Issue #5 remains open until real failure-injection and recovery run URLs are recorded |
 | Production | Issue #3 remains open pending owner decisions and explicit approval; no production provisioning or deployment |

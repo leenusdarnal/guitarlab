@@ -5,9 +5,18 @@ import type {
 
 const intervalAnswers = [
   'unison',
+  'minor_second',
+  'major_second',
   'minor_third',
   'major_third',
-  'perfect_fifth'
+  'perfect_fourth',
+  'tritone',
+  'perfect_fifth',
+  'minor_sixth',
+  'major_sixth',
+  'minor_seventh',
+  'major_seventh',
+  'octave'
 ] as const;
 
 const pulseAnswers = ['steady', 'uneven'] as const;
@@ -26,8 +35,8 @@ export type IntervalRecognitionAnswer = (typeof intervalAnswers)[number];
 
 export const intervalRecognitionAssessment = {
   definitionId: 'guitar.ear-training.interval-recognition',
-  definitionVersion: 1,
-  scoringRuleVersion: 'exact-interval-choice-v1',
+  definitionVersion: 2,
+  scoringRuleVersion: 'exact-interval-choice-v2',
   skillId: 'ear.intervals',
   decisionScope: 'supporting_probe' as const
 };

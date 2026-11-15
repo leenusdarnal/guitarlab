@@ -10,10 +10,12 @@
   import {
     createEarTrainingExercise,
     type EarTrainingAnswer,
+    type EarTrainingIntervalSet,
     type EarTrainingKind
   } from '../../../lib/domain/music/ear-training';
 
   let kind = $state<EarTrainingKind>('pulse');
+  let intervalSet = $state<EarTrainingIntervalSet>('foundation');
   let sequence = $state(0);
   let selectedAnswer = $state<EarTrainingAnswer | null>(null);
   let feedbackState = $state<'correct' | 'incorrect' | ''>('');
@@ -32,7 +34,16 @@
     return new AudioContext();
   });
 
-  const exercise = $derived(createEarTrainingExercise(kind, sequence));
+  const exercise = $derived(
+    createEarTrainingExercise(kind, sequence, intervalSet)
+  );
+  const intervalSetLabel = $derived(
+    intervalSet === 'foundation'
+      ? 'FOUNDATIONS'
+      : intervalSet === 'steps-and-tritone'
+        ? 'STEPS AND TRITONE'
+        : 'WIDE LEAPS'
+  );
 
   onDestroy(() => {
     playbackAbortController?.abort();
@@ -52,6 +63,16 @@
   function selectKind(nextKind: EarTrainingKind) {
     if (isPlaying) return;
     kind = nextKind;
+    sequence = 0;
+    selectedAnswer = null;
+    feedbackState = '';
+    audioError = '';
+    evidenceSaveState = 'idle';
+  }
+
+  function selectIntervalSet(nextSet: EarTrainingIntervalSet) {
+    if (isPlaying) return;
+    intervalSet = nextSet;
     sequence = 0;
     selectedAnswer = null;
     feedbackState = '';
@@ -189,9 +210,32 @@
     <button type="button" class:active={kind === 'chord-movement'} aria-pressed={kind === 'chord-movement'} onclick={() => selectKind('chord-movement')}>Chord movement</button>
   </nav>
 
+  {#if kind === 'interval'}
+    <div class="exercise-tabs interval-set-tabs" role="group" aria-label="Interval practice set">
+      <button
+        type="button"
+        class:active={intervalSet === 'foundation'}
+        aria-pressed={intervalSet === 'foundation'}
+        onclick={() => selectIntervalSet('foundation')}
+      >Foundations</button>
+      <button
+        type="button"
+        class:active={intervalSet === 'steps-and-tritone'}
+        aria-pressed={intervalSet === 'steps-and-tritone'}
+        onclick={() => selectIntervalSet('steps-and-tritone')}
+      >Steps &amp; tritone</button>
+      <button
+        type="button"
+        class:active={intervalSet === 'wide-leaps'}
+        aria-pressed={intervalSet === 'wide-leaps'}
+        onclick={() => selectIntervalSet('wide-leaps')}
+      >Wide leaps</button>
+    </div>
+  {/if}
+
   <section class="panel exercise-panel" aria-labelledby="exercise-title">
     <div class="exercise-meta">
-      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : kind === 'contour' ? 'MELODY SHAPE' : kind === 'interval' ? 'INTERVAL RECOGNITION' : 'CHORD FUNCTION'}</span>
+      <span class="eyebrow">{kind === 'pulse' ? 'RHYTHM AND TIME' : kind === 'pitch' ? 'PITCH COMPARISON' : kind === 'contour' ? 'MELODY SHAPE' : kind === 'interval' ? `INTERVAL RECOGNITION · ${intervalSetLabel}` : 'CHORD FUNCTION'}</span>
       <span class="score" aria-label="Session score">{correctCount} correct · {attemptCount} attempts</span>
     </div>
     <h2 id="exercise-title">{exercise.prompt}</h2>
@@ -261,7 +305,7 @@
     <ul>
       <li>Use headphones or a comfortable speaker volume if available.</li>
       <li>Listen to the whole example before choosing an answer.</li>
-      <li>For intervals, compare the distance between notes rather than trying to name their absolute pitches.</li>
+      <li>For intervals, compare the distance between notes rather than trying to name either note.</li>
       <li>Replay as often as you need; this exercise is about noticing, not speed.</li>
       <li>Visual instructions and answer labels are provided, so the task is not explained by sound alone.</li>
     </ul>
@@ -338,6 +382,9 @@
     border-color: var(--primary);
     color: var(--primary);
     background: var(--surface-raised);
+  }
+  .interval-set-tabs {
+    margin-top: -4px;
   }
   .panel {
     padding: clamp(18px, 4vw, 30px);
