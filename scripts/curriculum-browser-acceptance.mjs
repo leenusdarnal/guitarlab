@@ -90,7 +90,7 @@ try {
     await page.locator('.stats').innerText(),
     /48 specialist lessons/
   );
-  assert.match(await page.locator('.stats').innerText(), /152 total lessons/);
+  assert.match(await page.locator('.stats').innerText(), /152 lessons in total/);
 
   // Search, route and duration filters must make a specific lesson easy to find.
   const lessonSearch = page.getByRole('searchbox', { name: 'Search lessons' });
