@@ -330,7 +330,7 @@ try {
     .selectOption('dark');
   assert.equal(
     await restrictedStoragePage.locator('html').getAttribute('data-theme'),
-    'light',
+    'dark',
     'The theme should still change in memory when localStorage is blocked'
   );
   assert.deepEqual(
