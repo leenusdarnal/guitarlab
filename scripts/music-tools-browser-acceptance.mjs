@@ -131,7 +131,20 @@ try {
   await page.getByRole('link', { name: /Open metronome/ }).click();
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
 
-  // Tempo and meter can be changed before audio begins.
+  // Numeric, stepped, preset, tap-tempo and slider controls stay in sync.
+  const tempoEntry = page.getByRole('spinbutton', {
+    name: 'Enter tempo in beats per minute'
+  });
+  await tempoEntry.fill('112');
+  await page.waitForFunction(() =>
+    document.querySelector('.tempo-display')?.textContent?.includes('112')
+  );
+  await page.getByRole('button', { name: 'Increase tempo by 1 BPM' }).click();
+  await page.waitForFunction(() =>
+    document.querySelector('.tempo-display')?.textContent?.includes('113')
+  );
+  await page.getByRole('button', { name: '100 BPM' }).click();
+  await page.getByLabel('Beats per bar').selectOption('3');
   const tempoSlider = page.getByRole('slider', {
     name: 'Tempo in beats per minute'
   });
@@ -142,13 +155,23 @@ try {
   await page.waitForFunction(() =>
     document.querySelector('.tempo-display')?.textContent?.includes('112')
   );
-  await page.getByLabel('Beats per bar').selectOption('3');
+  await page.getByRole('button', { name: 'Tap tempo' }).click();
+  await page.getByRole('status').filter({ hasText: 'Tap once more' }).waitFor();
+
+  // A valid BPM deep link pre-fills tempo without starting audio.
+  await page.goto(`${origin}/tools/metronome?bpm=96`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
+  await page.getByRole('spinbutton', { name: 'Enter tempo in beats per minute' }).toHaveValue('96');
+  assert.equal(await page.getByRole('button', { name: 'Metronome playback' }).getAttribute('aria-pressed'), 'false');
 
   // Audio starts only from an explicit user action and can be stopped.
-  await page.getByRole('button', { name: 'Start metronome' }).click();
+  const metronomeToggle = page.getByRole('button', { name: 'Metronome playback' });
+  await metronomeToggle.click();
   await page.getByText('Playing', { exact: true }).waitFor();
-  await page.getByRole('button', { name: 'Stop metronome' }).click();
+  assert.equal(await metronomeToggle.getAttribute('aria-pressed'), 'true');
+  await metronomeToggle.click();
   await page.getByText('Stopped', { exact: true }).waitFor();
+  assert.equal(await metronomeToggle.getAttribute('aria-pressed'), 'false');
 
   // Reference tone is a separate user-initiated action; no microphone is requested.
   await page.getByRole('button', { name: 'Play A4 reference tone' }).click();
@@ -483,6 +506,17 @@ try {
 
   await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  assert.equal(
+    await page.locator('.note-display').getAttribute('aria-live'),
+    null,
+    'High-frequency tuner measurements must not be announced continuously'
+  );
+  await page.getByRole('status').filter({ hasText: 'The tuner is ready' }).waitFor();
+  await page.getByLabel('A4 reference frequency').selectOption('442');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  await page.getByLabel('A4 reference frequency').toHaveValue('442');
+  await page.getByRole('button', { name: 'Hear A4 reference tone' }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
   const tunerDimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
