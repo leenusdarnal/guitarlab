@@ -58,6 +58,7 @@ try {
 
   // Start finder interaction from a fully loaded route rather than racing the SPA navigation.
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.locator('[data-catalog-hydrated="true"]').waitFor();
 
   assert.equal(
     await page.locator('.route-card').count(),
@@ -109,6 +110,7 @@ try {
     .click();
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await lessonSearch.fill('zzzz-no-matching-lesson');
   await page
     .getByRole('heading', { name: 'No lessons match those filters.' })
@@ -243,6 +245,7 @@ try {
 
   // Year 2 route and an optional specialist route use the same reader contract.
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
     .fill('Fretboard map 1');
@@ -253,6 +256,7 @@ try {
   assert.match(page.url(), /y2-w01-lesson/);
 
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
     .fill('Right-hand independence');
