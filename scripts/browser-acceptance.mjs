@@ -1507,7 +1507,7 @@ try {
   await page.getByLabel('Find a skill').fill('chord transition');
   await page.getByText('Showing 1 of 34 skills', { exact: true }).waitFor();
   const chordTransitionChoice = page.getByRole('button', {
-    name: /Chord Transition/
+    name: /Chord transitions/i
   });
   await chordTransitionChoice.waitFor();
   await chordTransitionChoice.click();
