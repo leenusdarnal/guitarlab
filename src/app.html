@@ -3,7 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#171715" />
+    <meta name="theme-color" content="#101318" />
+    <script nonce="%sveltekit.nonce%">
+      (() => {
+        let preference = 'system';
+        try {
+          const stored = window.localStorage.getItem('guitarlab-theme');
+          if (stored === 'system' || stored === 'light' || stored === 'dark') {
+            preference = stored;
+          }
+        } catch {
+          // System appearance remains available when storage is blocked.
+        }
+
+        const resolved =
+          preference === 'system'
+            ? window.matchMedia('(prefers-color-scheme: light)').matches
+              ? 'light'
+              : 'dark'
+            : preference;
+        const root = document.documentElement;
+        root.dataset.theme = resolved;
+        root.dataset.themePreference = preference;
+
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) {
+          themeColor.setAttribute(
+            'content',
+            resolved === 'light' ? '#F5F4F0' : '#101318'
+          );
+        }
+      })();
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">
