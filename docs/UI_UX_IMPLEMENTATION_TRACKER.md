@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-05 / UX-06 — actionable daily plans and session-first Practice Studio ([PR #142](https://github.com/leenusdarnal/guitarlab/pull/142))
+**Active implementation:** UX-11 — discoverable, trustworthy local backups (`feat/ux-11-trustworthy-backups`)
 
 ---
 
@@ -296,20 +296,20 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-11 — Make backups discoverable and trustworthy
 
 **Priority:** P1 for focus/contrast; P2 for recency and presentation  
-**Status:** READY  
+**Status:** IN REVIEW — export prioritisation, plain-language storage guidance, local recency and dashboard reminder implemented; browser and device acceptance is being validated  
 **Depends on:** UX-02 and existing backup/restore implementation  
 **Related findings:** B1–B4
 
-- [ ] Add visible focus styling to the backup restore file-picker control.
-- [ ] Fix reset-button text and background contrast in both themes.
-- [ ] Put export before advanced storage-protection explanation and simplify technical storage language.
-- [ ] Place success and error feedback next to the export/restore action that caused it.
-- [ ] Add a truthful last-export timestamp only after a successful export; never infer one from file creation or page visits.
-- [ ] Show backup recency in Data & backups and provide a restrained reminder in an appropriate dashboard location.
-- [ ] Evaluate Web Share as an optional enhancement with download fallback and platform testing.
-- [ ] Verify export, restore preview, replacement, rollback and reset flows after UI changes.
+- [x] Verify visible focus styling on the restore file-picker with the existing 3px focus outline and 44px target; accessibility browser acceptance covers desktop and 320px layouts in both themes.
+- [x] Verify reset-button text/background contrast in both themes with the existing semantic danger tokens and design-token contrast validation.
+- [x] Put export before storage-protection details and replace storage jargon with direct language about browser site data and backups.
+- [x] Place success/error feedback beside the export, restore, reset or storage action that produced it.
+- [x] Store a local timestamp only after the backup snapshot is created and the browser download is triggered; label it as “download started” because the browser does not confirm the final save location.
+- [x] Show the latest known download start in Data & backups and a restrained dashboard reminder for active learners; a recent download suppresses the reminder.
+- [x] Evaluate Web Share; defer enabling it until physical-device and platform-consent testing is available. Keep the explicit JSON download as the predictable fallback for this private learner data.
+- [x] Extend automated coverage for recency validation, storage failures, reminder timing, export, preview, replacement, rollback, restore and reset. Successful restore/reset clears stale local backup metadata; failed replacement preserves existing data and its metadata.
 
-**Acceptance:** users can export and restore with keyboard or touch, see what happened, understand storage risk in plain language and never see a fabricated backup date.
+**Acceptance:** learners can export and restore with keyboard or touch, see action-specific outcomes, understand browser storage risk and never see a fabricated backup date. The displayed date describes a download request, not confirmed file retention.
 
 ### UX-12 — Clarify the Tools hub and onboarding/preferences
 
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | UX-11 branch adds local-only backup-download recency (never included in learner records), truthful download-start wording, a 30-day dashboard reminder, action-specific feedback and plain-language storage guidance. Existing file-picker focus and dark/light danger-token contrast are covered by the accessibility and design-token checks. Web Share was evaluated and deferred pending real-device consent testing. Automated CI is pending. |
 | 2026-11-15 | PR #146 implements the canonical 34-skill map, evidence-aware learner states, active-release scoping, published lesson links, search/category filters and mobile master/detail navigation. CI rerun after synchronization is pending; manual learner acceptance remains under UX-14. |
 | 2026-11-15 | PR #145 implements fretboard structure/inlays, prompted note-finding, selected-pitch playback and chord-box diagrams. CI rerun after synchronization is pending; manual device and assistive-technology checks remain under UX-14. |
 | 2026-11-15 | PR #144 implementation and automated CI validation complete for UX-08; physical-device, keyboard-only, screen-reader and wake-lock lifecycle acceptance remain open under UX-14. |
