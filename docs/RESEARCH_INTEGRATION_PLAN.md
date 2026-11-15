@@ -15,6 +15,7 @@ This document records decisions and sequencing. It does not claim that deferred 
 | Finding from comparable projects | GuitarLab decision | Integration point |
 |---|---|---|
 | Per-item accuracy, weak-item selection and difficulty adjustment | Adopt a small, explainable rules-based approach first; measure it before considering predictive models | M7 adaptive practice |
+| Stable pitch tracking, inner hearing and interval recognition | Adopt the learning sequence, not copied code or copyrighted audio examples | M8 ear training |
 | Stable pitch tracking, microphone session management and local audio processing | Adopt the engineering patterns, not copied code; add permission, noise and confidence handling | M6 audio capability / new Issue #68 |
 | FFT/chroma, silence rejection and confidence thresholds | Use as design/evaluation references; validate with synthetic signals and real guitar recordings before claiming accuracy | Issue #68 |
 | CAGED, triads, inversions and connected fretboard positions | Integrate through shared theory functions and progressive learning modes | M8 theory/fretboard |
@@ -81,6 +82,20 @@ New work must extend these foundations. In particular:
 2. Complete physical-device offline, backup/restore, accessibility and privacy acceptance under Issue #18.
 3. Add a third-party dependency/licence register.
 4. Build repertoire/TAB workflows only for original, public-domain or properly licensed content; external resources remain links and receive no private learner data.
+
+## Interval-recognition extension — 2026-11-15
+
+The next Issue #17 interval batch adds the remaining common simple-interval classes in progressive, focused answer sets rather than presenting all 13 choices at once:
+
+| Practice set | Intervals | Learning distinction |
+|---|---|---|
+| Foundations | Unison, minor third, major third, perfect fifth | Retains the original four-item pool as a stable introductory set |
+| Steps and tritone | Minor second, major second, perfect fourth, tritone | Adds adjacent scale-step sizes, the fourth, and the six-semitone tritone |
+| Wide leaps | Minor sixth, major sixth, minor seventh, major seventh, octave | Adds larger melodic spans and the octave |
+
+This follows the sequencing visible in [Berklee Ear Training 1](https://online.berklee.edu/courses/ear-training-1), which introduces the minor and major second, major third, perfect fourth and fifth, tritone, sixths and sevenths before reviewing simple intervals. [Open Music Theory's interval chapter](https://open-musictheory.github.io/docs/fundamentals/intervals/) distinguishes chromatic semitone distance from diatonic interval spelling; accordingly this listening-only drill names the six-semitone sound a **tritone** and does not claim to distinguish augmented fourth from diminished fifth without note spelling.
+
+Assessment instrumentation advances to version 2 so the expanded item pool is not silently treated as identical to historical version-1 attempts. Responses remain append-only supporting probes; incorrect answers do not create confusion codes or change whole-skill mastery. The current batch remains ascending, locally synthesized two-note examples with a focused choice pool. Descending-direction recognition and notation-aware enharmonic spelling are separate future learning outcomes, not inferred from this batch.
 
 ## 4. Architecture and quality constraints
 

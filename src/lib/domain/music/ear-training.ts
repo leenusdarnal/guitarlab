@@ -1,5 +1,15 @@
 export type EarTrainingKind =
-  'pulse' | 'pitch' | 'contour' | 'interval' | 'chord-movement';
+  | 'pulse'
+  | 'pitch'
+  | 'contour'
+  | 'interval'
+  | 'chord-movement';
+
+export type EarTrainingIntervalSet =
+  | 'foundation'
+  | 'steps-and-tritone'
+  | 'wide-leaps';
+
 export type EarTrainingAnswer =
   | 'steady'
   | 'uneven'
@@ -9,9 +19,18 @@ export type EarTrainingAnswer =
   | 'falling'
   | 'level'
   | 'unison'
+  | 'minor_second'
+  | 'major_second'
   | 'minor_third'
   | 'major_third'
+  | 'perfect_fourth'
+  | 'tritone'
   | 'perfect_fifth'
+  | 'minor_sixth'
+  | 'major_sixth'
+  | 'minor_seventh'
+  | 'major_seventh'
+  | 'octave'
   | 'subdominant'
   | 'dominant';
 
@@ -41,12 +60,53 @@ const pitchChoices = [
   { value: 'second', label: 'Second note' }
 ] as const;
 
-const intervalChoices = [
-  { value: 'unison', label: 'Same note (unison)' },
-  { value: 'minor_third', label: 'Minor third' },
-  { value: 'major_third', label: 'Major third' },
-  { value: 'perfect_fifth', label: 'Perfect fifth' }
-] as const;
+type IntervalAnswer = Extract<
+  EarTrainingAnswer,
+  | 'unison'
+  | 'minor_second'
+  | 'major_second'
+  | 'minor_third'
+  | 'major_third'
+  | 'perfect_fourth'
+  | 'tritone'
+  | 'perfect_fifth'
+  | 'minor_sixth'
+  | 'major_sixth'
+  | 'minor_seventh'
+  | 'major_seventh'
+  | 'octave'
+>;
+
+interface IntervalDefinition {
+  semitones: number;
+  answer: IntervalAnswer;
+  label: string;
+}
+
+const intervalDefinitions: Record<
+  EarTrainingIntervalSet,
+  readonly IntervalDefinition[]
+> = {
+  foundation: [
+    { semitones: 0, answer: 'unison', label: 'Same note (unison)' },
+    { semitones: 3, answer: 'minor_third', label: 'Minor third' },
+    { semitones: 4, answer: 'major_third', label: 'Major third' },
+    { semitones: 7, answer: 'perfect_fifth', label: 'Perfect fifth' }
+  ],
+  'steps-and-tritone': [
+    { semitones: 1, answer: 'minor_second', label: 'Minor second' },
+    { semitones: 2, answer: 'major_second', label: 'Major second' },
+    { semitones: 5, answer: 'perfect_fourth', label: 'Perfect fourth' },
+    { semitones: 6, answer: 'tritone', label: 'Tritone (six semitones)' }
+  ],
+  'wide-leaps': [
+    { semitones: 8, answer: 'minor_sixth', label: 'Minor sixth' },
+    { semitones: 9, answer: 'major_sixth', label: 'Major sixth' },
+    { semitones: 10, answer: 'minor_seventh', label: 'Minor seventh' },
+    { semitones: 11, answer: 'major_seventh', label: 'Major seventh' },
+    { semitones: 12, answer: 'octave', label: 'Octave' }
+  ]
+};
 
 const contourChoices = [
   { value: 'rising', label: 'Rising' },
@@ -73,7 +133,8 @@ function assertSequence(sequence: number): void {
  */
 export function createEarTrainingExercise(
   kind: EarTrainingKind,
-  sequence = 0
+  sequence = 0,
+  intervalSet: EarTrainingIntervalSet = 'foundation'
 ): EarTrainingExercise {
   assertSequence(sequence);
 
@@ -128,41 +189,28 @@ export function createEarTrainingExercise(
   }
 
   if (kind === 'interval') {
-    const intervals = [
-      {
-        semitones: 0,
-        answer: 'unison',
-        label: 'unison',
-        explanation: 'Both notes have the same pitch.'
-      },
-      {
-        semitones: 3,
-        answer: 'minor_third',
-        label: 'minor third',
-        explanation: 'The second note is three semitones above the first.'
-      },
-      {
-        semitones: 4,
-        answer: 'major_third',
-        label: 'major third',
-        explanation: 'The second note is four semitones above the first.'
-      },
-      {
-        semitones: 7,
-        answer: 'perfect_fifth',
-        label: 'perfect fifth',
-        explanation: 'The second note is seven semitones above the first.'
-      }
-    ] as const;
+    const intervals = intervalDefinitions[intervalSet];
+    if (!intervals) {
+      throw new RangeError('Choose a supported interval practice set.');
+    }
     const interval = intervals[sequence % intervals.length];
     const firstFrequency = 440;
     const secondFrequency =
       firstFrequency * Math.pow(2, interval.semitones / 12);
+    const visualHint =
+      intervalSet === 'foundation'
+        ? 'Start with familiar anchors: a repeated note, thirds and a fifth. Listen for the distance, not the absolute pitch.'
+        : intervalSet === 'steps-and-tritone'
+          ? 'Compare close steps with the wider tritone. The labels describe the ascending distance between the two notes.'
+          : 'Listen for the wider leaps: sixths, sevenths and an octave. The second note is always above the first.';
+    const explanation =
+      interval.semitones === 0
+        ? 'Both notes have the same pitch.'
+        : `The second note is ${interval.semitones} semitone${interval.semitones === 1 ? '' : 's'} above the first: a ${interval.label.toLowerCase()}.`;
     return {
       kind,
       prompt: 'How far apart were the two notes?',
-      visualHint:
-        'Listen to the distance between the first note and the second. Compare the sound as a whole; you do not need to name either note.',
+      visualHint,
       tones: [
         {
           frequencyHz: firstFrequency,
@@ -175,9 +223,12 @@ export function createEarTrainingExercise(
           durationMilliseconds: 360
         }
       ],
-      choices: intervalChoices,
+      choices: intervals.map(({ answer, label }) => ({
+        value: answer,
+        label
+      })),
       answer: interval.answer,
-      explanation: interval.explanation
+      explanation
     };
   }
 

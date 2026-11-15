@@ -12,8 +12,8 @@ describe('interval recognition assessment evidence', () => {
   it('uses a versioned supporting-probe instrument for the interval skill', () => {
     expect(intervalRecognitionAssessment).toEqual({
       definitionId: 'guitar.ear-training.interval-recognition',
-      definitionVersion: 1,
-      scoringRuleVersion: 'exact-interval-choice-v1',
+      definitionVersion: 2,
+      scoringRuleVersion: 'exact-interval-choice-v2',
       skillId: 'ear.intervals',
       decisionScope: 'supporting_probe'
     });
@@ -56,6 +56,32 @@ describe('interval recognition assessment evidence', () => {
       ]
     });
     expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
+  });
+
+  it('records new interval classes as version-2 supporting-probe items', () => {
+    const cases = [
+      ['steps-and-tritone', 0, 'minor_second'],
+      ['steps-and-tritone', 3, 'tritone'],
+      ['wide-leaps', 0, 'minor_sixth'],
+      ['wide-leaps', 4, 'octave']
+    ] as const;
+
+    for (const [set, sequence, answer] of cases) {
+      const exercise = createEarTrainingExercise('interval', sequence, set);
+      const result = scoreIntervalRecognitionResponse(exercise, answer);
+      expect(result.assessmentInstrument).toMatchObject({
+        definitionId: 'guitar.ear-training.interval-recognition',
+        definitionVersion: 2,
+        scoringRuleVersion: 'exact-interval-choice-v2',
+        decisionScope: 'supporting_probe'
+      });
+      expect(result.itemEvidence[0]).toMatchObject({
+        itemId: `interval-recognition.${answer}`,
+        response: answer,
+        outcome: 'correct'
+      });
+      expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
+    }
   });
 
   it('rejects non-interval exercises and answers outside the item choices', () => {

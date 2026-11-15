@@ -118,9 +118,57 @@ describe('ear-training exercise model', () => {
     });
   });
 
+  it('covers the added step and tritone intervals in their own practice set', () => {
+    const expected = [
+      ['minor_second', 1],
+      ['major_second', 2],
+      ['perfect_fourth', 5],
+      ['tritone', 6]
+    ] as const;
+
+    expected.forEach(([answer, semitones], sequence) => {
+      const exercise = createEarTrainingExercise(
+        'interval',
+        sequence,
+        'steps-and-tritone'
+      );
+      expect(exercise.answer).toBe(answer);
+      expect(exercise.tones[1].frequencyHz).toBeCloseTo(
+        440 * 2 ** (semitones / 12)
+      );
+      expect(exercise.choices).toHaveLength(4);
+    });
+  });
+
+  it('covers sixths, sevenths and octave in the wide-leaps set', () => {
+    const expected = [
+      ['minor_sixth', 8],
+      ['major_sixth', 9],
+      ['minor_seventh', 10],
+      ['major_seventh', 11],
+      ['octave', 12]
+    ] as const;
+
+    expected.forEach(([answer, semitones], sequence) => {
+      const exercise = createEarTrainingExercise(
+        'interval',
+        sequence,
+        'wide-leaps'
+      );
+      expect(exercise.answer).toBe(answer);
+      expect(exercise.tones[1].frequencyHz).toBeCloseTo(
+        440 * 2 ** (semitones / 12)
+      );
+      expect(exercise.choices).toHaveLength(5);
+    });
+  });
+
   it('rejects invalid sequence values and unsupported exercise kinds', () => {
     expect(() => createEarTrainingExercise('pulse', -1)).toThrow(RangeError);
     expect(() => createEarTrainingExercise('pitch', 1.5)).toThrow(RangeError);
+    expect(() =>
+      createEarTrainingExercise('interval', 0, 'unsupported' as never)
+    ).toThrow(RangeError);
     expect(() => createEarTrainingExercise('rhythm' as never)).toThrow(
       RangeError
     );
