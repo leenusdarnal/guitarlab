@@ -1396,14 +1396,14 @@ try {
   ]);
   const activeTabResults = await Promise.all([
     page
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: 'Concurrent tab A', exact: true })
       .waitFor({ timeout: 5_000 })
-      .then(() => true)
+      .then(() => 'A')
       .catch(() => false),
     competingPage
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: 'Concurrent tab B', exact: true })
       .waitFor({ timeout: 5_000 })
-      .then(() => true)
+      .then(() => 'B')
       .catch(() => false)
   ]);
   assert.equal(
@@ -1416,11 +1416,9 @@ try {
     competingPage.reload({ waitUntil: 'networkidle' })
   ]);
   await Promise.all([
-    page
-      .getByRole('heading', { name: 'Your session is in progress' })
-      .waitFor(),
+    page.getByRole('heading', { name: /Concurrent tab [AB]/ }).waitFor(),
     competingPage
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: /Concurrent tab [AB]/ })
       .waitFor()
   ]);
   await competingPage.close();
