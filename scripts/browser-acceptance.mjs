@@ -572,7 +572,9 @@ try {
     'Every phase card should expose a route destination'
   );
   await page.getByRole('link', { name: 'View all sessions' }).click();
-  await page.getByRole('heading', { name: 'Practice history', exact: true }).waitFor();
+  await page
+    .getByRole('heading', { name: 'Practice history', exact: true })
+    .waitFor();
   await page.goto(origin, { waitUntil: 'networkidle' });
 
   // Mobile navigation and planner cards remain usable at a narrow viewport.
