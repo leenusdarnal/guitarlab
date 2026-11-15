@@ -15,7 +15,7 @@ permissions: {}
 
 jobs:
   controlled-rehearsal:
-    name: Controlled \${{ inputs.mode }} rehearsal
+    name: Controlled ${{ inputs.mode }} rehearsal
     runs-on: ubuntu-24.04
     timeout-minutes: 2
     steps:
@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "This is an intentionally isolated, manually dispatched workflow."
           echo "It does not run in pull requests, main CI, deploy workflows, or production."
-          echo "Mode: \${{ inputs.mode }}"
+          echo "Mode: ${{ inputs.mode }}"
 
       - name: Inject the expected failure
         if: inputs.mode == 'failure-injection'
@@ -34,6 +34,6 @@ jobs:
       - name: Verify the recovery path
         if: inputs.mode == 'recovery'
         run: |
-          test -n "\${{ github.sha }}"
-          echo "Recovery path passed for commit \${{ github.sha }}."
+          test -n "${{ github.sha }}"
+          echo "Recovery path passed for commit ${{ github.sha }}."
           echo "The required GuitarLab CI workflow was not changed or bypassed."
