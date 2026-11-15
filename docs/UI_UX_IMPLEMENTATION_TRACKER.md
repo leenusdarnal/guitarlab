@@ -259,19 +259,19 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-09 — Turn fretboard and chord views into recognisable musical diagrams
 
 **Priority:** P1 for core diagram usability; P2 for drill enhancements  
-**Status:** READY  
+**Status:** IN REVIEW — fretboard/chord interaction and browser acceptance implementation complete; automated CI is being rerun after branch synchronization. Physical-device and assistive-technology checks remain under UX-14  
 **Depends on:** UX-04 and existing music-tool model  
 **Related findings:** F1–F4, CH1–CH4
 
-- [ ] Replace the tiny fretboard button grid with a responsive SVG or equivalent semantic fretboard showing strings, fret wires and standard inlay landmarks.
-- [ ] Reflow the fretboard for narrow phones without horizontal page scrolling; keep labels legible and show detail on selection where necessary.
-- [ ] Move secondary fretboard settings below or into a compact control area so the instrument diagram appears first.
-- [ ] Add user-initiated tap-to-hear note playback with correct pitch/tuning mapping and clean audio-session release.
-- [ ] Turn “Find a note” into a prompted exercise with found-count, hints/reveal and first-attempt tracking.
-- [ ] Replace the chord six-column status list with a standard chord-box diagram using strings, frets, dots and barre lines.
-- [ ] Keep the current useful textual chord description available to screen readers.
+- [x] Replace the tiny fretboard grid presentation with an instrument-like fretboard: string lines, fret wires, a nut and standard single/double inlay landmarks; keep the note positions keyboard operable.
+- [x] Keep the 12-fret learning view touch-sized on phones and contain the 24-fret view in its own horizontal scroller; verify no page-level overflow in browser acceptance.
+- [x] Move secondary fretboard settings below the instrument diagram.
+- [x] Add an explicit Hear note action using the selected fretboard pitch; playback does not begin until the learner activates it.
+- [x] Turn Find a note into a prompted exercise with found count, hints, reveal, total attempts and first-try scoring.
+- [x] Replace the six-column string list with a chord-box diagram showing six strings, fret wires, nut, finger dots, open/muted markers and barre shapes.
+- [x] Preserve the chord's written description and expose string/fret/finger details through the diagram's accessible name.
 - [ ] Add clear tap/strum audio only after playback and audio-lifecycle acceptance are defined.
-- [ ] Make chord drill actions larger and reachable; simplify selection of the small chord set without hiding the selected chord state.
+- [x] Increase drill action hit areas to 48px and retain the selected chord label and native chord selector.
 - [ ] Add “Save to session” only through the existing observation/provenance model; do not silently convert drill actions into mastery.
 
 **Acceptance:** learners recognise the diagrams immediately, can use them on a phone without page overflow, and have equivalent text descriptions and predictable audio behaviour.
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | PR #145 implements fretboard structure/inlays, prompted note-finding, selected-pitch playback and chord-box diagrams. CI rerun after synchronization is pending; manual device and assistive-technology checks remain under UX-14. |
 | 2026-11-15 | PR #144 implementation and automated CI validation complete for UX-08; physical-device, keyboard-only, screen-reader and wake-lock lifecycle acceptance remain open under UX-14. |
 | 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |
 | 2026-11-15 | Standardised practice duration to 5–180 minutes, with 10/20/40/60 presets and blur-committed custom preference entry in onboarding; dashboard overrides remain day-only. |

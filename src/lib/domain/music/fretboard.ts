@@ -55,6 +55,18 @@ export const FLAT_NOTE_NAMES = [
 ] as const;
 
 /** Standard six-string E–A–D–G–B–E tuning, from string 6 to string 1. */
+export const STANDARD_FRETBOARD_INLAY_FRETS = [
+  3, 5, 7, 9, 12, 15, 17, 19, 21, 24
+] as const;
+
+/** Standard fretboard inlay positions visible within the selected fret range. */
+export function getFretboardInlayFrets(maxFret = 24): number[] {
+  if (!Number.isInteger(maxFret) || maxFret < 0 || maxFret > 24) {
+    throw new RangeError('Maximum fret must be a whole number from 0 to 24.');
+  }
+  return STANDARD_FRETBOARD_INLAY_FRETS.filter((fret) => fret <= maxFret);
+}
+
 export const STANDARD_GUITAR_TUNING: GuitarTuning = {
   id: 'standard-e',
   name: 'Standard E (E–A–D–G–B–E)',
