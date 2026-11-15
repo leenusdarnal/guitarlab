@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import {
     finishActivePracticeSession,
@@ -407,7 +406,7 @@
       focus: recommendation.title.slice(0, 180),
       source: 'recommended-focus'
     });
-    void goto(resolve('/practice') + '?' + query.toString() + '#practice-session');
+    window.location.assign(resolve('/practice') + '?' + query.toString() + '#practice-session');
   }
 
   async function quickLogAttempt(kind: 'clean' | 'correction') {

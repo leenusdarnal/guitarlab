@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
-  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { loadActiveLearnerDashboard } from '../lib/storage/indexeddb';
   import type { DashboardSnapshot } from '../lib/application/dashboard';
@@ -209,7 +208,7 @@
     event.preventDefault();
     if (task.skillId) {
       const query = new URLSearchParams({ skillId: task.skillId });
-      void goto(resolve('/skills') + '?' + query.toString());
+      window.location.assign(resolve('/skills') + '?' + query.toString());
       return;
     }
     const query = new URLSearchParams({
@@ -217,18 +216,18 @@
       focus: task.title,
       source: 'today-task'
     });
-    void goto(resolve('/practice') + '?' + query.toString() + '#practice-session');
+    window.location.assign(resolve('/practice') + '?' + query.toString() + '#practice-session');
   }
 
   function openSkillReview(event: MouseEvent, skillId: string) {
     event.preventDefault();
     const query = new URLSearchParams({ skillId });
-    void goto(resolve('/skills') + '?' + query.toString());
+    window.location.assign(resolve('/skills') + '?' + query.toString());
   }
 
   function openPracticeHistory(event: MouseEvent) {
     event.preventDefault();
-    void goto(resolve('/practice') + '#practice-history');
+    window.location.assign(resolve('/practice') + '#practice-history');
   }
 
   function practiceTaskAction(task: { lessonId?: string; skillId?: string }) {
@@ -445,7 +444,15 @@
                     </div>
                     <h3>{task.title}</h3>
                     <p>{task.reason}</p>
-                    <a class="task-action" href={practiceTaskHref(task)} onclick={(event) => openPracticeTask(event, task)}>
+                    <a
+                      class="task-action"
+                      href={task.lessonId
+                        ? resolve('/learn/[lessonId]', { lessonId: task.lessonId })
+                        : task.skillId
+                          ? resolve('/skills')
+                          : resolve('/practice')}
+                      onclick={(event) => openPracticeTask(event, task)}
+                    >
                       {practiceTaskAction(task)} <span aria-hidden="true">→</span>
                     </a>
                   </article>
