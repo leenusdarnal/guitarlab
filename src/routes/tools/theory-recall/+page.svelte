@@ -153,7 +153,7 @@
 </svelte:head>
 
 <main class="theory-page">
-  <a class="back-link" href={resolve('/tools')}>← Practice tools</a>
+  <a class="back-link" href={resolve('/tools')}>← Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · MUSICAL UNDERSTANDING</div>
