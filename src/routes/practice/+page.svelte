@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import {
     finishActivePracticeSession,
@@ -400,12 +401,13 @@
   }
 
 
-  function recommendationPracticeHref(recommendation: AdaptivePracticeRecommendation) {
+  function openRecommendedPractice(event: MouseEvent, recommendation: AdaptivePracticeRecommendation) {
+    event.preventDefault();
     const query = new URLSearchParams({
       focus: recommendation.title.slice(0, 180),
       source: 'recommended-focus'
     });
-    return resolve('/practice') + '?' + query.toString() + '#practice-session';
+    void goto(resolve('/practice') + '?' + query.toString() + '#practice-session');
   }
 
   async function quickLogAttempt(kind: 'clean' | 'correction') {
@@ -892,7 +894,7 @@
                   reduce the tempo, simplify the shape or practise a smaller part.
                 </p>
               {/if}
-              <a class="recommendation-practice" href={recommendationPracticeHref(recommendation)}>
+              <a class="recommendation-practice" href={resolve('/practice')} onclick={(event) => openRecommendedPractice(event, recommendation)}>
                 Practise this <span aria-hidden="true">→</span>
               </a>
               <div class="recommendation-actions" aria-label={`Feedback for ${recommendation.title}`}>

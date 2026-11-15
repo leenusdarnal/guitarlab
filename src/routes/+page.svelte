@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
+  import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { loadActiveLearnerDashboard } from '../lib/storage/indexeddb';
   import type { DashboardSnapshot } from '../lib/application/dashboard';
@@ -192,20 +193,42 @@
   function practiceTaskHref(task: {
     lessonId?: string;
     skillId?: string;
-    title: string;
   }) {
     if (task.lessonId) {
       return resolve('/learn/[lessonId]', { lessonId: task.lessonId });
     }
+    return task.skillId ? resolve('/skills') : resolve('/practice');
+  }
+
+  function openPracticeTask(event: MouseEvent, task: {
+    lessonId?: string;
+    skillId?: string;
+    title: string;
+  }) {
+    if (task.lessonId) return;
+    event.preventDefault();
     if (task.skillId) {
-      return resolve('/skills') + '?skillId=' + encodeURIComponent(task.skillId);
+      const query = new URLSearchParams({ skillId: task.skillId });
+      void goto(resolve('/skills') + '?' + query.toString());
+      return;
     }
     const query = new URLSearchParams({
       minutes: String(selectedPracticeMinutes ?? 20),
       focus: task.title,
       source: 'today-task'
     });
-    return resolve('/practice') + '?' + query.toString() + '#practice-session';
+    void goto(resolve('/practice') + '?' + query.toString() + '#practice-session');
+  }
+
+  function openSkillReview(event: MouseEvent, skillId: string) {
+    event.preventDefault();
+    const query = new URLSearchParams({ skillId });
+    void goto(resolve('/skills') + '?' + query.toString());
+  }
+
+  function openPracticeHistory(event: MouseEvent) {
+    event.preventDefault();
+    void goto(resolve('/practice') + '#practice-history');
   }
 
   function practiceTaskAction(task: { lessonId?: string; skillId?: string }) {
@@ -422,7 +445,7 @@
                     </div>
                     <h3>{task.title}</h3>
                     <p>{task.reason}</p>
-                    <a class="task-action" href={practiceTaskHref(task)}>
+                    <a class="task-action" href={practiceTaskHref(task)} onclick={(event) => openPracticeTask(event, task)}>
                       {practiceTaskAction(task)} <span aria-hidden="true">→</span>
                     </a>
                   </article>
@@ -460,7 +483,7 @@
               <ul class="review-list">
                 {#each dashboard.dueReviews as review (review.skillId)}
                   <li>
-                    <a class="review-link" href={resolve('/skills') + '?skillId=' + encodeURIComponent(review.skillId)}>
+                    <a class="review-link" href={resolve('/skills')} onclick={(event) => openSkillReview(event, review.skillId)}>
                       <span class="review-dot" aria-hidden="true"></span>
                       <strong>{skillLabel(review.skillId)}</strong>
                       <span class="review-date">Due {formatDate(review.nextReviewAt)}</span>
@@ -476,7 +499,7 @@
           <article class="panel" id="practice-history">
             <div class="panel-heading">
               <div><div class="eyebrow">RECENT EVIDENCE</div><h2>Practice history</h2></div>
-              <a class="panel-action" href={resolve('/practice') + '#practice-history'}>View all sessions →</a>
+              <a class="panel-action" href={resolve('/practice')} onclick={openPracticeHistory}>View all sessions →</a>
             </div>
             {#if dashboard.recentPractice.length > 0}
               <ul class="session-list">{#each dashboard.recentPractice as session (session.id)}<li><span class="session-mark" aria-hidden="true">◉</span><span class="session-copy"><strong>{session.focus ?? 'Practice session'}</strong><small>{formatDate(session.startedAt)}{session.status === 'paused' ? ' · Paused' : session.status === 'in_progress' ? ' · In progress' : ''}</small></span><span class="session-duration">{formatDuration(session.actualDurationSeconds)}</span></li>{/each}</ul>
@@ -495,7 +518,7 @@
                 <h3>{phase.title}</h3><p>{phase.goal}</p>
                 <div class="phase-progress" role="progressbar" aria-label={'Progress: ' + phase.title} aria-valuemin="0" aria-valuemax={phase.totalLessons} aria-valuenow={phase.completedLessons}><span style={'width: ' + phaseProgress(phase.completedLessons, phase.totalLessons) + '%'}></span></div>
                 <div class="phase-count">{phase.completedLessons} of {phase.totalLessons} lessons completed</div>
-                <a class="phase-action" href={resolve('/learn') + '#route-year-1'}>Browse Year 1 lessons →</a>
+                <a class="phase-action" href={resolve('/learn')}>Browse Year 1 lessons →</a>
               </article>
             {/each}
           </div>
