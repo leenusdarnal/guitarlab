@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     MAX_METRONOME_BPM,
@@ -15,18 +15,110 @@
   let isStarting = $state(false);
   let isPlayingReference = $state(false);
   let audioError = $state('');
+  let currentBeat = $state(0);
+  let wakeLockStatus = $state<'idle' | 'active' | 'unsupported' | 'denied' | 'released'>('idle');
+  type ScreenWakeLockHandle = {
+    released: boolean;
+    release: () => Promise<void>;
+    addEventListener: (type: 'release', listener: () => void) => void;
+  };
+  let wakeLock: ScreenWakeLockHandle | null = null;
+  let tapTimes = $state<number[]>([]);
+  const tempoPresets = [60, 80, 100, 120] as const;
 
-  onDestroy(() => {
-    void metronome?.dispose();
-  });
-
-  function updateTempo(event: Event) {
-    tempo = Number((event.currentTarget as HTMLInputElement).value);
+  function setTempo(nextTempo: number) {
+    if (!Number.isInteger(nextTempo)) return;
+    tempo = Math.max(MIN_METRONOME_BPM, Math.min(MAX_METRONOME_BPM, nextTempo));
     metronome?.setTempo(tempo);
   }
 
+  function updateTempo(event: Event) {
+    setTempo(Number((event.currentTarget as HTMLInputElement).value));
+  }
+
+  function tapTempo() {
+    const now = performance.now();
+    const previousTap = tapTimes.at(-1);
+    if (previousTap !== undefined && now - previousTap > 2_000) {
+      tapTimes = [];
+    }
+    tapTimes = [...tapTimes, now].slice(-5);
+    if (tapTimes.length < 2) return;
+    const intervals = tapTimes.slice(1).map((tap, index) => tap - tapTimes[index]);
+    const averageInterval =
+      intervals.reduce((total, interval) => total + interval, 0) / intervals.length;
+    setTempo(Math.round(60_000 / averageInterval));
+  }
+
+  async function releaseWakeLock() {
+    const currentLock = wakeLock;
+    wakeLock = null;
+    if (currentLock && !currentLock.released) {
+      try {
+        await currentLock.release();
+      } catch {
+        // Wake Lock is an enhancement; audio continues if release is unavailable.
+      }
+    }
+    if (wakeLockStatus === 'active') wakeLockStatus = 'idle';
+  }
+
+  async function acquireWakeLock() {
+    if (!isMetronomeRunning || document.visibilityState !== 'visible') return;
+    if (wakeLock && !wakeLock.released) return;
+    const api = (
+      navigator as unknown as {
+        wakeLock?: {
+          request: (type: 'screen') => Promise<ScreenWakeLockHandle>;
+        };
+      }
+    ).wakeLock;
+    if (!api) {
+      wakeLockStatus = 'unsupported';
+      return;
+    }
+    try {
+      const lock = await api.request('screen');
+      if (!isMetronomeRunning || document.visibilityState !== 'visible') {
+        await lock.release();
+        return;
+      }
+      wakeLock = lock;
+      wakeLockStatus = 'active';
+      lock.addEventListener('release', () => {
+        if (wakeLock !== lock) return;
+        wakeLock = null;
+        wakeLockStatus = 'released';
+        if (isMetronomeRunning && document.visibilityState === 'visible') {
+          window.setTimeout(() => void acquireWakeLock(), 0);
+        }
+      });
+    } catch {
+      wakeLockStatus = 'denied';
+    }
+  }
+
+  function handleVisibilityChange() {
+    if (document.visibilityState === 'visible' && isMetronomeRunning) {
+      void acquireWakeLock();
+    }
+  }
+
+  onMount(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  });
+
+  onDestroy(() => {
+    void metronome?.dispose();
+    void releaseWakeLock();
+  });
+
   function updateMeter(event: Event) {
     beatsPerBar = Number((event.currentTarget as HTMLSelectElement).value);
+    currentBeat = 0;
     metronome?.setBeatsPerBar(beatsPerBar);
   }
 
@@ -47,6 +139,13 @@
         beatsPerBar,
         onStateChange: (running) => {
           isMetronomeRunning = running;
+          if (!running) {
+            currentBeat = 0;
+            void releaseWakeLock();
+          }
+        },
+        onBeat: (beatNumber) => {
+          currentBeat = beatNumber;
         }
       });
     player.setTempo(tempo);
@@ -55,6 +154,7 @@
     try {
       await player.start();
       isMetronomeRunning = player.isRunning;
+      if (isMetronomeRunning) void acquireWakeLock();
     } catch (error) {
       await player.dispose();
       metronome = null;
@@ -115,10 +215,55 @@
       </span>
     </div>
 
-    <div class="tempo-display" aria-live="polite">
+    <div class="tempo-display">
       <strong>{tempo}</strong>
       <span>BPM</span>
     </div>
+
+    <div class="beat-visual" aria-hidden="true">
+      {#each Array.from({ length: beatsPerBar }, (_, index) => index) as beatIndex}
+        <span
+          class:downbeat={beatIndex === 0}
+          class:active={isMetronomeRunning && currentBeat === beatIndex + 1}
+        ></span>
+      {/each}
+    </div>
+    <p class="beat-caption">
+      {#if isMetronomeRunning}
+        Beat {currentBeat || 1} of {beatsPerBar}{currentBeat === 1 ? ' · downbeat' : ''}
+      {:else}
+        First beat is accented · {beatsPerBar} beats per bar
+      {/if}
+    </p>
+
+    <div class="tempo-entry">
+      <label for="tempo-number">Beats per minute</label>
+      <button type="button" class="tempo-step" aria-label="Decrease tempo" onclick={() => setTempo(tempo - 1)}>−</button>
+      <input
+        id="tempo-number"
+        type="number"
+        min={MIN_METRONOME_BPM}
+        max={MAX_METRONOME_BPM}
+        step="1"
+        value={String(tempo)}
+        onchange={updateTempo}
+      />
+      <button type="button" class="tempo-step" aria-label="Increase tempo" onclick={() => setTempo(tempo + 1)}>+</button>
+    </div>
+
+    <div class="tempo-presets" role="group" aria-label="Common tempo presets">
+      {#each tempoPresets as preset (preset)}
+        <button
+          type="button"
+          aria-pressed={tempo === preset}
+          class:choice-active={tempo === preset}
+          onclick={() => setTempo(preset)}
+        >{preset} BPM</button>
+      {/each}
+    </div>
+    <button type="button" class="tap-tempo" onclick={tapTempo}>
+      Tap tempo{tapTimes.length ? ' · ' + tapTimes.length + '/5' : ''}
+    </button>
 
     <label class="tempo-slider">
       <span>Tempo <strong>{tempo} BPM</strong></span>
@@ -150,7 +295,6 @@
       <button
         type="button"
         class="primary-button"
-        aria-pressed={isMetronomeRunning}
         disabled={isStarting}
         onclick={toggleMetronome}
       >
@@ -173,6 +317,20 @@
     {#if audioError}
       <p class="input-error" role="alert">{audioError}</p>
     {/if}
+
+    <p class="wake-lock-status" role="status">
+      {#if wakeLockStatus === 'active'}
+        Screen wake lock is active while the metronome runs.
+      {:else if wakeLockStatus === 'unsupported'}
+        This browser does not support keeping the screen awake. Audio can still play.
+      {:else if wakeLockStatus === 'denied'}
+        Screen wake lock was unavailable. Audio can still play; keep your screen awake manually.
+      {:else if wakeLockStatus === 'released' && isMetronomeRunning}
+        The screen lock was released. GuitarLab will try again when the tab is visible.
+      {:else}
+        The screen only stays awake while the metronome is running and the browser allows it.
+      {/if}
+    </p>
   </section>
 
   <section class="panel guidance-panel" aria-labelledby="guidance-title">
@@ -281,6 +439,125 @@
     font-weight: 800;
     letter-spacing: 1px;
   }
+  .beat-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 42px;
+    margin-top: 4px;
+  }
+  .beat-visual span {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--surface-raised);
+    transition: background-color 80ms ease, box-shadow 80ms ease;
+  }
+  .beat-visual span.downbeat {
+    width: 22px;
+    height: 22px;
+    border-color: var(--primary);
+  }
+  .beat-visual span.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+  .beat-caption {
+    min-height: 20px;
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 11px;
+    text-align: center;
+  }
+  .tempo-entry {
+    display: grid;
+    grid-template-columns: 44px minmax(76px, 120px) 44px;
+    align-items: center;
+    gap: 10px;
+    max-width: 420px;
+    margin: 16px auto;
+  }
+  .tempo-entry label {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .tempo-entry input {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px;
+    border: 1px solid var(--control-border);
+    border-radius: 9px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .tempo-step {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    min-height: 44px;
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font-size: 22px;
+    cursor: pointer;
+  }
+  .tempo-step:first-of-type {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .tempo-step:last-of-type {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .tempo-presets {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .tempo-presets button,
+  .tap-tempo {
+    min-height: 44px;
+    padding: 9px 13px;
+    border: 1px solid var(--border-strong);
+    border-radius: 9px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .tempo-presets button.choice-active {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+  }
+  .tap-tempo {
+    display: block;
+    min-width: 132px;
+    margin: 0 auto 18px;
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 750;
+  }
+  .wake-lock-status {
+    margin: 14px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.55;
+  }
   .tempo-slider {
     display: grid;
     gap: 10px;
@@ -387,6 +664,11 @@
     }
     .audio-actions > button {
       flex: 1 1 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beat-visual span {
+      transition: none;
     }
   }
 </style>
