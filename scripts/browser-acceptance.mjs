@@ -507,7 +507,7 @@ try {
   await page.getByText(/No session has started yet/).waitFor();
   assert.equal(
     await page
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: 'Browser acceptance scale drill', exact: true })
       .count(),
     0,
     'The dashboard plan should prefill a session, not silently start it'
