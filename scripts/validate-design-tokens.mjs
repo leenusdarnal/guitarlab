@@ -7,9 +7,22 @@ const blocks = [
 ];
 
 const requiredTokens = [
-  'bg', 'surface', 'surface-raised', 'surface-overlay', 'text', 'muted',
-  'text-subtle', 'border', 'border-strong', 'primary', 'primary-ink',
-  'secondary', 'success', 'warning', 'danger', 'focus'
+  'bg',
+  'surface',
+  'surface-raised',
+  'surface-overlay',
+  'text',
+  'muted',
+  'text-subtle',
+  'border',
+  'border-strong',
+  'primary',
+  'primary-ink',
+  'secondary',
+  'success',
+  'warning',
+  'danger',
+  'focus'
 ];
 
 function tokensFrom(block) {
@@ -80,13 +93,29 @@ for (const [themeName, tokens] of themes) {
     if (!foreground || !background) continue;
     const ratio = contrast(foreground, background);
     console.log(
-      themeName + ': --' + foregroundKey + ' / --' + backgroundKey +
-      ' = ' + ratio.toFixed(2) + ':1 (min ' + minimum + ':1)'
+      themeName +
+        ': --' +
+        foregroundKey +
+        ' / --' +
+        backgroundKey +
+        ' = ' +
+        ratio.toFixed(2) +
+        ':1 (min ' +
+        minimum +
+        ':1)'
     );
     if (ratio < minimum) {
       failures.push(
-        themeName + ': --' + foregroundKey + ' on --' + backgroundKey +
-        ' is ' + ratio.toFixed(2) + ':1; minimum is ' + minimum + ':1'
+        themeName +
+          ': --' +
+          foregroundKey +
+          ' on --' +
+          backgroundKey +
+          ' is ' +
+          ratio.toFixed(2) +
+          ':1; minimum is ' +
+          minimum +
+          ':1'
       );
     }
   }
