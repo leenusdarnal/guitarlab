@@ -3,10 +3,23 @@
 **Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Verified baseline:** `c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294` (PR #132 merged; curriculum release v1.0.6)  
+**Verified baseline:** `18515ec7bb1ab6d76b4f19a5e9a424585945d890` (PR #135 merged; enforced CSP and response-header regression coverage)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-15 after PR #132
+## Live checkpoint — 2026-11-15 after PR #135
+
+- Verified `main` at `18515ec7bb1ab6d76b4f19a5e9a424585945d890`; PR [#135](https://github.com/leenusdarnal/guitarlab/pull/135) is merged.
+- PR #135 configures SvelteKit-managed Content Security Policy with automatic nonce/hash handling, restrictive script/resource directives, actual response-header assertions in browser acceptance, and `docs/SECURITY_RESPONSE_POLICY.md`.
+- PR CI [run #43689404424](https://github.com/leenusdarnal/guitarlab/actions/runs/43689404424) and post-merge main CI [run #43689790086](https://github.com/leenusdarnal/guitarlab/actions/runs/43689790086) both passed. The merged run includes Node.js 26, application/curriculum, unit, build, Worker smoke, browser, music-tools, accessibility/CSP and curriculum-browser checks.
+- PR #135 is a bounded CSP implementation, not a full security sign-off. Issue #18 remains open for manual WCAG 2.2 AA, physical keyboard/touch/screen-reader checks, privacy review, cross-browser audio lifecycle, licensing, performance and rollback evidence.
+- PR #134's local WAV evaluator supports privacy-safe condition breakdowns. Issue #89 still requires consented real-guitar recordings with ground truth and physical browser/device measurements. No physical corpus or hardware result is claimed.
+- Issues #9 and #10 remain open for physical desktop/mobile IndexedDB, offline restart, export/restore and reset acceptance. Automated Chromium coverage is not physical-device sign-off.
+- Issue #5 remains open: neither controlled rehearsal has been dispatched. The previous attempt expired at GitHub sign-in and produced no run. Dispatch both `failure-injection` and `recovery` from an authenticated GitHub session and record the actual run URLs.
+- Issue #3 remains deferred pending explicit decisions on production ownership, hostname, access model, data architecture and release approval. Do not provision production resources or deploy production.
+- **Next:** complete the authenticated Issue #5 workflow rehearsal, then progress the physical acceptance queues for Issues #9, #10, #89 and #18 without marking unrun checks complete.
+
+
+## Historical checkpoint — 2026-11-15 after PR #132 (superseded by PR #135)
 
 - Verified current main includes merge commit c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294 for PR #132. Issue #69 is reconciled and closed as completed.
 - PR #132 extended explicit expected-versus-selected interval response contrasts to all 13 interval classes and all 12 alternatives for v2 and v3, retained the v1 four-choice mapping, and passed full application/curriculum and Node.js 26 CI before merge.
@@ -91,7 +104,7 @@
 2. Measure per-string detection coverage, median/P95 absolute cents error, false detections during silence/noise and note-on latency.
 3. Record instrument/pickup or microphone, playing dynamics, tuning offsets, room noise and attack/sustain/decay segments.
 4. Run microphone, tuner and resource-cleanup acceptance on physical desktop/mobile devices and supported browser engines.
-5. Continue CSP, WCAG 2.2 AA, privacy, dependency/licence, performance, rollback and offline acceptance.
+5. [x] Implement SvelteKit-managed CSP and response-header regression assertions (PR #135); continue manual CSP deployment compatibility, WCAG 2.2 AA, privacy, dependency/licence, performance, rollback and offline acceptance.
 6. Record tested and untested browser/device combinations; do not generalise mocked Chromium results.
 
 **Exit criteria:** a reproducible evidence report and device matrix exist, or the exact missing hardware access is explicitly documented as blocked.
@@ -142,14 +155,15 @@ When the user says “resume GuitarLab” or “continue implementation”:
 
 | Field | Value |
 |---|---|
-| Last verified main SHA | c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294 (PR #132 merged) |
-| PR #132 | Merged; v2/v3 interval-response contrasts complete; Issue #69 closed |
-| PR #131 | Merged as b34578c4c295e83c5fc95e5350a92d3f664a398e; required application/curriculum and Node.js 26 CI passed; Issue #130 closed |
-| PR #134 | Current P3 PR, [privacy-safe local recording condition breakdowns](https://github.com/leenusdarnal/guitarlab/pull/134); branch feat/audio-corpus-dimension-reports-main132; CI run #43684634245 passed |
-| Issue #17 / #69 / #130 | Closed; musicianship/repertoire/provenance, adaptive practice, and deterministic interval roots delivered |
-| Physical evidence | Issue #89 real-guitar recordings and physical microphone/browser matrix; Issues #9/#10 physical offline storage and backup/restore QA; Issue #18 release hardening |
-| Controlled CI evidence | Issue #5 remains open until both manual failure-injection and recovery run URLs are recorded |
-| Production | Issue #3 remains open pending owner decisions and explicit approval; production provisioning/deployment remains unauthorized |
+| Last verified main SHA | `18515ec7bb1ab6d76b4f19a5e9a424585945d890` (PR #135 merged) |
+| PR #135 | Merged; SvelteKit-managed CSP and response-header regression assertions; PR CI #43689404424 and post-merge main CI #43689790086 passed |
+| PR #134 | Merged; privacy-safe local WAV evaluator condition breakdowns; this is evaluator tooling, not real-guitar measurement evidence |
+| Issue #17 / #69 / #130 | Closed; musicianship/repertoire/provenance, adaptive practice and deterministic interval roots delivered |
+| Issue #89 | Open; consented real-guitar corpus, ground-truth metrics and physical browser/device matrix not yet supplied/run |
+| Issues #9 / #10 | Open; physical-device IndexedDB/offline and backup/restore/reset acceptance remains |
+| Issue #18 | Open; CSP implementation merged, but manual accessibility, privacy, physical-device, audio lifecycle, licensing, performance and rollback sign-off remains |
+| Issue #5 | Open; failure-injection and recovery dispatches have not run because the previous GitHub sign-in session expired; no run URLs exist yet |
+| Issue #3 | Open and deferred; production ownership/architecture/release approval decisions remain unresolved |
 | Deferred | Production D1, authentication, cloud sync and production deployment |
 
 **Source-of-truth hierarchy:** current code/tests on `main` → merged PR evidence → current GitHub Issues/Actions → this checkpoint → historical notes and chat summaries.
