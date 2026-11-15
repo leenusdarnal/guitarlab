@@ -196,7 +196,18 @@
   </header>
 
 
-  <section class="progress-panel" aria-label="Your lesson progress" aria-live="polite">
+  <nav class="lesson-outline" aria-label="Lesson sections">
+    <a href="#lesson-section-overview">Overview</a>
+    <a href="#lesson-section-key-idea">Key idea</a>
+    <a href="#lesson-section-demonstration">Demonstration</a>
+    <a href="#lesson-section-walkthrough">Walkthrough</a>
+    <a href="#lesson-section-exercises">Exercises</a>
+    <a href="#lesson-section-music">Make music</a>
+    <a href="#lesson-section-recall">Review</a>
+    <a href="#lesson-progress">My progress</a>
+  </nav>
+
+  <section class="progress-panel" id="lesson-progress" aria-label="Your lesson progress" aria-live="polite">
     {#if progressLoading}
       <p class="progress-message">Loading your saved lesson progress…</p>
     {:else if progressError && !progress}
@@ -233,13 +244,13 @@
 
   <div class="lesson-layout">
     <article class="lesson-content">
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-overview">
         <div class="kicker">01 · LEARN</div>
         <h2>What you will learn</h2>
         <ul>{#each lesson.learningObjectives as objective (objective)}<li>{objective}</li>{/each}</ul>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-prerequisites">
         <div class="kicker">BEFORE YOU BEGIN</div>
         <h2>Prerequisites and refreshers</h2>
         {#if data.detail.prerequisiteReferences.length > 0}
@@ -257,7 +268,7 @@
         {/if}
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-key-idea">
         <div class="kicker">02 · UNDERSTAND</div>
         <h2>The key idea</h2>
         <p>{lesson.explanation.keyIdea}</p>
@@ -265,14 +276,14 @@
         <div class="worked-example"><span class="eyebrow">WORKED EXAMPLE</span><p>{lesson.explanation.workedExample}</p></div>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-demonstration">
         <div class="kicker">03 · SEE / HEAR</div>
         <h2>Guided demonstration</h2>
         <p>{lesson.demonstrationOrReference.referenceSuggestion}</p>
         <ol>{#each lesson.demonstrationOrReference.steps as step, stepIndex (stepIndex)}<li>{step}</li>{/each}</ol>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-walkthrough">
         <div class="kicker">04 · FOLLOW THE LESSON</div>
         <h2>Lesson walkthrough</h2>
         <div class="lesson-blocks">
@@ -294,7 +305,7 @@
         </div>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-exercises">
         <div class="kicker">05 · PRACTISE</div>
         <h2>Focused exercises</h2>
         <div class="exercise-list">
@@ -310,7 +321,7 @@
         </div>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-music">
         <div class="kicker">06 · MAKE MUSIC</div>
         <h2>Musical application</h2>
         <p>{lesson.musicalApplication.prompt}</p>
@@ -325,7 +336,7 @@
         {/if}
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-success">
         <div class="kicker">07 · CHECK YOURSELF</div>
         <h2>Success criteria</h2>
         <ul class="criteria">
@@ -335,7 +346,7 @@
         </ul>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-coaching">
         <div class="kicker">COACHING NOTES</div>
         <h2>Common mistakes and corrections</h2>
         <div class="mistakes">
@@ -345,13 +356,13 @@
         </div>
       </section>
 
-      <section class="content-section alternative">
+      <section class="content-section alternative" id="lesson-section-accessible">
         <div class="kicker">ACCESSIBLE ALTERNATIVE</div>
         <h2>Make the task manageable</h2>
         <p>{lesson.accessibleAlternative}</p>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-recall">
         <div class="kicker">08 · REFLECT AND RETRIEVE</div>
         <h2>Recall without looking</h2>
         <ul>{#each lesson.retrievalPrompt as prompt (prompt)}<li>{prompt}</li>{/each}</ul>
@@ -361,7 +372,7 @@
         <p>{lesson.nextReviewSuggestion.adaptation}</p>
       </section>
 
-      <section class="content-section">
+      <section class="content-section" id="lesson-section-session">
         <div class="kicker">FLEXIBLE PRACTICE</div>
         <h2>Choose a session size</h2>
         <div class="practice-options">
@@ -380,9 +391,12 @@
         <p>{data.detail.phase.goal}</p>
         <a href={resolve(`/learn#route-${data.detail.route.id}`)}>View all lessons in this route ↗</a>
       </div>
-      <div class="sidebar-card">
-        <span class="eyebrow">LESSON REFERENCE</span><strong>{lesson.id}</strong>
-        <span>Week ID: {lesson.curriculumWeekId}</span><span>Curriculum: {lesson.curriculumId}</span>
+      <div class="sidebar-card glance-card">
+        <span class="eyebrow">LESSON AT A GLANCE</span>
+        <strong>{lesson.estimatedMinutes} minutes</strong>
+        <span>{lesson.lessonBlocks.length} guided steps</span>
+        <span>{lesson.exercises.length} focused exercises</span>
+        <a href="#lesson-progress">View your saved progress ↓</a>
       </div>
     </aside>
   </div>
@@ -453,4 +467,18 @@
   @media(max-width:900px){.lesson-layout{grid-template-columns:1fr}.lesson-sidebar{position:static;grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:700px){.checkpoint-check{align-items:flex-start;flex-direction:column}.checkpoint-actions{width:100%}.checkpoint-actions button{flex:1}}
   @media(max-width:600px){.lesson-page{padding:20px 16px 55px}.breadcrumbs{margin-bottom:23px}.lesson-header h1{font-size:39px}.content-section{padding:22px 0}.content-section h2{font-size:22px}.practice-options{grid-template-columns:1fr}.lesson-sidebar{grid-template-columns:1fr}.lesson-pagination{flex-wrap:wrap}.lesson-pagination>*{flex:1 1 30%}.lesson-pagination>*:last-child{text-align:right}}
+
+  .lesson-outline{position:sticky;top:66px;z-index:30;display:flex;gap:6px;overflow-x:auto;margin:0 0 17px;padding:9px;border:1px solid var(--border);border-radius:12px;background:color-mix(in srgb,var(--surface) 96%,transparent);backdrop-filter:blur(12px);scrollbar-width:thin}
+  .lesson-outline a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;flex:none;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:13px;font-weight:750;white-space:nowrap}
+  .lesson-outline a:hover,.lesson-outline a:focus-visible{background:var(--surface-raised);color:var(--primary)}
+  .content-section{scroll-margin-top:126px}
+  .content-section h3{font-size:15px}
+  .content-section p,.content-section li{font-size:14px;line-height:1.75}
+  .block-type,.exercise-meta,.references article>span{font-size:11px}
+  .exercise>small{font-size:11px}
+  .sidebar-card p{font-size:12px}
+  .sidebar-card>span:not(.eyebrow){font-size:12px}
+  .glance-card strong{font:500 21px Georgia,serif;color:var(--primary)}
+  @media(max-width:760px){.lesson-outline{top:60px;margin-inline:-2px;padding:6px}.lesson-outline a{min-height:42px;padding:8px 10px;font-size:12px}.content-section{scroll-margin-top:116px}}
+  
 </style>

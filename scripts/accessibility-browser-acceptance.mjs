@@ -207,6 +207,13 @@ try {
         // Theme persistence is optional in restricted browser contexts.
       }
     }, theme);
+    await context.addInitScript(() => {
+      window.__guitarlabThemeAtFirstFrame = null;
+      requestAnimationFrame(() => {
+        window.__guitarlabThemeAtFirstFrame =
+          document.documentElement.dataset.theme ?? null;
+      });
+    });
 
     const page = await context.newPage();
     const pageErrors = [];
@@ -244,11 +251,89 @@ try {
           JSON.stringify(mobileLayout)
       );
 
+      const undersizedTextControls = await page.evaluate(() =>
+        Array.from(
+          document.querySelectorAll(
+            'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]), select, textarea'
+          )
+        )
+          .map((control) => ({
+            element: control.tagName.toLowerCase(),
+            type: control.getAttribute('type'),
+            fontSize: Number.parseFloat(getComputedStyle(control).fontSize)
+          }))
+          .filter((control) => control.fontSize < 16)
+      );
+      assert.deepEqual(
+        undersizedTextControls,
+        [],
+        route + ' has text controls below 16px in ' + theme + ' theme'
+      );
+
       await scanPage(page, route, theme, '320px');
 
       await page.setViewportSize({ width: 1440, height: 1000 });
       await scanPage(page, route, theme, 'desktop');
     }
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+    const firstFrameTheme = await page.evaluate(() => ({
+      applied: document.documentElement.dataset.theme,
+      firstFrame: window.__guitarlabThemeAtFirstFrame,
+      preference: document.documentElement.dataset.themePreference
+    }));
+    assert.equal(firstFrameTheme.applied, theme);
+    assert.equal(
+      firstFrameTheme.firstFrame,
+      theme,
+      'The selected theme must be applied before the first rendered frame'
+    );
+    assert.equal(firstFrameTheme.preference, theme);
+
+    const appearance = page.locator('select[aria-label="Appearance"]');
+    assert.equal(await appearance.inputValue(), theme);
+    await appearance.selectOption('system');
+    assert.equal(
+      await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
+      'system'
+    );
+
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'light'
+    );
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#F5F4F0'
+    );
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === 'dark'
+    );
+    assert.equal(
+      await page.locator('meta[name="theme-color"]').getAttribute('content'),
+      '#101318'
+    );
+
+    await appearance.selectOption('light');
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.theme),
+      'light'
+    );
+    assert.equal(
+      await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
+      'light'
+    );
+    await appearance.selectOption('dark');
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.theme),
+      'dark'
+    );
+    assert.equal(
+      await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
+      'dark'
+    );
 
     if (theme === 'dark') {
       await page.setViewportSize({ width: 390, height: 844 });

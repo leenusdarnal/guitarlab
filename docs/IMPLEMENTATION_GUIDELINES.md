@@ -26,32 +26,21 @@ A learner can repeat, split, skip or revisit practice blocks. The app must not a
 
 ## 2. Design direction
 
-### Approved direction: a deliberate hybrid
+The detailed visual and interaction system now lives in the [Design Direction](DESIGN_DIRECTION.md). That document is the authoritative specification for GuitarLab's **Modern Music Studio** direction, including semantic theme tokens, typography, spacing, navigation, component patterns, screen composition, responsive behaviour, motion and accessibility.
 
-Use the structural clarity and interactive-tool emphasis of the **Modern & Interactive** concept, the acoustic warmth and instrument photography of the **Classic Academy** concept, and the restrained hierarchy and low-distraction focus of the **Focused Learner** concept.
+Apply the design direction as a coherent system:
 
-This is a design direction, not a mandate to copy a generated mockup pixel for pixel. Generated mockups are visual inspiration only; their sample labels, dates, percentages, lesson counts and curriculum groupings are not authoritative product data.
+- Use the graphite dark theme and warm-paper light theme with semantic colour tokens.
+- Keep amber/brass for primary actions and active states; use supporting colours sparingly and semantically.
+- Use the documented type scale, readable lesson text, consistent spacing and limited surface elevation.
+- Use the documented desktop navigation rail and compact mobile destinations; do not introduce a competing navigation pattern in an individual route.
+- Prioritise the current learning action and the instrument/task over analytics, decorative imagery or card-heavy layouts.
+- Keep practice focused and hands-busy controls large, clear and reachable.
+- Preserve WCAG 2.2 AA requirements, reduced-motion support, keyboard focus and responsive reflow.
 
-### Visual language
+`DESIGN_DIRECTION.md` defines visual presentation. This guide remains authoritative for product behaviour, personalisation, curriculum, assessment, privacy and implementation boundaries. If an old screenshot, mockup or duplicated styling note conflicts with the Design Direction, follow the current Design Direction while preserving the product and curriculum rules in this guide.
 
-- Base surface: deep graphite/charcoal, with a carefully tested light theme.
-- Primary accent: warm amber/orange, used for the main learning action and active states.
-- Secondary accent: restrained violet/blue for tools, theory and supporting categories; do not use every colour everywhere.
-- Atmosphere: real acoustic-guitar details and selective instrument imagery, balanced with crisp diagrams and interactive fretboard graphics.
-- Typography: highly legible sans-serif for interface and lesson text; optional monospaced type for TAB, note names, fret positions, tempo and technical readouts.
-- Layout: generous spacing, clear hierarchy and simple grouped surfaces. Avoid a grid of cards for every piece of content.
-- Tone: encouraging, intelligent and calm. Avoid punitive streaks, noisy gradients, casino-style reward loops and shame language.
-- Dark and light themes must both meet contrast requirements. Do not make the dark theme the only usable theme.
-
-### Interaction principles
-
-- Mobile-first; the app is used beside a guitar, often with one hand available.
-- Primary actions need generous touch targets and clear labels.
-- Lesson content should be scannable, with one main action at a time.
-- Practice mode should reduce navigation and visual noise. Keep the current drill, timer/metronome and essential controls in reach.
-- Use progressive disclosure for advanced theory and tools. Do not expose a beginner to every advanced fretboard mode on Day 1.
-- Show save/offline/sync status without interrupting practice.
-- Provide useful empty, loading, error, permission-denied and offline states.
+The colour values in the Design Direction are a target system. They are not considered implemented until the shared CSS tokens are migrated and the automated design validation passes.
 
 ## 3. Information architecture
 
