@@ -32,6 +32,6 @@ The browser acceptance workflow checks the actual HTML response headers and the 
 
 ## Verification boundary
 
-The automated assertions verify that the configured policy is emitted by the local Cloudflare Worker preview. They do not prove that every production route, browser extension, third-party integration or future feature is compatible with the policy. They are not a substitute for security review, CSP violation monitoring, physical-device acceptance, deployment configuration review or release approval.
+The automated assertions verify that the configured policy is emitted by the local Cloudflare Worker preview. They do not prove that every production route, browser extension, third-party integration or future feature is compatible with the policy. They are not a substitute for security review, CSP violation monitoring, physical-device acceptance, deployment configuration review or live production smoke tests.
 
-Before enabling a new external integration, review its required script, style, image, media, worker and connection origins. Re-run browser acceptance after changing CSP. Keep production deployment deferred until the owner, data architecture, access controls and release approval gates are resolved.
+Before enabling a new external integration, review its required script, style, image, media, worker and connection origins. Re-run browser acceptance after changing CSP. The first local-first production deployment is now the top priority. Its isolated Worker config has no D1 binding or learner-data API; login and cloud sync remain unimplemented and must not be enabled until authenticated ownership and sync controls are complete.

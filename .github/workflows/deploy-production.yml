@@ -1,0 +1,224 @@
+name: Deploy GuitarLab production
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_production:
+        description: Confirm the local-first production release to the guitarlab Worker
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  checks: read
+  deployments: write
+
+concurrency:
+  group: guitarlab-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  verify-ci:
+    name: Verify CI for production commit
+    if: github.ref == 'refs/heads/main' && inputs.deploy_production
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - name: Checkout the selected commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Ensure the selected commit is still the main tip
+        shell: bash
+        run: |
+          main_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [[ -z "$main_sha" || "$main_sha" != "$GITHUB_SHA" ]]; then
+            echo "The selected commit is no longer the current main branch tip."
+            echo "Selected: $GITHUB_SHA"
+            echo "Current main: $main_sha"
+            echo "Run the workflow again after main is stable."
+            exit 1
+          fi
+
+      - name: Require successful CI checks for this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100")"
+          if ! jq -e --arg sha "$GITHUB_SHA" '
+            def passed($name):
+              ([
+                .check_runs[]
+                | select(.head_sha == $sha and .name == $name)
+              ]
+              | sort_by(.started_at // .created_at // "")
+              | last // {}) as $latest
+              | $latest.status == "completed"
+                and $latest.conclusion == "success";
+            passed("Validate application and curriculum")
+            and passed("Check Node.js 26 compatibility")
+          ' <<< "$checks" >/dev/null; then
+            echo "The latest application/curriculum or Node.js 26 check is not successful for $GITHUB_SHA."
+            echo "Production has not been changed."
+            exit 1
+          fi
+          echo "The latest application/curriculum and Node.js 26 checks passed for $GITHUB_SHA."
+
+  deploy-production:
+    name: Build and deploy production Worker
+    needs: verify-ci
+    if: github.ref == 'refs/heads/main' && inputs.deploy_production
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://guitarlab.leenusdarnal.workers.dev
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout the verified commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Verify production Cloudflare credentials are configured
+        shell: bash
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "Missing production environment secret: CLOUDFLARE_API_TOKEN"
+            exit 1
+          fi
+          if [[ ! "$CLOUDFLARE_ACCOUNT_ID" =~ ^[a-fA-F0-9]{32}$ ]]; then
+            echo "Set the production environment variable CLOUDFLARE_ACCOUNT_ID to the Cloudflare account ID."
+            exit 1
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the production Worker
+        run: npm run build
+
+      - name: Validate production deployment configuration
+        run: npm run deploy:production:dry-run
+
+      - name: Deploy production Worker
+        env:
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson
+        run: npm run deploy:production
+
+      - name: Smoke-test production routes and security headers
+        shell: bash
+        run: |
+          base_url="https://guitarlab.leenusdarnal.workers.dev"
+          headers="$RUNNER_TEMP/guitarlab-production.headers"
+          body="$RUNNER_TEMP/guitarlab-production.html"
+
+          for route in / /learn /practice /tools/tuner /settings/data; do
+            status="$(curl --silent --show-error --location --max-time 30 \
+              --dump-header "$headers" --output "$body" --write-out '%{http_code}' \
+              "$base_url$route")"
+            if [ "$status" != "200" ]; then
+              echo "Production smoke test failed: GET $route returned HTTP $status."
+              cat "$body" || true
+              exit 1
+            fi
+            if ! grep -q "GuitarLab" "$body"; then
+              echo "Production smoke test failed: GET $route did not return GuitarLab HTML."
+              exit 1
+            fi
+          done
+
+          for header in \
+            "content-security-policy:" \
+            "strict-transport-security:" \
+            "x-content-type-options: nosniff" \
+            "x-frame-options: DENY" \
+            "referrer-policy: strict-origin-when-cross-origin"; do
+            if ! grep -qi "^$header" "$headers"; then
+              echo "Production smoke test failed: missing response header $header"
+              exit 1
+            fi
+          done
+
+          if grep -Eiq "^content-security-policy:.*script-src[^;]*'unsafe-(inline|eval)'" "$headers"; then
+            echo "Production smoke test failed: CSP script-src permits unsafe inline/eval execution."
+            exit 1
+          fi
+
+          echo "Production smoke test passed for $base_url (five routes and security headers)."
+          echo "Commit: $GITHUB_SHA"
+
+      - name: Create production deployment evidence
+        shell: bash
+        env:
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = process.env.WRANGLER_OUTPUT_FILE_PATH;
+          if (!fs.existsSync(path)) {
+            throw new Error('Wrangler structured output file is missing.');
+          }
+          const events = fs.readFileSync(path, 'utf8')
+            .split(/\r?\n/)
+            .filter(Boolean)
+            .map((line) => JSON.parse(line));
+          const deployment = events
+            .filter((event) => event.type === 'deploy' && event.worker_name === 'guitarlab')
+            .at(-1);
+          if (!deployment?.version_id || !deployment.timestamp || !deployment.targets?.length) {
+            throw new Error('Wrangler output did not contain a complete production deployment record.');
+          }
+          const evidence = {
+            worker: deployment.worker_name,
+            versionId: deployment.version_id,
+            deployedAt: deployment.timestamp,
+            commitSha: process.env.GITHUB_SHA,
+            deploymentUrls: deployment.targets,
+            smokeTest: {
+              result: 'passed',
+              routes: ['/', '/learn', '/practice', '/tools/tuner', '/settings/data'],
+              securityHeaders: [
+                'content-security-policy',
+                'strict-transport-security',
+                'x-content-type-options',
+                'x-frame-options',
+                'referrer-policy'
+              ]
+            }
+          };
+          fs.writeFileSync(
+            process.env.RUNNER_TEMP + '/guitarlab-production-deployment.json',
+            JSON.stringify(evidence, null, 2) + '\n'
+          );
+          console.log(JSON.stringify({
+            worker: evidence.worker,
+            versionId: evidence.versionId,
+            deployedAt: evidence.deployedAt,
+            commitSha: evidence.commitSha,
+            deploymentUrls: evidence.deploymentUrls,
+            smokeTest: evidence.smokeTest.result
+          }, null, 2));
+          NODE
+
+      - name: Preserve production deployment evidence
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: guitarlab-production-deployment-${{ github.sha }}
+          path: ${{ runner.temp }}/guitarlab-production-deployment.json
+          if-no-files-found: error
+          retention-days: 90

@@ -32,7 +32,9 @@
     "prepare": "node scripts/install-git-hooks.mjs",
     "deploy:preview:dry-run": "wrangler deploy --config wrangler.preview.jsonc --dry-run",
     "deploy:preview": "wrangler deploy --config wrangler.preview.jsonc",
-    "audio:evaluate-recordings": "node scripts/evaluate-pitch-recordings.mjs"
+    "audio:evaluate-recordings": "node scripts/evaluate-pitch-recordings.mjs",
+    "deploy:production:dry-run": "wrangler deploy --config wrangler.production.jsonc --dry-run",
+    "deploy:production": "wrangler deploy --config wrangler.production.jsonc"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",

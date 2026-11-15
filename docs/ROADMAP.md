@@ -35,7 +35,7 @@ M0 product, architecture, curriculum and implementation guidelines are ready for
 - [x] Add the initial responsive application shell using the approved hybrid design direction and semantic design tokens.
 - [ ] Complete manual mobile, keyboard and component-level accessibility verification.
 
-M1 foundation is merged in PR #21. Worker build and local smoke checks pass. Cloudflare preview/production configuration and live deployment remain separate release work.
+M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The first local-first production deployment is now the top priority; an isolated no-D1 production config and manual release workflow are being added. The connected Cloudflare account currently has no production Worker, custom domain or zone, so the first host is the existing workers.dev subdomain.
 
 ### M2 — Data foundation
 
@@ -83,7 +83,7 @@ M4.1 is merged in PR #29. The reader displays authored content but deliberately 
 - [x] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
-- [ ] Account and secure cloud sync when ready.
+- [ ] Account registration/login, secure sessions and cloud sync when ready; these remain separate M5 follow-up work and are not enabled in the first local-first production release.
 - [x] Local export and validated restore workflow; browser round-trip/rollback acceptance remains.
 
 ### M6 — Interactive music tools
