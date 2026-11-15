@@ -139,6 +139,9 @@ jobs:
       - name: Validate Cloudflare preview deployment configuration
         run: npx wrangler deploy --config wrangler.preview.jsonc --dry-run
 
+      - name: Validate Cloudflare production deployment configuration
+        run: npm run deploy:production:dry-run
+
       - name: Cloudflare Worker local smoke test
         shell: bash
         run: |
