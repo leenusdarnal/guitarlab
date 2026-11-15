@@ -1,4 +1,4 @@
-export type PracticePlanPreset = 10 | 20 | 40 | 'custom';
+export type PracticePlanPreset = 10 | 20 | 40 | 60 | 'custom';
 
 export type PracticeLesson = {
   id: string;
@@ -79,7 +79,9 @@ export function buildPracticePlan(input: {
         ? 20
         : minutes === 40
           ? 40
-          : 'custom');
+          : minutes === 60
+            ? 60
+            : 'custom');
   const scale = minutes < 15 ? 'short' : minutes < 30 ? 'standard' : 'extended';
   const candidates: Candidate[] = [];
   let order = 0;

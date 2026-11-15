@@ -10,18 +10,23 @@ const lesson = {
 };
 
 describe('explainable practice planning', () => {
-  it.each([10, 20, 40])('fits a %i-minute plan without exceeding the budget', (minutes) => {
-    const plan = buildPracticePlan({
-      minutes,
-      currentLesson: lesson,
-      dueReviews: [],
-      now: 1_000
-    });
-    expect(plan.allocatedMinutes).toBeLessThanOrEqual(minutes);
-    expect(plan.remainingMinutes).toBeGreaterThanOrEqual(0);
-    expect(plan.recommendations.every((task) => task.minutes > 0)).toBe(true);
-    expect(plan.recommendations.every((task) => task.reason.length > 20)).toBe(true);
-  });
+  it.each([10, 20, 40, 60])(
+    'fits a %i-minute plan without exceeding the budget',
+    (minutes) => {
+      const plan = buildPracticePlan({
+        minutes,
+        currentLesson: lesson,
+        dueReviews: [],
+        now: 1_000
+      });
+      expect(plan.allocatedMinutes).toBeLessThanOrEqual(minutes);
+      expect(plan.remainingMinutes).toBeGreaterThanOrEqual(0);
+      expect(plan.recommendations.every((task) => task.minutes > 0)).toBe(true);
+      expect(
+        plan.recommendations.every((task) => task.reason.length > 20)
+      ).toBe(true);
+    }
+  );
 
   it('uses a smaller set of focused tasks for a short plan', () => {
     const plan = buildPracticePlan({
@@ -35,7 +40,9 @@ describe('explainable practice planning', () => {
       'lesson-focus',
       'reflection'
     ]);
-    expect(plan.recommendations.some((task) => task.kind === 'musical-application')).toBe(false);
+    expect(
+      plan.recommendations.some((task) => task.kind === 'musical-application')
+    ).toBe(false);
   });
 
   it('prioritises due reviews and explains why they are included', () => {
@@ -43,16 +50,35 @@ describe('explainable practice planning', () => {
       minutes: 20,
       currentLesson: lesson,
       dueReviews: [
-        { skillId: 'rhythm.pulse', state: 'practising', confidence: 65, nextReviewAt: 900 },
-        { skillId: 'fretting.clean-tone', state: 'review_due', confidence: 35, nextReviewAt: 800 },
-        { skillId: 'ear.intervals', state: 'stable', confidence: 90, nextReviewAt: 2_000 }
+        {
+          skillId: 'rhythm.pulse',
+          state: 'practising',
+          confidence: 65,
+          nextReviewAt: 900
+        },
+        {
+          skillId: 'fretting.clean-tone',
+          state: 'review_due',
+          confidence: 35,
+          nextReviewAt: 800
+        },
+        {
+          skillId: 'ear.intervals',
+          state: 'stable',
+          confidence: 90,
+          nextReviewAt: 2_000
+        }
       ],
       now: 1_000
     });
-    const review = plan.recommendations.find((task) => task.skillId === 'fretting.clean-tone');
+    const review = plan.recommendations.find(
+      (task) => task.skillId === 'fretting.clean-tone'
+    );
     expect(review).toBeDefined();
     expect(review?.reason).toContain('35/100');
-    expect(plan.recommendations.some((task) => task.skillId === 'ear.intervals')).toBe(false);
+    expect(
+      plan.recommendations.some((task) => task.skillId === 'ear.intervals')
+    ).toBe(false);
   });
 
   it('uses learner goals to explain the musical application task', () => {
@@ -63,7 +89,9 @@ describe('explainable practice planning', () => {
       learnerGoals: ['acoustic-fingerstyle'],
       now: 1_000
     });
-    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    const application = plan.recommendations.find(
+      (task) => task.kind === 'musical-application'
+    );
     expect(application?.reason).toContain('acoustic and fingerstyle playing');
   });
 
@@ -73,13 +101,27 @@ describe('explainable practice planning', () => {
       currentLesson: lesson,
       dueReviews: [],
       recentPractice: [
-        { focus: 'old unrelated focus', difficulty: null, status: 'completed', startedAt: 100 },
-        { focus: 'Posture and instrument setup', difficulty: null, status: 'completed', startedAt: 900 }
+        {
+          focus: 'old unrelated focus',
+          difficulty: null,
+          status: 'completed',
+          startedAt: 100
+        },
+        {
+          focus: 'Posture and instrument setup',
+          difficulty: null,
+          status: 'completed',
+          startedAt: 900
+        }
       ],
       now: 1_000
     });
-    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
-    expect(application?.reason).toContain('latest recorded session also focused on Posture and instrument setup');
+    const application = plan.recommendations.find(
+      (task) => task.kind === 'musical-application'
+    );
+    expect(application?.reason).toContain(
+      'latest recorded session also focused on Posture and instrument setup'
+    );
     expect(application?.reason).toContain('vary the musical context');
   });
 
@@ -89,12 +131,24 @@ describe('explainable practice planning', () => {
       currentLesson: lesson,
       dueReviews: [],
       recentPractice: [
-        { focus: 'Posture and instrument setup', difficulty: 4, status: 'completed', startedAt: 800 },
-        { focus: 'Interrupted session', difficulty: 5, status: 'abandoned', startedAt: 1_000 }
+        {
+          focus: 'Posture and instrument setup',
+          difficulty: 4,
+          status: 'completed',
+          startedAt: 800
+        },
+        {
+          focus: 'Interrupted session',
+          difficulty: 5,
+          status: 'abandoned',
+          startedAt: 1_000
+        }
       ],
       now: 1_100
     });
-    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    const application = plan.recommendations.find(
+      (task) => task.kind === 'musical-application'
+    );
     expect(application?.reason).toContain('difficulty value of 4');
     expect(application?.reason).toContain('not as a grade');
     expect(application?.reason).not.toContain('difficulty value of 5');
@@ -109,7 +163,9 @@ describe('explainable practice planning', () => {
       recentPractice: [],
       now: 1_000
     });
-    const application = plan.recommendations.find((task) => task.kind === 'musical-application');
+    const application = plan.recommendations.find(
+      (task) => task.kind === 'musical-application'
+    );
     expect(application?.reason).toBe(
       'Applying posture and instrument setup in a musical context helps connect the exercise to real playing.'
     );
@@ -134,17 +190,26 @@ describe('explainable practice planning', () => {
       dueReviews: [],
       now: 1_000
     });
-    expect(plan.recommendations.map((task) => task.kind)).toEqual(['warm-up', 'reflection']);
-    expect(plan.recommendations.some((task) => task.kind === 'lesson-focus')).toBe(false);
-    expect(plan.recommendations.some((task) => task.kind === 'skill-review')).toBe(false);
+    expect(plan.recommendations.map((task) => task.kind)).toEqual([
+      'warm-up',
+      'reflection'
+    ]);
+    expect(
+      plan.recommendations.some((task) => task.kind === 'lesson-focus')
+    ).toBe(false);
+    expect(
+      plan.recommendations.some((task) => task.kind === 'skill-review')
+    ).toBe(false);
   });
 
   it('rejects durations outside the supported range', () => {
-    expect(() => buildPracticePlan({
-      minutes: 4,
-      currentLesson: lesson,
-      dueReviews: [],
-      now: 1_000
-    })).toThrow(RangeError);
+    expect(() =>
+      buildPracticePlan({
+        minutes: 4,
+        currentLesson: lesson,
+        dueReviews: [],
+        now: 1_000
+      })
+    ).toThrow(RangeError);
   });
 });

@@ -325,10 +325,9 @@ try {
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
-  const restrictedAppearance = restrictedStoragePage.getByRole('combobox', {
-    name: 'Appearance'
-  });
-  await restrictedAppearance.selectOption('dark');
+  await restrictedStoragePage
+    .getByRole('combobox', { name: 'Appearance' })
+    .selectOption('dark');
   assert.equal(
     await restrictedStoragePage.locator('html').getAttribute('data-theme'),
     'dark',
@@ -428,10 +427,9 @@ try {
   );
 
   // Appearance preference persists across a full reload.
-  const dashboardAppearance = page.getByRole('combobox', {
-    name: 'Appearance'
-  });
-  await dashboardAppearance.selectOption('light');
+  await page
+    .getByRole('combobox', { name: 'Appearance' })
+    .selectOption('light');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   assert.equal(
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
@@ -492,11 +490,40 @@ try {
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     /\/ 10 min planned/
   );
-  await planner.getByRole('button', { name: 'Use this plan' }).click();
   await planner
-    .getByRole('status')
-    .filter({ hasText: 'does not record practice' })
+    .getByRole('button', { name: 'Review in Practice Studio' })
+    .click();
+  await page.waitForURL(/\/practice\?minutes=10/);
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
+  assert.equal(await page.locator('#duration').inputValue(), '10');
+  assert.equal(
+    await page.locator('#duration').getAttribute('min'),
+    '5',
+    'Practice Studio must use the shared 5–180 minute duration range'
+  );
+  assert.ok((await page.locator('#focus').inputValue()).length > 0);
+  await page.getByText(/No session has started yet/).waitFor();
+  assert.equal(
+    await page
+      .getByRole('heading', { name: 'Your session is in progress' })
+      .count(),
+    0,
+    'The dashboard plan should prefill a session, not silently start it'
+  );
+  assert.ok(
+    await page.locator('#practice-history').count(),
+    'Practice history has a stable destination'
+  );
+  await page.goto(origin, { waitUntil: 'networkidle' });
+  const actionLinks = await planner
+    .locator('.practice-task .task-action')
+    .count();
+  assert.ok(
+    actionLinks > 0,
+    'Every suggested task should expose a useful action'
+  );
 
   // Dismiss and restore suggestions without touching learner progress.
   await planner.getByRole('button', { name: 'Dismiss' }).click();
@@ -514,23 +541,41 @@ try {
     .click();
   const customDuration = page.getByLabel('Custom duration (5–180 minutes)');
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
     await planner.locator('.planner-heading .neutral-tag').innerText(),
     '15 / 15 min planned'
   );
   await customDuration.fill('4');
+  await customDuration.blur();
   await planner
     .getByText('Enter a whole number from 5 to 180 minutes.')
     .waitFor();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner
+      .getByRole('button', { name: 'Review in Practice Studio' })
+      .isDisabled(),
     true
   );
   await customDuration.fill('15');
+  await customDuration.blur();
   assert.equal(
-    await planner.getByRole('button', { name: 'Use this plan' }).isDisabled(),
+    await planner
+      .getByRole('button', { name: 'Review in Practice Studio' })
+      .isDisabled(),
     false
   );
+
+  assert.equal(
+    await page.locator('.phase-card .phase-action').count(),
+    await page.locator('.phase-card').count(),
+    'Every phase card should expose a route destination'
+  );
+  await page.getByRole('link', { name: 'View all sessions' }).click();
+  await page
+    .getByRole('heading', { name: 'Practice history', exact: true })
+    .waitFor();
+  await page.goto(origin, { waitUntil: 'networkidle' });
 
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
@@ -1147,22 +1192,33 @@ try {
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
-  await page.locator('#duration').fill('2');
+  await page.locator('#duration').fill('5');
   await page
     .locator('#authored-exercise')
     .selectOption('y1-w01-lesson::y1-w01-lesson-focus');
   await page.locator('#focus').fill('Browser acceptance scale drill');
   await page.getByRole('button', { name: 'Start practice' }).click();
-  await page
-    .getByRole('heading', { name: 'Your session is in progress' })
-    .waitFor();
+  try {
+    await page
+      .getByRole('heading', {
+        name: 'Browser acceptance scale drill',
+        exact: true
+      })
+      .waitFor({ timeout: 10_000 });
+  } catch {
+    const startFailure = await page.getByRole('alert').allTextContents();
+    throw new Error(
+      'Practice session did not start. Visible validation: ' +
+        startFailure.join(' | ')
+    );
+  }
   const authoredSessionLabel = await page
     .locator('.authored-session-link')
     .innerText();
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
-    /curriculum-v1\.0\.6.*y1-w01-lesson.*0\.3\.0/
+    /Linked exercise: Meet your guitar.*Focused skill drill/
   );
 
   // Reject impossible learner-entered counts before any observation is saved.
@@ -1232,11 +1288,17 @@ try {
   );
   await page.getByRole('button', { name: 'Resume session' }).click();
   await page
-    .getByRole('heading', { name: 'Your session is in progress' })
+    .getByRole('heading', {
+      name: 'Browser acceptance scale drill',
+      exact: true
+    })
     .waitFor();
   await page.reload({ waitUntil: 'networkidle' });
   await page
-    .getByRole('heading', { name: 'Your session is in progress' })
+    .getByRole('heading', {
+      name: 'Browser acceptance scale drill',
+      exact: true
+    })
     .waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
@@ -1321,8 +1383,8 @@ try {
       .waitFor()
   ]);
   await Promise.all([
-    page.locator('#duration').fill('2'),
-    competingPage.locator('#duration').fill('2')
+    page.locator('#duration').fill('5'),
+    competingPage.locator('#duration').fill('5')
   ]);
   await Promise.all([
     page.locator('#focus').fill('Concurrent tab A'),
@@ -1334,14 +1396,14 @@ try {
   ]);
   const activeTabResults = await Promise.all([
     page
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: 'Concurrent tab A', exact: true })
       .waitFor({ timeout: 5_000 })
-      .then(() => true)
+      .then(() => 'A')
       .catch(() => false),
     competingPage
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: 'Concurrent tab B', exact: true })
       .waitFor({ timeout: 5_000 })
-      .then(() => true)
+      .then(() => 'B')
       .catch(() => false)
   ]);
   assert.equal(
@@ -1354,11 +1416,9 @@ try {
     competingPage.reload({ waitUntil: 'networkidle' })
   ]);
   await Promise.all([
-    page
-      .getByRole('heading', { name: 'Your session is in progress' })
-      .waitFor(),
+    page.getByRole('heading', { name: /Concurrent tab [AB]/ }).waitFor(),
     competingPage
-      .getByRole('heading', { name: 'Your session is in progress' })
+      .getByRole('heading', { name: /Concurrent tab [AB]/ })
       .waitFor()
   ]);
   await competingPage.close();

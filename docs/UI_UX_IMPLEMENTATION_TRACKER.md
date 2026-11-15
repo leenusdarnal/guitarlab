@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-02 / UX-03 / UX-07 — theme consistency and reliable lesson saving ([PR #141](https://github.com/leenusdarnal/guitarlab/pull/141))
+**Active implementation:** UX-05 / UX-06 — actionable daily plans and session-first Practice Studio ([PR #142](https://github.com/leenusdarnal/guitarlab/pull/142))
 
 ---
 
@@ -177,19 +177,19 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-05 — Make the Today dashboard actionable
 
 **Priority:** P1  
-**Status:** READY  
-**Depends on:** UX-01; coordinate with UX-06  
+**Status:** IN PROGRESS — actionable task destinations and a real Practice Studio hand-off implemented on the feature branch  
+**Depends on:** UX-01; merge after UX-02 / UX-03 prerequisite PR #141  
 **Related findings:** D1, D2, D3, D4, D6, D7
 
-- [ ] Make the primary plan action start a real practice flow or open a clearly labelled review/confirmation step; remove the current notice-only dead end.
-- [ ] Make each plan task actionable and link it to the relevant lesson, tool or skill review.
-- [ ] Make due-review rows and phase cards open the relevant destination.
-- [ ] Unify saved practice-duration preferences so dashboard, onboarding and Practice Studio do not offer conflicting defaults/ranges.
-- [ ] Keep a clearly labelled one-day override separate from the saved preference.
+- [x] Replace the notice-only plan CTA with a Practice Studio review hand-off that pre-fills duration and focus without automatically starting or recording a session.
+- [x] Make lesson tasks open their lesson, skill reviews open the selected skill, and general tasks open a pre-filled Practice Studio task.
+- [x] Make due-review rows open the selected skill and Year 1 phase cards open the full Year 1 route.
+- [x] Unify the saved practice duration contract to whole minutes from 5 to 180 across onboarding, dashboard planning and Practice Studio; expose 10, 20, 40 and 60-minute presets plus custom entry.
+- [x] Keep a clearly labelled one-day override separate from the saved profile preference; the dashboard override is not written back to onboarding.
 - [ ] Put the next useful learning action and today's plan first on mobile after onboarding.
 - [ ] Reduce the first-run welcome content once it is no longer useful; keep preferences discoverable without dominating the first screen.
-- [ ] Validate custom-duration input on blur/submit rather than interrupting each keystroke.
-- [ ] Add a path to the complete practice history instead of showing only a short recent sample.
+- [x] Validate custom-duration input on blur; keep the value editable while the learner is typing.
+- [x] Add a direct Practice Studio history link beside the recent three-session summary.
 - [ ] Ensure all task cards and review rows have clear interactive semantics and visible focus.
 
 **Acceptance:** every item that looks actionable performs a meaningful action; the plan starts the intended flow; one duration preference has predictable behaviour across screens.
@@ -197,17 +197,17 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-06 — Rework Practice Studio around the next useful action
 
 **Priority:** P1  
-**Status:** READY  
+**Status:** IN PROGRESS — session start now precedes analytics, recommendation actions and one-tap observations added; longer-running ergonomic work remains open  
 **Depends on:** UX-05; preserve existing session lifecycle and evidence boundaries  
 **Related findings:** P1/P2 practice, X10, P8
 
-- [ ] Move the session start action and a clear session-length choice above long recommendation and analytics sections.
-- [ ] Give useful recommendations a positive action such as “Practise this”; do not offer only dismiss/correction responses.
+- [x] Move session start and duration controls ahead of long recommendation/analytics content.
+- [x] Add a primary “Practise this” hand-off that pre-fills the current recommendation as the session focus; feedback actions remain available.
 - [ ] Keep correction actions available but visually secondary to practising a relevant skill.
-- [ ] Replace internal milestone labels, raw enums, release identifiers and catalogue-version copy with learner language or a deliberate details disclosure.
+- [x] Replace the internal milestone label and catalogue-version badge; hide raw release/taxonomy identifiers from the active-session learner view.
 - [ ] Remove repeated mastery disclaimers while preserving one clear explanation of how progress is measured.
 - [ ] Make the active session surface focus on the current task, timer, pause/finish and the next useful control.
-- [ ] Add large quick-log actions for clean attempts, corrections and tempo changes; keep detailed counts optional.
+- [x] Add large one-tap clean-attempt and needs-correction observation controls; retain detailed count entry as an optional form.
 - [ ] Provide access to a compact metronome and tuner without forcing the learner to leave the session.
 - [ ] Add wake-lock support only while an active session needs it; handle unsupported, rejected and automatically released states.
 - [ ] Review idle-gap handling and session recovery so elapsed wall-clock time is not mistaken for active practice.
@@ -403,6 +403,8 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 | Date | Change |
 |---|---|
 | 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |
+| 2026-11-15 | Standardised practice duration to 5–180 minutes, with 10/20/40/60 presets and blur-committed custom preference entry in onboarding; dashboard overrides remain day-only. |
+| 2026-11-15 | Started UX-05/UX-06 on `feat/ux-05-actionable-practice-plans`: real plan-to-session review hand-off, task/review/phase/history links, blur-based custom-duration validation, session-first practice layout, positive recommendation action and quick observation logging. Automated validation pending; full wake-lock/idle recovery and physical-device acceptance remain open. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
