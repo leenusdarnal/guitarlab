@@ -1,6 +1,6 @@
 # GuitarLab Implementation Tracker
 
-**Last updated:** 2026-11-14  
+**Last updated:** 2026-11-15  
 **Tracking source:** GitHub Issues and pull requests in this repository  
 **Implementation branch:** `main`
 
@@ -14,6 +14,25 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - **Adaptive practice expanded:** PRs #92–94 provide the evidence audit, deterministic read model, canonical skill catalogue and Practice Studio recommendations/category assessment coverage. PR #103 adds append-only local dismiss/correct feedback; PR #104 adds comparable measured-score summaries/trends; PRs #107–109 add objective item outcomes; PR #110 adds item accuracy and repeated-miss prioritisation; PR #111 adds the first explicitly evidenced taxonomy; PR #112 links new sessions/observations to exact authored exercise, lesson, release and taxonomy identity; PR #113 (merged as `fbe9e75`) derives local exposure from exact links. PR #114 merged taxonomy v0.2.0 with 15 scopes and retained the v0.1.0 snapshot. This follow-up advances to v0.3.0 with nine additional evidence-backed scopes, preserving immutable v0.1.0 and v0.2.0 snapshots so historical observations are never reclassified. Legacy free-text records and unsupported taxonomy versions remain excluded. No exposure data is accuracy, completion or mastery evidence.
 - **Musicianship and release work remain:** Issue #17 covers chord-movement listening, theory recall, connected theory/CAGED and repertoire. Issue #18 and Issues #3, #5, #9 and #10 retain release, infrastructure and physical-device acceptance gates.
 - PRs #102–104 and #110 are merged; refresh live open-PR and Actions state before starting another implementation slice.
+
+## Parallel implementation queue — 2026-11-15
+
+Independent work may proceed concurrently on separate branches. Each PR remains isolated and tested; merging is strictly ordered by priority. The queue reflects the current priority sequence and is not a promise that all items have passed CI.
+
+| Merge order | PR | Priority / issue | Scope | Current gate |
+| --- | --- | --- | --- | --- |
+| 1 | [#117](https://github.com/leenusdarnal/guitarlab/pull/117) | P1 / #69 | Explicit interval response-mismatch read model, tightly scoped to authored v1 interval choices | Fix/verify CI before merge |
+| 2 | [#118](https://github.com/leenusdarnal/guitarlab/pull/118) | P2 / #17 | Chord-movement listening | Fix/verify CI before merge |
+| 3 | [#119](https://github.com/leenusdarnal/guitarlab/pull/119) | P2 / #17 | Name/sound/use theory recall | Fix/verify CI before merge |
+| 4 | [#120](https://github.com/leenusdarnal/guitarlab/pull/120) | P2 / #17 | Shared scale/triad/inversion/CAGED and fretboard model | CI passed on recorded head; rerun after base updates |
+| 5 | [#121](https://github.com/leenusdarnal/guitarlab/pull/121) | P2 / #17 | Local song projects with learner-scoped IndexedDB and backup/restore/reset | Fix/verify CI before merge |
+| 6 | [#122](https://github.com/leenusdarnal/guitarlab/pull/122) | P3 / #89, #18, #9, #10 | Real-device and recording evidence matrix | Documentation only; physical evidence still not run |
+| 7 | [#123](https://github.com/leenusdarnal/guitarlab/pull/123) | P4 / #5 | Manual-only controlled CI failure/recovery rehearsal | Workflow dispatch after merge; Issue #5 remains open until evidence is recorded |
+| 8 | [#124](https://github.com/leenusdarnal/guitarlab/pull/124) | Execution governance | Parallel implementation and ordered-merge process | Documentation PR |
+
+**Merge protocol:** verify the current branch head and all required checks; merge only the next PR in this table using squash; confirm post-merge main CI; then refresh/rebase the next PR onto the new main and rerun affected checks. Do not merge later PRs merely because their checks finish first. No check is bypassed or softened.
+
+**Honest completion rule:** a merged code PR completes only its stated code scope. Physical device/recording acceptance, manual WCAG/privacy review, controlled workflow dispatch and production approval remain separately open until their evidence exists. Synthetic/mock testing is not hardware sign-off. Production resources and deployment are outside this queue without explicit approval.
 
 ## Current status
 
@@ -113,10 +132,10 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 
 ## How progress is recorded
 
-1. Use one pull request per small implementation slice where practical; link it to its issue with `Closes #N` when all acceptance criteria are complete.
+1. Use one focused PR per implementation slice. Independent slices may be developed on parallel branches; record their dependency and merge order. Link to the issue and use `Closes #N` only when every acceptance criterion is complete.
 2. Include CI results and manual verification evidence in the pull request description.
 3. Update this page when a slice changes state or an acceptance criterion changes.
-4. Keep `main` buildable and protected by pull-request and required-status-check rules.
+4. Keep `main` buildable and protected by pull-request and required-status-check rules. Merge in the documented priority order, verifying main CI after each merge and revalidating the next PR against the updated base.
 5. Keep learner records, recordings, credentials and runtime databases out of this public repository.
 
 ## Definition of done
