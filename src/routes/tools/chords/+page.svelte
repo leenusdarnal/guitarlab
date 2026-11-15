@@ -684,13 +684,6 @@
     .chord-summary {
       gap: 10px;
     }
-    .chord-string {
-      min-height: 96px;
-    }
-    .string-marker {
-      width: 30px;
-      height: 30px;
-    }
     .observation-fields,
     .drill-choices {
       grid-template-columns: 1fr;
