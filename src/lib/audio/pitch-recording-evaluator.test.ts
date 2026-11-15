@@ -159,6 +159,20 @@ describe('local pitch recording evaluator', () => {
     expect(result.stderr).not.toContain('private-device-serial');
   });
 
+  it('rejects segment IDs that exceed the bounded token format', () => {
+    const result = runEvaluator([
+      {
+        id: '../private-recording.wav',
+        file: './file-that-must-not-be-opened.wav',
+        expectedFrequencyHz: 110
+      }
+    ]);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('bounded ASCII segment id');
+    expect(result.stderr).not.toContain('private-recording.wav');
+  });
+
   it('keeps older manifests valid when no condition dimensions are supplied', () => {
     const result = runEvaluator([
       {
