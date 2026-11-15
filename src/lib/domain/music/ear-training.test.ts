@@ -261,9 +261,7 @@ describe('ear-training exercise model', () => {
           exercise.tones.map((tone) => tone.frequencyHz)
         )
       ).toEqual(
-        replay.map((exercise) =>
-          exercise.tones.map((tone) => tone.frequencyHz)
-        )
+        replay.map((exercise) => exercise.tones.map((tone) => tone.frequencyHz))
       );
     }
   });
