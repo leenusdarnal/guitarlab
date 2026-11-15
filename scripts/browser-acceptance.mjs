@@ -1288,11 +1288,17 @@ try {
   );
   await page.getByRole('button', { name: 'Resume session' }).click();
   await page
-    .getByRole('heading', { name: 'Your session is in progress' })
+    .getByRole('heading', {
+      name: 'Browser acceptance scale drill',
+      exact: true
+    })
     .waitFor();
   await page.reload({ waitUntil: 'networkidle' });
   await page
-    .getByRole('heading', { name: 'Your session is in progress' })
+    .getByRole('heading', {
+      name: 'Browser acceptance scale drill',
+      exact: true
+    })
     .waitFor();
   await page.getByText('Browser acceptance scale drill').first().waitFor();
   await delay(1_200);
