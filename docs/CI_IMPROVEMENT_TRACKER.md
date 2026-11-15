@@ -12,7 +12,8 @@
 
 - **Implemented in this PR** — change is present on this branch; CI still needs to validate it.
 - **Pending** — researched and tracked, not yet implemented.
-- **Verified** — acceptance criteria have passed in GitHub Actions.
+- **Partially verified** — the normal CI path passed, but a negative/fault-injection acceptance case remains untested.
+- **Verified** — all listed acceptance criteria have passed in GitHub Actions.
 - **Deferred** — intentionally postponed with a reason.
 
 Do not mark an item Verified from a code inspection alone. Record the workflow run and evidence.
@@ -30,9 +31,9 @@ Do not mark an item Verified from a code inspection alone. Record the workflow r
 
 | ID | Priority | Work item | Acceptance criteria | Status |
 |---|---|---|---|---|
-| CI-01 | P0 | Run independent checks even when a sibling check fails | A formatting or lint failure does not prevent lint, type/Svelte checks, unit tests, or the build from reporting their own results. Dependent steps still skip when their prerequisites fail. | Implemented in this PR; awaiting CI |
-| CI-02 | P0 | Detect generated database migration drift | After Drizzle generation/finalization, CI fails with a clear diagnostic if tracked or untracked files under `drizzle/migrations` changed. Valid committed migration changes pass. | Implemented in this PR; awaiting CI |
-| CI-03 | P1 | Cache npm data for the Node 22 validation job | `actions/setup-node` uses the npm cache keyed by `package-lock.json`; installs remain reproducible through `npm ci`. | Implemented in this PR; awaiting CI |
+| CI-01 | P0 | Run independent checks even when a sibling check fails | A formatting or lint failure does not prevent lint, type/Svelte checks, unit tests, or the build from reporting their own results. Dependent steps still skip when their prerequisites fail. | Partially verified — all independent checks passed on the successful path in run #1366; deliberate failure injection remains outstanding |
+| CI-02 | P0 | Detect generated database migration drift | After Drizzle generation/finalization, CI fails with a clear diagnostic if tracked or untracked files under `drizzle/migrations` changed. Valid committed migration changes pass. | Partially verified — clean committed migrations passed the drift check in run #1366; deliberate uncommitted-change injection remains outstanding |
+| CI-03 | P1 | Cache npm data for the Node 22 validation job | `actions/setup-node` uses the npm cache keyed by `package-lock.json`; installs remain reproducible through `npm ci`. | Verified in run #1366 — Node 22 setup and dependency installation passed |
 | CI-04 | P1 | Establish a deliberate formatting baseline | Inventory all Prettier-managed file types, resolve pre-existing formatting debt in a separate cleanup, and use one consistent formatter policy without allowing CI to modify submitted code. Do not silently widen the current changed-file allowlist. | Pending |
 | CI-05 | P1 | Make Playwright and axe installation lockfile-controlled | Add compatible, pinned development dependencies and update the lockfile; remove the separate ad hoc install; verify clean `npm ci` installs both. | Pending |
 | CI-06 | P1 | Reduce browser acceptance timing flakiness | Replace high-risk `networkidle` waits with explicit route, heading, state, and application-readiness assertions; retain meaningful end-to-end coverage. Validate all four browser suites repeatedly. | Pending |
@@ -74,7 +75,7 @@ The Node 22 dependency setup now enables the npm cache and keys it from `package
 | Date | Workflow / PR | Result | Evidence |
 |---|---|---|---|
 | 2026-11-15 | PR #139, run #1363 | Failed at formatting; Node 26 job passed | [Run #1363](https://github.com/leenusdarnal/guitarlab/actions/runs/43711188955). Nine format warnings; independent later Node 22 steps were skipped in the then-current workflow. |
-| Pending | This PR | Pending | Add the workflow run URL and record which acceptance criteria passed after GitHub Actions completes. |
+| 2026-11-15 | PR #140, run #1366 | Successful-path validation passed on the PR head SHA | [Run #1366](https://github.com/leenusdarnal/guitarlab/actions/runs/43712693446). Primary Node 22 job passed dependency audit, migration generation and clean-tree drift guard, local D1 migration/integrity, curriculum and design-token validation, changed-file formatting, lint, type/Svelte checks, unit tests, production build, Cloudflare configuration dry-runs, Worker smoke test, and all four browser acceptance suites. Node 26 dependency install, type/Svelte checks, unit tests, and production build passed. Required legacy status passed. CI-01 failure-isolation and CI-02 uncommitted-migration negative cases were not fault-injected. |
 
 ## Change control and sequencing
 
