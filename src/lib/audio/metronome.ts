@@ -38,6 +38,8 @@ export class WebAudioMetronome {
   private bpm: number;
   private beatsPerBar: number;
   private readonly onStateChange?: (running: boolean) => void;
+  private readonly onBeat?: (beatNumber: number, accented: boolean) => void;
+  private readonly pendingBeatTimers = new Set<ReturnType<typeof setTimeout>>();
 
   private readonly tickMilliseconds = 25;
   private readonly lookaheadSeconds = 0.1;
@@ -46,9 +48,11 @@ export class WebAudioMetronome {
     bpm?: number;
     beatsPerBar?: number;
     onStateChange?: (running: boolean) => void;
+    onBeat?: (beatNumber: number, accented: boolean) => void;
   }) {
     this.bpm = validateMetronomeTempo(options?.bpm ?? 80);
     this.onStateChange = options?.onStateChange;
+    this.onBeat = options?.onBeat;
     this.beatsPerBar = options?.beatsPerBar ?? 4;
     if (
       !Number.isInteger(this.beatsPerBar) ||
@@ -111,6 +115,8 @@ export class WebAudioMetronome {
       clearTimeout(this.timer);
       this.timer = null;
     }
+    for (const beatTimer of this.pendingBeatTimers) clearTimeout(beatTimer);
+    this.pendingBeatTimers.clear();
     for (const oscillator of this.scheduledOscillators) {
       try {
         // Cancel clicks already queued inside the lookahead window as well.
@@ -145,7 +151,8 @@ export class WebAudioMetronome {
 
     while (this.nextBeatTime < context.currentTime + this.lookaheadSeconds) {
       const accented = this.beatIndex % this.beatsPerBar === 0;
-      this.scheduleClick(this.nextBeatTime, accented);
+      const beatNumber = (this.beatIndex % this.beatsPerBar) + 1;
+      this.scheduleClick(this.nextBeatTime, accented, beatNumber);
       this.nextBeatTime += 60 / this.bpm;
       this.beatIndex += 1;
     }
@@ -153,9 +160,15 @@ export class WebAudioMetronome {
     this.timer = setTimeout(this.schedule, this.tickMilliseconds);
   };
 
-  private scheduleClick(when: number, accented: boolean): void {
+  private scheduleClick(when: number, accented: boolean, beatNumber: number): void {
     const context = this.context;
     if (!context) return;
+
+    const beatTimer = setTimeout(() => {
+      this.pendingBeatTimers.delete(beatTimer);
+      if (this.running) this.onBeat?.(beatNumber, accented);
+    }, Math.max(0, (when - context.currentTime) * 1_000));
+    this.pendingBeatTimers.add(beatTimer);
 
     const oscillator = context.createOscillator();
     const gain = context.createGain();
