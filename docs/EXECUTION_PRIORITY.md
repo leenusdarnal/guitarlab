@@ -163,3 +163,12 @@ When the user says “resume GuitarLab” or “continue implementation”:
 - Exposure aggregation unions scope identity across supported taxonomy snapshots while only applying dimension tags that existed in the record's own version.
 - Five topics and one technique are added. Only the explicit low E bass string in the Week 16 musical-application exercise is tagged as string 6; no new fret-position/range is inferred.
 - Curriculum-owner review remains a manual follow-up. No confusion codes or mastery rules are added.
+
+
+## M7.2 evidence-validation slice — 2026-11-15
+
+- Baseline: PR #115 merged as `bd1a7f82b9585ade6fa02f420e3ca49a4046c4a3`; post-merge application CI and curriculum validation passed.
+- Active branch: `feat/m7-validate-exercise-source-evidence`.
+- The taxonomy validator now requires every `sourceEvidence` excerpt to occur verbatim in the exact linked exercise's authored `instructions` or `successCriterion`, across current and retained historical snapshots.
+- The evidence matcher has explicit negative guards for fabricated text and text that belongs to a different exercise. The v0.3.0 catalogue and historical version boundaries are preserved.
+- Next: run curriculum validation, formatting, type/unit checks and full CI; correct any evidence that fails rather than relaxing the matcher. After merge, continue deterministic exercise-specific confusion/error research only where authored rules make a misconception unambiguous.
