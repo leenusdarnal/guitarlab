@@ -26,7 +26,7 @@
       .then((records) => {
         if (!active) return;
         projects = records;
-        draft = records[0] ? structuredClone(records[0]) : null;
+        draft = records[0] ? $state.snapshot(records[0]) : null;
       })
       .catch((cause) => {
         if (active) {
@@ -46,7 +46,7 @@
 
   function selectProject(projectId: string) {
     const selected = projects.find((project) => project.id === projectId);
-    draft = selected ? structuredClone(selected) : null;
+    draft = selected ? $state.snapshot(selected) : null;
     status = '';
     error = '';
   }
@@ -67,7 +67,7 @@
         sections: []
       });
       projects = [created, ...projects];
-      draft = structuredClone(created);
+      draft = $state.snapshot(created);
       newTitle = '';
       status = 'Song project created and saved locally.';
     } catch (cause) {
@@ -91,14 +91,14 @@
       if (!saved) {
         projects = await loadActiveSongProjects();
         const latest = projects.find((project) => project.id === draft?.id);
-        draft = latest ? structuredClone(latest) : null;
+        draft = latest ? $state.snapshot(latest) : null;
         error =
           'This project changed in another tab. The latest saved version has been reloaded; review it before editing again.';
         return;
       }
       projects = await loadActiveSongProjects();
       const latest = projects.find((project) => project.id === draft?.id);
-      draft = latest ? structuredClone(latest) : null;
+      draft = latest ? $state.snapshot(latest) : null;
       status = 'Changes saved on this device.';
     } catch (cause) {
       error =
@@ -125,7 +125,7 @@
         return;
       }
       projects = await loadActiveSongProjects();
-      draft = projects[0] ? structuredClone(projects[0]) : null;
+      draft = projects[0] ? $state.snapshot(projects[0]) : null;
       status = 'Song project deleted from this device.';
     } catch (cause) {
       error =
