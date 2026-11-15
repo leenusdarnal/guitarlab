@@ -19,12 +19,21 @@ Create a manifest next to the WAV files, for example `local-pitch-manifest.json`
 {
   "entries": [
     {
-      "id": "guitar-a2-sustain",
+      "id": "segment-01",
       "file": "./recordings/guitar-a2.wav",
       "expectedFrequencyHz": 110,
       "startSeconds": 0.25,
       "endSeconds": 2.25,
-      "expectedOnsetSeconds": 0.25
+      "expectedOnsetSeconds": 0.25,
+      "dimensions": {
+        "instrumentType": "steel_string_acoustic",
+        "stringPosition": "string_5",
+        "capturePath": "microphone",
+        "segmentPhase": "sustain",
+        "dynamic": "mf",
+        "noiseCondition": "quiet",
+        "tuningCondition": "standard"
+      }
     },
     {
       "id": "room-noise",
@@ -54,7 +63,21 @@ The manifest, recordings, and report should remain on the evaluator's machine. D
 - **False-note rate:** proportion of windows in a silence/noise segment where a note was detected.
 - **Note-on latency:** first stable tracker note-on time minus the supplied expected onset time. This is omitted when no onset annotation is provided or no note-on occurs.
 
-The summary averages segment-level coverage and false-note rates equally. Use the per-segment results for per-string and per-condition comparisons; do not interpret the segment average as a duration-weighted corpus metric.
+The report schema is version 2. Optional `dimensions` add allow-listed breakdowns without asking the evaluator to emit instrument serial numbers, device models, browser versions, file paths or free-form personal metadata. Segment IDs are echoed verbatim to preserve per-segment traceability: the CLI limits them to a bounded ASCII token format, but cannot determine whether a valid token contains identifying information. Use opaque labels such as `segment-01`; never put names, serial numbers, device models, locations or other personal/device identifiers in an ID. Only these categorical values are accepted:
+
+| Dimension | Allowed values |
+| --- | --- |
+| `instrumentType` | `electric`, `steel_string_acoustic`, `nylon_string_classical`, `other` |
+| `stringPosition` | `string_6` through `string_1`, `unknown` |
+| `capturePath` | `piezo_pickup`, `magnetic_pickup`, `microphone`, `direct_input`, `other` |
+| `segmentPhase` | `attack`, `sustain`, `decay`, `muted`, `silence`, `noise` |
+| `dynamic` | `pp`, `p`, `mp`, `mf`, `f`, `ff`, `unknown` |
+| `noiseCondition` | `quiet`, `room_noise`, `electrical_noise`, `handling_noise`, `other` |
+| `tuningCondition` | `standard`, `alternate`, `flat_offset`, `sharp_offset`, `unknown` |
+
+A dimension may be omitted when it does not apply. Each supplied category is reported independently in `breakdowns`, so researchers can compare per-string, per-capture-path, instrument-family, phase, dynamic and noise-condition results without producing an overly sparse cross-product. Detection coverage and false-note rate in these breakdowns are window-weighted; cents-error percentiles use detected pitched windows, and note-on latency percentiles use segments with both onset annotation and a detected note-on. Empty/missing metric values remain `null`, not zero. Legacy manifests without dimensions remain valid and produce empty breakdown arrays.
+
+The top-level `summary` retains the original equally weighted segment mean for compatibility. Use the dimension breakdowns for condition-level comparisons and per-segment rows to inspect uneven or weak conditions; do not treat either mean as a complete population estimate without reviewing the corpus design.
 
 ## Recording protocol
 

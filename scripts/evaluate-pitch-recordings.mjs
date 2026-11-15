@@ -9,6 +9,47 @@ const HOP_SIZE = 1_024;
 const MIN_FREQUENCY_HZ = 40;
 const MAX_FREQUENCY_HZ = 1_000;
 
+const REPORT_DIMENSIONS = {
+  instrumentType: [
+    'electric',
+    'steel_string_acoustic',
+    'nylon_string_classical',
+    'other'
+  ],
+  stringPosition: [
+    'string_6',
+    'string_5',
+    'string_4',
+    'string_3',
+    'string_2',
+    'string_1',
+    'unknown'
+  ],
+  capturePath: [
+    'piezo_pickup',
+    'magnetic_pickup',
+    'microphone',
+    'direct_input',
+    'other'
+  ],
+  segmentPhase: ['attack', 'sustain', 'decay', 'muted', 'silence', 'noise'],
+  dynamic: ['pp', 'p', 'mp', 'mf', 'f', 'ff', 'unknown'],
+  noiseCondition: [
+    'quiet',
+    'room_noise',
+    'electrical_noise',
+    'handling_noise',
+    'other'
+  ],
+  tuningCondition: [
+    'standard',
+    'alternate',
+    'flat_offset',
+    'sharp_offset',
+    'unknown'
+  ]
+};
+
 function usage() {
   process.stderr.write(
     'Usage: node scripts/evaluate-pitch-recordings.mjs <manifest.json>\n' +
@@ -17,8 +58,11 @@ function usage() {
 }
 
 function parseWav(buffer) {
-  if (buffer.length < 44 || buffer.toString('ascii', 0, 4) !== 'RIFF' ||
-      buffer.toString('ascii', 8, 12) !== 'WAVE') {
+  if (
+    buffer.length < 44 ||
+    buffer.toString('ascii', 0, 4) !== 'RIFF' ||
+    buffer.toString('ascii', 8, 12) !== 'WAVE'
+  ) {
     throw new Error('Expected a RIFF/WAVE file.');
   }
 
@@ -45,16 +89,29 @@ function parseWav(buffer) {
     offset = end + (size % 2);
   }
 
-  if (!format || !data) throw new Error('WAV must contain fmt and data chunks.');
-  const { audioFormat, channels, sampleRate, blockAlign, bitsPerSample } = format;
-  if (!Number.isInteger(channels) || channels < 1 || channels > 32 ||
-      !Number.isInteger(sampleRate) || sampleRate <= 0 ||
-      blockAlign !== channels * (bitsPerSample / 8)) {
-    throw new Error('WAV channel, sample-rate, or block-alignment metadata is invalid.');
+  if (!format || !data)
+    throw new Error('WAV must contain fmt and data chunks.');
+  const { audioFormat, channels, sampleRate, blockAlign, bitsPerSample } =
+    format;
+  if (
+    !Number.isInteger(channels) ||
+    channels < 1 ||
+    channels > 32 ||
+    !Number.isInteger(sampleRate) ||
+    sampleRate <= 0 ||
+    blockAlign !== channels * (bitsPerSample / 8)
+  ) {
+    throw new Error(
+      'WAV channel, sample-rate, or block-alignment metadata is invalid.'
+    );
   }
-  if (!((audioFormat === 1 && [8, 16, 24, 32].includes(bitsPerSample)) ||
-        (audioFormat === 3 && bitsPerSample === 32))) {
-    throw new Error('Supported WAV encodings: PCM 8/16/24/32-bit and IEEE float32.');
+  if (!(
+    (audioFormat === 1 && [8, 16, 24, 32].includes(bitsPerSample)) ||
+    (audioFormat === 3 && bitsPerSample === 32)
+  )) {
+    throw new Error(
+      'Supported WAV encodings: PCM 8/16/24/32-bit and IEEE float32.'
+    );
   }
 
   const bytesPerSample = bitsPerSample / 8;
@@ -78,7 +135,8 @@ function parseWav(buffer) {
       } else {
         value = data.readInt32LE(offset) / 2_147_483_648;
       }
-      if (!Number.isFinite(value)) throw new Error('WAV contains non-finite samples.');
+      if (!Number.isFinite(value))
+        throw new Error('WAV contains non-finite samples.');
       sum += value;
     }
     mono[frame] = sum / channels;
@@ -94,38 +152,90 @@ function percentile(values, fraction) {
 }
 
 function validateEntry(entry, index) {
-  if (!entry || typeof entry !== 'object' || typeof entry.id !== 'string' ||
-      !entry.id.trim() || typeof entry.file !== 'string' || !entry.file.trim()) {
-    throw new Error(`Manifest entry ${index + 1} needs non-empty id and file fields.`);
+  if (
+    !entry ||
+    typeof entry !== 'object' ||
+    typeof entry.id !== 'string' ||
+    !/^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/.test(entry.id) ||
+    typeof entry.file !== 'string' ||
+    !entry.file.trim()
+  ) {
+    throw new Error(
+      `Manifest entry ${index + 1} needs a bounded ASCII segment id (1–64 letters, numbers, dots, underscores or hyphens) and a local file path. Use an opaque, non-identifying label.`
+    );
   }
-  if (entry.expectedFrequencyHz !== null &&
-      (!Number.isFinite(entry.expectedFrequencyHz) ||
-       entry.expectedFrequencyHz < MIN_FREQUENCY_HZ ||
-       entry.expectedFrequencyHz > MAX_FREQUENCY_HZ)) {
-    throw new Error(`Entry "${entry.id}" expectedFrequencyHz must be null or between ${MIN_FREQUENCY_HZ} and ${MAX_FREQUENCY_HZ}.`);
+  if (
+    entry.expectedFrequencyHz !== null &&
+    (!Number.isFinite(entry.expectedFrequencyHz) ||
+      entry.expectedFrequencyHz < MIN_FREQUENCY_HZ ||
+      entry.expectedFrequencyHz > MAX_FREQUENCY_HZ)
+  ) {
+    throw new Error(
+      `Entry "${entry.id}" expectedFrequencyHz must be null or between ${MIN_FREQUENCY_HZ} and ${MAX_FREQUENCY_HZ}.`
+    );
   }
   const start = entry.startSeconds ?? 0;
   if (!Number.isFinite(start) || start < 0) {
     throw new Error(`Entry "${entry.id}" startSeconds must be non-negative.`);
   }
-  if (entry.endSeconds !== undefined &&
-      (!Number.isFinite(entry.endSeconds) || entry.endSeconds <= start)) {
-    throw new Error(`Entry "${entry.id}" endSeconds must be greater than startSeconds.`);
+  if (
+    entry.endSeconds !== undefined &&
+    (!Number.isFinite(entry.endSeconds) || entry.endSeconds <= start)
+  ) {
+    throw new Error(
+      `Entry "${entry.id}" endSeconds must be greater than startSeconds.`
+    );
   }
-  if (entry.expectedOnsetSeconds !== undefined &&
-      (!Number.isFinite(entry.expectedOnsetSeconds) || entry.expectedOnsetSeconds < start ||
-       (entry.endSeconds !== undefined && entry.expectedOnsetSeconds > entry.endSeconds))) {
-    throw new Error(`Entry "${entry.id}" expectedOnsetSeconds must fall within its segment.`);
+  if (
+    entry.expectedOnsetSeconds !== undefined &&
+    (!Number.isFinite(entry.expectedOnsetSeconds) ||
+      entry.expectedOnsetSeconds < start ||
+      (entry.endSeconds !== undefined &&
+        entry.expectedOnsetSeconds > entry.endSeconds))
+  ) {
+    throw new Error(
+      `Entry "${entry.id}" expectedOnsetSeconds must fall within its segment.`
+    );
+  }
+
+  if (entry.dimensions !== undefined) {
+    if (
+      !entry.dimensions ||
+      typeof entry.dimensions !== 'object' ||
+      Array.isArray(entry.dimensions)
+    ) {
+      throw new Error(
+        `Entry "${entry.id}" dimensions must be an object of approved category values.`
+      );
+    }
+
+    for (const [dimension, value] of Object.entries(entry.dimensions)) {
+      const allowedValues = Object.hasOwn(REPORT_DIMENSIONS, dimension)
+        ? REPORT_DIMENSIONS[dimension]
+        : null;
+      if (
+        !allowedValues ||
+        typeof value !== 'string' ||
+        !allowedValues.includes(value)
+      ) {
+        throw new Error(
+          'Manifest contains an unsupported dimension or category. Use only approved non-identifying values.'
+        );
+      }
+    }
   }
 }
 
 function evaluateEntry(entry, samples, sampleRate) {
   const start = Math.floor((entry.startSeconds ?? 0) * sampleRate);
-  const end = entry.endSeconds === undefined
-    ? samples.length
-    : Math.min(samples.length, Math.floor(entry.endSeconds * sampleRate));
+  const end =
+    entry.endSeconds === undefined
+      ? samples.length
+      : Math.min(samples.length, Math.floor(entry.endSeconds * sampleRate));
   if (start >= samples.length || end - start < WINDOW_SIZE) {
-    throw new Error(`Entry "${entry.id}" does not contain one complete analysis window.`);
+    throw new Error(
+      `Entry "${entry.id}" does not contain one complete analysis window.`
+    );
   }
 
   const tracker = new StableNoteTracker();
@@ -151,9 +261,11 @@ function evaluateEntry(entry, samples, sampleRate) {
       if (entry.expectedFrequencyHz === null) {
         falseNotes += 1;
       } else {
-        errors.push(Math.abs(1_200 * Math.log2(
-          estimate.frequencyHz / entry.expectedFrequencyHz
-        )));
+        errors.push(
+          Math.abs(
+            1_200 * Math.log2(estimate.frequencyHz / entry.expectedFrequencyHz)
+          )
+        );
       }
     } else if (estimate.status === 'uncertain') {
       lowConfidence += 1;
@@ -165,9 +277,14 @@ function evaluateEntry(entry, samples, sampleRate) {
   }
 
   const isSilence = entry.expectedFrequencyHz === null;
+  const noteOnLatencyMs =
+    entry.expectedOnsetSeconds !== undefined && noteOnSeconds !== null
+      ? (noteOnSeconds - entry.expectedOnsetSeconds) * 1_000
+      : null;
   const result = {
     id: entry.id,
     segmentType: isSilence ? 'silence-or-noise' : 'pitched-note',
+    ...(entry.dimensions ? { dimensions: entry.dimensions } : {}),
     windows,
     detectionCoverage: isSilence ? null : detected / windows,
     falseNoteRate: isSilence ? falseNotes / windows : null,
@@ -175,12 +292,83 @@ function evaluateEntry(entry, samples, sampleRate) {
     p95AbsoluteCentsError: isSilence ? null : percentile(errors, 0.95),
     detectedWindows: detected,
     uncertainWindows: lowConfidence,
-    noteOnLatencyMs: entry.expectedOnsetSeconds !== undefined && noteOnSeconds !== null
-      ? (noteOnSeconds - entry.expectedOnsetSeconds) * 1_000
-      : null
+    noteOnLatencyMs,
+    _metrics: {
+      pitchedWindows: isSilence ? 0 : windows,
+      pitchedDetections: isSilence ? 0 : detected,
+      quietWindows: isSilence ? windows : 0,
+      falseNotes,
+      absoluteCentsErrors: errors,
+      onsetAnnotated: entry.expectedOnsetSeconds !== undefined,
+      onsetDetected: noteOnLatencyMs !== null,
+      noteOnLatencyMs
+    }
   };
 
   return result;
+}
+
+function aggregateSegments(segments) {
+  const metrics = segments.map((segment) => segment._metrics);
+  const pitchedWindows = metrics.reduce(
+    (total, item) => total + item.pitchedWindows,
+    0
+  );
+  const quietWindows = metrics.reduce(
+    (total, item) => total + item.quietWindows,
+    0
+  );
+  const detections = metrics.reduce(
+    (total, item) => total + item.pitchedDetections,
+    0
+  );
+  const falseNotes = metrics.reduce(
+    (total, item) => total + item.falseNotes,
+    0
+  );
+  const centsErrors = metrics.flatMap((item) => item.absoluteCentsErrors);
+  const noteOnLatencies = metrics
+    .map((item) => item.noteOnLatencyMs)
+    .filter((value) => value !== null);
+
+  return {
+    segments: segments.length,
+    pitchedSegments: metrics.filter((item) => item.pitchedWindows > 0).length,
+    quietSegments: metrics.filter((item) => item.quietWindows > 0).length,
+    analysisWindows: pitchedWindows + quietWindows,
+    detectionCoverage: pitchedWindows ? detections / pitchedWindows : null,
+    falseNoteRate: quietWindows ? falseNotes / quietWindows : null,
+    medianAbsoluteCentsError: percentile(centsErrors, 0.5),
+    p95AbsoluteCentsError: percentile(centsErrors, 0.95),
+    onsetAnnotatedSegments: metrics.filter((item) => item.onsetAnnotated)
+      .length,
+    onsetDetectedSegments: metrics.filter((item) => item.onsetDetected).length,
+    medianNoteOnLatencyMs: percentile(noteOnLatencies, 0.5),
+    p95NoteOnLatencyMs: percentile(noteOnLatencies, 0.95)
+  };
+}
+
+function buildDimensionBreakdowns(results) {
+  return Object.fromEntries(
+    Object.keys(REPORT_DIMENSIONS).map((dimension) => {
+      const values = [
+        ...new Set(
+          results
+            .map((result) => result.dimensions?.[dimension])
+            .filter((value) => value !== undefined)
+        )
+      ].sort();
+      return [
+        dimension,
+        values.map((value) => ({
+          value,
+          ...aggregateSegments(
+            results.filter((result) => result.dimensions?.[dimension] === value)
+          )
+        }))
+      ];
+    })
+  );
 }
 
 async function main() {
@@ -193,7 +381,11 @@ async function main() {
 
   const absoluteManifest = resolve(manifestPath);
   const manifest = JSON.parse(await readFile(absoluteManifest, 'utf8'));
-  if (!manifest || !Array.isArray(manifest.entries) || manifest.entries.length === 0) {
+  if (
+    !manifest ||
+    !Array.isArray(manifest.entries) ||
+    manifest.entries.length === 0
+  ) {
     throw new Error('Manifest must contain a non-empty entries array.');
   }
 
@@ -201,7 +393,8 @@ async function main() {
   const results = [];
   for (const [index, entry] of manifest.entries.entries()) {
     validateEntry(entry, index);
-    if (ids.has(entry.id)) throw new Error(`Duplicate manifest id: "${entry.id}".`);
+    if (ids.has(entry.id))
+      throw new Error(`Duplicate manifest id: "${entry.id}".`);
     ids.add(entry.id);
 
     const wavPath = resolve(dirname(absoluteManifest), entry.file);
@@ -209,10 +402,14 @@ async function main() {
     results.push(evaluateEntry(entry, wav.samples, wav.sampleRate));
   }
 
-  const pitched = results.filter((result) => result.segmentType === 'pitched-note');
-  const quiet = results.filter((result) => result.segmentType === 'silence-or-noise');
+  const pitched = results.filter(
+    (result) => result.segmentType === 'pitched-note'
+  );
+  const quiet = results.filter(
+    (result) => result.segmentType === 'silence-or-noise'
+  );
   const report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt: new Date().toISOString(),
     method: {
       estimator: 'YIN-style pitch estimator',
@@ -220,20 +417,31 @@ async function main() {
       windowSizeSamples: WINDOW_SIZE,
       hopSizeSamples: HOP_SIZE,
       frequencyRangeHz: [MIN_FREQUENCY_HZ, MAX_FREQUENCY_HZ],
-      note: 'Metrics are computed locally. No audio or file paths are included in this report.'
+      breakdownMethod:
+        'Each dimension groups only entries with an explicitly supplied approved category. Detection and false-note rates are window-weighted; cents error and onset latency percentiles use qualifying detected windows/segments.',
+      note: 'Metrics are computed locally. No audio or file paths are included. Segment IDs are emitted verbatim as supplied, so callers must use opaque, non-identifying labels; only approved category labels are accepted as additional metadata.'
     },
     summary: {
       segments: results.length,
       pitchedSegments: pitched.length,
       quietSegments: quiet.length,
       meanDetectionCoverage: pitched.length
-        ? pitched.reduce((sum, result) => sum + (result.detectionCoverage ?? 0), 0) / pitched.length
+        ? pitched.reduce(
+            (sum, result) => sum + (result.detectionCoverage ?? 0),
+            0
+          ) / pitched.length
         : null,
       meanFalseNoteRate: quiet.length
-        ? quiet.reduce((sum, result) => sum + (result.falseNoteRate ?? 0), 0) / quiet.length
+        ? quiet.reduce((sum, result) => sum + (result.falseNoteRate ?? 0), 0) /
+          quiet.length
         : null
     },
-    results
+    breakdowns: buildDimensionBreakdowns(results),
+    results: results.map((result) => {
+      const visibleResult = { ...result };
+      delete visibleResult._metrics;
+      return visibleResult;
+    })
   };
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
