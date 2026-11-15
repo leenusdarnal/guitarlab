@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+staged_files=()
+while IFS= read -r -d '' file; do
+  staged_files+=("$file")
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if (("${#staged_files[@]}" == 0)); then
+  exit 0
+fi
+
+echo "Running Prettier on staged files..."
+npx prettier --write --ignore-unknown "${staged_files[@]}"
+git add -- "${staged_files[@]}"
+echo "Prettier complete; formatted files have been re-staged."

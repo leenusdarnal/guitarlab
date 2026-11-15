@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 1,
+  "curriculumVersion": "1.1.0",
+  "id": "guitarlab-spiral-learning-framework",
+  "title": "GuitarLab Spiral Learning Framework",
+  "instructionalModel": {
+    "sequence": [
+      "hear_or_observe",
+      "name_the_goal",
+      "isolate_a_small_part",
+      "practise_slowly",
+      "observe_and_adjust",
+      "mix_with_known_skill",
+      "apply_to_music",
+      "reflect_and_retrieve"
+    ],
+    "lessonShape": [
+      "whole",
+      "part",
+      "whole"
+    ],
+    "principles": [
+      "Integrate sound, rhythm, technique, fretboard knowledge, theory and repertoire from the beginning.",
+      "Use focused repetition for unfamiliar movements; introduce mixed practice when the learner has a stable foundation.",
+      "Use spaced retrieval and adaptive review rather than punitive streaks.",
+      "Treat elapsed time as practice context, never as proof of mastery.",
+      "Keep learner choice, self-assessment and musical enjoyment visible."
+    ]
+  },
+  "spiralStrands": [
+    {
+      "id": "sound-rhythm",
+      "title": "Sound, pulse and rhythm",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every week",
+      "examples": [
+        "tap or count a steady pulse",
+        "clap or speak a rhythm before playing it",
+        "listen for starts, stops, rests and accents",
+        "use a metronome or backing track when useful"
+      ]
+    },
+    {
+      "id": "ear-musicianship",
+      "title": "Ear, singing and audiation",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every week",
+      "examples": [
+        "hum or sing the target note or phrase",
+        "call-and-response with notes or rhythms",
+        "hear whether a phrase rises, falls or repeats",
+        "match a heard sound on the guitar",
+        "gradually identify intervals, roots and chord quality"
+      ]
+    },
+    {
+      "id": "technique-tone",
+      "title": "Technique, tone and comfort",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every week",
+      "examples": [
+        "relaxed setup and minimal necessary pressure",
+        "clean fretting and picking",
+        "short focused repetitions",
+        "notice unnecessary tension and rest when needed"
+      ]
+    },
+    {
+      "id": "fretboard-theory",
+      "title": "Fretboard and applied theory",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every week",
+      "examples": [
+        "name strings and selected note landmarks",
+        "connect fret movement to semitones",
+        "relate chord shapes to roots and intervals",
+        "map scales and triads progressively"
+      ]
+    },
+    {
+      "id": "repertoire-creativity",
+      "title": "Repertoire and creativity",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every week",
+      "examples": [
+        "apply a skill to a small musical phrase",
+        "use a progression or song section",
+        "create a variation or two-note motif",
+        "build repertoire across styles"
+      ]
+    },
+    {
+      "id": "reflection-retrieval",
+      "title": "Reflection and retrieval",
+      "start": "Year 1 Week 1",
+      "recurrence": "Every session",
+      "examples": [
+        "recall without looking at the answer",
+        "record one success and one difficulty",
+        "choose one next target",
+        "review older skills after a delay"
+      ]
+    }
+  ],
+  "practicePlans": {
+    "defaultMinutes": 40,
+    "optionsMinutes": [
+      10,
+      20,
+      40
+    ],
+    "customDuration": true,
+    "plans": {
+      "10": [
+        "one priority skill",
+        "short musical application",
+        "one-tap result"
+      ],
+      "20": [
+        "comfort check and warm-up",
+        "focused skill practice",
+        "musical application",
+        "brief reflection"
+      ],
+      "40": [
+        "warm-up and setup",
+        "focused new skill",
+        "spaced review",
+        "new learning or technique",
+        "musical application",
+        "brief reflection"
+      ]
+    },
+    "rule": "Do not compress every activity into a short session. Select the highest-value task for the available time."
+  },
+  "practiceProgression": {
+    "newSkill": "Start with focused repetition at a comfortable tempo, then combine the skill with a familiar task after it becomes reasonably stable.",
+    "mixedPractice": "Introduce interleaving progressively; do not force random switching for every task because music-practice findings vary by learner, instrument and task.",
+    "tempo": "Increase tempo only after the exercise-specific quality target is met. If accuracy, tone or comfort drops, reduce tempo.",
+    "metrics": [
+      "accuracy",
+      "cleanRepetitions",
+      "totalAttempts",
+      "actualTempoBpm",
+      "pulseContinuity",
+      "soundQuality",
+      "comfort",
+      "musicalApplication"
+    ],
+    "prohibition": [
+      "timer-only mastery",
+      "speed-only mastery",
+      "universal clean-streak mastery",
+      "unvalidated automated chord grading"
+    ]
+  },
+  "reviewPolicy": {
+    "approach": "Adaptive spaced retrieval",
+    "signals": [
+      "recent accuracy",
+      "hesitation or response time where measurable",
+      "learner confidence",
+      "time since last successful retrieval",
+      "application in a new musical context"
+    ],
+    "rules": [
+      "Schedule earlier review after errors, hesitation or low confidence.",
+      "Extend the interval after confident retrieval on separate occasions.",
+      "Occasionally ask for recall before showing diagrams or answers.",
+      "Bring stable skills back in new musical contexts.",
+      "Treat review dates as suggestions, not deadlines."
+    ],
+    "note": "Initial intervals are configurable product heuristics and must not be described as a scientifically optimal schedule."
+  },
+  "assessment": {
+    "dimensions": [
+      "accuracy",
+      "sound",
+      "time",
+      "control_and_comfort",
+      "musical_application",
+      "understanding"
+    ],
+    "evidenceTypes": [
+      "measured",
+      "observed_or_self_checked",
+      "self_reported",
+      "recording_reviewed"
+    ],
+    "defaultMasteryGuidance": "Require more than one successful demonstration separated in time and at least one application beyond an isolated drill. Make the rule visible and allow learner review.",
+    "limitations": "Only label a result measured when an implemented, validated tool measured that exact property."
+  },
+  "checkpoints": [
+    {
+      "id": "y1-q1",
+      "curriculum": "year-1",
+      "week": 12,
+      "focus": [
+        "tuning",
+        "clean_single_notes",
+        "TAB_and_chord_maps",
+        "open_chords",
+        "pulse"
+      ],
+      "performance": "A short chord and melody medley with steady pulse"
+    },
+    {
+      "id": "y1-midyear",
+      "curriculum": "year-1",
+      "week": 24,
+      "focus": [
+        "chords",
+        "rhythm",
+        "melody",
+        "basic_lead"
+      ],
+      "performance": "A chord piece, a melody and a short lead phrase"
+    },
+    {
+      "id": "y1-q3",
+      "curriculum": "year-1",
+      "week": 44,
+      "focus": [
+        "barre_and_triads",
+        "ear",
+        "sixteenth_rhythm",
+        "lead_phrasing"
+      ],
+      "performance": "A selected chord, rhythm and melody task"
+    },
+    {
+      "id": "y1-capstone",
+      "curriculum": "year-1",
+      "week": 52,
+      "focus": [
+        "repertoire",
+        "rhythm",
+        "chords",
+        "reading_or_TAB",
+        "lead_or_fingerstyle",
+        "musicianship"
+      ],
+      "performance": "Prepared piece, short sight-read or TAB excerpt and improvised phrase"
+    },
+    {
+      "id": "y2-q1",
+      "curriculum": "year-2",
+      "week": 6,
+      "focus": [
+        "fretboard",
+        "octaves",
+        "triads"
+      ],
+      "performance": "Accurate note finding and triad recall; time is secondary"
+    },
+    {
+      "id": "y2-q2",
+      "curriculum": "year-2",
+      "week": 16,
+      "focus": [
+        "scales",
+        "phrasing",
+        "chord_tones"
+      ],
+      "performance": "Scale fragment, musical phrase and chord-tone landing"
+    },
+    {
+      "id": "y2-q3",
+      "curriculum": "year-2",
+      "week": 28,
+      "focus": [
+        "fingerstyle",
+        "arrangement",
+        "dynamics"
+      ],
+      "performance": "Strummed and fingerpicked versions of a short section"
+    },
+    {
+      "id": "y2-q4",
+      "curriculum": "year-2",
+      "week": 45,
+      "focus": [
+        "jazz",
+        "harmony",
+        "voice_leading"
+      ],
+      "performance": "Short melody, comping and solo arrangement"
+    },
+    {
+      "id": "y2-capstone",
+      "curriculum": "year-2",
+      "week": 52,
+      "focus": [
+        "independent_practice",
+        "transcription",
+        "recording",
+        "repertoire"
+      ],
+      "performance": "Prepared piece, progression and short improvised phrase"
+    }
+  ],
+  "physicalComfort": {
+    "guidance": [
+      "Use stable instrument support and a comfortable setup.",
+      "Use only the pressure needed for a clear note.",
+      "Take breaks and avoid long forced repetitions.",
+      "Stop the exercise if pain, numbness or tingling occurs; seek qualified professional advice for persistent symptoms."
+    ],
+    "disclaimer": "GuitarLab is an educational tool, not a medical or rehabilitation service."
+  },
+  "contentAuthoring": {
+    "requiredForFullyAuthoredLesson": [
+      "learningObjectives",
+      "explanation",
+      "demonstrationOrReference",
+      "focusedExercise",
+      "musicalApplication",
+      "successCriteria",
+      "commonMistakeAndCorrection",
+      "accessibleAlternative",
+      "retrievalPrompt",
+      "nextReviewSuggestion"
+    ],
+    "existingOutlineCompatibility": "The existing weekly records remain valid outlines; optional detailed fields are added progressively with versioned schemas."
+  },
+  "progressionConstraints": [
+    "Keep Year 1 and Year 2 week IDs stable.",
+    "Keep weekly curriculum progress separate from numbered micro-lesson progress.",
+    "Do not force a seven-day week or a five-day practice streak.",
+    "Do not gate progress on optional staff notation.",
+    "Choose Year 3+ specialisation by learner interest and demonstrated prerequisite skills, not calendar time alone."
+  ]
+}
