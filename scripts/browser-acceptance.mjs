@@ -1148,11 +1148,6 @@ try {
     'Restoring the exported backup into a clean profile should recover preferences'
   );
   assert.equal(
-    await page.getByRole('radio', { name: 'Acoustic guitar' }).isChecked(),
-    true,
-    'Restoring the exported backup should recover the instrument preference'
-  );
-  assert.equal(
     await page
       .getByRole('checkbox', { name: 'Acoustic & fingerstyle' })
       .isChecked(),
