@@ -81,6 +81,8 @@ The current PR already introduces a searchable lesson finder, route and duration
 
 **Important implementation detail:** the current PR branch has a desktop navigation row and a two-column expandable mobile menu. It does not currently implement a five-item bottom tab bar. The dashboard still has its own navigation treatment; onboarding intentionally remains a focused setup flow. Reconcile these differences during the navigation acceptance task rather than assuming the PR description proves the pattern is complete.
 
+The revised `docs/DESIGN_DIRECTION.md` now defines the Modern Music Studio target system, including palette, type scale, layout, navigation, components and screen direction. These are design targets only; the app CSS and route layouts still need implementation and validation.
+
 The audit browser could not render the public preview because of a connection failure. No screenshot-based production visual audit, physical-device test or screen-reader test has been completed. Those remain open acceptance work and must not be described as passed.
 
 ---
@@ -135,10 +137,11 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-03 — Make theme behaviour reliable
 
 **Priority:** P1  
-**Status:** READY  
+**Status:** READY — target visual system documented; code migration pending  
 **Depends on:** UX-02  
 **Related findings:** X5
 
+- [x] Document the target dark/light palette and semantic colour roles in `docs/DESIGN_DIRECTION.md`.
 - [ ] Apply the saved or system-selected theme before first paint to prevent a flash of the wrong theme.
 - [ ] Support System, Light and Dark preferences, with a safe fallback when storage is unavailable.
 - [ ] Provide correct browser theme-colour metadata for both themes and update it when the theme changes.
@@ -153,11 +156,12 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-04 — Establish readable type, spacing and shared UI patterns
 
 **Priority:** P1 for learning text; P2 for broader consistency  
-**Status:** READY  
+**Status:** READY — target type, spacing and component guidance documented; code migration pending  
 **Depends on:** UX-02 and UX-03  
 **Related findings:** X1, X6, X9, X11, X12
 
-- [ ] Define and document a consistent rem-based type scale using the approved design direction.
+- [x] Document the target type scale, spacing, radii, content widths and surface/component treatments in `docs/DESIGN_DIRECTION.md`.
+- [ ] Implement a consistent rem-based type scale using the approved design direction.
 - [ ] Bring learner-facing body copy to a comfortable readable size; lesson paragraphs must not be small muted metadata.
 - [ ] Reserve muted colour and the smallest type roles for secondary metadata, not instructions or success criteria.
 - [ ] Define consistent reading and app container widths, spacing and page-header patterns.
@@ -398,3 +402,4 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 |---|---|
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | Committed a narrow-screen lesson-catalogue footer wrapping fix after CI identified /learn overflow at 320px; validation remains pending. |
+| 2026-11-15 | Reworked `docs/DESIGN_DIRECTION.md` into the Modern Music Studio target system and aligned `docs/IMPLEMENTATION_GUIDELINES.md`; the design is documented but not yet implemented in the application. |
