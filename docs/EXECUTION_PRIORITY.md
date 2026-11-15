@@ -13,9 +13,9 @@
 - PR #131 remains merged as b34578c4c295e83c5fc95e5350a92d3f664a398e; Issue #130 is closed. Its 24-root C3–B4 deterministic cycle preserves intervals within C3–B5 and keeps v2/v3 evidence distinct.
 - PRs #127–#129 remain merged in priority order; Issue #17 is closed. All simple ascending melodic interval classes, progression research, current-content provenance and local repertoire/harmony work have shipped.
 - Issue #69 is closed after PR #116 exact source-evidence validation, PR #117 v1 response contrasts and PR #132 v2/v3 response contrasts. Contrast labels are descriptive selected-response patterns, not psychological diagnoses or mastery evidence.
-- **Current P3 implementation:** PR [#133](https://github.com/leenusdarnal/guitarlab/pull/133) extends the local WAV evaluator with privacy-safe, allow-listed condition dimensions and per-facet aggregate reporting for instrument family, string, capture path, phase, dynamic, noise and tuning. It preserves legacy manifests and per-segment metrics; no physical-device result is claimed.
-- PR #133 branch feat/audio-corpus-dimension-reports, current head 77238d1ad0775dda5a74fbe5bb54a40de5b80a50. Required workflow [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245) passed application/curriculum and Node.js 26 checks on the current implementation.
-- After PR #133, the remaining Issue #89 work is genuinely physical: consented local guitar recordings with ground truth and physical browser/OS/device acceptance. Issues #9/#10 remain physical IndexedDB/offline/backup/restore QA; Issue #18 remains release hardening. Synthetic fixtures and mocked Chromium are regression coverage only.
+- **Current P3 implementation:** PR [#134](https://github.com/leenusdarnal/guitarlab/pull/134) extends the local WAV evaluator with privacy-safe, allow-listed condition dimensions and per-facet aggregate reporting for instrument family, string, capture path, phase, dynamic, noise and tuning. It preserves legacy manifests and per-segment metrics; no physical-device result is claimed.
+- PR #134 branch feat/audio-corpus-dimension-reports-main132, current head 77238d1ad0775dda5a74fbe5bb54a40de5b80a50. Required workflow [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245) passed application/curriculum and Node.js 26 checks on the current implementation.
+- After PR #134, the remaining Issue #89 work is genuinely physical: consented local guitar recordings with ground truth and physical browser/OS/device acceptance. Issues #9/#10 remain physical IndexedDB/offline/backup/restore QA; Issue #18 remains release hardening. Synthetic fixtures and mocked Chromium are regression coverage only.
 - Issue #5 remains open until controlled failure-injection and recovery are manually dispatched and their actual run URLs recorded. Issue #3 remains open pending explicit owner decisions; no production resources, secrets, D1 database, routes, authentication or production deployment are authorized.
 
 ## Historical checkpoint — 2026-11-14 after PR #113
@@ -145,7 +145,7 @@ When the user says “resume GuitarLab” or “continue implementation”:
 | Last verified main SHA | c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294 (PR #132 merged) |
 | PR #132 | Merged; v2/v3 interval-response contrasts complete; Issue #69 closed |
 | PR #131 | Merged as b34578c4c295e83c5fc95e5350a92d3f664a398e; required application/curriculum and Node.js 26 CI passed; Issue #130 closed |
-| PR #133 | Current P3 PR, [privacy-safe local recording condition breakdowns](https://github.com/leenusdarnal/guitarlab/pull/133); branch feat/audio-corpus-dimension-reports; CI run #43684634245 passed |
+| PR #134 | Current P3 PR, [privacy-safe local recording condition breakdowns](https://github.com/leenusdarnal/guitarlab/pull/134); branch feat/audio-corpus-dimension-reports-main132; CI run #43684634245 passed |
 | Issue #17 / #69 / #130 | Closed; musicianship/repertoire/provenance, adaptive practice, and deterministic interval roots delivered |
 | Physical evidence | Issue #89 real-guitar recordings and physical microphone/browser matrix; Issues #9/#10 physical offline storage and backup/restore QA; Issue #18 release hardening |
 | Controlled CI evidence | Issue #5 remains open until both manual failure-injection and recovery run URLs are recorded |
