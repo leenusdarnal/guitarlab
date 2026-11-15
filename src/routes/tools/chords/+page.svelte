@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import { SvelteMap } from 'svelte/reactivity';
   import {
     createChordTransitionObservation,
     getCleanChangeRate,
@@ -38,6 +39,29 @@
       ? [...selectedChord.strings].reverse()
       : [...selectedChord.strings]
   );
+  const chordBarres = $derived.by(() => {
+    const groups = new SvelteMap<
+      string,
+      { fret: number; finger: number; indexes: number[] }
+    >();
+    displayStrings.forEach((string, index) => {
+      if (string.state !== 'fretted') return;
+      const key = `${string.fret}:${string.finger}`;
+      const group = groups.get(key) ?? {
+        fret: string.fret,
+        finger: string.finger,
+        indexes: []
+      };
+      group.indexes.push(index);
+      groups.set(key, group);
+    });
+    return [...groups.values()].filter(
+      (barre) =>
+        barre.indexes.length > 1 &&
+        Math.max(...barre.indexes) - Math.min(...barre.indexes) + 1 ===
+          barre.indexes.length
+    );
+  });
   const cleanChangeObservation = $derived.by(() => {
     // Svelte coerces values from type="number" inputs to numbers. Normalize
     // before trimming so editing one field cannot break the derived view.
@@ -132,6 +156,27 @@
     if (string.state === 'open') return 'open';
     return `fret ${string.fret}, finger ${string.finger}`;
   }
+
+  function stringName(stringNumber: number): string {
+    return ['e', 'B', 'G', 'D', 'A', 'E'][stringNumber - 1];
+  }
+
+  function isBarrePosition(string: ChordString): boolean {
+    return (
+      string.state === 'fretted' &&
+      chordBarres.some(
+        (barre) =>
+          barre.fret === string.fret &&
+          barre.finger === string.finger &&
+          displayStrings.findIndex(
+            (candidate) => candidate.stringNumber === string.stringNumber
+          ) >= Math.min(...barre.indexes) &&
+          displayStrings.findIndex(
+            (candidate) => candidate.stringNumber === string.stringNumber
+          ) <= Math.max(...barre.indexes)
+      )
+    );
+  }
 </script>
 
 <svelte:head>
@@ -182,35 +227,49 @@
     <div
       class="chord-diagram"
       role="img"
-      aria-label={`${selectedChord.name} chord, ${handedness}-handed view. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
+      aria-label={`${selectedChord.name} chord, ${handedness}-handed chord box. ${displayStrings.map((string) => `string ${string.stringNumber}: ${stringDescription(string)}`).join('; ')}.`}
     >
-      {#each displayStrings as string (string.stringNumber)}
-        <div class="chord-string">
-          <span class="string-name">
-            {string.stringNumber === 1
-              ? 'e'
-              : string.stringNumber === 2
-                ? 'B'
-                : string.stringNumber === 3
-                  ? 'G'
-                  : string.stringNumber === 4
-                    ? 'D'
-                    : string.stringNumber === 5
-                      ? 'A'
-                      : 'E'}
-          </span>
+      <svg class="chord-box" viewBox="0 0 240 230" aria-hidden="true" focusable="false">
+        {#each displayStrings as string, index (string.stringNumber)}
+          <line class="chord-svg-string" x1={44 + index * 32} x2={44 + index * 32} y1="36" y2="180" />
+          <text class="chord-svg-string-name" x={44 + index * 32} y="215">{stringName(string.stringNumber)}</text>
           {#if string.state === 'muted'}
-            <span class="string-marker muted" aria-hidden="true">×</span>
-            <small>Mute</small>
+            <text class="chord-svg-status muted" x={44 + index * 32} y="22">×</text>
           {:else if string.state === 'open'}
-            <span class="string-marker open" aria-hidden="true">○</span>
-            <small>Open</small>
-          {:else}
-            <span class="string-marker fretted" aria-hidden="true">{string.finger}</span>
-            <small>Fret {string.fret}</small>
+            <text class="chord-svg-status open" x={44 + index * 32} y="22">○</text>
+          {:else if string.state === 'fretted' && !isBarrePosition(string)}
+            <circle class="chord-svg-finger" cx={44 + index * 32} cy={36 + (string.fret - 0.5) * 36} r="11" />
+            <text class="chord-svg-finger-number" x={44 + index * 32} y={40 + (string.fret - 0.5) * 36}>{string.finger}</text>
           {/if}
-        </div>
-      {/each}
+        {/each}
+        {#each Array.from({ length: 5 }, (_, index) => index) as fretLine (fretLine)}
+          <line
+            class:chord-nut={fretLine === 0}
+            class="chord-svg-fret"
+            x1="28"
+            x2="220"
+            y1={36 + fretLine * 36}
+            y2={36 + fretLine * 36}
+          />
+          {#if fretLine > 0}
+            <text class="chord-svg-fret-number" x="15" y={40 + (fretLine - 0.5) * 36}>{fretLine}</text>
+          {/if}
+        {/each}
+        {#each chordBarres as barre (`${barre.fret}-${barre.finger}`)}
+          <line
+            class="chord-svg-barre"
+            x1={44 + Math.min(...barre.indexes) * 32}
+            x2={44 + Math.max(...barre.indexes) * 32}
+            y1={36 + (barre.fret - 0.5) * 36}
+            y2={36 + (barre.fret - 0.5) * 36}
+          />
+          <text
+            class="chord-svg-finger-number"
+            x={44 + Math.min(...barre.indexes) * 32}
+            y={40 + (barre.fret - 0.5) * 36}
+          >{barre.finger}</text>
+        {/each}
+      </svg>
     </div>
 
     <div class="diagram-legend" aria-label="Chord diagram legend">
@@ -428,56 +487,25 @@
     line-height: 1.7;
   }
   .chord-diagram {
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 7px;
-    max-width: 600px;
-    margin: 22px auto 14px;
-    padding: 8px 0;
+    width: min(100%, 360px);
+    margin: 20px auto 14px;
+    padding: 12px 10px 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
   }
-  .chord-string {
-    display: grid;
-    min-width: 0;
-    min-height: 112px;
-    align-content: center;
-    justify-items: center;
-    gap: 8px;
-    border-left: 1px solid var(--border);
-  }
-  .chord-string:first-child {
-    border-left: 0;
-  }
-  .string-name {
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 800;
-  }
-  .string-marker {
-    display: grid;
-    width: 38px;
-    height: 38px;
-    place-items: center;
-    font-size: 23px;
-    line-height: 1;
-  }
-  .string-marker.open {
-    color: var(--success);
-  }
-  .string-marker.muted {
-    color: var(--danger);
-    font-weight: 850;
-  }
-  .string-marker.fretted {
-    border-radius: 50%;
-    background: var(--primary);
-    color: var(--primary-ink);
-    font-size: 14px;
-    font-weight: 850;
-  }
-  .chord-string small {
-    color: var(--muted);
-    font-size: 10px;
-  }
+  .chord-box { display: block; width: 100%; height: auto; overflow: visible; }
+  .chord-svg-string { stroke: var(--text); stroke-width: 1.7; }
+  .chord-svg-fret { stroke: var(--border-strong); stroke-width: 1.5; }
+  .chord-svg-fret.chord-nut { stroke: var(--text); stroke-width: 5; }
+  .chord-svg-fret-number { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+  .chord-svg-string-name { fill: var(--muted); font-size: 12px; font-weight: 800; text-anchor: middle; }
+  .chord-svg-status { font-size: 21px; font-weight: 800; text-anchor: middle; }
+  .chord-svg-status.open { fill: var(--success); }
+  .chord-svg-status.muted { fill: var(--danger); }
+  .chord-svg-finger { fill: var(--primary); stroke: var(--surface); stroke-width: 1.5; }
+  .chord-svg-finger-number { fill: var(--primary-ink); font-size: 11px; font-weight: 850; text-anchor: middle; }
+  .chord-svg-barre { stroke: var(--primary); stroke-width: 20; stroke-linecap: round; }
   .diagram-legend {
     display: flex;
     flex-wrap: wrap;
@@ -556,6 +584,7 @@
   }
   .primary-button,
   .secondary-button,
+  .drill-actions button { min-height: 48px; padding-inline: 13px; }
   .finish-button {
     min-height: 40px;
     padding: 9px 12px;
@@ -576,6 +605,7 @@
     color: var(--text);
   }
   .finish-button {
+    min-height: 48px;
     color: var(--muted);
   }
   button:disabled,
@@ -653,13 +683,6 @@
     }
     .chord-summary {
       gap: 10px;
-    }
-    .chord-string {
-      min-height: 96px;
-    }
-    .string-marker {
-      width: 30px;
-      height: 30px;
     }
     .observation-fields,
     .drill-choices {

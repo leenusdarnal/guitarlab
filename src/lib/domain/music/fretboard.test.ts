@@ -5,6 +5,7 @@ import {
   findFretboardPositions,
   getDisplayFretColumn,
   getFretboardLayout,
+  getFretboardInlayFrets,
   getNoteAtPosition,
   midiToFrequency
 } from './fretboard';
@@ -118,6 +119,20 @@ describe('standard guitar fretboard', () => {
 
     const note = getNoteAtPosition(6, 3);
     expect(note).toMatchObject({ stringNumber: 6, fret: 3, noteName: 'G' });
+  });
+
+  it('returns standard inlay markers only within the visible fret range', () => {
+    expect(getFretboardInlayFrets(12)).toEqual([3, 5, 7, 9, 12]);
+    expect(getFretboardInlayFrets(24)).toEqual([
+      3, 5, 7, 9, 12, 15, 17, 19, 21, 24
+    ]);
+    expect(getFretboardInlayFrets(2)).toEqual([]);
+  });
+
+  it('rejects an invalid inlay fret range', () => {
+    expect(() => getFretboardInlayFrets(-1)).toThrow(RangeError);
+    expect(() => getFretboardInlayFrets(25)).toThrow(RangeError);
+    expect(() => getFretboardInlayFrets(12.5)).toThrow(RangeError);
   });
 
   it('rejects invalid strings, frets, pitch classes and tunings', () => {

@@ -79,7 +79,7 @@ try {
   await page.getByLabel('Choose an open chord').selectOption('g-major');
   await page.getByRole('heading', { name: 'G', exact: true }).waitFor();
   const chordDiagram = page.getByRole('img', {
-    name: /G chord, right-handed view/
+    name: /G chord, right-handed chord box/
   });
   await chordDiagram.waitFor();
   assert.match(
@@ -90,6 +90,13 @@ try {
   assert.match(
     await chordDiagram.getAttribute('aria-label'),
     /string 1: fret 3, finger 4/
+  );
+  assert.equal(await chordDiagram.locator('.chord-svg-string').count(), 6);
+  assert.equal(await chordDiagram.locator('.chord-svg-fret').count(), 5);
+  assert.equal(await chordDiagram.locator('.chord-svg-finger').count(), 3);
+  assert.match(
+    await chordDiagram.getAttribute('aria-label'),
+    /string 5: fret 2, finger 1/
   );
 
   // The two-chord drill alternates targets and records outcomes separately.
@@ -564,6 +571,23 @@ try {
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'Find a note' }).click();
+  await page.locator('.find-progress').waitFor();
+  await page.locator('.fret-cell[data-string="2"][data-fret="1"]').click();
+  await page.getByText('1 found', { exact: true }).waitFor();
+  await page.getByText('1 first-try · 1 selections', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Next note' }).click();
+  await page.getByRole('button', { name: 'Hint' }).click();
+  await page.getByRole('button', { name: 'Reveal positions' }).click();
+  assert.ok((await page.locator('.fret-cell.is-revealed').count()) > 0);
+  await page.locator('.fret-cell[data-string="2"][data-fret="2"]').click();
+  await page.getByText('2 found', { exact: true }).waitFor();
+  await page.getByText('1 first-try · 2 selections', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Exit find mode' }).click();
+  await page.locator('.fret-cell[data-string="2"][data-fret="3"]').click();
+  await page.getByRole('button', { name: 'Hear D4' }).click();
+  await page.getByRole('status').filter({ hasText: 'Played D4' }).waitFor();
+
   const firstFretCell = page.locator('.fret-cell').first();
   await firstFretCell.waitFor();
   const fretCellSize = await firstFretCell.evaluate((element) => {
