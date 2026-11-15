@@ -8,7 +8,10 @@
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
   let mobileMenuTrigger: HTMLButtonElement | null = null;
-  let theme = $state<'dark' | 'light'>('dark');
+  type ThemePreference = 'system' | 'light' | 'dark';
+  type ResolvedTheme = 'dark' | 'light';
+  let themePreference = $state<ThemePreference>('system');
+  let themeMediaQuery: MediaQueryList | null = null;
   let currentPath = $derived(page.url.pathname);
   let activeSection = $derived(
     currentPath.startsWith('/learn') ? 'learn' :
@@ -21,29 +24,60 @@
   );
   let showPrimaryNavigation = $derived(currentPath !== '/' && currentPath !== '/onboarding');
 
-  onMount(() => {
-    try {
-      theme = window.localStorage.getItem('guitarlab-theme') === 'light' ? 'light' : 'dark';
-      document.documentElement.dataset.theme = theme;
-    } catch {
-      theme = 'dark';
-      document.documentElement.dataset.theme = 'dark';
-    }
+  function isThemePreference(value: string | undefined): value is ThemePreference {
+    return value === 'system' || value === 'light' || value === 'dark';
+  }
 
-    void loadActiveLearnerProfile().catch(() => {
-      localStorageUnavailable = true;
-    });
-  });
+  function applyResolvedTheme(preference: ThemePreference) {
+    const resolved: ResolvedTheme =
+      preference === 'system'
+        ? window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark'
+        : preference;
 
-  function toggleTheme() {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.theme = resolved;
+    const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    themeColor?.setAttribute('content', resolved === 'light' ? '#F5F4F0' : '#101318');
+  }
+
+  function setThemePreference(preference: ThemePreference) {
+    themePreference = preference;
+    document.documentElement.dataset.themePreference = preference;
+    applyResolvedTheme(preference);
     try {
-      window.localStorage.setItem('guitarlab-theme', theme);
+      window.localStorage.setItem('guitarlab-theme', preference);
     } catch {
       // The visible theme remains available for this session if storage is blocked.
     }
   }
+
+  function handleThemePreferenceChange(event: Event) {
+    const selected = event.currentTarget as HTMLSelectElement;
+    if (isThemePreference(selected.value)) {
+      setThemePreference(selected.value);
+    }
+  }
+
+  onMount(() => {
+    const initialPreference = document.documentElement.dataset.themePreference;
+    themePreference = isThemePreference(initialPreference) ? initialPreference : 'system';
+    applyResolvedTheme(themePreference);
+
+    themeMediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+    const handleSystemThemeChange = () => {
+      if (themePreference === 'system') applyResolvedTheme('system');
+    };
+    themeMediaQuery.addEventListener('change', handleSystemThemeChange);
+
+    void loadActiveLearnerProfile().catch(() => {
+      localStorageUnavailable = true;
+    });
+
+    return () => {
+      themeMediaQuery?.removeEventListener('change', handleSystemThemeChange);
+    };
+  });
 
   async function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
@@ -96,9 +130,14 @@
       </nav>
 
       <div class="global-nav-actions">
-        <button class="theme-toggle" type="button" onclick={toggleTheme} aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}>
-          {theme === 'dark' ? 'Light theme' : 'Dark theme'}
-        </button>
+        <label class="theme-control">
+          <span class="sr-only">Appearance</span>
+          <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
         <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-primary-navigation" aria-label="Open navigation">
           <span aria-hidden="true">☰</span><span>Menu</span>
         </button>
@@ -138,13 +177,14 @@
   .desktop-primary-navigation a:hover{background:var(--surface);color:var(--text)}
   .desktop-primary-navigation a.active{background:color-mix(in srgb,var(--primary) 13%,var(--surface));color:var(--primary)}
   .global-nav-actions{display:flex;align-items:center;gap:8px;flex:none}
-  .theme-toggle,.mobile-nav-trigger{min-height:42px;padding:8px 12px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
-  .mobile-nav-trigger{display:none;align-items:center;gap:8px}
+  .theme-control select{min-height:42px;max-width:132px;padding:8px 28px 8px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .mobile-nav-trigger{display:none;align-items:center;gap:8px;min-height:42px;padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
   .mobile-primary-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:8px 16px 16px;border-top:1px solid var(--border);background:var(--surface)}
   .mobile-primary-navigation a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
   .mobile-primary-navigation a:hover,.mobile-primary-navigation a:focus-visible{background:var(--surface-raised)}
-  .theme-toggle:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;min-height:60px}.mobile-nav-trigger{display:inline-flex}.theme-toggle{min-height:40px}}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;min-height:60px}.mobile-nav-trigger{display:inline-flex}.theme-control select{min-height:42px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
 </style>
