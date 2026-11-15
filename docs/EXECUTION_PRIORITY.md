@@ -3,10 +3,28 @@
 **Last updated:** 2026-11-15  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
-**Verified baseline:** `18515ec7bb1ab6d76b4f19a5e9a424585945d890` (PR #135 merged; enforced CSP and response-header regression coverage)  
+**Verified baseline:** `555b27c1ba230a87a59e4d75c5f7348127f8fd28` (PR #136 merged; documentation reconciled after CSP hardening)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live checkpoint — 2026-11-15 after PR #135
+## P0 — First production release (owner priority set 2026-11-15)
+
+**This is the top implementation priority until the first production release is deployed and verified.**
+
+- Release the existing local-first GuitarLab application; learner profiles, progress, sessions and preferences remain in browser-local IndexedDB.
+- Use the isolated `wrangler.production.jsonc` config and manual `Deploy GuitarLab production` workflow. Only a dispatch from `main` with `deploy_production=true` may deploy.
+- Require the latest successful `Validate application and curriculum` and `Check Node.js 26 compatibility` checks for the exact selected SHA.
+- Worker name: `guitarlab`; temporary first-release URL: `https://guitarlab.leenusdarnal.workers.dev` (the connected account's workers.dev subdomain is `leenusdarnal`).
+- Production has no D1 binding, authentication routes, account service, learner-data API or cloud sync. Do not claim login/cloud sync exists; that is separate M5 implementation work.
+- Live Cloudflare inventory: one Worker (`guitarlab-preview`), no production Worker, no D1 database, no Worker custom domain and no zone in the connected account. workers.dev is a temporary hostname; attach an owned custom domain/route for long-term production.
+- Configure the GitHub Actions `production` environment with secret `CLOUDFLARE_API_TOKEN` and variable `CLOUDFLARE_ACCOUNT_ID`; restrict deploy branches to `main` and require a reviewer where settings support it.
+- The release workflow builds and dry-runs the exact main SHA, deploys that build, and smoke-tests `/`, `/learn`, `/practice`, `/tools/tuner`, `/settings/data` plus CSP/HSTS/MIME/frame/referrer headers.
+- Do not provision D1, run remote migrations, enable account/cloud-sync services, or create domains/DNS in this release slice.
+
+**Exit criteria:** an exact-main production workflow succeeds, all smoke checks pass, and the commit, Worker version/deployment ID, timestamp and URL are recorded. Keep P0 open until then.
+
+**After first production verification:** resume M5 account/authentication and secure sync, then Issues #9/#10 physical storage/recovery acceptance, #89 real-device audio, and #18 full release sign-off. Issue #5 remains pending for authenticated CI rehearsal dispatch.
+
+## Historical checkpoint — 2026-11-15 after PR #135 (superseded by the P0 production-release queue above)
 
 - Verified `main` at `18515ec7bb1ab6d76b4f19a5e9a424585945d890`; PR [#135](https://github.com/leenusdarnal/guitarlab/pull/135) is merged.
 - PR #135 configures SvelteKit-managed Content Security Policy with automatic nonce/hash handling, restrictive script/resource directives, actual response-header assertions in browser acceptance, and `docs/SECURITY_RESPONSE_POLICY.md`.
