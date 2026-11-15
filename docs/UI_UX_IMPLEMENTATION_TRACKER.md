@@ -279,17 +279,17 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-10 — Make Progress useful to new and returning learners
 
 **Priority:** P1/P2  
-**Status:** READY  
+**Status:** IN PROGRESS — evidence-aware 34-skill map, local learner detail, related lesson links, filters and mobile master/detail view implemented; automated validation pending  
 **Depends on:** existing skill catalogue and learner-state model  
 **Related findings:** K1, K2, D7, X10
 
-- [ ] Review the empty Skills state: a new learner should be able to understand the skill map before any evidence exists.
-- [ ] Where supported by the canonical catalogue, show all available skills with a clear “not assessed yet” state rather than an empty page.
-- [ ] Explain the difference between not started, insufficient evidence, practising and demonstrated states in learner language.
-- [ ] Keep missing evidence distinct from a low score or failed skill.
-- [ ] Improve mobile master/detail navigation so a selected skill's details are visible without awkward off-screen panels.
-- [ ] Link a skill to its relevant lessons, practice actions and history without inventing evidence.
-- [ ] Keep history search/filter and a full-history destination easy to discover.
+- [x] Replace the empty-first Skills experience with the full canonical catalogue so a new learner can explore before any evidence exists.
+- [x] Show all 34 canonical skills with “Not assessed yet” where no qualifying assessment or mastery evidence exists.
+- [x] Explain not assessed, insufficient/inconclusive evidence, needs practice, demonstrated and review due in learner language.
+- [x] Preserve the domain distinction: missing evidence is `not_started`, inconclusive evidence is `learning`, and needs-practice is `practising`.
+- [x] Add mobile master/detail navigation with an explicit All skills return action.
+- [x] Link skills only to lessons explicitly associated in the canonical curriculum index and provide Practice Studio/history destinations without treating activity as mastery.
+- [x] Keep the practice-history destination visible beside the linked lesson and Practice Studio actions.
 
 **Acceptance:** a new learner sees a useful starting map without fabricated progress; every displayed state follows the canonical skill and evidence model.
 
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Started UX-10: replaced saved-record-only Skills page with the canonical 34-skill catalogue, active learner assessment explanations, release-aware state mapping, evidence count/date detail, published lesson links, search/category filters and mobile master/detail navigation. Added unit coverage for missing, inconclusive, needs-practice, passed and cross-release evidence. Automated validation pending. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
