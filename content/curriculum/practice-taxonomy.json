@@ -218,7 +218,10 @@
       "lessonId": "y1-w15-lesson",
       "exerciseId": "y1-w15-lesson-focus",
       "topicIds": [],
-      "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+      "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -262,7 +265,10 @@
     {
       "lessonId": "y1-w17-lesson",
       "exerciseId": "y1-w17-lesson-focus",
-      "topicIds": ["theory.major-scale-construction", "lead.a-minor-pentatonic-note-set"],
+      "topicIds": [
+        "theory.major-scale-construction",
+        "lead.a-minor-pentatonic-note-set"
+      ],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -371,7 +377,10 @@
       "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
       "stringNumbers": [],
-      "fretPositionIds": ["position.pentatonic-box-1", "position.pentatonic-box-2"],
+      "fretPositionIds": [
+        "position.pentatonic-box-1",
+        "position.pentatonic-box-2"
+      ],
       "sourceEvidence": "Exercise instructions explicitly require A minor pentatonic box 1, adjacent box 2, and connecting those two named positions. No string numbers or numeric fret range are stated."
     },
     {
@@ -569,7 +578,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
@@ -800,7 +812,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "The exercise explicitly specifies a D-U-D-U cell and a transition between two neighbouring strings; it does not name particular strings."
