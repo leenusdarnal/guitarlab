@@ -6,19 +6,20 @@
 **Verified baseline:** `a1da00fe0fb5804464ccb1679c128d1176957041` (PR #104 merged; curriculum release v1.0.6)  
 **Purpose:** Durable execution queue. Refresh live GitHub state before resuming; current code, tests and CI outrank historical notes.
 
-## Live coordination checkpoint — 2026-11-15 after PR #118
+## Live coordination checkpoint — 2026-11-15 after PR #120
 
-- Main includes PR #117 (P1 M7.2) merge commit `64054bb2ae8bb17bc0997aba58cfd0fd1a917c68` and PR #118 (P2 chord-movement listening) merge commit `aff8cfe50366fd78871858bc7dde3a4b6e3872b7`. PR #117's post-merge CI is green; PR #118's branch CI passed before merge and its post-merge main validation is running.
-- Independent workstreams are developed concurrently on separate branches. The merge sequence is still strict: **#119 → #120 → #121 → #122 → #123 → #125 → #124**.
-  - #119 — P2: theory recall (name, sound and musical use); rebased onto #118, fresh CI running.
-  - #120 — P2: shared harmony calculations and fretboard/CAGED integration; prior branch CI passed; revalidate after #119.
-  - #121 — P2: learner-owned local song projects, IndexedDB v7, backup/restore/reset; schema migration browser assertion corrected and CI rerunning.
-  - #122 — P3: real-recording and physical-device evidence matrix. All hardware/recording results remain not run or blocked until supplied.
-  - #123 — P4: isolated manual CI failure/recovery rehearsal. Actual workflow dispatch occurs after merge; Issue #5 remains open until both runs are recorded.
-  - #125 — P4: production environment decision and release approval gates. No production resource or deployment is authorized; Issue #3 remains open.
-  - #124 — final process/priority documentation update.
-- Before each merge, refresh the PR head SHA, base, mergeability and every required check. After each merge, verify post-merge main CI, then rebase/revalidate the next PR. Overlapping files must preserve all earlier merged changes.
-- Physical-device evidence must never be marked complete from synthetic audio, mocked permissions or automated Chromium runs. Production deployment remains deferred pending explicit approval and data-protection design.
+- Verified `main` HEAD: `f10c17529aa05fda3aebbb99079df24e415d3478`; its tree is identical to PR #120's merged tree `7f1e8fe8230637e7c88cbe96fd3c8bb1e7232def`. PR #126 was a duplicate of the already-merged #120 head/tree and added no files; do not count it as another implementation slice.
+- Merged P1/P2 work: #117 interval-response evidence labels, #118 chord-movement listening, #119 theory recall, and #120 shared harmony/fretboard/CAGED. The shared harmony work is delivered by #120.
+- Current strict merge queue: **#121 → #122 → #123 → #125 → #124**. Independent branches may continue in parallel, but later PRs must not merge ahead of this order.
+  - #121 — P2 / Issue #17: local song/repertoire projects, IndexedDB v7 and backup/restore/reset integration. Latest head `fc290be38793e4bc3a37870eb272b547cbca7f6b`; Node.js 26 check passed and application/browser validation is running after a test-harness assertion fix.
+  - #122 — P3 / Issues #89, #18, #9, #10: real-recording, physical-device, storage/recovery and release evidence matrix. CI passed; physical/recording rows remain not run or blocked.
+  - #123 — P4 / Issue #5: isolated manual CI failure/recovery rehearsal. CI passed; actual failure and recovery dispatches remain not run and must occur after merge.
+  - #125 — P4 / Issue #3: production environment decision and approval gates. CI passed; no production resources, configuration or deployment are authorized.
+  - #124 — final execution-governance and tracker update. CI passed before this checkpoint refresh; re-check after the documentation update and merge last.
+- PRs #122–#125 were checked at their current heads; their checks were green. Re-check head SHA, mergeability and required statuses at each merge turn because main has advanced.
+- The #126 duplicate merge created an empty commit only; post-merge Node.js 26 passed and application/curriculum validation was still running at this checkpoint.
+- Before each merge, verify the exact PR head and every required status. After each merge, verify post-merge main CI, then revalidate the next PR against the updated base. Do not bypass required checks.
+- Synthetic fixtures, mocked permissions and automated Chromium tests are not physical-device or real-recording evidence. Production remains gated on explicit owner approval, data-protection design and release sign-off.
 
 ## Historical checkpoint — 2026-11-14 after PR #113
 
