@@ -56,6 +56,9 @@ try {
   await page.getByRole('navigation', { name: 'Primary navigation' }).waitFor();
   await page.getByRole('searchbox', { name: 'Search lessons' }).waitFor();
 
+  // Start finder interaction from a fully loaded route rather than racing the SPA navigation.
+  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+
   assert.equal(
     await page.locator('.route-card').count(),
     6,
