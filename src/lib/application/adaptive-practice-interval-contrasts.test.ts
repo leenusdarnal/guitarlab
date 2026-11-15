@@ -118,10 +118,7 @@ describe('versioned interval response contrasts', () => {
               itemId: `interval-recognition.${expectedResponse}`,
               response: selectedResponse,
               outcome: 'incorrect',
-              assessedAt:
-                version * 10_000 +
-                expectedIndex * 12 +
-                selectedIndex,
+              assessedAt: version * 10_000 + expectedIndex * 12 + selectedIndex,
               instrument: {
                 definitionVersion: version,
                 scoringRuleVersion: `exact-interval-choice-v${version}`
@@ -134,11 +131,11 @@ describe('versioned interval response contrasts', () => {
     const groups = itemAnalytics(attempts);
     expect(
       groups.map(
-        ({
+        ({ definitionVersion, scoringRuleVersion, assessmentAttemptCount }) => [
           definitionVersion,
           scoringRuleVersion,
           assessmentAttemptCount
-        }) => [definitionVersion, scoringRuleVersion, assessmentAttemptCount]
+        ]
       )
     ).toEqual([
       [2, 'exact-interval-choice-v2', 156],
@@ -167,8 +164,7 @@ describe('versioned interval response contrasts', () => {
         );
       }
     }
-  }
-);
+  });
 
   it('keeps no-response, inconclusive, correct and non-comparable instruments out of contrasts', () => {
     const attempts = [
@@ -235,8 +231,7 @@ describe('versioned interval response contrasts', () => {
         group.items.every((item) => item.responseMismatches.length === 0)
       )
     ).toBe(true);
-  }
-);
+  });
 
   it('retains the original four-item v1 mapping and does not infer v1 from v2 item IDs', () => {
     const attempts = [
@@ -282,6 +277,5 @@ describe('versioned interval response contrasts', () => {
       }
     ]);
     expect(unsupportedItem?.responseMismatches).toEqual([]);
-  }
-);
+  });
 });
