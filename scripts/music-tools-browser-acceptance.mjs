@@ -272,6 +272,16 @@ try {
   await page.getByRole('button', { name: 'Major sixth' }).click();
   await page.getByText("That's right.").waitFor();
 
+  // Starting pitch varies, but the learner-facing task remains interval-relative.
+  await page.getByRole('button', { name: 'Next exercise' }).click();
+  await page
+    .getByRole('heading', { name: 'How far apart were the two notes?' })
+    .waitFor();
+  await page.getByRole('button', { name: 'Listen to example' }).click();
+  await waitForEarAudio();
+  await page.getByRole('button', { name: 'Minor seventh' }).click();
+  await page.getByText("That's right.").waitFor();
+
   await page.getByRole('button', { name: 'Chord movement' }).click();
   await page
     .getByRole('heading', {

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createEarTrainingExercise } from './ear-training';
+import {
+  createEarTrainingExercise,
+  type EarTrainingAnswer
+} from './ear-training';
 
 describe('ear-training exercise model', () => {
   it('creates a steady pulse with equal beat spacing', () => {
@@ -98,17 +101,21 @@ describe('ear-training exercise model', () => {
 
   it('creates reproducible interval recognition challenges', () => {
     const expected = [
-      ['unison', 440],
-      ['minor_third', 440 * Math.pow(2, 3 / 12)],
-      ['major_third', 440 * Math.pow(2, 4 / 12)],
-      ['perfect_fifth', 440 * Math.pow(2, 7 / 12)]
+      ['unison', 0],
+      ['minor_third', 3],
+      ['major_third', 4],
+      ['perfect_fifth', 7]
     ] as const;
-    expected.forEach(([answer, secondFrequency], sequence) => {
+    expected.forEach(([answer, semitones], sequence) => {
       const exercise = createEarTrainingExercise('interval', sequence);
       expect(exercise.answer).toBe(answer);
       expect(exercise.tones).toHaveLength(2);
-      expect(exercise.tones[0].frequencyHz).toBe(440);
-      expect(exercise.tones[1].frequencyHz).toBeCloseTo(secondFrequency);
+      expect(
+        12 *
+          Math.log2(
+            exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
+          )
+      ).toBeCloseTo(semitones);
       expect(exercise.choices.map((choice) => choice.value)).toEqual([
         'unison',
         'minor_third',
@@ -133,9 +140,12 @@ describe('ear-training exercise model', () => {
         'steps-and-tritone'
       );
       expect(exercise.answer).toBe(answer);
-      expect(exercise.tones[1].frequencyHz).toBeCloseTo(
-        440 * 2 ** (semitones / 12)
-      );
+      expect(
+        12 *
+          Math.log2(
+            exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
+          )
+      ).toBeCloseTo(semitones);
       expect(exercise.choices).toHaveLength(4);
     });
   });
@@ -156,13 +166,105 @@ describe('ear-training exercise model', () => {
         'wide-leaps'
       );
       expect(exercise.answer).toBe(answer);
-      expect(exercise.tones[1].frequencyHz).toBeCloseTo(
-        440 * 2 ** (semitones / 12)
-      );
+      expect(
+        12 *
+          Math.log2(
+            exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
+          )
+      ).toBeCloseTo(semitones);
       expect(exercise.choices).toHaveLength(5);
     });
   });
 
+  it('cycles each interval through every bounded chromatic root deterministically', () => {
+    const semitonesByAnswer: Partial<Record<EarTrainingAnswer, number>> = {
+      unison: 0,
+      minor_second: 1,
+      major_second: 2,
+      minor_third: 3,
+      major_third: 4,
+      perfect_fourth: 5,
+      tritone: 6,
+      perfect_fifth: 7,
+      minor_sixth: 8,
+      major_sixth: 9,
+      minor_seventh: 10,
+      major_seventh: 11,
+      octave: 12
+    };
+    const intervalCounts = {
+      foundation: 4,
+      'steps-and-tritone': 4,
+      'wide-leaps': 5
+    } as const;
+    const midiToFrequency = (midiNote: number) =>
+      440 * 2 ** ((midiNote - 69) / 12);
+    const midiFromFrequency = (frequencyHz: number) =>
+      Math.round(69 + 12 * Math.log2(frequencyHz / 440));
+
+    for (const intervalSet of Object.keys(intervalCounts) as Array<
+      keyof typeof intervalCounts
+    >) {
+      const intervalCount = intervalCounts[intervalSet];
+      const rootStride = intervalCount === 4 ? 5 : 7;
+      const exerciseCount = intervalCount * 24;
+      const exercises = Array.from({ length: exerciseCount }, (_, sequence) =>
+        createEarTrainingExercise('interval', sequence, intervalSet)
+      );
+      const replay = Array.from({ length: exerciseCount }, (_, sequence) =>
+        createEarTrainingExercise('interval', sequence, intervalSet)
+      );
+      const rootMidiNotes = exercises.map((exercise) =>
+        midiFromFrequency(exercise.tones[0].frequencyHz)
+      );
+      const generatedFrequencies = exercises.flatMap((exercise) =>
+        exercise.tones.map((tone) => tone.frequencyHz)
+      );
+      const rootsByInterval = new Map<EarTrainingAnswer, number[]>();
+
+      exercises.forEach((exercise, sequence) => {
+        const semitones = semitonesByAnswer[exercise.answer];
+        const intervalPosition = sequence % intervalCount;
+        const intervalCycle = Math.floor(sequence / intervalCount);
+        const expectedRoot =
+          48 + ((intervalPosition + intervalCycle * rootStride) % 24);
+        expect(semitones).toBeDefined();
+        expect(rootMidiNotes[sequence]).toBe(expectedRoot);
+        expect(
+          12 *
+            Math.log2(
+              exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
+            )
+        ).toBeCloseTo(semitones ?? -1);
+
+        const roots = rootsByInterval.get(exercise.answer) ?? [];
+        roots.push(rootMidiNotes[sequence]);
+        rootsByInterval.set(exercise.answer, roots);
+      });
+
+      expect(rootsByInterval.size).toBe(intervalCount);
+      for (const roots of rootsByInterval.values()) {
+        expect(roots).toHaveLength(24);
+        expect(new Set(roots).size).toBe(24);
+        expect(new Set(roots.map((midiNote) => midiNote % 12)).size).toBe(12);
+        expect(Math.max(...roots) - Math.min(...roots)).toBe(23);
+      }
+
+      expect(Math.min(...generatedFrequencies)).toBeGreaterThanOrEqual(
+        midiToFrequency(48)
+      );
+      expect(Math.max(...generatedFrequencies)).toBeLessThanOrEqual(
+        midiToFrequency(83)
+      );
+      expect(
+        exercises.map((exercise) =>
+          exercise.tones.map((tone) => tone.frequencyHz)
+        )
+      ).toEqual(
+        replay.map((exercise) => exercise.tones.map((tone) => tone.frequencyHz))
+      );
+    }
+  });
   it('rejects invalid sequence values and unsupported exercise kinds', () => {
     expect(() => createEarTrainingExercise('pulse', -1)).toThrow(RangeError);
     expect(() => createEarTrainingExercise('pitch', 1.5)).toThrow(RangeError);
