@@ -376,6 +376,19 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  await context.addInitScript(() => {
+    window.__guitarlabGetUserMediaCalls = 0;
+    const devices = navigator.mediaDevices;
+    if (!devices || typeof devices.getUserMedia !== 'function') return;
+    const request = devices.getUserMedia.bind(devices);
+    Object.defineProperty(devices, 'getUserMedia', {
+      configurable: true,
+      value: (...args) => {
+        window.__guitarlabGetUserMediaCalls += 1;
+        return request(...args);
+      }
+    });
+  });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -422,7 +435,10 @@ try {
   assert.equal(await page.locator('.tool-group').count(), 4);
   assert.equal(await page.locator('.tool-row').count(), 8);
   assert.equal(await page.getByText('Available now', { exact: true }).count(), 0);
-  await page.getByText(/tuner and note recognition[\s\S]*only after you press Start/).waitFor();
+  assert.match(
+    await page.locator('.page-heading p').innerText(),
+    /tuner and note recognition[\\s\\S]*only after you press Start/
+  );
 
   // Microphone tools explain capture and permission before any Start action.
   await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
@@ -432,6 +448,12 @@ try {
     .getByText(/only after you press Start tuner/)
     .waitFor();
   await page.getByRole('button', { name: 'Start tuner' }).waitFor();
+  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
+    0,
+    'Opening the tuner must not request microphone access'
+  );
   await page.goto(`${origin}/tools/note-recognition`, { waitUntil: 'networkidle' });
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   await page
@@ -439,6 +461,12 @@ try {
     .getByText(/only after you press Start exercise/)
     .waitFor();
   await page.getByRole('button', { name: 'Start exercise' }).waitFor();
+  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
+    0,
+    'Opening note recognition must not request microphone access'
+  );
 
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page
