@@ -313,7 +313,7 @@ try {
     waitUntil: 'networkidle'
   });
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
-  await page.getByText(progressLabel).waitFor();
+  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   assert.match(page.url(), /y1-w02-lesson/);
