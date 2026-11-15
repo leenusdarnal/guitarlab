@@ -66,7 +66,8 @@ Priority definitions: **P1** = learner-critical or an accessibility barrier; **P
 |---|---|
 | PR | [#138 — feat(ui): make lessons easy to find and navigate](https://github.com/leenusdarnal/guitarlab/pull/138) |
 | Branch | feat/ui-ux-lesson-discovery |
-| UI code head exercised by the failing check | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
+| Previous UI code head with overflow | 214f1f4fd67755ea11093f5fc1092ccc827679e4 |
+| Responsive overflow fix commit | ca0059cbcc79e6dca761165788ffcd19fda0bbbb |
 | Base | main at 555b27c1ba230a87a59e4d75c5f7348127f8fd28 |
 | PR state | Open; not merged |
 | CI run checked | [GuitarLab CI run 43693912725](https://github.com/leenusdarnal/guitarlab/actions/runs/43693912725) |
@@ -74,6 +75,7 @@ Priority definitions: **P1** = learner-critical or an accessibility barrier; **P
 | Blocking failure | /learn has 359px content width at a 320px viewport in dark theme; test location: scripts/accessibility-browser-acceptance.mjs, line 238 |
 | Tracker commit | 72bb04e0c39ecd27f0b65ce1c1fa950e24c9ae24 |
 | CI for tracker commit | [GuitarLab CI run 43699096684](https://github.com/leenusdarnal/guitarlab/actions/runs/43699096684) was in progress at the time this tracker was updated; do not treat it as passed |
+| Fix validation | CI triggered by commit `ca0059c`; pending at time of this update |
 
 The current PR already introduces a searchable lesson finder, route and duration filters, no-results recovery, a route directory, a dashboard browse action, shared navigation on secondary routes, reader section shortcuts and learner-facing lesson summary information.
 
@@ -90,7 +92,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-01 — Make every lesson easy to find
 
 **Priority:** P1  
-**Status:** IN PROGRESS — PR #138; BLOCKED by 320px overflow  
+**Status:** IN PROGRESS — PR #138; responsive overflow fix committed, awaiting CI verification  
 **Depends on:** None  
 **Related findings:** lesson discovery, curriculum navigation, X2, C1/C2  
 **Implementation:** [PR #138](https://github.com/leenusdarnal/guitarlab/pull/138)
@@ -100,7 +102,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Add visible result count, progressive result loading and no-results recovery.
 - [x] Separate route exploration from the lesson results.
 - [x] Add a prominent dashboard entry point to browse all lessons.
-- [ ] Fix the 320px /learn horizontal overflow without hiding or clipping meaningful content and without weakening the test.
+- [x] Fix the narrow-screen route-card footer wrapping that caused the 320px /learn horizontal overflow; CI must still confirm the fix.
 - [ ] Re-run the full CI suite, including axe and responsive browser acceptance, on the final PR head.
 - [ ] Verify that search can find lessons by title, focus/topic, checkpoint, route and stage.
 - [ ] Verify all 152 lessons remain available in the correct six routes and original order.
@@ -395,3 +397,4 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 | Date | Change |
 |---|---|
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
+| 2026-11-15 | Committed a narrow-screen lesson-catalogue footer wrapping fix after CI identified /learn overflow at 320px; validation remains pending. |
