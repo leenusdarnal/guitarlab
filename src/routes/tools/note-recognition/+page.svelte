@@ -204,6 +204,7 @@
         <div class="target-note">Well played.</div>
         <h2 id="exercise-title">All six strings checked.</h2>
         <p>You matched {correctCount} of {targets.length} target notes.</p>
+        <p>First-try matches: {firstTryCorrectCount} of {targets.length}. Total detected attempts: {totalAttemptCount}.</p>
         <button type="button" class="primary-button" onclick={restartExercise}>Play again</button>
       </div>
     {:else if target}
@@ -224,12 +225,15 @@
           <p>The next round will listen when the sound has settled.</p>
         {:else if roundState === 'listening'}
           <strong>Listening for {target.noteName}…</strong>
-          <p>{detectedNote ? `Hearing ${detectedNote} · confidence ${Math.round((confidence ?? 0) * 100)}%` : 'Pluck the open string and hold the note.'}</p>
+          <p>{detectedNote ? `A stable ${detectedNote} is coming through. Keep playing for ${target.noteName}.` : 'Pluck the open string and hold the note.'}</p>
         {:else}
           <strong>Ready when you are.</strong>
           <p>Start the exercise to enable microphone-based note checking.</p>
         {/if}
       </div>
+      {#if roundState !== 'correct'}
+        <p class="attempt-count">Attempts for this note: {attemptsForRound}</p>
+      {/if}
       {#if roundState === 'correct'}
         <button type="button" class="primary-button" onclick={nextNote}>Next note</button>
       {/if}
@@ -285,9 +289,10 @@
   .feedback strong { font-size: 13px; }
   .feedback p, .result-state p { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
   .positive { color: var(--success); }
+  .attempt-count { margin: 10px 0 0; color: var(--muted); font-size: 11px; text-align: center; font-variant-numeric: tabular-nums; }
   .caution { color: var(--warning); }
   .controls { display: grid; justify-items: center; gap: 10px; margin-top: 18px; }
-  .primary-button, .secondary-button { min-height: 44px; padding: 11px 18px; border: 1px solid var(--primary); border-radius: 10px; background: var(--primary); color: var(--primary-ink); font-size: 12px; font-weight: 750; cursor: pointer; }
+  .primary-button, .secondary-button { min-height: 48px; padding: 11px 18px; border: 1px solid var(--primary); border-radius: 10px; background: var(--primary); color: var(--primary-ink); font-size: 12px; font-weight: 750; cursor: pointer; }
   .secondary-button { border-color: var(--border); background: var(--surface-raised); color: var(--text); }
   button:disabled { cursor: wait; opacity: .6; }
   .capture-state { display: flex; align-items: center; gap: 7px; }
