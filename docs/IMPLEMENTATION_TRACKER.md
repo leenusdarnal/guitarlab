@@ -11,8 +11,8 @@ GitHub Issues remain the execution records. A task is complete only when its cod
 - Verified current main includes PR #132 merge commit c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294. Issue #69 is closed as completed after its acceptance checklist was reconciled to merged evidence.
 - PR #132 extended exact expected-versus-selected response contrasts across all 13 interval classes and all 12 alternate choices for v2 and v3; it preserves v1 compatibility and keeps instruments/scope versions separate. Full application/curriculum and Node.js 26 PR CI passed before merge.
 - PR #131 is merged as b34578c4c295e83c5fc95e5350a92d3f664a398e; Issue #130 is closed. PRs #127–#129 and Issue #17 are complete.
-- **Current P3 PR:** [#133](https://github.com/leenusdarnal/guitarlab/pull/133) adds privacy-safe optional recording-condition dimensions and grouped local WAV metrics. The current branch feat/audio-corpus-dimension-reports passed Node.js 26 compatibility and application/curriculum CI run [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245).
-- PR #133's tests use synthetic WAV fixtures only. The real-guitar corpus and physical-device matrix remain Not run until consented recordings and actual hardware/browser combinations are available.
+- **Current P3 PR:** [#134](https://github.com/leenusdarnal/guitarlab/pull/134) adds privacy-safe optional recording-condition dimensions and grouped local WAV metrics. The current branch feat/audio-corpus-dimension-reports-main132 passed Node.js 26 compatibility and application/curriculum CI run [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245).
+- PR #134's tests use synthetic WAV fixtures only. The real-guitar corpus and physical-device matrix remain Not run until consented recordings and actual hardware/browser combinations are available.
 - Issue #89 remains open for those physical measurements; Issues #9/#10 remain open for device-level IndexedDB/offline and backup/restore QA; Issue #18 remains open for release hardening.
 - Issue #5 remains open until both controlled failure-injection and recovery runs are actually dispatched and their run URLs recorded. Issue #3 remains open pending explicit production-owner decisions; no production resource or deployment is authorized.
 
@@ -45,11 +45,11 @@ Independent implementation branches may be developed in parallel, but merges rem
 | Merged 12 | [#129](https://github.com/leenusdarnal/guitarlab/pull/129) | P2 / #17 | Current-content provenance inventory and future per-asset rights gate | Merged; required CI passed; Issue #17 closed |
 | Merged 13 | [#131](https://github.com/leenusdarnal/guitarlab/pull/131) | P2 follow-up / #130 | Per-interval C3–B4 root cycles, C3–B5 bounds, interval instrument v3 and historical v2 separation | Merged as b34578c4c295e83c5fc95e5350a92d3f664a398e; full PR CI and Node.js 26 passed; Issue #130 closed |
 | Merged 14 | [#132](https://github.com/leenusdarnal/guitarlab/pull/132) | P1 / #69 | Extend explicit expected-versus-selected interval contrasts to all 13-class v2/v3 instruments; preserve v1 | Merged as c4c9f23c93a4a1d5ee1c42ff584af63fee3ac294; full application/curriculum and Node.js 26 CI passed; Issue #69 closed |
-| Current | [#133](https://github.com/leenusdarnal/guitarlab/pull/133) | P3 / #89 | Privacy-safe per-condition breakdowns for local WAV evaluator; preserve legacy manifests; synthetic CLI tests only | Open; application/curriculum and Node.js 26 CI run #43684634245 passed |
+| Current | [#134](https://github.com/leenusdarnal/guitarlab/pull/134) | P3 / #89 | Privacy-safe per-condition breakdowns for local WAV evaluator; preserve legacy manifests; synthetic CLI tests only | Open; application/curriculum and Node.js 26 CI run #43684634245 passed |
 
-**Remaining sequence:** merge PR #133 only after the exact current head and all required checks are verified. Then resume Issue #89's real-guitar corpus and physical browser/device matrix using real consented hardware evidence. Issues #9/#10 continue for device-level storage and backup/restore; Issue #18 remains the release-hardening gate.
+**Remaining sequence:** merge PR #134 only after the exact current head and all required checks are verified. Then resume Issue #89's real-guitar corpus and physical browser/device matrix using real consented hardware evidence. Issues #9/#10 continue for device-level storage and backup/restore; Issue #18 remains the release-hardening gate.
 
-**Recent CI evidence:** PR #131 full workflow [#43683213960](https://github.com/leenusdarnal/guitarlab/actions/runs/43683213960) passed; PR #132 required workflow [#43684130734](https://github.com/leenusdarnal/guitarlab/actions/runs/43684130734) passed; PR #133 workflow [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245) passed.
+**Recent CI evidence:** PR #131 full workflow [#43683213960](https://github.com/leenusdarnal/guitarlab/actions/runs/43683213960) passed; PR #132 required workflow [#43684130734](https://github.com/leenusdarnal/guitarlab/actions/runs/43684130734) passed; PR #134 workflow [#43684634245](https://github.com/leenusdarnal/guitarlab/actions/runs/43684634245) passed.
 
 **Honest completion rule:** physical-device/recording acceptance, manual accessibility/privacy review, controlled workflow dispatch and production approval remain open until their evidence exists. Synthetic/mock tests are not hardware sign-off. Production resources and deployment require separate explicit approval.
 
@@ -168,7 +168,7 @@ Independent implementation branches may be developed in parallel, but merges rem
 
 ## Immediate next actions
 
-1. Merge PR #133 after verifying its latest exact head, clean review state and required application/curriculum plus Node.js 26 checks.
+1. Merge PR #134 after verifying its latest exact head, clean review state and required application/curriculum plus Node.js 26 checks.
 2. Update Issue #89 with actual corpus evidence only after consented real-guitar recordings and ground-truth frequencies are measured; keep absent hardware rows marked not run.
 3. Complete Issues #9/#10 physical-device IndexedDB/offline and backup/restore QA; synthetic CI is not device sign-off.
 4. Complete Issue #18's manual release-hardening gates and reviewer evidence.
