@@ -85,6 +85,7 @@
   async function startTuner() {
     if (isStarting || isRunning) return;
     errorMessage = '';
+    screenReaderMessage = 'Microphone starting.';
     result = emptyResult;
     tracker.reset();
     isStarting = true;
@@ -123,6 +124,7 @@
     isStarting = false;
     tracker.reset();
     result = emptyResult;
+    screenReaderMessage = 'Tuner stopped.';
     if (activeMicrophone) await activeMicrophone.dispose();
   }
 
