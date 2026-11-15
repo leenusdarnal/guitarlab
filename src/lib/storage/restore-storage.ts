@@ -1,3 +1,4 @@
+import type { SongProjectRecord } from '../domain/repertoire/song-project';
 import { createEmptyLocalLearnerProfile, openLocalDatabase } from './indexeddb';
 import {
   createRestorePreview,
@@ -27,7 +28,8 @@ const storeNames = [
   'skillMastery',
   'practiceSessions',
   'practiceEvidence',
-  'adaptiveRecommendationFeedback'
+  'adaptiveRecommendationFeedback',
+  'songProjects'
 ] as const;
 
 type ActiveMetadata = { key: string; value: string };
@@ -79,7 +81,8 @@ async function readActiveRecords(
       mastery,
       sessions,
       evidence,
-      adaptiveFeedback
+      adaptiveFeedback,
+      songProjects
     ] = await Promise.all([
       requestResult<LearnerProfileRecord[]>(
         transaction.objectStore('learnerProfiles').getAll()
@@ -104,6 +107,9 @@ async function readActiveRecords(
       ),
       requestResult<AdaptiveRecommendationFeedbackRecord[]>(
         transaction.objectStore('adaptiveRecommendationFeedback').getAll()
+      ),
+      requestResult<SongProjectRecord[]>(
+        transaction.objectStore('songProjects').getAll()
       )
     ]);
     await completed;
@@ -130,7 +136,8 @@ async function readActiveRecords(
       skillMastery: owned(mastery),
       practiceSessions: owned(sessions),
       practiceEvidence: owned(evidence),
-      adaptiveRecommendationFeedback: owned(adaptiveFeedback)
+      adaptiveRecommendationFeedback: owned(adaptiveFeedback),
+      songProjects: owned(songProjects)
     };
   } catch (error) {
     await completed.catch(() => undefined);
@@ -190,6 +197,7 @@ export async function restoreLearnerBackup(
     const adaptiveFeedbackStore = transaction.objectStore(
       'adaptiveRecommendationFeedback'
     );
+    const songProjectsStore = transaction.objectStore('songProjects');
 
     try {
       const active = await requestResult<ActiveMetadata | undefined>(
@@ -203,7 +211,8 @@ export async function restoreLearnerBackup(
         mastery,
         sessions,
         evidence,
-        adaptiveFeedback
+        adaptiveFeedback,
+        songProjects
       ] = await Promise.all([
         requestResult<LearnerProfileRecord[]>(profileStore.getAll()),
         requestResult<LessonProgressRecord[]>(progressStore.getAll()),
@@ -214,7 +223,8 @@ export async function restoreLearnerBackup(
         requestResult<PracticeEvidenceRecord[]>(evidenceStore.getAll()),
         requestResult<AdaptiveRecommendationFeedbackRecord[]>(
           adaptiveFeedbackStore.getAll()
-        )
+        ),
+        requestResult<SongProjectRecord[]>(songProjectsStore.getAll())
       ]);
 
       const replacedLearnerIds = new Set(
@@ -269,6 +279,11 @@ export async function restoreLearnerBackup(
           await requestResult(adaptiveFeedbackStore.delete(record.id));
         }
       }
+      for (const record of songProjects) {
+        if (replacedLearnerIds.has(record.learnerId)) {
+          await requestResult(songProjectsStore.delete(record.id));
+        }
+      }
 
       await requestResult(profileStore.put(backup.records.profile));
       for (const record of backup.records.lessonProgress) {
@@ -292,6 +307,9 @@ export async function restoreLearnerBackup(
       for (const record of backup.records.adaptiveRecommendationFeedback ??
         []) {
         await requestResult(adaptiveFeedbackStore.put(record));
+      }
+      for (const record of backup.records.songProjects ?? []) {
+        await requestResult(songProjectsStore.put(record));
       }
       await requestResult(
         metadataStore.put({ key: 'activeLearnerId', value: backup.learnerId })
@@ -334,6 +352,7 @@ export async function resetActiveLearnerData(
     const adaptiveFeedback = transaction.objectStore(
       'adaptiveRecommendationFeedback'
     );
+    const songProjects = transaction.objectStore('songProjects');
 
     try {
       const active = await requestResult<ActiveMetadata | undefined>(
@@ -348,7 +367,8 @@ export async function resetActiveLearnerData(
           masteryRows,
           practiceRows,
           evidenceRows,
-          adaptiveFeedbackRows
+          adaptiveFeedbackRows,
+          songProjectRows
         ] = await Promise.all([
           requestResult<LessonProgressRecord[]>(progress.getAll()),
           requestResult<LessonCompletionEventRecord[]>(events.getAll()),
@@ -358,7 +378,8 @@ export async function resetActiveLearnerData(
           requestResult<PracticeEvidenceRecord[]>(evidence.getAll()),
           requestResult<AdaptiveRecommendationFeedbackRecord[]>(
             adaptiveFeedback.getAll()
-          )
+          ),
+          requestResult<SongProjectRecord[]>(songProjects.getAll())
         ]);
 
         for (const record of progressRows) {
@@ -396,6 +417,10 @@ export async function resetActiveLearnerData(
         for (const record of adaptiveFeedbackRows) {
           if (record.learnerId === active.value)
             await requestResult(adaptiveFeedback.delete(record.id));
+        }
+        for (const record of songProjectRows) {
+          if (record.learnerId === active.value)
+            await requestResult(songProjects.delete(record.id));
         }
         await requestResult(profiles.delete(active.value));
       }

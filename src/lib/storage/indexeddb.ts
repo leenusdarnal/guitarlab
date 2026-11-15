@@ -1,4 +1,8 @@
 import {
+  songProjectRecordSchema,
+  type SongProjectRecord
+} from '../domain/repertoire/song-project';
+import {
   createEmptyProfilePreferences,
   profilePreferencesSchema,
   type ProfilePreferences
@@ -38,12 +42,13 @@ import type {
   LessonProgressRepository,
   PracticeSessionRecord,
   PracticeSessionRepository,
+  SongProjectRepository,
   SkillMasteryRecord,
   SkillMasteryRepository
 } from '../repositories/contracts';
 
 export const LOCAL_DATABASE_NAME = 'guitarlab-local';
-export const LOCAL_DATABASE_VERSION = 6;
+export const LOCAL_DATABASE_VERSION = 7;
 
 const stores = {
   metadata: 'metadata',
@@ -54,7 +59,8 @@ const stores = {
   mastery: 'skillMastery',
   practiceSessions: 'practiceSessions',
   practiceEvidence: 'practiceEvidence',
-  adaptiveRecommendationFeedback: 'adaptiveRecommendationFeedback'
+  adaptiveRecommendationFeedback: 'adaptiveRecommendationFeedback',
+  songProjects: 'songProjects'
 } as const;
 
 type MetadataRecord = { key: string; value: string };
@@ -229,6 +235,13 @@ export function openLocalDatabase(
           'curriculumReleaseId'
         ]);
       }
+      if (!database.objectStoreNames.contains(stores.songProjects)) {
+        const projects = database.createObjectStore(stores.songProjects, {
+          keyPath: 'id'
+        });
+        projects.createIndex('byLearnerId', 'learnerId');
+        projects.createIndex('byLearnerUpdatedAt', ['learnerId', 'updatedAt']);
+      }
     };
 
     request.onsuccess = () => {
@@ -314,6 +327,7 @@ export type IndexedDbRepositories = {
   practice: PracticeSessionRepository;
   practiceEvidence: PracticeEvidenceRepository;
   adaptiveRecommendationFeedback: AdaptiveRecommendationFeedbackRepository;
+  songProjects: SongProjectRepository;
 };
 
 /** IndexedDB adapters implement the same ports used by the application layer. */
@@ -672,6 +686,93 @@ export function createIndexedDbRepositories(
         )
     };
 
+  const songProjects: SongProjectRepository = {
+    create: async (untrustedRecord) => {
+      const record = songProjectRecordSchema.parse(untrustedRecord);
+      await inTransaction(
+        database,
+        [stores.songProjects, stores.profiles],
+        'readwrite',
+        async (tx) => {
+          const owner = await requestResult<LearnerProfileRecord | undefined>(
+            tx.objectStore(stores.profiles).get(record.learnerId)
+          );
+          if (!owner) {
+            throw new Error(
+              'A song project must belong to a saved learner profile.'
+            );
+          }
+          await requestResult(tx.objectStore(stores.songProjects).add(record));
+        }
+      );
+    },
+    findById: (learnerId, projectId) =>
+      inTransaction(database, [stores.songProjects], 'readonly', async (tx) => {
+        const record = await requestResult<SongProjectRecord | undefined>(
+          tx.objectStore(stores.songProjects).get(projectId)
+        );
+        return record?.learnerId === learnerId ? record : null;
+      }),
+    listByLearner: (learnerId) =>
+      inTransaction(database, [stores.songProjects], 'readonly', async (tx) => {
+        const records = await requestResult<SongProjectRecord[]>(
+          tx
+            .objectStore(stores.songProjects)
+            .index('byLearnerId')
+            .getAll(learnerId)
+        );
+        return records
+          .filter((record) => record.learnerId === learnerId)
+          .sort(
+            (left, right) =>
+              right.updatedAt - left.updatedAt ||
+              left.title.localeCompare(right.title)
+          );
+      }),
+    update: async (untrustedRecord, expectedUpdatedAt) => {
+      const record = songProjectRecordSchema.parse(untrustedRecord);
+      return inTransaction(
+        database,
+        [stores.songProjects, stores.profiles],
+        'readwrite',
+        async (tx) => {
+          const owner = await requestResult<LearnerProfileRecord | undefined>(
+            tx.objectStore(stores.profiles).get(record.learnerId)
+          );
+          if (!owner) return false;
+          const store = tx.objectStore(stores.songProjects);
+          const current = await requestResult<SongProjectRecord | undefined>(
+            store.get(record.id)
+          );
+          if (
+            !current ||
+            current.learnerId !== record.learnerId ||
+            current.updatedAt !== expectedUpdatedAt
+          ) {
+            return false;
+          }
+          await requestResult(store.put(record));
+          return true;
+        }
+      );
+    },
+    delete: (learnerId, projectId) =>
+      inTransaction(
+        database,
+        [stores.songProjects],
+        'readwrite',
+        async (tx) => {
+          const store = tx.objectStore(stores.songProjects);
+          const current = await requestResult<SongProjectRecord | undefined>(
+            store.get(projectId)
+          );
+          if (!current || current.learnerId !== learnerId) return false;
+          await requestResult(store.delete(projectId));
+          return true;
+        }
+      )
+  };
+
   return {
     profiles,
     progress,
@@ -679,8 +780,93 @@ export function createIndexedDbRepositories(
     mastery,
     practice,
     practiceEvidence,
-    adaptiveRecommendationFeedback
+    adaptiveRecommendationFeedback,
+    songProjects
   };
+}
+
+export type CreateActiveSongProjectInput = Pick<
+  SongProjectRecord,
+  'title' | 'artist' | 'sourceType' | 'sourceUrl' | 'notes' | 'sections'
+>;
+
+/** Read only the active learner's locally stored song projects. */
+export async function loadActiveSongProjects(): Promise<SongProjectRecord[]> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    return await createIndexedDbRepositories(
+      database
+    ).songProjects.listByLearner(profile.id);
+  } finally {
+    database.close();
+  }
+}
+
+/** Create a project for the current active learner; no material is fetched or uploaded. */
+export async function createActiveSongProject(
+  input: CreateActiveSongProjectInput
+): Promise<SongProjectRecord> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    const now = systemRuntime.now();
+    const record = songProjectRecordSchema.parse({
+      ...input,
+      id: systemRuntime.newId(),
+      learnerId: profile.id,
+      createdAt: now,
+      updatedAt: now
+    });
+    await createIndexedDbRepositories(database).songProjects.create(record);
+    return record;
+  } finally {
+    database.close();
+  }
+}
+
+/** Compare-and-set project editing protects against another tab overwriting newer notes. */
+export async function saveActiveSongProject(
+  record: SongProjectRecord,
+  expectedUpdatedAt: number
+): Promise<boolean> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    if (record.learnerId !== profile.id) {
+      throw new Error(
+        'The active learner changed. Reload before saving this project.'
+      );
+    }
+    // Keep compare-and-set revisions strictly increasing, even for rapid saves
+    // that happen inside the same millisecond.
+    const validated = songProjectRecordSchema.parse({
+      ...record,
+      updatedAt: Math.max(systemRuntime.now(), expectedUpdatedAt + 1)
+    });
+    return await createIndexedDbRepositories(database).songProjects.update(
+      validated,
+      expectedUpdatedAt
+    );
+  } finally {
+    database.close();
+  }
+}
+
+/** Delete only a project belonging to the current active learner. */
+export async function deleteActiveSongProject(
+  projectId: string
+): Promise<boolean> {
+  const database = await openLocalDatabase();
+  try {
+    const profile = await ensureActiveLearnerProfile(database);
+    return await createIndexedDbRepositories(database).songProjects.delete(
+      profile.id,
+      projectId
+    );
+  } finally {
+    database.close();
+  }
 }
 
 /** Entry point used only by client-side lifecycle hooks and user actions. */

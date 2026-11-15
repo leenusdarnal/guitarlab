@@ -345,6 +345,52 @@ describe('learner backup contract', () => {
     expect(parseLearnerBackup(makeBackup())).toMatchObject({ success: true });
   });
 
+  it('round-trips learner-owned song projects and preserves legacy backup compatibility', () => {
+    const backup = makeBackup();
+    const project = {
+      id: '123e4567-e89b-42d3-a456-426614174000',
+      learnerId,
+      title: 'My arrangement',
+      artist: null,
+      sourceType: 'original' as const,
+      sourceUrl: null,
+      notes: 'Keep the strumming relaxed.',
+      sections: [
+        {
+          id: '223e4567-e89b-42d3-a456-426614174000',
+          title: 'Verse',
+          order: 0,
+          notes: 'Bass note first.',
+          bookmark: '0:42',
+          practiceTarget: 'Make four clean chord changes.'
+        }
+      ],
+      createdAt: 100,
+      updatedAt: 200
+    };
+    backup.records.songProjects = [project];
+    expect(parseLearnerBackupJson(JSON.stringify(backup))).toMatchObject({
+      success: true,
+      data: { records: { songProjects: [project] } }
+    });
+
+    const foreign = structuredClone(backup);
+    foreign.records.songProjects![0].learnerId =
+      'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    expect(parseLearnerBackup(foreign)).toMatchObject({ success: false });
+
+    const duplicate = structuredClone(backup);
+    duplicate.records.songProjects!.push(project);
+    expect(parseLearnerBackup(duplicate)).toMatchObject({
+      success: false,
+      message: expect.stringContaining('duplicate')
+    });
+
+    // Backups created before song projects remain valid version-1 files.
+    const legacy = makeBackup();
+    expect(parseLearnerBackup(legacy)).toMatchObject({ success: true });
+  });
+
   it('rejects malformed JSON, unsupported versions and oversized files', () => {
     expect(parseLearnerBackupJson('{')).toMatchObject({
       success: false,

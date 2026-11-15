@@ -35,6 +35,51 @@ describe('ear-training exercise model', () => {
     );
   });
 
+  it('creates a three-chord I–IV–I or I–V–I listening sequence', () => {
+    const subdominant = createEarTrainingExercise('chord-movement', 0);
+    const dominant = createEarTrainingExercise('chord-movement', 1);
+
+    expect(subdominant.answer).toBe('subdominant');
+    expect(dominant.answer).toBe('dominant');
+    expect(subdominant.tones).toHaveLength(9);
+    expect(dominant.tones).toHaveLength(9);
+    expect([
+      ...new Set(subdominant.tones.map((tone) => tone.startMilliseconds))
+    ]).toEqual([0, 900, 1_800]);
+    expect(
+      subdominant.tones
+        .filter((tone) => tone.startMilliseconds === 0)
+        .map((tone) => tone.frequencyHz)
+        .sort((left, right) => left - right)
+    ).toEqual(
+      [60, 64, 67]
+        .map((midi) => 440 * 2 ** ((midi - 69) / 12))
+        .sort((left, right) => left - right)
+    );
+    const middleSubdominant = subdominant.tones
+      .filter((tone) => tone.startMilliseconds === 900)
+      .map((tone) => tone.frequencyHz)
+      .sort((left, right) => left - right);
+    const middleDominant = dominant.tones
+      .filter((tone) => tone.startMilliseconds === 900)
+      .map((tone) => tone.frequencyHz)
+      .sort((left, right) => left - right);
+    expect(middleSubdominant).toEqual(
+      [65, 69, 72]
+        .map((midi) => 440 * 2 ** ((midi - 69) / 12))
+        .sort((left, right) => left - right)
+    );
+    expect(middleDominant).toEqual(
+      [67, 71, 74]
+        .map((midi) => 440 * 2 ** ((midi - 69) / 12))
+        .sort((left, right) => left - right)
+    );
+    expect(subdominant.choices.map((choice) => choice.value)).toEqual([
+      'subdominant',
+      'dominant'
+    ]);
+  });
+
   it('creates rising, falling and level melodic contours', () => {
     const rising = createEarTrainingExercise('contour', 0);
     const falling = createEarTrainingExercise('contour', 1);

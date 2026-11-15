@@ -23,6 +23,19 @@
 
   <section class="tool-list" aria-label="GuitarLab tools">
     <article class="tool-row available">
+      <div class="tool-symbol" aria-hidden="true">♫</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Notes · Sections · Practice targets</span></div>
+        <h2>Song projects</h2>
+        <p>
+          Organise your own song notes, section bookmarks and practice targets
+          locally, with learner backup and restore support.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/repertoire')}>Open repertoire <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="tool-row available">
       <div class="tool-symbol" aria-hidden="true">♬</div>
       <div class="tool-copy">
         <div class="tool-meta"><span class="available-label">Available now</span><span>Notes · Tuning · Fretboard</span></div>
@@ -85,6 +98,19 @@
         </p>
       </div>
       <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="tool-row available">
+      <div class="tool-symbol" aria-hidden="true">♮</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span class="available-label">Available now</span><span>Harmony · Chords · Musical function</span></div>
+        <h2>Theory recall</h2>
+        <p>
+          Connect chord names, locally synthesized triad sounds and their role
+          in a key through short name, sound and use prompts.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/theory-recall')}>Open theory recall <span aria-hidden="true">→</span></a>
     </article>
 
     <article class="tool-row available">
