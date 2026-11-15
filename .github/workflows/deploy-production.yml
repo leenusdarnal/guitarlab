@@ -174,7 +174,7 @@ jobs:
             throw new Error('Wrangler structured output file is missing.');
           }
           const events = fs.readFileSync(path, 'utf8')
-            .split(/\\r?\\n/)
+            .split(/\r?\n/)
             .filter(Boolean)
             .map((line) => JSON.parse(line));
           const deployment = events
@@ -203,7 +203,7 @@ jobs:
           };
           fs.writeFileSync(
             process.env.RUNNER_TEMP + '/guitarlab-production-deployment.json',
-            JSON.stringify(evidence, null, 2) + '\\n'
+            JSON.stringify(evidence, null, 2) + '\n'
           );
           console.log(JSON.stringify({
             worker: evidence.worker,
