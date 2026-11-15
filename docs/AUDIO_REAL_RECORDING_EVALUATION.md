@@ -63,7 +63,7 @@ The manifest, recordings, and report should remain on the evaluator's machine. D
 - **False-note rate:** proportion of windows in a silence/noise segment where a note was detected.
 - **Note-on latency:** first stable tracker note-on time minus the supplied expected onset time. This is omitted when no onset annotation is provided or no note-on occurs.
 
-The report schema is version 2. Optional `dimensions` add privacy-safe breakdowns without asking the evaluator to emit instrument serial numbers, device models, browser versions, file paths or free-form personal metadata. Only these categorical values are accepted:
+The report schema is version 2. Optional `dimensions` add allow-listed breakdowns without asking the evaluator to emit instrument serial numbers, device models, browser versions, file paths or free-form personal metadata. Segment IDs are echoed verbatim to preserve per-segment traceability: the CLI limits them to a bounded ASCII token format, but cannot determine whether a valid token contains identifying information. Use opaque labels such as `segment-01`; never put names, serial numbers, device models, locations or other personal/device identifiers in an ID. Only these categorical values are accepted:
 
 | Dimension | Allowed values |
 | --- | --- |
