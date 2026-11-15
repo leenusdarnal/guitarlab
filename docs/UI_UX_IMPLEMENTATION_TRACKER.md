@@ -177,7 +177,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-05 — Make the Today dashboard actionable
 
 **Priority:** P1  
-**Status:** READY  
+**Status:** IN PROGRESS — fretboard inlays and structure, guided note-finding, note playback and chord-box diagrams implemented; automated validation pending  
 **Depends on:** UX-01; coordinate with UX-06  
 **Related findings:** D1, D2, D3, D4, D6, D7
 
@@ -263,15 +263,15 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 **Depends on:** UX-04 and existing music-tool model  
 **Related findings:** F1–F4, CH1–CH4
 
-- [ ] Replace the tiny fretboard button grid with a responsive SVG or equivalent semantic fretboard showing strings, fret wires and standard inlay landmarks.
-- [ ] Reflow the fretboard for narrow phones without horizontal page scrolling; keep labels legible and show detail on selection where necessary.
-- [ ] Move secondary fretboard settings below or into a compact control area so the instrument diagram appears first.
-- [ ] Add user-initiated tap-to-hear note playback with correct pitch/tuning mapping and clean audio-session release.
-- [ ] Turn “Find a note” into a prompted exercise with found-count, hints/reveal and first-attempt tracking.
-- [ ] Replace the chord six-column status list with a standard chord-box diagram using strings, frets, dots and barre lines.
-- [ ] Keep the current useful textual chord description available to screen readers.
+- [x] Replace the tiny fretboard grid presentation with an instrument-like fretboard: string lines, fret wires, a nut and standard single/double inlay landmarks; keep the note positions keyboard operable.
+- [x] Keep the 12-fret learning view touch-sized on phones and contain the 24-fret view in its own horizontal scroller; verify no page-level overflow in browser acceptance.
+- [x] Move secondary fretboard settings below the instrument diagram.
+- [x] Add an explicit Hear note action using the selected fretboard pitch; playback does not begin until the learner activates it.
+- [x] Turn Find a note into a prompted exercise with found count, hints, reveal, total attempts and first-try scoring.
+- [x] Replace the six-column string list with a chord-box diagram showing six strings, fret wires, nut, finger dots, open/muted markers and barre shapes.
+- [x] Preserve the chord's written description and expose string/fret/finger details through the diagram's accessible name.
 - [ ] Add clear tap/strum audio only after playback and audio-lifecycle acceptance are defined.
-- [ ] Make chord drill actions larger and reachable; simplify selection of the small chord set without hiding the selected chord state.
+- [x] Increase drill action hit areas to 48px and retain the selected chord label and native chord selector.
 - [ ] Add “Save to session” only through the existing observation/provenance model; do not silently convert drill actions into mastery.
 
 **Acceptance:** learners recognise the diagrams immediately, can use them on a phone without page overflow, and have equivalent text descriptions and predictable audio behaviour.
@@ -402,6 +402,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-15 | Started UX-09 diagram usability: instrument-like fretboard rendering, standard position inlays, mobile scrolling, guided note-finding and selected-pitch playback, conventional chord-box diagrams and larger chord drill controls. Automated validation pending. |
 | 2026-11-15 | Opened PR #141 for UX-02/03/04/07: unified dashboard and shared-shell System/Light/Dark preference, queued lesson progress writes with rapid-edit regression coverage, removed save-time focus-disrupting disabled states, and raised lesson instruction typography to 16–17px. Automated CI and manual acceptance remain pending. |
 | 2026-11-15 | Created the UI/UX implementation tracker from the advisory UX review, repository source audit, approved design direction and current PR #138/CI state. |
 | 2026-11-15 | UX-01 merged as PR #138 (`98c0f72`); final CI run #1349 passed. Finder/device/screen-reader manual acceptance remains open. |
