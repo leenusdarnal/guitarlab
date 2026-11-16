@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-13 — consistent icons across tools and route-level controls (`ux/13-consistent-route-icons`)
+**Active implementation:** UX-13 — layout-stable loading states and contextual recovery actions (`ux/13-loading-recovery-states`)
 
 ---
 
@@ -331,20 +331,24 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-13 — Finish lower-priority resilience and polish
 
 **Priority:** P3  
-**Status:** IN PROGRESS — dashboard and global navigation icons merged in PR #153; remaining tool and route-level controls are being migrated in `ux/13-consistent-route-icons`  
+**Status:** IN PROGRESS — shared SVG migration merged in PR #162; remaining UX-13 work is focused on loading stability and recoverable local-data failures in `ux/13-loading-recovery-states`  
 **Depends on:** UX-04  
 **Related findings:** X13–X15 and earlier-snapshot ear-training notes
 
 - [ ] Add layout-stable loading placeholders for large dashboard and progress surfaces where measured layout shift warrants it.
+  - [x] Reserve the Repertoire two-column workspace and Skills list/detail layout while local IndexedDB data loads; responsive skeletons preserve the expected desktop/mobile structure.
+  - [ ] Measure loading layout shift on the Today dashboard and other large progress surfaces before adding further placeholders.
 - [ ] Ensure recoverable errors have a retry action and a useful next destination.
   - [x] Application storage warnings can retry the local database probe and clear once storage recovers.
   - [x] Today dashboard IndexedDB load failures provide an in-place retry and a preferences destination; browser acceptance verifies recovery after storage becomes available.
   - [x] Skill map IndexedDB load failures provide an in-place retry and a direct route to browse lessons; browser acceptance verifies recovery.
+  - [x] Repertoire initial local-project load failure now offers an in-place retry and a return-to-Today destination; browser acceptance covers recovery after IndexedDB becomes available.
+  - [x] Practice history, active-session observations, adaptive suggestions and historical observations now use separate read-error states with context-specific retry actions; Practice history also offers a return-to-Today destination.
   - [ ] Audit remaining learner-facing recoverable errors and add context-specific retry/next actions.
-- [x] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
+- [x] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set (merged in PR #162).
   - [x] Replace the eight decorative Tools hub glyphs with a single local SVG icon component; the adjacent card headings provide the accessible names.
   - [x] Replace decorative pictograms in the Today sidebar and global mobile menu/navigation with the shared local SVG component; visible link text remains the accessible name.
-  - [x] Audit and replace navigation, action, search and backup glyphs across individual tool pages and route-level controls with the shared local SVG component; retain intentional musical notation such as open-string markers and accidentals.
+  - [x] Audit and replace navigation, action, search and backup glyphs across individual tool pages and route-level controls with the shared local SVG component; retain intentional musical notation such as open-string markers and accidentals (PR #162).
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
   - [x] Enable `viewport-fit=cover` and apply safe-area insets to the sticky global navigation and lesson outline offsets.
   - [x] Add `svh` and `dvh` fallbacks for the app body's minimum height and test it against changing mobile viewport heights.
