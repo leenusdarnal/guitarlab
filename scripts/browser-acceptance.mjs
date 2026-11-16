@@ -536,9 +536,7 @@ try {
   const repertoireRecovery = recoveryPage.locator('.load-error');
   await repertoireRecovery.waitFor();
   assert.equal(
-    await repertoireRecovery
-      .getByRole('button', { name: 'Try again' })
-      .count(),
+    await repertoireRecovery.getByRole('button', { name: 'Try again' }).count(),
     1,
     'Repertoire load failures must expose an in-place retry'
   );
@@ -552,9 +550,7 @@ try {
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(true)
   );
-  await repertoireRecovery
-    .getByRole('button', { name: 'Try again' })
-    .click();
+  await repertoireRecovery.getByRole('button', { name: 'Try again' }).click();
   await recoveryPage.locator('.workspace').waitFor();
   assert.equal(
     await recoveryPage.locator('.load-error').count(),
