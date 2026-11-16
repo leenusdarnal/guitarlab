@@ -319,6 +319,41 @@ try {
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
 
+      if (route === '/onboarding') {
+        const onboardingCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.intro, .custom-practice, .custom-practice-help, .preference-effect, .privacy-note'
+            )
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          onboardingCopySizes.length > 0 &&
+            onboardingCopySizes[0] >= 16 &&
+            onboardingCopySizes.every((fontSize) => fontSize >= 15),
+          'Onboarding explanations must use 16px body text and readable supporting text.'
+        );
+      }
+      if (route === '/settings/data') {
+        const settingsCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.intro, .section-copy, .backup-panel p, .reset-label, .privacy-note'
+            )
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          settingsCopySizes.length > 0 &&
+            settingsCopySizes.slice(0, 3).every((fontSize) => fontSize >= 16) &&
+            settingsCopySizes.every((fontSize) => fontSize >= 15),
+          'Backup, reset and privacy instructions must remain readable.'
+        );
+      }
+
       if (route === '/tools') {
         const smallestToolCopy = await page.evaluate(() =>
           Math.min(
