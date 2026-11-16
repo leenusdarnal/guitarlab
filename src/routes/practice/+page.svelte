@@ -614,7 +614,7 @@
 
         <section class="quick-log" aria-label="Quick practice observations">
           <h3>Quick log</h3>
-          <p>Record one attempt at a time. These notes do not grade you or change skill mastery.</p>
+          <p>Capture a quick note about an attempt while you practise.</p>
           <div class="quick-log-actions">
             <button type="button" class="quick-log-clean" onclick={() => void quickLogAttempt('clean')} disabled={evidenceSaving || saving}>
               + Clean attempt
@@ -634,9 +634,8 @@
             <span class="count">{activeEvidence.length} observations</span>
           </div>
           <p class="muted">
-            Record your own repetitions, clean repetitions, tempo and perceived
-            difficulty. These are separate observations, not an automatic
-            accuracy score or mastery result.
+            Add repetitions, clean repetitions, tempo or perceived difficulty when a
+            more detailed practice note will help you plan your next session.
           </p>
 
           {#if evidenceError}
@@ -1070,10 +1069,7 @@
         </ul>
       </details>
     {/if}
-    <p class="adaptive-footnote">
-      Your observations help guide practice; they are not automatic accuracy scores or mastery awards.
-    </p>
-  </section>
+    </section>
 
     <section class="history" id="practice-history" aria-labelledby="history-heading">
       <div class="history-heading">
@@ -1220,11 +1216,10 @@
   <aside class="principle">
     <strong>Practice time is not mastery.</strong>
     <p>
-      Active-time totals include only intervals between starting/resuming and
-      pausing/finishing. Repetitions, clean repetitions, tempo and difficulty
-      are learner-entered observations; the app does not infer accuracy or
-      award skill levels from time or speed alone. Review scheduling and
-      evidence-based mastery remain separate M7 steps.
+      Active time counts only the time between starting or resuming and pausing or
+      finishing. Repetition counts, clean repetitions, tempo and difficulty are
+      practice notes; they do not establish skill mastery. Skill states come from
+      separate assessments, not time spent practising.
     </p>
   </aside>
 </main>
@@ -1641,11 +1636,14 @@
   }
 
   .quick-log-actions .quick-log-clean {
-    border-color: var(--success, #28734d);
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 10%, var(--surface-raised));
   }
 
   .quick-log-actions .quick-log-correction {
-    border-color: var(--warning, #8a6500);
+    border-color: var(--border-strong);
+    background: var(--surface);
+    font-weight: 600;
   }
 
   .session-actions {
