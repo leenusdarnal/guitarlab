@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import { SvelteMap } from 'svelte/reactivity';
   import {
     createChordTransitionObservation,
@@ -188,7 +189,7 @@
 </svelte:head>
 
 <main class="chords-page">
-  <a class="back-link" href={resolve('/tools')}>← Tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · HARMONY</div>
