@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
 </script>
 
 <svelte:head>
@@ -28,7 +29,7 @@
     </header>
     <div class="tool-list">
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♬</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="fretboard" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Notes · Tuning · Fretboard</span></div>
         <h2>Fretboard explorer</h2>
@@ -40,7 +41,7 @@
       <a class="open-tool" href={resolve('/tools/fretboard')}>Open fretboard explorer <span aria-hidden="true">→</span></a>
     </article>
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">◇</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="chord" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Voicings · Clean changes</span></div>
         <h2>Chord library</h2>
@@ -52,7 +53,7 @@
       <a class="open-tool" href={resolve('/tools/chords')}>Open chord library <span aria-hidden="true">→</span></a>
     </article>
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♮</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="theory" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Harmony · Chords · Musical function</span></div>
         <h2>Theory recall</h2>
@@ -73,7 +74,7 @@
     </header>
     <div class="tool-list">
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♫</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="ear" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Listening · Pulse · Pitch · Intervals</span></div>
         <h2>Ear training</h2>
@@ -85,7 +86,7 @@
       <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <span aria-hidden="true">→</span></a>
     </article>
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♪</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="microphone" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Microphone · Open strings · Pitch</span></div>
         <h2>Note recognition</h2>
@@ -106,7 +107,7 @@
     </header>
     <div class="tool-list">
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">◷</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="metronome" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Tempo · Pulse · Reference tones</span></div>
         <h2>Metronome</h2>
@@ -118,7 +119,7 @@
       <a class="open-tool" href={resolve('/tools/metronome')}>Open metronome <span aria-hidden="true">→</span></a>
     </article>
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♯</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="tuner" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Chromatic · Microphone · Pitch</span></div>
         <h2>Chromatic tuner</h2>
@@ -139,7 +140,7 @@
     </header>
     <div class="tool-list">
     <article class="tool-row">
-      <div class="tool-symbol" aria-hidden="true">♫</div>
+      <div class="tool-symbol" aria-hidden="true"><Icon name="song" /></div>
       <div class="tool-copy">
         <div class="tool-meta"><span>Notes · Sections · Practice targets</span></div>
         <h2>Song projects</h2>
