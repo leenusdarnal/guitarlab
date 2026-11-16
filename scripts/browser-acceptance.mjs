@@ -495,6 +495,56 @@ try {
     .getByRole('button', { name: 'Try again' })
     .click();
   await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
+
+  // Practice history and Repertoire recover from a temporary local database outage.
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(false)
+  );
+  await recoveryPage.goto(origin + '/practice', { waitUntil: 'networkidle' });
+  const practiceHistoryRecovery = recoveryPage.locator('.recovery-message');
+  await practiceHistoryRecovery.waitFor();
+  assert.equal(
+    await practiceHistoryRecovery.getByRole('button', { name: 'Try again' }).count(),
+    1,
+    'Practice history failures must expose an in-place retry'
+  );
+  assert.equal(
+    await practiceHistoryRecovery.getByRole('link', { name: 'Return to Today' }).getAttribute('href'),
+    '/',
+    'Practice history failures must provide a useful next destination'
+  );
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
+  await practiceHistoryRecovery.getByRole('button', { name: 'Try again' }).click();
+  await practiceHistoryRecovery.waitFor({ state: 'detached' });
+
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(false)
+  );
+  await recoveryPage.goto(origin + '/repertoire', { waitUntil: 'networkidle' });
+  const repertoireRecovery = recoveryPage.locator('.load-error');
+  await repertoireRecovery.waitFor();
+  assert.equal(
+    await repertoireRecovery.getByRole('button', { name: 'Try again' }).count(),
+    1,
+    'Repertoire load failures must expose an in-place retry'
+  );
+  assert.equal(
+    await repertoireRecovery.getByRole('link', { name: 'Return to Today' }).getAttribute('href'),
+    '/',
+    'Repertoire load failures must provide a useful next destination'
+  );
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
+  await repertoireRecovery.getByRole('button', { name: 'Try again' }).click();
+  await recoveryPage.locator('.workspace').waitFor();
+  assert.equal(
+    await recoveryPage.locator('.load-error').count(),
+    0,
+    'A recovered local database must clear the Repertoire load error'
+  );
   await recoveryContext.close();
 
   // Saved theme preferences apply when a learner opens a nested route directly.
