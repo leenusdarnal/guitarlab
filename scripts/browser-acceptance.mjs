@@ -1537,6 +1537,43 @@ try {
   const authoredSessionLabel = await page
     .locator('.authored-session-link')
     .innerText();
+  assert.equal(
+    await page.locator('.principle').count(),
+    1,
+    'Practice Studio should keep one clear explanation of how time and observations relate to mastery.'
+  );
+  assert.equal(
+    await page.locator('.adaptive-footnote').count(),
+    0,
+    'Recommendation panels should not repeat the page-level mastery explanation.'
+  );
+  assert.doesNotMatch(
+    await page.locator('.quick-log').innerText(),
+    /mastery|accuracy score|grade/i,
+    'Quick logging should give a brief action hint instead of repeating the mastery disclaimer.'
+  );
+  assert.doesNotMatch(
+    await page.locator('.exercise-log > .muted').innerText(),
+    /mastery|accuracy score/i,
+    'The detailed observation form should describe its fields without repeating the mastery disclaimer.'
+  );
+  const quickLogVisualHierarchy = await page.evaluate(() => {
+    const clean = getComputedStyle(document.querySelector('.quick-log-clean'));
+    const correction = getComputedStyle(
+      document.querySelector('.quick-log-correction')
+    );
+    return {
+      cleanBackground: clean.backgroundColor,
+      correctionBackground: correction.backgroundColor,
+      correctionWeight: correction.fontWeight
+    };
+  });
+  assert.notEqual(
+    quickLogVisualHierarchy.cleanBackground,
+    quickLogVisualHierarchy.correctionBackground,
+    'The correction action should remain available but look secondary to the positive quick-log action.'
+  );
+  assert.equal(quickLogVisualHierarchy.correctionWeight, '600');
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
@@ -1642,6 +1679,146 @@ try {
   await page
     .getByText('Repeat the G major scale at 72 BPM for three minutes.')
     .waitFor();
+
+  // Screen wake lock follows the active-session lifecycle, including visibility.
+  const wakeLockContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  await wakeLockContext.addInitScript(() => {
+    window.__wakeLockState = {
+      requests: 0,
+      releases: 0,
+      lastType: '',
+      visibility: 'visible'
+    };
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      get() {
+        return window.__wakeLockState.visibility;
+      }
+    });
+    Object.defineProperty(navigator, 'wakeLock', {
+      configurable: true,
+      value: {
+        async request(type) {
+          window.__wakeLockState.requests += 1;
+          window.__wakeLockState.lastType = type;
+          let released = false;
+          const listeners = [];
+          return {
+            get released() {
+              return released;
+            },
+            async release() {
+              if (released) return;
+              released = true;
+              window.__wakeLockState.releases += 1;
+              for (const listener of listeners) listener();
+            },
+            addEventListener(eventType, listener) {
+              if (eventType === 'release') listeners.push(listener);
+            }
+          };
+        }
+      }
+    });
+  });
+  const wakeLockPage = await wakeLockContext.newPage();
+  await wakeLockPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await wakeLockPage.locator('#duration').fill('5');
+  await wakeLockPage.locator('#focus').fill('Wake lock lifecycle test');
+  await wakeLockPage.getByRole('button', { name: 'Start practice' }).click();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Wake lock lifecycle test', exact: true })
+    .waitFor();
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 1
+  );
+  assert.equal(
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
+    true,
+    'Starting a session should move focus to its active heading.'
+  );
+  assert.equal(
+    await wakeLockPage.evaluate(() => window.__wakeLockState.lastType),
+    'screen',
+    'An active practice session should request a screen wake lock.'
+  );
+
+  await wakeLockPage.getByRole('button', { name: 'Pause session' }).click();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Your session is paused' })
+    .waitFor();
+  assert.equal(
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
+    true,
+    'Pausing a session should keep focus on the current session heading.'
+  );
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 1
+  );
+
+  await wakeLockPage.getByRole('button', { name: 'Resume session' }).click();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Wake lock lifecycle test', exact: true })
+    .waitFor();
+  assert.equal(
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
+    true,
+    'Resuming a session should move focus back to its active heading.'
+  );
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 2
+  );
+
+  await wakeLockPage.evaluate(() => {
+    window.__wakeLockState.visibility = 'hidden';
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 2
+  );
+  await wakeLockPage.evaluate(() => {
+    window.__wakeLockState.visibility = 'visible';
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 3
+  );
+  // Session storage intentionally rejects sessions shorter than one second.
+  await wakeLockPage.waitForTimeout(1100);
+
+  await wakeLockPage
+    .getByRole('button', { name: 'Finish and save session' })
+    .click();
+  const finishNotice = wakeLockPage.locator('.message[role="status"]');
+  const finishError = wakeLockPage.getByRole('alert');
+  await Promise.race([
+    finishNotice.filter({ hasText: /^Session saved\./ }).waitFor(),
+    finishError.waitFor()
+  ]);
+  assert.equal(
+    await finishError.count(),
+    0,
+    'Wake-lock cleanup must not prevent session completion: ' +
+      (await finishError.allTextContents()).join(' | ')
+  );
+  assert.match(await finishNotice.innerText(), /^Session saved\./);
+  assert.equal(
+    await finishNotice.evaluate((notice) => document.activeElement === notice),
+    true,
+    'Finishing a session should move focus to the save confirmation.'
+  );
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 3
+  );
+  await wakeLockContext.close();
 
   // Practice history filters search only learner-authored focus and notes.
   const historySearch = page.locator('#history-search');
