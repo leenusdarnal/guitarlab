@@ -679,13 +679,21 @@ try {
       }
 
       await page.setViewportSize({ width: 1440, height: 1000 });
-      assert.equal(
-        await page
-          .locator('.mobile-tab-bar')
-          .evaluate((element) => getComputedStyle(element).display),
-        'none',
-        'Mobile primary tabs must not replace desktop navigation.'
-      );
+      if (route === '/onboarding') {
+        assert.equal(
+          await page.locator('.mobile-tab-bar').count(),
+          0,
+          'The focused onboarding flow must remain free of mobile primary navigation.'
+        );
+      } else {
+        assert.equal(
+          await page
+            .locator('.mobile-tab-bar')
+            .evaluate((element) => getComputedStyle(element).display),
+          'none',
+          'Mobile primary tabs must not replace desktop navigation.'
+        );
+      }
       await scanPage(page, route, theme, 'desktop');
       if (route === '/') {
         await assertDashboardTypography(page, 'desktop');
