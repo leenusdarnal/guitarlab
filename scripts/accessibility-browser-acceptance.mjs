@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
-import { chromium } from 'playwright';
+import { chromium, webkit } from 'playwright';
 
 const require = createRequire(import.meta.url);
 const axeSource = await readFile(
@@ -13,7 +13,8 @@ const axeSource = await readFile(
 const port = Number(process.env.GUITARLAB_ACCESSIBILITY_PREVIEW_PORT ?? 8789);
 const origin = 'http://127.0.0.1:' + port;
 const themes = ['dark', 'light'];
-const routes = [
+const browserEngine = process.env.GUITARLAB_BROWSER_ENGINE === 'webkit' ? webkit : chromium;
+const baseRoutes = [
   '/',
   '/learn',
   '/learn/y1-w01-lesson',
@@ -31,6 +32,10 @@ const routes = [
   '/tools/tuner',
   '/repertoire'
 ];
+const routes =
+  process.env.GUITARLAB_BROWSER_ENGINE === 'webkit'
+    ? ['/', '/learn', '/learn/y1-w01-lesson', '/practice', '/settings/data', '/tools', '/tools/tuner', '/skills', '/repertoire']
+    : baseRoutes;
 const wcagTags = [
   'wcag2a',
   'wcag2aa',
@@ -198,7 +203,7 @@ async function scanPage(page, route, theme, viewport) {
 
 try {
   await waitForPreview();
-  browser = await chromium.launch({ headless: true });
+  browser = await browserEngine.launch({ headless: true });
 
   for (const theme of themes) {
     const context = await browser.newContext({
@@ -797,7 +802,7 @@ try {
   }
 
   console.log(
-    'Accessibility checks passed: 11 routes in dark ' +
+    'Accessibility checks passed with ' + (process.env.GUITARLAB_BROWSER_ENGINE ?? 'chromium') + ': ' + routes.length + ' routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
       'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
   );
