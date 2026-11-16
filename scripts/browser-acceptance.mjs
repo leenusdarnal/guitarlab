@@ -422,7 +422,10 @@ try {
     )
     .waitFor();
   assert.equal(
-    await recoveryPage.getByRole('button', { name: 'Try again' }).count(),
+    await recoveryPage
+      .locator('.status.error')
+      .getByRole('button', { name: 'Try again' })
+      .count(),
     1,
     'The skill map storage error must provide a retry action'
   );
@@ -436,8 +439,18 @@ try {
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(true)
   );
-  await recoveryPage.getByRole('button', { name: 'Try again' }).click();
-  await recoveryPage.getByText('Showing 34 of 34 skills', { exact: true }).waitFor();
+  await recoveryPage
+    .locator('.status.error')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage
+    .getByText('Showing 34 of 34 skills', { exact: true })
+    .waitFor();
+  await recoveryPage
+    .locator('.storage-warning')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
   await recoveryContext.close();
 
   // Saved theme preferences apply when a learner opens a nested route directly.
