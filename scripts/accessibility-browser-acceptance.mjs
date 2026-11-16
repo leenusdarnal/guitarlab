@@ -337,8 +337,10 @@ try {
       if (route === '/skills') {
         const smallestSkillCopy = await page.evaluate(() =>
           Math.min(
-            ...Array.from(document.querySelectorAll('header > p, .guide-item p')).map(
-              (element) => Number.parseFloat(getComputedStyle(element).fontSize)
+            ...Array.from(
+              document.querySelectorAll('header > p, .guide-item p')
+            ).map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
             )
           )
         );
