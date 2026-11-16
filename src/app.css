@@ -17,14 +17,14 @@
   --border: #303a48;
   --border-strong: #6b7888;
   --control-border: #718096;
-  --primary: #f0b65a;
-  --primary-ink: #20160a;
-  --secondary: #a7a4ea;
-  --success: #76c6a0;
+  --primary: #42d6a0;
+  --primary-ink: #06251b;
+  --secondary: #58cdb1;
+  --success: #8ccf76;
   --warning: #e9bc68;
   --danger: #f08a80;
   --danger-ink: #20160a;
-  --focus: #ffd17a;
+  --focus: #e7c77f;
 
   /* Semantic text roles follow the active theme's readable action colours. */
   --text-primary: var(--primary);
@@ -74,14 +74,14 @@
   --border: #d7dce1;
   --border-strong: #7a8795;
   --control-border: #7a8795;
-  --primary: #8a5210;
+  --primary: #176b4b;
   --primary-ink: #ffffff;
-  --secondary: #5b50a8;
-  --success: #216a4a;
+  --secondary: #176b68;
+  --success: #2f733f;
   --warning: #805400;
   --danger: #a5352b;
   --danger-ink: #ffffff;
-  --focus: #744600;
+  --focus: #16694d;
 }
 
 * {

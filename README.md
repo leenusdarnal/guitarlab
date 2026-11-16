@@ -2,9 +2,13 @@
 
 **Learn. Practise. Master.**
 
+<p align="center">
+  <img src="static/brand/guitarlab-logo.svg" alt="GuitarLab — Learn, Practise, Master" width="620" />
+</p>
+
 GuitarLab is a local-first guitar-learning application under active development, built around a self-contained, authored three-year curriculum and deliberate practice.
 
-The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations. The current application includes learner onboarding and local profiles, a personalised dashboard and practice planner, local backup/restore, a curriculum navigation and lesson reader, locally persisted lesson checkpoints with completion/resume, and a first privacy-safe offline app-shell slice. That offline slice pre-caches app assets and supports previously visited public lesson pages with an explicit offline fallback. It is not yet a complete installable PWA or a full offline-first sync solution. Every new learner starts fresh.
+The curriculum contains 152 authored lessons across a 52-week Year 1 route, a 52-week Year 2 route and four optional 12-week specialisations. The current application includes learner onboarding and local profiles, a personalised dashboard and practice planner, local backup/restore, a curriculum navigation and lesson reader, locally persisted lesson checkpoints with completion/resume, and a first privacy-safe offline app-shell slice. That offline slice pre-caches app assets and supports previously visited public lesson pages with an explicit offline fallback. The site now includes a web app manifest and scalable SVG app icons; the offline experience is still an initial app-shell slice, not a full offline-first sync solution. Every new learner starts fresh.
 
 ## Product goals
 
@@ -75,6 +79,7 @@ The first offline app-shell implementation merged in [PR #35](https://github.com
 - [Curriculum content model and skill taxonomy](docs/CURRICULUM_CONTENT_MODEL.md)
 - [First-release scope](docs/RELEASE_SCOPE.md)
 - [Design direction](docs/DESIGN_DIRECTION.md)
+- [Brand identity, logo assets and PWA icons](docs/BRAND_IDENTITY.md)
 - [UI/UX audit and implementation priorities](docs/UI_UX_AUDIT.md)
 - [Implementation guidelines — design, personalisation and delivery](docs/IMPLEMENTATION_GUIDELINES.md)
 - [Fresh learner profile policy](docs/LEARNING_PROGRESS_MIGRATION.md)

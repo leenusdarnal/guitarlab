@@ -6,6 +6,7 @@
   import '../app.css';
   import { loadActiveLearnerProfile } from '../lib/storage/indexeddb';
   import Icon from '../lib/components/Icon.svelte';
+  import Brand from '../lib/components/Brand.svelte';
 
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
@@ -142,8 +143,7 @@
   <header class="global-nav">
     <div class="global-nav-inner">
       <a class="global-brand" href={resolve('/')}>
-        <span class="global-brand-mark" aria-hidden="true">G</span>
-        <span>GuitarLab</span>
+        <Brand size="small" />
       </a>
 
       <nav class="desktop-primary-navigation" aria-label="Primary navigation">
@@ -232,8 +232,7 @@
   .storage-warning button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .global-nav{position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(16px)}
   .global-nav-inner{max-width:1440px;min-height:66px;margin:0 auto;padding:8px clamp(15px,3vw,38px);display:flex;align-items:center;gap:24px}
-  .global-brand{display:inline-flex;align-items:center;gap:9px;flex:none;font-size:17px;font-weight:850;letter-spacing:-.35px}
-  .global-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--primary);color:var(--primary-ink);font:800 17px Georgia,serif}
+  .global-brand{display:inline-flex;align-items:center;flex:none}
   .desktop-primary-navigation{display:flex;align-items:center;justify-content:center;gap:4px;flex:1;min-width:0}
   .desktop-primary-navigation a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 11px;border-radius:9px;color:var(--muted);font-size:13px;font-weight:700;white-space:nowrap}
   .desktop-primary-navigation a:hover{background:var(--surface);color:var(--text)}
@@ -250,6 +249,6 @@
   .mobile-primary-navigation a:hover,.mobile-primary-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-brand{gap:6px;font-size:15px}.global-brand-mark{width:32px;height:32px}.global-nav-actions{gap:6px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
 </style>
