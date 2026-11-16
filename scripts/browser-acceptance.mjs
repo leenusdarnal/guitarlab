@@ -891,7 +891,7 @@ try {
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
-  const mobileMenuButton = page.locator('.mobile-brand');
+  const mobileMenuButton = page.locator('.mobile-nav-trigger');
   await mobileMenuButton.click();
   let mobileNavigation = page.getByRole('navigation', {
     name: 'More navigation'
@@ -899,7 +899,9 @@ try {
   const firstMoreLink = mobileNavigation.getByRole('link', { name: 'Songs' });
   await firstMoreLink.waitFor();
   assert.equal(
-    await firstMoreLink.evaluate((element) => element === document.activeElement),
+    await firstMoreLink.evaluate(
+      (element) => element === document.activeElement
+    ),
     true,
     'Opening More navigation should focus its first link'
   );
@@ -1454,7 +1456,9 @@ try {
     name: 'Songs'
   });
   assert.equal(
-    await globalFirstMoreLink.evaluate((link) => document.activeElement === link),
+    await globalFirstMoreLink.evaluate(
+      (link) => document.activeElement === link
+    ),
     true,
     'Opening More navigation should move focus to its first link.'
   );
