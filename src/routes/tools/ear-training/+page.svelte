@@ -3,6 +3,7 @@
   import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
   import { AudioContextSession } from '../../../lib/audio/audio-context-session';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import {
     recordActiveIntervalRecognitionAssessment,
     recordActivePulseRecognitionAssessment
@@ -191,7 +192,7 @@
 </svelte:head>
 
 <main class="ear-page">
-  <a class="back-link" href={resolve('/tools')}>← Tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · LISTENING</div>
@@ -242,7 +243,7 @@
     <p class="visual-hint">{exercise.visualHint}</p>
 
     <div class="listening-card">
-      <div class="sound-symbol" aria-hidden="true">{kind === 'pulse' ? '♩' : kind === 'pitch' ? '♪' : '♫'}</div>
+      <div class="sound-symbol" aria-hidden="true"><Icon name="ear" size={28} /></div>
       <p>{kind === 'pulse' ? 'Four beats' : kind === 'pitch' ? 'Two notes' : kind === 'contour' ? 'Three notes' : kind === 'interval' ? 'Two notes · interval' : 'Three simultaneous chords'}</p>
       <button type="button" class="primary-button" onclick={playExercise} disabled={isPlaying}>
         {isPlaying ? 'Playing example…' : 'Listen to example'}
