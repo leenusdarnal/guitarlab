@@ -140,6 +140,28 @@ function assertSequence(sequence: number): void {
 }
 
 /**
+ * Rotate answer options with a small deterministic xorshift seed. This keeps
+ * exercises reproducible for assessment evidence while avoiding a fixed
+ * correct-answer position across a learner's sequence.
+ */
+function rotateChoices<T>(
+  choices: readonly T[],
+  sequence: number,
+  seed: number
+): readonly T[] {
+  if (choices.length < 2) return choices;
+
+  let state = (sequence + 1 + seed) >>> 0;
+  state ^= state << 13;
+  state ^= state >>> 17;
+  state ^= state << 5;
+
+  const offset = (state >>> 0) % choices.length;
+  if (offset === 0) return choices;
+  return [...choices.slice(offset), ...choices.slice(0, offset)];
+}
+
+/**
  * Creates reproducible listening challenges. The answer is returned to the
  * exercise controller, not rendered in the learner-facing prompt.
  */
@@ -163,7 +185,7 @@ export function createEarTrainingExercise(
         startMilliseconds,
         durationMilliseconds: 100
       })),
-      choices: pulseChoices,
+      choices: rotateChoices(pulseChoices, sequence, 11),
       answer: uneven ? 'uneven' : 'steady',
       explanation: uneven
         ? 'The gaps alternate between shorter and longer, so the pulse is uneven.'
@@ -192,7 +214,7 @@ export function createEarTrainingExercise(
           durationMilliseconds: 320
         }
       ],
-      choices: pitchChoices,
+      choices: rotateChoices(pitchChoices, sequence, 23),
       answer: firstIsHigher ? 'first' : 'second',
       explanation: firstIsHigher
         ? 'The first note had the higher frequency.'
@@ -242,10 +264,18 @@ export function createEarTrainingExercise(
           durationMilliseconds: 360
         }
       ],
-      choices: intervals.map(({ answer, label }) => ({
-        value: answer,
-        label
-      })),
+      choices: rotateChoices(
+        intervals.map(({ answer, label }) => ({
+          value: answer,
+          label
+        })),
+        sequence,
+        intervalSet === 'foundation'
+          ? 31
+          : intervalSet === 'steps-and-tritone'
+            ? 37
+            : 47
+      ),
       answer: interval.answer,
       explanation
     };
@@ -280,7 +310,7 @@ export function createEarTrainingExercise(
           durationMilliseconds: 640
         }))
       ),
-      choices: chordMovementChoices,
+      choices: rotateChoices(chordMovementChoices, sequence, 41),
       answer: middleAnswer,
       explanation:
         middleAnswer === 'subdominant'
@@ -309,7 +339,7 @@ export function createEarTrainingExercise(
         startMilliseconds: index * 460,
         durationMilliseconds: 300
       })),
-      choices: contourChoices,
+      choices: rotateChoices(contourChoices, sequence, 53),
       answer,
       explanation:
         answer === 'rising'
