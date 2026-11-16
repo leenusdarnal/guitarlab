@@ -359,7 +359,7 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Open metronome{#if lesson.startingTempoBpm} at {lesson.startingTempoBpm} BPM{/if}
+            Open metronome{#if lesson.startingTempoBpm}{' '}at {lesson.startingTempoBpm} BPM{/if}
           </a>
           <!-- eslint-enable svelte/no-navigation-without-resolve -->
           <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
