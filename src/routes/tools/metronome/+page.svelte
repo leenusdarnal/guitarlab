@@ -20,6 +20,7 @@
   let isStarting = $state(false);
   let isPlayingReference = $state(false);
   let audioError = $state('');
+  let audioErrorAction = $state<'metronome' | 'reference' | null>(null);
   let activeBeat = $state<number | null>(null);
   let isWakeLockActive = $state(false);
   let wakeLockStatus = $state<'idle' | 'active' | 'unavailable' | 'released'>('idle');
@@ -124,6 +125,7 @@
   async function toggleMetronome() {
     if (isStarting) return;
     audioError = '';
+    audioErrorAction = null;
     if (isMetronomeRunning) {
       metronome?.stop();
       isMetronomeRunning = false;
@@ -161,6 +163,7 @@
       audioError = error instanceof Error
         ? error.message
         : 'The metronome could not start in this browser.';
+      audioErrorAction = 'metronome';
     } finally {
       isStarting = false;
     }
@@ -168,6 +171,7 @@
 
   async function playA4Reference() {
     audioError = '';
+    audioErrorAction = null;
     isPlayingReference = true;
     try {
       await playReferenceTone(440, 900);
@@ -175,6 +179,7 @@
       audioError = error instanceof Error
         ? error.message
         : 'The reference tone could not be played.';
+      audioErrorAction = 'reference';
     } finally {
       isPlayingReference = false;
     }
@@ -293,7 +298,7 @@
           ? 'Starting…'
           : isMetronomeRunning
             ? 'Stop metronome'
-            : 'Start metronome'}
+            : audioErrorAction === 'metronome' ? 'Try metronome again' : 'Start metronome'}
       </button>
       <button
         type="button"
@@ -301,7 +306,7 @@
         onclick={playA4Reference}
         disabled={isPlayingReference}
       >
-        {isPlayingReference ? 'Playing A4…' : 'Play A4 reference tone'}
+        {isPlayingReference ? 'Playing A4…' : audioErrorAction === 'reference' ? 'Try A4 reference tone again' : 'Play A4 reference tone'}
       </button>
     </div>
 
