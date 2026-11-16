@@ -1606,7 +1606,6 @@ try {
     .getByText('Repeat the G major scale at 72 BPM for three minutes.')
     .waitFor();
 
-
   // Screen wake lock follows the active-session lifecycle, including visibility.
   const wakeLockContext = await browser.newContext({
     viewport: { width: 390, height: 844 }
@@ -1662,9 +1661,9 @@ try {
     () => window.__wakeLockState.requests === 1
   );
   assert.equal(
-    await wakeLockPage.locator('#session-heading').evaluate(
-      (heading) => document.activeElement === heading
-    ),
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
     true,
     'Starting a session should move focus to its active heading.'
   );
@@ -1679,9 +1678,9 @@ try {
     .getByRole('heading', { name: 'Your session is paused' })
     .waitFor();
   assert.equal(
-    await wakeLockPage.locator('#session-heading').evaluate(
-      (heading) => document.activeElement === heading
-    ),
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
     true,
     'Pausing a session should keep focus on the current session heading.'
   );
@@ -1694,9 +1693,9 @@ try {
     .getByRole('heading', { name: 'Wake lock lifecycle test', exact: true })
     .waitFor();
   assert.equal(
-    await wakeLockPage.locator('#session-heading').evaluate(
-      (heading) => document.activeElement === heading
-    ),
+    await wakeLockPage
+      .locator('#session-heading')
+      .evaluate((heading) => document.activeElement === heading),
     true,
     'Resuming a session should move focus back to its active heading.'
   );
@@ -1724,7 +1723,10 @@ try {
     .click();
   const finishNotice = wakeLockPage.locator('.message[role="status"]');
   const finishError = wakeLockPage.getByRole('alert');
-  await Promise.race([finishNotice.waitFor(), finishError.waitFor()]);
+  await Promise.race([
+    finishNotice.filter({ hasText: /^Session saved\./ }).waitFor(),
+    finishError.waitFor()
+  ]);
   assert.equal(
     await finishError.count(),
     0,
@@ -1733,9 +1735,7 @@ try {
   );
   assert.match(await finishNotice.innerText(), /^Session saved\./);
   assert.equal(
-    await finishNotice.evaluate(
-      (notice) => document.activeElement === notice
-    ),
+    await finishNotice.evaluate((notice) => document.activeElement === notice),
     true,
     'Finishing a session should move focus to the save confirmation.'
   );
