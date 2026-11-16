@@ -466,4 +466,42 @@
   .status-message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6;margin:16px 0 0}.status-message.error{border:1px solid var(--danger)}
   .privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:24px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
   @media(max-width:520px){header{margin-bottom:28px}.backup-panel{flex-direction:column}.primary-button,.danger-button{width:100%}.preview{padding:12px}th,td{padding:8px 4px;font-size:10px}}
+
+  /* Backup, restore and reset instructions are content, not metadata. */
+  .back-link,
+  .primary-button,
+  .danger-button,
+  .file-picker,
+  .file-name,
+  .reset-label,
+  .status-message,
+  .privacy-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .intro,
+  .section-copy,
+  .backup-panel p,
+  .preview .section-copy {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .eyebrow {
+    font-size: var(--font-size-metadata);
+  }
+
+  .backup-icon {
+    font-size: inherit;
+  }
+
+  table {
+    font-size: var(--font-size-metadata);
+  }
+
+  th,
+  td {
+    font-size: var(--font-size-metadata);
+  }
 </style>

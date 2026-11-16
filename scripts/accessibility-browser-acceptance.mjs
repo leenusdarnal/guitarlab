@@ -21,6 +21,7 @@ const routes = [
   '/practice',
   '/settings/data',
   '/tools',
+  '/skills',
   '/tools/fretboard',
   '/tools/chords',
   '/tools/metronome',
@@ -318,10 +319,204 @@ try {
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
 
+      if (route === '/onboarding') {
+        const onboardingCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.intro, .custom-practice, .custom-practice-help, .preference-effect, .privacy-note'
+            )
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          onboardingCopySizes.length > 0 &&
+            onboardingCopySizes[0] >= 16 &&
+            onboardingCopySizes.every((fontSize) => fontSize >= 15),
+          'Onboarding explanations must use 16px body text and readable supporting text.'
+        );
+      }
+      if (route === '/settings/data') {
+        const settingsCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.intro, .section-copy, .backup-panel p, .reset-label, .privacy-note'
+            )
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          settingsCopySizes.length > 0 &&
+            settingsCopySizes.slice(0, 3).every((fontSize) => fontSize >= 16) &&
+            settingsCopySizes.every((fontSize) => fontSize >= 15),
+          'Backup, reset and privacy instructions must remain readable.'
+        );
+      }
+
+      if (route.startsWith('/tools/')) {
+        const toolInstructions = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.page-heading p, .guidance-panel p, .guidance-panel li, .visual-hint, .tuning-guidance p'
+            )
+          )
+            .map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+            .filter(Number.isFinite)
+        );
+        assert.ok(
+          toolInstructions.length > 0 &&
+            toolInstructions.every((fontSize) => fontSize >= 16),
+          route + ' must use 16px body text for tool instructions.'
+        );
+      }
+      if (route === '/repertoire') {
+        const repertoireCopy = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.page-heading p, .empty-copy, .rights-note'
+            )
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          repertoireCopy.length > 0 &&
+            repertoireCopy.every((fontSize) => fontSize >= 15),
+          'Repertoire guidance and rights copy must remain readable.'
+        );
+      }
+
+      if (route === '/tools') {
+        const smallestToolCopy = await page.evaluate(() =>
+          Math.min(
+            ...Array.from(
+              document.querySelectorAll('.page-heading > p, .tool-copy > p')
+            ).map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+          )
+        );
+        assert.ok(
+          smallestToolCopy >= 16,
+          'Tools instructions and descriptions must use readable 16px body copy.'
+        );
+      }
+      if (route === '/skills') {
+        const smallestSkillCopy = await page.evaluate(() =>
+          Math.min(
+            ...Array.from(
+              document.querySelectorAll('header > p, .guide-item p')
+            ).map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+          )
+        );
+        assert.ok(
+          smallestSkillCopy >= 13,
+          'Skills guidance and supporting copy must not use tiny metadata sizing.'
+        );
+      }
+
+      if (route === '/learn/y1-w01-lesson') {
+        const metronomeLink = page.locator(
+          '.lesson-tool-links a[href*="/tools/metronome"]'
+        );
+        assert.match(
+          await metronomeLink.innerText(),
+          /Open metronome at 50 BPM/,
+          'The lesson should announce its starting tempo in the metronome action.'
+        );
+        const metronomeHref = await metronomeLink.getAttribute('href');
+        assert.ok(
+          metronomeHref,
+          'The lesson should link to its metronome tool.'
+        );
+        assert.equal(
+          new URL(metronomeHref, origin).searchParams.get('bpm'),
+          '50',
+          'The lesson starting tempo should be carried into the metronome URL.'
+        );
+        const metronomePage = await context.newPage();
+        await metronomePage.goto(new URL(metronomeHref, origin).toString(), {
+          waitUntil: 'networkidle'
+        });
+        assert.equal(
+          await metronomePage
+            .getByRole('spinbutton', {
+              name: 'Enter tempo in beats per minute'
+            })
+            .inputValue(),
+          '50',
+          'The metronome should initialize from the lesson starting tempo.'
+        );
+        await metronomePage.close();
+
+        const lessonCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.content-section p, .content-section li, .sidebar-card p, .practice-options li, .mastery-note'
+            )
+          )
+            .map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+            .filter(Number.isFinite)
+        );
+        assert.ok(
+          lessonCopySizes.length > 0 && Math.min(...lessonCopySizes) >= 15,
+          'Lesson instructions, supporting explanations and sidebar guidance must stay readable.'
+        );
+        const undersizedLessonActions = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.resume-button, .checkpoint-actions button, .completion-actions button, .block-complete'
+            )
+          )
+            .map((element) => ({
+              text: element.textContent?.trim(),
+              height: element.getBoundingClientRect().height
+            }))
+            .filter((element) => element.height < 44)
+        );
+        assert.deepEqual(
+          undersizedLessonActions,
+          [],
+          'Lesson progress and completion actions must meet the 44px target height.'
+        );
+      }
+
       await scanPage(page, route, theme, '320px');
 
       await page.setViewportSize({ width: 1440, height: 1000 });
       await scanPage(page, route, theme, 'desktop');
+      for (const width of [360, 390, 768, 1280]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const responsiveLayout = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          content: document.documentElement.scrollWidth,
+          undersizedControls: Array.from(
+            document.querySelectorAll(
+              'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]), select, textarea'
+            )
+          )
+            .map((control) =>
+              Number.parseFloat(getComputedStyle(control).fontSize)
+            )
+            .filter((fontSize) => fontSize < 16)
+        }));
+        assert.ok(
+          responsiveLayout.content <= responsiveLayout.viewport,
+          route + ' has horizontal overflow at ' + width + 'px in ' + theme
+        );
+        assert.deepEqual(
+          responsiveLayout.undersizedControls,
+          [],
+          route + ' has text controls below 16px at ' + width + 'px in ' + theme
+        );
+      }
     }
 
     await page.setViewportSize({ width: 390, height: 844 });

@@ -26,6 +26,13 @@
   --danger-ink: #20160a;
   --focus: #ffd17a;
 
+  /* Semantic text roles follow the active theme's readable action colours. */
+  --text-primary: var(--primary);
+  --text-secondary: var(--secondary);
+  --text-success: var(--success);
+  --text-warning: var(--warning);
+  --text-danger: var(--danger);
+
   /* Layout and type roles */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

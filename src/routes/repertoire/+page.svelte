@@ -480,4 +480,39 @@
     .save-row { align-items: stretch; flex-direction: column; }
     .save-row button { width: 100%; }
   }
+
+  .page-heading p,
+  .empty-copy,
+  .rights-note {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  label,
+  .project-choice strong,
+  .project-choice span,
+  .project-choice small,
+  .empty-editor p,
+  .status {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .list-heading,
+  .section-number,
+  .save-row span {
+    font-size: var(--font-size-metadata);
+  }
+
+  .rights-note {
+    font-size: var(--font-size-supporting);
+  }
+
+  .primary-button,
+  .secondary-button,
+  .danger-button,
+  .text-button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>

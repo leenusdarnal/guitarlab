@@ -639,4 +639,33 @@
       flex: 1 1 100%;
     }
   }
+
+  .page-heading p,
+  .guidance-panel p,
+  .guidance-panel li {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .audio-status,
+  .privacy-note,
+  .range-labels,
+  .range-labels small {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .field,
+  .field label {
+    font-size: var(--font-size-supporting);
+  }
+
+  .step-button,
+  .tempo-presets button,
+  .primary-button,
+  .secondary-button,
+  .audio-actions > button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
