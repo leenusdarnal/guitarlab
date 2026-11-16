@@ -350,7 +350,7 @@
           <p>{lesson.accessibleAlternative}</p>
         </aside>
         <nav class="lesson-tool-links" aria-label="Tools for this lesson">
-          <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- The base route is resolved before adding the lesson tempo query. -->
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
           <a
             href={
               resolve('/tools/metronome') +
@@ -361,6 +361,7 @@
           >
             Open metronome{#if lesson.startingTempoBpm} at {lesson.startingTempoBpm} BPM{/if}
           </a>
+          <!-- eslint-enable svelte/no-navigation-without-resolve -->
           <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
         </nav>
         <div class="exercise-list">
@@ -593,7 +594,6 @@
 
   .success-target strong,
   .mistakes strong,
-  .exercise > small,
   .references h4,
   .criteria strong,
   .sidebar-card strong,
@@ -606,7 +606,6 @@
   .mastery-note,
   .checkpoint-check p,
   .note-label,
-  .completion-actions small,
   .practice-options li,
   .lesson-pagination a,
   .lesson-pagination span {
