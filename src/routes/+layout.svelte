@@ -26,7 +26,7 @@
     currentPath.startsWith('/onboarding') || currentPath.startsWith('/settings') ? 'preferences' :
     'today'
   );
-  let showPrimaryNavigation = $derived(currentPath !== '/' && currentPath !== '/onboarding');
+  let showPrimaryNavigation = $derived(currentPath !== '/onboarding');
 
   function isThemePreference(value: string | undefined): value is ThemePreference {
     return value === 'system' || value === 'light' || value === 'dark';
@@ -141,7 +141,7 @@
 {/if}
 
 {#if showPrimaryNavigation}
-  <header class="global-nav">
+  <header class="global-nav" class:dashboard-mobile-only={currentPath === '/'}>
     <div class="global-nav-inner">
       <a class="global-brand" href={resolve('/')}>
         <Brand size="small" />
@@ -231,4 +231,10 @@
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
   @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
+  @media (min-width: 761px) {
+    .global-nav.dashboard-mobile-only {
+      display: none;
+    }
+  }
+
 </style>
