@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
