@@ -72,6 +72,50 @@ try {
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
   await upgradePage.getByText('Your first session is still ahead').waitFor();
+  await upgradePage.setViewportSize({ width: 390, height: 844 });
+  const mobileDashboardOrder = await upgradePage.evaluate(() => {
+    const plan = document.querySelector('.practice-planner');
+    const nextLesson = document.querySelector('.hero-grid');
+    const overview = document.querySelector('.dashboard-grid');
+    return {
+      planTop: plan?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      nextLessonTop:
+        nextLesson?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      overviewTop:
+        overview?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth
+    };
+  });
+  assert.ok(
+    mobileDashboardOrder.planTop < mobileDashboardOrder.nextLessonTop,
+    'Mobile Today must present the editable practice plan before the lesson overview.'
+  );
+  assert.ok(
+    mobileDashboardOrder.nextLessonTop < mobileDashboardOrder.overviewTop,
+    'Mobile Today must present the next lesson before historical progress panels.'
+  );
+  assert.equal(
+    mobileDashboardOrder.documentWidth,
+    mobileDashboardOrder.viewportWidth,
+    'Mobile Today must not introduce horizontal page overflow.'
+  );
+  await upgradePage.setViewportSize({ width: 1440, height: 1000 });
+  const desktopDashboardOrder = await upgradePage.evaluate(() => ({
+    planTop: document
+      .querySelector('.practice-planner')
+      ?.getBoundingClientRect().top,
+    nextLessonTop: document.querySelector('.hero-grid')?.getBoundingClientRect()
+      .top,
+    overviewTop: document
+      .querySelector('.dashboard-grid')
+      ?.getBoundingClientRect().top
+  }));
+  assert.ok(
+    desktopDashboardOrder.planTop < desktopDashboardOrder.nextLessonTop &&
+      desktopDashboardOrder.nextLessonTop < desktopDashboardOrder.overviewTop,
+    'Desktop Today should retain the same action-first content order.'
+  );
   await upgradePage.evaluate(async () => {
     await new Promise((resolve, reject) => {
       const deletion = indexedDB.deleteDatabase('guitarlab-local');
