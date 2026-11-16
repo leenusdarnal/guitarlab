@@ -25,7 +25,11 @@ const routes = [
   '/tools/fretboard',
   '/tools/chords',
   '/tools/metronome',
-  '/tools/ear-training'
+  '/tools/ear-training',
+  '/tools/note-recognition',
+  '/tools/theory-recall',
+  '/tools/tuner',
+  '/repertoire'
 ];
 const wcagTags = [
   'wcag2a',
@@ -237,6 +241,27 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
+      const routeBackIconSelector =
+        route === '/learn'
+          ? '.catalog-header .back [data-icon="arrow-left"]'
+          : route === '/onboarding'
+            ? '.setup-page header .skip [data-icon="arrow-left"]'
+            : route === '/practice'
+              ? '.practice-page .top > a [data-icon="arrow-left"]'
+              : route === '/settings/data'
+                ? '.data-page header .back-link [data-icon="arrow-left"]'
+                : route === '/skills'
+                  ? '.skill-page > .back [data-icon="arrow-left"]'
+                  : route === '/tools' || route.startsWith('/tools/') || route === '/repertoire'
+                    ? '.back-link [data-icon="arrow-left"]'
+                    : null;
+      if (routeBackIconSelector) {
+        assert.equal(
+          await page.locator(routeBackIconSelector).count(),
+          1,
+          route + ' must render the shared SVG back icon.'
+        );
+      }
       const viewportMeta = await page
         .locator('meta[name="viewport"]')
         .getAttribute('content');
