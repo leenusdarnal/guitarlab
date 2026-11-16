@@ -236,6 +236,33 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
+      const viewportMeta = await page
+        .locator('meta[name="viewport"]')
+        .getAttribute('content');
+      assert.match(
+        viewportMeta ?? '',
+        /viewport-fit=cover/,
+        'The page must allow the browser to expose device safe-area insets'
+      );
+      const mobileViewportHeight = await page.evaluate(() => ({
+        minHeight: getComputedStyle(document.body).minHeight,
+        viewportHeight: window.innerHeight
+      }));
+      assert.equal(
+        Number.parseFloat(mobileViewportHeight.minHeight),
+        mobileViewportHeight.viewportHeight,
+        'The app body must follow the current mobile viewport height'
+      );
+      if (route === '/learn/y1-w01-lesson') {
+        const outline = await page
+          .locator('.lesson-outline')
+          .evaluate((element) => ({
+            position: getComputedStyle(element).position,
+            top: getComputedStyle(element).top
+          }));
+        assert.equal(outline.position, 'sticky');
+        assert.equal(outline.top, '60px');
+      }
 
       if (route === '/') {
         assertResponseSecurityHeaders(mobileResponse);
