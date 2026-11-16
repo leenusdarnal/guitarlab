@@ -257,9 +257,9 @@ try {
         const outline = await page
           .locator('.lesson-outline')
           .evaluate((element) => ({
-          position: getComputedStyle(element).position,
-          top: getComputedStyle(element).top
-        }));
+            position: getComputedStyle(element).position,
+            top: getComputedStyle(element).top
+          }));
         assert.equal(outline.position, 'sticky');
         assert.equal(outline.top, '60px');
       }
