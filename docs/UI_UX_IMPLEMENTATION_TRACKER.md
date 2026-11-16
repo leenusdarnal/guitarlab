@@ -337,6 +337,9 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 
 - [ ] Add layout-stable loading placeholders for large dashboard and progress surfaces where measured layout shift warrants it.
 - [ ] Ensure recoverable errors have a retry action and a useful next destination.
+  - [x] Today dashboard IndexedDB load failures provide an in-place retry and a preferences destination; browser acceptance verifies recovery after storage becomes available.
+  - [x] Skill map IndexedDB load failures provide an in-place retry and a direct route to browse lessons; browser acceptance verifies recovery.
+  - [ ] Audit remaining learner-facing recoverable errors and add context-specific retry/next actions.
 - [ ] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
 - [ ] Re-check ear-training answer order and accessible visual alternatives; the advisory finding came from an earlier snapshot and must be re-verified before implementation.
