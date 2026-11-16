@@ -891,22 +891,20 @@ try {
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: 'networkidle' });
-  const mobileMenuButton = page.getByRole('button', {
-    name: 'Toggle navigation'
-  });
+  const mobileMenuButton = page.locator('.mobile-brand');
   await mobileMenuButton.click();
   let mobileNavigation = page.getByRole('navigation', {
-    name: 'Mobile navigation'
+    name: 'More navigation'
   });
-  const todayLink = mobileNavigation.getByRole('link', { name: 'Today' });
-  await todayLink.waitFor();
+  const firstMoreLink = mobileNavigation.getByRole('link', { name: 'Songs' });
+  await firstMoreLink.waitFor();
   assert.equal(
-    await todayLink.evaluate((element) => element === document.activeElement),
+    await firstMoreLink.evaluate((element) => element === document.activeElement),
     true,
-    'Opening mobile navigation should focus its first link'
+    'Opening More navigation should focus its first link'
   );
   await page.keyboard.press('Escape');
-  await mobileNavigation.waitFor({ state: 'detached' });
+  await mobileNavigation.waitFor({ state: 'hidden' });
   assert.equal(
     await mobileMenuButton.evaluate(
       (element) => element === document.activeElement
@@ -916,7 +914,7 @@ try {
   );
   await mobileMenuButton.click();
   mobileNavigation = page.getByRole('navigation', {
-    name: 'Mobile navigation'
+    name: 'More navigation'
   });
   await mobileNavigation.getByRole('link', { name: 'Learning path' }).click();
   assert.equal(new URL(page.url()).hash, '#learning-path');
@@ -1053,7 +1051,8 @@ try {
   await page.locator('#backup-reminder').waitFor({ state: 'visible' });
 
   // Backup navigation and export remain available from the learner dashboard.
-  await page.getByRole('button', { name: 'Toggle navigation' }).click();
+  await page.locator('.mobile-brand').click();
+  mobileNavigation = page.getByRole('navigation', { name: 'More navigation' });
   await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
   await page
     .getByRole('heading', { name: 'Keep your learning safe.' })
@@ -1420,7 +1419,8 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
   const globalMenuButton = page.locator('.mobile-nav-trigger');
-  const globalMobileNavigation = page.locator('#mobile-primary-navigation');
+  const globalMobileNavigation = page.locator('#mobile-more-navigation');
+  const mobileTabBar = page.locator('.mobile-tab-bar');
   assert.equal(
     await globalMenuButton.getAttribute('aria-expanded'),
     'false',
@@ -1428,7 +1428,7 @@ try {
   );
   assert.equal(
     await globalMenuButton.getAttribute('aria-controls'),
-    'mobile-primary-navigation'
+    'mobile-more-navigation'
   );
   assert.equal(
     await globalMobileNavigation.count(),
@@ -1450,20 +1450,18 @@ try {
   await globalMenuButton.focus();
   await page.keyboard.press('Enter');
   await globalMobileNavigation.waitFor();
-  const globalTodayLink = globalMobileNavigation.getByRole('link', {
-    name: 'Today'
+  const globalFirstMoreLink = globalMobileNavigation.getByRole('link', {
+    name: 'Songs'
   });
   assert.equal(
-    await globalTodayLink.evaluate((link) => document.activeElement === link),
+    await globalFirstMoreLink.evaluate((link) => document.activeElement === link),
     true,
-    'Opening the global menu should move focus to its first link.'
+    'Opening More navigation should move focus to its first link.'
   );
   assert.equal(
-    await globalMobileNavigation
-      .getByRole('link', { name: 'Tools' })
-      .getAttribute('aria-current'),
-    'page',
-    'The current global section should be announced in the mobile menu.'
+    await mobileTabBar.locator('a[aria-current="page"] span').textContent(),
+    'Tools',
+    'The primary tab bar should announce the current section.'
   );
   await page.keyboard.press('Escape');
   await globalMobileNavigation.waitFor({ state: 'hidden' });
@@ -1482,7 +1480,7 @@ try {
   await globalMenuButton.focus();
   await page.keyboard.press('Enter');
   await globalMobileNavigation.waitFor();
-  await globalMobileNavigation.getByRole('link', { name: 'Practice' }).click();
+  await mobileTabBar.getByRole('link', { name: 'Practice' }).click();
   await page.waitForURL((url) => url.pathname === '/practice');
   await page.waitForFunction(
     () => document.activeElement?.id === 'main-content'
