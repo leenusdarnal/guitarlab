@@ -1485,7 +1485,9 @@ try {
   );
   const quickLogVisualHierarchy = await page.evaluate(() => {
     const clean = getComputedStyle(document.querySelector('.quick-log-clean'));
-    const correction = getComputedStyle(document.querySelector('.quick-log-correction'));
+    const correction = getComputedStyle(
+      document.querySelector('.quick-log-correction')
+    );
     return {
       cleanBackground: clean.backgroundColor,
       correctionBackground: correction.backgroundColor,
@@ -1666,7 +1668,9 @@ try {
   );
 
   await wakeLockPage.getByRole('button', { name: 'Pause session' }).click();
-  await wakeLockPage.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Your session is paused' })
+    .waitFor();
   await wakeLockPage.waitForFunction(
     () => window.__wakeLockState.releases === 1
   );
@@ -1694,11 +1698,19 @@ try {
     () => window.__wakeLockState.requests === 3
   );
 
-  await wakeLockPage.getByRole('button', { name: 'Finish and save session' }).click();
   await wakeLockPage
-    .getByRole('status')
-    .filter({ hasText: 'Elapsed session time is activity history' })
-    .waitFor();
+    .getByRole('button', { name: 'Finish and save session' })
+    .click();
+  const finishNotice = wakeLockPage.locator('.message[role="status"]');
+  const finishError = wakeLockPage.getByRole('alert');
+  await Promise.race([finishNotice.waitFor(), finishError.waitFor()]);
+  assert.equal(
+    await finishError.count(),
+    0,
+    'Wake-lock cleanup must not prevent session completion: ' +
+      (await finishError.allTextContents()).join(' | ')
+  );
+  assert.match(await finishNotice.innerText(), /^Session saved\./);
   await wakeLockPage.waitForFunction(
     () => window.__wakeLockState.releases === 3
   );
