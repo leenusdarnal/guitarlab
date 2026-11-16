@@ -318,7 +318,7 @@
 
   <main class="main-area">
     <header class="topbar">
-      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-more-navigation"><Icon name={menuOpen ? 'close' : 'menu'} size={19} /><Brand size="small" /><span>More</span></button>
+      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-more-navigation" aria-label={menuOpen ? 'More navigation — close' : 'More navigation — open'}><Icon name={menuOpen ? 'close' : 'menu'} size={19} /><Brand size="small" /><span>More</span></button>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions">
         <span class="status-pill"><i></i> Local-first learning</span>
