@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
   import {
     finishActivePracticeSession,
     listActivePracticeEvidence,
@@ -623,8 +624,8 @@
 
 <main class="practice-page">
   <header class="top">
-    <a href={resolve('/')} aria-label="Back to GuitarLab dashboard">
-      ← Dashboard
+    <a href={resolve('/')} aria-label="Back to Today">
+      <Icon name="arrow-left" size={14} /> Today
     </a>
     <span>YOUR PERSONAL PRACTICE SPACE</span>
   </header>
@@ -1005,7 +1006,7 @@
                 </p>
               {/if}
               <a class="recommendation-practice" href={resolve('/practice')} onclick={(event) => openRecommendedPractice(event, recommendation)}>
-                Practise this <span aria-hidden="true">→</span>
+                Practise this <Icon name="arrow-right" size={14} />
               </a>
               <div class="recommendation-actions" aria-label={`Feedback for ${recommendation.title}`}>
                 <button

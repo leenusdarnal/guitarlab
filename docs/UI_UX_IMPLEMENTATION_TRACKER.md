@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-13 — dashboard and global navigation icon consistency (`ux/13-consistent-dashboard-and-navigation-icons`)
+**Active implementation:** UX-13 — consistent icons across tools and route-level controls (`ux/13-consistent-route-icons`)
 
 ---
 
@@ -331,7 +331,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-13 — Finish lower-priority resilience and polish
 
 **Priority:** P3  
-**Status:** IN PROGRESS — shared local SVG icon migration for Today and global mobile navigation is underway in `ux/13-consistent-dashboard-and-navigation-icons`  
+**Status:** IN PROGRESS — dashboard and global navigation icons merged in PR #153; remaining tool and route-level controls are being migrated in `ux/13-consistent-route-icons`  
 **Depends on:** UX-04  
 **Related findings:** X13–X15 and earlier-snapshot ear-training notes
 
@@ -341,10 +341,10 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
   - [x] Today dashboard IndexedDB load failures provide an in-place retry and a preferences destination; browser acceptance verifies recovery after storage becomes available.
   - [x] Skill map IndexedDB load failures provide an in-place retry and a direct route to browse lessons; browser acceptance verifies recovery.
   - [ ] Audit remaining learner-facing recoverable errors and add context-specific retry/next actions.
-- [ ] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
+- [x] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
   - [x] Replace the eight decorative Tools hub glyphs with a single local SVG icon component; the adjacent card headings provide the accessible names.
   - [x] Replace decorative pictograms in the Today sidebar and global mobile menu/navigation with the shared local SVG component; visible link text remains the accessible name.
-  - [ ] Audit and replace remaining glyphs in individual tool pages and route-level controls.
+  - [x] Audit and replace navigation, action, search and backup glyphs across individual tool pages and route-level controls with the shared local SVG component; retain intentional musical notation such as open-string markers and accidentals.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
   - [x] Enable `viewport-fit=cover` and apply safe-area insets to the sticky global navigation and lesson outline offsets.
   - [x] Add `svh` and `dvh` fallbacks for the app body's minimum height and test it against changing mobile viewport heights.

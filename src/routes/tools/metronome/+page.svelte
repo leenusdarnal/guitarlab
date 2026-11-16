@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import {
     MAX_METRONOME_BPM,
     MIN_METRONOME_BPM,
@@ -189,7 +190,7 @@
 </svelte:head>
 
 <main class="metronome-page">
-  <a class="back-link" href={resolve('/tools')}>← Tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · TIME AND PULSE</div>

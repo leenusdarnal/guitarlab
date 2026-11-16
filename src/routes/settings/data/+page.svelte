@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import {
     getLearnerStoragePersistenceStatus,
     requestLearnerStoragePersistence,
@@ -250,7 +251,7 @@
 <main class="data-page">
   <header>
     <a class="brand" href={resolve('/')}><span class="mark">G</span><strong>GuitarLab</strong></a>
-    <a class="back-link" href={resolve('/')}>← Back to dashboard</a>
+    <a class="back-link" href={resolve('/')}><Icon name="arrow-left" size={14} /> Back to Today</a>
   </header>
 
   <section class="data-card">
@@ -261,7 +262,7 @@
       assessment evidence, skill snapshots and practice sessions.
     </p>
     <section class="backup-panel export-panel" aria-labelledby="export-title">
-      <div class="backup-icon" aria-hidden="true">↓</div>
+      <div class="backup-icon" aria-hidden="true"><Icon name="download" size={24} /></div>
       <div>
         <h2 id="export-title">Export learner backup</h2>
         <p>
@@ -270,7 +271,7 @@
           device; GuitarLab does not upload it.
         </p>
         <button class="primary-button" type="button" onclick={downloadBackup} disabled={isExporting}>
-          {isExporting ? 'Preparing backup…' : 'Download backup'} <span>→</span>
+          {isExporting ? 'Preparing backup…' : 'Download backup'} <Icon name="arrow-right" size={14} />
         </button>
         {#if lastBackupExportAt !== null}
           <p class="backup-recency">
@@ -290,7 +291,7 @@
     </section>
 
     <section class="backup-panel" aria-labelledby="storage-protection-title">
-      <div class="backup-icon" aria-hidden="true">◈</div>
+      <div class="backup-icon" aria-hidden="true"><Icon name="shield-check" size={24} /></div>
       <div>
         <h2 id="storage-protection-title">Protect data in this browser</h2>
         {#if isCheckingStorage}
@@ -455,7 +456,7 @@
   .backup-panel{display:flex;align-items:flex-start;gap:16px;padding:20px;border:1px solid var(--border);border-radius:14px;background:var(--surface-raised);margin:28px 0}
   .backup-icon{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:11px;background:color-mix(in srgb,var(--primary) 16%,transparent);color:var(--primary);font-size:22px}
   h2{font-size:15px;margin:2px 0 7px}.backup-panel p{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 14px}
-  .primary-button,.danger-button{border:0;border-radius:10px;padding:13px 17px;font-weight:750;font-size:12px;cursor:pointer}.primary-button{background:var(--primary);color:var(--primary-ink)}.primary-button:disabled,.danger-button:disabled{opacity:.45;cursor:not-allowed}.primary-button span{padding-left:12px}
+  .primary-button,.danger-button{border:0;border-radius:10px;padding:13px 17px;font-weight:750;font-size:12px;cursor:pointer}.primary-button{background:var(--primary);color:var(--primary-ink)}.primary-button:disabled,.danger-button:disabled{opacity:.45;cursor:not-allowed}.primary-button :global(.icon){margin-left:12px}
   .section{border-top:1px solid var(--border);padding-top:25px;margin-top:30px}.file-picker{display:inline-flex;align-items:center;position:relative;overflow:hidden;min-height:44px;border:1px solid var(--control-border);border-radius:10px;padding:12px 15px;font-size:12px;font-weight:650;cursor:pointer;background:var(--surface-raised)}.file-picker:focus-within{outline:3px solid var(--focus);outline-offset:3px}.file-picker input:focus-visible{outline:0}.file-picker input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.file-name{font-size:11px;color:var(--muted);margin:10px 0}
   .storage-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.storage-actions button:disabled{opacity:.45;cursor:not-allowed}
   .preview{border:1px solid var(--border);border-radius:13px;padding:18px;margin-top:18px}.preview h3{font-size:14px;margin:0 0 8px}.preview .section-copy{font-size:12px}

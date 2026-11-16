@@ -12,7 +12,7 @@
 </svelte:head>
 
 <main class="tools-page">
-  <a class="back-link" href={resolve('/')}>← Today</a>
+  <a class="back-link" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH</div>
     <h1>Tools for your <em>practice.</em></h1>
@@ -38,7 +38,7 @@
           sharp and flat spelling, mirror the diagram, and practise finding a note.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/fretboard')}>Open fretboard explorer <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/fretboard')}>Open fretboard explorer <Icon name="arrow-right" size={14} /></a>
     </article>
     <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true"><Icon name="chord" /></div>
@@ -50,7 +50,7 @@
           record clean changes separately from elapsed practice time.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/chords')}>Open chord library <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/chords')}>Open chord library <Icon name="arrow-right" size={14} /></a>
     </article>
     <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true"><Icon name="theory" /></div>
@@ -62,7 +62,7 @@
           in a key through short name, sound and use prompts.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/theory-recall')}>Open theory recall <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/theory-recall')}>Open theory recall <Icon name="arrow-right" size={14} /></a>
     </article>
     </div>
   </section>
@@ -83,7 +83,7 @@
           short audio examples generated locally in your browser.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <Icon name="arrow-right" size={14} /></a>
     </article>
     <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true"><Icon name="microphone" /></div>
@@ -95,7 +95,7 @@
           feedback from local pitch recognition. Microphone access starts only after Start.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/note-recognition')}>Open note recognition <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/note-recognition')}>Open note recognition <Icon name="arrow-right" size={14} /></a>
     </article>
     </div>
   </section>
@@ -116,7 +116,7 @@
           separately triggered A4 reference tone.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/metronome')}>Open metronome <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/metronome')}>Open metronome <Icon name="arrow-right" size={14} /></a>
     </article>
     <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true"><Icon name="tuner" /></div>
@@ -128,7 +128,7 @@
           flat-to-sharp meter. Microphone access starts only when you choose Start.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/tuner')}>Open chromatic tuner <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/tuner')}>Open chromatic tuner <Icon name="arrow-right" size={14} /></a>
     </article>
     </div>
   </section>
@@ -149,7 +149,7 @@
           locally, with learner backup and restore support.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/repertoire')}>Open song projects <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/repertoire')}>Open song projects <Icon name="arrow-right" size={14} /></a>
     </article>
     </div>
   </section>
@@ -268,8 +268,9 @@
   .open-tool {
     color: var(--primary);
   }
-  .open-tool span {
-    padding-left: 7px;
+  .open-tool :global(.icon) {
+    margin-left: 7px;
+    color: var(--primary);
   }
   .tool-status {
     color: var(--muted);

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
   import { onMount } from 'svelte';
   import type { PageData } from './$types';
 
@@ -89,7 +90,7 @@
 
 <main class="catalog">
   <header class="catalog-header">
-    <a class="back" href={resolve('/')}>← Today</a>
+    <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
     <div class="eyebrow">THE GUITARLAB CURRICULUM</div>
     <h1>Find your next <em>lesson.</em></h1>
     <p class="intro">Search by lesson name or what you want to practise. Filter by learning path or the time you have, then open a lesson directly.</p>
@@ -111,12 +112,12 @@
         <div class="eyebrow">LESSON FINDER</div>
         <h2 id="finder-title">What would you like to learn?</h2>
       </div>
-      <a class="browse-paths-link" href="#browse-paths">Browse learning paths ↓</a>
+      <a class="browse-paths-link" href="#browse-paths">Browse learning paths <Icon name="arrow-down" size={14} /></a>
     </div>
 
     <label class="search-label" for="lesson-search">Search 152 lessons</label>
     <div class="search-wrap">
-      <span class="search-icon" aria-hidden="true">⌕</span>
+      <span class="search-icon" aria-hidden="true"><Icon name="search" size={18} /></span>
       <input
         id="lesson-search"
         type="search"
@@ -164,7 +165,7 @@
 
     {#if filteredLessons.length === 0}
       <div class="empty-results" role="status">
-        <div class="empty-symbol" aria-hidden="true">⌕</div>
+        <div class="empty-symbol" aria-hidden="true"><Icon name="search" size={24} /></div>
         <h3>No lessons match those filters.</h3>
         <p>Try another word, choose a different learning path or remove the duration filter.</p>
         <button type="button" onclick={clearFilters}>Clear filters</button>
@@ -183,7 +184,7 @@
             <div class="result-footer">
               <span>{lesson.routeTitle} <span aria-hidden="true">·</span> {lesson.phaseTitle}</span>
               <a class="lesson-result-link" href={resolve('/learn/[lessonId]', { lessonId: lesson.lessonId })} aria-label={'Open lesson: ' + lesson.title}>
-                Open lesson <span aria-hidden="true">→</span>
+                Open lesson <Icon name="arrow-right" size={14} />
               </a>
             </div>
           </article>
@@ -193,7 +194,7 @@
         <div class="show-more-wrap">
           <button class="show-more" type="button" onclick={() => (visibleCount += 12)}>
             Show {Math.min(12, filteredLessons.length - visibleLessons.length)} more lessons
-            <span aria-hidden="true">↓</span>
+            <Icon name="arrow-down" size={14} />
           </button>
           <p>Showing {visibleLessons.length} of {filteredLessons.length} matching lessons</p>
         </div>
@@ -210,7 +211,7 @@
         <h2 id="paths-title">Browse by learning path</h2>
         <p>Follow a structured route or explore an optional specialist pathway.</p>
       </div>
-      <a href="#lesson-search">↑ Back to lesson finder</a>
+      <a href="#lesson-search"><Icon name="arrow-up" size={14} /> Back to lesson finder</a>
     </div>
     <nav class="route-jump" aria-label="Jump to a learning path">
       {#each data.routes as route (route.id)}
@@ -228,7 +229,7 @@
           <p>{route.goal}</p>
           <div class="route-card-footer">
             <span>{route.phases.length} {route.phases.length === 1 ? 'stage' : 'stages'} · {route.contentVersion} content</span>
-            <a href={resolve('/learn/[lessonId]', { lessonId: route.weeks[0].lessonId })}>Open first lesson <span aria-hidden="true">→</span></a>
+            <a href={resolve('/learn/[lessonId]', { lessonId: route.weeks[0].lessonId })}>Open first lesson <Icon name="arrow-right" size={14} /></a>
           </div>
         </article>
       {/each}
@@ -279,7 +280,7 @@
   .lesson-result-link:hover,.browse-paths-link:hover,.directory-heading>a:hover{ text-decoration:underline;text-underline-offset:3px}
   .show-more-wrap{text-align:center;padding:20px 0 2px}
   .show-more,.empty-results button{min-height:44px;padding:10px 17px;border:1px solid var(--border);border-radius:10px;background:var(--surface-raised);color:var(--text);font-size:13px;font-weight:750;cursor:pointer}
-  .show-more span{padding-left:8px;color:var(--primary)}
+  .show-more :global(.icon){margin-left:8px;color:var(--primary)}
   .show-more-wrap p,.all-results-shown{color:var(--muted);font-size:12px;margin:8px 0 0;text-align:center}
   .empty-results{padding:30px 15px;text-align:center;border:1px dashed var(--border);border-radius:12px;background:var(--bg)}
   .empty-symbol{font-size:32px;color:var(--muted)}

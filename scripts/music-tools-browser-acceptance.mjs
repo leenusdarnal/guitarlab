@@ -67,15 +67,25 @@ try {
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
+  const assertBackIcon = async () => {
+    assert.equal(
+      await page.locator('.back-link [data-icon="arrow-left"]').count(),
+      1,
+      'Tool routes must use the shared SVG back icon.'
+    );
+  };
+
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
+  await assertBackIcon();
 
   // The chord library is independently navigable and shows one complete shape.
   await page.getByRole('link', { name: /Open chord library/ }).click();
   await page.getByRole('heading', { name: 'Chord library.' }).waitFor();
+  await assertBackIcon();
   await page.getByLabel('Choose an open chord').selectOption('g-major');
   await page.getByRole('heading', { name: 'G', exact: true }).waitFor();
   const chordDiagram = page.getByRole('img', {
@@ -134,9 +144,10 @@ try {
   await page.getByLabel('Clean changes').fill('11');
   await page.getByRole('alert').waitFor();
 
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page.getByRole('link', { name: /Open metronome/ }).click();
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
+  await assertBackIcon();
 
   // Numeric, stepped, preset, tap-tempo and slider controls stay in sync.
   const tempoEntry = page.getByRole('spinbutton', {
@@ -194,9 +205,10 @@ try {
   });
 
   // Ear-training challenges generate their examples locally and provide retry feedback.
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
+  await assertBackIcon();
   const waitForEarAudio = () =>
     page.waitForFunction(() => {
       const button = [...document.querySelectorAll('button')].find((item) =>
@@ -370,7 +382,7 @@ try {
   // Navigating away during playback aborts the completion timer and closes the context.
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'Playing example…' }).waitFor();
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
@@ -379,12 +391,13 @@ try {
   await page.getByRole('button', { name: 'Listen to example' }).waitFor();
 
   // Theory recall connects names, generated triad sounds and chord function.
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
   await page.getByRole('link', { name: /Open theory recall/ }).click();
   await page.getByRole('heading', { name: 'Make theory musical.' }).waitFor();
+  await assertBackIcon();
   await page.getByRole('button', { name: 'F major' }).click();
   await page.getByText("That's right.").waitFor();
   await page
@@ -425,9 +438,10 @@ try {
     .waitFor();
 
   // The chromatic tuner must not request microphone access on page load.
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page.getByRole('link', { name: /Open chromatic tuner/ }).click();
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  await assertBackIcon();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     0,
@@ -496,9 +510,10 @@ try {
   });
 
   // The guided note-recognition exercise also defers microphone permission.
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page.getByRole('link', { name: /Open note recognition/ }).click();
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
+  await assertBackIcon();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     0,
@@ -556,7 +571,7 @@ try {
     `Tuner page overflows horizontally on mobile: ${JSON.stringify(tunerDimensions)}`
   );
 
-  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.locator('.back-link').click();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });
@@ -571,6 +586,7 @@ try {
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'networkidle' });
+  await assertBackIcon();
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('.find-progress').waitFor();
   await page.locator('.fret-cell[data-string="2"][data-fret="1"]').click();
@@ -615,6 +631,9 @@ try {
     dimensions.page <= dimensions.viewport,
     `Music tool page overflows horizontally on mobile: ${JSON.stringify(dimensions)}`
   );
+  await page.goto(`${origin}/repertoire`, { waitUntil: 'networkidle' });
+  await assertBackIcon();
+
   assert.deepEqual(
     pageErrors,
     [],

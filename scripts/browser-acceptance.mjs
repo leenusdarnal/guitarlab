@@ -617,7 +617,7 @@ try {
     .getByText(/only after you press Start tuner/)
     .waitFor();
   await page.getByRole('button', { name: 'Start tuner' }).waitFor();
-  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  await page.locator('.back-link [data-icon="arrow-left"]').waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
     0,
@@ -632,7 +632,7 @@ try {
     .getByText(/only after you press Start exercise/)
     .waitFor();
   await page.getByRole('button', { name: 'Start exercise' }).waitFor();
-  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  await page.locator('.back-link [data-icon="arrow-left"]').waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
     0,
