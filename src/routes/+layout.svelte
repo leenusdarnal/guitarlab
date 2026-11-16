@@ -7,6 +7,7 @@
   import { loadActiveLearnerProfile } from '../lib/storage/indexeddb';
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
+  import MobileTabBar from '../lib/components/MobileTabBar.svelte';
 
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
@@ -165,48 +166,23 @@
             <option value="dark">Dark</option>
           </select>
         </label>
-        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-primary-navigation" aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}>
-          <Icon name={mobileMenuOpen ? 'close' : 'menu'} size={18} /><span>Menu</span>
+        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-more-navigation" aria-label={mobileMenuOpen ? 'Close more navigation' : 'Open more navigation'}>
+          <Icon name={mobileMenuOpen ? 'close' : 'menu'} size={18} /><span>More</span>
         </button>
       </div>
     </div>
 
     <nav
-      class="mobile-primary-navigation"
-      id="mobile-primary-navigation"
-      aria-label="Primary navigation"
+      class="mobile-more-navigation"
+      id="mobile-more-navigation"
+      aria-label="More navigation"
       hidden={!mobileMenuOpen}
     >
-      <a
-        href={resolve('/')}
-        aria-current={activeSection === 'today' ? 'page' : undefined}
-        onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="home" size={18} /></span>Today</a>
-      <a
-        href={resolve('/learn')}
-        aria-current={activeSection === 'learn' ? 'page' : undefined}
-        onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="book-open" size={18} /></span>Learn</a>
-      <a
-        href={resolve('/practice')}
-        aria-current={activeSection === 'practice' ? 'page' : undefined}
-        onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span>Practice</a>
-      <a
-        href={resolve('/tools')}
-        aria-current={activeSection === 'tools' ? 'page' : undefined}
-        onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="toolbox" size={18} /></span>Tools</a>
       <a
         href={resolve('/repertoire')}
         aria-current={activeSection === 'songs' ? 'page' : undefined}
         onclick={closeMobileMenu}
       ><span class="nav-icon" aria-hidden="true"><Icon name="song" size={18} /></span>Songs</a>
-      <a
-        href={resolve('/skills')}
-        aria-current={activeSection === 'progress' ? 'page' : undefined}
-        onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span>Progress</a>
       <a
         href={resolve('/onboarding')}
         aria-current={currentPath.startsWith('/onboarding') ? 'page' : undefined}
@@ -222,6 +198,10 @@
 {/if}
 
 <slot />
+
+{#if currentPath !== '/onboarding'}
+  <MobileTabBar />
+{/if}
 
 <style>
   .skip-link{position:fixed;z-index:1000;top:.75rem;left:.75rem;padding:.75rem 1rem;transform:translateY(calc(-100% - 1rem));border:1px solid var(--primary);border-radius:.75rem;background:var(--primary);color:var(--primary-ink);font-size:.875rem;font-weight:700;box-shadow:0 6px 24px #0004;transition:transform 140ms ease-out}
@@ -241,13 +221,13 @@
   .theme-control select{min-height:44px;max-width:132px;padding:8px 28px 8px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .mobile-nav-trigger{display:none;align-items:center;gap:8px;min-height:44px;padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
-  .mobile-primary-navigation[hidden]{display:none!important}
+  .mobile-more-navigation[hidden]{display:none!important}
   .mobile-nav-trigger :global(svg){flex:none}
-  .mobile-primary-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:8px 16px 16px;border-top:1px solid var(--border);background:var(--surface)}
-  .mobile-primary-navigation a{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
-  .mobile-primary-navigation .nav-icon{display:grid;place-items:center;width:20px;flex:none;color:var(--muted)}
-  .mobile-primary-navigation a:hover,.mobile-primary-navigation a:focus-visible{background:var(--surface-raised)}
-  .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .mobile-more-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:8px 16px 16px;border-top:1px solid var(--border);background:var(--surface)}
+  .mobile-more-navigation a{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
+  .mobile-more-navigation .nav-icon{display:grid;place-items:center;width:20px;flex:none;color:var(--muted)}
+  .mobile-more-navigation a:hover,.mobile-more-navigation a:focus-visible{background:var(--surface-raised)}
+  .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
   @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
