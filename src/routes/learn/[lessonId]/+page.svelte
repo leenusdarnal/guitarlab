@@ -1,6 +1,7 @@
 <script lang="ts">
   import { SvelteMap } from 'svelte/reactivity';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import type { PageData } from './$types';
   import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
   import type { LessonProgressRecord } from '../../../lib/repositories/contracts';
@@ -438,14 +439,14 @@
         <span class="eyebrow">YOUR ROUTE</span><strong>{data.detail.route.title}</strong>
         <span>Weeks {data.detail.phase.firstWeek}–{data.detail.phase.lastWeek}</span>
         <p>{data.detail.phase.goal}</p>
-        <a href={resolve(`/learn#route-${data.detail.route.id}`)}>View all lessons in this route ↗</a>
+        <a href={resolve(`/learn#route-${data.detail.route.id}`)}>View all lessons in this route <Icon name="external-link" size={13} /></a>
       </div>
       <div class="sidebar-card glance-card">
         <span class="eyebrow">LESSON AT A GLANCE</span>
         <strong>{lesson.estimatedMinutes} minutes</strong>
         <span>{lesson.lessonBlocks.length} guided steps</span>
         <span>{lesson.exercises.length} focused exercises</span>
-        <a href="#lesson-progress">View your saved progress ↓</a>
+        <a href="#lesson-progress">View your saved progress <Icon name="arrow-down" size={14} /></a>
       </div>
     </aside>
   </div>
@@ -488,9 +489,9 @@
   </section>
 
   <nav class="lesson-pagination" aria-label="Lesson pagination">
-    {#if data.previousLessonId}<a href={resolve('/learn/[lessonId]', { lessonId: data.previousLessonId })}>← Previous lesson</a>{:else}<span>Start of this route</span>{/if}
+    {#if data.previousLessonId}<a href={resolve('/learn/[lessonId]', { lessonId: data.previousLessonId })}><Icon name="arrow-left" size={14} /> Previous lesson</a>{:else}<span>Start of this route</span>{/if}
     <a href={resolve(`/learn#route-${data.detail.route.id}`)}>All lessons</a>
-    {#if data.nextLessonId}<a href={resolve('/learn/[lessonId]', { lessonId: data.nextLessonId })}>Next lesson →</a>{:else}<span>End of this route</span>{/if}
+    {#if data.nextLessonId}<a href={resolve('/learn/[lessonId]', { lessonId: data.nextLessonId })}>Next lesson <Icon name="arrow-right" size={14} /></a>{:else}<span>End of this route</span>{/if}
   </nav>
   <p class="mastery-note">Reading a lesson or spending time on an exercise does not mark it complete or prove skill mastery. Progress recording and checkpoints are a separate learning step.</p>
 </main>
