@@ -90,6 +90,18 @@
       ?.setAttribute('content', resolved === 'light' ? '#F5F4F0' : '#101318');
   }
 
+  function handleThemePreferenceChange(event: Event) {
+    const selected = event.currentTarget as HTMLSelectElement;
+    if (!isThemePreference(selected.value)) return;
+    themePreference = selected.value;
+    applyResolvedTheme(themePreference);
+    try {
+      window.localStorage.setItem('guitarlab-theme', themePreference);
+    } catch {
+      // Keep the selected theme active for this session when storage is blocked.
+    }
+  }
+
   async function loadDashboard(isCurrent: () => boolean = () => true) {
     isLoading = true;
     dashboardError = '';
@@ -281,6 +293,14 @@
       <div class="mobile-brand" aria-hidden="true"><Brand size="small" /></div>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions">
+        <label class="appearance-control">
+          <span class="sr-only">Appearance</span>
+          <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
         <span class="status-pill"><i></i> Local-first learning</span>
         <a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences"><Icon name="external-link" size={16} /></a>
       </div>
@@ -523,6 +543,7 @@
   .learning-path{margin-bottom:35px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.section-heading h2{font-size:20px;margin:7px 0 5px}.section-heading p{font-size:11px;color:var(--muted);margin:0}.phase-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.phase-card{padding:17px;min-width:0}.phase-card.current-phase{border-color:color-mix(in srgb,var(--primary) 65%,var(--border));background:color-mix(in srgb,var(--primary) 5%,var(--surface))}.phase-top{display:flex;justify-content:space-between;gap:6px;font-size:8px;letter-spacing:.8px;color:var(--muted);font-weight:750}.current-label{color:var(--primary)}.phase-card h3{font:500 19px/1.2 Georgia,serif;margin:17px 0 7px}.phase-card>p{font-size:10px;line-height:1.6;color:var(--muted);min-height:64px;margin:0 0 15px}.phase-progress{height:5px;border-radius:9px;background:var(--surface-raised);overflow:hidden}.phase-progress span{display:block;height:100%;border-radius:9px;background:var(--primary)}.phase-count{font-size:9px;color:var(--muted);margin-top:8px}.phase-action{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-top:6px;color:var(--primary);font-size:10px;font-weight:750;text-decoration:none}.path-note{font-size:10px;line-height:1.6;color:var(--muted);margin:13px 0 0}footer{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--border);padding-top:17px;margin-top:30px;color:var(--muted);font-size:10px}
   @media(max-width:1050px){.phase-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.phase-card>p{min-height:44px}}@media(max-width:900px){.app-shell{grid-template-columns:205px minmax(0,1fr)}.hero-grid,.dashboard-grid{grid-template-columns:1fr}.section-heading{align-items:flex-start;flex-direction:column}}@media(max-width:650px){.task-list{grid-template-columns:1fr}.planner-heading{flex-direction:column}.planner-footer{align-items:flex-start;flex-direction:column}.app-shell{display:block}.sidebar{display:none}.topbar{height:60px;padding:0 17px}.mobile-brand{display:flex;align-items:center;gap:9px;border:0;background:transparent;color:var(--text);font-size:14px}.breadcrumb,.status-pill{display:none}.appearance-control select{min-width:92px;padding-inline:7px}.page-content{padding:32px 17px 22px}.welcome{align-items:flex-start;flex-direction:column;gap:17px}.welcome h1{font-size:42px}.secondary-button{width:100%;text-align:center}.fresh-state{align-items:flex-start;padding:16px}.target-card{padding:20px;min-height:215px}.target-footer{align-items:flex-start;flex-direction:column}.practice-target{min-height:200px}.phase-grid{grid-template-columns:1fr}.phase-card>p{min-height:0}.panel{padding:18px}footer{flex-direction:column}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+  @media(max-width:760px){.appearance-control{display:none}}
   .welcome-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;flex:none}
   .primary-button,.secondary-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:750;white-space:nowrap}
   .primary-button{background:var(--primary);color:var(--primary-ink);border:1px solid var(--primary)}
