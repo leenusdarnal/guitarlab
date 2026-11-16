@@ -58,10 +58,12 @@
   let historyEvidenceSessionId = $state<string | null>(null);
   let historyEvidence = $state<PracticeEvidenceRecord[]>([]);
   let historyEvidenceLoadingSessionId = $state<string | null>(null);
+  let historyEvidenceError = $state('');
   let adaptiveSnapshot = $state<AdaptivePracticeSnapshot | null>(null);
   let adaptiveFeedbackRecords = $state<AdaptiveRecommendationFeedbackRecord[]>([]);
   let adaptiveFeedbackSavingId = $state<string | null>(null);
   let adaptiveLoading = $state(true);
+  let adaptiveLoadError = $state('');
   let adaptiveError = $state('');
 
   const authoredPracticeScopes = listAuthoredPracticeScopes();
@@ -78,9 +80,11 @@
   let nextTarget = $state('');
 
   let loading = $state(true);
+  let historyError = $state('');
   let saving = $state(false);
   let evidenceSaving = $state(false);
   let activeEvidenceLoading = $state(false);
+  let activeEvidenceLoadError = $state('');
   let error = $state('');
   let notice = $state('');
   let evidenceError = $state('');
@@ -202,11 +206,11 @@
 
   async function loadActiveEvidence(sessionId: string) {
     activeEvidenceLoading = true;
-    evidenceError = '';
+    activeEvidenceLoadError = '';
     try {
       activeEvidence = await listActivePracticeEvidence(sessionId);
     } catch (cause) {
-      evidenceError =
+      activeEvidenceLoadError =
         cause instanceof Error
           ? cause.message
           : 'Could not load this session’s exercise observations.';
@@ -217,7 +221,7 @@
 
   async function refreshAdaptivePractice() {
     adaptiveLoading = true;
-    adaptiveError = '';
+    adaptiveLoadError = '';
     try {
       const [snapshot, feedback] = await Promise.all([
         loadActiveAdaptivePracticeSnapshot(),
@@ -227,7 +231,7 @@
       adaptiveFeedbackRecords = feedback;
     } catch {
       adaptiveSnapshot = null;
-      adaptiveError =
+      adaptiveLoadError =
         'Adaptive practice suggestions could not be loaded from local learner records.';
     } finally {
       adaptiveLoading = false;
@@ -244,8 +248,22 @@
       await loadActiveEvidence(current.id);
     } else {
       activeEvidence = [];
+      activeEvidenceLoadError = '';
     }
     await refreshAdaptivePractice();
+  }
+
+  async function refreshPracticeData() {
+    loading = true;
+    historyError = '';
+    try {
+      await refresh();
+    } catch {
+      historyError =
+        'Your local practice history could not be loaded. Check browser storage, then try again.';
+    } finally {
+      loading = false;
+    }
   }
 
   onMount(() => {
@@ -281,12 +299,7 @@
         // Keep the safe 20-minute fallback when the local profile is unavailable.
       });
 
-    void refresh()
-      .catch(() => {
-        error =
-          'Your local practice history could not be loaded. Check browser storage and try again.';
-      })
-      .finally(() => (loading = false));
+    void refreshPracticeData();
     return () => {
       window.clearInterval(clock);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -451,15 +464,10 @@
     }
   }
 
-  async function toggleHistoryEvidence(sessionId: string) {
-    if (historyEvidenceSessionId === sessionId) {
-      historyEvidenceSessionId = null;
-      historyEvidence = [];
-      return;
-    }
-
+  async function loadHistoryEvidence(sessionId: string) {
     historyEvidenceSessionId = sessionId;
     historyEvidence = [];
+    historyEvidenceError = '';
     historyEvidenceLoadingSessionId = sessionId;
     try {
       const observations = await listActivePracticeEvidence(sessionId);
@@ -468,17 +476,26 @@
       }
     } catch (cause) {
       if (historyEvidenceSessionId === sessionId) {
-        error =
+        historyEvidenceError =
           cause instanceof Error
             ? cause.message
             : 'Could not load this session’s exercise observations.';
-        historyEvidence = [];
       }
     } finally {
       if (historyEvidenceLoadingSessionId === sessionId) {
         historyEvidenceLoadingSessionId = null;
       }
     }
+  }
+
+  async function toggleHistoryEvidence(sessionId: string) {
+    if (historyEvidenceSessionId === sessionId) {
+      historyEvidenceSessionId = null;
+      historyEvidence = [];
+      historyEvidenceError = '';
+      return;
+    }
+    await loadHistoryEvidence(sessionId);
   }
 
   async function finishSession() {
@@ -643,6 +660,17 @@
 
   {#if error}
     <p class="message error" role="alert">{error}</p>
+  {/if}
+  {#if historyError}
+    <div class="message error recovery-message" role="alert">
+      <p>{historyError}</p>
+      <div class="recovery-actions">
+        <button class="text-button" type="button" onclick={() => void refreshPracticeData()} disabled={loading}>
+          Try again
+        </button>
+        <a href={resolve('/')}>Return to Today</a>
+      </div>
+    </div>
   {/if}
   {#if notice}
     <p class="message" role="status" tabindex="-1" bind:this={sessionNotice}>{notice}</p>
@@ -838,6 +866,13 @@
 
           {#if activeEvidenceLoading}
             <p class="muted" role="status">Loading saved observations…</p>
+          {:else if activeEvidenceLoadError}
+            <div class="message error recovery-message" role="alert">
+              <p>{activeEvidenceLoadError}</p>
+              <button class="text-button" type="button" onclick={() => void loadActiveEvidence(activeSession.id)} disabled={activeEvidenceLoading}>
+                Try again
+              </button>
+            </div>
           {:else if activeEvidence.length > 0}
             <ul class="evidence-list active-evidence-list">
               {#each activeEvidence as observation (observation.id)}
@@ -980,10 +1015,18 @@
 
     </div>
 
+    {#if adaptiveError}
+      <p class="message error" role="alert">{adaptiveError}</p>
+    {/if}
     {#if adaptiveLoading}
       <p class="muted" role="status">Loading your learning evidence…</p>
-    {:else if adaptiveError}
-      <p class="message error" role="alert">{adaptiveError}</p>
+    {:else if adaptiveLoadError}
+      <div class="message error recovery-message" role="alert">
+        <p>{adaptiveLoadError}</p>
+        <button class="text-button" type="button" onclick={() => void refreshAdaptivePractice()} disabled={adaptiveLoading}>
+          Try again
+        </button>
+      </div>
     {:else if adaptiveRecommendations.length > 0}
       <ol class="adaptive-list">
         {#each adaptiveRecommendations as item (item.recommendation.id)}
@@ -1288,6 +1331,13 @@
                 <div class="history-evidence">
                   {#if historyEvidenceLoadingSessionId === session.id}
                     <p class="muted" role="status">Loading observations…</p>
+                  {:else if historyEvidenceError}
+                    <div class="message error recovery-message" role="alert">
+                      <p>{historyEvidenceError}</p>
+                      <button class="text-button" type="button" onclick={() => void loadHistoryEvidence(session.id)} disabled={historyEvidenceLoadingSessionId === session.id}>
+                        Try again
+                      </button>
+                    </div>
                   {:else if historyEvidence.length > 0}
                     <ul class="evidence-list">
                       {#each historyEvidence as observation (observation.id)}
@@ -1972,6 +2022,24 @@
     margin: 6px 0 0;
     line-height: 1.55;
     max-width: 700px;
+  }
+
+  .recovery-message p {
+    margin: 0 0 8px;
+  }
+
+  .recovery-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .recovery-actions a {
+    color: var(--primary);
+    font-weight: 650;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .message {

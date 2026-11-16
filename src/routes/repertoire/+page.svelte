@@ -17,29 +17,34 @@
   let draft = $state<SongProjectRecord | null>(null);
   let newTitle = $state('');
   let isLoading = $state(true);
+  let loadError = $state('');
   let isSaving = $state(false);
   let status = $state('');
   let error = $state('');
 
+  async function loadProjects(isCurrent: () => boolean = () => true) {
+    isLoading = true;
+    loadError = '';
+    try {
+      const records = await loadActiveSongProjects();
+      if (!isCurrent()) return;
+      projects = records;
+      draft = records[0] ? $state.snapshot(records[0]) : null;
+    } catch (cause) {
+      if (isCurrent()) {
+        loadError =
+          cause instanceof Error
+            ? cause.message
+            : 'Your local song projects could not be loaded.';
+      }
+    } finally {
+      if (isCurrent()) isLoading = false;
+    }
+  }
+
   onMount(() => {
     let active = true;
-    void loadActiveSongProjects()
-      .then((records) => {
-        if (!active) return;
-        projects = records;
-        draft = records[0] ? $state.snapshot(records[0]) : null;
-      })
-      .catch((cause) => {
-        if (active) {
-          error =
-            cause instanceof Error
-              ? cause.message
-              : 'Your local song projects could not be loaded.';
-        }
-      })
-      .finally(() => {
-        if (active) isLoading = false;
-      });
+    void loadProjects(() => active);
     return () => {
       active = false;
     };
@@ -212,7 +217,34 @@
   </section>
 
   {#if isLoading}
-    <p class="status" role="status">Loading local projects…</p>
+    <div class="workspace-loading" role="status" aria-label="Loading local projects">
+      <p class="status">Loading local projects…</p>
+      <div class="workspace-loading-grid" aria-hidden="true">
+        <div class="workspace-loading-list">
+          <span class="loading-line short"></span>
+          <span class="loading-field"></span>
+          <span class="loading-field"></span>
+          <span class="loading-field"></span>
+        </div>
+        <div class="workspace-loading-editor">
+          <span class="loading-line medium"></span>
+          <span class="loading-field"></span>
+          <span class="loading-field"></span>
+          <span class="loading-field"></span>
+          <span class="loading-field"></span>
+        </div>
+      </div>
+    </div>
+  {:else if loadError}
+    <div class="status error load-error" role="alert">
+      <p>{loadError}</p>
+      <div class="status-actions">
+        <button type="button" class="primary-button" onclick={() => void loadProjects()} disabled={isLoading}>
+          Try again
+        </button>
+        <a href={resolve('/')}>Return to Today</a>
+      </div>
+    </div>
   {:else}
     <div class="workspace">
       <aside class="project-list" aria-label="Your song projects">
@@ -427,6 +459,16 @@
   .text-button { min-height: 32px; padding: 5px 8px; background: transparent; color: var(--muted); }
   button:disabled { opacity: .55; cursor: wait; }
   .workspace { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: 16px; align-items: start; }
+  .workspace-loading-grid { display: grid; grid-template-columns: minmax(210px, 270px) minmax(0, 1fr); gap: 16px; }
+  .workspace-loading-list, .workspace-loading-editor { display: grid; align-content: start; gap: 12px; min-height: 340px; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .loading-line { display: block; height: 12px; border-radius: 6px; background: var(--surface-raised); }
+  .loading-line.short { width: 55%; }
+  .loading-line.medium { width: 72%; }
+  .loading-field { display: block; height: 42px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-raised); }
+  .workspace-loading-editor .loading-field:nth-child(4), .workspace-loading-editor .loading-field:nth-child(5) { height: 58px; }
+  .load-error p { margin: 0 0 12px; }
+  .status-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .status-actions a { color: var(--primary); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
   .project-list, .editor { padding: 16px; }
   .list-heading { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 12px; color: var(--muted); font-size: 10px; }
   .project-choice {
@@ -468,7 +510,9 @@
     outline-offset: 2px;
   }
   @media (max-width: 760px) {
-    .workspace { grid-template-columns: 1fr; }
+    .workspace, .workspace-loading-grid { grid-template-columns: 1fr; }
+    .workspace-loading-list { min-height: 170px; }
+    .workspace-loading-editor { min-height: 290px; }
     .project-list { order: 2; }
     .editor { order: 1; }
   }
