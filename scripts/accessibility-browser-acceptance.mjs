@@ -250,6 +250,11 @@ try {
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
         const moreNavigation = page.locator('#mobile-more-navigation');
         await moreNavigation.waitFor({ state: 'visible' });
+        assert.equal(
+          await moreNavigation.locator('a').first().evaluate((element) => document.activeElement === element),
+          true,
+          'Opening More navigation must move focus to its first destination.'
+        );
         assert.ok(
           await moreNavigation.locator('a').count() >= 3,
           'Secondary navigation must retain Songs, preferences and data backups.'
