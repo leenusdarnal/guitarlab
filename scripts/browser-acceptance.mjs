@@ -376,6 +376,19 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const page = await context.newPage();
+  await context.addInitScript(() => {
+    window.__guitarlabGetUserMediaCalls = 0;
+    const devices = navigator.mediaDevices;
+    if (!devices || typeof devices.getUserMedia !== 'function') return;
+    const request = devices.getUserMedia.bind(devices);
+    Object.defineProperty(devices, 'getUserMedia', {
+      configurable: true,
+      value: (...args) => {
+        window.__guitarlabGetUserMediaCalls += 1;
+        return request(...args);
+      }
+    });
+  });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -414,6 +427,52 @@ try {
   assert.equal(
     securityHeaders['permissions-policy'],
     'camera=(), microphone=(self), geolocation=()'
+  );
+
+  // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
+  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  await page
+    .getByRole('heading', { name: 'Tools for your practice.' })
+    .waitFor();
+  assert.equal(await page.locator('.tool-group').count(), 4);
+  assert.equal(await page.locator('.tool-row').count(), 8);
+  assert.equal(
+    await page.getByText('Available now', { exact: true }).count(),
+    0
+  );
+  assert.match(
+    await page.locator('.page-heading p').innerText(),
+    /The tuner and note recognition use your microphone only after you press Start/
+  );
+
+  // Microphone tools explain capture and permission before any Start action.
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  await page
+    .locator('.microphone-permission-note')
+    .getByText(/only after you press Start tuner/)
+    .waitFor();
+  await page.getByRole('button', { name: 'Start tuner' }).waitFor();
+  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
+    0,
+    'Opening the tuner must not request microphone access'
+  );
+  await page.goto(`${origin}/tools/note-recognition`, {
+    waitUntil: 'networkidle'
+  });
+  await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
+  await page
+    .locator('.microphone-permission-note')
+    .getByText(/only after you press Start exercise/)
+    .waitFor();
+  await page.getByRole('button', { name: 'Start exercise' }).waitFor();
+  await page.getByRole('link', { name: '← Tools' }).waitFor();
+  assert.equal(
+    await page.evaluate(() => window.__guitarlabGetUserMediaCalls),
+    0,
+    'Opening note recognition must not request microphone access'
   );
 
   await page.goto(origin, { waitUntil: 'networkidle' });
@@ -460,7 +519,16 @@ try {
     .first()
     .click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
-  await page.getByRole('radio', { name: 'Acoustic guitar' }).check();
+  assert.equal(
+    await page.getByRole('radio', { name: 'Acoustic guitar' }).count(),
+    0,
+    'Setup should not offer an instrument choice until it changes the learning experience'
+  );
+  assert.equal(
+    await page.getByLabel('Preferred lesson presentation').count(),
+    0,
+    'Setup should not promise a lesson-presentation effect that is not implemented'
+  );
   await page.getByRole('checkbox', { name: 'Acoustic & fingerstyle' }).check();
   await page.getByRole('radio', { name: '20 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
@@ -468,7 +536,8 @@ try {
     .getByRole('status')
     .filter({ hasText: 'saved privately on this device' })
     .waitFor();
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.getByRole('link', { name: 'Go to Today' }).click();
+  await page.waitForURL((url) => url.pathname === '/');
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'networkidle' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
@@ -1079,11 +1148,6 @@ try {
     'Restoring the exported backup into a clean profile should recover preferences'
   );
   assert.equal(
-    await page.getByRole('radio', { name: 'Acoustic guitar' }).isChecked(),
-    true,
-    'Restoring the exported backup should recover the instrument preference'
-  );
-  assert.equal(
     await page
       .getByRole('checkbox', { name: 'Acoustic & fingerstyle' })
       .isChecked(),
@@ -1132,7 +1196,7 @@ try {
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
-  await page.getByRole('link', { name: /Open explorer/ }).click();
+  await page.getByRole('link', { name: /Open fretboard explorer/ }).click();
   await page.getByRole('heading', { name: 'Fretboard explorer.' }).waitFor();
   assert.equal(
     await page.locator('.fret-cell').count(),

@@ -6,52 +6,43 @@
   <title>Practice tools — GuitarLab</title>
   <meta
     name="description"
-    content="Explore the guitar fretboard and find the notes that support your practice."
+    content="Choose a guitar practice tool by what you want to explore, hear, recognise or practise."
   />
 </svelte:head>
 
 <main class="tools-page">
-  <a class="back-link" href={resolve('/')}>← Dashboard</a>
+  <a class="back-link" href={resolve('/')}>← Today</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH</div>
     <h1>Tools for your <em>practice.</em></h1>
     <p>
-      Clear, focused tools that help connect the fretboard, harmony and rhythm to
-      the music you are learning. Microphone access is optional and only used by the tuner after you press Start.
+      Choose a tool by the task you want to work on. The tuner and note recognition
+      use your microphone only after you press Start; the other tools do not request it.
     </p>
   </header>
 
-  <section class="tool-list" aria-label="GuitarLab tools">
-    <article class="tool-row available">
-      <div class="tool-symbol" aria-hidden="true">♫</div>
-      <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Notes · Sections · Practice targets</span></div>
-        <h2>Song projects</h2>
-        <p>
-          Organise your own song notes, section bookmarks and practice targets
-          locally, with learner backup and restore support.
-        </p>
-      </div>
-      <a class="open-tool" href={resolve('/repertoire')}>Open repertoire <span aria-hidden="true">→</span></a>
-    </article>
-
-    <article class="tool-row available">
+  <section class="tool-group" aria-labelledby="explore-title">
+    <header class="tool-group-heading">
+      <h2 id="explore-title">Explore notes and chords</h2>
+      <p>See where notes sit, explore chord shapes and connect them to musical harmony.</p>
+    </header>
+    <div class="tool-list">
+    <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true">♬</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Notes · Tuning · Fretboard</span></div>
+        <div class="tool-meta"><span>Notes · Tuning · Fretboard</span></div>
         <h2>Fretboard explorer</h2>
         <p>
           See note names across all six strings in standard tuning. Switch between
           sharp and flat spelling, mirror the diagram, and practise finding a note.
         </p>
       </div>
-      <a class="open-tool" href={resolve('/tools/fretboard')}>Open explorer <span aria-hidden="true">→</span></a>
+      <a class="open-tool" href={resolve('/tools/fretboard')}>Open fretboard explorer <span aria-hidden="true">→</span></a>
     </article>
-
-    <article class="tool-row available">
+    <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true">◇</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Voicings · Clean changes</span></div>
+        <div class="tool-meta"><span>Voicings · Clean changes</span></div>
         <h2>Chord library</h2>
         <p>
           Explore five open chord shapes, identify muted and fretted strings, and
@@ -60,50 +51,10 @@
       </div>
       <a class="open-tool" href={resolve('/tools/chords')}>Open chord library <span aria-hidden="true">→</span></a>
     </article>
-
-    <article class="tool-row available">
-      <div class="tool-symbol" aria-hidden="true">♯</div>
-      <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Chromatic · Microphone · Pitch</span></div>
-        <h2>Chromatic tuner</h2>
-        <p>
-          Tune one string at a time with confidence-aware pitch detection and a clear
-          flat-to-sharp meter. Microphone access starts only when you choose Start.
-        </p>
-      </div>
-      <a class="open-tool" href={resolve('/tools/tuner')}>Open tuner <span aria-hidden="true">→</span></a>
-    </article>
-
-    <article class="tool-row available">
-      <div class="tool-symbol" aria-hidden="true">♪</div>
-      <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Microphone · Open strings · Pitch</span></div>
-        <h2>Note recognition</h2>
-        <p>
-          Play each of the six standard open strings and get immediate, confidence-aware
-          feedback from local pitch recognition. Microphone access starts only after Start.
-        </p>
-      </div>
-      <a class="open-tool" href={resolve('/tools/note-recognition')}>Open exercise <span aria-hidden="true">→</span></a>
-    </article>
-
-    <article class="tool-row available">
-      <div class="tool-symbol" aria-hidden="true">♫</div>
-      <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Listening · Pulse · Pitch · Intervals</span></div>
-        <h2>Ear training</h2>
-        <p>
-          Practise steady pulse, high and low pitch, melodic contour and intervals with
-          short audio examples generated locally in your browser.
-        </p>
-      </div>
-      <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <span aria-hidden="true">→</span></a>
-    </article>
-
-    <article class="tool-row available">
+    <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true">♮</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Harmony · Chords · Musical function</span></div>
+        <div class="tool-meta"><span>Harmony · Chords · Musical function</span></div>
         <h2>Theory recall</h2>
         <p>
           Connect chord names, locally synthesized triad sounds and their role
@@ -112,11 +63,52 @@
       </div>
       <a class="open-tool" href={resolve('/tools/theory-recall')}>Open theory recall <span aria-hidden="true">→</span></a>
     </article>
+    </div>
+  </section>
 
-    <article class="tool-row available">
+  <section class="tool-group" aria-labelledby="listen-title">
+    <header class="tool-group-heading">
+      <h2 id="listen-title">Listen and recognise</h2>
+      <p>Train your ear and practise recognising the notes you play.</p>
+    </header>
+    <div class="tool-list">
+    <article class="tool-row">
+      <div class="tool-symbol" aria-hidden="true">♫</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span>Listening · Pulse · Pitch · Intervals</span></div>
+        <h2>Ear training</h2>
+        <p>
+          Practise steady pulse, high and low pitch, melodic contour and intervals with
+          short audio examples generated locally in your browser.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/ear-training')}>Open ear training <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="tool-row">
+      <div class="tool-symbol" aria-hidden="true">♪</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span>Microphone · Open strings · Pitch</span></div>
+        <h2>Note recognition</h2>
+        <p>
+          Play each of the six standard open strings and get immediate, confidence-aware
+          feedback from local pitch recognition. Microphone access starts only after Start.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/note-recognition')}>Open note recognition <span aria-hidden="true">→</span></a>
+    </article>
+    </div>
+  </section>
+
+  <section class="tool-group" aria-labelledby="timing-title">
+    <header class="tool-group-heading">
+      <h2 id="timing-title">Keep time and tune</h2>
+      <p>Build a steady pulse or check the pitch of each guitar string.</p>
+    </header>
+    <div class="tool-list">
+    <article class="tool-row">
       <div class="tool-symbol" aria-hidden="true">◷</div>
       <div class="tool-copy">
-        <div class="tool-meta"><span class="available-label">Available now</span><span>Tempo · Pulse · Reference tones</span></div>
+        <div class="tool-meta"><span>Tempo · Pulse · Reference tones</span></div>
         <h2>Metronome</h2>
         <p>
           Practise with a Web Audio metronome, adjustable tempo and meter, and a
@@ -125,11 +117,46 @@
       </div>
       <a class="open-tool" href={resolve('/tools/metronome')}>Open metronome <span aria-hidden="true">→</span></a>
     </article>
+    <article class="tool-row">
+      <div class="tool-symbol" aria-hidden="true">♯</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span>Chromatic · Microphone · Pitch</span></div>
+        <h2>Chromatic tuner</h2>
+        <p>
+          Tune one string at a time with confidence-aware pitch detection and a clear
+          flat-to-sharp meter. Microphone access starts only when you choose Start.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/tools/tuner')}>Open chromatic tuner <span aria-hidden="true">→</span></a>
+    </article>
+    </div>
+  </section>
+
+  <section class="tool-group" aria-labelledby="organise-title">
+    <header class="tool-group-heading">
+      <h2 id="organise-title">Organise your music</h2>
+      <p>Keep song notes, section bookmarks and practice targets together.</p>
+    </header>
+    <div class="tool-list">
+    <article class="tool-row">
+      <div class="tool-symbol" aria-hidden="true">♫</div>
+      <div class="tool-copy">
+        <div class="tool-meta"><span>Notes · Sections · Practice targets</span></div>
+        <h2>Song projects</h2>
+        <p>
+          Organise your own song notes, section bookmarks and practice targets
+          locally, with learner backup and restore support.
+        </p>
+      </div>
+      <a class="open-tool" href={resolve('/repertoire')}>Open song projects <span aria-hidden="true">→</span></a>
+    </article>
+    </div>
   </section>
 
   <p class="privacy-note">
-    GuitarLab's music tools process locally in your browser. The tuner requests microphone
-    access only after you press Start; raw audio is never uploaded or stored.
+    Chromatic tuner and Note recognition are the only tools that request microphone access,
+    and each waits for your explicit Start action. Audio analysis stays in this browser;
+    raw audio is not uploaded or saved.
   </p>
 </main>
 
@@ -171,6 +198,25 @@
     font-size: 12px;
     line-height: 1.75;
   }
+  .tool-group {
+    margin-top: 26px;
+  }
+  .tool-group-heading {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .tool-group-heading h2 {
+    margin: 0;
+    font: 500 23px / 1.2 Georgia, serif;
+  }
+  .tool-group-heading p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.65;
+  }
   .tool-list {
     display: grid;
     border-top: 1px solid var(--border);
@@ -202,10 +248,6 @@
     font-size: 9px;
     letter-spacing: 0.45px;
     text-transform: uppercase;
-  }
-  .available-label {
-    color: var(--success);
-    font-weight: 800;
   }
   .tool-copy h2 {
     margin: 7px 0 4px;
@@ -242,6 +284,9 @@
   @media (max-width: 680px) {
     .tools-page {
       padding-top: 24px;
+    }
+    .tool-group-heading h2 {
+      font-size: 21px;
     }
     .tool-row {
       grid-template-columns: 42px minmax(0, 1fr);

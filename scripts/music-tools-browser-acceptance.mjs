@@ -134,7 +134,7 @@ try {
   await page.getByLabel('Clean changes').fill('11');
   await page.getByRole('alert').waitFor();
 
-  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
   await page.getByRole('link', { name: /Open metronome/ }).click();
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
 
@@ -194,7 +194,7 @@ try {
   });
 
   // Ear-training challenges generate their examples locally and provide retry feedback.
-  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   const waitForEarAudio = () =>
@@ -370,7 +370,7 @@ try {
   // Navigating away during playback aborts the completion timer and closes the context.
   await page.getByRole('button', { name: 'Listen to example' }).click();
   await page.getByRole('button', { name: 'Playing example…' }).waitFor();
-  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
@@ -379,7 +379,7 @@ try {
   await page.getByRole('button', { name: 'Listen to example' }).waitFor();
 
   // Theory recall connects names, generated triad sounds and chord function.
-  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
@@ -425,8 +425,8 @@ try {
     .waitFor();
 
   // The chromatic tuner must not request microphone access on page load.
-  await page.getByRole('link', { name: 'Practice tools' }).click();
-  await page.getByRole('link', { name: /Open tuner/ }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.getByRole('link', { name: /Open chromatic tuner/ }).click();
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
@@ -496,8 +496,8 @@ try {
   });
 
   // The guided note-recognition exercise also defers microphone permission.
-  await page.getByRole('link', { name: 'Practice tools' }).click();
-  await page.getByRole('link', { name: /Open exercise/ }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
+  await page.getByRole('link', { name: /Open note recognition/ }).click();
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
@@ -556,7 +556,7 @@ try {
     `Tuner page overflows horizontally on mobile: ${JSON.stringify(tunerDimensions)}`
   );
 
-  await page.getByRole('link', { name: 'Practice tools' }).click();
+  await page.getByRole('link', { name: '← Tools' }).click();
   await page.getByRole('link', { name: /Open ear training/ }).click();
   await page.getByRole('heading', { name: 'Train your ear.' }).waitFor();
   await page.setViewportSize({ width: 390, height: 844 });

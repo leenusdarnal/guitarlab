@@ -188,7 +188,7 @@
 </svelte:head>
 
 <main class="chords-page">
-  <a class="back-link" href={resolve('/tools')}>← Practice tools</a>
+  <a class="back-link" href={resolve('/tools')}>← Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · HARMONY</div>

@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-11 — discoverable, trustworthy local backups (`feat/ux-11-trustworthy-backups`)
+**Active implementation:** UX-12 — task-based Tools hub and effective learner preferences (`feat/ux-12-clarify-tools-and-preferences`)
 
 ---
 
@@ -279,7 +279,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-10 — Make Progress useful to new and returning learners
 
 **Priority:** P1/P2  
-**Status:** IN REVIEW — full 34-skill map, evidence-aware state explanations, release-scoped corrections and related learning links implemented; automated CI is being rerun after branch synchronization. Manual learner testing remains under UX-14  
+**Status:** COMPLETE — PR #146 merged; required CI passed. Manual learner testing remains tracked under UX-14  
 **Depends on:** existing skill catalogue and learner-state model  
 **Related findings:** K1, K2, D7, X10
 
@@ -296,7 +296,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-11 — Make backups discoverable and trustworthy
 
 **Priority:** P1 for focus/contrast; P2 for recency and presentation  
-**Status:** IN REVIEW — export prioritisation, plain-language storage guidance, local recency and dashboard reminder implemented; browser and device acceptance is being validated  
+**Status:** COMPLETE — PR #147 merged; required CI and browser acceptance passed. Web Share remains deferred pending physical-device consent/fallback testing  
 **Depends on:** UX-02 and existing backup/restore implementation  
 **Related findings:** B1–B4
 
@@ -314,17 +314,17 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-12 — Clarify the Tools hub and onboarding/preferences
 
 **Priority:** P2  
-**Status:** READY  
+**Status:** IN PROGRESS — task-based tool groups, microphone permission guidance and active preference cleanup implemented on the feature branch  
 **Depends on:** UX-04 and product decision for preference behaviour  
 **Related findings:** T1, O1–O3
 
-- [ ] Group tools by learner intent (for example, fretboard/chords, listening, timing, tuning and note playing).
-- [ ] Make microphone use and permissions clear before a tool starts audio capture.
-- [ ] Remove repeated generic availability labels where they add no information.
-- [ ] Verify whether lesson-presentation and goal preferences are consumed outside the files inspected by the advisory review.
-- [ ] For every preference, either implement a visible effect or remove/rename the unused choice before calling the flow complete.
-- [ ] Ensure setup completion offers a clear route back to Today.
-- [ ] Use one learner-facing name for each concept and screen.
+- [x] Group tools by learner intent: explore notes/chords, listen/recognise, keep time/tune and organise music.
+- [x] Explain before Start that only the tuner and note-recognition tools request microphone access, with permission recovery steps and local-audio privacy guidance.
+- [x] Remove repeated “Available now” labels from every tool card.
+- [x] Audit app consumers: goals tailor the Today musical-application suggestion; saved practice duration drives Today and Practice Studio. `lessonPresentation` has no consumer in lesson, dashboard or practice routes inspected.
+- [x] Keep the setup UI to the two preferences with visible effects (goals and daily practice duration). Remove unused instrument, fretting-hand, starting-level and lesson-presentation choices while retaining their existing schema fields for backward-compatible profiles and backups.
+- [x] Show an explicit “Go to Today” action after preferences save successfully; retain skip/back navigation.
+- [x] Use “Today” for the dashboard destination and “Tools” for the tool hub/back links; rename card actions to match their named destination.
 
 **Acceptance:** tools are easy to choose by task; settings have a visible purpose; no setup choice promises personalisation that the product does not actually use.
 
@@ -402,8 +402,9 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
-| 2026-11-16 | UX-11 branch adds local-only backup-download recency (never included in learner records), truthful download-start wording, a 30-day dashboard reminder, action-specific feedback and plain-language storage guidance. Existing file-picker focus and dark/light danger-token contrast are covered by the accessibility and design-token checks. Web Share was evaluated and deferred pending real-device consent testing. Automated CI is pending. |
-| 2026-11-15 | PR #146 implements the canonical 34-skill map, evidence-aware learner states, active-release scoping, published lesson links, search/category filters and mobile master/detail navigation. CI rerun after synchronization is pending; manual learner acceptance remains under UX-14. |
+| 2026-11-16 | PR #147 (UX-11) merged as `857560b`; run #1434 passed required CI, including backup, accessibility, music-tool and curriculum browser acceptance. Backup recency is local-only and describes download start, not confirmed file retention. Web Share is deferred pending device/consent tests. |
+| 2026-11-16 | UX-12 groups all eight tools by task, explains microphone access before Start on tuner and note recognition, removes generic availability badges, and limits setup to effective goals/practice-duration preferences while preserving unused legacy schema fields. CI pending. |
+| 2026-11-16 | PR #146 (UX-10) merged after the canonical skill fixture was corrected to seed catalogue IDs and the active curriculum release. Final required CI passed; manual learner acceptance remains under UX-14. |
 | 2026-11-15 | PR #145 implements fretboard structure/inlays, prompted note-finding, selected-pitch playback and chord-box diagrams. CI rerun after synchronization is pending; manual device and assistive-technology checks remain under UX-14. |
 | 2026-11-15 | PR #144 implementation and automated CI validation complete for UX-08; physical-device, keyboard-only, screen-reader and wake-lock lifecycle acceptance remain open under UX-14. |
 | 2026-11-15 | Started UX-07 reader workflow pass: moved completion to the end of the lesson, placed alternatives and practice tools beside exercises, added retry actions and prepared section-link/mobile acceptance. Metronome BPM deep-link and full CI validation remain pending. |

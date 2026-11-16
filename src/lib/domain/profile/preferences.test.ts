@@ -5,7 +5,7 @@ import {
 } from './preferences';
 
 describe('learner profile preferences', () => {
-  it('starts with no assumed instrument, handedness, goal or practice duration', () => {
+  it('starts with no assumed goal or practice duration', () => {
     const profile = createEmptyProfilePreferences();
 
     expect(profilePreferencesSchema.parse(profile)).toEqual(profile);
@@ -16,18 +16,21 @@ describe('learner profile preferences', () => {
   });
 
   it('accepts a learner-selected preference set', () => {
-    const result = profilePreferencesSchema.safeParse({
+    const storedPreferences = {
       ...createEmptyProfilePreferences(),
-      instrument: 'acoustic',
-      handedness: 'right',
+      instrument: 'acoustic' as const,
+      handedness: 'right' as const,
       tuning: 'E-A-D-G-B-E',
-      startingPoint: 'fresh-beginner',
-      goals: ['all-round-musician'],
+      startingPoint: 'fresh-beginner' as const,
+      goals: ['all-round-musician' as const],
       practiceMinutes: 20,
-      lessonPresentation: 'balanced'
-    });
+      availableDays: [1, 3, 5],
+      lessonPresentation: 'visual-first' as const
+    };
 
-    expect(result.success).toBe(true);
+    expect(profilePreferencesSchema.parse(storedPreferences)).toEqual(
+      storedPreferences
+    );
   });
 
   it('rejects invalid practice durations', () => {
