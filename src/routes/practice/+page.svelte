@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     finishActivePracticeSession,
@@ -27,12 +27,27 @@
     type AdaptivePracticeSnapshot
   } from '../../lib/application/adaptive-practice';
   import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
+
   import {
     loadActiveAdaptivePracticeSnapshot,
     loadActiveAdaptiveRecommendationFeedback,
     loadActiveLearnerProfile,
     recordActiveAdaptiveRecommendationFeedback
   } from '../../lib/storage/indexeddb';
+
+  type ScreenWakeLockSentinel = {
+    readonly released: boolean;
+    release(): Promise<void>;
+    addEventListener(
+      type: 'release',
+      listener: () => void,
+      options?: boolean | { once?: boolean }
+    ): void;
+  };
+
+  type ScreenWakeLockApi = {
+    request(type: 'screen'): Promise<ScreenWakeLockSentinel>;
+  };
 
   let sessions = $state<PracticeSessionRecord[]>([]);
   let historyQuery = $state('');
@@ -70,6 +85,11 @@
   let evidenceError = $state('');
   let evidenceNotice = $state('');
   let now = $state(Date.now());
+  let visibilityRevision = $state(0);
+  let wakeLockStatus = $state<'idle' | 'requesting' | 'active' | 'unsupported' | 'unavailable'>('idle');
+  let screenWakeLock: ScreenWakeLockSentinel | null = null;
+  let sessionHeading = $state<HTMLHeadingElement | null>(null);
+  let sessionNotice = $state<HTMLParagraphElement | null>(null);
 
   const filteredSessions = $derived(
     filterPracticeSessions(sessions, {
@@ -96,6 +116,79 @@
       ? getAuthoredPracticeScope(activeSession.primaryLessonId, activeSession.primaryExerciseId)
       : null
   );
+  
+  function releaseScreenWakeLock() {
+    const heldLock = screenWakeLock;
+    screenWakeLock = null;
+    if (heldLock && !heldLock.released) {
+      void heldLock.release().catch(() => undefined);
+    }
+  }
+
+  // Keep the display awake only while a session is actively running. Pause,
+  // finish, unmount and hidden-page transitions all release the browser lock.
+  $effect(() => {
+    const requestRevision = visibilityRevision;
+    if (activeSession?.status !== 'in_progress') {
+      wakeLockStatus = 'idle';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    const wakeLockApi =
+      typeof navigator === 'undefined'
+        ? undefined
+        : (navigator as Navigator & { wakeLock?: ScreenWakeLockApi }).wakeLock;
+
+    if (!wakeLockApi) {
+      wakeLockStatus = 'unsupported';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    if (typeof document === 'undefined' || document.visibilityState !== 'visible') {
+      wakeLockStatus = 'idle';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    let cancelled = false;
+    wakeLockStatus = 'requesting';
+    void wakeLockApi
+      .request('screen')
+      .then((lock) => {
+        if (
+          cancelled ||
+          visibilityRevision !== requestRevision ||
+          activeSession?.status !== 'in_progress' ||
+          document.visibilityState !== 'visible'
+        ) {
+          if (!lock.released) void lock.release().catch(() => undefined);
+          return;
+        }
+
+        screenWakeLock = lock;
+        wakeLockStatus = 'active';
+        lock.addEventListener(
+          'release',
+          () => {
+            if (screenWakeLock !== lock) return;
+            screenWakeLock = null;
+            wakeLockStatus = 'idle';
+            visibilityRevision += 1;
+          },
+          { once: true }
+        );
+      })
+      .catch(() => {
+        if (!cancelled) wakeLockStatus = 'unavailable';
+      });
+
+    return () => {
+      cancelled = true;
+      releaseScreenWakeLock();
+    };
+  });
   const adaptiveRecommendationViews = $derived(
     resolveAdaptiveRecommendationFeedback({
       recommendations: adaptiveSnapshot?.recommendations ?? [],
@@ -156,6 +249,10 @@
 
   onMount(() => {
     const clock = window.setInterval(() => (now = Date.now()), 1000);
+    const handleVisibilityChange = () => {
+      visibilityRevision += 1;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     const query = new URLSearchParams(window.location.search);
     const requestedMinutes = Number(query.get('minutes'));
     const hasRequestedMinutes =
@@ -189,7 +286,11 @@
           'Your local practice history could not be loaded. Check browser storage and try again.';
       })
       .finally(() => (loading = false));
-    return () => window.clearInterval(clock);
+    return () => {
+      window.clearInterval(clock);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      releaseScreenWakeLock();
+    };
   });
 
   function clearHistoryFilters() {
@@ -231,6 +332,8 @@
       reflection = '';
       nextTarget = '';
       await refresh();
+      await tick();
+      sessionHeading?.focus();
       notice =
         'Practice session started. Elapsed session time is tracked locally.';
     } catch (cause) {
@@ -258,6 +361,8 @@
           'Session paused. Your accumulated active time has been saved.';
       }
       await refresh();
+      await tick();
+      sessionHeading?.focus();
     } catch (cause) {
       error =
         cause instanceof Error
@@ -389,6 +494,8 @@
         'Session saved. Elapsed session time is activity history, not verified active practice or a skill assessment.';
       reflection = '';
       nextTarget = '';
+      await tick();
+      sessionNotice?.focus();
     } catch (cause) {
       error =
         cause instanceof Error
@@ -537,7 +644,7 @@
     <p class="message error" role="alert">{error}</p>
   {/if}
   {#if notice}
-    <p class="message" role="status">{notice}</p>
+    <p class="message" role="status" tabindex="-1" bind:this={sessionNotice}>{notice}</p>
   {/if}
 
   {#if loading}
@@ -551,7 +658,7 @@
         </p>
       {/if}
       {#if activeSession}
-        <h2 id="session-heading">
+        <h2 id="session-heading" tabindex="-1" bind:this={sessionHeading}>
           {activeSession.status === 'paused'
             ? 'Your session is paused'
             : activeSession.focus || 'Your session is in progress'}
@@ -560,6 +667,11 @@
           Started {dateLabel(activeSession.startedAt)}. Paused intervals are
           excluded from the active-time total.
         </p>
+        {#if wakeLockStatus === 'unsupported' || wakeLockStatus === 'unavailable'}
+          <p class="wake-lock-hint" role="status">
+            This browser cannot keep the screen awake right now. Your session will still save normally.
+          </p>
+        {/if}
         <p class="elapsed" aria-live="off">
           {durationLabel(
             activeSession.actualDurationSeconds +
@@ -614,7 +726,7 @@
 
         <section class="quick-log" aria-label="Quick practice observations">
           <h3>Quick log</h3>
-          <p>Record one attempt at a time. These notes do not grade you or change skill mastery.</p>
+          <p>Capture a quick note about an attempt while you practise.</p>
           <div class="quick-log-actions">
             <button type="button" class="quick-log-clean" onclick={() => void quickLogAttempt('clean')} disabled={evidenceSaving || saving}>
               + Clean attempt
@@ -634,9 +746,8 @@
             <span class="count">{activeEvidence.length} observations</span>
           </div>
           <p class="muted">
-            Record your own repetitions, clean repetitions, tempo and perceived
-            difficulty. These are separate observations, not an automatic
-            accuracy score or mastery result.
+            Add repetitions, clean repetitions, tempo or perceived difficulty when a
+            more detailed practice note will help you plan your next session.
           </p>
 
           {#if evidenceError}
@@ -1070,10 +1181,7 @@
         </ul>
       </details>
     {/if}
-    <p class="adaptive-footnote">
-      Your observations help guide practice; they are not automatic accuracy scores or mastery awards.
-    </p>
-  </section>
+    </section>
 
     <section class="history" id="practice-history" aria-labelledby="history-heading">
       <div class="history-heading">
@@ -1220,11 +1328,10 @@
   <aside class="principle">
     <strong>Practice time is not mastery.</strong>
     <p>
-      Active-time totals include only intervals between starting/resuming and
-      pausing/finishing. Repetitions, clean repetitions, tempo and difficulty
-      are learner-entered observations; the app does not infer accuracy or
-      award skill levels from time or speed alone. Review scheduling and
-      evidence-based mastery remain separate M7 steps.
+      Active time counts only the time between starting or resuming and pausing or
+      finishing. Repetition counts, clean repetitions, tempo and difficulty are
+      practice notes; they do not establish skill mastery. Skill states come from
+      separate assessments, not time spent practising.
     </p>
   </aside>
 </main>
@@ -1641,17 +1748,27 @@
   }
 
   .quick-log-actions .quick-log-clean {
-    border-color: var(--success, #28734d);
+    border-color: var(--success);
+    background: color-mix(in srgb, var(--success) 10%, var(--surface-raised));
   }
 
   .quick-log-actions .quick-log-correction {
-    border-color: var(--warning, #8a6500);
+    border-color: var(--border);
+    background: var(--surface);
+    font-weight: 600;
   }
 
   .session-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .wake-lock-hint {
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 12px;
   }
 
   .exercise-log,
