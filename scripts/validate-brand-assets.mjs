@@ -44,7 +44,7 @@ assert.deepEqual(apple, { width: 180, height: 180 });
 const maskable = (await staticFile('icons/guitarlab-maskable.svg')).toString('utf8');
 assert.match(maskable, /<rect width="512" height="512" fill="url\(#tile\)"\s*\/>/, 'maskable icon must have a full-bleed background');
 assert.match(maskable, /translate\(110 105\) scale\(1\.15\)/, 'maskable artwork must remain inset inside the safe area');
-assert.doesNotMatch(maskable, /<rect\\b(?=[^>]*width="512")(?=[^>]*height="512")(?=[^>]*rx=)[^>]*>/, 'maskable background must not pre-round corners');
+assert.doesNotMatch(maskable, /<rect\b(?=[^>]*width="512")(?=[^>]*height="512")(?=[^>]*rx=)[^>]*>/, 'maskable background must not pre-round corners');
 
 const favicon = (await staticFile('favicon.svg')).toString('utf8');
 assert.match(favicon, /viewBox="0 0 64 64"/, 'favicon must use its compact 64px viewBox');
