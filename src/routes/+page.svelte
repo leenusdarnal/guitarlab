@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
@@ -643,6 +643,16 @@
     .phase-card > p,
     .path-note {
       font-size: 0.9375rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .app-shell {
+      display: block;
+    }
+    .sidebar,
+    .topbar {
+      display: none;
     }
   }
 
