@@ -268,8 +268,9 @@
   .open-tool {
     color: var(--primary);
   }
-  .open-tool span {
-    padding-left: 7px;
+  .open-tool :global(.icon) {
+    margin-left: 7px;
+    color: var(--primary);
   }
   .tool-status {
     color: var(--muted);
