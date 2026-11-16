@@ -259,9 +259,7 @@ try {
       );
 
       if (route === '/' || route === '/practice') {
-        const moreTrigger = page.locator(
-          '.mobile-nav-trigger'
-        );
+        const moreTrigger = page.locator('.mobile-nav-trigger');
         await moreTrigger.click();
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
         const moreNavigation = page.locator('#mobile-more-navigation');
