@@ -350,6 +350,7 @@
           <p>{lesson.accessibleAlternative}</p>
         </aside>
         <nav class="lesson-tool-links" aria-label="Tools for this lesson">
+          <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- The base route is resolved before adding the lesson tempo query. -->
           <a
             href={
               resolve('/tools/metronome') +
