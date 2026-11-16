@@ -41,7 +41,7 @@
     addEventListener(
       type: 'release',
       listener: () => void,
-      options?: boolean | AddEventListenerOptions
+      options?: boolean | { once?: boolean }
     ): void;
   };
 
