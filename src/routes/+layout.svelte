@@ -60,7 +60,7 @@
     }
   }
 
-  afterNavigate(() => {
+  afterNavigate(({ type }) => {
     mobileMenuOpen = false;
     const savedPreference = document.documentElement.dataset.themePreference;
     if (isThemePreference(savedPreference)) themePreference = savedPreference;
@@ -69,7 +69,8 @@
       if (mainContent) {
         mainContent.id = 'main-content';
         mainContent.tabIndex = -1;
-        mainContent.focus({ preventScroll: true });
+        // Preserve the skip link as the first keyboard stop on initial page load.
+        if (type !== 'enter') mainContent.focus({ preventScroll: true });
       }
     });
   });
