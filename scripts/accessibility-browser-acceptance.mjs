@@ -795,7 +795,7 @@ try {
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(origin, { waitUntil: 'networkidle' });
-    const dashboardAppearance = page.locator('select[aria-label="Appearance"]');
+    const dashboardAppearance = page.locator('select[aria-label="Appearance"]:visible');
     assert.equal(await dashboardAppearance.inputValue(), 'dark');
     await dashboardAppearance.selectOption('light');
     assert.deepEqual(
