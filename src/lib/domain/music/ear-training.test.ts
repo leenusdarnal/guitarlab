@@ -11,9 +11,10 @@ describe('ear-training exercise model', () => {
     expect(exercise.tones.map((tone) => tone.startMilliseconds)).toEqual([
       0, 500, 1_000, 1_500
     ]);
-    expect(
-      exercise.choices.map((choice) => choice.value).sort()
-    ).toEqual(['steady', 'uneven']);
+    expect(exercise.choices.map((choice) => choice.value).sort()).toEqual([
+      'steady',
+      'uneven'
+    ]);
   });
 
   it('creates an uneven pulse with distinguishable gaps', () => {
@@ -76,9 +77,10 @@ describe('ear-training exercise model', () => {
         .map((midi) => 440 * 2 ** ((midi - 69) / 12))
         .sort((left, right) => left - right)
     );
-    expect(
-      subdominant.choices.map((choice) => choice.value).sort()
-    ).toEqual(['dominant', 'subdominant']);
+    expect(subdominant.choices.map((choice) => choice.value).sort()).toEqual([
+      'dominant',
+      'subdominant'
+    ]);
   });
 
   it('creates rising, falling and level melodic contours', () => {
@@ -102,7 +104,8 @@ describe('ear-training exercise model', () => {
       (sequence: number) => createEarTrainingExercise('pulse', sequence),
       (sequence: number) => createEarTrainingExercise('pitch', sequence),
       (sequence: number) => createEarTrainingExercise('contour', sequence),
-      (sequence: number) => createEarTrainingExercise('chord-movement', sequence),
+      (sequence: number) =>
+        createEarTrainingExercise('chord-movement', sequence),
       (sequence: number) => createEarTrainingExercise('interval', sequence),
       (sequence: number) =>
         createEarTrainingExercise('interval', sequence, 'steps-and-tritone'),
@@ -128,9 +131,9 @@ describe('ear-training exercise model', () => {
         answerPositions.add(position);
 
         expect(position).toBeGreaterThanOrEqual(0);
-        expect(
-          exercise.choices.map((choice) => choice.value).sort()
-        ).toEqual(expectedOptions);
+        expect(exercise.choices.map((choice) => choice.value).sort()).toEqual(
+          expectedOptions
+        );
         expect(repeated.choices).toEqual(exercise.choices);
         expect(repeated.answer).toBe(exercise.answer);
       });
@@ -156,9 +159,7 @@ describe('ear-training exercise model', () => {
             exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
           )
       ).toBeCloseTo(semitones);
-      expect(
-        exercise.choices.map((choice) => choice.value).sort()
-      ).toEqual([
+      expect(exercise.choices.map((choice) => choice.value).sort()).toEqual([
         'major_third',
         'minor_third',
         'perfect_fifth',
