@@ -1313,7 +1313,7 @@ try {
   // Global navigation: keyboard open, active-section semantics, Escape and route focus.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
-  const globalMenuButton = page.getByRole('button', { name: 'Open menu' });
+  const globalMenuButton = page.locator('.mobile-nav-trigger');
   assert.equal(
     await globalMenuButton.getAttribute('aria-expanded'),
     'false',
