@@ -350,7 +350,11 @@
           <p>{lesson.accessibleAlternative}</p>
         </aside>
         <nav class="lesson-tool-links" aria-label="Tools for this lesson">
-          <a href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">
+          <a
+            href={resolve('/tools/metronome') + (lesson.startingTempoBpm ? '?bpm=' + lesson.startingTempoBpm : '')}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Open metronome{#if lesson.startingTempoBpm} at {lesson.startingTempoBpm} BPM{/if}
           </a>
           <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
@@ -567,4 +571,70 @@
   .glance-card strong{font:500 21px Georgia,serif;color:var(--primary)}
   @media(max-width:760px){.lesson-outline{top:60px;margin-inline:-2px;padding:6px}.lesson-outline a{min-height:44px;padding:8px 10px;font-size:12px}.content-section,#lesson-progress{scroll-margin-top:116px}.lesson-tool-links a{flex:1 1 140px;justify-content:center}}
   
+
+  /* Supporting lesson copy uses the shared readable type scale; metadata stays compact. */
+  .breadcrumbs {
+    font-size: var(--font-size-supporting);
+  }
+
+  .eyebrow,
+  .kicker,
+  .lesson-meta span,
+  .checkpoint small,
+  .block-type,
+  .exercise-meta,
+  .references article > span {
+    font-size: var(--font-size-metadata);
+  }
+
+  .success-target strong,
+  .mistakes strong,
+  .exercise > small,
+  .references h4,
+  .criteria strong,
+  .sidebar-card strong,
+  .sidebar-card > span:not(.eyebrow),
+  .progress-summary strong,
+  .progress-message,
+  .saving-message,
+  .progress-error,
+  .progress-complete,
+  .mastery-note,
+  .checkpoint-check p,
+  .note-label,
+  .completion-actions small,
+  .practice-options li,
+  .lesson-pagination a,
+  .lesson-pagination span {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .sidebar-card p,
+  .success-target p,
+  .mistakes p,
+  .references p,
+  .criteria p {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .retry-progress,
+  .resume-button,
+  .checkpoint-actions button,
+  .completion-actions button,
+  .block-complete {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
+
+  .progress-error {
+    color: var(--text-danger);
+  }
+
+  button:focus-visible,
+  textarea:focus-visible,
+  a:focus-visible {
+    outline-color: var(--focus);
+  }
 </style>
