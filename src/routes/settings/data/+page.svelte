@@ -469,7 +469,6 @@
 
   /* Backup, restore and reset instructions are content, not metadata. */
   .back-link,
-  .backup-panel p,
   .primary-button,
   .danger-button,
   .file-picker,
@@ -483,6 +482,7 @@
 
   .intro,
   .section-copy,
+  .backup-panel p,
   .preview .section-copy {
     font-size: var(--font-size-body);
     line-height: var(--line-height-body);
