@@ -355,7 +355,10 @@ try {
           name: 'Open metronome at 50 BPM'
         });
         const metronomeHref = await metronomeLink.getAttribute('href');
-        assert.ok(metronomeHref, 'The lesson should link to its metronome tool.');
+        assert.ok(
+          metronomeHref,
+          'The lesson should link to its metronome tool.'
+        );
         assert.equal(
           new URL(metronomeHref, origin).searchParams.get('bpm'),
           '50',
@@ -367,7 +370,9 @@ try {
         });
         assert.equal(
           await metronomePage
-            .getByRole('spinbutton', { name: 'Enter tempo in beats per minute' })
+            .getByRole('spinbutton', {
+              name: 'Enter tempo in beats per minute'
+            })
             .inputValue(),
           '50',
           'The metronome should initialize from the lesson starting tempo.'
