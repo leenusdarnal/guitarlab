@@ -87,7 +87,7 @@ These values are the shared semantic theme tokens shipped in `src/app.css`. Keep
 | `--primary` | `#42D6A0` | `#176B4B` | Main actions, links and active state |
 | `--primary-ink` | `#20160A` | `#FFFFFF` | Text/icons on primary surfaces |
 | `--secondary` | `#58CDB1` | `#176B68` | Rare supporting emphasis, theory or tool state |
-| `--success` | `#76C6A0` | `#216A4A` | Successful save, completion and positive feedback |
+| `--success` | `#8CCF76` | `#2F733F` | Successful save, completion and positive feedback |
 | `--warning` | `#E9BC68` | `#805400` | Caution and recoverable attention |
 | `--danger` | `#F08A80` | `#A5352B` | Destructive actions and error text |
 | `--focus` | `#E7C77F` | `#16694D` | Keyboard focus indicator |
