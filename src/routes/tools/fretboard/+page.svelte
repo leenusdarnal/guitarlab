@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import {
     FLAT_NOTE_NAMES,
     SHARP_NOTE_NAMES,
@@ -321,7 +322,7 @@
 </svelte:head>
 
 <main class="fretboard-page">
-  <a class="back-link" href={resolve('/tools')}>← Tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · NOTES &amp; PITCH</div>
