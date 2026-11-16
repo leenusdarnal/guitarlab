@@ -1053,7 +1053,7 @@ try {
   await page.locator('#backup-reminder').waitFor({ state: 'visible' });
 
   // Backup navigation and export remain available from the learner dashboard.
-  await page.locator('.mobile-brand').click();
+  await page.locator('.mobile-nav-trigger').click();
   mobileNavigation = page.getByRole('navigation', { name: 'More navigation' });
   await mobileNavigation.getByRole('link', { name: 'Data & backups' }).click();
   await page
