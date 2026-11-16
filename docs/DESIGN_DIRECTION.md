@@ -1,7 +1,7 @@
 # GuitarLab Design Direction
 
-**Status:** Proposed visual-system refresh; application implementation pending  
-**Last reviewed:** 15 November 2026  
+**Status:** In implementation — core palette, brand identity, iconography and responsive navigation are shipped; route-level consistency and manual acceptance remain  
+**Last reviewed:** 16 November 2026  
 **Product:** GuitarLab — personal guitar-learning and practice environment  
 **Design authority:** This document defines the visual and interaction direction.  
 **Related guidance:** [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [UI/UX Implementation Tracker](UI_UX_IMPLEMENTATION_TRACKER.md), [UI/UX Audit](UI_UX_AUDIT_2026-11-15.md)
@@ -202,6 +202,8 @@ Mobile navigation rules:
 - Use a small, calm active indicator with the primary accent.
 - Keep the active label and page title consistent.
 - Ensure opening and closing secondary navigation works with keyboard, Escape and touch, with focus returned to its trigger when dismissed.
+
+**Implementation baseline (16 November 2026):** the five labelled destinations (Today, Learn, Practice, Tools and Progress) are provided by a persistent mobile tab bar. Songs, preferences and data backups remain in the secondary “More” navigation. The tab bar is hidden on the focused onboarding flow and on desktop; it respects left/right/bottom safe-area insets and reserves document space so content is not obscured. See UX-02/UX-14 in the implementation tracker for automated and manual acceptance.
 
 ### Navigation language
 
