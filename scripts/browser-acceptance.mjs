@@ -534,6 +534,29 @@ try {
   assert.equal(await page.locator('.tool-group').count(), 4);
   assert.equal(await page.locator('.tool-row').count(), 8);
   assert.equal(
+    await page.locator('.tool-symbol svg[aria-hidden="true"]').count(),
+    8,
+    'Each tool card must use a decorative accessible SVG icon'
+  );
+  assert.deepEqual(
+    await page
+      .locator('.tool-symbol svg')
+      .evaluateAll((elements) =>
+        elements.map((element) => element.getAttribute('data-icon'))
+      ),
+    [
+      'fretboard',
+      'chord',
+      'theory',
+      'ear',
+      'microphone',
+      'metronome',
+      'tuner',
+      'song'
+    ]
+  );
+
+  assert.equal(
     await page.getByText('Available now', { exact: true }).count(),
     0
   );

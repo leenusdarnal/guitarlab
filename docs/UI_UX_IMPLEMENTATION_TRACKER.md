@@ -342,6 +342,8 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
   - [x] Skill map IndexedDB load failures provide an in-place retry and a direct route to browse lessons; browser acceptance verifies recovery.
   - [ ] Audit remaining learner-facing recoverable errors and add context-specific retry/next actions.
 - [ ] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
+  - [x] Replace the eight decorative Tools hub glyphs with a single local SVG icon component; the adjacent card headings provide the accessible names.
+  - [ ] Replace remaining dashboard, global navigation and individual tool glyphs with the same icon set.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
 - [ ] Re-check ear-training answer order and accessible visual alternatives; the advisory finding came from an earlier snapshot and must be re-verified before implementation.
 - [ ] Remove or revise any stale tool disclaimers that no longer match the current implementation.
