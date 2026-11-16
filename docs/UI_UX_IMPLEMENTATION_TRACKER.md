@@ -344,6 +344,8 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [ ] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
 - [ ] Re-check ear-training answer order and accessible visual alternatives; the advisory finding came from an earlier snapshot and must be re-verified before implementation.
+  - [x] Confirm all five exercise types render a visible listening hint as well as text-labelled answer options.
+  - [x] Rotate answer-option order deterministically by exercise sequence so correct answers do not remain tied to a fixed option position; unit tests cover all option positions for each exercise type and interval set.
 - [ ] Remove or revise any stale tool disclaimers that no longer match the current implementation.
 
 **Acceptance:** loading and error states guide recovery, icons render consistently and fixed controls do not collide with mobile browser chrome or device safe areas.
