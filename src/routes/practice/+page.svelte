@@ -28,6 +28,13 @@
   } from '../../lib/application/adaptive-practice';
   import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
 
+  import {
+    loadActiveAdaptivePracticeSnapshot,
+    loadActiveAdaptiveRecommendationFeedback,
+    loadActiveLearnerProfile,
+    recordActiveAdaptiveRecommendationFeedback
+  } from '../../lib/storage/indexeddb';
+
   type ScreenWakeLockSentinel = {
     readonly released: boolean;
     release(): Promise<void>;
@@ -41,12 +48,6 @@
   type ScreenWakeLockApi = {
     request(type: 'screen'): Promise<ScreenWakeLockSentinel>;
   };
-  import {
-    loadActiveAdaptivePracticeSnapshot,
-    loadActiveAdaptiveRecommendationFeedback,
-    loadActiveLearnerProfile,
-    recordActiveAdaptiveRecommendationFeedback
-  } from '../../lib/storage/indexeddb';
 
   let sessions = $state<PracticeSessionRecord[]>([]);
   let historyQuery = $state('');
@@ -1743,7 +1744,7 @@
   }
 
   .quick-log-actions .quick-log-correction {
-    border-color: var(--border-strong);
+    border-color: var(--border);
     background: var(--surface);
     font-weight: 600;
   }
