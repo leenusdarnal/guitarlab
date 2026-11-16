@@ -1314,16 +1314,33 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
   const globalMenuButton = page.locator('.mobile-nav-trigger');
+  const globalMobileNavigation = page.locator('#mobile-primary-navigation');
   assert.equal(
     await globalMenuButton.getAttribute('aria-expanded'),
     'false',
     'The global menu should start collapsed.'
   );
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-controls'),
+    'mobile-primary-navigation'
+  );
+  assert.equal(
+    await globalMobileNavigation.count(),
+    1,
+    'The controlled mobile navigation target should remain in the DOM while closed.'
+  );
+  assert.equal(
+    await globalMobileNavigation.isHidden(),
+    true,
+    'The collapsed mobile navigation target should be hidden from interaction.'
+  );
+  assert.ok(
+    (await globalMenuButton.evaluate((button) => button.getBoundingClientRect().height)) >=
+      44,
+    'The global menu trigger should meet the 44px touch target.'
+  );
   await globalMenuButton.focus();
   await page.keyboard.press('Enter');
-  const globalMobileNavigation = page.getByRole('navigation', {
-    name: 'Primary navigation'
-  });
   await globalMobileNavigation.waitFor();
   const globalTodayLink = globalMobileNavigation.getByRole('link', {
     name: 'Today'
