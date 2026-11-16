@@ -1981,8 +1981,8 @@
   }
 
   .error {
-    border-color: #a65c52;
-    color: #ffb5a9;
+    border-color: var(--danger);
+    color: var(--text-danger);
   }
 
   a:focus-visible,

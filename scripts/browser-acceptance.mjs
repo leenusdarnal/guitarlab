@@ -1309,6 +1309,80 @@ try {
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
+
+  // Global navigation: keyboard open, active-section semantics, Escape and route focus.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  const globalMenuButton = page.locator('.mobile-nav-trigger');
+  const globalMobileNavigation = page.locator('#mobile-primary-navigation');
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-expanded'),
+    'false',
+    'The global menu should start collapsed.'
+  );
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-controls'),
+    'mobile-primary-navigation'
+  );
+  assert.equal(
+    await globalMobileNavigation.count(),
+    1,
+    'The controlled mobile navigation target should remain in the DOM while closed.'
+  );
+  assert.equal(
+    await globalMobileNavigation.isHidden(),
+    true,
+    'The collapsed mobile navigation target should be hidden from interaction.'
+  );
+  const globalMenuButtonHeight = await globalMenuButton.evaluate(
+    (button) => button.getBoundingClientRect().height
+  );
+  assert.ok(
+    globalMenuButtonHeight >= 44,
+    'The global menu trigger should meet the 44px touch target.'
+  );
+  await globalMenuButton.focus();
+  await page.keyboard.press('Enter');
+  await globalMobileNavigation.waitFor();
+  const globalTodayLink = globalMobileNavigation.getByRole('link', {
+    name: 'Today'
+  });
+  assert.equal(
+    await globalTodayLink.evaluate((link) => document.activeElement === link),
+    true,
+    'Opening the global menu should move focus to its first link.'
+  );
+  assert.equal(
+    await globalMobileNavigation
+      .getByRole('link', { name: 'Tools' })
+      .getAttribute('aria-current'),
+    'page',
+    'The current global section should be announced in the mobile menu.'
+  );
+  await page.keyboard.press('Escape');
+  await globalMobileNavigation.waitFor({ state: 'hidden' });
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-expanded'),
+    'false',
+    'Escape should collapse the global navigation.'
+  );
+  assert.equal(
+    await globalMenuButton.evaluate(
+      (button) => document.activeElement === button
+    ),
+    true,
+    'Escape should return focus to the global menu trigger.'
+  );
+  await globalMenuButton.focus();
+  await page.keyboard.press('Enter');
+  await globalMobileNavigation.waitFor();
+  await globalMobileNavigation.getByRole('link', { name: 'Practice' }).click();
+  await page.waitForURL((url) => url.pathname === '/practice');
+  await page.waitForFunction(
+    () => document.activeElement?.id === 'main-content'
+  );
+  await globalMobileNavigation.waitFor({ state: 'hidden' });
+
   // Restore the desktop viewport after the earlier mobile navigation acceptance.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(origin, { waitUntil: 'networkidle' });

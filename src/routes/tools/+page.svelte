@@ -172,7 +172,7 @@
     display: inline-block;
     margin-bottom: 30px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: var(--font-size-supporting);
   }
   .page-heading {
     max-width: 700px;
@@ -180,7 +180,7 @@
   }
   .eyebrow {
     color: var(--muted);
-    font-size: 10px;
+    font-size: var(--font-size-metadata);
     font-weight: 750;
     letter-spacing: 1.4px;
   }
@@ -196,8 +196,8 @@
   .tool-copy p,
   .privacy-note {
     color: var(--muted);
-    font-size: 12px;
-    line-height: 1.75;
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
   }
   .tool-group {
     margin-top: 26px;
@@ -209,14 +209,14 @@
   }
   .tool-group-heading h2 {
     margin: 0;
-    font: 500 23px / 1.2 Georgia, serif;
+    font: 500 var(--font-size-section-title) / var(--line-height-heading) Georgia, serif;
   }
   .tool-group-heading p {
     max-width: 620px;
     margin: 0;
     color: var(--muted);
-    font-size: 11px;
-    line-height: 1.65;
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
   }
   .tool-list {
     display: grid;
@@ -246,23 +246,23 @@
     flex-wrap: wrap;
     gap: 9px;
     color: var(--muted);
-    font-size: 9px;
+    font-size: var(--font-size-metadata);
     letter-spacing: 0.45px;
     text-transform: uppercase;
   }
   .tool-copy h2 {
     margin: 7px 0 4px;
-    font: 500 22px / 1.2 Georgia, serif;
+    font: 500 var(--font-size-panel-title) / var(--line-height-heading) Georgia, serif;
   }
   .tool-copy p {
     max-width: 600px;
     margin: 0;
-    font-size: 11px;
+    font-size: var(--font-size-body);
   }
   .open-tool,
   .tool-status {
     white-space: nowrap;
-    font-size: 11px;
+    font-size: var(--font-size-supporting);
     font-weight: 750;
   }
   .open-tool {
@@ -303,5 +303,11 @@
       grid-column: 2;
       justify-self: start;
     }
+  }
+
+  .page-heading p,
+  .tool-copy p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
   }
 </style>

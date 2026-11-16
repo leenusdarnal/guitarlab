@@ -452,11 +452,11 @@
     display: inline-block;
     margin-bottom: 24px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: var(--font-size-supporting);
   }
   .eyebrow {
     color: var(--muted);
-    font-size: 10px;
+    font-size: var(--font-size-metadata);
     font-weight: 750;
     letter-spacing: 1.3px;
   }
@@ -475,8 +475,8 @@
   header > p,
   .skill-description {
     color: var(--muted);
-    font-size: 13px;
-    line-height: 1.75;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
   }
   .state-guide,
   .skill-list,
@@ -499,12 +499,12 @@
   }
   .guide-heading h2 {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--font-size-panel-title);
   }
   .guide-heading p {
     margin: 0;
     color: var(--muted);
-    font-size: 10px;
+    font-size: var(--font-size-metadata);
   }
   .guide-grid {
     display: grid;
@@ -521,13 +521,13 @@
   .guide-item strong {
     display: block;
     margin: 7px 0 4px;
-    font-size: 10px;
+    font-size: var(--font-size-supporting);
   }
   .guide-item p {
     margin: 0;
     color: var(--muted);
-    font-size: 9px;
-    line-height: 1.55;
+    font-size: var(--font-size-metadata);
+    line-height: var(--line-height-body);
   }
   .state-dot {
     display: block;
@@ -648,13 +648,13 @@
   }
   .choice-copy small {
     color: var(--muted);
-    font-size: 9px;
+    font-size: var(--font-size-metadata);
   }
   .choice-copy strong {
-    font-size: 11px;
+    font-size: var(--font-size-supporting);
   }
   .choice-state {
-    font-size: 9px;
+    font-size: var(--font-size-metadata);
     font-weight: 700;
   }
   .no-results {
@@ -699,8 +699,8 @@
   .state-summary p {
     margin: 0;
     color: var(--muted);
-    font-size: 11px;
-    line-height: 1.65;
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
   }
   .evidence {
     display: grid;
@@ -779,8 +779,8 @@
   .related-note {
     margin: 10px 0 0;
     color: var(--muted);
-    font-size: 10px;
-    line-height: 1.6;
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
   }
   form {
     display: grid;
@@ -797,8 +797,8 @@
   .correction-note {
     margin: 0;
     color: var(--muted);
-    font-size: 11px;
-    line-height: 1.65;
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
   }
   textarea {
     min-height: 88px;
