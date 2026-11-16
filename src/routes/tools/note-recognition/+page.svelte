@@ -331,4 +331,36 @@
     font-size: 11px;
     line-height: 1.65;
   }
+
+  .page-heading p,
+  .guidance-panel li {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .feedback p,
+  .result-state p,
+  .attempt-count,
+  .error-message,
+  .privacy-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .progress,
+  .capture-state,
+  .target-label,
+  .target-string {
+    font-size: var(--font-size-metadata);
+  }
+
+  .feedback strong {
+    font-size: var(--font-size-supporting);
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-height: 48px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
