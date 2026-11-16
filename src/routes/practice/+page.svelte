@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { resolve } from '$app/paths';
   import {
     finishActivePracticeSession,
@@ -88,6 +88,8 @@
   let visibilityRevision = $state(0);
   let wakeLockStatus = $state<'idle' | 'requesting' | 'active' | 'unsupported' | 'unavailable'>('idle');
   let screenWakeLock: ScreenWakeLockSentinel | null = null;
+  let sessionHeading = $state<HTMLHeadingElement | null>(null);
+  let sessionNotice = $state<HTMLParagraphElement | null>(null);
 
   const filteredSessions = $derived(
     filterPracticeSessions(sessions, {
@@ -330,6 +332,8 @@
       reflection = '';
       nextTarget = '';
       await refresh();
+      await tick();
+      sessionHeading?.focus();
       notice =
         'Practice session started. Elapsed session time is tracked locally.';
     } catch (cause) {
@@ -357,6 +361,8 @@
           'Session paused. Your accumulated active time has been saved.';
       }
       await refresh();
+      await tick();
+      sessionHeading?.focus();
     } catch (cause) {
       error =
         cause instanceof Error
@@ -488,6 +494,8 @@
         'Session saved. Elapsed session time is activity history, not verified active practice or a skill assessment.';
       reflection = '';
       nextTarget = '';
+      await tick();
+      sessionNotice?.focus();
     } catch (cause) {
       error =
         cause instanceof Error
@@ -636,7 +644,7 @@
     <p class="message error" role="alert">{error}</p>
   {/if}
   {#if notice}
-    <p class="message" role="status">{notice}</p>
+    <p class="message" role="status" tabindex="-1" bind:this={sessionNotice}>{notice}</p>
   {/if}
 
   {#if loading}
@@ -650,7 +658,7 @@
         </p>
       {/if}
       {#if activeSession}
-        <h2 id="session-heading">
+        <h2 id="session-heading" tabindex="-1" bind:this={sessionHeading}>
           {activeSession.status === 'paused'
             ? 'Your session is paused'
             : activeSession.focus || 'Your session is in progress'}
