@@ -24,7 +24,12 @@
     | 'clock'
     | 'check'
     | 'circle'
-    | 'arrow-right';
+    | 'arrow-right'
+    | 'arrow-left'
+    | 'arrow-up'
+    | 'arrow-down'
+    | 'search'
+    | 'shield-check';
 
   type Props = {
     name: IconName;
@@ -47,6 +52,7 @@
   aria-hidden="true"
   focusable="false"
   data-icon={name}
+  class="icon"
 >
   {#if name === 'fretboard'}
     <rect x="4" y="3" width="16" height="18" rx="2" />
@@ -121,5 +127,25 @@
     <circle cx="12" cy="12" r="8.5" />
   {:else if name === 'arrow-right'}
     <path d="M4 12h16m-6-6 6 6-6 6" />
+  {:else if name === 'arrow-left'}
+    <path d="M20 12H4m6-6-6 6 6 6" />
+  {:else if name === 'arrow-up'}
+    <path d="M12 20V4m-6 6 6-6 6 6" />
+  {:else if name === 'arrow-down'}
+    <path d="M12 4v16m-6-6 6 6 6-6" />
+  {:else if name === 'search'}
+    <circle cx="10.8" cy="10.8" r="6.8" />
+    <path d="m16 16 5 5" />
+  {:else if name === 'shield-check'}
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+    <path d="m9 12 2 2 4-4" />
   {/if}
 </svg>
+
+<style>
+  .icon {
+    display: inline-block;
+    flex: none;
+    vertical-align: middle;
+  }
+</style>
