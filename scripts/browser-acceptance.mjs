@@ -1604,6 +1604,106 @@ try {
     .getByText('Repeat the G major scale at 72 BPM for three minutes.')
     .waitFor();
 
+
+  // Screen wake lock follows the active-session lifecycle, including visibility.
+  const wakeLockContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  await wakeLockContext.addInitScript(() => {
+    window.__wakeLockState = {
+      requests: 0,
+      releases: 0,
+      lastType: '',
+      visibility: 'visible'
+    };
+    Object.defineProperty(document, 'visibilityState', {
+      configurable: true,
+      get() {
+        return window.__wakeLockState.visibility;
+      }
+    });
+    Object.defineProperty(navigator, 'wakeLock', {
+      configurable: true,
+      value: {
+        async request(type) {
+          window.__wakeLockState.requests += 1;
+          window.__wakeLockState.lastType = type;
+          let released = false;
+          const listeners = [];
+          return {
+            get released() {
+              return released;
+            },
+            async release() {
+              if (released) return;
+              released = true;
+              window.__wakeLockState.releases += 1;
+              for (const listener of listeners) listener();
+            },
+            addEventListener(eventType, listener) {
+              if (eventType === 'release') listeners.push(listener);
+            }
+          };
+        }
+      }
+    });
+  });
+  const wakeLockPage = await wakeLockContext.newPage();
+  await wakeLockPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await wakeLockPage.locator('#duration').fill('5');
+  await wakeLockPage.locator('#focus').fill('Wake lock lifecycle test');
+  await wakeLockPage.getByRole('button', { name: 'Start practice' }).click();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Wake lock lifecycle test', exact: true })
+    .waitFor();
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 1
+  );
+  assert.equal(
+    await wakeLockPage.evaluate(() => window.__wakeLockState.lastType),
+    'screen',
+    'An active practice session should request a screen wake lock.'
+  );
+
+  await wakeLockPage.getByRole('button', { name: 'Pause session' }).click();
+  await wakeLockPage.getByRole('heading', { name: 'Your session is paused' }).waitFor();
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 1
+  );
+
+  await wakeLockPage.getByRole('button', { name: 'Resume session' }).click();
+  await wakeLockPage
+    .getByRole('heading', { name: 'Wake lock lifecycle test', exact: true })
+    .waitFor();
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 2
+  );
+
+  await wakeLockPage.evaluate(() => {
+    window.__wakeLockState.visibility = 'hidden';
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 2
+  );
+  await wakeLockPage.evaluate(() => {
+    window.__wakeLockState.visibility = 'visible';
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.requests === 3
+  );
+
+  await wakeLockPage.getByRole('button', { name: 'Finish and save session' }).click();
+  await wakeLockPage
+    .getByRole('status')
+    .filter({ hasText: 'Elapsed session time is activity history' })
+    .waitFor();
+  await wakeLockPage.waitForFunction(
+    () => window.__wakeLockState.releases === 3
+  );
+  await wakeLockContext.close();
+
   // Practice history filters search only learner-authored focus and notes.
   const historySearch = page.locator('#history-search');
   await historySearch.fill('Browser acceptance scale drill');
