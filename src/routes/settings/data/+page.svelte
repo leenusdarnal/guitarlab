@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import {
     getLearnerStoragePersistenceStatus,
     requestLearnerStoragePersistence,
@@ -250,7 +251,7 @@
 <main class="data-page">
   <header>
     <a class="brand" href={resolve('/')}><span class="mark">G</span><strong>GuitarLab</strong></a>
-    <a class="back-link" href={resolve('/')}>← Back to dashboard</a>
+    <a class="back-link" href={resolve('/')}><Icon name="arrow-left" size={14} /> Back to Today</a>
   </header>
 
   <section class="data-card">
@@ -261,7 +262,7 @@
       assessment evidence, skill snapshots and practice sessions.
     </p>
     <section class="backup-panel export-panel" aria-labelledby="export-title">
-      <div class="backup-icon" aria-hidden="true">↓</div>
+      <div class="backup-icon" aria-hidden="true"><Icon name="download" size={24} /></div>
       <div>
         <h2 id="export-title">Export learner backup</h2>
         <p>
@@ -270,7 +271,7 @@
           device; GuitarLab does not upload it.
         </p>
         <button class="primary-button" type="button" onclick={downloadBackup} disabled={isExporting}>
-          {isExporting ? 'Preparing backup…' : 'Download backup'} <span>→</span>
+          {isExporting ? 'Preparing backup…' : 'Download backup'} <Icon name="arrow-right" size={14} />
         </button>
         {#if lastBackupExportAt !== null}
           <p class="backup-recency">
@@ -290,7 +291,7 @@
     </section>
 
     <section class="backup-panel" aria-labelledby="storage-protection-title">
-      <div class="backup-icon" aria-hidden="true">◈</div>
+      <div class="backup-icon" aria-hidden="true"><Icon name="shield-check" size={24} /></div>
       <div>
         <h2 id="storage-protection-title">Protect data in this browser</h2>
         {#if isCheckingStorage}
