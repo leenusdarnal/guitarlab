@@ -280,7 +280,7 @@
   .lesson-result-link:hover,.browse-paths-link:hover,.directory-heading>a:hover{ text-decoration:underline;text-underline-offset:3px}
   .show-more-wrap{text-align:center;padding:20px 0 2px}
   .show-more,.empty-results button{min-height:44px;padding:10px 17px;border:1px solid var(--border);border-radius:10px;background:var(--surface-raised);color:var(--text);font-size:13px;font-weight:750;cursor:pointer}
-  .show-more span{padding-left:8px;color:var(--primary)}
+  .show-more :global(.icon){margin-left:8px;color:var(--primary)}
   .show-more-wrap p,.all-results-shown{color:var(--muted);font-size:12px;margin:8px 0 0;text-align:center}
   .empty-results{padding:30px 15px;text-align:center;border:1px dashed var(--border);border-radius:12px;background:var(--bg)}
   .empty-symbol{font-size:32px;color:var(--muted)}
