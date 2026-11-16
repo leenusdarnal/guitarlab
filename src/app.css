@@ -199,3 +199,11 @@ textarea:focus-visible {
     }
   }
 }
+
+
+/* Keep page content reachable above the fixed mobile primary navigation. */
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  }
+}
