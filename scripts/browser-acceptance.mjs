@@ -1334,9 +1334,11 @@ try {
     true,
     'The collapsed mobile navigation target should be hidden from interaction.'
   );
+  const globalMenuButtonHeight = await globalMenuButton.evaluate((button) =>
+    button.getBoundingClientRect().height
+  );
   assert.ok(
-    (await globalMenuButton.evaluate((button) => button.getBoundingClientRect().height)) >=
-      44,
+    globalMenuButtonHeight >= 44,
     'The global menu trigger should meet the 44px touch target.'
   );
   await globalMenuButton.focus();
@@ -1365,7 +1367,9 @@ try {
     'Escape should collapse the global navigation.'
   );
   assert.equal(
-    await globalMenuButton.evaluate((button) => document.activeElement === button),
+    await globalMenuButton.evaluate(
+      (button) => document.activeElement === button
+    ),
     true,
     'Escape should return focus to the global menu trigger.'
   );
@@ -1378,7 +1382,6 @@ try {
     () => document.activeElement?.id === 'main-content'
   );
   await globalMobileNavigation.waitFor({ state: 'hidden' });
-
 
   // Restore the desktop viewport after the earlier mobile navigation acceptance.
   await page.setViewportSize({ width: 1440, height: 900 });
