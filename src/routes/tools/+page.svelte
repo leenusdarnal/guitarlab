@@ -304,4 +304,10 @@
       justify-self: start;
     }
   }
+
+  .page-heading p,
+  .tool-copy p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
 </style>
