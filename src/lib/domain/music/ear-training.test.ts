@@ -11,10 +11,9 @@ describe('ear-training exercise model', () => {
     expect(exercise.tones.map((tone) => tone.startMilliseconds)).toEqual([
       0, 500, 1_000, 1_500
     ]);
-    expect(exercise.choices.map((choice) => choice.value)).toEqual([
-      'steady',
-      'uneven'
-    ]);
+    expect(
+      exercise.choices.map((choice) => choice.value).sort()
+    ).toEqual(['steady', 'uneven']);
   });
 
   it('creates an uneven pulse with distinguishable gaps', () => {
@@ -77,10 +76,9 @@ describe('ear-training exercise model', () => {
         .map((midi) => 440 * 2 ** ((midi - 69) / 12))
         .sort((left, right) => left - right)
     );
-    expect(subdominant.choices.map((choice) => choice.value)).toEqual([
-      'subdominant',
-      'dominant'
-    ]);
+    expect(
+      subdominant.choices.map((choice) => choice.value).sort()
+    ).toEqual(['dominant', 'subdominant']);
   });
 
   it('creates rising, falling and level melodic contours', () => {
@@ -97,6 +95,48 @@ describe('ear-training exercise model', () => {
       falling.tones[2].frequencyHz
     );
     expect(new Set(level.tones.map((tone) => tone.frequencyHz)).size).toBe(1);
+  });
+
+  it('varies the correct answer position while keeping option sets reproducible', () => {
+    const factories = [
+      (sequence: number) => createEarTrainingExercise('pulse', sequence),
+      (sequence: number) => createEarTrainingExercise('pitch', sequence),
+      (sequence: number) => createEarTrainingExercise('contour', sequence),
+      (sequence: number) => createEarTrainingExercise('chord-movement', sequence),
+      (sequence: number) => createEarTrainingExercise('interval', sequence),
+      (sequence: number) =>
+        createEarTrainingExercise('interval', sequence, 'steps-and-tritone'),
+      (sequence: number) =>
+        createEarTrainingExercise('interval', sequence, 'wide-leaps')
+    ];
+
+    for (const createExercise of factories) {
+      const exercises = Array.from({ length: 100 }, (_, sequence) =>
+        createExercise(sequence)
+      );
+      const optionCount = exercises[0].choices.length;
+      const expectedOptions = exercises[0].choices
+        .map((choice) => choice.value)
+        .sort();
+      const answerPositions = new Set<number>();
+
+      exercises.forEach((exercise, sequence) => {
+        const repeated = createExercise(sequence);
+        const position = exercise.choices.findIndex(
+          (choice) => choice.value === exercise.answer
+        );
+        answerPositions.add(position);
+
+        expect(position).toBeGreaterThanOrEqual(0);
+        expect(
+          exercise.choices.map((choice) => choice.value).sort()
+        ).toEqual(expectedOptions);
+        expect(repeated.choices).toEqual(exercise.choices);
+        expect(repeated.answer).toBe(exercise.answer);
+      });
+
+      expect(answerPositions.size).toBe(optionCount);
+    }
   });
 
   it('creates reproducible interval recognition challenges', () => {
@@ -116,11 +156,13 @@ describe('ear-training exercise model', () => {
             exercise.tones[1].frequencyHz / exercise.tones[0].frequencyHz
           )
       ).toBeCloseTo(semitones);
-      expect(exercise.choices.map((choice) => choice.value)).toEqual([
-        'unison',
-        'minor_third',
+      expect(
+        exercise.choices.map((choice) => choice.value).sort()
+      ).toEqual([
         'major_third',
-        'perfect_fifth'
+        'minor_third',
+        'perfect_fifth',
+        'unison'
       ]);
     });
   });
