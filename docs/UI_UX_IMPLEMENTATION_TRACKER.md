@@ -345,6 +345,9 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
   - [x] Replace the eight decorative Tools hub glyphs with a single local SVG icon component; the adjacent card headings provide the accessible names.
   - [ ] Replace remaining dashboard, global navigation and individual tool glyphs with the same icon set.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
+  - [x] Enable `viewport-fit=cover` and apply safe-area insets to the sticky global navigation and lesson outline offsets.
+  - [x] Add `svh` and `dvh` fallbacks for the app body's minimum height and test it against changing mobile viewport heights.
+  - [ ] Confirm notch, landscape and browser-chrome behaviour on physical iOS and Android devices.
 - [ ] Re-check ear-training answer order and accessible visual alternatives; the advisory finding came from an earlier snapshot and must be re-verified before implementation.
 - [ ] Remove or revise any stale tool disclaimers that no longer match the current implementation.
 
