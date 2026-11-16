@@ -324,13 +324,7 @@ try {
       );
 
 
-      if (
-        route.startsWith('/tools/') &&
-        route !== '/tools/fretboard' &&
-        route !== '/tools/chords' &&
-        route !== '/tools/metronome' &&
-        route !== '/tools/ear-training'
-      ) {
+      if (route.startsWith('/tools/')) {
         const toolInstructions = await page.evaluate(() =>
           Array.from(
             document.querySelectorAll(
