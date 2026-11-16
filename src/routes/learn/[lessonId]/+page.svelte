@@ -351,7 +351,10 @@
         </aside>
         <nav class="lesson-tool-links" aria-label="Tools for this lesson">
           <a
-            href={resolve('/tools/metronome') + (lesson.startingTempoBpm ? '?bpm=' + lesson.startingTempoBpm : '')}
+            href={
+              resolve('/tools/metronome') +
+              (lesson.startingTempoBpm ? '?bpm=' + lesson.startingTempoBpm : '')
+            }
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -570,7 +573,7 @@
   .sidebar-card>span:not(.eyebrow){font-size:12px}
   .glance-card strong{font:500 21px Georgia,serif;color:var(--primary)}
   @media(max-width:760px){.lesson-outline{top:60px;margin-inline:-2px;padding:6px}.lesson-outline a{min-height:44px;padding:8px 10px;font-size:12px}.content-section,#lesson-progress{scroll-margin-top:116px}.lesson-tool-links a{flex:1 1 140px;justify-content:center}}
-  
+
 
   /* Supporting lesson copy uses the shared readable type scale; metadata stays compact. */
   .breadcrumbs {
