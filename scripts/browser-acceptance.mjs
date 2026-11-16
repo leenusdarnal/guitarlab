@@ -1334,8 +1334,8 @@ try {
     true,
     'The collapsed mobile navigation target should be hidden from interaction.'
   );
-  const globalMenuButtonHeight = await globalMenuButton.evaluate((button) =>
-    button.getBoundingClientRect().height
+  const globalMenuButtonHeight = await globalMenuButton.evaluate(
+    (button) => button.getBoundingClientRect().height
   );
   assert.ok(
     globalMenuButtonHeight >= 44,
