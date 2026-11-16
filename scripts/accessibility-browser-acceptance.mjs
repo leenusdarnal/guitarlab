@@ -21,6 +21,7 @@ const routes = [
   '/practice',
   '/settings/data',
   '/tools',
+  '/skills',
   '/tools/fretboard',
   '/tools/chords',
   '/tools/metronome',
@@ -317,6 +318,36 @@ try {
         [],
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
+
+
+      if (route === '/tools') {
+        const smallestToolCopy = await page.evaluate(() =>
+          Math.min(
+            ...Array.from(
+              document.querySelectorAll('.page-heading > p, .tool-copy > p')
+            ).map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+          )
+        );
+        assert.ok(
+          smallestToolCopy >= 16,
+          'Tools instructions and descriptions must use readable 16px body copy.'
+        );
+      }
+      if (route === '/skills') {
+        const smallestSkillCopy = await page.evaluate(() =>
+          Math.min(
+            ...Array.from(document.querySelectorAll('header > p, .guide-item p')).map(
+              (element) => Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+          )
+        );
+        assert.ok(
+          smallestSkillCopy >= 13,
+          'Skills guidance and supporting copy must not use tiny metadata sizing.'
+        );
+      }
 
       await scanPage(page, route, theme, '320px');
 
