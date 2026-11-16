@@ -224,7 +224,27 @@
   </section>
 
   {#if loading}
-    <p class="status" role="status">Loading your skill map…</p>
+    <div class="skill-layout-loading" role="status" aria-label="Loading your skill map">
+      <p class="status">Loading your skill map…</p>
+      <div class="layout skill-loading-layout" aria-hidden="true">
+        <div class="skill-loading-panel skill-loading-list">
+          <span class="skill-loading-line short"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-line"></span>
+        </div>
+        <div class="skill-loading-panel skill-loading-detail">
+          <span class="skill-loading-line medium"></span>
+          <span class="skill-loading-line"></span>
+          <span class="skill-loading-block"></span>
+          <span class="skill-loading-block"></span>
+          <span class="skill-loading-line"></span>
+        </div>
+      </div>
+    </div>
   {:else if error && reviews.length === 0}
     <div class="status error" role="alert">
       <p>{error}</p>
@@ -568,6 +588,12 @@
     align-items: start;
     gap: 16px;
   }
+  .skill-loading-layout { min-height: 32rem; }
+  .skill-loading-panel { display: grid; align-content: start; gap: 14px; min-height: 32rem; padding: 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .skill-loading-line { display: block; height: 12px; border-radius: 6px; background: var(--surface-raised); }
+  .skill-loading-line.short { width: 52%; }
+  .skill-loading-line.medium { width: 68%; }
+  .skill-loading-block { display: block; min-height: 88px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-raised); }
   .skill-list,
   .detail {
     min-width: 0;
@@ -882,6 +908,8 @@
     .layout {
       grid-template-columns: minmax(0, 1fr);
     }
+    .skill-loading-panel { min-height: 16rem; }
+    .skill-loading-detail { min-height: 22rem; }
     .skill-list.mobile-hidden {
       display: none;
     }
