@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">GuitarLab</title>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFF0C6"/><stop offset=".55" stop-color="#E5B95F"/><stop offset="1" stop-color="#A96D25"/></linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#22B98F"/><stop offset="1" stop-color="#7BE2BC"/></linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="#0B1723"/>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 21V31C23 28 17 32 18 39C18 45 24 48 29 44C31 42 32 40 32 37C33 41 35 44 39 45C45 46 49 42 47 36C46 32 41 29 36 31V21Z" stroke-width="2.8"/>
+    <path d="M28 21V13C28 10 30 8 33 8H35C38 8 40 10 40 13V21" stroke-width="2.6"/>
+    <path d="M30 19V34M32 19V34M34 19V34M36 19V34" stroke-width="1.05"/>
+    <circle cx="33" cy="37" r="4.2" stroke-width="1.7"/>
+  </g>
+  <g fill="url(#teal)">
+    <rect x="20" y="49" width="3" height="3" rx="1.5"/>
+    <rect x="26" y="46" width="3" height="6" rx="1.5"/>
+    <rect x="32" y="44" width="3" height="9" rx="1.5"/>
+    <rect x="38" y="46" width="3" height="6" rx="1.5"/>
+    <rect x="44" y="49" width="3" height="3" rx="1.5"/>
+  </g>
+</svg>

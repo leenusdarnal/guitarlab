@@ -26,11 +26,11 @@ The refresh makes those ingredients more consistent and more explicit. The inter
 
 | Direction | Strength | Trade-off | Decision |
 |---|---|---|---|
-| **Modern Music Studio** — graphite and warm-paper surfaces, brass action accent, precise typography, instrument-first diagrams and a calm practice surface | Balances contemporary product clarity with the warmth of learning a physical instrument | Requires a disciplined token and component system across existing routes | **Recommended** |
+| **Modern Music Studio** — graphite and warm-paper surfaces, emerald primary actions, restrained teal support, champagne-gold instrument detailing, precise typography and a calm practice surface | Balances contemporary product clarity with the warmth of learning a physical instrument | Requires a disciplined token and component system across existing routes | **Recommended** |
 | Bright creator platform — vivid colour, expressive gradients, large promotional artwork and energetic motion | Distinctive and immediately lively | Adds visual noise to long lessons and hands-busy practice; competes with musical content and the approved calm direction | Not recommended |
 | Boutique instrument showroom — dark wood textures, full-bleed guitar photography and decorative material effects | Strong acoustic atmosphere and premium character | Makes the product feel like a shop or editorial site; photographs cannot replace accurate teaching diagrams and can slow the learning journey | Not recommended |
 
-**Design call for this revision:** use Modern Music Studio. Keep the amber/brass identity, but move the base palette toward cleaner blue-neutral graphite and warm paper. Use photography as occasional atmosphere, never as a substitute for a lesson visualisation or instrument diagram.
+**Design call for this revision:** use Modern Music Studio with the GuitarLab acoustic identity. Emerald is the primary action colour, teal is the rare supporting accent, and champagne gold is reserved for decorative guitar detailing. Retain blue-neutral graphite and warm paper surfaces. Use photography as occasional atmosphere, never as a substitute for a lesson visualisation or instrument diagram.
 
 ### What success looks like
 
@@ -61,7 +61,7 @@ Apply these principles to every route:
 - **Reveal complexity gradually.** Keep beginner tasks approachable; expose advanced theory and controls when relevant.
 - **Respect concentration.** Practice mode should remove distractions and keep essential controls reachable.
 - **Make state visible.** Saving, saved, offline, unavailable, microphone permission and error states must be understandable.
-- **Use warmth with restraint.** Amber, subtle surface contrast and occasional authentic instrument imagery provide character. Do not decorate every region.
+- **Use the brand with restraint.** Emerald and teal identify actions and supporting emphasis; champagne gold stays in the acoustic artwork. Do not decorate every region.
 
 ---
 
@@ -69,9 +69,9 @@ Apply these principles to every route:
 
 ### 3.1 Colour palette
 
-The target palette uses deep, slightly blue-neutral graphite for dark mode and warm paper for light mode. Brass/amber remains the primary action colour. Supporting colours are semantic and should not become a rainbow category system.
+The implemented palette uses deep, slightly blue-neutral graphite for dark mode and warm paper for light mode. Emerald is the primary action colour, teal is a rare secondary emphasis, and champagne gold is decorative artwork only. Supporting colours remain semantic and do not become a rainbow category system.
 
-These are **target design tokens**, not a statement of the values currently shipped in `src/app.css`. Implement them through semantic CSS variables and run `npm run design:validate` after migration. Do not copy colours ad hoc into route styles.
+These values are the shared semantic theme tokens shipped in `src/app.css`. Keep them centralised, use semantic CSS variables in route/component styles, and run `npm run design:validate` when changing them. Do not copy colours ad hoc into route styles.
 
 | Semantic token | Dark target | Light target | Intended use |
 |---|---|---|---|
@@ -84,13 +84,13 @@ These are **target design tokens**, not a statement of the values currently ship
 | `--text-subtle` | `#8592A2` | `#626E7C` | Non-essential metadata only |
 | `--border` | `#303A48` | `#D7DCE1` | Dividers and quiet grouping |
 | `--border-strong` | `#6B7888` | `#7A8795` | Input outlines and meaningful control boundaries |
-| `--primary` | `#F0B65A` | `#8A5210` | Main actions, links and active state |
+| `--primary` | `#42D6A0` | `#176B4B` | Main actions, links and active state |
 | `--primary-ink` | `#20160A` | `#FFFFFF` | Text/icons on primary surfaces |
-| `--secondary` | `#A7A4EA` | `#5B50A8` | Rare supporting emphasis, theory or tool state |
-| `--success` | `#76C6A0` | `#216A4A` | Successful save, completion and positive feedback |
+| `--secondary` | `#58CDB1` | `#176B68` | Rare supporting emphasis, theory or tool state |
+| `--success` | `#8CCF76` | `#2F733F` | Successful save, completion and positive feedback |
 | `--warning` | `#E9BC68` | `#805400` | Caution and recoverable attention |
 | `--danger` | `#F08A80` | `#A5352B` | Destructive actions and error text |
-| `--focus` | `#FFD17A` | `#744600` | Keyboard focus indicator |
+| `--focus` | `#E7C77F` | `#16694D` | Keyboard focus indicator |
 
 Colour rules:
 
@@ -455,7 +455,7 @@ Visual design must never create a false product promise.
 
 ## 13. Implementation guidance and migration
 
-This document defines the target. It does not mean the current application has already adopted these tokens or layouts. At the time of this revision, `src/app.css` still contains the earlier charcoal/amber baseline.
+This document defines the current visual system and implementation guidance. The semantic theme values in `src/app.css` follow the palette in section 3.1; route-level refinements remain tracked in the UI/UX implementation tracker.
 
 Implement the refresh incrementally, using the ordered work in the [UI/UX Implementation Tracker](UI_UX_IMPLEMENTATION_TRACKER.md):
 
@@ -505,4 +505,5 @@ A design-system implementation is ready for review only when:
 
 | Date | Change |
 |---|---|
-| 2026-11-15 | Replaced the broad hybrid direction with a detailed Modern Music Studio visual and interaction system, including target theme tokens, typography, layout, navigation, component patterns, screen guidance, accessibility and migration acceptance. |
+| 2026-11-15 | Replaced the broad hybrid direction with a detailed Modern Music Studio visual and interaction system, including theme tokens, typography, layout, navigation, component patterns, screen guidance, accessibility and migration acceptance. |
+| 2026-11-16 | Adopted the GuitarLab acoustic brand palette: emerald primary, teal supporting accent and champagne-gold decorative instrument detailing. Reconciled the semantic token table with `src/app.css`. |

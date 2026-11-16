@@ -18,7 +18,7 @@
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs && node scripts/validate-practice-taxonomy.mjs",
     "cf-typegen": "wrangler types",
-    "design:validate": "node scripts/validate-design-tokens.mjs",
+    "design:validate": "node scripts/validate-design-tokens.mjs && node scripts/validate-brand-assets.mjs",
     "db:generate": "drizzle-kit generate",
     "db:finalize": "node scripts/finalize-db-migration.mjs",
     "db:migrate:local": "wrangler d1 migrations apply guitarlab-local --local",
