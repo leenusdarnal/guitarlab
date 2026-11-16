@@ -385,10 +385,103 @@ try {
         );
       }
 
+      if (route === '/learn/y1-w01-lesson') {
+        const metronomeLink = page.locator(
+          '.lesson-tool-links a[href*="/tools/metronome"]'
+        );
+        assert.match(
+          await metronomeLink.innerText(),
+          /Open metronome at 50 BPM/,
+          'The lesson should announce its starting tempo in the metronome action.'
+        );
+        const metronomeHref = await metronomeLink.getAttribute('href');
+        assert.ok(
+          metronomeHref,
+          'The lesson should link to its metronome tool.'
+        );
+        assert.equal(
+          new URL(metronomeHref, origin).searchParams.get('bpm'),
+          '50',
+          'The lesson starting tempo should be carried into the metronome URL.'
+        );
+        const metronomePage = await context.newPage();
+        await metronomePage.goto(new URL(metronomeHref, origin).toString(), {
+          waitUntil: 'networkidle'
+        });
+        assert.equal(
+          await metronomePage
+            .getByRole('spinbutton', {
+              name: 'Enter tempo in beats per minute'
+            })
+            .inputValue(),
+          '50',
+          'The metronome should initialize from the lesson starting tempo.'
+        );
+        await metronomePage.close();
+
+        const lessonCopySizes = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.content-section p, .content-section li, .sidebar-card p, .practice-options li, .mastery-note'
+            )
+          )
+            .map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+            .filter(Number.isFinite)
+        );
+        assert.ok(
+          lessonCopySizes.length > 0 && Math.min(...lessonCopySizes) >= 15,
+          'Lesson instructions, supporting explanations and sidebar guidance must stay readable.'
+        );
+        const undersizedLessonActions = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.resume-button, .checkpoint-actions button, .completion-actions button, .block-complete'
+            )
+          )
+            .map((element) => ({
+              text: element.textContent?.trim(),
+              height: element.getBoundingClientRect().height
+            }))
+            .filter((element) => element.height < 44)
+        );
+        assert.deepEqual(
+          undersizedLessonActions,
+          [],
+          'Lesson progress and completion actions must meet the 44px target height.'
+        );
+      }
+
       await scanPage(page, route, theme, '320px');
 
       await page.setViewportSize({ width: 1440, height: 1000 });
       await scanPage(page, route, theme, 'desktop');
+      for (const width of [360, 390, 768, 1280]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const responsiveLayout = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          content: document.documentElement.scrollWidth,
+          undersizedControls: Array.from(
+            document.querySelectorAll(
+              'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]), select, textarea'
+            )
+          )
+            .map((control) =>
+              Number.parseFloat(getComputedStyle(control).fontSize)
+            )
+            .filter((fontSize) => fontSize < 16)
+        }));
+        assert.ok(
+          responsiveLayout.content <= responsiveLayout.viewport,
+          route + ' has horizontal overflow at ' + width + 'px in ' + theme
+        );
+        assert.deepEqual(
+          responsiveLayout.undersizedControls,
+          [],
+          route + ' has text controls below 16px at ' + width + 'px in ' + theme
+        );
+      }
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
