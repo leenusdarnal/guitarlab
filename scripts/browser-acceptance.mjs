@@ -1717,6 +1717,8 @@ try {
   await wakeLockPage.waitForFunction(
     () => window.__wakeLockState.requests === 3
   );
+  // Session storage intentionally rejects sessions shorter than one second.
+  await wakeLockPage.waitForTimeout(1100);
 
   await wakeLockPage
     .getByRole('button', { name: 'Finish and save session' })
