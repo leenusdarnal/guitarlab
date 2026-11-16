@@ -1072,4 +1072,32 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  .page-heading p,
+  .diagram-hint,
+  .find-panel > p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .save-status,
+  .feedback,
+  .privacy-note,
+  .local-label {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .controls label,
+  .find-panel label,
+  .harmony-control label {
+    font-size: var(--font-size-supporting);
+  }
+
+  .secondary-button,
+  .primary-button,
+  .find-actions button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
