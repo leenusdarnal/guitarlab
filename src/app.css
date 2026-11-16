@@ -90,6 +90,8 @@ html {
 body {
   min-width: 320px;
   min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   margin: 0;
   background: var(--bg);
   color: var(--text);
@@ -161,5 +163,32 @@ textarea:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Keep sticky learner navigation clear of device cut-outs and browser chrome. */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .global-nav {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  :root body .global-nav-inner {
+    padding-left: max(clamp(15px, 3vw, 38px), env(safe-area-inset-left, 0px));
+    padding-right: max(clamp(15px, 3vw, 38px), env(safe-area-inset-right, 0px));
+  }
+
+  :root body .lesson-outline {
+    top: calc(66px + env(safe-area-inset-top, 0px));
+  }
+
+  @media (max-width: 760px) {
+    :root body .global-nav-inner {
+      padding-left: max(12px, env(safe-area-inset-left, 0px));
+      padding-right: max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    :root body .lesson-outline {
+      top: calc(60px + env(safe-area-inset-top, 0px));
+    }
   }
 }
