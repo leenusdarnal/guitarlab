@@ -319,7 +319,6 @@ try {
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
 
-
       if (route === '/tools') {
         const smallestToolCopy = await page.evaluate(() =>
           Math.min(
