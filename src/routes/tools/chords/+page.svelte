@@ -692,4 +692,31 @@
       flex: 1 1 100%;
     }
   }
+
+  .page-heading p,
+  .section-description {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .profile-status,
+  .privacy-note,
+  .observation-fields,
+  .drill-actions button {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .field,
+  .field label {
+    font-size: var(--font-size-supporting);
+  }
+
+  .primary-button,
+  .secondary-button,
+  .finish-button,
+  .drill-actions button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
