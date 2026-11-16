@@ -2,12 +2,12 @@
 
 **Status:** Active  
 **Created:** 15 November 2026  
-**Last reviewed:** 15 November 2026  
+**Last reviewed:** 16 November 2026  
 **Implementation source:** UX_REVIEW.md (advisory review supplied for this work) and the source audit in [UI/UX audit](UI_UX_AUDIT_2026-11-15.md)  
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-12 — task-based Tools hub and effective learner preferences (`feat/ux-12-clarify-tools-and-preferences`)
+**Active implementation:** UX-13 — dashboard and global navigation icon consistency (`ux/13-consistent-dashboard-and-navigation-icons`)
 
 ---
 
@@ -314,7 +314,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-12 — Clarify the Tools hub and onboarding/preferences
 
 **Priority:** P2  
-**Status:** IN PROGRESS — task-based tool groups, microphone permission guidance and active preference cleanup implemented on the feature branch  
+**Status:** DONE — PR #148 merged; tool grouping, microphone permission guidance and effective preference cleanup are on `main`  
 **Depends on:** UX-04 and product decision for preference behaviour  
 **Related findings:** T1, O1–O3
 
@@ -331,7 +331,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-13 — Finish lower-priority resilience and polish
 
 **Priority:** P3  
-**Status:** READY  
+**Status:** IN PROGRESS — shared local SVG icon migration for Today and global mobile navigation is underway in `ux/13-consistent-dashboard-and-navigation-icons`  
 **Depends on:** UX-04  
 **Related findings:** X13–X15 and earlier-snapshot ear-training notes
 
@@ -343,7 +343,8 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
   - [ ] Audit remaining learner-facing recoverable errors and add context-specific retry/next actions.
 - [ ] Replace inconsistent Unicode navigation/tool glyphs with a consistent accessible icon set.
   - [x] Replace the eight decorative Tools hub glyphs with a single local SVG icon component; the adjacent card headings provide the accessible names.
-  - [ ] Replace remaining dashboard, global navigation and individual tool glyphs with the same icon set.
+  - [x] Replace decorative pictograms in the Today sidebar and global mobile menu/navigation with the shared local SVG component; visible link text remains the accessible name.
+  - [ ] Audit and replace remaining glyphs in individual tool pages and route-level controls.
 - [ ] Apply safe-area insets and dynamic viewport sizing to fixed/sticky mobile controls where needed.
   - [x] Enable `viewport-fit=cover` and apply safe-area insets to the sticky global navigation and lesson outline offsets.
   - [x] Add `svh` and `dvh` fallbacks for the app body's minimum height and test it against changing mobile viewport heights.
