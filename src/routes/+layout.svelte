@@ -183,6 +183,9 @@
         aria-current={activeSection === 'songs' ? 'page' : undefined}
         onclick={closeMobileMenu}
       ><span class="nav-icon" aria-hidden="true"><Icon name="song" size={18} /></span>Songs</a>
+      {#if currentPath === '/'}
+        <a href="#learning-path" onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="route" size={18} /></span>Learning path</a>
+      {/if}
       <a
         href={resolve('/onboarding')}
         aria-current={currentPath.startsWith('/onboarding') ? 'page' : undefined}
