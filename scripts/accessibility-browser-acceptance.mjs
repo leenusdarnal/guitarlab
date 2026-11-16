@@ -351,9 +351,14 @@ try {
       }
 
       if (route === '/learn/y1-w01-lesson') {
-        const metronomeLink = page.getByRole('link', {
-          name: 'Open metronome at 50 BPM'
-        });
+        const metronomeLink = page.locator(
+          '.lesson-tool-links a[href*="/tools/metronome"]'
+        );
+        assert.match(
+          await metronomeLink.innerText(),
+          /Open metronome at 50 BPM/,
+          'The lesson should announce its starting tempo in the metronome action.'
+        );
         const metronomeHref = await metronomeLink.getAttribute('href');
         assert.ok(
           metronomeHref,
