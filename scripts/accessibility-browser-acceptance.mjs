@@ -13,7 +13,8 @@ const axeSource = await readFile(
 const port = Number(process.env.GUITARLAB_ACCESSIBILITY_PREVIEW_PORT ?? 8789);
 const origin = 'http://127.0.0.1:' + port;
 const themes = ['dark', 'light'];
-const browserEngine = process.env.GUITARLAB_BROWSER_ENGINE === 'webkit' ? webkit : chromium;
+const browserEngine =
+  process.env.GUITARLAB_BROWSER_ENGINE === 'webkit' ? webkit : chromium;
 const baseRoutes = [
   '/',
   '/learn',
@@ -34,7 +35,17 @@ const baseRoutes = [
 ];
 const routes =
   process.env.GUITARLAB_BROWSER_ENGINE === 'webkit'
-    ? ['/', '/learn', '/learn/y1-w01-lesson', '/practice', '/settings/data', '/tools', '/tools/tuner', '/skills', '/repertoire']
+    ? [
+        '/',
+        '/learn',
+        '/learn/y1-w01-lesson',
+        '/practice',
+        '/settings/data',
+        '/tools',
+        '/tools/tuner',
+        '/skills',
+        '/repertoire'
+      ]
     : baseRoutes;
 const wcagTags = [
   'wcag2a',
@@ -256,7 +267,10 @@ try {
         const moreNavigation = page.locator('#mobile-more-navigation');
         await moreNavigation.waitFor({ state: 'visible' });
         assert.equal(
-          await moreNavigation.locator('a').first().evaluate((element) => document.activeElement === element),
+          await moreNavigation
+            .locator('a')
+            .first()
+            .evaluate((element) => document.activeElement === element),
           true,
           'Opening More navigation must move focus to its first destination.'
         );
@@ -281,17 +295,18 @@ try {
           ['Today', 'Learn', 'Practice', 'Tools', 'Progress'],
           'Mobile primary navigation must expose five labelled destinations.'
         );
-        const expectedTab = route === '/'
-          ? 'Today'
-          : route.startsWith('/learn')
-            ? 'Learn'
-            : route.startsWith('/practice')
-              ? 'Practice'
-              : route.startsWith('/tools')
-                ? 'Tools'
-                : route.startsWith('/skills')
-                  ? 'Progress'
-                  : null;
+        const expectedTab =
+          route === '/'
+            ? 'Today'
+            : route.startsWith('/learn')
+              ? 'Learn'
+              : route.startsWith('/practice')
+                ? 'Practice'
+                : route.startsWith('/tools')
+                  ? 'Tools'
+                  : route.startsWith('/skills')
+                    ? 'Progress'
+                    : null;
         const selectedTabs = mobileTabs.locator('a[aria-current="page"] span');
         if (expectedTab) {
           assert.equal(await selectedTabs.count(), 1);
@@ -303,9 +318,11 @@ try {
             route + ' must not falsely mark an unrelated primary destination current.'
           );
         }
-        const tabTargetHeights = await mobileTabs.locator('a').evaluateAll((links) =>
-          links.map((link) => link.getBoundingClientRect().height)
-        );
+        const tabTargetHeights = await mobileTabs
+          .locator('a')
+          .evaluateAll((links) =>
+            links.map((link) => link.getBoundingClientRect().height)
+          );
         assert.ok(
           tabTargetHeights.every((height) => height >= 44),
           'Every mobile tab must provide at least a 44px touch target.'
@@ -802,7 +819,11 @@ try {
   }
 
   console.log(
-    'Accessibility checks passed with ' + (process.env.GUITARLAB_BROWSER_ENGINE ?? 'chromium') + ': ' + routes.length + ' routes in dark ' +
+    'Accessibility checks passed with ' +
+      (process.env.GUITARLAB_BROWSER_ENGINE ?? 'chromium') +
+      ': ' +
+      routes.length +
+      ' routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
       'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
   );
