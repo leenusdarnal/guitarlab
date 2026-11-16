@@ -305,7 +305,7 @@
       <a class="nav-link" href="#learning-path"><span class="nav-icon" aria-hidden="true"><Icon name="route" size={18} /></span> Learning path</a>
       <a class="nav-link" href={resolve('/skills')}><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span> Skill states</a>
       <a class="nav-link" href="#reviews"><span class="nav-icon" aria-hidden="true"><Icon name="calendar-clock" size={18} /></span> Reviews</a>
-      <a class="nav-link" href={resolve('/practice')}><span aria-hidden="true">◷</span> Practice Studio</a>
+      <a class="nav-link" href={resolve('/practice')}><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span> Practice Studio</a>
       <a class="nav-link" href="#practice-history"><span class="nav-icon" aria-hidden="true"><Icon name="history" size={18} /></span> Practice history</a>
     </nav>
     <div class="sidebar-bottom">
