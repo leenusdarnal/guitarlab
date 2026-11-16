@@ -254,7 +254,9 @@ try {
         'The app body must follow the current mobile viewport height'
       );
       if (route === '/learn/y1-w01-lesson') {
-        const outline = await page.locator('.lesson-outline').evaluate((element) => ({
+        const outline = await page
+          .locator('.lesson-outline')
+          .evaluate((element) => ({
           position: getComputedStyle(element).position,
           top: getComputedStyle(element).top
         }));
