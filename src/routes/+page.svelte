@@ -90,21 +90,6 @@
       ?.setAttribute('content', resolved === 'light' ? '#F5F4F0' : '#101318');
   }
 
-  function setThemePreference(preference: ThemePreference) {
-    themePreference = preference;
-    applyResolvedTheme(preference);
-    try {
-      window.localStorage.setItem('guitarlab-theme', preference);
-    } catch {
-      // The selected appearance remains active for this session.
-    }
-  }
-
-  function handleThemePreferenceChange(event: Event) {
-    const selected = event.currentTarget as HTMLSelectElement;
-    if (isThemePreference(selected.value)) setThemePreference(selected.value);
-  }
-
   async function loadDashboard(isCurrent: () => boolean = () => true) {
     isLoading = true;
     dashboardError = '';
