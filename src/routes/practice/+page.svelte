@@ -126,7 +126,7 @@
   // Keep the display awake only while a session is actively running. Pause,
   // finish, unmount and hidden-page transitions all release the browser lock.
   $effect(() => {
-    visibilityRevision;
+    const requestRevision = visibilityRevision;
     if (activeSession?.status !== 'in_progress') {
       wakeLockStatus = 'idle';
       releaseScreenWakeLock();
@@ -157,6 +157,7 @@
       .then((lock) => {
         if (
           cancelled ||
+          visibilityRevision !== requestRevision ||
           activeSession?.status !== 'in_progress' ||
           document.visibilityState !== 'visible'
         ) {
