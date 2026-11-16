@@ -275,15 +275,16 @@ try {
           'Opening More navigation must move focus to its first destination.'
         );
         assert.ok(
-          await moreNavigation.locator('a').count() >= 3,
+          (await moreNavigation.locator('a').count()) >= 3,
           'Secondary navigation must retain Songs, preferences and data ' +
             'backups.'
         );
         await page.keyboard.press('Escape');
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'false');
         assert.equal(
-          await moreTrigger
-            .evaluate((element) => document.activeElement === element),
+          await moreTrigger.evaluate(
+            (element) => document.activeElement === element
+          ),
           true,
           'Escape must close More navigation and restore focus to its trigger.'
         );
@@ -621,7 +622,9 @@ try {
 
       await page.setViewportSize({ width: 1440, height: 1000 });
       assert.equal(
-        await page.locator('.mobile-tab-bar').evaluate((element) => getComputedStyle(element).display),
+        await page
+          .locator('.mobile-tab-bar')
+          .evaluate((element) => getComputedStyle(element).display),
         'none',
         'Mobile primary tabs must not replace desktop navigation.'
       );
