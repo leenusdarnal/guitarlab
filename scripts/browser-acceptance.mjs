@@ -385,20 +385,35 @@ try {
   });
   const recoveryPage = await recoveryContext.newPage();
   await recoveryPage.goto(origin, { waitUntil: 'networkidle' });
-  await recoveryPage.getByText('Dashboard unavailable', { exact: true }).waitFor();
+  await recoveryPage
+    .getByText('Dashboard unavailable', { exact: true })
+    .waitFor();
   assert.equal(
-    await recoveryPage.getByRole('button', { name: 'Try again' }).count(),
+    await recoveryPage
+      .locator('.error-panel')
+      .getByRole('button', { name: 'Try again' })
+      .count(),
     1,
     'The dashboard storage error must provide a retry action'
   );
-  await recoveryPage.evaluate(() => window.__guitarlabSetDatabaseAvailable(true));
-  await recoveryPage.getByRole('button', { name: 'Try again' }).click();
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
+  await recoveryPage
+    .locator('.error-panel')
+    .getByRole('button', { name: 'Try again' })
+    .click();
   await recoveryPage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
-  await recoveryPage.locator('.storage-warning').getByRole('button', { name: 'Try again' }).click();
+  await recoveryPage
+    .locator('.storage-warning')
+    .getByRole('button', { name: 'Try again' })
+    .click();
   await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
-  await recoveryPage.evaluate(() => window.__guitarlabSetDatabaseAvailable(false));
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(false)
+  );
   await recoveryPage.goto(origin + '/skills', { waitUntil: 'networkidle' });
   await recoveryPage
     .getByText(
@@ -412,11 +427,15 @@ try {
     'The skill map storage error must provide a retry action'
   );
   assert.equal(
-    await recoveryPage.getByRole('link', { name: 'Browse lessons' }).getAttribute('href'),
+    await recoveryPage
+      .getByRole('link', { name: 'Browse lessons' })
+      .getAttribute('href'),
     '/learn',
     'The skill map storage error must provide a useful next destination'
   );
-  await recoveryPage.evaluate(() => window.__guitarlabSetDatabaseAvailable(true));
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
   await recoveryPage.getByRole('button', { name: 'Try again' }).click();
   await recoveryPage.getByText('Showing 34 of 34 skills', { exact: true }).waitFor();
   await recoveryContext.close();
