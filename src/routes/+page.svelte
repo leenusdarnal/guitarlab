@@ -591,6 +591,7 @@
   .primary-button:hover{filter:brightness(1.06)}
   .primary-button:focus-visible,.secondary-button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .secondary-button{border:1px solid var(--border);background:var(--surface);color:var(--text)}
+  @media(max-width:900px){.welcome{align-items:flex-start;flex-direction:column;gap:17px}.welcome-actions{width:100%}}
   @media(max-width:720px){.welcome{align-items:flex-start;flex-direction:column;margin-bottom:16px}.welcome p{display:none}.welcome-actions{width:100%}.welcome-actions a{flex:1}.backup-reminder{align-items:flex-start;flex-direction:column}}
   
 </style>
