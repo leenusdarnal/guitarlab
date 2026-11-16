@@ -199,7 +199,7 @@
 
 <slot />
 
-{#if currentPath !== '/onboarding' && currentPath !== '/'}
+{#if currentPath !== '/onboarding'}
   <MobileTabBar />
 {/if}
 
