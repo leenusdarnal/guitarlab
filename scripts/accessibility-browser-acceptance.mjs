@@ -323,7 +323,6 @@ try {
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
 
-
       if (route.startsWith('/tools/')) {
         const toolInstructions = await page.evaluate(() =>
           Array.from(
