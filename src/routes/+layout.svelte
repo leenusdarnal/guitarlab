@@ -166,7 +166,7 @@
             <option value="dark">Dark</option>
           </select>
         </label>
-        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-more-navigation" aria-label={mobileMenuOpen ? 'Close more navigation' : 'Open more navigation'}>
+        <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-more-navigation" aria-label={mobileMenuOpen ? 'More — close navigation' : 'More — open navigation'}>
           <Icon name={mobileMenuOpen ? 'close' : 'menu'} size={18} /><span>More</span>
         </button>
       </div>
