@@ -243,13 +243,17 @@ try {
       );
       let routeBackIconSelector = null;
       if (route === '/learn') {
-        routeBackIconSelector = '.catalog-header .back [data-icon="arrow-left"]';
+        routeBackIconSelector =
+          '.catalog-header .back [data-icon="arrow-left"]';
       } else if (route === '/onboarding') {
-        routeBackIconSelector = '.setup-page header .skip [data-icon="arrow-left"]';
+        routeBackIconSelector =
+          '.setup-page header .skip [data-icon="arrow-left"]';
       } else if (route === '/practice') {
-        routeBackIconSelector = '.practice-page .top > a [data-icon="arrow-left"]';
+        routeBackIconSelector =
+          '.practice-page .top > a [data-icon="arrow-left"]';
       } else if (route === '/settings/data') {
-        routeBackIconSelector = '.data-page header .back-link [data-icon="arrow-left"]';
+        routeBackIconSelector =
+          '.data-page header .back-link [data-icon="arrow-left"]';
       } else if (route === '/skills') {
         routeBackIconSelector = '.skill-page > .back [data-icon="arrow-left"]';
       } else if (
