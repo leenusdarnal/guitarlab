@@ -5,6 +5,7 @@
   import { resolve } from '$app/paths';
   import '../app.css';
   import { loadActiveLearnerProfile } from '../lib/storage/indexeddb';
+  import Icon from '../lib/components/Icon.svelte';
 
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
@@ -162,21 +163,21 @@
           </select>
         </label>
         <button class="mobile-nav-trigger" type="button" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={mobileMenuOpen} aria-controls="mobile-primary-navigation" aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}>
-          <span aria-hidden="true">☰</span><span>Menu</span>
+          <Icon name={mobileMenuOpen ? 'close' : 'menu'} size={18} /><span>Menu</span>
         </button>
       </div>
     </div>
 
     {#if mobileMenuOpen}
       <nav class="mobile-primary-navigation" id="mobile-primary-navigation" aria-label="Primary navigation">
-        <a href={resolve('/')} onclick={closeMobileMenu}>Today</a>
-        <a href={resolve('/learn')} onclick={closeMobileMenu}>Learn</a>
-        <a href={resolve('/practice')} onclick={closeMobileMenu}>Practice</a>
-        <a href={resolve('/tools')} onclick={closeMobileMenu}>Tools</a>
-        <a href={resolve('/repertoire')} onclick={closeMobileMenu}>Songs</a>
-        <a href={resolve('/skills')} onclick={closeMobileMenu}>Progress</a>
-        <a href={resolve('/onboarding')} onclick={closeMobileMenu}>Preferences</a>
-        <a href={resolve('/settings/data')} onclick={closeMobileMenu}>Data &amp; backups</a>
+        <a href={resolve('/')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="home" size={18} /></span>Today</a>
+        <a href={resolve('/learn')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="book-open" size={18} /></span>Learn</a>
+        <a href={resolve('/practice')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span>Practice</a>
+        <a href={resolve('/tools')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="toolbox" size={18} /></span>Tools</a>
+        <a href={resolve('/repertoire')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="song" size={18} /></span>Songs</a>
+        <a href={resolve('/skills')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span>Progress</a>
+        <a href={resolve('/onboarding')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="settings" size={18} /></span>Preferences</a>
+        <a href={resolve('/settings/data')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="download" size={18} /></span>Data &amp; backups</a>
       </nav>
     {/if}
   </header>
@@ -204,7 +205,7 @@
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .mobile-nav-trigger{display:none;align-items:center;gap:8px;min-height:42px;padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
   .mobile-primary-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding:8px 16px 16px;border-top:1px solid var(--border);background:var(--surface)}
-  .mobile-primary-navigation a{display:flex;align-items:center;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
+  .mobile-primary-navigation a{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}\n  .mobile-primary-navigation .nav-icon{display:grid;place-items:center;width:20px;flex:none;color:var(--muted)}
   .mobile-primary-navigation a:hover,.mobile-primary-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-primary-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
