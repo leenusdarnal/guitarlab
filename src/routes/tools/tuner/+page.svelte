@@ -32,6 +32,7 @@
   let isRunning = $state(false);
   let result = $state<StableNoteUpdate>(emptyResult);
   let errorMessage = $state('');
+  let errorRetryAction = $state<'microphone' | 'reference' | null>(null);
   let processedAt = 0;
   let calibration = $state(440);
   let screenReaderMessage = $state('The tuner is ready. Start the microphone when you are ready.');
@@ -66,11 +67,13 @@
 
   async function playA4Reference() {
     errorMessage = '';
+    errorRetryAction = null;
     isPlayingReference = true;
     try {
       await playReferenceTone(calibration, 900);
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : 'The A4 reference tone could not be played.';
+      errorRetryAction = 'reference';
     } finally {
       isPlayingReference = false;
     }
@@ -86,6 +89,7 @@
   async function startTuner() {
     if (isStarting || isRunning) return;
     errorMessage = '';
+    errorRetryAction = null;
     screenReaderMessage = 'Microphone starting.';
     result = emptyResult;
     tracker.reset();
@@ -109,6 +113,7 @@
       if (microphone === input) microphone = null;
       await input.dispose();
       errorMessage = describeMicrophoneError(error);
+      errorRetryAction = 'microphone';
     } finally {
       isStarting = false;
     }
@@ -238,7 +243,7 @@
 
     <div class="reference-actions">
       <button type="button" class="reference-button" onclick={playA4Reference} disabled={isPlayingReference}>
-        {isPlayingReference ? 'Playing A4 reference…' : 'Hear A4 reference tone'}
+        {isPlayingReference ? 'Playing A4 reference…' : errorRetryAction === 'reference' ? 'Try A4 reference again' : 'Hear A4 reference tone'}
       </button>
       <span>{calibration} Hz reference</span>
     </div>
@@ -249,7 +254,7 @@
         <span class="capture-state"><span class="live-dot"></span> Listening on this device</span>
       {:else}
         <button type="button" class="start-button" onclick={startTuner} disabled={isStarting}>
-          {isStarting ? 'Starting microphone…' : 'Start tuner'}
+          {isStarting ? 'Starting microphone…' : errorRetryAction === 'microphone' ? 'Try tuner again' : 'Start tuner'}
         </button>
         <span class="capture-state">Microphone starts only when you press Start</span>
       {/if}
