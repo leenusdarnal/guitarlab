@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
   import {
     createActiveSongProject,
     deleteActiveSongProject,
@@ -184,7 +185,7 @@
 </svelte:head>
 
 <main class="repertoire-page">
-  <a class="back-link" href={resolve('/tools')}>← Practice tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Practice tools</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · REPERTOIRE</div>
     <h1>Build your <em>repertoire.</em></h1>
