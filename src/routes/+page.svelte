@@ -613,6 +613,7 @@
 
   .target-card > p,
   .practice-target > p,
+  .practice-task p,
   .fresh-copy p,
   .planner-heading p,
   .duration-context,
