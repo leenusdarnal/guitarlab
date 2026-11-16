@@ -344,7 +344,9 @@ try {
       if (route === '/repertoire') {
         const repertoireCopy = await page.evaluate(() =>
           Array.from(
-            document.querySelectorAll('.page-heading p, .empty-copy, .rights-note')
+            document.querySelectorAll(
+              '.page-heading p, .empty-copy, .rights-note'
+            )
           ).map((element) =>
             Number.parseFloat(getComputedStyle(element).fontSize)
           )
@@ -573,3 +575,4 @@ try {
     server.kill('SIGTERM');
   }
 }
+
