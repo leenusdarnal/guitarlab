@@ -257,7 +257,7 @@
     menuOpen = !menuOpen;
     if (menuOpen) {
       await tick();
-      document.querySelector<HTMLAnchorElement>('#mobile-navigation a')?.focus();
+      document.querySelector<HTMLAnchorElement>('#mobile-more-navigation a')?.focus();
     } else {
       mobileMenuTrigger?.focus();
     }
