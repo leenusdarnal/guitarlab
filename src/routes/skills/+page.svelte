@@ -225,7 +225,15 @@
   {#if loading}
     <p class="status" role="status">Loading your skill map…</p>
   {:else if error && reviews.length === 0}
-    <p class="status error" role="alert">{error}</p>
+    <div class="status error" role="alert">
+      <p>{error}</p>
+      <div class="status-actions">
+        <button type="button" class="retry-button" onclick={refresh} disabled={loading}>
+          Try again
+        </button>
+        <a href={resolve('/learn')}>Browse lessons</a>
+      </div>
+    </div>
   {:else}
     <div class="layout">
       <section
@@ -907,5 +915,33 @@
     .related-actions {
       display: grid;
     }
+  }
+
+  .status-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+    margin-top: 12px;
+  }
+  .retry-button {
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 9px;
+    background: var(--surface-raised);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .status-actions a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
   }
 </style>

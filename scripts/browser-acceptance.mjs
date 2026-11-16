@@ -356,6 +356,103 @@ try {
   );
   await restrictedStorageContext.close();
 
+  // Storage errors offer an in-place retry and a useful next destination.
+  const recoveryContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  await recoveryContext.addInitScript(() => {
+    const factory = window.indexedDB;
+    const originalOpen = factory.open.bind(factory);
+    let databaseAvailable = false;
+    Object.defineProperty(factory, 'open', {
+      configurable: true,
+      value: (...args) => {
+        if (!databaseAvailable) {
+          throw new DOMException(
+            'Local database is temporarily unavailable',
+            'UnknownError'
+          );
+        }
+        return originalOpen(...args);
+      }
+    });
+    Object.defineProperty(window, '__guitarlabSetDatabaseAvailable', {
+      configurable: true,
+      value: (available) => {
+        databaseAvailable = available;
+      }
+    });
+  });
+  const recoveryPage = await recoveryContext.newPage();
+  await recoveryPage.goto(origin, { waitUntil: 'networkidle' });
+  await recoveryPage
+    .getByText('Dashboard unavailable', { exact: true })
+    .waitFor();
+  assert.equal(
+    await recoveryPage
+      .locator('.error-panel')
+      .getByRole('button', { name: 'Try again' })
+      .count(),
+    1,
+    'The dashboard storage error must provide a retry action'
+  );
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
+  await recoveryPage
+    .locator('.error-panel')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
+  await recoveryPage
+    .locator('.storage-warning')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(false)
+  );
+  await recoveryPage.goto(origin + '/skills', { waitUntil: 'networkidle' });
+  await recoveryPage
+    .getByText(
+      'Your local skill map could not be loaded. Check browser storage and try again.',
+      { exact: true }
+    )
+    .waitFor();
+  assert.equal(
+    await recoveryPage
+      .locator('.status.error')
+      .getByRole('button', { name: 'Try again' })
+      .count(),
+    1,
+    'The skill map storage error must provide a retry action'
+  );
+  assert.equal(
+    await recoveryPage
+      .getByRole('link', { name: 'Browse lessons' })
+      .getAttribute('href'),
+    '/learn',
+    'The skill map storage error must provide a useful next destination'
+  );
+  await recoveryPage.evaluate(() =>
+    window.__guitarlabSetDatabaseAvailable(true)
+  );
+  await recoveryPage
+    .locator('.status.error')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage
+    .getByText('Showing 34 of 34 skills', { exact: true })
+    .waitFor();
+  await recoveryPage
+    .locator('.storage-warning')
+    .getByRole('button', { name: 'Try again' })
+    .click();
+  await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
+  await recoveryContext.close();
+
   // Saved theme preferences apply when a learner opens a nested route directly.
   const savedThemeContext = await browser.newContext({
     viewport: { width: 390, height: 844 }

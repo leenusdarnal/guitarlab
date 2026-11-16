@@ -83,14 +83,21 @@
     };
     themeMediaQuery.addEventListener('change', handleSystemThemeChange);
 
-    void loadActiveLearnerProfile().catch(() => {
-      localStorageUnavailable = true;
-    });
+    void retryLocalStorage();
 
     return () => {
       themeMediaQuery?.removeEventListener('change', handleSystemThemeChange);
     };
   });
+
+  async function retryLocalStorage() {
+    try {
+      await loadActiveLearnerProfile();
+      localStorageUnavailable = false;
+    } catch {
+      localStorageUnavailable = true;
+    }
+  }
 
   async function toggleMobileMenu() {
     mobileMenuOpen = !mobileMenuOpen;
@@ -120,7 +127,10 @@
 
 {#if localStorageUnavailable}
   <div class="storage-warning" role="alert">
-    GuitarLab could not open local learner storage. Your progress will not be saved in this browser until storage is available.
+    <span>
+      GuitarLab could not open local learner storage. Your progress will not be saved in this browser until storage is available.
+    </span>
+    <button type="button" onclick={() => void retryLocalStorage()}>Try again</button>
   </div>
 {/if}
 
@@ -178,7 +188,9 @@
   .skip-link{position:fixed;z-index:1000;top:.75rem;left:.75rem;padding:.75rem 1rem;transform:translateY(calc(-100% - 1rem));border:1px solid var(--primary);border-radius:.75rem;background:var(--primary);color:var(--primary-ink);font-size:.875rem;font-weight:700;box-shadow:0 6px 24px #0004;transition:transform 140ms ease-out}
   .skip-link:focus{transform:translateY(0)}
   #main-content:focus{outline:none}
-  .storage-warning{padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--surface-raised);color:var(--text);font-size:.875rem;line-height:1.5;text-align:center}
+  .storage-warning{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 16px;padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--surface-raised);color:var(--text);font-size:.875rem;line-height:1.5;text-align:center}
+  .storage-warning button{min-height:44px;padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font:inherit;font-size:.8125rem;font-weight:700;cursor:pointer}
+  .storage-warning button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .global-nav{position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(16px)}
   .global-nav-inner{max-width:1440px;min-height:66px;margin:0 auto;padding:8px clamp(15px,3vw,38px);display:flex;align-items:center;gap:24px}
   .global-brand{display:inline-flex;align-items:center;gap:9px;flex:none;font-size:17px;font-weight:850;letter-spacing:-.35px}
