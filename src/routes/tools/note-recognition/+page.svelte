@@ -245,7 +245,7 @@
         <span class="capture-state"><span class="live-dot"></span> Audio stays on this device</span>
       {:else}
         <button type="button" class="primary-button" onclick={startExercise} disabled={isStarting || roundState === 'complete'}>
-          {isStarting ? 'Starting microphone…' : 'Start exercise'}
+          {isStarting ? 'Starting microphone…' : errorMessage ? 'Try exercise again' : 'Start exercise'}
         </button>
         <span class="capture-state">Microphone access begins only after Start</span>
       {/if}

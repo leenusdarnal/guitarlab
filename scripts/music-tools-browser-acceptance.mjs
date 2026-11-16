@@ -452,10 +452,17 @@ try {
     .getByRole('alert')
     .getByText(/Microphone permission was denied/)
     .waitFor();
+  const tunerRetry = page.getByRole('button', { name: 'Try tuner again' });
+  await tunerRetry.waitFor();
+  await tunerRetry.click();
+  await page
+    .getByRole('alert')
+    .getByText(/Microphone permission was denied/)
+    .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    1,
-    'Tuner should request microphone permission once after explicit Start'
+    2,
+    'Tuner retry should make one new user-initiated microphone request'
   );
   // Missing devices receive a distinct, actionable message.
   await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
@@ -468,6 +475,7 @@ try {
     .getByRole('alert')
     .getByText(/No microphone was found/)
     .waitFor();
+  await page.getByRole('button', { name: 'Try tuner again' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     1,
@@ -487,6 +495,7 @@ try {
     .getByRole('alert')
     .getByText(/not supported in this browser or context/i)
     .waitFor();
+  await page.getByRole('button', { name: 'Try tuner again' }).waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
     0,
@@ -524,10 +533,19 @@ try {
     .getByRole('alert')
     .getByText(/Microphone permission was denied/)
     .waitFor();
+  const noteRecognitionRetry = page.getByRole('button', {
+    name: 'Try exercise again'
+  });
+  await noteRecognitionRetry.waitFor();
+  await noteRecognitionRetry.click();
+  await page
+    .getByRole('alert')
+    .getByText(/Microphone permission was denied/)
+    .waitFor();
   assert.equal(
     await page.evaluate(() => window.__guitarLabMicRequests),
-    1,
-    'Note-recognition should request microphone permission once after explicit Start'
+    2,
+    'Note-recognition retry should make one new user-initiated microphone request'
   );
 
   await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
