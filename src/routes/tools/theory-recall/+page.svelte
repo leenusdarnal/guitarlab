@@ -425,4 +425,30 @@
     .answer-options { grid-template-columns: 1fr; }
     .mode-tabs button { flex: 1 1 auto; }
   }
+
+  .page-heading p,
+  .visual-hint,
+  .guidance-panel li {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .feedback p,
+  .privacy-note,
+  .exercise-meta {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .exercise-meta {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mode-tabs button,
+  .answer-button,
+  .secondary-button,
+  .primary-button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
