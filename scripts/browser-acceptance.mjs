@@ -1463,6 +1463,41 @@ try {
   const authoredSessionLabel = await page
     .locator('.authored-session-link')
     .innerText();
+  assert.equal(
+    await page.locator('.principle').count(),
+    1,
+    'Practice Studio should keep one clear explanation of how time and observations relate to mastery.'
+  );
+  assert.equal(
+    await page.locator('.adaptive-footnote').count(),
+    0,
+    'Recommendation panels should not repeat the page-level mastery explanation.'
+  );
+  assert.doesNotMatch(
+    await page.locator('.quick-log').innerText(),
+    /mastery|accuracy score|grade/i,
+    'Quick logging should give a brief action hint instead of repeating the mastery disclaimer.'
+  );
+  assert.doesNotMatch(
+    await page.locator('.exercise-log > .muted').innerText(),
+    /mastery|accuracy score/i,
+    'The detailed observation form should describe its fields without repeating the mastery disclaimer.'
+  );
+  const quickLogVisualHierarchy = await page.evaluate(() => {
+    const clean = getComputedStyle(document.querySelector('.quick-log-clean'));
+    const correction = getComputedStyle(document.querySelector('.quick-log-correction'));
+    return {
+      cleanBackground: clean.backgroundColor,
+      correctionBackground: correction.backgroundColor,
+      correctionWeight: correction.fontWeight
+    };
+  });
+  assert.notEqual(
+    quickLogVisualHierarchy.cleanBackground,
+    quickLogVisualHierarchy.correctionBackground,
+    'The correction action should remain available but look secondary to the positive quick-log action.'
+  );
+  assert.equal(quickLogVisualHierarchy.correctionWeight, '600');
   console.log('Practice session authored link:', authoredSessionLabel);
   assert.match(
     authoredSessionLabel,
