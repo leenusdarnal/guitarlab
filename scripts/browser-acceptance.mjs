@@ -500,45 +500,61 @@ try {
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(false)
   );
-  await recoveryPage.goto(origin + '/practice', { waitUntil: 'networkidle' });
+  await recoveryPage.goto(origin + '/practice', {
+    waitUntil: 'networkidle'
+  });
   const practiceHistoryRecovery = recoveryPage.locator('.recovery-message');
   await practiceHistoryRecovery.waitFor();
   assert.equal(
-    await practiceHistoryRecovery.getByRole('button', { name: 'Try again' }).count(),
+    await practiceHistoryRecovery
+      .getByRole('button', { name: 'Try again' })
+      .count(),
     1,
     'Practice history failures must expose an in-place retry'
   );
   assert.equal(
-    await practiceHistoryRecovery.getByRole('link', { name: 'Return to Today' }).getAttribute('href'),
+    await practiceHistoryRecovery
+      .getByRole('link', { name: 'Return to Today' })
+      .getAttribute('href'),
     '/',
     'Practice history failures must provide a useful next destination'
   );
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(true)
   );
-  await practiceHistoryRecovery.getByRole('button', { name: 'Try again' }).click();
+  await practiceHistoryRecovery
+    .getByRole('button', { name: 'Try again' })
+    .click();
   await practiceHistoryRecovery.waitFor({ state: 'detached' });
 
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(false)
   );
-  await recoveryPage.goto(origin + '/repertoire', { waitUntil: 'networkidle' });
+  await recoveryPage.goto(origin + '/repertoire', {
+    waitUntil: 'networkidle'
+  });
   const repertoireRecovery = recoveryPage.locator('.load-error');
   await repertoireRecovery.waitFor();
   assert.equal(
-    await repertoireRecovery.getByRole('button', { name: 'Try again' }).count(),
+    await repertoireRecovery
+      .getByRole('button', { name: 'Try again' })
+      .count(),
     1,
     'Repertoire load failures must expose an in-place retry'
   );
   assert.equal(
-    await repertoireRecovery.getByRole('link', { name: 'Return to Today' }).getAttribute('href'),
+    await repertoireRecovery
+      .getByRole('link', { name: 'Return to Today' })
+      .getAttribute('href'),
     '/',
     'Repertoire load failures must provide a useful next destination'
   );
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(true)
   );
-  await repertoireRecovery.getByRole('button', { name: 'Try again' }).click();
+  await repertoireRecovery
+    .getByRole('button', { name: 'Try again' })
+    .click();
   await recoveryPage.locator('.workspace').waitFor();
   assert.equal(
     await recoveryPage.locator('.load-error').count(),
