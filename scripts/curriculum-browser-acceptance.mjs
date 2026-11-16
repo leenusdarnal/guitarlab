@@ -387,14 +387,16 @@ try {
   // The route index remains within the mobile viewport.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
-  const openMobileMenu = page.getByRole('button', { name: 'Open menu' });
-  await openMobileMenu.waitFor();
-  await openMobileMenu.click();
-  const mobileMenuLearn = page
-    .locator('#mobile-primary-navigation')
+  const mobileLearnTab = page
+    .locator('.mobile-tab-bar')
     .getByRole('link', { name: 'Learn', exact: true });
-  await mobileMenuLearn.waitFor();
-  await mobileMenuLearn.click();
+  await mobileLearnTab.waitFor({ state: 'visible' });
+  assert.equal(
+    await mobileLearnTab.getAttribute('aria-current'),
+    'page',
+    'The Learn tab should identify the current curriculum destination.'
+  );
+  await mobileLearnTab.click();
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth
