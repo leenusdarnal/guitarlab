@@ -241,20 +241,24 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
-      const routeBackIconSelector =
-        route === '/learn'
-          ? '.catalog-header .back [data-icon="arrow-left"]'
-          : route === '/onboarding'
-            ? '.setup-page header .skip [data-icon="arrow-left"]'
-            : route === '/practice'
-              ? '.practice-page .top > a [data-icon="arrow-left"]'
-              : route === '/settings/data'
-                ? '.data-page header .back-link [data-icon="arrow-left"]'
-                : route === '/skills'
-                  ? '.skill-page > .back [data-icon="arrow-left"]'
-                  : route === '/tools' || route.startsWith('/tools/') || route === '/repertoire'
-                    ? '.back-link [data-icon="arrow-left"]'
-                    : null;
+      let routeBackIconSelector = null;
+      if (route === '/learn') {
+        routeBackIconSelector = '.catalog-header .back [data-icon="arrow-left"]';
+      } else if (route === '/onboarding') {
+        routeBackIconSelector = '.setup-page header .skip [data-icon="arrow-left"]';
+      } else if (route === '/practice') {
+        routeBackIconSelector = '.practice-page .top > a [data-icon="arrow-left"]';
+      } else if (route === '/settings/data') {
+        routeBackIconSelector = '.data-page header .back-link [data-icon="arrow-left"]';
+      } else if (route === '/skills') {
+        routeBackIconSelector = '.skill-page > .back [data-icon="arrow-left"]';
+      } else if (
+        route === '/tools' ||
+        route.startsWith('/tools/') ||
+        route === '/repertoire'
+      ) {
+        routeBackIconSelector = '.back-link [data-icon="arrow-left"]';
+      }
       if (routeBackIconSelector) {
         assert.equal(
           await page.locator(routeBackIconSelector).count(),
