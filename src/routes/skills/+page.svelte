@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
   import {
     getSkillCategoryDisplayName,
     getSkillDescription,
@@ -195,7 +196,7 @@
 </svelte:head>
 
 <main class="skill-page">
-  <a class="back" href={resolve('/')}>← Dashboard</a>
+  <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
   <header>
     <div class="eyebrow">YOUR LEARNING MAP</div>
     <h1>See the skills behind <em>the music.</em></h1>
@@ -305,7 +306,7 @@
           aria-labelledby="skill-title"
         >
           <button class="mobile-back" type="button" onclick={showSkillList}>
-            ← All skills
+            <Icon name="arrow-left" size={14} /> All skills
           </button>
           <div class="eyebrow">{getSkillCategoryDisplayName(selectedReview.skill.category)}</div>
           <h2 id="skill-title">{selectedReview.skill.displayName}</h2>
@@ -381,7 +382,7 @@
             <div class="related-actions">
               <a href={resolve('/practice')}>
                 Open Practice Studio and full practice history
-                <span aria-hidden="true">→</span>
+                <Icon name="arrow-right" size={14} />
               </a>
             </div>
             <p class="related-note">
