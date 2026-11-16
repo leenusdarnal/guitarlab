@@ -374,30 +374,6 @@
           <section class="fresh-state" aria-labelledby="fresh-title"><div class="fresh-icon" aria-hidden="true">✳</div><div class="fresh-copy"><div class="eyebrow">A FRESH START</div><h2 id="fresh-title">Your journey begins with the foundations.</h2><p>No previous lessons or skill levels have been assumed. Your first step is Year 1, Week 1. Week numbers are a route, not deadlines.</p></div></section>
         {/if}
 
-        <section class="hero-grid" aria-label="Today's learning">
-          <article class="target-card">
-            <div class="eyebrow">YOUR NEXT LEARNING TARGET</div>
-            {#if dashboard.nextLesson}
-              <div class="target-meta">YEAR 1 <span>·</span> WEEK {dashboard.nextLesson.week}{#if dashboard.currentPhase}<span>·</span>{dashboard.currentPhase}{/if}</div>
-              <h2>{dashboard.nextLesson.title}</h2><p>{dashboard.nextLesson.focus}</p>
-              <div class="target-footer"><span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span><a href={resolve('/learn/[lessonId]', { lessonId: dashboard.nextLesson.id })}>Open lesson <b>→</b></a></div>
-            {:else}
-              <h2>Year 1 route complete</h2><p>You've completed every lesson in this route. Your learning record remains available for review.</p>
-              <div class="target-footer"><span>{dashboard.completedLessons} lessons completed</span><a href="#learning-path">Review your path <b>→</b></a></div>
-            {/if}
-          </article>
-          <article class="practice-target">
-            <div class="eyebrow">TODAY'S PRACTICE PLAN</div>
-            {#if dashboard.practiceMinutes}
-              <div class="practice-number">{dashboard.practiceMinutes}<small>min</small></div><h2>Your chosen daily target</h2><p>Use this as a flexible guide, not a quota. A shorter focused session is still useful.</p>
-              <a class="text-link" href={resolve('/onboarding')}>Change practice target ↗</a>
-            {:else}
-              <div class="practice-symbol" aria-hidden="true">◷</div><h2>Choose a practice duration</h2><p>Set a time that fits your routine. You can change it whenever you need.</p>
-              <a class="text-link" href={resolve('/onboarding')}>Set your practice target ↗</a>
-            {/if}
-          </article>
-        </section>
-
         <section class="practice-planner panel" aria-labelledby="planner-title">
           <div class="planner-heading">
             <div>
@@ -504,6 +480,30 @@
           <p class="planner-guardrail">These are suggestions only. GuitarLab will not mark lessons complete or award skill mastery because a plan was selected or time was spent practising.</p>
         </section>
 
+        <section class="hero-grid" aria-label="Today's learning">
+          <article class="target-card">
+            <div class="eyebrow">YOUR NEXT LEARNING TARGET</div>
+            {#if dashboard.nextLesson}
+              <div class="target-meta">YEAR 1 <span>·</span> WEEK {dashboard.nextLesson.week}{#if dashboard.currentPhase}<span>·</span>{dashboard.currentPhase}{/if}</div>
+              <h2>{dashboard.nextLesson.title}</h2><p>{dashboard.nextLesson.focus}</p>
+              <div class="target-footer"><span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span><a href={resolve('/learn/[lessonId]', { lessonId: dashboard.nextLesson.id })}>Open lesson <b>→</b></a></div>
+            {:else}
+              <h2>Year 1 route complete</h2><p>You've completed every lesson in this route. Your learning record remains available for review.</p>
+              <div class="target-footer"><span>{dashboard.completedLessons} lessons completed</span><a href="#learning-path">Review your path <b>→</b></a></div>
+            {/if}
+          </article>
+          <article class="practice-target">
+            <div class="eyebrow">TODAY'S PRACTICE PLAN</div>
+            {#if dashboard.practiceMinutes}
+              <div class="practice-number">{dashboard.practiceMinutes}<small>min</small></div><h2>Your chosen daily target</h2><p>Use this as a flexible guide, not a quota. A shorter focused session is still useful.</p>
+              <a class="text-link" href={resolve('/onboarding')}>Change practice target ↗</a>
+            {:else}
+              <div class="practice-symbol" aria-hidden="true">◷</div><h2>Choose a practice duration</h2><p>Set a time that fits your routine. You can change it whenever you need.</p>
+              <a class="text-link" href={resolve('/onboarding')}>Set your practice target ↗</a>
+            {/if}
+          </article>
+        </section>
+
         <section class="dashboard-grid">
           <article class="panel" id="reviews">
             <div class="panel-heading"><div><div class="eyebrow">SPACED REVIEW</div><h2>Skills ready to revisit</h2></div><span class="neutral-tag">{dashboard.dueReviews.length} due</span></div>
@@ -590,6 +590,6 @@
   .primary-button:hover{filter:brightness(1.06)}
   .primary-button:focus-visible,.secondary-button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .secondary-button{border:1px solid var(--border);background:var(--surface);color:var(--text)}
-  @media(max-width:720px){.welcome{align-items:flex-start;flex-direction:column}.welcome-actions{width:100%}.welcome-actions a{flex:1}.backup-reminder{align-items:flex-start;flex-direction:column}}
+  @media(max-width:720px){.welcome{align-items:flex-start;flex-direction:column;margin-bottom:16px}.welcome p{display:none}.welcome-actions{width:100%}.welcome-actions a{flex:1}.backup-reminder{align-items:flex-start;flex-direction:column}}
   
 </style>
