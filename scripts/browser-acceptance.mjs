@@ -1309,7 +1309,7 @@ try {
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
-  
+
   // Global navigation: keyboard open, active-section semantics, Escape and route focus.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
@@ -1362,7 +1362,8 @@ try {
   );
   await globalMobileNavigation.waitFor({ state: 'hidden' });
 
-// Restore the desktop viewport after the earlier mobile navigation acceptance.
+
+  // Restore the desktop viewport after the earlier mobile navigation acceptance.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
