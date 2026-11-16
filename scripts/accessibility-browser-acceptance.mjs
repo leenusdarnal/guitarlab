@@ -241,6 +241,51 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
+
+      if (route !== '/onboarding') {
+        const mobileTabs = page.locator('.mobile-tab-bar');
+        await mobileTabs.waitFor({ state: 'visible' });
+        assert.deepEqual(
+          await mobileTabs.locator('a span').allTextContents(),
+          ['Today', 'Learn', 'Practice', 'Tools', 'Progress'],
+          'Mobile primary navigation must expose five labelled destinations.'
+        );
+        const expectedTab = route === '/'
+          ? 'Today'
+          : route.startsWith('/learn')
+            ? 'Learn'
+            : route.startsWith('/practice')
+              ? 'Practice'
+              : route.startsWith('/tools')
+                ? 'Tools'
+                : route.startsWith('/skills')
+                  ? 'Progress'
+                  : null;
+        const selectedTabs = mobileTabs.locator('a[aria-current="page"] span');
+        if (expectedTab) {
+          assert.equal(await selectedTabs.count(), 1);
+          assert.equal((await selectedTabs.textContent())?.trim(), expectedTab);
+        } else {
+          assert.equal(
+            await selectedTabs.count(),
+            0,
+            route + ' must not falsely mark an unrelated primary destination current.'
+          );
+        }
+        const tabTargetHeights = await mobileTabs.locator('a').evaluateAll((links) =>
+          links.map((link) => link.getBoundingClientRect().height)
+        );
+        assert.ok(
+          tabTargetHeights.every((height) => height >= 44),
+          'Every mobile tab must provide at least a 44px touch target.'
+        );
+      } else {
+        assert.equal(
+          await page.locator('.mobile-tab-bar').count(),
+          0,
+          'The focused onboarding flow should not display primary navigation.'
+        );
+      }
       let routeBackIconSelector = null;
       if (route === '/learn') {
         routeBackIconSelector =
@@ -524,9 +569,23 @@ try {
       await scanPage(page, route, theme, '320px');
 
       await page.setViewportSize({ width: 1440, height: 1000 });
+      assert.equal(
+        await page.locator('.mobile-tab-bar').evaluate((element) => getComputedStyle(element).display),
+        'none',
+        'Mobile primary tabs must not replace desktop navigation.'
+      );
       await scanPage(page, route, theme, 'desktop');
       for (const width of [360, 390, 768, 1280]) {
         await page.setViewportSize({ width, height: 1000 });
+        const responsiveTabVisibility = await page.evaluate(() => {
+          const tabBar = document.querySelector('.mobile-tab-bar');
+          return tabBar ? getComputedStyle(tabBar).display !== 'none' : false;
+        });
+        assert.equal(
+          responsiveTabVisibility,
+          width <= 760 && route !== '/onboarding',
+          route + ' must show mobile tabs only at mobile widths.'
+        );
         const responsiveLayout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           content: document.documentElement.scrollWidth,
