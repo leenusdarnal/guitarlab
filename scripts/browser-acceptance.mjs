@@ -1309,7 +1309,60 @@ try {
   );
 
   // M6.1 fretboard explorer: navigation, note mapping, find mode and handedness.
-  // Restore the desktop viewport after the earlier mobile navigation acceptance.
+  
+  // Global navigation: keyboard open, active-section semantics, Escape and route focus.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  const globalMenuButton = page.getByRole('button', { name: 'Open menu' });
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-expanded'),
+    'false',
+    'The global menu should start collapsed.'
+  );
+  await globalMenuButton.focus();
+  await page.keyboard.press('Enter');
+  const globalMobileNavigation = page.getByRole('navigation', {
+    name: 'Primary navigation'
+  });
+  await globalMobileNavigation.waitFor();
+  const globalTodayLink = globalMobileNavigation.getByRole('link', {
+    name: 'Today'
+  });
+  assert.equal(
+    await globalTodayLink.evaluate((link) => document.activeElement === link),
+    true,
+    'Opening the global menu should move focus to its first link.'
+  );
+  assert.equal(
+    await globalMobileNavigation
+      .getByRole('link', { name: 'Tools' })
+      .getAttribute('aria-current'),
+    'page',
+    'The current global section should be announced in the mobile menu.'
+  );
+  await page.keyboard.press('Escape');
+  await globalMobileNavigation.waitFor({ state: 'hidden' });
+  assert.equal(
+    await globalMenuButton.getAttribute('aria-expanded'),
+    'false',
+    'Escape should collapse the global navigation.'
+  );
+  assert.equal(
+    await globalMenuButton.evaluate((button) => document.activeElement === button),
+    true,
+    'Escape should return focus to the global menu trigger.'
+  );
+  await globalMenuButton.focus();
+  await page.keyboard.press('Enter');
+  await globalMobileNavigation.waitFor();
+  await globalMobileNavigation.getByRole('link', { name: 'Practice' }).click();
+  await page.waitForURL((url) => url.pathname === '/practice');
+  await page.waitForFunction(
+    () => document.activeElement?.id === 'main-content'
+  );
+  await globalMobileNavigation.waitFor({ state: 'hidden' });
+
+// Restore the desktop viewport after the earlier mobile navigation acceptance.
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(origin, { waitUntil: 'networkidle' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
