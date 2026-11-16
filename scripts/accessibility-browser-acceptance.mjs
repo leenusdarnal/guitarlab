@@ -351,7 +351,6 @@ try {
       }
 
       if (route === '/learn/y1-w01-lesson') {
-
         const metronomeLink = page.getByRole('link', {
           name: 'Open metronome at 50 BPM'
         });
@@ -438,7 +437,6 @@ try {
           route + ' has text controls below 16px at ' + width + 'px in ' + theme
         );
       }
-
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
