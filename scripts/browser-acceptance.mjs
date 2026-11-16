@@ -396,6 +396,8 @@ try {
   await recoveryPage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
+  await recoveryPage.locator('.storage-warning').getByRole('button', { name: 'Try again' }).click();
+  await recoveryPage.locator('.storage-warning').waitFor({ state: 'detached' });
   await recoveryPage.evaluate(() => window.__guitarlabSetDatabaseAvailable(false));
   await recoveryPage.goto(origin + '/skills', { waitUntil: 'networkidle' });
   await recoveryPage
