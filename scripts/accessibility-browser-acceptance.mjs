@@ -25,7 +25,11 @@ const routes = [
   '/tools/fretboard',
   '/tools/chords',
   '/tools/metronome',
-  '/tools/ear-training'
+  '/tools/ear-training',
+  '/tools/note-recognition',
+  '/tools/theory-recall',
+  '/tools/tuner',
+  '/repertoire'
 ];
 const wcagTags = [
   'wcag2a',
@@ -318,6 +322,46 @@ try {
         [],
         route + ' has text controls below 16px in ' + theme + ' theme'
       );
+
+
+      if (
+        route.startsWith('/tools/') &&
+        route !== '/tools/fretboard' &&
+        route !== '/tools/chords' &&
+        route !== '/tools/metronome' &&
+        route !== '/tools/ear-training'
+      ) {
+        const toolInstructions = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll(
+              '.page-heading p, .guidance-panel p, .guidance-panel li, .visual-hint, .tuning-guidance p'
+            )
+          )
+            .map((element) =>
+              Number.parseFloat(getComputedStyle(element).fontSize)
+            )
+            .filter(Number.isFinite)
+        );
+        assert.ok(
+          toolInstructions.length > 0 &&
+            toolInstructions.every((fontSize) => fontSize >= 16),
+          route + ' must use 16px body text for tool instructions.'
+        );
+      }
+      if (route === '/repertoire') {
+        const repertoireCopy = await page.evaluate(() =>
+          Array.from(
+            document.querySelectorAll('.page-heading p, .empty-copy, .rights-note')
+          ).map((element) =>
+            Number.parseFloat(getComputedStyle(element).fontSize)
+          )
+        );
+        assert.ok(
+          repertoireCopy.length > 0 &&
+            repertoireCopy.every((fontSize) => fontSize >= 15),
+          'Repertoire guidance and rights copy must remain readable.'
+        );
+      }
 
       if (route === '/tools') {
         const smallestToolCopy = await page.evaluate(() =>
