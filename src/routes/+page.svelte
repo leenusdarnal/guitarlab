@@ -595,4 +595,94 @@
   @media(max-width:900px){.welcome{align-items:flex-start;flex-direction:column;gap:17px}.welcome-actions{width:100%}}
   @media(max-width:720px){.welcome{align-items:flex-start;flex-direction:column;margin-bottom:16px}.welcome p{display:none}.welcome-actions{width:100%}.welcome-actions a{flex:1}.backup-reminder{align-items:flex-start;flex-direction:column}}
   
+
+
+  /* The dashboard is a learning surface, not a compact analytics table. */
+  .welcome p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .nav-link {
+    font-size: var(--font-size-supporting);
+  }
+
+  .offline-indicator {
+    font-size: var(--font-size-metadata);
+  }
+
+  .target-card > p,
+  .practice-target > p,
+  .fresh-copy p,
+  .planner-heading p,
+  .duration-context,
+  .planner-footer > p,
+  .planner-guardrail,
+  .planner-notice,
+  .error-panel p,
+  .empty-state p,
+  .backup-reminder p,
+  .section-heading p,
+  .phase-card > p,
+  .path-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .fresh-copy h2,
+  .practice-task h3,
+  .panel-heading h2,
+  .backup-reminder h2 {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
+
+  .review-list li,
+  .session-list li,
+  .session-copy strong {
+    font-size: var(--font-size-supporting);
+  }
+
+  .text-link,
+  .panel-action,
+  .task-action,
+  .phase-action,
+  .backup-reminder-action {
+    font-size: var(--font-size-supporting);
+  }
+
+  .task-meta {
+    font-size: var(--font-size-metadata);
+  }
+
+  .practice-task {
+    padding: 18px;
+  }
+
+  .empty-state p {
+    max-width: 58ch;
+  }
+
+  .phase-card > p {
+    min-height: 0;
+  }
+
+  @media (max-width: 650px) {
+    .target-card > p,
+    .practice-target > p,
+    .planner-heading p,
+    .duration-context,
+    .planner-footer > p,
+    .planner-guardrail,
+    .planner-notice,
+    .error-panel p,
+    .empty-state p,
+    .backup-reminder p,
+    .section-heading p,
+    .phase-card > p,
+    .path-note {
+      font-size: 0.9375rem;
+    }
+  }
+
 </style>
