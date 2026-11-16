@@ -142,6 +142,63 @@ function assertResponseSecurityHeaders(response) {
   );
 }
 
+async function assertDashboardTypography(page, viewport) {
+  const result = await page.evaluate(() => {
+    const bodyCopySelectors = [
+      '.welcome p',
+      '.target-card > p',
+      '.practice-target > p',
+      '.fresh-copy p',
+      '.planner-heading p',
+      '.practice-task p',
+      '.duration-context',
+      '.planner-footer > p',
+      '.planner-guardrail',
+      '.planner-notice',
+      '.error-panel p',
+      '.empty-state p',
+      '.backup-reminder p',
+      '.section-heading p',
+      '.phase-card > p',
+      '.path-note'
+    ];
+    const headings = [
+      '.fresh-copy h2',
+      '.practice-task h3',
+      '.panel-heading h2',
+      '.backup-reminder h2'
+    ];
+    const measure = (selectors) =>
+      Array.from(document.querySelectorAll(selectors.join(',')))
+        .filter((element) => element.getClientRects().length > 0)
+        .map((element) => ({
+          text: element.textContent?.trim().slice(0, 80) ?? '',
+          fontSize: Number.parseFloat(getComputedStyle(element).fontSize)
+        }));
+    return {
+      bodyCopy: measure(bodyCopySelectors),
+      headings: measure(headings)
+    };
+  });
+
+  assert.ok(
+    result.bodyCopy.length > 0,
+    'Today should expose learner-facing explanatory copy at ' + viewport
+  );
+  assert.deepEqual(
+    result.bodyCopy.filter((item) => item.fontSize < 14),
+    [],
+    'Today has learner-facing copy below 14px at ' +
+      viewport +
+      ': ' +
+      JSON.stringify(result.bodyCopy.filter((item) => item.fontSize < 14))
+  );
+  assert.ok(
+    result.headings.every((item) => item.fontSize >= 16),
+    'Dashboard task and panel headings must be at least 16px at ' + viewport
+  );
+}
+
 async function scanPage(page, route, theme, viewport) {
   const results = await page.evaluate(async (tags) => {
     return window.axe.run(document, {
@@ -617,6 +674,9 @@ try {
       }
 
       await scanPage(page, route, theme, '320px');
+      if (route === '/') {
+        await assertDashboardTypography(page, '320px');
+      }
 
       await page.setViewportSize({ width: 1440, height: 1000 });
       assert.equal(
@@ -627,6 +687,9 @@ try {
         'Mobile primary tabs must not replace desktop navigation.'
       );
       await scanPage(page, route, theme, 'desktop');
+      if (route === '/') {
+        await assertDashboardTypography(page, 'desktop');
+      }
       for (const width of [360, 390, 768, 1280]) {
         await page.setViewportSize({ width, height: 1000 });
         const responsiveTabVisibility = await page.evaluate(() => {
