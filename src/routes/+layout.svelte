@@ -181,8 +181,8 @@
       <a href={resolve('/tools')} aria-current={activeSection === 'tools' ? 'page' : undefined} onclick={closeMobileMenu}>Tools</a>
       <a href={resolve('/repertoire')} aria-current={activeSection === 'songs' ? 'page' : undefined} onclick={closeMobileMenu}>Songs</a>
       <a href={resolve('/skills')} aria-current={activeSection === 'progress' ? 'page' : undefined} onclick={closeMobileMenu}>Progress</a>
-      <a href={resolve('/onboarding')} aria-current={activeSection === 'preferences' ? 'page' : undefined} onclick={closeMobileMenu}>Preferences</a>
-      <a href={resolve('/settings/data')} aria-current={activeSection === 'preferences' ? 'page' : undefined} onclick={closeMobileMenu}>Data &amp; backups</a>
+      <a href={resolve('/onboarding')} aria-current={currentPath.startsWith('/onboarding') ? 'page' : undefined} onclick={closeMobileMenu}>Preferences</a>
+      <a href={resolve('/settings/data')} aria-current={currentPath.startsWith('/settings/data') ? 'page' : undefined} onclick={closeMobileMenu}>Data &amp; backups</a>
     </nav>
   </header>
 {/if}
