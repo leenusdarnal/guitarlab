@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../../lib/components/Icon.svelte';
   import { AudioContextSession } from '../../../lib/audio/audio-context-session';
   import { waitForPlaybackCompletion } from '../../../lib/audio/playback-lifecycle';
   import {
@@ -153,7 +154,7 @@
 </svelte:head>
 
 <main class="theory-page">
-  <a class="back-link" href={resolve('/tools')}>← Tools</a>
+  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · MUSICAL UNDERSTANDING</div>
@@ -181,7 +182,7 @@
 
     {#if exercise.tones.length > 0}
       <div class="sound-card">
-        <div class="sound-symbol" aria-hidden="true">♫</div>
+        <div class="sound-symbol" aria-hidden="true"><Icon name="theory" size={28} /></div>
         <p>Three notes played together</p>
         <button type="button" class="primary-button" onclick={playExample} disabled={isPlaying}>
           {isPlaying ? 'Playing example…' : 'Listen to example'}
