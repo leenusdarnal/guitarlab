@@ -172,7 +172,9 @@ async function assertDashboardTypography(page, viewport) {
   assert.deepEqual(
     result.bodyCopy.filter((item) => item.fontSize < 14),
     [],
-    'Today has learner-facing copy below 14px at ' + viewport + ': ' +
+    'Today has learner-facing copy below 14px at ' +
+      viewport +
+      ': ' +
       JSON.stringify(result.bodyCopy.filter((item) => item.fontSize < 14))
   );
   assert.ok(
