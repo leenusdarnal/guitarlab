@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import Icon from '../../lib/components/Icon.svelte';
   import {
     createEmptyProfilePreferences,
     profilePreferencesSchema,
@@ -107,7 +108,7 @@
 </svelte:head>
 
 <main class="setup-page">
-  <header><a href={resolve('/')} class="brand"><span class="mark">G</span><strong>GuitarLab</strong></a><a href={resolve('/')} class="skip">Back to Today ↗</a></header>
+  <header><a href={resolve('/')} class="brand"><span class="mark">G</span><strong>GuitarLab</strong></a><a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a></header>
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>
     <h1>Make GuitarLab <em>yours.</em></h1>
@@ -138,10 +139,10 @@
           {customPracticeError || 'Your saved target pre-fills Practice Studio and guides your daily plan. It is a flexible target, not a quota.'}
         </p>
       </fieldset>
-      <div class="form-actions"><button type="submit" disabled={isLoading || isSaving}>{isLoading ? 'Loading profile…' : isSaving ? 'Saving…' : 'Save my preferences'} <span>→</span></button><a href={resolve('/')}>Return to Today</a></div>
+      <div class="form-actions"><button type="submit" disabled={isLoading || isSaving}>{isLoading ? 'Loading profile…' : isSaving ? 'Saving…' : 'Save my preferences'} <Icon name="arrow-right" size={14} /></button><a href={resolve('/')}>Return to Today</a></div>
       {#if message}<p class="message" role="status">{message}</p>{/if}
       {#if hasSavedPreferences}
-        <a class="return-today" href={resolve('/')}>Go to Today →</a>
+        <a class="return-today" href={resolve('/')}>Go to Today <Icon name="arrow-right" size={14} /></a>
       {/if}
     </form>
     <p class="privacy-note">Privacy by design: your profile and preferences are stored in this browser only. They are not uploaded or synced to a server. No account or microphone permission is required.</p>
