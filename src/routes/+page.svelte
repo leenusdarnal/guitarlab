@@ -297,14 +297,6 @@
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions">
         <span class="status-pill"><i></i> Local-first learning</span>
-        <label class="appearance-control">
-          <span class="sr-only">Appearance</span>
-          <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
         <a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences"><Icon name="external-link" size={16} /></a>
       </div>
     </header>
