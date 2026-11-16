@@ -253,27 +253,6 @@
     planNotice = 'Suggestions hidden for now. Your learning progress has not changed.';
   }
 
-  async function toggleMobileMenu() {
-    menuOpen = !menuOpen;
-    if (menuOpen) {
-      await tick();
-      document.querySelector<HTMLAnchorElement>('#mobile-more-navigation a')?.focus();
-    } else {
-      mobileMenuTrigger?.focus();
-    }
-  }
-
-  function closeMobileMenu() {
-    menuOpen = false;
-    mobileMenuTrigger?.focus();
-  }
-
-  function handleMobileMenuKeydown(event: KeyboardEvent) {
-    if (!menuOpen || event.key !== 'Escape') return;
-    event.preventDefault();
-    closeMobileMenu();
-  }
-
   function formatDate(timestamp: number) {
     return new Date(timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
   }
@@ -293,7 +272,6 @@
   <meta name="description" content="Your next guitar-learning step, practice target and evidence-based learning path." />
 </svelte:head>
 
-<svelte:window onkeydown={handleMobileMenuKeydown} />
 
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
@@ -318,7 +296,7 @@
 
   <main class="main-area">
     <header class="topbar">
-      <button class="mobile-brand" bind:this={mobileMenuTrigger} onclick={toggleMobileMenu} aria-expanded={menuOpen} aria-controls="mobile-more-navigation" aria-label={menuOpen ? 'More navigation — close' : 'More navigation — open'}><Icon name={menuOpen ? 'close' : 'menu'} size={19} /><Brand size="small" /><span>More</span></button>
+      <div class="mobile-brand" aria-hidden="true"><Brand size="small" /></div>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>
       <div class="top-actions">
         <span class="status-pill"><i></i> Local-first learning</span>
@@ -333,15 +311,6 @@
         <a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences"><Icon name="external-link" size={16} /></a>
       </div>
     </header>
-
-    <nav class="mobile-menu" id="mobile-more-navigation" aria-label="More navigation" hidden={!menuOpen}>
-        <a href={resolve('/repertoire')} onclick={closeMobileMenu}>Songs</a>
-        <a href="#learning-path" onclick={closeMobileMenu}>Learning path</a>
-        <a href="#reviews" onclick={closeMobileMenu}>Reviews</a>
-        <a href="#practice-history" onclick={closeMobileMenu}>Practice history</a>
-        <a href={resolve('/onboarding')} onclick={closeMobileMenu}>Learning preferences</a>
-        <a href={resolve('/settings/data')} onclick={closeMobileMenu}>Data &amp; backups</a>
-    </nav>
 
     <div class="page-content">
       <section class="welcome" id="today">
