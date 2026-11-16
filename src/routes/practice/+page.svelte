@@ -27,6 +27,20 @@
     type AdaptivePracticeSnapshot
   } from '../../lib/application/adaptive-practice';
   import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
+
+  type ScreenWakeLockSentinel = {
+    readonly released: boolean;
+    release(): Promise<void>;
+    addEventListener(
+      type: 'release',
+      listener: () => void,
+      options?: boolean | AddEventListenerOptions
+    ): void;
+  };
+
+  type ScreenWakeLockApi = {
+    request(type: 'screen'): Promise<ScreenWakeLockSentinel>;
+  };
   import {
     loadActiveAdaptivePracticeSnapshot,
     loadActiveAdaptiveRecommendationFeedback,
@@ -70,6 +84,9 @@
   let evidenceError = $state('');
   let evidenceNotice = $state('');
   let now = $state(Date.now());
+  let visibilityRevision = $state(0);
+  let wakeLockStatus = $state<'idle' | 'requesting' | 'active' | 'unsupported' | 'unavailable'>('idle');
+  let screenWakeLock: ScreenWakeLockSentinel | null = null;
 
   const filteredSessions = $derived(
     filterPracticeSessions(sessions, {
@@ -96,6 +113,78 @@
       ? getAuthoredPracticeScope(activeSession.primaryLessonId, activeSession.primaryExerciseId)
       : null
   );
+  
+  function releaseScreenWakeLock() {
+    const heldLock = screenWakeLock;
+    screenWakeLock = null;
+    if (heldLock && !heldLock.released) {
+      void heldLock.release().catch(() => undefined);
+    }
+  }
+
+  // Keep the display awake only while a session is actively running. Pause,
+  // finish, unmount and hidden-page transitions all release the browser lock.
+  $effect(() => {
+    visibilityRevision;
+    if (activeSession?.status !== 'in_progress') {
+      wakeLockStatus = 'idle';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    const wakeLockApi =
+      typeof navigator === 'undefined'
+        ? undefined
+        : (navigator as Navigator & { wakeLock?: ScreenWakeLockApi }).wakeLock;
+
+    if (!wakeLockApi) {
+      wakeLockStatus = 'unsupported';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    if (typeof document === 'undefined' || document.visibilityState !== 'visible') {
+      wakeLockStatus = 'idle';
+      releaseScreenWakeLock();
+      return;
+    }
+
+    let cancelled = false;
+    wakeLockStatus = 'requesting';
+    void wakeLockApi
+      .request('screen')
+      .then((lock) => {
+        if (
+          cancelled ||
+          activeSession?.status !== 'in_progress' ||
+          document.visibilityState !== 'visible'
+        ) {
+          if (!lock.released) void lock.release().catch(() => undefined);
+          return;
+        }
+
+        screenWakeLock = lock;
+        wakeLockStatus = 'active';
+        lock.addEventListener(
+          'release',
+          () => {
+            if (screenWakeLock !== lock) return;
+            screenWakeLock = null;
+            wakeLockStatus = 'idle';
+            visibilityRevision += 1;
+          },
+          { once: true }
+        );
+      })
+      .catch(() => {
+        if (!cancelled) wakeLockStatus = 'unavailable';
+      });
+
+    return () => {
+      cancelled = true;
+      releaseScreenWakeLock();
+    };
+  });
   const adaptiveRecommendationViews = $derived(
     resolveAdaptiveRecommendationFeedback({
       recommendations: adaptiveSnapshot?.recommendations ?? [],
@@ -156,6 +245,10 @@
 
   onMount(() => {
     const clock = window.setInterval(() => (now = Date.now()), 1000);
+    const handleVisibilityChange = () => {
+      visibilityRevision += 1;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
     const query = new URLSearchParams(window.location.search);
     const requestedMinutes = Number(query.get('minutes'));
     const hasRequestedMinutes =
@@ -189,7 +282,11 @@
           'Your local practice history could not be loaded. Check browser storage and try again.';
       })
       .finally(() => (loading = false));
-    return () => window.clearInterval(clock);
+    return () => {
+      window.clearInterval(clock);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      releaseScreenWakeLock();
+    };
   });
 
   function clearHistoryFilters() {
@@ -560,6 +657,11 @@
           Started {dateLabel(activeSession.startedAt)}. Paused intervals are
           excluded from the active-time total.
         </p>
+        {#if wakeLockStatus === 'unsupported' || wakeLockStatus === 'unavailable'}
+          <p class="wake-lock-hint" role="status">
+            This browser cannot keep the screen awake right now. Your session will still save normally.
+          </p>
+        {/if}
         <p class="elapsed" aria-live="off">
           {durationLabel(
             activeSession.actualDurationSeconds +
@@ -1650,6 +1752,13 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .wake-lock-hint {
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 12px;
   }
 
   .exercise-log,
