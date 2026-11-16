@@ -276,12 +276,14 @@ try {
         );
         assert.ok(
           await moreNavigation.locator('a').count() >= 3,
-          'Secondary navigation must retain Songs, preferences and data backups.'
+          'Secondary navigation must retain Songs, preferences and data ' +
+            'backups.'
         );
         await page.keyboard.press('Escape');
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'false');
         assert.equal(
-          await moreTrigger.evaluate((element) => document.activeElement === element),
+          await moreTrigger
+            .evaluate((element) => document.activeElement === element),
           true,
           'Escape must close More navigation and restore focus to its trigger.'
         );
@@ -315,7 +317,8 @@ try {
           assert.equal(
             await selectedTabs.count(),
             0,
-            route + ' must not falsely mark an unrelated primary destination current.'
+            route +
+              ' must not falsely mark an unrelated primary destination current.'
           );
         }
         const tabTargetHeights = await mobileTabs
@@ -825,7 +828,8 @@ try {
       routes.length +
       ' routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
-      'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
+      'narrow-screen reflow, real-main skip navigation, restore-picker ' +
+      'focus, and mobile control sizing.'
   );
 } catch (error) {
   console.error(error);
