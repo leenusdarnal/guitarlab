@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">GuitarLab app icon</title>
-  <desc id="desc">A gold acoustic guitar and teal equalizer on a deep navy emerald app tile.</desc>
+  <title id="title">GuitarLab maskable app icon</title>
+  <desc id="desc">A centered champagne-gold acoustic guitar and teal equalizer on a full-bleed deep emerald background.</desc>
   <defs>
     <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#123C31"/>
       <stop offset=".58" stop-color="#0D2A25"/>
       <stop offset="1" stop-color="#071B22"/>
     </linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#7BE2BC"/>
-      <stop offset="1" stop-color="#16966F"/>
-    </linearGradient>
-    
-  
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#FFF0C6"/>
       <stop offset=".48" stop-color="#E5B95F"/>
@@ -27,12 +21,9 @@
       <stop offset="0" stop-color="#148766"/>
       <stop offset="1" stop-color="#6EE0AE"/>
     </linearGradient>
-  
   </defs>
-  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#tile)"/>
-  <rect x="10" y="10" width="492" height="492" rx="110" fill="none" stroke="url(#edge)" stroke-width="7"/>
-  <g transform="translate(84 55) scale(1.34)">
-  <g id="guitarlab-acoustic-mark" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="512" height="512" fill="url(#tile)"/>
+  <g transform="translate(110 105) scale(1.15)" stroke-linecap="round" stroke-linejoin="round">
     <path d="M64 221 C93 250 164 251 202 220" fill="none" stroke="url(#green-swoosh)" stroke-width="8"/>
     <path d="M112 119 C100 111 85 111 75 122 C64 134 67 149 75 164 C82 178 72 189 62 202 C46 224 57 246 80 249 C100 252 117 241 128 231 C139 241 156 252 176 249 C199 246 210 224 194 202 C184 189 174 178 181 164 C189 149 192 134 181 122 C171 111 156 111 144 119" fill="#102B24" stroke="url(#gold)" stroke-width="5"/>
     <path d="M115 46 H141 L139 151 H117 Z" fill="#142F27" stroke="url(#gold)" stroke-width="3.5"/>
@@ -57,5 +48,5 @@
     </g>
     <path d="M106 239 H150" fill="none" stroke="#E5C37E" stroke-width="3.4"/>
     <path d="M112 243 H144" fill="none" stroke="#F7E8C4" stroke-width="1.4"/>
-  </g></g>
+  </g>
 </svg>

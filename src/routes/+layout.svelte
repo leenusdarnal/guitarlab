@@ -142,7 +142,7 @@
 {#if showPrimaryNavigation}
   <header class="global-nav">
     <div class="global-nav-inner">
-      <a class="global-brand" href={resolve('/')} aria-label="GuitarLab home">
+      <a class="global-brand" href={resolve('/')}>
         <Brand size="small" />
       </a>
 

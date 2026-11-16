@@ -2,36 +2,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">GuitarLab</title>
   <defs>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFF0C6"/><stop offset=".48" stop-color="#E5B95F"/><stop offset="1" stop-color="#A96D25"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFF0C6"/><stop offset=".55" stop-color="#E5B95F"/><stop offset="1" stop-color="#A96D25"/></linearGradient>
     <linearGradient id="teal" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#22B98F"/><stop offset="1" stop-color="#7BE2BC"/></linearGradient>
-    <linearGradient id="green-swoosh" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#148766"/><stop offset="1" stop-color="#6EE0AE"/></linearGradient>
   </defs>
   <rect width="64" height="64" rx="15" fill="#0B1723"/>
-  <g transform="scale(.25)">
-  <g id="guitarlab-acoustic-mark" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M64 221 C93 250 164 251 202 220" fill="none" stroke="url(#green-swoosh)" stroke-width="8"/>
-    <path d="M112 119 C100 111 85 111 75 122 C64 134 67 149 75 164 C82 178 72 189 62 202 C46 224 57 246 80 249 C100 252 117 241 128 231 C139 241 156 252 176 249 C199 246 210 224 194 202 C184 189 174 178 181 164 C189 149 192 134 181 122 C171 111 156 111 144 119" fill="#102B24" stroke="url(#gold)" stroke-width="5"/>
-    <path d="M115 46 H141 L139 151 H117 Z" fill="#142F27" stroke="url(#gold)" stroke-width="3.5"/>
-    <path d="M114 48 L108 24 Q107 7 124 7 H132 Q149 7 148 24 L142 48 Z" fill="#142F27" stroke="url(#gold)" stroke-width="4"/>
-    <path d="M113 61 H143 M113 75 H143 M114 89 H142 M115 103 H141 M116 117 H140 M117 131 H139" fill="none" stroke="#E8C987" stroke-width="2.1" opacity=".9"/>
-    <path d="M117 46 V187 M121.5 46 V187 M126 46 V187 M130 46 V187 M134.5 46 V187 M139 46 V187" fill="none" stroke="#F6E8C5" stroke-width="1.05" opacity=".88"/>
-    <g fill="#F0D18E" stroke="#9B692B" stroke-width="1.4">
-      <circle cx="105" cy="18" r="5.4"/><circle cx="105" cy="31" r="5.4"/><circle cx="105" cy="44" r="5.4"/>
-      <circle cx="151" cy="18" r="5.4"/><circle cx="151" cy="31" r="5.4"/><circle cx="151" cy="44" r="5.4"/>
-    </g>
-    <path d="M119 53 H137" stroke="#F5DFAF" stroke-width="3"/>
-    <circle cx="128" cy="177" r="25" fill="#0A1B18" stroke="url(#gold)" stroke-width="3.6"/>
-    <circle cx="128" cy="177" r="19.5" fill="none" stroke="#E7C681" stroke-width="1.8" opacity=".88"/>
-    <g fill="url(#teal)">
-      <rect x="91" y="211" width="8" height="8" rx="4"/>
-      <rect x="105" y="204" width="8" height="22" rx="4"/>
-      <rect x="118" y="198" width="8" height="34" rx="4"/>
-      <rect x="131" y="193" width="8" height="44" rx="4"/>
-      <rect x="144" y="198" width="8" height="34" rx="4"/>
-      <rect x="157" y="204" width="8" height="22" rx="4"/>
-      <rect x="171" y="211" width="8" height="8" rx="4"/>
-    </g>
-    <path d="M106 239 H150" fill="none" stroke="#E5C37E" stroke-width="3.4"/>
-    <path d="M112 243 H144" fill="none" stroke="#F7E8C4" stroke-width="1.4"/>
-  </g></g>
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 21V31C23 28 17 32 18 39C18 45 24 48 29 44C31 42 32 40 32 37C33 41 35 44 39 45C45 46 49 42 47 36C46 32 41 29 36 31V21Z" stroke-width="2.8"/>
+    <path d="M28 21V13C28 10 30 8 33 8H35C38 8 40 10 40 13V21" stroke-width="2.6"/>
+    <path d="M30 19V34M32 19V34M34 19V34M36 19V34" stroke-width="1.05"/>
+    <circle cx="33" cy="37" r="4.2" stroke-width="1.7"/>
+  </g>
+  <g fill="url(#teal)">
+    <rect x="20" y="49" width="3" height="3" rx="1.5"/>
+    <rect x="26" y="46" width="3" height="6" rx="1.5"/>
+    <rect x="32" y="44" width="3" height="9" rx="1.5"/>
+    <rect x="38" y="46" width="3" height="6" rx="1.5"/>
+    <rect x="44" y="49" width="3" height="3" rx="1.5"/>
+  </g>
 </svg>

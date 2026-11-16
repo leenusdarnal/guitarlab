@@ -108,7 +108,7 @@
 </svelte:head>
 
 <main class="setup-page">
-  <header><a href={resolve('/')} class="brand" aria-label="GuitarLab home"><Brand size="small" /></a><a href={resolve('/')} class="skip">Back to Today ↗</a></header>
+  <header><a href={resolve('/')} class="brand"><Brand size="small" /></a><a href={resolve('/')} class="skip">Back to Today ↗</a></header>
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>
     <h1>Make GuitarLab <em>yours.</em></h1>

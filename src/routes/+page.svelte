@@ -297,7 +297,7 @@
 
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
-    <a class="brand" href={resolve('/')} aria-label="GuitarLab home"><Brand size="medium" tagline /></a>
+    <a class="brand" href={resolve('/')}><Brand size="medium" tagline /></a>
     <div class="nav-label">YOUR WORKSPACE</div>
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span class="nav-icon" aria-hidden="true"><Icon name="home" size={18} /></span> Today</a>
