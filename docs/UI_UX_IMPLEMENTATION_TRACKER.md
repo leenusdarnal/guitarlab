@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-13 — layout-stable loading states and contextual recovery actions (`ux/13-loading-recovery-states`)
+**Active implementation:** UX-02 / UX-14 — approved five-destination mobile primary navigation (`feat/ux-mobile-primary-tab-navigation`, PR #166)
 
 ---
 
@@ -120,7 +120,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-02 — Fix global accessibility and mobile interaction blockers
 
 **Priority:** P1  
-**Status:** IN PROGRESS — first implementation slice in [PR #141](https://github.com/leenusdarnal/guitarlab/pull/141); keyboard-only and 200% zoom review remain open  
+**Status:** IN PROGRESS — global focus/control improvements are merged in PRs #141 and #159; PR #166 implements the approved five-destination mobile tab bar and secondary More menu. Keyboard-only, 200% zoom, physical-device and learner thumb-reach acceptance remain open under UX-14  
 **Depends on:** UX-01 automated acceptance is complete; manual finder/device acceptance remains open  
 **Related findings:** X3, X4, X6, X7, X9, B2
 
@@ -365,7 +365,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-14 — Cross-browser, device and learner acceptance
 
 **Priority:** P1 release gate  
-**Status:** BLOCKED pending implementation completion and preview/browser access  
+**Status:** IN PROGRESS — browser acceptance covers both themes, narrow responsive layouts, keyboard focus and recovery. Physical iOS/Android, VoiceOver/TalkBack and learner think-aloud evidence remain blocked on real devices and participants  
 **Depends on:** all P1 tasks; selected P2 tasks before wider release  
 **Related findings:** audit methodology and acceptance plan
 
@@ -390,7 +390,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 
 | Decision | Current position | Required evidence / next action |
 |---|---|---|
-| Mobile primary navigation | Approved direction says compact mobile navigation; UX review proposes bottom tabs; PR #138 currently has an expandable menu | Test discoverability and thumb reach with learners before standardising |
+| Mobile primary navigation | Five labelled tabs are the approved primary mobile pattern: Today, Learn, Practice, Tools and Progress; Songs, Preferences and Data & backups remain in More | PR #166 implements the pattern; physical-device thumb reach and learner discoverability remain UX-14 acceptance |
 | Practice plan action | UX review proposes starting a plan-based session | Confirm whether it starts immediately or first shows a concise session review; preserve learner control |
 | Lesson presentation preferences | Current usage is not fully established by the source audit | Trace all consumers; implement visible effects or remove unsupported promise |
 | Lesson reading density | UX review recommends a more prominent reading surface | Check long lesson usability at phone width and text zoom; preserve authored content |
@@ -420,6 +420,8 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-16 | Opened PR #166 for UX-02/UX-14: five labelled mobile primary tabs, secondary More navigation, device safe-area handling, bottom content clearance and automated keyboard/active-state/touch-target coverage. WebKit acceptance is configured for the core learner routes, subject to PR CI confirmation. Physical-device and learner testing remain open. |
+| 2026-11-16 | Opened PR #167 for UX-04: increased Today dashboard explanatory/task copy to shared readable type tokens and added browser size assertions. CI in progress; no merge until formatting, browser and accessibility checks pass. |
 | 2026-11-16 | PR #147 (UX-11) merged as `857560b`; run #1434 passed required CI, including backup, accessibility, music-tool and curriculum browser acceptance. Backup recency is local-only and describes download start, not confirmed file retention. Web Share is deferred pending device/consent tests. |
 | 2026-11-16 | UX-13 adds explicit, action-specific retry labels after tuner, note-recognition, metronome and A4 reference-tone failures. Browser acceptance verifies microphone retries remain user-initiated; remaining mutation-error audit and CI validation stay open. |
 | 2026-11-16 | UX-12 groups all eight tools by task, explains microphone access before Start on tuner and note recognition, removes generic availability badges, and limits setup to effective goals/practice-duration preferences while preserving unused legacy schema fields. CI pending. |

@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
-import { chromium } from 'playwright';
+import { chromium, webkit } from 'playwright';
 
 const require = createRequire(import.meta.url);
 const axeSource = await readFile(
@@ -13,7 +13,9 @@ const axeSource = await readFile(
 const port = Number(process.env.GUITARLAB_ACCESSIBILITY_PREVIEW_PORT ?? 8789);
 const origin = 'http://127.0.0.1:' + port;
 const themes = ['dark', 'light'];
-const routes = [
+const browserEngine =
+  process.env.GUITARLAB_BROWSER_ENGINE === 'webkit' ? webkit : chromium;
+const baseRoutes = [
   '/',
   '/learn',
   '/learn/y1-w01-lesson',
@@ -31,6 +33,20 @@ const routes = [
   '/tools/tuner',
   '/repertoire'
 ];
+const routes =
+  process.env.GUITARLAB_BROWSER_ENGINE === 'webkit'
+    ? [
+        '/',
+        '/learn',
+        '/learn/y1-w01-lesson',
+        '/practice',
+        '/settings/data',
+        '/tools',
+        '/tools/tuner',
+        '/skills',
+        '/repertoire'
+      ]
+    : baseRoutes;
 const wcagTags = [
   'wcag2a',
   'wcag2aa',
@@ -255,7 +271,7 @@ async function scanPage(page, route, theme, viewport) {
 
 try {
   await waitForPreview();
-  browser = await chromium.launch({ headless: true });
+  browser = await browserEngine.launch({ headless: true });
 
   for (const theme of themes) {
     const context = await browser.newContext({
@@ -298,6 +314,85 @@ try {
         200,
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
+
+      if (route === '/' || route === '/practice') {
+        const moreTrigger = page.locator('.mobile-nav-trigger');
+        await moreTrigger.click();
+        assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
+        const moreNavigation = page.locator('#mobile-more-navigation');
+        await moreNavigation.waitFor({ state: 'visible' });
+        assert.equal(
+          await moreNavigation
+            .locator('a')
+            .first()
+            .evaluate((element) => document.activeElement === element),
+          true,
+          'Opening More navigation must move focus to its first destination.'
+        );
+        assert.ok(
+          (await moreNavigation.locator('a').count()) >= 3,
+          'Secondary navigation must retain Songs, preferences and data ' +
+            'backups.'
+        );
+        await page.keyboard.press('Escape');
+        assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'false');
+        assert.equal(
+          await moreTrigger.evaluate(
+            (element) => document.activeElement === element
+          ),
+          true,
+          'Escape must close More navigation and restore focus to its trigger.'
+        );
+      }
+
+      if (route !== '/onboarding') {
+        const mobileTabs = page.locator('.mobile-tab-bar');
+        await mobileTabs.waitFor({ state: 'visible' });
+        assert.deepEqual(
+          await mobileTabs.locator('a span').allTextContents(),
+          ['Today', 'Learn', 'Practice', 'Tools', 'Progress'],
+          'Mobile primary navigation must expose five labelled destinations.'
+        );
+        const expectedTab =
+          route === '/'
+            ? 'Today'
+            : route.startsWith('/learn')
+              ? 'Learn'
+              : route.startsWith('/practice')
+                ? 'Practice'
+                : route.startsWith('/tools')
+                  ? 'Tools'
+                  : route.startsWith('/skills')
+                    ? 'Progress'
+                    : null;
+        const selectedTabs = mobileTabs.locator('a[aria-current="page"] span');
+        if (expectedTab) {
+          assert.equal(await selectedTabs.count(), 1);
+          assert.equal((await selectedTabs.textContent())?.trim(), expectedTab);
+        } else {
+          assert.equal(
+            await selectedTabs.count(),
+            0,
+            route +
+              ' must not falsely mark an unrelated primary destination current.'
+          );
+        }
+        const tabTargetHeights = await mobileTabs
+          .locator('a')
+          .evaluateAll((links) =>
+            links.map((link) => link.getBoundingClientRect().height)
+          );
+        assert.ok(
+          tabTargetHeights.every((height) => height >= 44),
+          'Every mobile tab must provide at least a 44px touch target.'
+        );
+      } else {
+        assert.equal(
+          await page.locator('.mobile-tab-bar').count(),
+          0,
+          'The focused onboarding flow should not display primary navigation.'
+        );
+      }
       let routeBackIconSelector = null;
       if (route === '/learn') {
         routeBackIconSelector =
@@ -425,9 +520,6 @@ try {
             onboardingCopySizes.every((fontSize) => fontSize >= 15),
           'Onboarding explanations must use 16px body text and readable supporting text.'
         );
-      }
-      if (route === '/') {
-        await assertDashboardTypography(page, '320px');
       }
       if (route === '/settings/data') {
         const settingsCopySizes = await page.evaluate(() =>
@@ -582,14 +674,41 @@ try {
       }
 
       await scanPage(page, route, theme, '320px');
+      if (route === '/') {
+        await assertDashboardTypography(page, '320px');
+      }
 
       await page.setViewportSize({ width: 1440, height: 1000 });
+      if (route === '/onboarding') {
+        assert.equal(
+          await page.locator('.mobile-tab-bar').count(),
+          0,
+          'The focused onboarding flow must remain free of mobile primary navigation.'
+        );
+      } else {
+        assert.equal(
+          await page
+            .locator('.mobile-tab-bar')
+            .evaluate((element) => getComputedStyle(element).display),
+          'none',
+          'Mobile primary tabs must not replace desktop navigation.'
+        );
+      }
+      await scanPage(page, route, theme, 'desktop');
       if (route === '/') {
         await assertDashboardTypography(page, 'desktop');
       }
-      await scanPage(page, route, theme, 'desktop');
       for (const width of [360, 390, 768, 1280]) {
         await page.setViewportSize({ width, height: 1000 });
+        const responsiveTabVisibility = await page.evaluate(() => {
+          const tabBar = document.querySelector('.mobile-tab-bar');
+          return tabBar ? getComputedStyle(tabBar).display !== 'none' : false;
+        });
+        assert.equal(
+          responsiveTabVisibility,
+          width <= 760 && route !== '/onboarding',
+          route + ' must show mobile tabs only at mobile widths.'
+        );
         const responsiveLayout = await page.evaluate(() => ({
           viewport: document.documentElement.clientWidth,
           content: document.documentElement.scrollWidth,
@@ -676,7 +795,9 @@ try {
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(origin, { waitUntil: 'networkidle' });
-    const dashboardAppearance = page.locator('select[aria-label="Appearance"]');
+    const dashboardAppearance = page.locator(
+      'select[aria-label="Appearance"]:visible'
+    );
     assert.equal(await dashboardAppearance.inputValue(), 'dark');
     await dashboardAppearance.selectOption('light');
     assert.deepEqual(
@@ -775,9 +896,14 @@ try {
   }
 
   console.log(
-    'Accessibility checks passed: 11 routes in dark ' +
+    'Accessibility checks passed with ' +
+      (process.env.GUITARLAB_BROWSER_ENGINE ?? 'chromium') +
+      ': ' +
+      routes.length +
+      ' routes in dark ' +
       'and light themes, WCAG A/AA axe scans at desktop and 320px, ' +
-      'narrow-screen reflow, real-main skip navigation, restore-picker focus, and mobile control sizing.'
+      'narrow-screen reflow, real-main skip navigation, restore-picker ' +
+      'focus, and mobile control sizing.'
   );
 } catch (error) {
   console.error(error);
