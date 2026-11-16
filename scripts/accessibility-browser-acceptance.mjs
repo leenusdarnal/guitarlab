@@ -242,6 +242,27 @@ try {
         'Expected ' + route + ' to load at 320px in ' + theme + ' theme'
       );
 
+      if (route === '/' || route === '/practice') {
+        const moreTrigger = page.locator(
+          route === '/' ? '.mobile-brand' : '.mobile-nav-trigger'
+        );
+        await moreTrigger.click();
+        assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
+        const moreNavigation = page.locator('#mobile-more-navigation');
+        await moreNavigation.waitFor({ state: 'visible' });
+        assert.ok(
+          await moreNavigation.locator('a').count() >= 3,
+          'Secondary navigation must retain Songs, preferences and data backups.'
+        );
+        await page.keyboard.press('Escape');
+        assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'false');
+        assert.equal(
+          await moreTrigger.evaluate((element) => document.activeElement === element),
+          true,
+          'Escape must close More navigation and restore focus to its trigger.'
+        );
+      }
+
       if (route !== '/onboarding') {
         const mobileTabs = page.locator('.mobile-tab-bar');
         await mobileTabs.waitFor({ state: 'visible' });
