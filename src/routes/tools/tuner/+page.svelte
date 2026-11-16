@@ -526,4 +526,30 @@
     font-size: 11px;
     line-height: 1.65;
   }
+
+  .page-heading p,
+  .guidance-panel li,
+  .tuning-guidance p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .privacy-note,
+  .audio-status,
+  .error-message,
+  .reference-actions span {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .tuning-guidance h3 {
+    font-size: var(--font-size-supporting);
+  }
+
+  .reference-button,
+  .start-button,
+  .stop-button {
+    min-height: 44px;
+    font-size: var(--font-size-supporting);
+  }
 </style>
