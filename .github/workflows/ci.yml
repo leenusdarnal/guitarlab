@@ -5,8 +5,6 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: write
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}
@@ -27,19 +25,6 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: package-lock.json
-
-      - name: Refresh auth dependency lock for this pull request
-        if: github.event_name == 'pull_request' && github.head_ref == 'feat/m5-secure-account-auth'
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-
-      - name: Preserve refreshed auth dependency lock
-        if: github.event_name == 'pull_request' && github.head_ref == 'feat/m5-secure-account-auth'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: guitarlab-auth-package-lock
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 1
 
       - name: Install dependencies
         id: install-dependencies
@@ -238,29 +223,6 @@ jobs:
           GUITARLAB_BROWSER_ENGINE: webkit
         run: npm run test:accessibility
 
-      - name: Commit refreshed auth dependency lock to the PR branch
-        if: success() && github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feat/m5-secure-account-auth' && github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          GH_TOKEN: ${{ github.token }}
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        shell: bash
-        run: |
-          if git diff --quiet -- package-lock.json; then
-            echo "The package lock is already current."
-            exit 0
-          fi
-          base64 -w 0 package-lock.json > "$RUNNER_TEMP/package-lock.b64"
-          current_sha="$(gh api "repos/${GITHUB_REPOSITORY}/contents/package-lock.json?ref=${HEAD_REF}" --jq .sha)"
-          jq -n \
-            --arg message "chore(auth): update Better Auth dependency lock" \
-            --rawfile content "$RUNNER_TEMP/package-lock.b64" \
-            --arg sha "$current_sha" \
-            --arg branch "$HEAD_REF" \
-            '{message: $message, content: $content, sha: $sha, branch: $branch}' \
-            > "$RUNNER_TEMP/package-lock-update.json"
-          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/package-lock.json" \
-            --input "$RUNNER_TEMP/package-lock-update.json"
-
       - name: Preserve Cloudflare preview build
         if: github.event_name == 'push' && github.ref_name == 'main'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
@@ -309,10 +271,6 @@ jobs:
         with:
           node-version: 26.13.1
           cache: npm
-
-      - name: Refresh auth dependency lock for Node.js 26 check
-        if: github.event_name == 'pull_request' && github.head_ref == 'feat/m5-secure-account-auth'
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
 
       - name: Install dependencies
         id: install-dependencies
