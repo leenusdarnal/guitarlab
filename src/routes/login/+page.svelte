@@ -3,6 +3,8 @@
   import { page } from '$app/state';
   import { authClient } from '$lib/auth-client';
 
+  let { data } = $props<{ data: { authAvailable: boolean } }>();
+
   type Mode = 'sign-in' | 'sign-up' | 'request-reset' | 'reset-password';
 
   let mode = $state<Mode>(
