@@ -2517,6 +2517,18 @@
 
   @media (max-width: 600px) {
 
+    .session-actions {
+      /* Keep the session controls reachable while the exercise log continues below the fold. */
+      position: sticky;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      z-index: 4;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-raised);
+      box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    }
+
     .routine-list > li {
       grid-template-columns: minmax(0, 1fr);
     }
