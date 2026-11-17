@@ -109,6 +109,13 @@ const practiceSessionSchema = z
           'An authored session exercise requires release, lesson and taxonomy version.'
       });
     }
+    if (session.routineSnapshot && hasExercise) {
+      context.addIssue({
+        code: 'custom',
+        path: ['primaryExerciseId'],
+        message: 'A routine session cannot be linked to one authored exercise.'
+      });
+    }
     if (session.routineSnapshot) {
       const routineMinutes = session.routineSnapshot.exercises.reduce(
         (total, exercise) => total + exercise.minutes,
