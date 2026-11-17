@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: guitarlab-ci-${{ github.ref }}
@@ -237,6 +237,25 @@ jobs:
         env:
           GUITARLAB_BROWSER_ENGINE: webkit
         run: npm run test:accessibility
+
+      - name: Commit refreshed auth dependency lock to the PR branch
+        if: success() && github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feat/m5-secure-account-auth' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        shell: bash
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "The package lock is already current."
+            exit 0
+          fi
+          lock_content="$(base64 -w 0 package-lock.json)"
+          current_sha="$(gh api "repos/${GITHUB_REPOSITORY}/contents/package-lock.json?ref=${HEAD_REF}" --jq .sha)"
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/package-lock.json" \
+            -f message="chore(auth): update Better Auth dependency lock" \
+            -f content="$lock_content" \
+            -f sha="$current_sha" \
+            -f branch="$HEAD_REF"
 
       - name: Preserve Cloudflare preview build
         if: github.event_name == 'push' && github.ref_name == 'main'
