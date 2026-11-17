@@ -1667,7 +1667,7 @@ try {
     'The session routine snapshot must survive a reload'
   );
   await page.waitForTimeout(1_100);
-  await page.getByRole('button', { name: 'Finish and save session' }).click();
+  await page.getByRole('button', { name: 'Finish session' }).click();
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
@@ -1687,7 +1687,7 @@ try {
   await page.getByRole('button', { name: 'Start practice' }).click();
   await page.locator('.routine-run').waitFor();
   await page.waitForTimeout(1_100);
-  await page.getByRole('button', { name: 'Finish and save session' }).click();
+  await page.getByRole('button', { name: 'Finish session' }).click();
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
@@ -1922,7 +1922,7 @@ try {
   await page
     .locator('#next-target')
     .fill('Repeat the G major scale at 72 BPM for three minutes.');
-  await page.getByRole('button', { name: 'Finish and save session' }).click();
+  await page.getByRole('button', { name: 'Finish session' }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'Elapsed session time is activity history' })
@@ -2050,7 +2050,7 @@ try {
   await wakeLockPage.waitForTimeout(1100);
 
   await wakeLockPage
-    .getByRole('button', { name: 'Finish and save session' })
+    .getByRole('button', { name: 'Finish session' })
     .click();
   const finishNotice = wakeLockPage.locator('.message[role="status"]');
   const finishError = wakeLockPage.getByRole('alert');
