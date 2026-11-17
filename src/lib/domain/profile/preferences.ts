@@ -38,6 +38,15 @@ export const profilePreferencesSchema = z.object({
       'song-first'
     ])
     .nullable()
+}).superRefine((preferences, context) => {
+  const routineIds = preferences.practiceRoutines.map((routine) => routine.id);
+  if (new Set(routineIds).size !== routineIds.length) {
+    context.addIssue({
+      code: 'custom',
+      path: ['practiceRoutines'],
+      message: 'Saved practice routine identifiers must be unique.'
+    });
+  }
 });
 
 export type ProfilePreferences = z.infer<typeof profilePreferencesSchema>;
