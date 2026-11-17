@@ -717,28 +717,7 @@
                 : 0)
           )}
         </p>
-        {#if activeSession.focus}
-          <p><strong>Focus:</strong> {activeSession.focus}</p>
-        {/if}
-        {#if activeSession.plannedMinutes}
-          <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
-        {/if}
-        {#if activeSession.primaryExerciseId}
-          <p class="authored-session-link">
-            <strong>Linked exercise:</strong>
-            {activeSessionAuthoredScope
-              ? activeSessionAuthoredScope.lessonTitle + ' — ' + activeSessionAuthoredScope.exerciseTitle
-              : 'Reviewed curriculum exercise'}
-          </p>
-        {:else}
-          <p class="muted authored-session-link">
-            General session — exercise observations will remain unlinked to authored curriculum.
-          </p>
-        {/if}
-
-        <div class="session-actions">
-          <a class="session-tool-link" href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">Open metronome in a new tab</a>
-          <a class="session-tool-link" href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner in a new tab</a>
+        <div class="session-actions" aria-label="Active session actions">
           <button
             class="primary secondary session-finish-action"
             type="submit"
@@ -759,6 +738,30 @@
                 ? 'Resume session'
                 : 'Pause session'}
           </button>
+        </div>
+
+        {#if activeSession.focus}
+          <p><strong>Focus:</strong> {activeSession.focus}</p>
+        {/if}
+        {#if activeSession.plannedMinutes}
+          <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
+        {/if}
+        {#if activeSession.primaryExerciseId}
+          <p class="authored-session-link">
+            <strong>Linked exercise:</strong>
+            {activeSessionAuthoredScope
+              ? activeSessionAuthoredScope.lessonTitle + ' — ' + activeSessionAuthoredScope.exerciseTitle
+              : 'Reviewed curriculum exercise'}
+          </p>
+        {:else}
+          <p class="muted authored-session-link">
+            General session — exercise observations will remain unlinked to authored curriculum.
+          </p>
+        {/if}
+
+        <div class="session-tool-links" aria-label="Session tools">
+          <a class="session-tool-link" href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">Open metronome in a new tab</a>
+          <a class="session-tool-link" href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner in a new tab</a>
         </div>
 
         <section class="quick-log" aria-label="Quick practice observations">
@@ -1822,10 +1825,17 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin: 12px 0 16px;
   }
 
   .session-actions .primary {
     margin-top: 0;
+  }
+
+  .session-tool-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .wake-lock-hint {
