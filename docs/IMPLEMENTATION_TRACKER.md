@@ -192,11 +192,12 @@ Independent implementation branches may be developed in parallel, but merges rem
 
 ## Immediate next actions
 
-1. Complete Issue #5's controlled CI rehearsal in an authenticated GitHub session: dispatch `failure-injection`, then `recovery`, and record both actual workflow run URLs. The earlier attempt did not dispatch because GitHub sign-in expired.
-2. Complete the physical desktop/mobile IndexedDB upgrade, reload, offline restart and storage-error checks in Issue #9.
-3. Complete physical-device export/restore/reset and mobile file-picker acceptance in Issue #10.
-4. Collect consented local real-guitar recordings with ground truth and run the physical browser/device matrix for Issue #89; keep all missing hardware rows marked not run.
-5. Continue Issue #18's manual WCAG 2.2 AA, privacy, cross-browser audio, licensing, performance, CSP deployment compatibility and rollback review. Keep production under Issue #3 blocked pending explicit owner approval.
+1. Redeploy the latest `main` commit to the existing local-first production Worker using the manual production workflow. Require exact-SHA application/curriculum and Node.js 26 checks, then attach the new route/security-header smoke-test evidence artifact to Issue #3. Initial production deployment succeeded on 2026-11-16 for `306f7aea`; do not treat that older deployment as current release verification.
+2. Complete Issue #5's controlled CI rehearsal in an authenticated GitHub session: dispatch `failure-injection`, then `recovery`, and record both actual workflow run URLs.
+3. Complete physical desktop/mobile IndexedDB upgrade, reload, offline restart and storage-error checks in Issue #9.
+4. Complete physical-device export/restore/reset and mobile file-picker acceptance in Issue #10.
+5. Collect consented local real-guitar recordings with ground truth and run the physical browser/device matrix for Issue #89; keep all missing hardware rows marked not run.
+6. Continue Issue #18's manual WCAG 2.2 AA, privacy, cross-browser audio, licensing, performance, CSP deployment compatibility and rollback review. Do not mark physical checks complete based on CI.
 
 
 ## M7.2 implementation slice (2026-11-12)
