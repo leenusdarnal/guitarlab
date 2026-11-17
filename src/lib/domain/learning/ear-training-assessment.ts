@@ -179,7 +179,9 @@ export function scoreChordMovementResponse(
     throw new Error('Only chord-movement exercises can be scored here.');
   }
   if (exercise.answer !== 'subdominant' && exercise.answer !== 'dominant') {
-    throw new Error('The chord-movement item does not have an authored answer.');
+    throw new Error(
+      'The chord-movement item does not have an authored answer.'
+    );
   }
   if (
     (response !== 'subdominant' && response !== 'dominant') ||

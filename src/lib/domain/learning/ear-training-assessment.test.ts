@@ -195,7 +195,10 @@ describe('chord movement recognition assessment evidence', () => {
   });
 
   it('records stable IV and V progression item identities and explicit responses', () => {
-    for (const [sequence, answer] of [[0, 'subdominant'], [1, 'dominant']] as const) {
+    for (const [sequence, answer] of [
+      [0, 'subdominant'],
+      [1, 'dominant']
+    ] as const) {
       const exercise = createEarTrainingExercise('chord-movement', sequence);
       const result = scoreChordMovementResponse(exercise, answer);
       expect(result).toMatchObject({
@@ -210,13 +213,13 @@ describe('chord movement recognition assessment evidence', () => {
           decisionScope: 'supporting_probe'
         },
         itemEvidence: [
-        {
-          itemId: `chord-movement.${answer}-between-tonic`,
-          response: answer,
-          outcome: 'correct',
-          responseSource: 'learner_selected_option'
-        }
-      ]
+          {
+            itemId: `chord-movement.${answer}-between-tonic`,
+            response: answer,
+            outcome: 'correct',
+            responseSource: 'learner_selected_option'
+          }
+        ]
       });
     }
   });
@@ -227,32 +230,33 @@ describe('chord movement recognition assessment evidence', () => {
     expect(result).toMatchObject({
       score: 0,
       outcome: 'needs_practice',
-      itemEvidence: [{
-        itemId: 'chord-movement.subdominant-between-tonic',
-        response: 'dominant',
-        outcome: 'incorrect'
-      }]
+      itemEvidence: [
+        {
+          itemId: 'chord-movement.subdominant-between-tonic',
+          response: 'dominant',
+          outcome: 'incorrect'
+        }
+      ]
     });
     expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
   });
 
   it('rejects a non-chord exercise, invalid response, and unauthored answer', () => {
-    expect(
-      () => scoreChordMovementResponse(createEarTrainingExercise('pulse'), 'steady')
+    expect(() =>
+      scoreChordMovementResponse(createEarTrainingExercise('pulse'), 'steady')
     ).toThrow('Only chord-movement exercises');
-    expect(
-      () =>
-        scoreChordMovementResponse(
-          createEarTrainingExercise('chord-movement'),
-          'rising'
-        )
+    expect(() =>
+      scoreChordMovementResponse(
+        createEarTrainingExercise('chord-movement'),
+        'rising'
+      )
     ).toThrow('not valid for this chord-movement item');
     const invalid = {
       ...createEarTrainingExercise('chord-movement'),
       answer: 'rising' as EarTrainingAnswer
     };
-    expect(() => scoreChordMovementResponse(invalid, 'subdominant')).toThrow(
-      'does not have an authored answer'
-    );
+    expect(() =>
+      scoreChordMovementResponse(invalid, 'subdominant')
+    ).toThrow('does not have an authored answer');
   });
 });
