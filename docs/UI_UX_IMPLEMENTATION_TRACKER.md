@@ -2,12 +2,12 @@
 
 **Status:** Active  
 **Created:** 15 November 2026  
-**Last reviewed:** 16 November 2026  
+**Last reviewed:** 17 November 2026  
 **Implementation source:** UX_REVIEW.md (advisory review supplied for this work) and the source audit in [UI/UX audit](UI_UX_AUDIT_2026-11-15.md)  
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-02 / UX-14 — approved five-destination mobile primary navigation (`feat/ux-mobile-primary-tab-navigation`, PR #166)
+**Active implementation:** UX-02 follow-up — interactive-control accessibility and 200%-zoom-equivalent reflow checks (`ux/02-zoom-reflow-and-control-audit`)
 
 ---
 
@@ -132,7 +132,11 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Queue lesson-progress writes and keep section/checkpoint/note controls enabled while an ordinary save is in flight; avoid disabling the learner's current control (PR #141, automated rapid-edit regression added).
 - [x] Preserve focus during normal saves by removing save-time control disabling; focus after explicit view/route replacement remains subject to manual keyboard review.
 - [ ] Review icon-only controls for accessible names, hit area and visible focus.
+  - [x] Add browser acceptance that audits every visible button on core learner routes for an accessible name and a 44px minimum hit area in both themes and at responsive widths.
+  - [ ] Complete manual icon-only control and focus review with keyboard and assistive technology on physical devices.
 - [ ] Test keyboard-only operation and browser zoom at 200% without disabling user zoom.
+  - [x] Add a visible keyboard-focus assertion and a 640 CSS-pixel reflow check (the content width expected at 200% zoom on a 1280px desktop viewport). This is viewport-equivalent coverage, not a simulation of browser UI zoom.
+  - [ ] Verify actual 200% browser zoom and keyboard-only journeys manually on supported desktop/mobile browsers.
 
 **Acceptance:** no field triggers iOS-style focus zoom due to sub-16px text; skip navigation reaches the page content; all essential controls remain keyboard accessible and visually identifiable in both themes.
 
@@ -420,6 +424,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-17 | Started UX-02 follow-up: automated visible-button name/44px target checks across core routes and themes, keyboard focus-indicator coverage, and 640px 200%-zoom-equivalent reflow checks. Actual browser UI zoom and physical-device/assistive-technology verification remain manual. |
 | 2026-11-16 | Opened PR #166 for UX-02/UX-14: five labelled mobile primary tabs, secondary More navigation, device safe-area handling, bottom content clearance and automated keyboard/active-state/touch-target coverage. WebKit acceptance is configured for the core learner routes, subject to PR CI confirmation. Physical-device and learner testing remain open. |
 | 2026-11-16 | Opened PR #167 for UX-04: increased Today dashboard explanatory/task copy to shared readable type tokens and added browser size assertions. CI in progress; no merge until formatting, browser and accessibility checks pass. |
 | 2026-11-16 | PR #147 (UX-11) merged as `857560b`; run #1434 passed required CI, including backup, accessibility, music-tool and curriculum browser acceptance. Backup recency is local-only and describes download start, not confirmed file retention. Web Share is deferred pending device/consent tests. |
