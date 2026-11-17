@@ -1672,8 +1672,15 @@ try {
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
 
-  const reusableRoutine = page.locator('.routine-list > li').filter({
+  const routineToEdit = page.locator('.routine-list > li').filter({
     hasText: 'Browser routine acceptance'
+  });
+  await routineToEdit.getByRole('button', { name: 'Edit' }).click();
+  await page.locator('#routine-name').fill('Browser routine acceptance edited');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+
+  const reusableRoutine = page.locator('.routine-list > li').filter({
+    hasText: 'Browser routine acceptance edited'
   });
   await reusableRoutine.getByRole('button', { name: 'Use routine' }).click();
   assert.equal(await page.locator('#duration').inputValue(), '5');
@@ -1686,7 +1693,7 @@ try {
     .waitFor();
 
   await page.locator('.routine-list > li').filter({
-    hasText: 'Browser routine acceptance'
+    hasText: 'Browser routine acceptance edited'
   }).getByRole('button', { name: 'Delete' }).click();
   await page.getByText('No saved routines yet. Build one below, or start a one-off session.').waitFor();
 
