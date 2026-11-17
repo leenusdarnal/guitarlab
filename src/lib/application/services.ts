@@ -606,6 +606,19 @@ const startPracticeInputSchema = z
           'An authored exercise requires a curriculum release, lesson and taxonomy version.'
       });
     }
+    if (value.routineSnapshot) {
+      const routineMinutes = value.routineSnapshot.exercises.reduce(
+        (total, exercise) => total + exercise.minutes,
+        0
+      );
+      if (value.plannedMinutes !== routineMinutes) {
+        context.addIssue({
+          code: 'custom',
+          path: ['plannedMinutes'],
+          message: 'The planned session duration must match the saved routine total.'
+        });
+      }
+    }
   });
 
 export async function startPracticeSession(
