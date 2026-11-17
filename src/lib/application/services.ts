@@ -8,6 +8,7 @@ import {
   practiceEvidenceInputSchema,
   practiceEvidenceSubmissionSchema
 } from '../domain/learning/practice-evidence';
+import { practiceRoutineSnapshotSchema } from '../domain/learning/practice-routine';
 import {
   skillMasteryStateSchema,
   skillMasteryUpdateSchema
@@ -574,6 +575,7 @@ const startPracticeInputSchema = z
     primaryLessonId: lessonIdSchema.nullable(),
     primaryExerciseId: lessonIdSchema.nullable().default(null),
     practiceTaxonomyVersion: z.string().min(1).max(40).nullable().default(null),
+    routineSnapshot: practiceRoutineSnapshotSchema.nullable().default(null),
     focus: z.string().trim().min(1).max(180).nullable()
   })
   .strict()
@@ -636,6 +638,7 @@ export async function startPracticeSession(
     primaryLessonId: value.primaryLessonId,
     primaryExerciseId: value.primaryExerciseId,
     practiceTaxonomyVersion: value.practiceTaxonomyVersion,
+    routineSnapshot: value.routineSnapshot,
     status: 'in_progress',
     activeStartedAt: now,
     plannedMinutes: value.plannedMinutes,
