@@ -2125,15 +2125,17 @@ try {
     .waitFor();
   await page.locator('#history-date-range').selectOption('all');
 
-  await page
+  const authoredHistoryItem = page
+    .locator('.history-item')
+    .filter({ hasText: 'Browser acceptance scale drill' });
+  await authoredHistoryItem
     .getByRole('button', { name: 'Show exercise observations' })
-    .first()
     .click();
-  await page
+  await authoredHistoryItem
     .locator('.history-evidence')
     .getByText('G major scale', { exact: true })
     .waitFor();
-  await page.getByText(/\d+ sec/).waitFor();
+  await authoredHistoryItem.getByText(/\d+ sec/).waitFor();
 
   // Two tabs share the same IndexedDB database. Concurrent starts must
   // serialize so exactly one tab can create the learner's active session.
