@@ -25,7 +25,7 @@ export const profilePreferencesSchema = z.object({
   practiceMinutes: z.number().int().min(5).max(180).nullable(),
   // Retained for profile compatibility until schedule-aware planning is implemented.
   availableDays: z.array(z.number().int().min(0).max(6)).max(7),
-  // Retained for profile compatibility; no current lesson route consumes this preference.
+  // Controls the teaching-section order in the authored lesson reader.
   lessonPresentation: z
     .enum([
       'balanced',
