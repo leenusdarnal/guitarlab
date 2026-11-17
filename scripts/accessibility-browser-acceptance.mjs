@@ -781,6 +781,16 @@ try {
             'px in ' +
             theme
         );
+        if (route === '/tools/fretboard' && width <= 640) {
+          const fretboardScroll = await page.locator('.fretboard-scroll').evaluate((element) => ({
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth
+          }));
+          assert.ok(
+            fretboardScroll.scrollWidth > fretboardScroll.clientWidth,
+            'Fretboard note targets must remain at least 44px wide and scroll inside the diagram on narrow screens.'
+          );
+        }
       }
     }
 
