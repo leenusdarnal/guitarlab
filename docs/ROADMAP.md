@@ -71,9 +71,9 @@ M3.1 is merged in PR #26 and M3.2 in PR #28. Advanced accessibility and offline 
 - [x] Interactive checkpoints, lesson completion events and resume behaviour (PR #33).
 - [x] Load all 152 authored lessons with stable IDs and versioned content.
 - [x] Record and restore learner progress against lesson blocks/checkpoints (PR #33; automated browser acceptance merged).
-- [ ] Render lesson blocks according to per-profile presentation preferences while preserving authored learning outcomes and text fallbacks.
+- [x] Render lesson sections in the learner's saved presentation order (balanced, visual-first, demonstration-first, text-first, interactive-first or song-first) while retaining all authored content, stable progress IDs and text fallbacks.
 
-M4.1 is merged in PR #29. The reader displays authored content but deliberately does not mark lessons complete or grant skill mastery. M4.2 is the next curriculum implementation slice.
+M4.1 is merged in PR #29. M4.2 section progress and checkpoint completion are implemented in PR #33; manual QA remains separate. The reader now consumes the optional profile presentation preference and defaults to the authored balanced sequence when no preference is selected. Presentation changes only section order: it does not rewrite curriculum JSON, hide content, or affect lesson completion or skill mastery.
 
 ### M5 — Learning state and synchronisation
 
