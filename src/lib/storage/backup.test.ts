@@ -545,10 +545,11 @@ describe('learner backup contract', () => {
           practiceSessions: [{ routineSnapshot: snapshot }]
         }
       }
-      const inconsistent = structuredClone(backup);
+    });
+
+    const inconsistent = structuredClone(backup);
     inconsistent.records.practiceSessions[0].plannedMinutes = 14;
     expect(parseLearnerBackup(inconsistent)).toMatchObject({ success: false });
-  });
   });
 
   it('defaults missing routine preferences when reading an older local backup', () => {
