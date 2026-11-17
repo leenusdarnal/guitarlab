@@ -25,7 +25,9 @@ describe('profile-based lesson presentation', () => {
       expect(new Set(sequence)).toEqual(new Set(lessonPresentationSectionIds));
 
       for (const section of lessonPresentationSectionIds) {
-        expect(getLessonPresentationSectionOrder(value, section)).toBeGreaterThan(0);
+        expect(
+          getLessonPresentationSectionOrder(value, section)
+        ).toBeGreaterThan(0);
       }
     }
   );
@@ -43,9 +45,7 @@ describe('profile-based lesson presentation', () => {
     );
     expect(
       getLessonPresentationSectionOrder('song-first', 'music')
-    ).toBeLessThan(
-      getLessonPresentationSectionOrder('song-first', 'key-idea')
-    );
+    ).toBeLessThan(getLessonPresentationSectionOrder('song-first', 'key-idea'));
   });
 
   it('keeps the balanced reader order aligned with the authored sequence', () => {
