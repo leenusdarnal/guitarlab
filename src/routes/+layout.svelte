@@ -179,7 +179,7 @@
       aria-label="More navigation"
       hidden={!mobileMenuOpen}
     >
-      <a href={resolve('/login')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="user" size={18} /></span>Sign in</a>
+      <a href={resolve('/login')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="shield-check" size={18} /></span>Sign in</a>
       <a
         href={resolve('/repertoire')}
         aria-current={activeSection === 'songs' ? 'page' : undefined}

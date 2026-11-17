@@ -89,7 +89,7 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
     const delivery = sendTransactionalEmail(env, message);
     if (waitUntil) {
       waitUntil(delivery);
-      return;
+      return Promise.resolve();
     }
     return delivery;
   };

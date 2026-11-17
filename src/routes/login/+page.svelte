@@ -1,9 +1,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { authClient } from '$lib/auth-client';
+  import { authClient } from '#lib/auth-client';
 
-  let { data } = $props<{ data: { authAvailable: boolean } }>();
+  import type { PageProps } from './$types';
+
+  let { data }: PageProps = $props();
 
   type Mode = 'sign-in' | 'sign-up' | 'request-reset' | 'reset-password';
 
