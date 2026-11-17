@@ -114,7 +114,7 @@
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>
     <h1>Make GuitarLab <em>yours.</em></h1>
-    <p class="intro">Choose a musical direction and a realistic practice target. Only preferences that currently change your daily plan appear here. You can skip either choice or return to update them later.</p>
+    <p class="intro">Choose a musical direction and a realistic practice target. Only choices that affect your lessons or daily plan appear here. You can skip either choice or return to update them later.</p>
 
     <form onsubmit={submitSetup} onchange={clearSaveConfirmation}>
       <fieldset>
