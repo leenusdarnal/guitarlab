@@ -416,7 +416,7 @@
         <div
           class="fret-numbers"
           data-frets={maxFret}
-          style={`grid-template-columns: 34px repeat(${maxFret + 1}, minmax(0, 1fr));`}
+          style={`min-width: ${34 + (maxFret + 1) * 44}px; grid-template-columns: 34px repeat(${maxFret + 1}, minmax(44px, 1fr));`}
           aria-hidden="true"
         >
           <span class="string-heading">String</span>
@@ -462,7 +462,7 @@
             class="fret-row"
             role="group"
             data-frets={maxFret}
-            style={`grid-template-columns: 34px repeat(${maxFret + 1}, minmax(0, 1fr));`}
+            style={`min-width: ${34 + (maxFret + 1) * 44}px; grid-template-columns: 34px repeat(${maxFret + 1}, minmax(44px, 1fr));`}
             aria-label={`String ${rowIndex + 1}`}
           >
             <span class="string-label">
@@ -800,7 +800,7 @@
   .fretboard { gap: 3px; }
   .fret-row { position: relative; z-index: 1; min-height: 48px; gap: 0; }
   .fret-cell {
-    min-width: 24px;
+    min-width: 44px;
     min-height: 44px;
     border: 0;
     border-radius: 50%;
@@ -864,8 +864,8 @@
   }
   .fret-cell {
     display: flex;
-    min-width: 24px;
-    min-height: 40px;
+    min-width: 44px;
+    min-height: 44px;
     align-items: center;
     justify-content: center;
     gap: 1px;
