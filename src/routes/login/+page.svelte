@@ -115,8 +115,8 @@
         return;
       }
 
-      statusMessage = 'Your password has been updated. Sign in with your new password.';
       selectMode('sign-in');
+      statusMessage = 'Your password has been updated. Sign in with your new password.';
       password = '';
       confirmPassword = '';
     } catch {
