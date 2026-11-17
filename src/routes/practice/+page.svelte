@@ -717,7 +717,7 @@
                 : 0)
           )}
         </p>
-        <div class="session-actions" aria-label="Active session actions">
+        <div class="session-actions" role="group" aria-label="Active session actions">
           <button
             class="primary secondary session-finish-action"
             type="submit"
@@ -759,7 +759,7 @@
           </p>
         {/if}
 
-        <div class="session-tool-links" aria-label="Session tools">
+        <div class="session-tool-links" role="group" aria-label="Session tools">
           <a class="session-tool-link" href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">Open metronome in a new tab</a>
           <a class="session-tool-link" href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner in a new tab</a>
         </div>
