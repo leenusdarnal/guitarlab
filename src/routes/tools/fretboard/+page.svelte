@@ -428,7 +428,7 @@
           {/each}
         </div>
 
-        <div class="fret-rows" data-frets={maxFret}>
+        <div class="fret-rows" data-frets={maxFret} style={`min-width: ${34 + (maxFret + 1) * 44}px;`}>
           <svg
             class="fretboard-structure"
             viewBox={`0 0 ${maxFret + 1} 6`}
