@@ -206,7 +206,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [ ] Keep correction actions available but visually secondary to practising a relevant skill.
 - [x] Replace the internal milestone label and catalogue-version badge; hide raw release/taxonomy identifiers from the active-session learner view.
 - [ ] Remove repeated mastery disclaimers while preserving one clear explanation of how progress is measured.
-- [ ] Make the active session surface focus on the current task, timer, pause/finish and the next useful control.
+- [x] Keep the active session's pause/resume and finish actions beside the timer and current task; the finish control submits the existing optional session-review form without requiring a scroll past exercise observations (automated mobile browser acceptance).
 - [x] Add large one-tap clean-attempt and needs-correction observation controls; retain detailed count entry as an optional form.
 - [ ] Provide access to a compact metronome and tuner without forcing the learner to leave the session.
 - [ ] Add wake-lock support only while an active session needs it; handle unsupported, rejected and automatically released states.
@@ -420,6 +420,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-17 | Improved UX-06: added a Finish session action beside the active-session controls, linked to the existing review form so optional reflection/next-target fields and existing save semantics are preserved. Added mobile browser acceptance for initial-viewport reachability and form association. |
 | 2026-11-16 | Opened PR #166 for UX-02/UX-14: five labelled mobile primary tabs, secondary More navigation, device safe-area handling, bottom content clearance and automated keyboard/active-state/touch-target coverage. WebKit acceptance is configured for the core learner routes, subject to PR CI confirmation. Physical-device and learner testing remain open. |
 | 2026-11-16 | Opened PR #167 for UX-04: increased Today dashboard explanatory/task copy to shared readable type tokens and added browser size assertions. CI in progress; no merge until formatting, browser and accessibility checks pass. |
 | 2026-11-16 | PR #147 (UX-11) merged as `857560b`; run #1434 passed required CI, including backup, accessibility, music-tool and curriculum browser acceptance. Backup recency is local-only and describes download start, not confirmed file retention. Web Share is deferred pending device/consent tests. |
