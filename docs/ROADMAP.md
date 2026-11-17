@@ -35,7 +35,7 @@ M0 product, architecture, curriculum and implementation guidelines are ready for
 - [x] Add the initial responsive application shell using the approved hybrid design direction and semantic design tokens.
 - [ ] Complete manual mobile, keyboard and component-level accessibility verification.
 
-M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The first local-first production deployment is now the top priority; an isolated no-D1 production config and manual release workflow are being added. The connected Cloudflare account currently has no production Worker, custom domain or zone, so the first host is the existing workers.dev subdomain.
+M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The isolated no-D1 production config and manual release workflow are implemented. The first local-first production deployment succeeded on 2026-11-16 for commit `306f7aea19596731dac88192d8228590544f00fc`; five route smoke tests and security-header checks passed, and a 90-day artifact records Worker version `36ba069d-3462-467d-8076-90c17383f255`. Current `main` (`357105dfc9bcdbf3d76d1b89a04836cdc694c5c9`) is newer and requires a fresh production redeploy before its latest UX improvements are live. Temporary host: `https://guitarlab.leenusdarnal.workers.dev`; no custom domain or zone is connected.
 
 ### M2 — Data foundation
 
@@ -150,9 +150,9 @@ PR #61 and PR #67 deliver the first local, generated-audio listening exercises. 
 - [ ] Third-party dependency and licence register; review all optional integrations before adoption.
 - [x] Curriculum validator integrated into the main application CI.
 - [ ] Verify preview deployment and browser smoke check against the current v1.0.6 main commit; the preview workflow has succeeded for an earlier main commit.
-- [ ] Private production deployment, smoke tests and rollback procedure.
+- [x] First local-first production deployment and five-route/security-header smoke tests (2026-11-16; deployed SHA `306f7aea19596731dac88192d8228590544f00fc`; Worker version `36ba069d-3462-467d-8076-90c17383f255`; 90-day evidence artifact retained). [ ] Redeploy the latest `main` SHA and verify smoke tests/evidence. [ ] Verify rollback procedure against an actual prior Worker version.
 
-Release hardening remains open under [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18). No production deployment is authorised by this roadmap.
+Release hardening remains open under [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18). The initial local-first production Worker is deployed; re-deployment of the latest `main` remains outstanding. This release does not enable login, D1, remote learner data or cloud sync.
 
 ## M7 implementation note (2026-11-12)
 

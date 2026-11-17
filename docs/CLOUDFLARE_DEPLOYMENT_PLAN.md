@@ -6,7 +6,7 @@
 **Framework:** SvelteKit with `@sveltejs/adapter-cloudflare`  
 **Local persistence:** IndexedDB / browser-local storage  
 **Remote database:** Cloudflare D1 is configured in the repository's local development setup, but remote learner-data persistence is not currently enabled  
-**Status:** First local-first production release is P0 by owner direction; live deployment awaits workflow and environment prerequisites  
+**Status:** First local-first production deployment succeeded on 2026-11-16 for SHA `306f7aea19596731dac88192d8228590544f00fc`; latest-main redeployment remains pending  
 **Last reviewed:** 13 November 2026
 
 ---
@@ -47,11 +47,11 @@ The following findings were established from the repository and connected Cloudf
 | Preview HTTP response | URL responded; returned page showed the GuitarLab dashboard loading state |
 | Cloudflare Pages projects | None found in the connected account |
 | Cloudflare D1 databases | Zero returned by the account-level D1 listing at audit time |
-| Production Worker | Not confirmed |
+| Production Worker | `guitarlab` exists and serves `https://guitarlab.leenusdarnal.workers.dev` |
 | Preview Wrangler config | `wrangler.preview.jsonc` exists |
 | Production Wrangler config | Not found at `wrangler.production.jsonc` |
 | Preview workflow | `.github/workflows/deploy-preview.yml` exists |
-| Production deployment workflow | Not found in the inspected workflow paths |
+| Production deployment workflow | `.github/workflows/deploy-production.yml` exists; first release run #43874208724 passed |
 
 **Interpretation of the D1 finding:** The repository README explicitly says the preview configuration intentionally has no D1 binding, learner preferences and practice data remain browser-local, and cloud sync is not enabled. Therefore, the absence of a remote preview D1 binding is not automatically a defect. Do not create D1 databases just to make the deployment plan look complete. First decide whether remote persistence, accounts or cloud sync are part of the release scope.
 
@@ -185,7 +185,7 @@ The existing workflow's HTTP smoke test is a useful first check, not the complet
 
 ### Phase E — Production release (CF-11 / CF-12 / CF-13)
 
-The owner set the first local-first production release as the top priority on 2026-11-15. Live execution remains gated on exact-SHA CI, production environment credentials, manual workflow dispatch and post-deploy smoke checks. This does not authorize remote D1 provisioning/migrations, authentication/cloud-sync activation, or domain/DNS changes.
+The owner set the first local-first production release as the top priority on 2026-11-15. The initial release was deployed successfully on 2026-11-16. Current main has since advanced, so the next release remains gated on exact-SHA CI, the protected production environment, manual workflow dispatch and post-deploy smoke checks. This does not authorize remote D1 provisioning/migrations, authentication/cloud-sync activation, or domain/DNS changes.
 
 Release sequence:
 
@@ -272,12 +272,12 @@ Verify domain ownership, DNS, Worker routing and TLS/HTTPS. The previous Vercel 
 | CF-05 | Verify preview secrets and variables | High | Blocked on authorized GitHub environment settings access; values not exposed |
 | CF-06 | Validate preview build and deployment workflow | Critical | Partially complete |
 | CF-07 | Complete preview browser and application acceptance | Critical | Pending |
-| CF-08 | Verify production Worker and production configuration | Critical | Pending |
+| CF-08 | Verify production Worker and production configuration | Critical | First local-first Worker and ASSETS-only config verified 2026-11-17; current-main redeploy pending |
 | CF-09 | Review production migrations and recovery, if D1 is in scope | Critical | Pending |
 | CF-10 | Complete production readiness checks | Critical | Pending |
 | CF-11 | Obtain explicit production release approval | Critical | Owner priority/authorization recorded on 2026-11-15 for the first local-first release; no remote data/migration approval implied |
-| CF-12 | Deploy production Worker | Critical | Isolated config and manual workflow being added; live deployment pending GitHub production environment setup and successful dispatch |
-| CF-13 | Complete production smoke tests | Critical | Route and response-header checks included in the release workflow; live results pending deployment |
+| CF-12 | Deploy production Worker | Critical | First local-first release succeeded 2026-11-16 (run #43874208724); redeploy latest main SHA pending |
+| CF-13 | Complete production smoke tests | Critical | Five routes and security headers passed on 2026-11-16 deployment; rerun on latest main SHA pending |
 | CF-14 | Harden CI/CD and implement gated production workflow | High | Pending |
 | CF-15 | Document monitoring, rollback and recovery | High | Pending |
 | CF-16 | Configure custom domain | Medium | Deferred |

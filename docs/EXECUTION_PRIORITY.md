@@ -1,6 +1,6 @@
 # GuitarLab Execution Priority and Resume Plan
 
-**Last updated:** 2026-11-15  
+**Last updated:** 2026-11-17  
 **Repository:** `leenusdarnal/guitarlab`  
 **Default branch:** `main`  
 **Verified baseline:** `555b27c1ba230a87a59e4d75c5f7348127f8fd28` (PR #136 merged; documentation reconciled after CSP hardening)  
@@ -15,14 +15,14 @@
 - Require the latest successful `Validate application and curriculum` and `Check Node.js 26 compatibility` checks for the exact selected SHA.
 - Worker name: `guitarlab`; temporary first-release URL: `https://guitarlab.leenusdarnal.workers.dev` (the connected account's workers.dev subdomain is `leenusdarnal`).
 - Production has no D1 binding, authentication routes, account service, learner-data API or cloud sync. Do not claim login/cloud sync exists; that is separate M5 implementation work.
-- Live Cloudflare inventory: one Worker (`guitarlab-preview`), no production Worker, no D1 database, no Worker custom domain and no zone in the connected account. workers.dev is a temporary hostname; attach an owned custom domain/route for long-term production.
+- Verified Cloudflare state now includes both `guitarlab` and `guitarlab-preview`. Production Worker has an `ASSETS` binding only; no D1 binding was reported in the 2026-11-17 inventory. workers.dev is a temporary hostname; attach an owned custom domain/route for long-term production only after a zone is connected.
 - Configure the GitHub Actions `production` environment with secret `CLOUDFLARE_API_TOKEN` and variable `CLOUDFLARE_ACCOUNT_ID`; restrict deploy branches to `main` and require a reviewer where settings support it.
 - The release workflow builds and dry-runs the exact main SHA, deploys that build, and smoke-tests `/`, `/learn`, `/practice`, `/tools/tuner`, `/settings/data` plus CSP/HSTS/MIME/frame/referrer headers.
 - Do not provision D1, run remote migrations, enable account/cloud-sync services, or create domains/DNS in this release slice.
 
-**Exit criteria:** an exact-main production workflow succeeds, all smoke checks pass, and the commit, Worker version/deployment ID, timestamp and URL are recorded. Keep P0 open until then.
+**Verified first release (2026-11-16):** production run [#43874208724](https://github.com/leenusdarnal/guitarlab/actions/runs/43874208724) succeeded for SHA `306f7aea19596731dac88192d8228590544f00fc`; Worker version `36ba069d-3462-467d-8076-90c17383f255`; timestamp `2026-11-16T13:17:33.944Z`; URL `https://guitarlab.leenusdarnal.workers.dev`. Five application routes and the five response-security header checks passed. The 90-day artifact is `guitarlab-production-deployment-306f7aea19596731dac88192d8228590544f00fc`. Current `main` is `357105dfc9bcdbf3d76d1b89a04836cdc694c5c9` with successful CI run [#44025856958](https://github.com/leenusdarnal/guitarlab/actions/runs/44025856958), but has not been redeployed. **Remaining P0:** redeploy current main via the manual production workflow and validate a fresh evidence artifact. Keep issue #3 open until that exact-SHA deployment succeeds.
 
-**After first production verification:** resume M5 account/authentication and secure sync, then Issues #9/#10 physical storage/recovery acceptance, #89 real-device audio, and #18 full release sign-off. Issue #5 remains pending for authenticated CI rehearsal dispatch.
+**After current-main production verification:** reconcile and close Issue #3, then continue the product roadmap without enabling login/cloud sync as an assumed default. Physical acceptance remains separate: Issues #9/#10 storage/recovery; #89 real-device audio; #18 complete release sign-off; and Issue #5 controlled CI failure/recovery rehearsal.
 
 ## Historical checkpoint — 2026-11-15 after PR #135 (superseded by the P0 production-release queue above)
 
