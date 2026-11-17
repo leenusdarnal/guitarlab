@@ -146,5 +146,7 @@ if (legacyPracticeColorFallbacks.length) {
   );
   process.exit(1);
 }
-console.log('Practice Studio uses shared semantic colour tokens without legacy colour fallbacks.');
+console.log(
+  'Practice Studio uses shared semantic colour tokens without legacy colour fallbacks.'
+);
 console.log('Design-token contrast checks passed for dark and light themes.');
