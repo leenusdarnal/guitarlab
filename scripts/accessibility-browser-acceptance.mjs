@@ -698,8 +698,8 @@ try {
       if (route === '/') {
         await assertDashboardTypography(page, 'desktop');
       }
-      // 640 CSS px provides the reflow width expected at 200% zoom on a 1280px
-      // desktop viewport. This is viewport-equivalent coverage, not browser UI zoom.
+      // 640 CSS px represents 200% zoom reflow from a 1280px desktop viewport.
+      // This does not emulate browser UI zoom.
       for (const width of [360, 390, 640, 768, 1280]) {
         await page.setViewportSize({ width, height: 1000 });
         const responsiveTabVisibility = await page.evaluate(() => {
@@ -730,7 +730,10 @@ try {
               const referencedLabel = labelledBy
                 ? labelledBy
                     .split(/\s+/)
-                    .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+                    .map(
+                      (id) =>
+                        document.getElementById(id)?.textContent?.trim() ?? ''
+                    )
                     .join(' ')
                     .trim()
                 : '';
@@ -761,14 +764,22 @@ try {
             (button) => !button.accessibleName
           ),
           [],
-          route + ' has a visible button without an accessible name at ' + width + 'px in ' + theme
+          route +
+            ' has a visible button without an accessible name at ' +
+            width +
+            'px in ' +
+            theme
         );
         assert.deepEqual(
           responsiveLayout.visibleButtons.filter(
             (button) => button.width < 44 || button.height < 44
           ),
           [],
-          route + ' has a visible button below the 44px target at ' + width + 'px in ' + theme
+          route +
+            ' has a visible button below the 44px target at ' +
+            width +
+            'px in ' +
+            theme
         );
       }
     }
