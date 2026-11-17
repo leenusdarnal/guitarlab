@@ -16,13 +16,19 @@ const exerciseSequenceSchema = z
   .min(1)
   .max(12)
   .superRefine((exercises, context) => {
-    if (new Set(exercises.map((exercise) => exercise.id)).size !== exercises.length) {
+    if (
+      new Set(exercises.map((exercise) => exercise.id)).size !==
+      exercises.length
+    ) {
       context.addIssue({
         code: 'custom',
         message: 'Each exercise in a routine must have a unique identifier.'
       });
     }
-    const total = exercises.reduce((minutes, exercise) => minutes + exercise.minutes, 0);
+    const total = exercises.reduce(
+      (minutes, exercise) => minutes + exercise.minutes,
+      0
+    );
     if (total < 5 || total > 180) {
       context.addIssue({
         code: 'custom',

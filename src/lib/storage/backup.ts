@@ -125,7 +125,8 @@ const practiceSessionSchema = z
         context.addIssue({
           code: 'custom',
           path: ['plannedMinutes'],
-          message: 'The planned session duration must match the saved routine total.'
+          message:
+            'The planned session duration must match the saved routine total.'
         });
       }
     }

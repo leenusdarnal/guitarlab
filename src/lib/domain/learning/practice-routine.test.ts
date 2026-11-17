@@ -27,14 +27,16 @@ const routine = {
 
 describe('saved practice routines', () => {
   it('validates and normalizes a named ordered exercise sequence', () => {
-    expect(practiceRoutineSchema.parse({
-      ...routine,
-      name: '  Balanced daily practice  ',
-      exercises: [
-        { ...routine.exercises[0], name: ' Warm-up and relaxed fretting ' },
-        routine.exercises[1]
-      ]
-    })).toMatchObject({
+    expect(
+      practiceRoutineSchema.parse({
+        ...routine,
+        name: '  Balanced daily practice  ',
+        exercises: [
+          { ...routine.exercises[0], name: ' Warm-up and relaxed fretting ' },
+          routine.exercises[1]
+        ]
+      })
+    ).toMatchObject({
       name: 'Balanced daily practice',
       exercises: [
         { name: 'Warm-up and relaxed fretting' },
@@ -44,36 +46,46 @@ describe('saved practice routines', () => {
   });
 
   it('requires a useful 5–180 minute plan with one to twelve exercises', () => {
-    expect(practiceRoutineSchema.safeParse({
-      ...routine,
-      exercises: [{ ...routine.exercises[0], minutes: 4 }]
-    }).success).toBe(false);
-    expect(practiceRoutineSchema.safeParse({
-      ...routine,
-      exercises: [{ ...routine.exercises[0], minutes: 181 }]
-    }).success).toBe(false);
-    expect(practiceRoutineSchema.safeParse({
-      ...routine,
-      exercises: Array.from({ length: 13 }, (_, index) => ({
-        ...routine.exercises[0],
-        id: `22222222-2222-4222-8222-${String(index + 1).padStart(12, '0')}`,
-        minutes: 5
-      }))
-    }).success).toBe(false);
+    expect(
+      practiceRoutineSchema.safeParse({
+        ...routine,
+        exercises: [{ ...routine.exercises[0], minutes: 4 }]
+      }).success
+    ).toBe(false);
+    expect(
+      practiceRoutineSchema.safeParse({
+        ...routine,
+        exercises: [{ ...routine.exercises[0], minutes: 181 }]
+      }).success
+    ).toBe(false);
+    expect(
+      practiceRoutineSchema.safeParse({
+        ...routine,
+        exercises: Array.from({ length: 13 }, (_, index) => ({
+          ...routine.exercises[0],
+          id: `22222222-2222-4222-8222-${String(index + 1).padStart(12, '0')}`,
+          minutes: 5
+        }))
+      }).success
+    ).toBe(false);
   });
 
   it('rejects duplicate exercise identifiers and invalid names', () => {
-    expect(practiceRoutineSchema.safeParse({
-      ...routine,
-      exercises: [
-        routine.exercises[0],
-        { ...routine.exercises[1], id: routine.exercises[0].id }
-      ]
-    }).success).toBe(false);
-    expect(practiceRoutineSchema.safeParse({
-      ...routine,
-      exercises: [{ ...routine.exercises[0], name: '  ' }]
-    }).success).toBe(false);
+    expect(
+      practiceRoutineSchema.safeParse({
+        ...routine,
+        exercises: [
+          routine.exercises[0],
+          { ...routine.exercises[1], id: routine.exercises[0].id }
+        ]
+      }).success
+    ).toBe(false);
+    expect(
+      practiceRoutineSchema.safeParse({
+        ...routine,
+        exercises: [{ ...routine.exercises[0], name: '  ' }]
+      }).success
+    ).toBe(false);
   });
 
   it('freezes the exercise order and time allocations for a started session', () => {
@@ -85,7 +97,9 @@ describe('saved practice routines', () => {
       'Warm-up and relaxed fretting',
       'Chord changes with a metronome'
     ]);
-    expect(snapshot.exercises.map((exercise) => exercise.minutes)).toEqual([5, 10]);
+    expect(snapshot.exercises.map((exercise) => exercise.minutes)).toEqual([
+      5, 10
+    ]);
     expect(practiceRoutineSnapshotSchema.parse(snapshot)).toEqual(snapshot);
   });
 });

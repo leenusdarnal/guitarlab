@@ -565,5 +565,4 @@ describe('learner backup contract', () => {
       data: { records: { profile: { preferences: { practiceRoutines: [] } } } }
     });
   });
-
 });

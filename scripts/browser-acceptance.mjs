@@ -1639,10 +1639,11 @@ try {
   await savedRoutine.waitFor();
   const savedSequence = await savedRoutine.locator('ol').innerText();
   assert.ok(
-    savedSequence.indexOf('Relaxed warm-up') < savedSequence.indexOf('Chord changes'),
+    savedSequence.indexOf('Relaxed warm-up') <
+      savedSequence.indexOf('Chord changes'),
     'The saved routine must retain the learner-selected exercise order'
   );
-  assert.match(savedRoutine.innerText(), /5 minutes/);
+  assert.match(await savedRoutine.innerText(), /5 minutes/);
 
   await savedRoutine.getByRole('button', { name: 'Use routine' }).click();
   assert.equal(await page.locator('#duration').inputValue(), '5');
@@ -1656,7 +1657,8 @@ try {
   await routineSnapshot.waitFor();
   const snapshotSequence = await routineSnapshot.locator('ol').innerText();
   assert.ok(
-    snapshotSequence.indexOf('Relaxed warm-up') < snapshotSequence.indexOf('Chord changes'),
+    snapshotSequence.indexOf('Relaxed warm-up') <
+      snapshotSequence.indexOf('Chord changes'),
     'The active session must use the saved routine order'
   );
   await page.reload({ waitUntil: 'networkidle' });
@@ -1692,10 +1694,14 @@ try {
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
 
-  await page.locator('.routine-list > li').filter({
-    hasText: 'Browser routine acceptance edited'
-  }).getByRole('button', { name: 'Delete' }).click();
-  await page.getByText('No saved routines yet. Build one below, or start a one-off session.').waitFor();
+  await page
+    .locator('.routine-list > li')
+    .filter({ hasText: 'Browser routine acceptance edited' })
+    .getByRole('button', { name: 'Delete' })
+    .click();
+  await page
+    .getByText('No saved routines yet. Build one below, or start a one-off session.')
+    .waitFor();
 
   // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
   await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
@@ -2049,9 +2055,7 @@ try {
   // Session storage intentionally rejects sessions shorter than one second.
   await wakeLockPage.waitForTimeout(1100);
 
-  await wakeLockPage
-    .getByRole('button', { name: 'Finish session' })
-    .click();
+  await wakeLockPage.getByRole('button', { name: 'Finish session' }).click();
   const finishNotice = wakeLockPage.locator('.message[role="status"]');
   const finishError = wakeLockPage.getByRole('alert');
   await Promise.race([
