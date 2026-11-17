@@ -43,7 +43,7 @@ The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Clou
 - Do not bind D1 to the existing production Worker until a separate migration and release approval is made.
 - Store the Better Auth secret and transactional email credentials in Wrangler/GitHub secret stores. No secret values belong in Git, browser bundles, CI logs or issue comments.
 - Email verification and password-reset messages require a real transactional email provider. The feature must remain clearly unavailable rather than pretending to send email when provider configuration is missing.
-- Use local-only test mail capture for automated tests; never expose verification/reset tokens in production responses or logs.
+- Do not use a real transactional email account in automated tests. The current tests cover configuration gates and schema presence only; a test mail sink and end-to-end verification/reset-token journeys remain required before production activation. Never expose verification/reset tokens in production responses or logs.
 
 ## Data and migration boundaries
 
