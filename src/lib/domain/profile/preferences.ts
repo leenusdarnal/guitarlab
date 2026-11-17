@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { practiceRoutineSchema } from '../learning/practice-routine';
 
 export const profilePreferencesSchema = z.object({
   schemaVersion: z.literal(1),
@@ -26,6 +27,7 @@ export const profilePreferencesSchema = z.object({
   // Retained for profile compatibility until schedule-aware planning is implemented.
   availableDays: z.array(z.number().int().min(0).max(6)).max(7),
   // Controls the teaching-section order in the authored lesson reader.
+  practiceRoutines: z.array(practiceRoutineSchema).max(12).default([]),
   lessonPresentation: z
     .enum([
       'balanced',
@@ -51,6 +53,7 @@ export function createEmptyProfilePreferences(): ProfilePreferences {
     goals: [],
     practiceMinutes: null,
     availableDays: [],
+    practiceRoutines: [],
     lessonPresentation: null
   };
 }
