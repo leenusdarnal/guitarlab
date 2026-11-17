@@ -21,16 +21,13 @@ server.stderr.on('data', (chunk) => {
 let browser;
 
 async function waitForProgressSummary(page, expectedLabel) {
-  await page.waitForFunction(
-    (expected) => {
-      const summary = document.querySelector('.progress-summary strong');
-      if (!summary) return false;
-      const bounds = summary.getBoundingClientRect();
-      const text = summary.textContent?.replace(/\\s+/g, ' ').trim() ?? '';
-      return bounds.width > 0 && bounds.height > 0 && text.includes(expected);
-    },
-    expectedLabel
-  );
+  await page.waitForFunction((expected) => {
+    const summary = document.querySelector('.progress-summary strong');
+    if (!summary) return false;
+    const bounds = summary.getBoundingClientRect();
+    const text = summary.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    return bounds.width > 0 && bounds.height > 0 && text.includes(expected);
+  }, expectedLabel);
 }
 
 try {
@@ -428,26 +425,27 @@ try {
     'true',
     `The second lesson block should update immediately while offline: ${JSON.stringify(offlineProgressState)}`
   );
-  await waitForProgressSummary(
-    page,
-    `2 of ${sectionCount} sections completed`
-  );
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.context().setOffline(false);
   await page.reload({ waitUntil: 'networkidle' });
-  await waitForProgressSummary(
-    page,
-    `2 of ${sectionCount} sections completed`
-  );
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {
     waitUntil: 'networkidle'
   });
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
-  await waitForProgressSummary(
-    page,
-    `2 of ${sectionCount} sections completed`
+  const completedLessonState = await page.evaluate(() => ({
+    progressSummary:
+      document.querySelector('.progress-summary strong')?.textContent?.trim() ?? null,
+    completionMessage:
+      document.querySelector('.progress-complete')?.textContent?.trim() ?? null
+  }));
+  console.log(
+    'Completed lesson progress state after reload:',
+    JSON.stringify(completedLessonState)
   );
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   assert.match(page.url(), /y1-w02-lesson/);
