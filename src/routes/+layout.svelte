@@ -8,6 +8,9 @@
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
   import MobileTabBar from '../lib/components/MobileTabBar.svelte';
+  import type { LayoutProps } from './$types';
+
+  let { data }: LayoutProps = $props();
 
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
@@ -158,7 +161,9 @@
       </nav>
 
       <div class="global-nav-actions">
-        <a class="account-link" href={resolve('/login')}>Sign in</a>
+        <a class="account-link" href={resolve(data.account ? '/account' : '/login')}>
+          {data.account ? 'Account' : 'Sign in'}
+        </a>
         <label class="theme-control">
           <span class="sr-only">Appearance</span>
           <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
@@ -197,7 +202,10 @@
         aria-current={currentPath.startsWith('/settings/data') ? 'page' : undefined}
         onclick={closeMobileMenu}
       ><span class="nav-icon" aria-hidden="true"><Icon name="download" size={18} /></span>Data &amp; backups</a>
-      <a href={resolve('/login')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="shield-check" size={18} /></span>Sign in</a>
+      <a href={resolve(data.account ? '/account' : '/login')} onclick={closeMobileMenu}>
+        <span class="nav-icon" aria-hidden="true"><Icon name="shield-check" size={18} /></span>
+        {data.account ? 'Account' : 'Sign in'}
+      </a>
     </nav>
   </header>
 {/if}

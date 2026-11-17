@@ -1,6 +1,6 @@
 # GuitarLab authentication decision
 
-**Status:** Runtime foundation implemented behind environment configuration; activation and end-to-end acceptance remain pending  
+**Status:** Runtime foundation, guest-first account UX and sign-out surface implemented; live email and deployment activation remain pending  
 **Date:** 2026-11-17  
 **Tracking:** [Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176)
 
@@ -55,7 +55,7 @@ The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Clou
 ## Delivery slices
 
 1. **Auth foundation (Issue #176):** dependency/API compatibility proof, schema and migration, server auth handler, environment configuration and secure session resolution.
-2. **Account UX:** sign-up, sign-in, verification pending/resend, reset password, logout and account settings, with a visible guest path.
+2. **Account UX:** sign-up, sign-in, verification pending/resend, reset password, account settings and sign-out, with a visible guest path. The sign-in and account surfaces are implemented; live email verification/reset journeys still require provider-backed acceptance.
 3. **Security and acceptance:** rate-limit/CSRF/origin tests, enumeration resistance, session expiry/revocation, browser journeys, export/deletion.
 4. **Separate M5 sync:** only after auth and deletion gates pass; outbox/idempotency/conflict and per-account ownership are a distinct milestone.
 

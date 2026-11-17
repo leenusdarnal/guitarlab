@@ -5,8 +5,17 @@ declare global {
     }
 
     interface Locals {
-      authUser: unknown;
-      authSession: unknown;
+      authUser: {
+        id: string;
+        name: string;
+        email: string;
+        emailVerified: boolean;
+      } | null;
+      authSession: {
+        id: string;
+        userId: string;
+        expiresAt: Date;
+      } | null;
     }
 
     interface Platform {
