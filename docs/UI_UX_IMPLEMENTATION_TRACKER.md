@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-02 / UX-06 regression fixes — mobile session-action reachability and 44px assessment controls (`fix/mobile-session-actions-and-assessment-targets`)
+**Active implementation:** UX-02 follow-up — interactive-control accessibility and 200%-zoom-equivalent reflow checks (PR #170)
 
 ---
 
@@ -120,7 +120,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-02 — Fix global accessibility and mobile interaction blockers
 
 **Priority:** P1  
-**Status:** IN PROGRESS — global focus/control improvements and the five-destination mobile tab bar (PRs #141, #159 and #166) are merged. PR #170 adds automated responsive/button-name/target-size checks; the 40px assessment-control issue found by that audit is being corrected. Actual keyboard-only, 200% browser zoom, physical-device and learner thumb-reach acceptance remain open under UX-14  
+**Status:** IN PROGRESS — global focus/control improvements and the five-destination mobile tab bar (PRs #141, #159 and #166) are merged. PR #170 adds automated responsive/button-name/target-size checks and keyboard-focus coverage; actual keyboard-only, 200% browser zoom, physical-device and learner thumb-reach acceptance remain open under UX-14  
 **Depends on:** UX-01 automated acceptance is complete; manual finder/device acceptance remains open  
 **Related findings:** X3, X4, X6, X7, X9, B2
 
@@ -132,7 +132,11 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Queue lesson-progress writes and keep section/checkpoint/note controls enabled while an ordinary save is in flight; avoid disabling the learner's current control (PR #141, automated rapid-edit regression added).
 - [x] Preserve focus during normal saves by removing save-time control disabling; focus after explicit view/route replacement remains subject to manual keyboard review.
 - [ ] Review icon-only controls for accessible names, hit area and visible focus.
+  - [x] Add browser acceptance that audits every visible button on core learner routes for an accessible name and a 44px minimum hit area in both themes and at responsive widths.
+  - [ ] Complete manual icon-only control and focus review with keyboard and assistive technology on physical devices.
 - [ ] Test keyboard-only operation and browser zoom at 200% without disabling user zoom.
+  - [x] Add a visible keyboard-focus assertion and a 640 CSS-pixel reflow check (the content width expected at 200% zoom on a 1280px desktop viewport). This is viewport-equivalent coverage, not a simulation of browser UI zoom.
+  - [ ] Verify actual 200% browser zoom and keyboard-only journeys manually on supported desktop/mobile browsers.
 
 **Acceptance:** no field triggers iOS-style focus zoom due to sub-16px text; skip navigation reaches the page content; all essential controls remain keyboard accessible and visually identifiable in both themes.
 
@@ -420,6 +424,8 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-17 | PR #170 adds responsive visible-button naming/44px target assertions, keyboard-focus and 640px zoom-equivalent reflow checks. Manual browser UI zoom and physical-device/screen-reader acceptance remain open. |
+| 2026-11-17 | Accessibility regression follow-up: all fretboard note buttons now use 44px × 44px targets with horizontal scrolling contained to the diagram; browser acceptance explicitly verifies the scrollable fretboard at narrow widths. |
 | 2026-11-17 | Corrective follow-up: move Finish/Pause directly below the active timer so primary actions remain above utility links and optional details; raise the StandardTuningAssessment answer/select controls to 44px after the responsive audit found a 40px answer button. Add viewport diagnostics to the session reachability regression. |
 | 2026-11-17 | Improved UX-06: added a Finish session action beside the active-session controls, linked to the existing review form so optional reflection/next-target fields and existing save semantics are preserved. Added mobile browser acceptance for initial-viewport reachability and form association. |
 | 2026-11-16 | Opened PR #166 for UX-02/UX-14: five labelled mobile primary tabs, secondary More navigation, device safe-area handling, bottom content clearance and automated keyboard/active-state/touch-target coverage. WebKit acceptance is configured for the core learner routes, subject to PR CI confirmation. Physical-device and learner testing remain open. |
