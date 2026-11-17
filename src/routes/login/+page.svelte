@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
-  import { authClient } from '#lib/auth-client';
+  import { authClient } from '../../lib/auth-client';
 
   import type { PageProps } from './$types';
 
