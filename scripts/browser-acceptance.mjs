@@ -1642,6 +1642,51 @@ try {
         startFailure.join(' | ')
     );
   }
+
+  // The learner must be able to finish from the active-session controls
+  // without scrolling past the exercise log and saved observation history.
+  await page.setViewportSize({ width: 390, height: 844 });
+  const finishSessionAction = page.locator(
+    '.session-actions button[form="finish-session-form"]'
+  );
+  assert.equal(await finishSessionAction.count(), 1);
+  assert.equal(await finishSessionAction.innerText(), 'Finish session');
+  const finishActionLayout = await finishSessionAction.evaluate((button) => {
+    const bounds = button.getBoundingClientRect();
+    const finishForm = document.getElementById('finish-session-form');
+    const exerciseLog = document.querySelector('.exercise-log');
+    return {
+      visibleInInitialViewport:
+        bounds.width > 0 &&
+        bounds.height > 0 &&
+        bounds.top >= 0 &&
+        bounds.bottom <= window.innerHeight,
+      associatedWithFinishForm: button.form === finishForm,
+      beforeExerciseLog:
+        exerciseLog !== null &&
+        Boolean(
+          button.compareDocumentPosition(exerciseLog) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        )
+    };
+  });
+  assert.equal(
+    finishActionLayout.associatedWithFinishForm,
+    true,
+    'The visible finish control must submit the existing session-review form.'
+  );
+  assert.equal(
+    finishActionLayout.beforeExerciseLog,
+    true,
+    'The finish control must appear before the long exercise log and observation history.'
+  );
+  assert.equal(
+    finishActionLayout.visibleInInitialViewport,
+    true,
+    'The finish control must be reachable in the initial mobile session viewport.'
+  );
+  await page.setViewportSize({ width: 1280, height: 720 });
+
   const authoredSessionLabel = await page
     .locator('.authored-session-link')
     .innerText();

@@ -740,6 +740,14 @@
           <a class="session-tool-link" href={resolve('/tools/metronome')} target="_blank" rel="noopener noreferrer">Open metronome in a new tab</a>
           <a class="session-tool-link" href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner in a new tab</a>
           <button
+            class="primary secondary session-finish-action"
+            type="submit"
+            form="finish-session-form"
+            disabled={saving || evidenceSaving}
+          >
+            Finish session
+          </button>
+          <button
             class="primary"
             type="button"
             onclick={togglePauseResume}
@@ -914,6 +922,7 @@
         </section>
 
         <form
+          id="finish-session-form"
           class="finish-form"
           onsubmit={(event) => {
             event.preventDefault();
@@ -1813,6 +1822,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+  }
+
+  .session-actions .primary {
+    margin-top: 0;
   }
 
   .wake-lock-hint {
