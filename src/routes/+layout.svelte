@@ -158,6 +158,7 @@
       </nav>
 
       <div class="global-nav-actions">
+        <a class="account-link" href={resolve('/login')}>Sign in</a>
         <label class="theme-control">
           <span class="sr-only">Appearance</span>
           <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
@@ -178,6 +179,7 @@
       aria-label="More navigation"
       hidden={!mobileMenuOpen}
     >
+      <a href={resolve('/login')} onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="user" size={18} /></span>Sign in</a>
       <a
         href={resolve('/repertoire')}
         aria-current={activeSection === 'songs' ? 'page' : undefined}
@@ -221,6 +223,9 @@
   .desktop-primary-navigation a:hover{background:var(--surface);color:var(--text)}
   .desktop-primary-navigation a.active{background:color-mix(in srgb,var(--primary) 13%,var(--surface));color:var(--primary)}
   .global-nav-actions{display:flex;align-items:center;gap:8px;flex:none}
+  .account-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:750;white-space:nowrap}
+  .account-link:hover{border-color:var(--primary);color:var(--primary)}
+  .account-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .theme-control select{min-height:44px;max-width:132px;padding:8px 28px 8px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .mobile-nav-trigger{display:none;align-items:center;gap:8px;min-height:44px;padding:8px 12px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:12px;font-weight:750;cursor:pointer}
@@ -232,7 +237,7 @@
   .mobile-more-navigation a:hover,.mobile-more-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{padding-inline:9px;font-size:12px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
   @media (min-width: 761px) {
     .global-nav.dashboard-mobile-only {

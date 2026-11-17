@@ -1,0 +1,5 @@
+# Copy this file to .dev.vars. Never commit real values.
+BETTER_AUTH_SECRET=replace-with-at-least-32-random-characters
+BETTER_AUTH_URL=http://localhost:8787
+RESEND_API_KEY=re_replace_with_a_real_resend_api_key
+AUTH_FROM_EMAIL=GuitarLab <auth@your-verified-domain.example>

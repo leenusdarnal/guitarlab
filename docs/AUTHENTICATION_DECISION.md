@@ -1,6 +1,6 @@
 # GuitarLab authentication decision
 
-**Status:** Accepted implementation direction for M5; runtime integration remains pending  
+**Status:** Runtime foundation implemented behind environment configuration; activation and end-to-end acceptance remain pending  
 **Date:** 2026-11-17  
 **Tracking:** [Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176)
 
@@ -15,7 +15,7 @@ References:
 - [Better Auth Cloudflare guide](https://better-auth.com/docs/guides/cloudflare)
 - [Better Auth configuration reference](https://better-auth.com/docs/reference/options)
 
-Before adding runtime dependencies, confirm the latest stable release, SvelteKit integration API, Cloudflare Workers compatibility and D1 adapter against the installed SvelteKit/Drizzle versions. Pin compatible versions and commit the generated lockfile; do not use beta APIs in production.
+The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Cloudflare D1 binding plus the documented SvelteKit hook integration. Keep this dependency pinned and verify its generated lockfile in CI; do not use the 1.8 beta APIs in production. Local setup and environment gates are documented in [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md).
 
 ## Product behaviour
 

@@ -34,7 +34,9 @@
     "deploy:preview": "wrangler deploy --config wrangler.preview.jsonc",
     "audio:evaluate-recordings": "node scripts/evaluate-pitch-recordings.mjs",
     "deploy:production:dry-run": "wrangler deploy --config wrangler.production.jsonc --dry-run",
-    "deploy:production": "wrangler deploy --config wrangler.production.jsonc"
+    "deploy:production": "wrangler deploy --config wrangler.production.jsonc",
+    "db:auth:migrate:local": "wrangler d1 migrations apply guitarlab-auth-local --local --migrations-dir drizzle/auth-migrations",
+    "db:auth:test:local": "node scripts/test-auth-db.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
@@ -59,6 +61,7 @@
   },
   "dependencies": {
     "zod": "^4.0.0",
-    "drizzle-orm": "^0.45.4"
+    "drizzle-orm": "^0.45.4",
+    "better-auth": "1.7.25"
   }
 }

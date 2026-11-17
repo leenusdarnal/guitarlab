@@ -94,6 +94,10 @@ jobs:
         id: apply-local-migrations
         run: npm run db:migrate:local
 
+      - name: Apply and verify the isolated auth D1 migration
+        if: ${{ !cancelled() && steps.apply-local-migrations.outcome == 'success' }}
+        run: npm run db:auth:migrate:local && npm run db:auth:test:local
+
       - name: Test local D1 integrity constraints
         if: ${{ !cancelled() && steps.apply-local-migrations.outcome == 'success' }}
         run: npm run db:test:local
