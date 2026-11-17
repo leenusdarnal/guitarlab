@@ -698,7 +698,9 @@ try {
       if (route === '/') {
         await assertDashboardTypography(page, 'desktop');
       }
-      for (const width of [360, 390, 768, 1280]) {
+      // 640 CSS px provides the reflow width expected at 200% zoom on a 1280px
+      // desktop viewport. This is viewport-equivalent coverage, not browser UI zoom.
+      for (const width of [360, 390, 640, 768, 1280]) {
         await page.setViewportSize({ width, height: 1000 });
         const responsiveTabVisibility = await page.evaluate(() => {
           const tabBar = document.querySelector('.mobile-tab-bar');
@@ -720,7 +722,30 @@ try {
             .map((control) =>
               Number.parseFloat(getComputedStyle(control).fontSize)
             )
-            .filter((fontSize) => fontSize < 16)
+            .filter((fontSize) => fontSize < 16),
+          visibleButtons: Array.from(document.querySelectorAll('button'))
+            .filter((button) => button.getClientRects().length > 0)
+            .map((button) => {
+              const labelledBy = button.getAttribute('aria-labelledby');
+              const referencedLabel = labelledBy
+                ? labelledBy
+                    .split(/\\s+/)
+                    .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+                    .join(' ')
+                    .trim()
+                : '';
+              const bounds = button.getBoundingClientRect();
+              return {
+                accessibleName:
+                  button.getAttribute('aria-label')?.trim() ||
+                  referencedLabel ||
+                  button.innerText?.trim() ||
+                  button.title?.trim() ||
+                  '',
+                width: bounds.width,
+                height: bounds.height
+              };
+            })
         }));
         assert.ok(
           responsiveLayout.content <= responsiveLayout.viewport,
@@ -730,6 +755,20 @@ try {
           responsiveLayout.undersizedControls,
           [],
           route + ' has text controls below 16px at ' + width + 'px in ' + theme
+        );
+        assert.deepEqual(
+          responsiveLayout.visibleButtons.filter(
+            (button) => !button.accessibleName
+          ),
+          [],
+          route + ' has a visible button without an accessible name at ' + width + 'px in ' + theme
+        );
+        assert.deepEqual(
+          responsiveLayout.visibleButtons.filter(
+            (button) => button.width < 44 || button.height < 44
+          ),
+          [],
+          route + ' has a visible button below the 44px target at ' + width + 'px in ' + theme
         );
       }
     }
@@ -869,6 +908,33 @@ try {
         await page.evaluate(() => document.activeElement?.tagName),
         'MAIN',
         'Skip navigation must focus the actual page main landmark'
+      );
+      await page.keyboard.press('Tab');
+      const keyboardFocus = await page.evaluate(() => {
+        const active = document.activeElement;
+        const style = active ? getComputedStyle(active) : null;
+        const bounds = active?.getBoundingClientRect();
+        return {
+          tagName: active?.tagName ?? '',
+          outlineStyle: style?.outlineStyle ?? '',
+          outlineWidth: Number.parseFloat(style?.outlineWidth ?? '0'),
+          visible: Boolean(bounds && bounds.width > 0 && bounds.height > 0)
+        };
+      });
+      assert.ok(
+        ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(
+          keyboardFocus.tagName
+        ),
+        'Tab must move from main content to a real interactive control'
+      );
+      assert.equal(
+        keyboardFocus.outlineStyle,
+        'solid',
+        'Keyboard navigation must expose a visible focus outline'
+      );
+      assert.ok(
+        keyboardFocus.outlineWidth >= 3 && keyboardFocus.visible,
+        'The keyboard-focused control must have a visible 3px focus indicator'
       );
     }
 
