@@ -18,7 +18,8 @@ export const lessonPresentationOptions = [
   {
     value: 'demonstration-first',
     label: 'Demonstration-first',
-    description: 'Start with a reference and guided steps before the explanation.'
+    description:
+      'Start with a reference and guided steps before the explanation.'
   },
   {
     value: 'text-first',
@@ -33,7 +34,8 @@ export const lessonPresentationOptions = [
   {
     value: 'song-first',
     label: 'Song-first',
-    description: 'Start with the musical application, then unpack how to play it.'
+    description:
+      'Start with the musical application, then unpack how to play it.'
   }
 ] as const satisfies ReadonlyArray<{
   value: LessonPresentation;
@@ -148,12 +150,14 @@ export function resolveLessonPresentation(
   return preference ?? 'balanced';
 }
 
-/** The reader uses CSS flex order so authored content and progress IDs stay unchanged. */
+/** Return a stable one-based position for a section in the selected teaching sequence. */
 export function getLessonPresentationSectionOrder(
   preference: ProfilePreferences['lessonPresentation'],
   section: LessonPresentationSection
 ): number {
-  return sectionSequences[resolveLessonPresentation(preference)].indexOf(section) + 1;
+  return (
+    sectionSequences[resolveLessonPresentation(preference)].indexOf(section) + 1
+  );
 }
 
 export function getLessonPresentationSectionSequence(
