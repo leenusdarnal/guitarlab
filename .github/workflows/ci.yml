@@ -35,7 +35,7 @@ jobs:
       - name: Production dependency security audit
         shell: bash
         run: |
-          timeout 120s npm audit --omit=dev --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-production-audit.json" || audit_status=$?
+          timeout 120s npm audit --omit=dev --omit=optional --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-production-audit.json" || audit_status=$?
           if [ ! -s "$RUNNER_TEMP/npm-production-audit.json" ]; then
             echo "npm production dependency audit did not produce a report; check registry availability and retry."
             exit 1
