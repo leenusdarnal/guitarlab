@@ -35,7 +35,7 @@
     "audio:evaluate-recordings": "node scripts/evaluate-pitch-recordings.mjs",
     "deploy:production:dry-run": "wrangler deploy --config wrangler.production.jsonc --dry-run",
     "deploy:production": "wrangler deploy --config wrangler.production.jsonc",
-    "db:auth:migrate:local": "wrangler d1 migrations apply guitarlab-auth-local --local --migrations-dir drizzle/auth-migrations",
+    "db:auth:migrate:local": "wrangler d1 migrations apply AUTH_DB --local",
     "db:auth:test:local": "node scripts/test-auth-db.mjs"
   },
   "devDependencies": {
