@@ -109,6 +109,19 @@ const practiceSessionSchema = z
           'An authored session exercise requires release, lesson and taxonomy version.'
       });
     }
+    if (session.routineSnapshot) {
+      const routineMinutes = session.routineSnapshot.exercises.reduce(
+        (total, exercise) => total + exercise.minutes,
+        0
+      );
+      if (session.plannedMinutes !== routineMinutes) {
+        context.addIssue({
+          code: 'custom',
+          path: ['plannedMinutes'],
+          message: 'The planned session duration must match the saved routine total.'
+        });
+      }
+    }
   });
 
 export const learnerBackupRecordsSchema = z
