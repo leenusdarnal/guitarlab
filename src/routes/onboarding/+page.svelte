@@ -228,4 +228,26 @@
   .form-actions button {
     min-height: 44px;
   }
+
+  /* Keep the preference form inside the narrowest supported viewport. */
+  .setup-page,
+  .setup-card,
+  .setup-card form,
+  .setup-card fieldset,
+  .choices,
+  .choices label {
+    min-width: 0;
+  }
+
+  .presentation-choice-copy {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 380px) {
+    .choices,
+    .choices.four {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
 </style>
