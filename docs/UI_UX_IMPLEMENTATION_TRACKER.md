@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-02 follow-up — interactive-control accessibility and 200%-zoom-equivalent reflow checks (PR #170)
+**Active implementation:** UX-03 theme-safe semantic colours in Practice Studio (`ux/03-practice-studio-semantic-colors`)
 
 ---
 
@@ -143,7 +143,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-03 — Make theme behaviour reliable
 
 **Priority:** P1  
-**Status:** IN PROGRESS — pre-paint theme setup and shared selector existed in the shell; PR #141 brings Today into the same three-state preference model  
+**Status:** IN PROGRESS — System/Light/Dark preference, pre-paint theme setup and browser theme metadata are implemented. The current UX-03 slice removes the final legacy colour fallbacks from Practice Studio and strengthens error-state contrast validation; a repository-wide component token audit remains open.  
 **Depends on:** UX-02  
 **Related findings:** X5
 
@@ -152,6 +152,8 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [x] Support System, Light and Dark preferences, with a safe fallback when storage is unavailable (PR #141 removes the dashboard's separate two-state model).
 - [x] Provide correct browser theme-colour metadata for both themes and update it when the theme changes (shared shell + dashboard selection, automated assertions in PR #141).
 - [ ] Replace hard-coded component colours with semantic tokens.
+  - [x] Remove 63 legacy hard-coded colour fallbacks from Practice Studio; its route styles now use the shared semantic theme tokens.
+  - [x] Extend contrast validation to cover danger-message text on raised surfaces and destructive-action labels in both themes.
 - [ ] Add and consistently use semantic text tokens for danger, primary and other coloured surfaces.
 - [ ] Fix the dark-theme reset-button contrast and the light-theme practice error-text contrast.
 - [x] Make the theme control announce its purpose and expose the selected System / Light / Dark preference through a labelled select.
@@ -424,6 +426,7 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
+| 2026-11-17 | UX-03 follow-up: removed 63 stale hard-coded colour fallbacks from Practice Studio and added CI guards for shared theme-token usage plus danger-message contrast on raised surfaces. Broader route token adoption and visual/device checks remain open. |
 | 2026-11-17 | PR #170 adds responsive visible-button naming/44px target assertions, keyboard-focus and 640px zoom-equivalent reflow checks. Manual browser UI zoom and physical-device/screen-reader acceptance remain open. |
 | 2026-11-17 | Accessibility regression follow-up: all fretboard note buttons now use 44px × 44px targets with horizontal scrolling contained to the diagram; browser acceptance explicitly verifies the scrollable fretboard at narrow widths. |
 | 2026-11-17 | Corrective follow-up: move Finish/Pause directly below the active timer so primary actions remain above utility links and optional details; raise the StandardTuningAssessment answer/select controls to 44px after the responsive audit found a 40px answer button. Add viewport diagnostics to the session reachability regression. |
