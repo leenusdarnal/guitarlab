@@ -386,11 +386,39 @@ try {
     'The final checkpoint choice must survive earlier in-flight saves'
   );
   await page.context().setOffline(true);
-  await page
-    .locator('.lesson-block')
-    .nth(1)
-    .getByRole('button', { name: 'Mark section complete' })
-    .click();
+  const secondBlock = page.locator('.lesson-block').nth(1);
+  const secondBlockButton = secondBlock.getByRole('button', {
+    name: 'Mark section complete'
+  });
+  await secondBlockButton.click();
+  const offlineProgressState = await page.evaluate(() => ({
+    isOnline: navigator.onLine,
+    progressSummary:
+      document.querySelector('.progress-summary')?.textContent?.trim() ?? null,
+    progressError:
+      document.querySelector('.progress-error')?.textContent?.trim() ?? null,
+    sectionButtons: Array.from(
+      document.querySelectorAll('.lesson-block .block-complete')
+    ).map((button) => ({
+      blockId: button.closest('.lesson-block')?.id ?? null,
+      pressed: button.getAttribute('aria-pressed'),
+      disabled: button.disabled
+    }))
+  }));
+  console.log(
+    'Offline lesson-progress state after marking the second section:',
+    JSON.stringify(offlineProgressState)
+  );
+  assert.equal(
+    offlineProgressState.isOnline,
+    false,
+    'The browser context should remain offline while saving local progress'
+  );
+  assert.equal(
+    offlineProgressState.sectionButtons[1]?.pressed,
+    'true',
+    `The second lesson block should update immediately while offline: ${JSON.stringify(offlineProgressState)}`
+  );
   await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
   await page.context().setOffline(false);
   await page.reload({ waitUntil: 'networkidle' });
