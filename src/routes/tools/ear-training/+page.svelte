@@ -5,9 +5,9 @@
   import { resolve } from '$app/paths';
   import Icon from '../../../lib/components/Icon.svelte';
   import {
+    recordActiveChordMovementRecognitionAssessment,
     recordActiveIntervalRecognitionAssessment,
-    recordActivePulseRecognitionAssessment,
-    recordActiveChordMovementRecognitionAssessment
+    recordActivePulseRecognitionAssessment
   } from '../../../lib/storage/assessment';
   import {
     createEarTrainingExercise,
@@ -290,7 +290,7 @@
       </p>
     {:else if (kind === 'pulse' || kind === 'interval' || kind === 'chord-movement') && evidenceSaveState === 'saved'}
       <p class="audio-caption" role="status">
-        {kind === 'pulse' ? 'Pulse' : 'Interval'} item evidence saved locally. This supporting probe does not establish skill mastery or playing ability.
+        {kind === 'pulse' ? 'Pulse' : kind === 'interval' ? 'Interval' : 'Chord movement'} item evidence saved locally. This supporting probe does not establish skill mastery or playing ability.
       </p>
     {:else if (kind === 'pulse' || kind === 'interval' || kind === 'chord-movement') && evidenceSaveState === 'error'}
       <p class="audio-error" role="alert">

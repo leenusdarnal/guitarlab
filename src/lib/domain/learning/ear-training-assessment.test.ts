@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { createEarTrainingExercise } from '../music/ear-training';
 import type { EarTrainingAnswer } from '../music/ear-training';
 import {
+  chordMovementRecognitionAssessment,
   intervalRecognitionAssessment,
   pulseRecognitionAssessment,
+  scoreChordMovementResponse,
   scoreIntervalRecognitionResponse,
   scorePulseRecognitionResponse
 } from './ear-training-assessment';
@@ -181,10 +183,8 @@ describe('pulse recognition assessment evidence', () => {
   });
 });
 
-
 describe('chord movement recognition assessment evidence', () => {
-  it('uses a versioned supporting-probe instrument without claiming playing mastery', async () => {
-    const { chordMovementRecognitionAssessment } = await import('./ear-training-assessment');
+  it('uses a versioned supporting-probe instrument without claiming playing mastery', () => {
     expect(chordMovementRecognitionAssessment).toEqual({
       definitionId: 'guitar.ear-training.chord-movement-recognition',
       definitionVersion: 1,
@@ -194,8 +194,7 @@ describe('chord movement recognition assessment evidence', () => {
     });
   });
 
-  it('records stable IV and V progression item identities and explicit responses', async () => {
-    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
+  it('records stable IV and V progression item identities and explicit responses', () => {
     for (const [sequence, answer] of [[0, 'subdominant'], [1, 'dominant']] as const) {
       const exercise = createEarTrainingExercise('chord-movement', sequence);
       const result = scoreChordMovementResponse(exercise, answer);
@@ -210,18 +209,19 @@ describe('chord movement recognition assessment evidence', () => {
           passThreshold: 100,
           decisionScope: 'supporting_probe'
         },
-        itemEvidence: [{
+        itemEvidence: [
+        {
           itemId: `chord-movement.${answer}-between-tonic`,
           response: answer,
           outcome: 'correct',
           responseSource: 'learner_selected_option'
-        }]
+        }
+      ]
       });
     }
   });
 
-  it('records an incorrect choice without inventing a confusion diagnosis', async () => {
-    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
+  it('records an incorrect choice without inventing a confusion diagnosis', () => {
     const exercise = createEarTrainingExercise('chord-movement', 0);
     const result = scoreChordMovementResponse(exercise, 'dominant');
     expect(result).toMatchObject({
@@ -236,15 +236,21 @@ describe('chord movement recognition assessment evidence', () => {
     expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
   });
 
-  it('rejects a non-chord exercise, invalid response, and unauthored answer', async () => {
-    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
-    expect(() => scoreChordMovementResponse(createEarTrainingExercise('pulse'), 'steady')).toThrow(
-      'Only chord-movement exercises'
-    );
-    expect(() => scoreChordMovementResponse(createEarTrainingExercise('chord-movement'), 'rising')).toThrow(
-      'not valid for this chord-movement item'
-    );
-    const invalid = { ...createEarTrainingExercise('chord-movement'), answer: 'rising' as EarTrainingAnswer };
+  it('rejects a non-chord exercise, invalid response, and unauthored answer', () => {
+    expect(
+      () => scoreChordMovementResponse(createEarTrainingExercise('pulse'), 'steady')
+    ).toThrow('Only chord-movement exercises');
+    expect(
+      () =>
+        scoreChordMovementResponse(
+          createEarTrainingExercise('chord-movement'),
+          'rising'
+        )
+    ).toThrow('not valid for this chord-movement item');
+    const invalid = {
+      ...createEarTrainingExercise('chord-movement'),
+      answer: 'rising' as EarTrainingAnswer
+    };
     expect(() => scoreChordMovementResponse(invalid, 'subdominant')).toThrow(
       'does not have an authored answer'
     );

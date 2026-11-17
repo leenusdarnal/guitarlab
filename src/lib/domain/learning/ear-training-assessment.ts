@@ -166,7 +166,6 @@ export function scorePulseRecognitionResponse(
   };
 }
 
-
 /**
  * Score the learner's explicit IV/V chord-function choice in a generated
  * I–IV–I or I–V–I progression. This is an auditory supporting probe only:
@@ -179,17 +178,16 @@ export function scoreChordMovementResponse(
   if (exercise.kind !== 'chord-movement') {
     throw new Error('Only chord-movement exercises can be scored here.');
   }
-  if (
-    exercise.answer !== 'subdominant' &&
-    exercise.answer !== 'dominant'
-  ) {
+  if (exercise.answer !== 'subdominant' && exercise.answer !== 'dominant') {
     throw new Error('The chord-movement item does not have an authored answer.');
   }
   if (
     (response !== 'subdominant' && response !== 'dominant') ||
     !exercise.choices.some((choice) => choice.value === response)
   ) {
-    throw new Error('The selected answer is not valid for this chord-movement item.');
+    throw new Error(
+      'The selected answer is not valid for this chord-movement item.'
+    );
   }
 
   const correct = response === exercise.answer;

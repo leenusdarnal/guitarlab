@@ -191,7 +191,12 @@ async function recordActiveEarTrainingProbe(
       findLesson: async () => null
     };
     const isCorrect = scored.itemEvidence[0].outcome === 'correct';
-    const label = exerciseKind === 'pulse' ? 'pulse' : exerciseKind === 'interval' ? 'interval' : 'chord-movement';
+    const label =
+      exerciseKind === 'pulse'
+        ? 'pulse'
+        : exerciseKind === 'interval'
+          ? 'interval'
+          : 'chord-movement';
 
     return await recordAssessmentAttempt(
       {
@@ -253,8 +258,9 @@ export async function recordActivePulseRecognitionAssessment(
   );
 }
 
-
-/** Append a supporting-probe outcome for the chord-movement listening exercise. */
+/**
+ * Append a supporting-probe outcome for the chord-movement listening exercise.
+ */
 export async function recordActiveChordMovementRecognitionAssessment(
   exercise: EarTrainingExercise,
   response: EarTrainingAnswer
