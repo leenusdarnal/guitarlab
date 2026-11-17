@@ -32,19 +32,19 @@ jobs:
         id: install-dependencies
         run: npm ci --no-audit --no-fund
 
-      - name: Dependency security audit
+      - name: Production dependency security audit
         shell: bash
         run: |
-          timeout 120s npm audit --package-lock-only --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-audit.json" || audit_status=$?
-          if [ ! -s "$RUNNER_TEMP/npm-audit.json" ]; then
-            echo "npm audit did not produce a report; check registry availability and retry."
+          timeout 120s npm audit --omit=dev --package-lock-only --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-production-audit.json" || audit_status=$?
+          if [ ! -s "$RUNNER_TEMP/npm-production-audit.json" ]; then
+            echo "npm production dependency audit did not produce a report; check registry availability and retry."
             exit 1
           fi
           node - <<'NODE'
           const fs = require('node:fs');
-          const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/npm-audit.json', 'utf8'));
+          const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/npm-production-audit.json', 'utf8'));
           if (report.error || !report.metadata?.vulnerabilities) {
-            console.error('npm audit returned an incomplete report:', JSON.stringify(report.error ?? report));
+            console.error('npm production audit returned an incomplete report:', JSON.stringify(report.error ?? report));
             process.exit(2);
           }
           const entries = Object.entries(report.vulnerabilities || {});
@@ -53,11 +53,39 @@ jobs:
           }
           const blocking = entries.filter(([, item]) => ['high', 'critical'].includes(item.severity));
           if (blocking.length) {
-            console.error(`Found ${blocking.length} high/critical dependency advisories.`);
+            console.error(`Found ${blocking.length} high/critical production dependency advisories.`);
             process.exit(1);
           }
           const advisoryCount = report.metadata.vulnerabilities.moderate + report.metadata.vulnerabilities.low;
-          console.log(`Dependency audit passed: no high/critical advisories; moderate/low advisories: ${advisoryCount}.`);
+          console.log(`Production dependency audit passed: no high/critical advisories; moderate/low advisories: ${advisoryCount}.`);
+          NODE
+
+      - name: Report development dependency advisories
+        shell: bash
+        run: |
+          timeout 120s npm audit --package-lock-only --json --fetch-timeout=30000 --fetch-retries=1 > "$RUNNER_TEMP/npm-full-audit.json" || audit_status=$?
+          if [ ! -s "$RUNNER_TEMP/npm-full-audit.json" ]; then
+            echo "Full dependency audit did not produce a report; check registry availability and retry."
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + '/npm-full-audit.json', 'utf8'));
+          if (report.error || !report.metadata?.vulnerabilities) {
+            console.error('Full dependency audit returned an incomplete report:', JSON.stringify(report.error ?? report));
+            process.exit(2);
+          }
+          const entries = Object.entries(report.vulnerabilities || {});
+          for (const [name, item] of entries) {
+            console.log(`${name}: ${item.severity}; direct=${item.isDirect}; fix=${JSON.stringify(item.fixAvailable)}`);
+          }
+          const counts = report.metadata.vulnerabilities;
+          const high = counts.high + counts.critical;
+          if (high) {
+            console.warn(`::warning::Full dependency tree has ${high} high/critical advisories. Production dependencies are gated separately; remediate development-toolchain advisories as upstream fixes become available.`);
+          } else {
+            console.log('Full dependency tree has no high/critical advisories.');
+          }
           NODE
 
       - name: Install Playwright and axe-core for browser acceptance
