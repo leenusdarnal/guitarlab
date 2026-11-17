@@ -83,7 +83,8 @@ M4.1 is merged in PR #29. M4.2 section progress and checkpoint completion are im
 - [x] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
-- [ ] Account registration/login, secure sessions and cloud sync when ready; these remain separate M5 follow-up work and are not enabled in the first local-first production release.
+- [ ] Account registration/login and secure sessions ([Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176); see [authentication decision](AUTHENTICATION_DECISION.md)); optional and separate from guest/local mode.
+- [ ] Outbox-based cloud sync, idempotency, conflict recovery and account-scoped data ownership; do not enable until account export/deletion and security gates pass.
 - [x] Local export and validated restore workflow; browser round-trip/rollback acceptance remains.
 
 ### M6 — Interactive music tools
