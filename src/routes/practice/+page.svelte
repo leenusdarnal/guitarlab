@@ -2345,7 +2345,196 @@
     outline-offset: 3px;
   }
 
+
+  .saved-routines {
+    margin: 24px 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-raised);
+  }
+
+  .routine-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    margin: 14px 0;
+    padding: 0;
+  }
+
+  .routine-list > li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  .routine-list > li.selected {
+    border-color: var(--primary);
+  }
+
+  .routine-summary {
+    min-width: 0;
+  }
+
+  .routine-summary > span,
+  .routine-summary p,
+  .routine-summary ol,
+  .routine-run > p:last-child {
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .routine-summary > span {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .routine-summary p {
+    margin: 6px 0;
+  }
+
+  .routine-summary ol {
+    margin: 8px 0 0;
+    padding-left: 20px;
+  }
+
+  .routine-summary ol li {
+    padding: 2px 0;
+  }
+
+  .routine-summary ol li span {
+    white-space: nowrap;
+  }
+
+  .routine-actions,
+  .routine-editor-actions,
+  .routine-order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .routine-editor {
+    display: grid;
+    gap: 9px;
+    padding-top: 18px;
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .routine-editor h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .routine-editor-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 0.88rem;
+  }
+
+  .routine-editor-heading span {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .routine-exercise-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 92px auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .routine-exercise-row label {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .routine-exercise-row input {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .routine-order-actions {
+    justify-content: end;
+    gap: 2px;
+  }
+
+  .routine-run {
+    margin: 18px 0;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+  }
+
+  .routine-run h3 {
+    margin: 6px 0 10px;
+  }
+
+  .routine-run ol {
+    display: grid;
+    gap: 8px;
+    padding-left: 22px;
+  }
+
+  .routine-run li {
+    padding-left: 4px;
+  }
+
+  .routine-run li span {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .routine-run li strong {
+    white-space: nowrap;
+  }
+
+  .routine-selected-note {
+    margin: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   @media (max-width: 600px) {
+
+    .routine-list > li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .routine-actions {
+      justify-content: flex-start;
+    }
+
+    .routine-exercise-row {
+      grid-template-columns: minmax(0, 1fr) 84px;
+    }
+
+    .routine-order-actions {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+
+
     .practice-page {
       padding: 20px 16px 48px;
     }
