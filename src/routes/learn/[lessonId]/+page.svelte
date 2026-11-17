@@ -1,16 +1,54 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { SvelteMap } from 'svelte/reactivity';
   import { resolve } from '$app/paths';
   import Icon from '../../../lib/components/Icon.svelte';
   import type { PageData } from './$types';
-  import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
+  import {
+    completeActiveLessonProgress,
+    loadActiveLearnerProfile,
+    loadActiveLessonProgress,
+    saveActiveLessonProgress
+  } from '../../../lib/storage/indexeddb';
   import type { LessonProgressRecord } from '../../../lib/repositories/contracts';
+  import {
+    getLessonPresentationSectionOrder,
+    lessonPresentationOptions,
+    resolveLessonPresentation,
+    type LessonPresentation
+  } from '../../../lib/domain/profile/lesson-presentation';
   import StandardTuningAssessment from '../../../lib/components/assessments/StandardTuningAssessment.svelte';
   import { standardTuningAssessment } from '../../../lib/domain/learning/standard-tuning-assessment';
 
   let { data }: { data: PageData } = $props();
   const lesson = $derived(data.detail.lesson);
   const curriculumReleaseId = 'curriculum-v1';
+  let lessonPresentation = $state<LessonPresentation>('balanced');
+  let presentationLoading = $state(true);
+  const presentationLabel = $derived(
+    lessonPresentationOptions.find((option) => option.value === lessonPresentation)?.label ??
+      'Balanced mix'
+  );
+
+  onMount(() => {
+    let active = true;
+    void loadActiveLearnerProfile()
+      .then((profile) => {
+        if (active) {
+          lessonPresentation = resolveLessonPresentation(profile.preferences.lessonPresentation);
+        }
+      })
+      .catch(() => {
+        // Balanced presentation is the safe fallback when local profile storage cannot be read.
+      })
+      .finally(() => {
+        if (active) presentationLoading = false;
+      });
+
+    return () => {
+      active = false;
+    };
+  });
   let progress = $state<LessonProgressRecord | null>(null);
   let progressLoading = $state(true);
   let progressSaving = $state(false);
@@ -255,6 +293,13 @@
       <span>{lesson.estimatedMinutes} min lesson guide</span>
       {#if lesson.startingTempoBpm}<span>{lesson.startingTempoBpm} BPM starting reference</span>{/if}
     </div>
+    {#if !presentationLoading}
+      <p class="presentation-note">
+        <span class="eyebrow">LESSON FORMAT</span>
+        <strong>{presentationLabel}</strong>
+        <a href={resolve('/onboarding')}>Change</a>
+      </p>
+    {/if}
     <div class="checkpoint">
       <span class="eyebrow">LESSON CHECKPOINT</span>
       <p>{lesson.checkpoint}</p>
@@ -263,15 +308,15 @@
   </header>
 
 
-  <nav class="lesson-outline" aria-label="Lesson sections">
-    <a href="#lesson-section-overview">Overview</a>
-    <a href="#lesson-section-key-idea">Key idea</a>
-    <a href="#lesson-section-demonstration">Demonstration</a>
-    <a href="#lesson-section-walkthrough">Walkthrough</a>
-    <a href="#lesson-section-exercises">Exercises</a>
-    <a href="#lesson-section-music">Make music</a>
-    <a href="#lesson-section-recall">Review</a>
-    <a href="#lesson-progress">My progress</a>
+  <nav class="lesson-outline" aria-label="Lesson sections" data-presentation={lessonPresentation}>
+    <a href="#lesson-section-overview" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'overview')}>Overview</a>
+    <a href="#lesson-section-key-idea" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'key-idea')}>Key idea</a>
+    <a href="#lesson-section-demonstration" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'demonstration')}>Demonstration</a>
+    <a href="#lesson-section-walkthrough" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'walkthrough')}>Walkthrough</a>
+    <a href="#lesson-section-exercises" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'exercises')}>Exercises</a>
+    <a href="#lesson-section-music" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'music')}>Make music</a>
+    <a href="#lesson-section-recall" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'recall')}>Review</a>
+    <a href="#lesson-progress" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'session')}>My progress</a>
   </nav>
 
 
@@ -281,14 +326,14 @@
   {/if}
 
   <div class="lesson-layout">
-    <article class="lesson-content">
-      <section class="content-section" id="lesson-section-overview">
+    <article class="lesson-content" data-presentation={lessonPresentation}>
+      <section class="content-section" id="lesson-section-overview" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'overview')}>
         <div class="kicker">01 · LEARN</div>
         <h2>What you will learn</h2>
         <ul>{#each lesson.learningObjectives as objective (objective)}<li>{objective}</li>{/each}</ul>
       </section>
 
-      <section class="content-section" id="lesson-section-prerequisites">
+      <section class="content-section" id="lesson-section-prerequisites" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'prerequisites')}>
         <div class="kicker">BEFORE YOU BEGIN</div>
         <h2>Prerequisites and refreshers</h2>
         {#if data.detail.prerequisiteReferences.length > 0}
@@ -306,7 +351,7 @@
         {/if}
       </section>
 
-      <section class="content-section" id="lesson-section-key-idea">
+      <section class="content-section" id="lesson-section-key-idea" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'key-idea')}>
         <div class="kicker">02 · UNDERSTAND</div>
         <h2>The key idea</h2>
         <p>{lesson.explanation.keyIdea}</p>
@@ -314,14 +359,14 @@
         <div class="worked-example"><span class="eyebrow">WORKED EXAMPLE</span><p>{lesson.explanation.workedExample}</p></div>
       </section>
 
-      <section class="content-section" id="lesson-section-demonstration">
+      <section class="content-section" id="lesson-section-demonstration" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'demonstration')}>
         <div class="kicker">03 · SEE / HEAR</div>
         <h2>Guided demonstration</h2>
         <p>{lesson.demonstrationOrReference.referenceSuggestion}</p>
         <ol>{#each lesson.demonstrationOrReference.steps as step, stepIndex (stepIndex)}<li>{step}</li>{/each}</ol>
       </section>
 
-      <section class="content-section" id="lesson-section-walkthrough">
+      <section class="content-section" id="lesson-section-walkthrough" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'walkthrough')}>
         <div class="kicker">04 · FOLLOW THE LESSON</div>
         <h2>Lesson walkthrough</h2>
         <div class="lesson-blocks">
@@ -343,7 +388,7 @@
         </div>
       </section>
 
-      <section class="content-section" id="lesson-section-exercises">
+      <section class="content-section" id="lesson-section-exercises" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'exercises')}>
         <div class="kicker">05 · PRACTISE</div>
         <h2>Focused exercises</h2>
         <aside class="lesson-adaptation" aria-label="A manageable alternative for this lesson">
@@ -377,7 +422,7 @@
         </div>
       </section>
 
-      <section class="content-section" id="lesson-section-music">
+      <section class="content-section" id="lesson-section-music" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'music')}>
         <div class="kicker">06 · MAKE MUSIC</div>
         <h2>Musical application</h2>
         <p>{lesson.musicalApplication.prompt}</p>
@@ -392,7 +437,7 @@
         {/if}
       </section>
 
-      <section class="content-section" id="lesson-section-success">
+      <section class="content-section" id="lesson-section-success" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'success')}>
         <div class="kicker">07 · CHECK YOURSELF</div>
         <h2>Success criteria</h2>
         <ul class="criteria">
@@ -402,7 +447,7 @@
         </ul>
       </section>
 
-      <section class="content-section" id="lesson-section-coaching">
+      <section class="content-section" id="lesson-section-coaching" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'coaching')}>
         <div class="kicker">COACHING NOTES</div>
         <h2>Common mistakes and corrections</h2>
         <div class="mistakes">
@@ -412,7 +457,7 @@
         </div>
       </section>
 
-      <section class="content-section" id="lesson-section-recall">
+      <section class="content-section" id="lesson-section-recall" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'recall')}>
         <div class="kicker">08 · REFLECT AND RETRIEVE</div>
         <h2>Recall without looking</h2>
         <ul>{#each lesson.retrievalPrompt as prompt (prompt)}<li>{prompt}</li>{/each}</ul>
@@ -422,7 +467,7 @@
         <p>{lesson.nextReviewSuggestion.adaptation}</p>
       </section>
 
-      <section class="content-section" id="lesson-section-session">
+      <section class="content-section" id="lesson-section-session" style:order={getLessonPresentationSectionOrder(lessonPresentation, 'session')}>
         <div class="kicker">FLEXIBLE PRACTICE</div>
         <h2>Choose a session size</h2>
         <div class="practice-options">
@@ -506,8 +551,13 @@
   .lesson-meta span{border:1px solid var(--border);border-radius:99px;padding:7px 10px;color:var(--muted);font-size:9px}
   .checkpoint{margin-top:21px;padding:19px 21px;border:1px solid color-mix(in srgb,var(--primary) 45%,var(--border));border-radius:var(--radius);background:color-mix(in srgb,var(--primary) 6%,var(--surface))}
   .checkpoint p{font:500 18px/1.45 Georgia,serif;margin:8px 0}.checkpoint small{font-size:10px;line-height:1.5;color:var(--muted)}
-  .lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:25px;align-items:start}.lesson-content{min-width:0}
-  .content-section{padding:26px 0;border-bottom:1px solid var(--border);scroll-margin-top:20px}
+  .lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:25px;align-items:start}
+  .lesson-content{min-width:0;display:flex;flex-direction:column}
+  .content-section{flex:none;width:100%;padding:26px 0;border-bottom:1px solid var(--border);scroll-margin-top:20px}
+  .presentation-note{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 22px;color:var(--muted);font-size:var(--font-size-supporting)}
+  .presentation-note .eyebrow{margin-right:3px}
+  .presentation-note strong{color:var(--text);font-weight:700}
+  .presentation-note a{color:var(--primary);font-weight:700;text-decoration:underline;text-underline-offset:3px}
   .content-section h2{font:500 25px/1.2 Georgia,serif;margin:8px 0 15px}.content-section h3{font-size:13px;margin:20px 0 9px}
   .content-section p,.content-section li{font-size:12px;line-height:1.8;color:var(--muted)}.content-section ul,.content-section ol{padding-left:21px}
   .worked-example,.success-target{padding:15px 17px;margin-top:15px;border:1px solid var(--border);border-radius:11px;background:var(--surface)}
