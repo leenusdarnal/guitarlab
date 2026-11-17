@@ -133,11 +133,11 @@ if (failures.length) {
   process.exit(1);
 }
 const legacyPracticeColorFallbacks = [
-  ...practiceRoute.matchAll(/var\\(\\s*--[\\w-]+\\s*,\\s*#[0-9a-fA-F]{3,8}\\s*\\)/g)
+  ...practiceRoute.matchAll(/var\(\s*--[\w-]+\s*,\s*#[0-9a-fA-F]{3,8}\s*\)/g)
 ];
 if (legacyPracticeColorFallbacks.length) {
   const locations = legacyPracticeColorFallbacks.map((match) => ({
-    line: practiceRoute.slice(0, match.index).split('\\n').length,
+    line: practiceRoute.slice(0, match.index).split('\n').length,
     value: match[0]
   }));
   console.error(
