@@ -28,11 +28,18 @@
     type AdaptivePracticeSnapshot
   } from '../../lib/application/adaptive-practice';
   import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
+  import {
+    createPracticeRoutineSnapshot,
+    practiceRoutineSchema,
+    type PracticeRoutine,
+    type PracticeRoutineExercise
+  } from '../../lib/domain/learning/practice-routine';
 
   import {
     loadActiveAdaptivePracticeSnapshot,
     loadActiveAdaptiveRecommendationFeedback,
     loadActiveLearnerProfile,
+    saveActiveLearnerPreferences,
     recordActiveAdaptiveRecommendationFeedback
   } from '../../lib/storage/indexeddb';
 
@@ -68,6 +75,16 @@
 
   const authoredPracticeScopes = listAuthoredPracticeScopes();
   let selectedAuthoredScopeKey = $state('');
+  let routines = $state<PracticeRoutine[]>([]);
+  let selectedRoutineId = $state<string | null>(null);
+  let editingRoutineId = $state<string | null>(null);
+  let routineName = $state('');
+  let routineFocus = $state('');
+  let routineExercises = $state<PracticeRoutineExercise[]>([]);
+  let routineSaving = $state(false);
+  let routineLoading = $state(true);
+  let routineError = $state('');
+  let routineNotice = $state('');
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
   let planContext = $state('');
@@ -110,6 +127,15 @@
       (session) =>
         session.status === 'in_progress' || session.status === 'paused'
     ) ?? null
+  );
+  const selectedRoutine = $derived(
+    routines.find((routine) => routine.id === selectedRoutineId) ?? null
+  );
+  const selectedRoutineMinutes = $derived(
+    selectedRoutine?.exercises.reduce((total, exercise) => total + exercise.minutes, 0) ?? 0
+  );
+  const routineDraftMinutes = $derived(
+    routineExercises.reduce((total, exercise) => total + exercise.minutes, 0)
   );
   const selectedAuthoredScope = $derived(
     authoredPracticeScopes.find(
@@ -291,11 +317,15 @@
 
     void loadActiveLearnerProfile()
       .then((profile) => {
+        routines = profile.preferences.practiceRoutines ?? [];
+        routineLoading = false;
         if (!hasRequestedMinutes) {
           plannedMinutes = profile.preferences.practiceMinutes ?? 20;
         }
       })
       .catch(() => {
+        routineLoading = false;
+        routineError = 'Saved routines could not be loaded from this device.';
         // Keep the safe 20-minute fallback when the local profile is unavailable.
       });
 
@@ -313,10 +343,129 @@
     historyDateRange = 'all';
   }
 
+
+  function resetRoutineEditor() {
+    editingRoutineId = null;
+    routineName = '';
+    routineFocus = '';
+    routineExercises = [];
+    routineError = '';
+  }
+
+  function editRoutine(routine: PracticeRoutine) {
+    editingRoutineId = routine.id;
+    routineName = routine.name;
+    routineFocus = routine.focus ?? '';
+    routineExercises = routine.exercises.map((exercise) => ({ ...exercise }));
+    routineError = '';
+  }
+
+  function addRoutineExercise() {
+    if (routineExercises.length >= 12) {
+      routineError = 'A routine can contain at most 12 exercises.';
+      return;
+    }
+    routineExercises = [
+      ...routineExercises,
+      { id: crypto.randomUUID(), name: '', minutes: 5 }
+    ];
+    routineError = '';
+  }
+
+  function removeRoutineExercise(exerciseId: string) {
+    routineExercises = routineExercises.filter((exercise) => exercise.id !== exerciseId);
+  }
+
+  function moveRoutineExercise(exerciseId: string, direction: -1 | 1) {
+    const index = routineExercises.findIndex((exercise) => exercise.id === exerciseId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= routineExercises.length) return;
+    const next = [...routineExercises];
+    [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+    routineExercises = next;
+  }
+
+  async function saveRoutine() {
+    routineError = '';
+    const existing = routines.find((routine) => routine.id === editingRoutineId);
+    const candidate = practiceRoutineSchema.safeParse({
+      id: existing?.id ?? crypto.randomUUID(),
+      name: routineName,
+      focus: routineFocus.trim() || null,
+      exercises: routineExercises,
+      createdAt: existing?.createdAt ?? Date.now(),
+      updatedAt: Date.now()
+    });
+    if (!candidate.success) {
+      routineError = candidate.error.issues[0]?.message ?? 'Review the routine details.';
+      return;
+    }
+
+    routineSaving = true;
+    try {
+      const profile = await loadActiveLearnerProfile();
+      const current = profile.preferences.practiceRoutines ?? [];
+      if (!existing && current.length >= 12) {
+        routineError = 'You can save up to 12 routines. Remove one before adding another.';
+        return;
+      }
+      const next = existing
+        ? current.map((routine) => routine.id === existing.id ? candidate.data : routine)
+        : [...current, candidate.data];
+      const updated = await saveActiveLearnerPreferences({
+        ...profile.preferences,
+        practiceRoutines: next
+      });
+      routines = updated.preferences.practiceRoutines ?? next;
+      resetRoutineEditor();
+      routineNotice = existing ? 'Routine updated on this device.' : 'Routine saved on this device.';
+    } catch (cause) {
+      routineError = cause instanceof Error ? cause.message : 'Could not save this routine.';
+    } finally {
+      routineSaving = false;
+    }
+  }
+
+  async function deleteRoutine(routineId: string) {
+    routineError = '';
+    routineSaving = true;
+    try {
+      const profile = await loadActiveLearnerProfile();
+      const next = (profile.preferences.practiceRoutines ?? []).filter(
+        (routine) => routine.id !== routineId
+      );
+      const updated = await saveActiveLearnerPreferences({
+        ...profile.preferences,
+        practiceRoutines: next
+      });
+      routines = updated.preferences.practiceRoutines ?? next;
+      if (selectedRoutineId === routineId) selectedRoutineId = null;
+      if (editingRoutineId === routineId) resetRoutineEditor();
+      routineNotice = 'Routine removed from this device.';
+    } catch (cause) {
+      routineError = cause instanceof Error ? cause.message : 'Could not remove this routine.';
+    } finally {
+      routineSaving = false;
+    }
+  }
+
+  function selectRoutine(routine: PracticeRoutine) {
+    selectedRoutineId = selectedRoutineId === routine.id ? null : routine.id;
+    if (selectedRoutineId) {
+      plannedMinutes = routine.exercises.reduce((total, exercise) => total + exercise.minutes, 0);
+      focus = routine.focus ?? routine.name;
+      selectedAuthoredScopeKey = '';
+    }
+  }
+
   async function startSession() {
     error = '';
     notice = '';
-    const minutes = plannedMinutes ?? null;
+    const routine = selectedRoutine;
+    const routineSnapshot = routine ? createPracticeRoutineSnapshot(routine) : null;
+    const minutes = routine
+      ? routineSnapshot!.exercises.reduce((total, exercise) => total + exercise.minutes, 0)
+      : (plannedMinutes ?? null);
     if (
       minutes !== null &&
       (!Number.isSafeInteger(minutes) || minutes < 5 || minutes > 180)
@@ -331,15 +480,17 @@
     try {
       await startActivePracticeSession({
         plannedMinutes: minutes,
-        focus: focus.trim() || null,
-        authoredPracticeScope: authoredScope
+        focus: (focus.trim() || routine?.name) ?? null,
+        authoredPracticeScope: routine ? null : authoredScope
           ? {
               curriculumReleaseId: PRACTICE_TAXONOMY_RELEASE_ID,
               lessonId: authoredScope.lessonId,
               exerciseId: authoredScope.exerciseId
             }
-          : null
+          : null,
+        routineSnapshot
       });
+      selectedRoutineId = null;
       exerciseName = authoredScope?.exerciseTitle ?? '';
       selectedAuthoredScopeKey = '';
       focus = '';
@@ -348,8 +499,9 @@
       await refresh();
       await tick();
       sessionHeading?.focus();
-      notice =
-        'Practice session started. Elapsed session time is tracked locally.';
+      notice = routine
+        ? `Practice session started with ${routine.name}. Follow the saved sequence; session time is tracked locally.`
+        : 'Practice session started. Elapsed session time is tracked locally.';
     } catch (cause) {
       error =
         cause instanceof Error
