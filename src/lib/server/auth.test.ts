@@ -11,23 +11,54 @@ const configuredEnvironment = {
 
 describe('isAuthConfigured', () => {
   it('fails closed when the dedicated auth database is absent', () => {
-    expect(isAuthConfigured({ ...configuredEnvironment, AUTH_DB: undefined })).toBe(false);
+    expect(
+      isAuthConfigured({ ...configuredEnvironment, AUTH_DB: undefined })
+    ).toBe(false);
   });
 
   it('requires a high-entropy secret', () => {
-    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_SECRET: 'too-short' })).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_SECRET: 'too-short'
+      })
+    ).toBe(false);
   });
 
   it('requires HTTPS for public origins and allows HTTP only for local development', () => {
-    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'guitarlab.example' })).toBe(false);
-    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'http://guitarlab.example' })).toBe(false);
-    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'https://guitarlab.example/path' })).toBe(false);
-    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'http://localhost:8787' })).toBe(true);
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'guitarlab.example'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'http://guitarlab.example'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'https://guitarlab.example/path'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'http://localhost:8787'
+      })
+    ).toBe(true);
   });
 
   it('requires a transactional email provider and sender', () => {
-    expect(isAuthConfigured({ ...configuredEnvironment, RESEND_API_KEY: undefined })).toBe(false);
-    expect(isAuthConfigured({ ...configuredEnvironment, AUTH_FROM_EMAIL: '  ' })).toBe(false);
+    expect(
+      isAuthConfigured({ ...configuredEnvironment, RESEND_API_KEY: undefined })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({ ...configuredEnvironment, AUTH_FROM_EMAIL: '  ' })
+    ).toBe(false);
   });
 
   it('accepts a fully configured isolated auth environment', () => {

@@ -8,9 +8,13 @@ export const handle: Handle = async ({ event, resolve }) => {
   const env = event.platform?.env;
 
   if (!building && env && isAuthConfigured(env)) {
-    const waitUntil = event.platform?.context?.waitUntil?.bind(event.platform.context);
+    const waitUntil = event.platform?.context?.waitUntil?.bind(
+      event.platform.context
+    );
     const auth = createAuth(env, waitUntil);
-    const session = await auth.api.getSession({ headers: event.request.headers });
+    const session = await auth.api.getSession({
+      headers: event.request.headers
+    });
 
     event.locals.authUser = session?.user ?? null;
     event.locals.authSession = session?.session ?? null;

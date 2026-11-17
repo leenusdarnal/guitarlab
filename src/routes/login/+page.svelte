@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import { page } from '$app/state';
   import { authClient } from '../../lib/auth-client';
 
@@ -53,7 +54,7 @@
           return;
         }
 
-        await goto('/');
+        await goto(resolve('/'));
         return;
       }
 
@@ -326,7 +327,7 @@
     {/if}
 
     <div class="guest-divider"><span>OR</span></div>
-    <a class="guest-action" href="/">Continue as guest</a>
+    <a class="guest-action" href={resolve('/')}>Continue as guest</a>
     <p class="privacy-note">
       Creating an account does not upload your existing practice history or local learner profile.
     </p>

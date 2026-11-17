@@ -32,7 +32,8 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
       url.hostname === '[::1]';
 
     return (
-      (url.protocol === 'https:' || (url.protocol === 'http:' && isLocalDevelopmentHost)) &&
+      (url.protocol === 'https:' ||
+        (url.protocol === 'http:' && isLocalDevelopmentHost)) &&
       url.pathname === '/' &&
       !url.search &&
       !url.hash &&
