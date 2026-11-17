@@ -1666,7 +1666,7 @@ try {
         exerciseLog !== null &&
         Boolean(
           button.compareDocumentPosition(exerciseLog) &
-            Node.DOCUMENT_POSITION_FOLLOWING
+          Node.DOCUMENT_POSITION_FOLLOWING
         )
     };
   });
