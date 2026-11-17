@@ -31,6 +31,7 @@ function makeBackup(): LearnerBackup {
           goals: ['all-round-musician'],
           practiceMinutes: 20,
           availableDays: [],
+          practiceRoutines: [],
           lessonPresentation: null
         },
         createdAt: 1_800_000_000_000,
@@ -489,5 +490,79 @@ describe('learner backup contract', () => {
     expect(createRestorePreview(incoming, null).replacesActiveProfile).toBe(
       false
     );
+  });
+
+  it('round-trips saved routines and the exact routine sequence used by a session', () => {
+    const backup = makeBackup();
+    const routine = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Balanced daily practice',
+      focus: 'Steady fundamentals',
+      exercises: [
+        {
+          id: '22222222-2222-4222-8222-222222222222',
+          name: 'Warm-up',
+          minutes: 5
+        },
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          name: 'Chord changes',
+          minutes: 10
+        }
+      ],
+      createdAt: 1_800_000_000_000,
+      updatedAt: 1_800_000_000_000
+    };
+    const snapshot = {
+      id: routine.id,
+      name: routine.name,
+      exercises: routine.exercises
+    };
+    backup.records.profile.preferences.practiceRoutines = [routine];
+    backup.records.practiceSessions.push({
+      id: 'b1b1b1b1-1111-4111-8111-111111111111',
+      learnerId,
+      primaryCurriculumReleaseId: null,
+      primaryLessonId: null,
+      status: 'completed',
+      plannedMinutes: 15,
+      actualDurationSeconds: 900,
+      focus: 'Balanced daily practice',
+      difficulty: null,
+      reflection: null,
+      startedAt: 1_800_000_000_000,
+      endedAt: 1_800_000_900_000,
+      createdAt: 1_800_000_000_000,
+      updatedAt: 1_800_000_900_000,
+      routineSnapshot: snapshot
+    });
+
+    expect(parseLearnerBackup(backup)).toMatchObject({
+      success: true,
+      data: {
+        records: {
+          profile: { preferences: { practiceRoutines: [routine] } },
+          practiceSessions: [{ routineSnapshot: snapshot }]
+        }
+      }
+    });
+
+    const inconsistent = structuredClone(backup);
+    inconsistent.records.practiceSessions[0].plannedMinutes = 14;
+    expect(parseLearnerBackup(inconsistent)).toMatchObject({ success: false });
+  });
+
+  it('defaults missing routine preferences when reading an older local backup', () => {
+    const legacy = makeBackup();
+    const legacyRecords = legacy as unknown as Record<string, unknown>;
+    const records = legacyRecords.records as Record<string, unknown>;
+    const profile = records.profile as Record<string, unknown>;
+    const preferences = profile.preferences as Record<string, unknown>;
+    delete preferences.practiceRoutines;
+
+    expect(parseLearnerBackup(legacy)).toMatchObject({
+      success: true,
+      data: { records: { profile: { preferences: { practiceRoutines: [] } } } }
+    });
   });
 });

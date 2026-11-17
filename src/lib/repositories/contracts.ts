@@ -4,6 +4,7 @@ import type { AdaptiveRecommendationFeedbackRecord } from '../domain/learning/ad
 import type { PracticeEvidenceInput } from '../domain/learning/practice-evidence';
 import type { SkillMasteryUpdate } from '../domain/learning/mastery';
 import type { ProfilePreferences } from '../domain/profile/preferences';
+import type { PracticeRoutineSnapshot } from '../domain/learning/practice-routine';
 
 /** Public, versioned curriculum metadata. Lesson bodies remain in Git JSON. */
 export type CurriculumReleaseRecord = {
@@ -103,6 +104,8 @@ export type PracticeSessionRecord = {
   reflection: string | null;
   /** Learner-selected next practice target; optional for pre-M7 rows. */
   nextTarget?: string | null;
+  /** Immutable ordered plan copied from a saved routine when the session starts. */
+  routineSnapshot?: PracticeRoutineSnapshot | null;
   startedAt: number;
   endedAt: number | null;
   createdAt: number;

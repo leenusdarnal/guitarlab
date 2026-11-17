@@ -5,6 +5,7 @@ import { profilePreferencesSchema } from '../domain/profile/preferences';
 import { practiceEvidenceInputSchema } from '../domain/learning/practice-evidence';
 import { adaptiveRecommendationFeedbackSchema } from '../domain/learning/adaptive-recommendation-feedback';
 import { songProjectRecordSchema } from '../domain/repertoire/song-project';
+import { practiceRoutineSnapshotSchema } from '../domain/learning/practice-routine';
 
 export const LEARNER_BACKUP_FORMAT = 'guitarlab-learner-backup' as const;
 export const LEARNER_BACKUP_VERSION = 1 as const;
@@ -86,6 +87,7 @@ const practiceSessionSchema = z
     difficulty: z.number().int().min(1).max(5).nullable(),
     reflection: z.string().max(2000).nullable(),
     nextTarget: z.string().max(1000).nullable().optional(),
+    routineSnapshot: practiceRoutineSnapshotSchema.nullable().optional(),
     startedAt: timestamp,
     endedAt: timestamp.nullable(),
     createdAt: timestamp,
@@ -106,6 +108,27 @@ const practiceSessionSchema = z
         message:
           'An authored session exercise requires release, lesson and taxonomy version.'
       });
+    }
+    if (session.routineSnapshot && hasExercise) {
+      context.addIssue({
+        code: 'custom',
+        path: ['primaryExerciseId'],
+        message: 'A routine session cannot be linked to one authored exercise.'
+      });
+    }
+    if (session.routineSnapshot) {
+      const routineMinutes = session.routineSnapshot.exercises.reduce(
+        (total, exercise) => total + exercise.minutes,
+        0
+      );
+      if (session.plannedMinutes !== routineMinutes) {
+        context.addIssue({
+          code: 'custom',
+          path: ['plannedMinutes'],
+          message:
+            'The planned session duration must match the saved routine total.'
+        });
+      }
     }
   });
 

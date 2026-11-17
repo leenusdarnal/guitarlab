@@ -33,6 +33,16 @@ describe('learner profile preferences', () => {
     );
   });
 
+  it('accepts legacy profile preferences without a routines field', () => {
+    const { practiceRoutines, ...legacyPreferences } =
+      createEmptyProfilePreferences();
+
+    expect(practiceRoutines).toEqual([]);
+    expect(
+      profilePreferencesSchema.parse(legacyPreferences).practiceRoutines
+    ).toEqual([]);
+  });
+
   it('rejects invalid practice durations', () => {
     const result = profilePreferencesSchema.safeParse({
       ...createEmptyProfilePreferences(),
@@ -40,5 +50,29 @@ describe('learner profile preferences', () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it('rejects duplicate identifiers in saved routine collections', () => {
+    const preferences = createEmptyProfilePreferences();
+    const routine = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Daily practice',
+      focus: null,
+      exercises: [
+        {
+          id: '22222222-2222-4222-8222-222222222222',
+          name: 'Warm-up',
+          minutes: 5
+        }
+      ],
+      createdAt: 100,
+      updatedAt: 100
+    };
+    preferences.practiceRoutines = [
+      routine,
+      { ...routine, name: 'Another routine' }
+    ];
+
+    expect(profilePreferencesSchema.safeParse(preferences).success).toBe(false);
   });
 });

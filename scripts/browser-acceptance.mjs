@@ -1617,6 +1617,94 @@ try {
   );
   await fretboardMobileContext.close();
 
+  // M7.3 saved routines: CRUD, authored sequence order, reuse and session snapshot recovery.
+  await page.goto(origin + '/practice', { waitUntil: 'networkidle' });
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
+    .waitFor();
+  await page.locator('#routine-name').fill('Browser routine acceptance');
+  await page.locator('#routine-focus').fill('Practice in a consistent order');
+  await page.getByRole('button', { name: 'Add exercise' }).click();
+  await page.getByRole('button', { name: 'Add exercise' }).click();
+  await page.getByLabel('Exercise 1 name').fill('Chord changes');
+  await page.getByLabel('Minutes for exercise 1').fill('2');
+  await page.getByLabel('Exercise 2 name').fill('Relaxed warm-up');
+  await page.getByLabel('Minutes for exercise 2').fill('3');
+  await page.getByRole('button', { name: 'Move exercise 2 up' }).click();
+  await page.getByRole('button', { name: 'Save routine' }).click();
+
+  const savedRoutine = page.locator('.routine-list > li').filter({
+    hasText: 'Browser routine acceptance'
+  });
+  await savedRoutine.waitFor();
+  const savedSequence = await savedRoutine.locator('ol').innerText();
+  assert.ok(
+    savedSequence.indexOf('Relaxed warm-up') <
+      savedSequence.indexOf('Chord changes'),
+    'The saved routine must retain the learner-selected exercise order'
+  );
+  assert.match(await savedRoutine.innerText(), /5 minutes/);
+
+  await savedRoutine.getByRole('button', { name: 'Use routine' }).click();
+  assert.equal(await page.locator('#duration').inputValue(), '5');
+  assert.equal(
+    await page.locator('#duration').isDisabled(),
+    true,
+    'A selected routine controls the session duration'
+  );
+  await page.getByRole('button', { name: 'Start practice' }).click();
+  const routineSnapshot = page.locator('.routine-run');
+  await routineSnapshot.waitFor();
+  const snapshotSequence = await routineSnapshot.locator('ol').innerText();
+  assert.ok(
+    snapshotSequence.indexOf('Relaxed warm-up') <
+      snapshotSequence.indexOf('Chord changes'),
+    'The active session must use the saved routine order'
+  );
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.locator('.routine-run').waitFor();
+  assert.equal(
+    await page.locator('.routine-run ol').innerText(),
+    snapshotSequence,
+    'The session routine snapshot must survive a reload'
+  );
+  await page.waitForTimeout(1_100);
+  await page.getByRole('button', { name: 'Finish session' }).click();
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
+    .waitFor();
+
+  const routineToEdit = page.locator('.routine-list > li').filter({
+    hasText: 'Browser routine acceptance'
+  });
+  await routineToEdit.getByRole('button', { name: 'Edit' }).click();
+  await page.locator('#routine-name').fill('Browser routine acceptance edited');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+
+  const reusableRoutine = page.locator('.routine-list > li').filter({
+    hasText: 'Browser routine acceptance edited'
+  });
+  await reusableRoutine.getByRole('button', { name: 'Use routine' }).click();
+  assert.equal(await page.locator('#duration').inputValue(), '5');
+  await page.getByRole('button', { name: 'Start practice' }).click();
+  await page.locator('.routine-run').waitFor();
+  await page.waitForTimeout(1_100);
+  await page.getByRole('button', { name: 'Finish session' }).click();
+  await page
+    .getByRole('heading', { name: 'Start a practice session' })
+    .waitFor();
+
+  await page
+    .locator('.routine-list > li')
+    .filter({ hasText: 'Browser routine acceptance edited' })
+    .getByRole('button', { name: 'Delete' })
+    .click();
+  await page
+    .getByText(
+      'No saved routines yet. Build one below, or start a one-off session.'
+    )
+    .waitFor();
+
   // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
   await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
   await page
@@ -1842,12 +1930,18 @@ try {
   await page
     .locator('#next-target')
     .fill('Repeat the G major scale at 72 BPM for three minutes.');
-  await page.getByRole('button', { name: 'Finish and save session' }).click();
+  await page.getByRole('button', { name: 'Finish session' }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'Elapsed session time is activity history' })
     .waitFor();
-  await page.getByText('completed', { exact: true }).waitFor();
+  await page
+    .locator('.history-item')
+    .filter({
+      hasText: 'The scale felt steadier when I kept my wrist relaxed.'
+    })
+    .getByText('completed', { exact: true })
+    .waitFor();
   await page
     .getByText('The scale felt steadier when I kept my wrist relaxed.')
     .waitFor();
@@ -1969,9 +2063,7 @@ try {
   // Session storage intentionally rejects sessions shorter than one second.
   await wakeLockPage.waitForTimeout(1100);
 
-  await wakeLockPage
-    .getByRole('button', { name: 'Finish and save session' })
-    .click();
+  await wakeLockPage.getByRole('button', { name: 'Finish session' }).click();
   const finishNotice = wakeLockPage.locator('.message[role="status"]');
   const finishError = wakeLockPage.getByRole('alert');
   await Promise.race([
@@ -2033,15 +2125,17 @@ try {
     .waitFor();
   await page.locator('#history-date-range').selectOption('all');
 
-  await page
+  const authoredHistoryItem = page
+    .locator('.history-item')
+    .filter({ hasText: 'Browser acceptance scale drill' });
+  await authoredHistoryItem
     .getByRole('button', { name: 'Show exercise observations' })
-    .first()
     .click();
-  await page
+  await authoredHistoryItem
     .locator('.history-evidence')
     .getByText('G major scale', { exact: true })
     .waitFor();
-  await page.getByText(/\d+ sec/).waitFor();
+  await authoredHistoryItem.getByText(/\d+ sec/).waitFor();
 
   // Two tabs share the same IndexedDB database. Concurrent starts must
   // serialize so exactly one tab can create the learner's active session.

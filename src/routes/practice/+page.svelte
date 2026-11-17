@@ -28,11 +28,18 @@
     type AdaptivePracticeSnapshot
   } from '../../lib/application/adaptive-practice';
   import type { AdaptiveRecommendationFeedbackRecord } from '../../lib/repositories/contracts';
+  import {
+    createPracticeRoutineSnapshot,
+    practiceRoutineSchema,
+    type PracticeRoutine,
+    type PracticeRoutineExercise
+  } from '../../lib/domain/learning/practice-routine';
 
   import {
     loadActiveAdaptivePracticeSnapshot,
     loadActiveAdaptiveRecommendationFeedback,
     loadActiveLearnerProfile,
+    saveActiveLearnerPreferences,
     recordActiveAdaptiveRecommendationFeedback
   } from '../../lib/storage/indexeddb';
 
@@ -68,6 +75,16 @@
 
   const authoredPracticeScopes = listAuthoredPracticeScopes();
   let selectedAuthoredScopeKey = $state('');
+  let routines = $state<PracticeRoutine[]>([]);
+  let selectedRoutineId = $state<string | null>(null);
+  let editingRoutineId = $state<string | null>(null);
+  let routineName = $state('');
+  let routineFocus = $state('');
+  let routineExercises = $state<PracticeRoutineExercise[]>([]);
+  let routineSaving = $state(false);
+  let routineLoading = $state(true);
+  let routineError = $state('');
+  let routineNotice = $state('');
   let plannedMinutes = $state<number | undefined>(20);
   let focus = $state('');
   let planContext = $state('');
@@ -110,6 +127,15 @@
       (session) =>
         session.status === 'in_progress' || session.status === 'paused'
     ) ?? null
+  );
+  const selectedRoutine = $derived(
+    routines.find((routine) => routine.id === selectedRoutineId) ?? null
+  );
+  const selectedRoutineMinutes = $derived(
+    selectedRoutine?.exercises.reduce((total, exercise) => total + exercise.minutes, 0) ?? 0
+  );
+  const routineDraftMinutes = $derived(
+    routineExercises.reduce((total, exercise) => total + exercise.minutes, 0)
   );
   const selectedAuthoredScope = $derived(
     authoredPracticeScopes.find(
@@ -291,11 +317,15 @@
 
     void loadActiveLearnerProfile()
       .then((profile) => {
+        routines = profile.preferences.practiceRoutines ?? [];
+        routineLoading = false;
         if (!hasRequestedMinutes) {
           plannedMinutes = profile.preferences.practiceMinutes ?? 20;
         }
       })
       .catch(() => {
+        routineLoading = false;
+        routineError = 'Saved routines could not be loaded from this device.';
         // Keep the safe 20-minute fallback when the local profile is unavailable.
       });
 
@@ -313,10 +343,129 @@
     historyDateRange = 'all';
   }
 
+
+  function resetRoutineEditor() {
+    editingRoutineId = null;
+    routineName = '';
+    routineFocus = '';
+    routineExercises = [];
+    routineError = '';
+  }
+
+  function editRoutine(routine: PracticeRoutine) {
+    editingRoutineId = routine.id;
+    routineName = routine.name;
+    routineFocus = routine.focus ?? '';
+    routineExercises = routine.exercises.map((exercise) => ({ ...exercise }));
+    routineError = '';
+  }
+
+  function addRoutineExercise() {
+    if (routineExercises.length >= 12) {
+      routineError = 'A routine can contain at most 12 exercises.';
+      return;
+    }
+    routineExercises = [
+      ...routineExercises,
+      { id: crypto.randomUUID(), name: '', minutes: 5 }
+    ];
+    routineError = '';
+  }
+
+  function removeRoutineExercise(exerciseId: string) {
+    routineExercises = routineExercises.filter((exercise) => exercise.id !== exerciseId);
+  }
+
+  function moveRoutineExercise(exerciseId: string, direction: -1 | 1) {
+    const index = routineExercises.findIndex((exercise) => exercise.id === exerciseId);
+    const nextIndex = index + direction;
+    if (index < 0 || nextIndex < 0 || nextIndex >= routineExercises.length) return;
+    const next = [...routineExercises];
+    [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+    routineExercises = next;
+  }
+
+  async function saveRoutine() {
+    routineError = '';
+    const existing = routines.find((routine) => routine.id === editingRoutineId);
+    const candidate = practiceRoutineSchema.safeParse({
+      id: existing?.id ?? crypto.randomUUID(),
+      name: routineName,
+      focus: routineFocus.trim() || null,
+      exercises: routineExercises,
+      createdAt: existing?.createdAt ?? Date.now(),
+      updatedAt: Date.now()
+    });
+    if (!candidate.success) {
+      routineError = candidate.error.issues[0]?.message ?? 'Review the routine details.';
+      return;
+    }
+
+    routineSaving = true;
+    try {
+      const profile = await loadActiveLearnerProfile();
+      const current = profile.preferences.practiceRoutines ?? [];
+      if (!existing && current.length >= 12) {
+        routineError = 'You can save up to 12 routines. Remove one before adding another.';
+        return;
+      }
+      const next = existing
+        ? current.map((routine) => routine.id === existing.id ? candidate.data : routine)
+        : [...current, candidate.data];
+      const updated = await saveActiveLearnerPreferences({
+        ...profile.preferences,
+        practiceRoutines: next
+      });
+      routines = updated.preferences.practiceRoutines ?? next;
+      resetRoutineEditor();
+      routineNotice = existing ? 'Routine updated on this device.' : 'Routine saved on this device.';
+    } catch (cause) {
+      routineError = cause instanceof Error ? cause.message : 'Could not save this routine.';
+    } finally {
+      routineSaving = false;
+    }
+  }
+
+  async function deleteRoutine(routineId: string) {
+    routineError = '';
+    routineSaving = true;
+    try {
+      const profile = await loadActiveLearnerProfile();
+      const next = (profile.preferences.practiceRoutines ?? []).filter(
+        (routine) => routine.id !== routineId
+      );
+      const updated = await saveActiveLearnerPreferences({
+        ...profile.preferences,
+        practiceRoutines: next
+      });
+      routines = updated.preferences.practiceRoutines ?? next;
+      if (selectedRoutineId === routineId) selectedRoutineId = null;
+      if (editingRoutineId === routineId) resetRoutineEditor();
+      routineNotice = 'Routine removed from this device.';
+    } catch (cause) {
+      routineError = cause instanceof Error ? cause.message : 'Could not remove this routine.';
+    } finally {
+      routineSaving = false;
+    }
+  }
+
+  function selectRoutine(routine: PracticeRoutine) {
+    selectedRoutineId = selectedRoutineId === routine.id ? null : routine.id;
+    if (selectedRoutineId) {
+      plannedMinutes = routine.exercises.reduce((total, exercise) => total + exercise.minutes, 0);
+      focus = routine.focus ?? routine.name;
+      selectedAuthoredScopeKey = '';
+    }
+  }
+
   async function startSession() {
     error = '';
     notice = '';
-    const minutes = plannedMinutes ?? null;
+    const routine = selectedRoutine;
+    const routineSnapshot = routine ? createPracticeRoutineSnapshot(routine) : null;
+    const minutes = routine
+      ? routineSnapshot!.exercises.reduce((total, exercise) => total + exercise.minutes, 0)
+      : (plannedMinutes ?? null);
     if (
       minutes !== null &&
       (!Number.isSafeInteger(minutes) || minutes < 5 || minutes > 180)
@@ -331,15 +480,17 @@
     try {
       await startActivePracticeSession({
         plannedMinutes: minutes,
-        focus: focus.trim() || null,
-        authoredPracticeScope: authoredScope
+        focus: (focus.trim() || routine?.name) ?? null,
+        authoredPracticeScope: routine ? null : authoredScope
           ? {
               curriculumReleaseId: PRACTICE_TAXONOMY_RELEASE_ID,
               lessonId: authoredScope.lessonId,
               exerciseId: authoredScope.exerciseId
             }
-          : null
+          : null,
+        routineSnapshot
       });
+      selectedRoutineId = null;
       exerciseName = authoredScope?.exerciseTitle ?? '';
       selectedAuthoredScopeKey = '';
       focus = '';
@@ -348,8 +499,9 @@
       await refresh();
       await tick();
       sessionHeading?.focus();
-      notice =
-        'Practice session started. Elapsed session time is tracked locally.';
+      notice = routine
+        ? `Practice session started with ${routine.name}. Follow the saved sequence; session time is tracked locally.`
+        : 'Practice session started. Elapsed session time is tracked locally.';
     } catch (cause) {
       error =
         cause instanceof Error
@@ -746,6 +898,21 @@
         {#if activeSession.plannedMinutes}
           <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
         {/if}
+        {#if activeSession.routineSnapshot}
+          <section class="routine-run" aria-labelledby="routine-run-heading">
+            <p class="eyebrow">SAVED ROUTINE · SESSION SNAPSHOT</p>
+            <h3 id="routine-run-heading">{activeSession.routineSnapshot.name}</h3>
+            <ol>
+              {#each activeSession.routineSnapshot.exercises as exercise (exercise.id)}
+                <li>
+                  <span>{exercise.name}</span>
+                  <strong>{exercise.minutes} min</strong>
+                </li>
+              {/each}
+            </ol>
+            <p class="muted">This is the sequence and timing saved when the session began. It remains unchanged if you edit the reusable routine later.</p>
+          </section>
+        {/if}
         {#if activeSession.primaryExerciseId}
           <p class="authored-session-link">
             <strong>Linked exercise:</strong>
@@ -969,6 +1136,92 @@
       {:else}
         <h2 id="session-heading">Start a practice session</h2>
         <p class="muted">Choose a duration and focus. Nothing is recorded until you start.</p>
+        <section class="saved-routines" aria-labelledby="saved-routines-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">REUSABLE PRACTICE</p>
+              <h3 id="saved-routines-heading">Your practice routines</h3>
+            </div>
+            <span class="count">{routines.length}/12 saved</span>
+          </div>
+          <p class="muted">
+            Save an ordered set of exercises with time allocations, then reuse it for a future session. Routines stay in this learner profile on this device.
+          </p>
+          {#if routineNotice}
+            <p class="message" role="status">{routineNotice}</p>
+          {/if}
+          {#if routineError}
+            <p class="message error" role="alert">{routineError}</p>
+          {/if}
+          {#if routineLoading}
+            <p class="muted" role="status">Loading saved routines…</p>
+          {:else if routines.length > 0}
+            <ul class="routine-list">
+              {#each routines as routine (routine.id)}
+                <li class:selected={selectedRoutineId === routine.id}>
+                  <div class="routine-summary">
+                    <strong>{routine.name}</strong>
+                    <span>{routine.exercises.length} exercises · {routine.exercises.reduce((total, exercise) => total + exercise.minutes, 0)} minutes</span>
+                    {#if routine.focus}
+                      <p>{routine.focus}</p>
+                    {/if}
+                    <ol>
+                      {#each routine.exercises as exercise (exercise.id)}
+                        <li>{exercise.name} <span>{exercise.minutes} min</span></li>
+                      {/each}
+                    </ol>
+                  </div>
+                  <div class="routine-actions">
+                    <button type="button" class="text-button" aria-pressed={selectedRoutineId === routine.id} onclick={() => selectRoutine(routine)}>
+                      {selectedRoutineId === routine.id ? 'Selected' : 'Use routine'}
+                    </button>
+                    <button type="button" class="text-button" onclick={() => editRoutine(routine)} disabled={routineSaving}>Edit</button>
+                    <button type="button" class="text-button" onclick={() => void deleteRoutine(routine.id)} disabled={routineSaving}>Delete</button>
+                  </div>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <p class="empty-inline">No saved routines yet. Build one below, or start a one-off session.</p>
+          {/if}
+
+          <form class="routine-editor" aria-labelledby="routine-editor-heading" onsubmit={(event) => { event.preventDefault(); void saveRoutine(); }}>
+            <h4 id="routine-editor-heading">{editingRoutineId ? 'Edit routine' : 'Create a routine'}</h4>
+            <label for="routine-name">Routine name</label>
+            <input id="routine-name" bind:value={routineName} maxlength="80" placeholder="e.g. Balanced daily practice" required />
+            <label for="routine-focus">Main focus <span>optional</span></label>
+            <input id="routine-focus" bind:value={routineFocus} maxlength="180" placeholder="e.g. Build relaxed, steady fundamentals" />
+            <div class="routine-editor-heading">
+              <strong>Exercise sequence</strong>
+              <span>{routineExercises.length}/12 · {routineDraftMinutes} min</span>
+            </div>
+            {#each routineExercises as exercise, index (exercise.id)}
+              <div class="routine-exercise-row">
+                <label>
+                  <span class="visually-hidden">Exercise {index + 1} name</span>
+                  <input bind:value={exercise.name} maxlength="160" placeholder="Exercise {index + 1}" required />
+                </label>
+                <label>
+                  <span class="visually-hidden">Minutes for exercise {index + 1}</span>
+                  <input type="number" bind:value={exercise.minutes} min="1" max="180" step="1" aria-label="Minutes for exercise {index + 1}" required />
+                </label>
+                <div class="routine-order-actions" role="group" aria-label="Reorder exercise {index + 1}">
+                  <button type="button" class="text-button" aria-label="Move exercise {index + 1} up" onclick={() => moveRoutineExercise(exercise.id, -1)} disabled={index === 0}>↑</button>
+                  <button type="button" class="text-button" aria-label="Move exercise {index + 1} down" onclick={() => moveRoutineExercise(exercise.id, 1)} disabled={index === routineExercises.length - 1}>↓</button>
+                  <button type="button" class="text-button" aria-label="Remove exercise {index + 1}" onclick={() => removeRoutineExercise(exercise.id)}>×</button>
+                </div>
+              </div>
+            {/each}
+            <p class="muted">Add at least one exercise. A routine must total 5–180 minutes. The saved order is used when you start a session.</p>
+            <div class="routine-editor-actions">
+              <button type="button" class="text-button" onclick={addRoutineExercise} disabled={routineExercises.length >= 12 || routineSaving}>Add exercise</button>
+              <button type="submit" class="primary" disabled={routineSaving}>{routineSaving ? 'Saving…' : editingRoutineId ? 'Save changes' : 'Save routine'}</button>
+              {#if editingRoutineId}
+                <button type="button" class="text-button" onclick={resetRoutineEditor} disabled={routineSaving}>Cancel</button>
+              {/if}
+            </div>
+          </form>
+        </section>
         <form
           class="start-form"
           onsubmit={(event) => {
@@ -984,11 +1237,18 @@
             max="180"
             step="1"
             bind:value={plannedMinutes}
+            disabled={!!selectedRoutine}
           />
+          {#if selectedRoutine}
+            <p class="muted routine-selected-note">
+              {selectedRoutine.name} supplies the {selectedRoutineMinutes}-minute session duration.
+              <button type="button" class="text-button" onclick={() => { selectedRoutineId = null; }}>Use a custom duration instead</button>
+            </p>
+          {/if}
           <label for="authored-exercise">
             Link to an authored exercise <span>optional</span>
           </label>
-          <select id="authored-exercise" bind:value={selectedAuthoredScopeKey}>
+          <select id="authored-exercise" bind:value={selectedAuthoredScopeKey} disabled={!!selectedRoutine}>
             <option value="">General session — no authored exercise link</option>
             {#each authoredPracticeScopes as scope (`${scope.lessonId}::${scope.exerciseId}`)}
               <option value={`${scope.lessonId}::${scope.exerciseId}`}>
@@ -2085,7 +2345,208 @@
     outline-offset: 3px;
   }
 
+
+  .saved-routines {
+    margin: 24px 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-raised);
+  }
+
+  .routine-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    margin: 14px 0;
+    padding: 0;
+  }
+
+  .routine-list > li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  .routine-list > li.selected {
+    border-color: var(--primary);
+  }
+
+  .routine-summary {
+    min-width: 0;
+  }
+
+  .routine-summary > span,
+  .routine-summary p,
+  .routine-summary ol,
+  .routine-run > p:last-child {
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .routine-summary > span {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .routine-summary p {
+    margin: 6px 0;
+  }
+
+  .routine-summary ol {
+    margin: 8px 0 0;
+    padding-left: 20px;
+  }
+
+  .routine-summary ol li {
+    padding: 2px 0;
+  }
+
+  .routine-summary ol li span {
+    white-space: nowrap;
+  }
+
+  .routine-actions,
+  .routine-editor-actions,
+  .routine-order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .routine-editor {
+    display: grid;
+    gap: 9px;
+    padding-top: 18px;
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .routine-editor h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .routine-editor-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+    font-size: 0.88rem;
+  }
+
+  .routine-editor-heading span {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .routine-exercise-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 92px auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .routine-exercise-row label {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .routine-exercise-row input {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .routine-order-actions {
+    justify-content: end;
+    gap: 2px;
+  }
+
+  .routine-run {
+    margin: 18px 0;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-raised);
+  }
+
+  .routine-run h3 {
+    margin: 6px 0 10px;
+  }
+
+  .routine-run ol {
+    display: grid;
+    gap: 8px;
+    padding-left: 22px;
+  }
+
+  .routine-run li {
+    padding-left: 4px;
+  }
+
+  .routine-run li span {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .routine-run li strong {
+    white-space: nowrap;
+  }
+
+  .routine-selected-note {
+    margin: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   @media (max-width: 600px) {
+
+    .session-actions {
+      /* Keep the session controls reachable while the exercise log continues below the fold. */
+      position: sticky;
+      bottom: max(8px, env(safe-area-inset-bottom));
+      z-index: 4;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-raised);
+      box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    }
+
+    .routine-list > li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .routine-actions {
+      justify-content: flex-start;
+    }
+
+    .routine-exercise-row {
+      grid-template-columns: minmax(0, 1fr) 84px;
+    }
+
+    .routine-order-actions {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+
+
     .practice-page {
       padding: 20px 16px 48px;
     }
