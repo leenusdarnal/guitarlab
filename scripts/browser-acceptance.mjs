@@ -1700,7 +1700,9 @@ try {
     .getByRole('button', { name: 'Delete' })
     .click();
   await page
-    .getByText('No saved routines yet. Build one below, or start a one-off session.')
+    .getByText(
+      'No saved routines yet. Build one below, or start a one-off session.'
+    )
     .waitFor();
 
   // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
@@ -1933,7 +1935,13 @@ try {
     .getByRole('status')
     .filter({ hasText: 'Elapsed session time is activity history' })
     .waitFor();
-  await page.getByText('completed', { exact: true }).waitFor();
+  await page
+    .locator('.history-item')
+    .filter({
+      hasText: 'The scale felt steadier when I kept my wrist relaxed.'
+    })
+    .getByText('completed', { exact: true })
+    .waitFor();
   await page
     .getByText('The scale felt steadier when I kept my wrist relaxed.')
     .waitFor();
