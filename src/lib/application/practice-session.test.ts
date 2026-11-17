@@ -481,4 +481,30 @@ describe('practice session lifecycle', () => {
     expect(sessions.get(created.id)?.routineSnapshot).toEqual(routineSnapshot);
   });
 
+
+  it('rejects a session duration that does not match its routine snapshot', async () => {
+    const routineSnapshot = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Balanced daily practice',
+      exercises: [{
+        id: '22222222-2222-4222-8222-222222222222',
+        name: 'Warm-up',
+        minutes: 5
+      }]
+    };
+
+    await expect(startPracticeSession(
+      {
+        learnerId,
+        plannedMinutes: 10,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        focus: 'Balanced daily practice',
+        routineSnapshot
+      },
+      { curriculum, practice, runtime }
+    )).rejects.toThrow(/must match the saved routine total/i);
+    expect(sessions.size).toBe(1);
+  });
+
 });
