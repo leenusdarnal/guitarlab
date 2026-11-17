@@ -2,6 +2,10 @@
 import { readFile } from 'node:fs/promises';
 
 const css = await readFile(new URL('../src/app.css', import.meta.url), 'utf8');
+const practiceRoute = await readFile(
+  new URL('../src/routes/practice/+page.svelte', import.meta.url),
+  'utf8'
+);
 const blocks = [
   ...css.matchAll(/:root(?:\[data-theme='light'\])?\s*\{([^}]+)\}/g)
 ];
@@ -65,6 +69,7 @@ const checks = [
   ['success', 'bg', 4.5],
   ['warning', 'bg', 4.5],
   ['danger', 'bg', 4.5],
+  ['danger', 'surface-raised', 4.5],
   ['danger-ink', 'danger', 4.5],
   ['primary-ink', 'primary', 4.5],
   ['border-strong', 'surface', 3],
@@ -127,4 +132,19 @@ if (failures.length) {
   console.error(failures.join('\n'));
   process.exit(1);
 }
+const legacyPracticeColorFallbacks = [
+  ...practiceRoute.matchAll(/var\\(\\s*--[\\w-]+\\s*,\\s*#[0-9a-fA-F]{3,8}\\s*\\)/g)
+];
+if (legacyPracticeColorFallbacks.length) {
+  const locations = legacyPracticeColorFallbacks.map((match) => ({
+    line: practiceRoute.slice(0, match.index).split('\\n').length,
+    value: match[0]
+  }));
+  console.error(
+    'Practice Studio must use shared semantic colour tokens, not legacy fallback colours:',
+    JSON.stringify(locations, null, 2)
+  );
+  process.exit(1);
+}
+console.log('Practice Studio uses shared semantic colour tokens without legacy colour fallbacks.');
 console.log('Design-token contrast checks passed for dark and light themes.');
