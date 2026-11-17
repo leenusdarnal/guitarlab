@@ -27,7 +27,19 @@ export const profilePreferencesSchema = z.object({
   // Retained for profile compatibility until schedule-aware planning is implemented.
   availableDays: z.array(z.number().int().min(0).max(6)).max(7),
   // Controls the teaching-section order in the authored lesson reader.
-  practiceRoutines: z.array(practiceRoutineSchema).max(12).default([]),
+  practiceRoutines: z
+    .array(practiceRoutineSchema)
+    .max(12)
+    .default([])
+    .superRefine((routines, context) => {
+      const routineIds = routines.map((routine) => routine.id);
+      if (new Set(routineIds).size !== routineIds.length) {
+        context.addIssue({
+          code: 'custom',
+          message: 'Saved practice routine identifiers must be unique.'
+        });
+      }
+    }),
   lessonPresentation: z
     .enum([
       'balanced',
@@ -38,15 +50,6 @@ export const profilePreferencesSchema = z.object({
       'song-first'
     ])
     .nullable()
-}).superRefine((preferences, context) => {
-  const routineIds = preferences.practiceRoutines.map((routine) => routine.id);
-  if (new Set(routineIds).size !== routineIds.length) {
-    context.addIssue({
-      code: 'custom',
-      path: ['practiceRoutines'],
-      message: 'Saved practice routine identifiers must be unique.'
-    });
-  }
 });
 
 export type ProfilePreferences = z.infer<typeof profilePreferencesSchema>;
