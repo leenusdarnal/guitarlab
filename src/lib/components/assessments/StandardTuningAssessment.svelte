@@ -154,7 +154,7 @@
   .assessment-item{display:grid;gap:8px;padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--surface-raised)}
   .assessment-item label{display:grid;gap:5px;font-size:11px;line-height:1.5;font-weight:650}
   .assessment-item label span{font-size:8px;letter-spacing:1px;color:var(--muted)}
-  .assessment-item select{width:100%;min-height:40px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:11px}
+  .assessment-item select{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:11px}
   .assessment-actions,.result-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px}
   .assessment-actions span{font-size:10px;color:var(--muted)}
   .assessment-actions button,.secondary-button{min-height:44px;padding:9px 14px;border:1px solid var(--primary);border-radius:9px;background:var(--primary);color:var(--surface);font-size:10px;font-weight:750}

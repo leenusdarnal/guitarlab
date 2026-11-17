@@ -1667,13 +1667,34 @@ try {
         Boolean(
           button.compareDocumentPosition(exerciseLog) &
           Node.DOCUMENT_POSITION_FOLLOWING
-        )
+        ),
+      afterTimer: (() => {
+        const timer = document.querySelector('.elapsed');
+        return (
+          timer !== null &&
+          Boolean(
+            timer.compareDocumentPosition(button) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+          )
+        );
+      })(),
+      viewport: {
+        top: bounds.top,
+        bottom: bounds.bottom,
+        height: window.innerHeight,
+        scrollY: window.scrollY
+      }
     };
   });
   assert.equal(
     finishActionLayout.associatedWithFinishForm,
     true,
     'The visible finish control must submit the existing session-review form.'
+  );
+  assert.equal(
+    finishActionLayout.afterTimer,
+    true,
+    'The primary session actions must follow the active timer.'
   );
   assert.equal(
     finishActionLayout.beforeExerciseLog,
@@ -1683,7 +1704,8 @@ try {
   assert.equal(
     finishActionLayout.visibleInInitialViewport,
     true,
-    'The finish control must be reachable in the initial mobile session viewport.'
+    'The finish control must be reachable in the initial mobile session viewport: ' +
+      JSON.stringify(finishActionLayout.viewport)
   );
   await page.setViewportSize({ width: 1280, height: 720 });
 

@@ -7,7 +7,7 @@
 **Design authority:** [DESIGN_DIRECTION.md](DESIGN_DIRECTION.md) and [IMPLEMENTATION_GUIDELINES.md](IMPLEMENTATION_GUIDELINES.md)  
 **Component research:** [UI component source audit](research/UI_COMPONENT_SOURCE_AUDIT_2026-11-15.md) — research only; no external UI dependency is approved by this document.  
 **Product roadmap:** [ROADMAP.md](ROADMAP.md), especially M1, M4, M6, M7 and M9  
-**Active implementation:** UX-02 follow-up — interactive-control accessibility and 200%-zoom-equivalent reflow checks (`ux/02-zoom-reflow-and-control-audit`)
+**Active implementation:** UX-02 follow-up — interactive-control accessibility and 200%-zoom-equivalent reflow checks (PR #170)
 
 ---
 
@@ -120,7 +120,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 ### UX-02 — Fix global accessibility and mobile interaction blockers
 
 **Priority:** P1  
-**Status:** IN PROGRESS — global focus/control improvements are merged in PRs #141 and #159; PR #166 implements the approved five-destination mobile tab bar and secondary More menu. Keyboard-only, 200% zoom, physical-device and learner thumb-reach acceptance remain open under UX-14  
+**Status:** IN PROGRESS — global focus/control improvements and the five-destination mobile tab bar (PRs #141, #159 and #166) are merged. PR #170 adds automated responsive/button-name/target-size checks and keyboard-focus coverage; actual keyboard-only, 200% browser zoom, physical-device and learner thumb-reach acceptance remain open under UX-14  
 **Depends on:** UX-01 automated acceptance is complete; manual finder/device acceptance remains open  
 **Related findings:** X3, X4, X6, X7, X9, B2
 
@@ -210,7 +210,7 @@ Work in this order unless a newly discovered P1 defect justifies reprioritisatio
 - [ ] Keep correction actions available but visually secondary to practising a relevant skill.
 - [x] Replace the internal milestone label and catalogue-version badge; hide raw release/taxonomy identifiers from the active-session learner view.
 - [ ] Remove repeated mastery disclaimers while preserving one clear explanation of how progress is measured.
-- [x] Keep the active session's pause/resume and finish actions beside the timer and current task; the finish control submits the existing optional session-review form without requiring a scroll past exercise observations (automated mobile browser acceptance).
+- [x] Keep the active session's pause/resume and finish actions immediately after the timer and before optional session details; keep metronome/tuner links secondary. The finish control submits the existing optional session-review form without requiring a scroll past exercise observations (automated mobile browser acceptance).
 - [x] Add large one-tap clean-attempt and needs-correction observation controls; retain detailed count entry as an optional form.
 - [ ] Provide access to a compact metronome and tuner without forcing the learner to leave the session.
 - [ ] Add wake-lock support only while an active session needs it; handle unsupported, rejected and automatically released states.
@@ -424,7 +424,8 @@ A task is **VERIFIED** only after its manual acceptance steps are complete and t
 
 | Date | Change |
 |---|---|
-| 2026-11-17 | Started UX-02 follow-up: automated visible-button name/44px target checks across core routes and themes, keyboard focus-indicator coverage, and 640px 200%-zoom-equivalent reflow checks. Actual browser UI zoom and physical-device/assistive-technology verification remain manual. |
+| 2026-11-17 | PR #170 adds responsive visible-button naming/44px target assertions, keyboard-focus and 640px zoom-equivalent reflow checks. Manual browser UI zoom and physical-device/screen-reader acceptance remain open. |
+| 2026-11-17 | Corrective follow-up: move Finish/Pause directly below the active timer so primary actions remain above utility links and optional details; raise the StandardTuningAssessment answer/select controls to 44px after the responsive audit found a 40px answer button. Add viewport diagnostics to the session reachability regression. |
 | 2026-11-17 | Improved UX-06: added a Finish session action beside the active-session controls, linked to the existing review form so optional reflection/next-target fields and existing save semantics are preserved. Added mobile browser acceptance for initial-viewport reachability and form association. |
 | 2026-11-16 | Opened PR #166 for UX-02/UX-14: five labelled mobile primary tabs, secondary More navigation, device safe-area handling, bottom content clearance and automated keyboard/active-state/touch-target coverage. WebKit acceptance is configured for the core learner routes, subject to PR CI confirmation. Physical-device and learner testing remain open. |
 | 2026-11-16 | Opened PR #167 for UX-04: increased Today dashboard explanatory/task copy to shared readable type tokens and added browser size assertions. CI in progress; no merge until formatting, browser and accessibility checks pass. |
