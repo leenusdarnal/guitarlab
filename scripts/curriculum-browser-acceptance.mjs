@@ -135,6 +135,61 @@ try {
     .getByRole('link', { name: 'Open lesson: Meet your guitar' })
     .click();
   await page.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
+
+  // Profile-selected lesson presentation changes teaching order, not content or progress identity.
+  const presentationCases = [
+    { value: 'visual-first', label: 'Visual-first', firstSection: 'lesson-section-demonstration' },
+    { value: 'demonstration-first', label: 'Demonstration-first', firstSection: 'lesson-section-demonstration' },
+    { value: 'text-first', label: 'Text-first', firstSection: 'lesson-section-overview' },
+    { value: 'interactive-first', label: 'Interactive-first', firstSection: 'lesson-section-exercises' },
+    { value: 'song-first', label: 'Song-first', firstSection: 'lesson-section-music' },
+    { value: 'balanced', label: 'Balanced mix', firstSection: 'lesson-section-overview' }
+  ];
+  for (const presentation of presentationCases) {
+    await page.goto(origin + '/onboarding', { waitUntil: 'networkidle' });
+    await page
+      .getByRole('radio', { name: new RegExp(presentation.label) })
+      .check();
+    await page.getByRole('button', { name: 'Save my preferences' }).click();
+    await page
+      .getByText('Your preferences have been saved privately on this device.', { exact: true })
+      .waitFor();
+
+    await page.goto(origin + '/learn/y1-w01-lesson', { waitUntil: 'networkidle' });
+    const lessonContent = page.locator(
+      `.lesson-content[data-presentation="${presentation.value}"]`
+    );
+    await lessonContent.waitFor();
+    const orderedSections = await lessonContent
+      .locator(':scope > .content-section')
+      .evaluateAll((sections) =>
+        sections
+          .map((section) => ({
+            id: section.id,
+            order: Number(getComputedStyle(section).order),
+            visible: section.getClientRects().length > 0
+          }))
+          .sort((left, right) => left.order - right.order)
+      );
+    assert.equal(orderedSections.length, 11, 'Every authored lesson section should remain rendered');
+    assert.equal(
+      orderedSections[0]?.id,
+      presentation.firstSection,
+      `${presentation.label} should put its defining teaching section first`
+    );
+    assert.ok(
+      orderedSections.every((section) => section.visible),
+      `${presentation.label} must not hide authored lesson content`
+    );
+    await page.reload({ waitUntil: 'networkidle' });
+    await lessonContent.waitFor();
+    assert.equal(
+      await lessonContent.locator(':scope > .content-section').count(),
+      11,
+      `${presentation.label} should persist after reload`
+    );
+  }
+
   await page.getByRole('heading', { name: 'What you will learn' }).waitFor();
   await page.getByRole('navigation', { name: 'Lesson sections' }).waitFor();
   const lessonOutline = page.locator('.lesson-outline a');
