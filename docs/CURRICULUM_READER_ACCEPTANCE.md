@@ -21,6 +21,8 @@ npm run test:curriculum-browser
 - All 152 lessons appear in stable week order and link through their original authored lesson IDs.
 - Year 1, Year 2 and a specialist lesson open the same complete reader contract.
 - Lesson pages show objectives, prerequisites/refreshers, explanation, worked example, guided demonstration, lesson blocks, exercises, success criteria, musical application, accessible alternatives and review guidance.
+- The learner-selected lesson presentation (balanced, visual-first, demonstration-first, text-first, interactive-first or song-first) changes the order of instructional sections and persists after reload.
+- Every presentation renders all 11 authored sections; stable block IDs, progress/checkpoint state and text alternatives remain unchanged.
 - Previous/next lesson navigation follows the selected route, without implying lesson completion or skill mastery.
 - Lesson sections can be marked individually; section progress, checkpoint self-check and optional note persist in browser-local IndexedDB after reload.
 - An explicit completion action is enabled only after the learner selects the positive checkpoint self-check; it does not grant skill mastery.
