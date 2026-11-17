@@ -36,7 +36,10 @@ describe('saved practice routines', () => {
       ]
     })).toMatchObject({
       name: 'Balanced daily practice',
-      exercises: [{ name: 'Warm-up and relaxed fretting' }]
+      exercises: [
+        { name: 'Warm-up and relaxed fretting' },
+        { name: 'Chord changes with a metronome' }
+      ]
     });
   });
 
