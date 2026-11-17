@@ -10,7 +10,7 @@ The local Wrangler configuration contains a separate `AUTH_DB` binding named `gu
 2. Generate a secret with `openssl rand -base64 32` and set it as `BETTER_AUTH_SECRET`.
 3. Set `BETTER_AUTH_URL=http://localhost:8787` when using the local Wrangler Worker.
 4. Configure a real Resend API key and a sender address verified by that Resend account.
-5. Apply the isolated identity schema with `npm run db:auth:migrate:local`.
+5. Apply the isolated identity schema with `npm run db:auth:migrate:local`, then verify its tables with `npm run db:auth:test:local`.
 6. Build and run the Worker with `npm run build` followed by `npm run preview`.
 
 Do not commit `.dev.vars`. The example file contains placeholders only. The application deliberately disables account endpoints when the database, 32-character-or-longer secret, explicit base URL, or email sender configuration is missing.
