@@ -1185,8 +1185,8 @@
             <p class="empty-inline">No saved routines yet. Build one below, or start a one-off session.</p>
           {/if}
 
-          <form class="routine-editor" onsubmit={(event) => { event.preventDefault(); void saveRoutine(); }}>
-            <h4>{editingRoutineId ? 'Edit routine' : 'Create a routine'}</h4>
+          <form class="routine-editor" aria-labelledby="routine-editor-heading" onsubmit={(event) => { event.preventDefault(); void saveRoutine(); }}>
+            <h4 id="routine-editor-heading">{editingRoutineId ? 'Edit routine' : 'Create a routine'}</h4>
             <label for="routine-name">Routine name</label>
             <input id="routine-name" bind:value={routineName} maxlength="80" placeholder="e.g. Balanced daily practice" required />
             <label for="routine-focus">Main focus <span>optional</span></label>
@@ -1205,7 +1205,7 @@
                   <span class="visually-hidden">Minutes for exercise {index + 1}</span>
                   <input type="number" bind:value={exercise.minutes} min="1" max="180" step="1" aria-label="Minutes for exercise {index + 1}" required />
                 </label>
-                <div class="routine-order-actions" aria-label="Reorder exercise {index + 1}">
+                <div class="routine-order-actions" role="group" aria-label="Reorder exercise {index + 1}">
                   <button type="button" class="text-button" aria-label="Move exercise {index + 1} up" onclick={() => moveRoutineExercise(exercise.id, -1)} disabled={index === 0}>↑</button>
                   <button type="button" class="text-button" aria-label="Move exercise {index + 1} down" onclick={() => moveRoutineExercise(exercise.id, 1)} disabled={index === routineExercises.length - 1}>↓</button>
                   <button type="button" class="text-button" aria-label="Remove exercise {index + 1}" onclick={() => removeRoutineExercise(exercise.id)}>×</button>
