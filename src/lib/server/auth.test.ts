@@ -18,9 +18,11 @@ describe('isAuthConfigured', () => {
     expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_SECRET: 'too-short' })).toBe(false);
   });
 
-  it('requires an explicit HTTP or HTTPS origin', () => {
+  it('requires HTTPS for public origins and allows HTTP only for local development', () => {
     expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'guitarlab.example' })).toBe(false);
+    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'http://guitarlab.example' })).toBe(false);
     expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'https://guitarlab.example/path' })).toBe(false);
+    expect(isAuthConfigured({ ...configuredEnvironment, BETTER_AUTH_URL: 'http://localhost:8787' })).toBe(true);
   });
 
   it('requires a transactional email provider and sender', () => {
