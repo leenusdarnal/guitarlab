@@ -729,7 +729,7 @@ try {
               const labelledBy = button.getAttribute('aria-labelledby');
               const referencedLabel = labelledBy
                 ? labelledBy
-                    .split(/\\s+/)
+                    .split(/\s+/)
                     .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
                     .join(' ')
                     .trim()
