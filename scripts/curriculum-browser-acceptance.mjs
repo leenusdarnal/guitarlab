@@ -20,6 +20,16 @@ server.stderr.on('data', (chunk) => {
 });
 let browser;
 
+async function waitForProgressSummary(page, expectedLabel) {
+  await page.waitForFunction((expected) => {
+    const summary = document.querySelector('.progress-summary strong');
+    if (!summary) return false;
+    const bounds = summary.getBoundingClientRect();
+    const text = summary.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    return bounds.width > 0 && bounds.height > 0 && text.includes(expected);
+  }, expectedLabel);
+}
+
 try {
   let ready = false;
   for (let attempt = 0; attempt < 45; attempt += 1) {
@@ -135,6 +145,94 @@ try {
     .getByRole('link', { name: 'Open lesson: Meet your guitar' })
     .click();
   await page.getByRole('heading', { name: 'Meet your guitar' }).waitFor();
+
+  // Profile-selected lesson presentation changes teaching order, not content or progress identity.
+  const presentationCases = [
+    {
+      value: 'visual-first',
+      label: 'Visual-first',
+      firstSection: 'lesson-section-demonstration'
+    },
+    {
+      value: 'demonstration-first',
+      label: 'Demonstration-first',
+      firstSection: 'lesson-section-demonstration'
+    },
+    {
+      value: 'text-first',
+      label: 'Text-first',
+      firstSection: 'lesson-section-overview'
+    },
+    {
+      value: 'interactive-first',
+      label: 'Interactive-first',
+      firstSection: 'lesson-section-exercises'
+    },
+    {
+      value: 'song-first',
+      label: 'Song-first',
+      firstSection: 'lesson-section-music'
+    },
+    {
+      value: 'balanced',
+      label: 'Balanced mix',
+      firstSection: 'lesson-section-overview'
+    }
+  ];
+  for (const presentation of presentationCases) {
+    await page.goto(origin + '/onboarding', { waitUntil: 'networkidle' });
+    await page
+      .getByRole('radio', { name: new RegExp(presentation.label) })
+      .check();
+    await page.getByRole('button', { name: 'Save my preferences' }).click();
+    await page
+      .getByText('Your preferences have been saved privately on this device.', {
+        exact: true
+      })
+      .waitFor();
+
+    await page.goto(origin + '/learn/y1-w01-lesson', {
+      waitUntil: 'networkidle'
+    });
+    const lessonContent = page.locator(
+      `.lesson-content[data-presentation="${presentation.value}"]`
+    );
+    await lessonContent.waitFor();
+    const orderedSections = await lessonContent
+      .locator(':scope > .content-section')
+      .evaluateAll((sections) =>
+        sections.map((section) => ({
+          id: section.id,
+          visible: section.getClientRects().length > 0
+        }))
+      );
+    assert.equal(
+      orderedSections.length,
+      11,
+      'Every authored lesson section should remain rendered'
+    );
+    assert.equal(
+      orderedSections[0]?.id,
+      presentation.firstSection,
+      `${presentation.label} should put its defining teaching section first`
+    );
+    assert.ok(
+      orderedSections.every((section) => section.visible),
+      `${presentation.label} must not hide authored lesson content`
+    );
+    await page.reload({ waitUntil: 'networkidle' });
+    await lessonContent.waitFor();
+    const reloadedSections = await lessonContent
+      .locator(':scope > .content-section')
+      .evaluateAll((sections) => sections.map((section) => section.id));
+    assert.equal(reloadedSections.length, 11);
+    assert.equal(
+      reloadedSections[0],
+      presentation.firstSection,
+      `${presentation.label} should preserve DOM reading order after reload`
+    );
+  }
+
   await page.getByRole('heading', { name: 'What you will learn' }).waitFor();
   await page.getByRole('navigation', { name: 'Lesson sections' }).waitFor();
   const lessonOutline = page.locator('.lesson-outline a');
@@ -298,22 +396,101 @@ try {
     'The final checkpoint choice must survive earlier in-flight saves'
   );
   await page.context().setOffline(true);
-  await page
-    .locator('.lesson-block')
-    .nth(1)
-    .getByRole('button', { name: 'Mark section complete' })
-    .click();
-  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
+  const secondBlock = page.locator('.lesson-block').nth(1);
+  const secondBlockButton = secondBlock.getByRole('button', {
+    name: 'Mark section complete'
+  });
+  await secondBlockButton.click();
+  const offlineProgressState = await page.evaluate(() => ({
+    isOnline: navigator.onLine,
+    progressSummary:
+      document.querySelector('.progress-summary')?.textContent?.trim() ?? null,
+    progressError:
+      document.querySelector('.progress-error')?.textContent?.trim() ?? null,
+    sectionButtons: Array.from(
+      document.querySelectorAll('.lesson-block .block-complete')
+    ).map((button) => ({
+      blockId: button.closest('.lesson-block')?.id ?? null,
+      pressed: button.getAttribute('aria-pressed'),
+      disabled: button.disabled
+    }))
+  }));
+  assert.equal(
+    offlineProgressState.isOnline,
+    false,
+    'The browser context should remain offline while saving local progress'
+  );
+  assert.equal(
+    offlineProgressState.sectionButtons[1]?.pressed,
+    'true',
+    `The second lesson block should update immediately while offline: ${JSON.stringify(offlineProgressState)}`
+  );
+  const offlineCompletedBlockIds = offlineProgressState.sectionButtons
+    .filter((button) => button.pressed === 'true')
+    .map((button) => button.blockId?.replace(/^lesson-block-/, '') ?? '');
+  await page.waitForFunction(
+    async (expectedBlockIds) => {
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      try {
+        const transaction = database.transaction(
+          ['metadata', 'lessonProgress'],
+          'readonly'
+        );
+        const [activeProfile, records] = await Promise.all([
+          new Promise((resolve, reject) => {
+            const request = transaction
+              .objectStore('metadata')
+              .get('activeLearnerId');
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          }),
+          new Promise((resolve, reject) => {
+            const request = transaction.objectStore('lessonProgress').getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          })
+        ]);
+        const savedProgress = records.find(
+          (record) =>
+            record.learnerId === activeProfile?.value &&
+            record.lessonId === 'y1-w01-lesson'
+        );
+        return expectedBlockIds.every((blockId) =>
+          savedProgress?.completedBlockIds?.includes(blockId)
+        );
+      } finally {
+        database.close();
+      }
+    },
+    offlineCompletedBlockIds,
+    { timeout: 15000 }
+  );
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.context().setOffline(false);
   await page.reload({ waitUntil: 'networkidle' });
-  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {
     waitUntil: 'networkidle'
   });
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
-  await page.getByText(`2 of ${sectionCount} sections completed`).waitFor();
+  const completedLessonState = await page.evaluate(() => ({
+    progressSummary:
+      document.querySelector('.progress-summary strong')?.textContent?.trim() ??
+      null,
+    completionMessage:
+      document.querySelector('.progress-complete')?.textContent?.trim() ?? null
+  }));
+  console.log(
+    'Completed lesson progress state after reload:',
+    JSON.stringify(completedLessonState)
+  );
+  await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.getByRole('link', { name: /Next lesson/ }).click();
   await page.getByRole('heading', { name: 'Clear single notes' }).waitFor();
   assert.match(page.url(), /y1-w02-lesson/);

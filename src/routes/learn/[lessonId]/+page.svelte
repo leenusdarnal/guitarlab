@@ -1,16 +1,55 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { SvelteMap } from 'svelte/reactivity';
   import { resolve } from '$app/paths';
   import Icon from '../../../lib/components/Icon.svelte';
   import type { PageData } from './$types';
-  import { completeActiveLessonProgress, loadActiveLessonProgress, saveActiveLessonProgress } from '../../../lib/storage/indexeddb';
+  import {
+    completeActiveLessonProgress,
+    loadActiveLearnerProfile,
+    loadActiveLessonProgress,
+    saveActiveLessonProgress
+  } from '../../../lib/storage/indexeddb';
   import type { LessonProgressRecord } from '../../../lib/repositories/contracts';
+  import {
+    getLessonPresentationSectionSequence,
+    lessonPresentationOptions,
+    resolveLessonPresentation,
+    type LessonPresentation,
+    type LessonPresentationSection
+  } from '../../../lib/domain/profile/lesson-presentation';
   import StandardTuningAssessment from '../../../lib/components/assessments/StandardTuningAssessment.svelte';
   import { standardTuningAssessment } from '../../../lib/domain/learning/standard-tuning-assessment';
 
   let { data }: { data: PageData } = $props();
   const lesson = $derived(data.detail.lesson);
   const curriculumReleaseId = 'curriculum-v1';
+  let lessonPresentation = $state<LessonPresentation>('balanced');
+  let presentationLoading = $state(true);
+  const presentationLabel = $derived(
+    lessonPresentationOptions.find((option) => option.value === lessonPresentation)?.label ??
+      'Balanced mix'
+  );
+
+  onMount(() => {
+    let active = true;
+    void loadActiveLearnerProfile()
+      .then((profile) => {
+        if (active) {
+          lessonPresentation = resolveLessonPresentation(profile.preferences.lessonPresentation);
+        }
+      })
+      .catch(() => {
+        // Balanced presentation is the safe fallback when local profile storage cannot be read.
+      })
+      .finally(() => {
+        if (active) presentationLoading = false;
+      });
+
+    return () => {
+      active = false;
+    };
+  });
   let progress = $state<LessonProgressRecord | null>(null);
   let progressLoading = $state(true);
   let progressSaving = $state(false);
@@ -255,6 +294,13 @@
       <span>{lesson.estimatedMinutes} min lesson guide</span>
       {#if lesson.startingTempoBpm}<span>{lesson.startingTempoBpm} BPM starting reference</span>{/if}
     </div>
+    {#if !presentationLoading}
+      <p class="presentation-note">
+        <span class="eyebrow">LESSON FORMAT</span>
+        <strong>{presentationLabel}</strong>
+        <a href={resolve('/onboarding')}>Change</a>
+      </p>
+    {/if}
     <div class="checkpoint">
       <span class="eyebrow">LESSON CHECKPOINT</span>
       <p>{lesson.checkpoint}</p>
@@ -263,7 +309,7 @@
   </header>
 
 
-  <nav class="lesson-outline" aria-label="Lesson sections">
+  <nav class="lesson-outline" aria-label="Lesson sections" data-presentation={lessonPresentation}>
     <a href="#lesson-section-overview">Overview</a>
     <a href="#lesson-section-key-idea">Key idea</a>
     <a href="#lesson-section-demonstration">Demonstration</a>
@@ -280,158 +326,210 @@
     <StandardTuningAssessment />
   {/if}
 
-  <div class="lesson-layout">
-    <article class="lesson-content">
-      <section class="content-section" id="lesson-section-overview">
-        <div class="kicker">01 · LEARN</div>
-        <h2>What you will learn</h2>
-        <ul>{#each lesson.learningObjectives as objective (objective)}<li>{objective}</li>{/each}</ul>
-      </section>
+  {#snippet overviewSection()}
+    <section class="content-section" id="lesson-section-overview">
+            <div class="kicker">01 · LEARN</div>
+            <h2>What you will learn</h2>
+            <ul>{#each lesson.learningObjectives as objective (objective)}<li>{objective}</li>{/each}</ul>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-prerequisites">
-        <div class="kicker">BEFORE YOU BEGIN</div>
-        <h2>Prerequisites and refreshers</h2>
-        {#if data.detail.prerequisiteReferences.length > 0}
-          <ul>
-            {#each data.detail.prerequisiteReferences as prerequisite (prerequisite.id)}
-              <li>{#if prerequisite.available}<a href={resolve('/learn/[lessonId]', { lessonId: prerequisite.id })}>{prerequisite.title}</a>{:else}<span>Not available in this curriculum version</span>{/if}</li>
-            {/each}
-          </ul>
-        {:else}
-          <p>No hard prerequisites are declared for this lesson. You can begin here without marking any earlier lesson complete.</p>
-        {/if}
-        {#if lesson.priorTopicsToRefresh.length > 0}
-          <h3>Optional topics to refresh</h3>
-          <ul>{#each lesson.priorTopicsToRefresh as topic (topic)}<li>{topic}</li>{/each}</ul>
-        {/if}
-      </section>
+  {#snippet prerequisitesSection()}
+    <section class="content-section" id="lesson-section-prerequisites">
+            <div class="kicker">BEFORE YOU BEGIN</div>
+            <h2>Prerequisites and refreshers</h2>
+            {#if data.detail.prerequisiteReferences.length > 0}
+              <ul>
+                {#each data.detail.prerequisiteReferences as prerequisite (prerequisite.id)}
+                  <li>{#if prerequisite.available}<a href={resolve('/learn/[lessonId]', { lessonId: prerequisite.id })}>{prerequisite.title}</a>{:else}<span>Not available in this curriculum version</span>{/if}</li>
+                {/each}
+              </ul>
+            {:else}
+              <p>No hard prerequisites are declared for this lesson. You can begin here without marking any earlier lesson complete.</p>
+            {/if}
+            {#if lesson.priorTopicsToRefresh.length > 0}
+              <h3>Optional topics to refresh</h3>
+              <ul>{#each lesson.priorTopicsToRefresh as topic (topic)}<li>{topic}</li>{/each}</ul>
+            {/if}
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-key-idea">
-        <div class="kicker">02 · UNDERSTAND</div>
-        <h2>The key idea</h2>
-        <p>{lesson.explanation.keyIdea}</p>
-        <p>{lesson.explanation.plainLanguage}</p>
-        <div class="worked-example"><span class="eyebrow">WORKED EXAMPLE</span><p>{lesson.explanation.workedExample}</p></div>
-      </section>
+  {#snippet keyIdeaSection()}
+    <section class="content-section" id="lesson-section-key-idea">
+            <div class="kicker">02 · UNDERSTAND</div>
+            <h2>The key idea</h2>
+            <p>{lesson.explanation.keyIdea}</p>
+            <p>{lesson.explanation.plainLanguage}</p>
+            <div class="worked-example"><span class="eyebrow">WORKED EXAMPLE</span><p>{lesson.explanation.workedExample}</p></div>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-demonstration">
-        <div class="kicker">03 · SEE / HEAR</div>
-        <h2>Guided demonstration</h2>
-        <p>{lesson.demonstrationOrReference.referenceSuggestion}</p>
-        <ol>{#each lesson.demonstrationOrReference.steps as step, stepIndex (stepIndex)}<li>{step}</li>{/each}</ol>
-      </section>
+  {#snippet demonstrationSection()}
+    <section class="content-section" id="lesson-section-demonstration">
+            <div class="kicker">03 · SEE / HEAR</div>
+            <h2>Guided demonstration</h2>
+            <p>{lesson.demonstrationOrReference.referenceSuggestion}</p>
+            <ol>{#each lesson.demonstrationOrReference.steps as step, stepIndex (stepIndex)}<li>{step}</li>{/each}</ol>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-walkthrough">
-        <div class="kicker">04 · FOLLOW THE LESSON</div>
-        <h2>Lesson walkthrough</h2>
-        <div class="lesson-blocks">
-          {#each lesson.lessonBlocks as block, index (block.id)}
-            <article class="lesson-block" id={`lesson-block-${block.id}`}>
-              <div class="block-number">{String(index + 1).padStart(2, '0')}</div>
-              <div>
-                <div class="block-type">{block.type.replaceAll('-', ' ')}</div>
-                <h3>{block.title}</h3>
-                {#if Array.isArray(block.content)}
-                  <ul>{#each block.content as item, itemIndex (itemIndex)}<li>{item}</li>{/each}</ul>
-                {:else}<p>{block.content}</p>{/if}
-                <button class="block-complete" type="button" aria-pressed={completedBlockIds.includes(block.id)} onclick={() => toggleBlock(block.id)} disabled={progress?.status === 'completed' || progressLoading}>
-                  {completedBlockIds.includes(block.id) ? 'Section completed' : 'Mark section complete'}
-                </button>
+  {#snippet walkthroughSection()}
+    <section class="content-section" id="lesson-section-walkthrough">
+            <div class="kicker">04 · FOLLOW THE LESSON</div>
+            <h2>Lesson walkthrough</h2>
+            <div class="lesson-blocks">
+              {#each lesson.lessonBlocks as block, index (block.id)}
+                <article class="lesson-block" id={`lesson-block-${block.id}`}>
+                  <div class="block-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div>
+                    <div class="block-type">{block.type.replaceAll('-', ' ')}</div>
+                    <h3>{block.title}</h3>
+                    {#if Array.isArray(block.content)}
+                      <ul>{#each block.content as item, itemIndex (itemIndex)}<li>{item}</li>{/each}</ul>
+                    {:else}<p>{block.content}</p>{/if}
+                    <button class="block-complete" type="button" aria-pressed={completedBlockIds.includes(block.id)} onclick={() => toggleBlock(block.id)} disabled={progress?.status === 'completed' || progressLoading}>
+                      {completedBlockIds.includes(block.id) ? 'Section completed' : 'Mark section complete'}
+                    </button>
+                  </div>
+                </article>
+              {/each}
+            </div>
+          </section>
+  {/snippet}
+
+  {#snippet exercisesSection()}
+    <section class="content-section" id="lesson-section-exercises">
+            <div class="kicker">05 · PRACTISE</div>
+            <h2>Focused exercises</h2>
+            <aside class="lesson-adaptation" aria-label="A manageable alternative for this lesson">
+              <strong>Need a smaller starting point?</strong>
+              <p>{lesson.accessibleAlternative}</p>
+            </aside>
+            <nav class="lesson-tool-links" aria-label="Tools for this lesson">
+              <!-- eslint-disable svelte/no-navigation-without-resolve -->
+              <a
+                href={
+                  resolve('/tools/metronome') +
+                  (lesson.startingTempoBpm ? '?bpm=' + lesson.startingTempoBpm : '')
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open metronome{#if lesson.startingTempoBpm}{' ' + 'at ' + lesson.startingTempoBpm + ' BPM'}{/if}
+              </a>
+              <!-- eslint-enable svelte/no-navigation-without-resolve -->
+              <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
+            </nav>
+            <div class="exercise-list">
+              {#each lesson.exercises as exercise, exerciseIndex (exercise.title ?? `${exercise.type}-${exerciseIndex}`)}
+                <article class="exercise">
+                  <div class="exercise-meta"><span>{exercise.type.replaceAll('-', ' ')}</span><span>{exercise.durationMinutes} min guide</span></div>
+                  <h3>{exercise.title ?? exercise.type}</h3>
+                  <ol>{#each exercise.instructions as instruction, instructionIndex (instructionIndex)}<li>{instruction}</li>{/each}</ol>
+                  <div class="success-target"><strong>Success looks like</strong><p>{exercise.successCriterion}</p></div>
+                </article>
+              {/each}
+            </div>
+          </section>
+  {/snippet}
+
+  {#snippet musicSection()}
+    <section class="content-section" id="lesson-section-music">
+            <div class="kicker">06 · MAKE MUSIC</div>
+            <h2>Musical application</h2>
+            <p>{lesson.musicalApplication.prompt}</p>
+            <ol>{#each lesson.musicalApplication.instructions as instruction, instructionIndex (instructionIndex)}<li>{instruction}</li>{/each}</ol>
+            {#if lesson.workedExamples.length > 0}
+              <h3>Examples and references</h3>
+              <div class="references">
+                {#each lesson.workedExamples as example (example.label)}
+                  <article><span>{example.kind.replaceAll('-', ' ')}</span><h4>{example.label}</h4><p>{example.content}</p></article>
+                {/each}
               </div>
-            </article>
-          {/each}
-        </div>
-      </section>
+            {/if}
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-exercises">
-        <div class="kicker">05 · PRACTISE</div>
-        <h2>Focused exercises</h2>
-        <aside class="lesson-adaptation" aria-label="A manageable alternative for this lesson">
-          <strong>Need a smaller starting point?</strong>
-          <p>{lesson.accessibleAlternative}</p>
-        </aside>
-        <nav class="lesson-tool-links" aria-label="Tools for this lesson">
-          <!-- eslint-disable svelte/no-navigation-without-resolve -->
-          <a
-            href={
-              resolve('/tools/metronome') +
-              (lesson.startingTempoBpm ? '?bpm=' + lesson.startingTempoBpm : '')
-            }
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open metronome{#if lesson.startingTempoBpm}{' ' + 'at ' + lesson.startingTempoBpm + ' BPM'}{/if}
-          </a>
-          <!-- eslint-enable svelte/no-navigation-without-resolve -->
-          <a href={resolve('/tools/tuner')} target="_blank" rel="noopener noreferrer">Open tuner</a>
-        </nav>
-        <div class="exercise-list">
-          {#each lesson.exercises as exercise, exerciseIndex (exercise.title ?? `${exercise.type}-${exerciseIndex}`)}
-            <article class="exercise">
-              <div class="exercise-meta"><span>{exercise.type.replaceAll('-', ' ')}</span><span>{exercise.durationMinutes} min guide</span></div>
-              <h3>{exercise.title ?? exercise.type}</h3>
-              <ol>{#each exercise.instructions as instruction, instructionIndex (instructionIndex)}<li>{instruction}</li>{/each}</ol>
-              <div class="success-target"><strong>Success looks like</strong><p>{exercise.successCriterion}</p></div>
-            </article>
-          {/each}
-        </div>
-      </section>
+  {#snippet successSection()}
+    <section class="content-section" id="lesson-section-success">
+            <div class="kicker">07 · CHECK YOURSELF</div>
+            <h2>Success criteria</h2>
+            <ul class="criteria">
+              {#each lesson.successCriteria as criterion (criterion.dimension)}
+                <li><strong>{criterion.dimension.replaceAll('-', ' ')}</strong><p>{criterion.criterion}</p></li>
+              {/each}
+            </ul>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-music">
-        <div class="kicker">06 · MAKE MUSIC</div>
-        <h2>Musical application</h2>
-        <p>{lesson.musicalApplication.prompt}</p>
-        <ol>{#each lesson.musicalApplication.instructions as instruction, instructionIndex (instructionIndex)}<li>{instruction}</li>{/each}</ol>
-        {#if lesson.workedExamples.length > 0}
-          <h3>Examples and references</h3>
-          <div class="references">
-            {#each lesson.workedExamples as example (example.label)}
-              <article><span>{example.kind.replaceAll('-', ' ')}</span><h4>{example.label}</h4><p>{example.content}</p></article>
-            {/each}
-          </div>
-        {/if}
-      </section>
+  {#snippet coachingSection()}
+    <section class="content-section" id="lesson-section-coaching">
+            <div class="kicker">COACHING NOTES</div>
+            <h2>Common mistakes and corrections</h2>
+            <div class="mistakes">
+              {#each lesson.commonMistakesAndCorrections as item, itemIndex (itemIndex)}
+                <article><strong>Watch for</strong><p>{item.mistake}</p><strong>Try this correction</strong><p>{item.correction}</p></article>
+              {/each}
+            </div>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-success">
-        <div class="kicker">07 · CHECK YOURSELF</div>
-        <h2>Success criteria</h2>
-        <ul class="criteria">
-          {#each lesson.successCriteria as criterion (criterion.dimension)}
-            <li><strong>{criterion.dimension.replaceAll('-', ' ')}</strong><p>{criterion.criterion}</p></li>
-          {/each}
-        </ul>
-      </section>
+  {#snippet recallSection()}
+    <section class="content-section" id="lesson-section-recall">
+            <div class="kicker">08 · REFLECT AND RETRIEVE</div>
+            <h2>Recall without looking</h2>
+            <ul>{#each lesson.retrievalPrompt as prompt (prompt)}<li>{prompt}</li>{/each}</ul>
+            <h3>Review guidance</h3>
+            <p>{lesson.nextReviewSuggestion.approach}</p>
+            <ul>{#each lesson.nextReviewSuggestion.suggestedChecks as check (check)}<li>{check}</li>{/each}</ul>
+            <p>{lesson.nextReviewSuggestion.adaptation}</p>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-coaching">
-        <div class="kicker">COACHING NOTES</div>
-        <h2>Common mistakes and corrections</h2>
-        <div class="mistakes">
-          {#each lesson.commonMistakesAndCorrections as item, itemIndex (itemIndex)}
-            <article><strong>Watch for</strong><p>{item.mistake}</p><strong>Try this correction</strong><p>{item.correction}</p></article>
-          {/each}
-        </div>
-      </section>
+  {#snippet sessionSection()}
+    <section class="content-section" id="lesson-section-session">
+            <div class="kicker">FLEXIBLE PRACTICE</div>
+            <h2>Choose a session size</h2>
+            <div class="practice-options">
+              <article><h3>10 minutes</h3><ul>{#each lines(lesson.practiceOptions.tenMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
+              <article><h3>20 minutes</h3><ul>{#each lines(lesson.practiceOptions.twentyMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
+              <article><h3>40 minutes</h3><ul>{#each lines(lesson.practiceOptions.fortyMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
+            </div>
+            <p>{lesson.practiceOptions.rule}</p>
+          </section>
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-recall">
-        <div class="kicker">08 · REFLECT AND RETRIEVE</div>
-        <h2>Recall without looking</h2>
-        <ul>{#each lesson.retrievalPrompt as prompt (prompt)}<li>{prompt}</li>{/each}</ul>
-        <h3>Review guidance</h3>
-        <p>{lesson.nextReviewSuggestion.approach}</p>
-        <ul>{#each lesson.nextReviewSuggestion.suggestedChecks as check (check)}<li>{check}</li>{/each}</ul>
-        <p>{lesson.nextReviewSuggestion.adaptation}</p>
-      </section>
+  {#snippet renderLessonSection(section: LessonPresentationSection)}
+    {#if section === 'overview'}
+      {@render overviewSection()}
+    {:else if section === 'prerequisites'}
+      {@render prerequisitesSection()}
+    {:else if section === 'key-idea'}
+      {@render keyIdeaSection()}
+    {:else if section === 'demonstration'}
+      {@render demonstrationSection()}
+    {:else if section === 'walkthrough'}
+      {@render walkthroughSection()}
+    {:else if section === 'exercises'}
+      {@render exercisesSection()}
+    {:else if section === 'music'}
+      {@render musicSection()}
+    {:else if section === 'success'}
+      {@render successSection()}
+    {:else if section === 'coaching'}
+      {@render coachingSection()}
+    {:else if section === 'recall'}
+      {@render recallSection()}
+    {:else if section === 'session'}
+      {@render sessionSection()}
+    {/if}
+  {/snippet}
 
-      <section class="content-section" id="lesson-section-session">
-        <div class="kicker">FLEXIBLE PRACTICE</div>
-        <h2>Choose a session size</h2>
-        <div class="practice-options">
-          <article><h3>10 minutes</h3><ul>{#each lines(lesson.practiceOptions.tenMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
-          <article><h3>20 minutes</h3><ul>{#each lines(lesson.practiceOptions.twentyMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
-          <article><h3>40 minutes</h3><ul>{#each lines(lesson.practiceOptions.fortyMinutes) as item, index (index)}<li>{item}</li>{/each}</ul></article>
-        </div>
-        <p>{lesson.practiceOptions.rule}</p>
-      </section>
+  <div class="lesson-layout">
+    <article class="lesson-content" data-presentation={lessonPresentation}>
+      {#each getLessonPresentationSectionSequence(lessonPresentation) as section (section)}
+        {@render renderLessonSection(section)}
+      {/each}
     </article>
 
     <aside class="lesson-sidebar" aria-label="Lesson navigation">
@@ -506,8 +604,13 @@
   .lesson-meta span{border:1px solid var(--border);border-radius:99px;padding:7px 10px;color:var(--muted);font-size:9px}
   .checkpoint{margin-top:21px;padding:19px 21px;border:1px solid color-mix(in srgb,var(--primary) 45%,var(--border));border-radius:var(--radius);background:color-mix(in srgb,var(--primary) 6%,var(--surface))}
   .checkpoint p{font:500 18px/1.45 Georgia,serif;margin:8px 0}.checkpoint small{font-size:10px;line-height:1.5;color:var(--muted)}
-  .lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:25px;align-items:start}.lesson-content{min-width:0}
+  .lesson-layout{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:25px;align-items:start}
+  .lesson-content{min-width:0}
   .content-section{padding:26px 0;border-bottom:1px solid var(--border);scroll-margin-top:20px}
+  .presentation-note{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 22px;color:var(--muted);font-size:var(--font-size-supporting)}
+  .presentation-note .eyebrow{margin-right:3px}
+  .presentation-note strong{color:var(--text);font-weight:700}
+  .presentation-note a{color:var(--primary);font-weight:700;text-decoration:underline;text-underline-offset:3px}
   .content-section h2{font:500 25px/1.2 Georgia,serif;margin:8px 0 15px}.content-section h3{font-size:13px;margin:20px 0 9px}
   .content-section p,.content-section li{font-size:12px;line-height:1.8;color:var(--muted)}.content-section ul,.content-section ol{padding-left:21px}
   .worked-example,.success-target{padding:15px 17px;margin-top:15px;border:1px solid var(--border);border-radius:11px;background:var(--surface)}
