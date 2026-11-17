@@ -26,11 +26,18 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
 
   try {
     const url = new URL(env.BETTER_AUTH_URL);
+    const isLocalDevelopmentHost =
+      url.hostname === 'localhost' ||
+      url.hostname === '127.0.0.1' ||
+      url.hostname === '[::1]';
+
     return (
-      (url.protocol === 'https:' || url.protocol === 'http:') &&
+      (url.protocol === 'https:' || (url.protocol === 'http:' && isLocalDevelopmentHost)) &&
       url.pathname === '/' &&
       !url.search &&
-      !url.hash
+      !url.hash &&
+      !url.username &&
+      !url.password
     );
   } catch {
     return false;
@@ -104,7 +111,7 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
       maxPasswordLength: 128,
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
-      sendResetPassword: async ({ user, url }) => {
+      sendResetPassword: ({ user, url }) =>
         queueEmail({
           to: user.email,
           subject: 'Reset your GuitarLab password',
@@ -113,15 +120,14 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
 ${url}
 
 If you did not request a reset, you can ignore this email.`
-        });
-      }
+        })
     },
     emailVerification: {
       sendOnSignUp: true,
       sendOnSignIn: true,
       autoSignInAfterVerification: false,
       expiresIn: 60 * 60,
-      sendVerificationEmail: async ({ user, url }) => {
+      sendVerificationEmail: ({ user, url }) =>
         queueEmail({
           to: user.email,
           subject: 'Verify your GuitarLab email',
@@ -130,8 +136,7 @@ If you did not request a reset, you can ignore this email.`
 ${url}
 
 The link expires in one hour.`
-        });
-      }
+        })
     },
     rateLimit: {
       enabled: true,
