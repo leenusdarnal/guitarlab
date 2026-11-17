@@ -28,6 +28,19 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      - name: Refresh auth dependency lock for this pull request
+        if: github.event_name == 'pull_request' && github.head_ref == 'feat/m5-secure-account-auth'
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+
+      - name: Preserve refreshed auth dependency lock
+        if: github.event_name == 'pull_request' && github.head_ref == 'feat/m5-secure-account-auth'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: guitarlab-auth-package-lock
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Install dependencies
         id: install-dependencies
         run: npm ci --no-audit --no-fund
