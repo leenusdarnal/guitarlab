@@ -163,13 +163,10 @@ try {
     const orderedSections = await lessonContent
       .locator(':scope > .content-section')
       .evaluateAll((sections) =>
-        sections
-          .map((section) => ({
-            id: section.id,
-            order: Number(getComputedStyle(section).order),
-            visible: section.getClientRects().length > 0
-          }))
-          .sort((left, right) => left.order - right.order)
+        sections.map((section) => ({
+          id: section.id,
+          visible: section.getClientRects().length > 0
+        }))
       );
     assert.equal(orderedSections.length, 11, 'Every authored lesson section should remain rendered');
     assert.equal(
@@ -183,10 +180,14 @@ try {
     );
     await page.reload({ waitUntil: 'networkidle' });
     await lessonContent.waitFor();
+    const reloadedSections = await lessonContent
+      .locator(':scope > .content-section')
+      .evaluateAll((sections) => sections.map((section) => section.id));
+    assert.equal(reloadedSections.length, 11);
     assert.equal(
-      await lessonContent.locator(':scope > .content-section').count(),
-      11,
-      `${presentation.label} should persist after reload`
+      reloadedSections[0],
+      presentation.firstSection,
+      `${presentation.label} should preserve DOM reading order after reload`
     );
   }
 
