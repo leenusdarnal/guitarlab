@@ -443,4 +443,42 @@ describe('practice session lifecycle', () => {
       )
     ).rejects.toThrow(/already updated/);
   });
+
+  it('persists a validated ordered routine snapshot on a started session', async () => {
+    const routineSnapshot = {
+      id: '11111111-1111-4111-8111-111111111111',
+      name: 'Balanced daily practice',
+      exercises: [
+        {
+          id: '22222222-2222-4222-8222-222222222222',
+          name: 'Warm-up',
+          minutes: 5
+        },
+        {
+          id: '33333333-3333-4333-8333-333333333333',
+          name: 'Chord changes',
+          minutes: 10
+        }
+      ]
+    };
+
+    const created = await startPracticeSession(
+      {
+        learnerId,
+        plannedMinutes: 15,
+        primaryCurriculumReleaseId: null,
+        primaryLessonId: null,
+        focus: 'Balanced daily practice',
+        routineSnapshot
+      },
+      { curriculum, practice, runtime }
+    );
+
+    expect(created).toMatchObject({
+      plannedMinutes: 15,
+      routineSnapshot
+    });
+    expect(sessions.get(created.id)?.routineSnapshot).toEqual(routineSnapshot);
+  });
+
 });
