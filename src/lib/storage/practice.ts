@@ -21,6 +21,7 @@ import type {
   PracticeSessionRecord
 } from '../repositories/contracts';
 import type { PracticeEvidenceSubmission } from '../domain/learning/practice-evidence';
+import type { PracticeRoutineSnapshot } from '../domain/learning/practice-routine';
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -61,6 +62,7 @@ export async function startActivePracticeSession(input: {
     lessonId: string;
     exerciseId: string;
   } | null;
+  routineSnapshot?: PracticeRoutineSnapshot | null;
 }): Promise<PracticeSessionRecord> {
   const database = await openLocalDatabase();
   try {
@@ -92,6 +94,7 @@ export async function startActivePracticeSession(input: {
         practiceTaxonomyVersion: authoredScope
           ? PRACTICE_TAXONOMY_VERSION
           : null,
+        routineSnapshot: input.routineSnapshot ?? null,
         focus: input.focus
       },
       {
