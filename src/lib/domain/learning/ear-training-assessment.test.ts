@@ -180,3 +180,73 @@ describe('pulse recognition assessment evidence', () => {
     );
   });
 });
+
+
+describe('chord movement recognition assessment evidence', () => {
+  it('uses a versioned supporting-probe instrument without claiming playing mastery', async () => {
+    const { chordMovementRecognitionAssessment } = await import('./ear-training-assessment');
+    expect(chordMovementRecognitionAssessment).toEqual({
+      definitionId: 'guitar.ear-training.chord-movement-recognition',
+      definitionVersion: 1,
+      scoringRuleVersion: 'exact-chord-function-choice-v1',
+      skillId: 'harmony.triads',
+      decisionScope: 'supporting_probe'
+    });
+  });
+
+  it('records stable IV and V progression item identities and explicit responses', async () => {
+    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
+    for (const [sequence, answer] of [[0, 'subdominant'], [1, 'dominant']] as const) {
+      const exercise = createEarTrainingExercise('chord-movement', sequence);
+      const result = scoreChordMovementResponse(exercise, answer);
+      expect(result).toMatchObject({
+        score: 100,
+        outcome: 'passed',
+        assessmentInstrument: {
+          definitionId: 'guitar.ear-training.chord-movement-recognition',
+          definitionVersion: 1,
+          scoringRuleVersion: 'exact-chord-function-choice-v1',
+          itemCount: 1,
+          passThreshold: 100,
+          decisionScope: 'supporting_probe'
+        },
+        itemEvidence: [{
+          itemId: `chord-movement.${answer}-between-tonic`,
+          response: answer,
+          outcome: 'correct',
+          responseSource: 'learner_selected_option'
+        }]
+      });
+    }
+  });
+
+  it('records an incorrect choice without inventing a confusion diagnosis', async () => {
+    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
+    const exercise = createEarTrainingExercise('chord-movement', 0);
+    const result = scoreChordMovementResponse(exercise, 'dominant');
+    expect(result).toMatchObject({
+      score: 0,
+      outcome: 'needs_practice',
+      itemEvidence: [{
+        itemId: 'chord-movement.subdominant-between-tonic',
+        response: 'dominant',
+        outcome: 'incorrect'
+      }]
+    });
+    expect(result.itemEvidence[0]).not.toHaveProperty('confusionCode');
+  });
+
+  it('rejects a non-chord exercise, invalid response, and unauthored answer', async () => {
+    const { scoreChordMovementResponse } = await import('./ear-training-assessment');
+    expect(() => scoreChordMovementResponse(createEarTrainingExercise('pulse'), 'steady')).toThrow(
+      'Only chord-movement exercises'
+    );
+    expect(() => scoreChordMovementResponse(createEarTrainingExercise('chord-movement'), 'rising')).toThrow(
+      'not valid for this chord-movement item'
+    );
+    const invalid = { ...createEarTrainingExercise('chord-movement'), answer: 'rising' as EarTrainingAnswer };
+    expect(() => scoreChordMovementResponse(invalid, 'subdominant')).toThrow(
+      'does not have an authored answer'
+    );
+  });
+});

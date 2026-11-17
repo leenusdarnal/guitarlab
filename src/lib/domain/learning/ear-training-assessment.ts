@@ -64,6 +64,15 @@ export type ScoredEarTrainingResponse = {
 
 export type ScoredIntervalRecognitionResponse = ScoredEarTrainingResponse;
 export type ScoredPulseRecognitionResponse = ScoredEarTrainingResponse;
+export type ScoredChordMovementResponse = ScoredEarTrainingResponse;
+
+export const chordMovementRecognitionAssessment = {
+  definitionId: 'guitar.ear-training.chord-movement-recognition',
+  definitionVersion: 1,
+  scoringRuleVersion: 'exact-chord-function-choice-v1',
+  skillId: 'harmony.triads',
+  decisionScope: 'supporting_probe' as const
+};
 
 /**
  * Score only the learner's explicit interval selection against the
@@ -147,6 +156,55 @@ export function scorePulseRecognitionResponse(
     itemEvidence: [
       {
         itemId,
+        response,
+        outcome: correct ? 'correct' : 'incorrect',
+        responseSource: 'learner_selected_option'
+      }
+    ],
+    score: correct ? 100 : 0,
+    outcome: correct ? 'passed' : 'needs_practice'
+  };
+}
+
+
+/**
+ * Score the learner's explicit IV/V chord-function choice in a generated
+ * I–IV–I or I–V–I progression. This is an auditory supporting probe only:
+ * it does not claim that the learner can play the chord or establish mastery.
+ */
+export function scoreChordMovementResponse(
+  exercise: EarTrainingExercise,
+  response: EarTrainingAnswer
+): ScoredChordMovementResponse {
+  if (exercise.kind !== 'chord-movement') {
+    throw new Error('Only chord-movement exercises can be scored here.');
+  }
+  if (
+    exercise.answer !== 'subdominant' &&
+    exercise.answer !== 'dominant'
+  ) {
+    throw new Error('The chord-movement item does not have an authored answer.');
+  }
+  if (
+    (response !== 'subdominant' && response !== 'dominant') ||
+    !exercise.choices.some((choice) => choice.value === response)
+  ) {
+    throw new Error('The selected answer is not valid for this chord-movement item.');
+  }
+
+  const correct = response === exercise.answer;
+  return {
+    assessmentInstrument: {
+      definitionId: chordMovementRecognitionAssessment.definitionId,
+      definitionVersion: chordMovementRecognitionAssessment.definitionVersion,
+      scoringRuleVersion: chordMovementRecognitionAssessment.scoringRuleVersion,
+      itemCount: 1,
+      passThreshold: 100,
+      decisionScope: chordMovementRecognitionAssessment.decisionScope
+    },
+    itemEvidence: [
+      {
+        itemId: `chord-movement.${exercise.answer}-between-tonic`,
         response,
         outcome: correct ? 'correct' : 'incorrect',
         responseSource: 'learner_selected_option'
