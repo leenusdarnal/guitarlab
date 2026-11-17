@@ -898,6 +898,21 @@
         {#if activeSession.plannedMinutes}
           <p><strong>Plan:</strong> {activeSession.plannedMinutes} minutes</p>
         {/if}
+        {#if activeSession.routineSnapshot}
+          <section class="routine-run" aria-labelledby="routine-run-heading">
+            <p class="eyebrow">SAVED ROUTINE · SESSION SNAPSHOT</p>
+            <h3 id="routine-run-heading">{activeSession.routineSnapshot.name}</h3>
+            <ol>
+              {#each activeSession.routineSnapshot.exercises as exercise (exercise.id)}
+                <li>
+                  <span>{exercise.name}</span>
+                  <strong>{exercise.minutes} min</strong>
+                </li>
+              {/each}
+            </ol>
+            <p class="muted">This is the sequence and timing saved when the session began. It remains unchanged if you edit the reusable routine later.</p>
+          </section>
+        {/if}
         {#if activeSession.primaryExerciseId}
           <p class="authored-session-link">
             <strong>Linked exercise:</strong>
@@ -1121,6 +1136,92 @@
       {:else}
         <h2 id="session-heading">Start a practice session</h2>
         <p class="muted">Choose a duration and focus. Nothing is recorded until you start.</p>
+        <section class="saved-routines" aria-labelledby="saved-routines-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">REUSABLE PRACTICE</p>
+              <h3 id="saved-routines-heading">Your practice routines</h3>
+            </div>
+            <span class="count">{routines.length}/12 saved</span>
+          </div>
+          <p class="muted">
+            Save an ordered set of exercises with time allocations, then reuse it for a future session. Routines stay in this learner profile on this device.
+          </p>
+          {#if routineNotice}
+            <p class="message" role="status">{routineNotice}</p>
+          {/if}
+          {#if routineError}
+            <p class="message error" role="alert">{routineError}</p>
+          {/if}
+          {#if routineLoading}
+            <p class="muted" role="status">Loading saved routines…</p>
+          {:else if routines.length > 0}
+            <ul class="routine-list">
+              {#each routines as routine (routine.id)}
+                <li class:selected={selectedRoutineId === routine.id}>
+                  <div class="routine-summary">
+                    <strong>{routine.name}</strong>
+                    <span>{routine.exercises.length} exercises · {routine.exercises.reduce((total, exercise) => total + exercise.minutes, 0)} minutes</span>
+                    {#if routine.focus}
+                      <p>{routine.focus}</p>
+                    {/if}
+                    <ol>
+                      {#each routine.exercises as exercise (exercise.id)}
+                        <li>{exercise.name} <span>{exercise.minutes} min</span></li>
+                      {/each}
+                    </ol>
+                  </div>
+                  <div class="routine-actions">
+                    <button type="button" class="text-button" aria-pressed={selectedRoutineId === routine.id} onclick={() => selectRoutine(routine)}>
+                      {selectedRoutineId === routine.id ? 'Selected' : 'Use routine'}
+                    </button>
+                    <button type="button" class="text-button" onclick={() => editRoutine(routine)} disabled={routineSaving}>Edit</button>
+                    <button type="button" class="text-button" onclick={() => void deleteRoutine(routine.id)} disabled={routineSaving}>Delete</button>
+                  </div>
+                </li>
+              {/each}
+            </ul>
+          {:else}
+            <p class="empty-inline">No saved routines yet. Build one below, or start a one-off session.</p>
+          {/if}
+
+          <form class="routine-editor" onsubmit={(event) => { event.preventDefault(); void saveRoutine(); }}>
+            <h4>{editingRoutineId ? 'Edit routine' : 'Create a routine'}</h4>
+            <label for="routine-name">Routine name</label>
+            <input id="routine-name" bind:value={routineName} maxlength="80" placeholder="e.g. Balanced daily practice" required />
+            <label for="routine-focus">Main focus <span>optional</span></label>
+            <input id="routine-focus" bind:value={routineFocus} maxlength="180" placeholder="e.g. Build relaxed, steady fundamentals" />
+            <div class="routine-editor-heading">
+              <strong>Exercise sequence</strong>
+              <span>{routineExercises.length}/12 · {routineDraftMinutes} min</span>
+            </div>
+            {#each routineExercises as exercise, index (exercise.id)}
+              <div class="routine-exercise-row">
+                <label>
+                  <span class="visually-hidden">Exercise {index + 1} name</span>
+                  <input bind:value={exercise.name} maxlength="160" placeholder="Exercise {index + 1}" required />
+                </label>
+                <label>
+                  <span class="visually-hidden">Minutes for exercise {index + 1}</span>
+                  <input type="number" bind:value={exercise.minutes} min="1" max="180" step="1" aria-label="Minutes for exercise {index + 1}" required />
+                </label>
+                <div class="routine-order-actions" aria-label="Reorder exercise {index + 1}">
+                  <button type="button" class="text-button" aria-label="Move exercise {index + 1} up" onclick={() => moveRoutineExercise(exercise.id, -1)} disabled={index === 0}>↑</button>
+                  <button type="button" class="text-button" aria-label="Move exercise {index + 1} down" onclick={() => moveRoutineExercise(exercise.id, 1)} disabled={index === routineExercises.length - 1}>↓</button>
+                  <button type="button" class="text-button" aria-label="Remove exercise {index + 1}" onclick={() => removeRoutineExercise(exercise.id)}>×</button>
+                </div>
+              </div>
+            {/each}
+            <p class="muted">Add at least one exercise. A routine must total 5–180 minutes. The saved order is used when you start a session.</p>
+            <div class="routine-editor-actions">
+              <button type="button" class="text-button" onclick={addRoutineExercise} disabled={routineExercises.length >= 12 || routineSaving}>Add exercise</button>
+              <button type="submit" class="primary" disabled={routineSaving}>{routineSaving ? 'Saving…' : editingRoutineId ? 'Save changes' : 'Save routine'}</button>
+              {#if editingRoutineId}
+                <button type="button" class="text-button" onclick={resetRoutineEditor} disabled={routineSaving}>Cancel</button>
+              {/if}
+            </div>
+          </form>
+        </section>
         <form
           class="start-form"
           onsubmit={(event) => {
@@ -1136,11 +1237,18 @@
             max="180"
             step="1"
             bind:value={plannedMinutes}
+            disabled={!!selectedRoutine}
           />
+          {#if selectedRoutine}
+            <p class="muted routine-selected-note">
+              {selectedRoutine.name} supplies the {selectedRoutineMinutes}-minute session duration.
+              <button type="button" class="text-button" onclick={() => { selectedRoutineId = null; }}>Use a custom duration instead</button>
+            </p>
+          {/if}
           <label for="authored-exercise">
             Link to an authored exercise <span>optional</span>
           </label>
-          <select id="authored-exercise" bind:value={selectedAuthoredScopeKey}>
+          <select id="authored-exercise" bind:value={selectedAuthoredScopeKey} disabled={!!selectedRoutine}>
             <option value="">General session — no authored exercise link</option>
             {#each authoredPracticeScopes as scope (`${scope.lessonId}::${scope.exerciseId}`)}
               <option value={`${scope.lessonId}::${scope.exerciseId}`}>
