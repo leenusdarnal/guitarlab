@@ -425,6 +425,52 @@ try {
     'true',
     `The second lesson block should update immediately while offline: ${JSON.stringify(offlineProgressState)}`
   );
+  const offlineCompletedBlockIds = offlineProgressState.sectionButtons
+    .filter((button) => button.pressed === 'true')
+    .map((button) => button.blockId?.replace(/^lesson-block-/, '') ?? '');
+  await page.waitForFunction(
+    async (expectedBlockIds) => {
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      try {
+        const transaction = database.transaction(
+          ['metadata', 'lessonProgress'],
+          'readonly'
+        );
+        const [activeProfile, records] = await Promise.all([
+          new Promise((resolve, reject) => {
+            const request = transaction
+              .objectStore('metadata')
+              .get('activeLearnerId');
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          }),
+          new Promise((resolve, reject) => {
+            const request = transaction
+              .objectStore('lessonProgress')
+              .getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+          })
+        ]);
+        const savedProgress = records.find(
+          (record) =>
+            record.learnerId === activeProfile?.value &&
+            record.lessonId === 'y1-w01-lesson'
+        );
+        return expectedBlockIds.every((blockId) =>
+          savedProgress?.completedBlockIds?.includes(blockId)
+        );
+      } finally {
+        database.close();
+      }
+    },
+    offlineCompletedBlockIds,
+    { timeout: 15000 }
+  );
   await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.context().setOffline(false);
   await page.reload({ waitUntil: 'networkidle' });
@@ -437,7 +483,8 @@ try {
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
   const completedLessonState = await page.evaluate(() => ({
     progressSummary:
-      document.querySelector('.progress-summary strong')?.textContent?.trim() ?? null,
+      document.querySelector('.progress-summary strong')?.textContent?.trim() ??
+      null,
     completionMessage:
       document.querySelector('.progress-complete')?.textContent?.trim() ?? null
   }));
