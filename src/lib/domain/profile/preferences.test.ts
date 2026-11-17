@@ -33,6 +33,14 @@ describe('learner profile preferences', () => {
     );
   });
 
+
+  it('accepts legacy profile preferences without a routines field', () => {
+    const { practiceRoutines: _practiceRoutines, ...legacyPreferences } =
+      createEmptyProfilePreferences();
+
+    expect(profilePreferencesSchema.parse(legacyPreferences).practiceRoutines).toEqual([]);
+  });
+
   it('rejects invalid practice durations', () => {
     const result = profilePreferencesSchema.safeParse({
       ...createEmptyProfilePreferences(),
