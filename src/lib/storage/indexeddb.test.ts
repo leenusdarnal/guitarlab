@@ -216,6 +216,7 @@ describe('local learner profile persistence', () => {
       goals: [],
       practiceMinutes: null,
       availableDays: [],
+      practiceRoutines: [],
       lessonPresentation: null
     });
   });
