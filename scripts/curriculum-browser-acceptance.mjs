@@ -449,9 +449,7 @@ try {
             request.onerror = () => reject(request.error);
           }),
           new Promise((resolve, reject) => {
-            const request = transaction
-              .objectStore('lessonProgress')
-              .getAll();
+            const request = transaction.objectStore('lessonProgress').getAll();
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);
           })
