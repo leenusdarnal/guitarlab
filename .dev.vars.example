@@ -1,0 +1,5 @@
+# Copy this file to .dev.vars and replace every blank value. Never commit real values.
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:8787
+RESEND_API_KEY=
+AUTH_FROM_EMAIL=

@@ -89,6 +89,10 @@ The first offline app-shell implementation merged in [PR #35](https://github.com
 - [External practice tools evaluation](docs/EXTERNAL_TOOLS.md)
 - [Contributing](CONTRIBUTING.md)
 
+## Optional accounts
+
+Email/password account flows are being introduced separately from the guest experience. Registration requires the dedicated auth D1 database, a Better Auth secret and a verified transactional email sender. The current preview and production Workers remain guest-only until their isolated databases and secrets are provisioned. See [authentication setup and deployment gates](docs/AUTHENTICATION_SETUP.md).
+
 ## Local development
 
 Use Node.js 22.23.5 as pinned in `.nvmrc`. CI also checks compatibility with Node.js 26.13.1.
