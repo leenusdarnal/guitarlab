@@ -21,7 +21,7 @@ const response = (headers: Record<string, string> = {}) =>
   }) as Response;
 
 describe('public offline navigation cache policy', () => {
-  it('allows explicitly marked prerendered public pages', () => {
+  it('allows allowlisted prerendered public pages', () => {
     expect(
       isCacheablePublicNavigation(
         request(),
