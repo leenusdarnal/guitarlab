@@ -22,8 +22,8 @@ const PRECACHE_URLS = [
 ];
 const MAX_CACHED_PAGES = 40;
 
-// Only prerendered public routes are eligible for offline HTML caching. Dynamic
-// routes are intentionally excluded, even when their response looks cacheable.
+// Prerendered routes are implicitly public. Dynamic routes must explicitly opt
+// in with Cache-Control: public before their HTML can enter the offline cache.
 const PUBLIC_PAGE_PATHS = new Set(
   prerendered.map(
     (page) => new URL(resolve(page.path), worker.location.origin).pathname
