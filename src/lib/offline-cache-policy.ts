@@ -26,14 +26,15 @@ export function isCacheablePublicNavigation(
   if (response.headers.has('set-cookie')) return false;
 
   const cacheControl = response.headers.get('cache-control')?.toLowerCase() ?? '';
-  const directives = cacheControl.split(',').map((directive) => directive.trim());
+  const directives = cacheControl
+    .split(',')
+    .map((directive) => directive.split('=', 1)[0].trim());
   if (directives.some((directive) => ['private', 'no-store'].includes(directive))) {
     return false;
   }
 
   const explicitlyPublic =
-    publicPaths.has(url.pathname) ||
-    directives.some((directive) => directive === 'public' || directive.startsWith('public='));
+    publicPaths.has(url.pathname) || directives.includes('public');
   if (!explicitlyPublic) return false;
 
   const vary = response.headers.get('vary')?.toLowerCase() ?? '';
