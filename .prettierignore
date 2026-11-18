@@ -5,3 +5,7 @@ build
 dist
 coverage
 package-lock.json
+
+# Preserve authored release-fingerprinted lesson JSON formatting.
+/content/curriculum/year-1-lessons.json
+/content/curriculum/year-2-lessons.json
