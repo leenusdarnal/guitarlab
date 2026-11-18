@@ -488,7 +488,7 @@ try {
     .getByRole('button', { name: 'Try again' })
     .click();
   await recoveryPage
-    .getByText('Showing 34 of 34 skills', { exact: true })
+    .getByText('Showing 35 of 35 skills', { exact: true })
     .waitFor();
   await recoveryPage
     .locator('.storage-warning')
@@ -2282,9 +2282,9 @@ try {
   await page
     .getByRole('heading', { name: 'See the skills behind the music.' })
     .waitFor();
-  await page.getByText('Showing 34 of 34 skills', { exact: true }).waitFor();
+  await page.getByText('Showing 35 of 35 skills', { exact: true }).waitFor();
   await page.getByLabel('Find a skill').fill('chord transition');
-  await page.getByText('Showing 1 of 34 skills', { exact: true }).waitFor();
+  await page.getByText('Showing 1 of 35 skills', { exact: true }).waitFor();
   const chordTransitionChoice = page.getByRole('button', {
     name: /Chord transitions/i
   });
