@@ -3,14 +3,12 @@ export const PRIVATE_NAVIGATION_PATH_PATTERN =
 
 export function isEligiblePublicNavigation(
   url: URL,
-  origin: string,
-  publicPaths: ReadonlySet<string>
+  origin: string
 ): boolean {
   return (
     url.origin === origin &&
     !url.search &&
-    !PRIVATE_NAVIGATION_PATH_PATTERN.test(url.pathname) &&
-    publicPaths.has(url.pathname)
+    !PRIVATE_NAVIGATION_PATH_PATTERN.test(url.pathname)
   );
 }
 
@@ -22,23 +20,21 @@ export function isCacheablePublicNavigation(
   publicPaths: ReadonlySet<string>
 ): boolean {
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
-  if (!isEligiblePublicNavigation(url, origin, publicPaths)) return false;
+  if (!isEligiblePublicNavigation(url, origin)) return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
-  if (
-    !response.headers.get('content-type')?.includes('text/html')
-  ) {
-    return false;
-  }
+  if (!response.headers.get('content-type')?.includes('text/html')) return false;
   if (response.headers.has('set-cookie')) return false;
 
-  const cacheControl =
-    response.headers.get('cache-control')?.toLowerCase() ?? '';
-  if (
-    cacheControl.includes('private') ||
-    cacheControl.includes('no-store')
-  ) {
+  const cacheControl = response.headers.get('cache-control')?.toLowerCase() ?? '';
+  const directives = cacheControl.split(',').map((directive) => directive.trim());
+  if (directives.some((directive) => ['private', 'no-store'].includes(directive))) {
     return false;
   }
+
+  const explicitlyPublic =
+    publicPaths.has(url.pathname) ||
+    directives.some((directive) => directive === 'public' || directive.startsWith('public='));
+  if (!explicitlyPublic) return false;
 
   const vary = response.headers.get('vary')?.toLowerCase() ?? '';
   if (
