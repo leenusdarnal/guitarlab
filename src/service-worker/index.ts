@@ -138,15 +138,13 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   if (url.origin !== worker.location.origin) return;
 
   if (request.mode === 'navigate') {
-    // Private routes are network-only and are never read from Cache Storage.
-    if (!isEligiblePublicPage(url)) {
-      event.respondWith(fetch(request).catch(createOfflineResponse));
-      return;
-    }
-
+    // Private routes never read from Cache Storage. The shared resolver also
+    // returns the offline fallback directly when the browser is offline.
     event.respondWith(
       (async () => {
-        const pages = await caches.open(PAGE_CACHE).catch(() => null);
+        const pages = isEligiblePublicPage(url)
+          ? await caches.open(PAGE_CACHE).catch(() => null)
+          : null;
         return resolvePublicNavigation(
           request,
           pages,

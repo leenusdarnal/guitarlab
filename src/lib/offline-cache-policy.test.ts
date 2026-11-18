@@ -17,10 +17,7 @@ const request = (path = '/', overrides: Record<string, string> = {}) =>
     ...overrides
   }) as Request;
 
-const response = (
-  headers: Record<string, string> = {},
-  body = 'public page'
-) =>
+const response = (headers: Record<string, string> = {}, body = 'public page') =>
   ({
     status: 200,
     type: 'basic',
@@ -240,6 +237,7 @@ describe('public offline navigation cache policy', () => {
       [target.url]: response({ 'cache-control': 'private, no-store' })
     });
     let cacheReads = 0;
+    let networkRequests = 0;
     const trackedCache: PublicNavigationCache = {
       async match(request) {
         cacheReads += 1;
@@ -258,6 +256,7 @@ describe('public offline navigation cache policy', () => {
       {
         online: false,
         fetchNavigation: async () => {
+          networkRequests += 1;
           throw new Error('network unavailable');
         },
         offlineResponse
@@ -266,6 +265,7 @@ describe('public offline navigation cache policy', () => {
 
     expect(result.status).toBe(503);
     expect(cacheReads).toBe(0);
+    expect(networkRequests).toBe(0);
   });
 
   it('updates the public page cache after a successful network response', async () => {

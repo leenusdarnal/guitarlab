@@ -408,12 +408,12 @@ This table records the state observed during the 18 November 2026 reconciliation
 | CSS entry | src/app.css starts with @import "tailwindcss"; |
 | Configuration | No legacy tailwind.config.* or standalone PostCSS config was found at the repository root |
 | Styling ownership | One global stylesheet and 25 Svelte component-scoped <style> blocks |
-| CSS size | About 148,746 characters in component-scoped styles plus 4,711 in src/app.css |
+| CSS size | About 144,035 characters in component-scoped styles plus 4,711 in src/app.css (148,746 combined) |
 | CSS structure | Approx. 1,495 rule blocks and 4,088 declarations in the scanned styles |
 | Class usage | 952 literal class attributes and 1,020 tokens; only 5 tokens matched a broad utility-class pattern. This is a heuristic, not a full Tailwind AST report |
 | Tailwind directives | No @apply was found in the scanned styles; no custom @theme block was found |
 | Overrides / dynamic styling | 19 !important occurrences, 7 literal style= attributes and 67 Svelte class: directives |
-| Design tokens | src/app.css defines 65 custom properties, including dark/light semantic colours, spacing, typography, radii and layout roles |
+| Design tokens | src/app.css contains 65 custom-property declarations representing 47 distinct names, including dark/light semantic colours, spacing, typography, radii and layout roles |
 
 **Interpretation:** Tailwind v4 is integrated correctly through its Vite plugin and CSS import, but the current UI is overwhelmingly styled with semantic class names and component-scoped CSS. Tailwind utility adoption is minimal. In practice Tailwind currently supplies its CSS processing, theme defaults and Preflight more than a utility-first component styling convention.
 
@@ -423,8 +423,8 @@ The semantic token system in src/app.css is an asset, not migration debt. Preser
 
 | File | Scoped CSS characters | Approx. rules | Notes |
 |---|---:|---:|---|
-| src/routes/+page.svelte | 16,206 | 197 | Dashboard; largest stylesheet block |
-| src/routes/practice/+page.svelte | 16,320 | 153 | Practice workflow; largest declaration count |
+| src/routes/practice/+page.svelte | 16,320 | 152 | Practice workflow; largest stylesheet block and declaration count |
+| src/routes/+page.svelte | 16,206 | 188 | Dashboard; second-largest stylesheet block |
 | src/routes/learn/[lessonId]/+page.svelte | 11,904 | 140 | Lesson and progress interaction |
 | src/routes/tools/fretboard/+page.svelte | 11,101 | 97 | Diagram geometry and responsive scrolling |
 | src/routes/skills/+page.svelte | 10,825 | 106 | Skill map and state presentation |

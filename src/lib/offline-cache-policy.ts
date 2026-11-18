@@ -24,11 +24,14 @@ export function isCacheablePublicNavigation(
   }
   if (response.headers.has('set-cookie')) return false;
 
-  const cacheControl = response.headers.get('cache-control')?.toLowerCase() ?? '';
+  const cacheControl =
+    response.headers.get('cache-control')?.toLowerCase() ?? '';
   const directives = cacheControl
     .split(',')
     .map((directive) => directive.split('=', 1)[0].trim());
-  if (directives.some((directive) => ['private', 'no-store'].includes(directive))) {
+  if (
+    directives.some((directive) => ['private', 'no-store'].includes(directive))
+  ) {
     return false;
   }
 
@@ -72,6 +75,8 @@ export async function resolvePublicNavigation(
   const offlineResponse = () => options.offlineResponse();
 
   if (!isEligiblePublicNavigation(url, origin)) {
+    if (!options.online) return offlineResponse();
+
     try {
       return await options.fetchNavigation();
     } catch {

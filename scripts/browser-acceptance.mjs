@@ -87,7 +87,9 @@ try {
       name.startsWith('guitarlab-pages-')
     );
     if (!pageCacheName) {
-      throw new Error('The active service worker did not create its page cache.');
+      throw new Error(
+        'The active service worker did not create its page cache.'
+      );
     }
     const pageCache = await caches.open(pageCacheName);
     await pageCache.put(
