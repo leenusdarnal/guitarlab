@@ -31,11 +31,7 @@ const PUBLIC_PAGE_PATHS = new Set(
 );
 
 function isEligiblePublicPage(url: URL) {
-  return isEligiblePublicNavigation(
-    url,
-    worker.location.origin,
-    PUBLIC_PAGE_PATHS
-  );
+  return isEligiblePublicNavigation(url, worker.location.origin);
 }
 
 const OFFLINE_HTML = `<!doctype html>
@@ -74,12 +70,16 @@ function isCacheableNavigation(request: Request, response: Response, url: URL) {
 async function removeNonPublicPageEntries(cache: Cache) {
   const keys = await cache.keys();
   await Promise.all(
-    keys
-      .filter((request) => {
-        const url = new URL(request.url);
-        return !isEligiblePublicPage(url);
-      })
-      .map((request) => cache.delete(request))
+    keys.map(async (request) => {
+      const url = new URL(request.url);
+      const cached = await cache.match(request);
+      if (
+        !cached ||
+        !isCacheableNavigation(request, cached, url)
+      ) {
+        await cache.delete(request);
+      }
+    })
   );
 }
 
@@ -150,7 +150,9 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
         const pages = await caches.open(PAGE_CACHE);
         if (!worker.navigator.onLine) {
           const cached = await pages.match(request);
-          if (cached) return cached;
+          if (cached && isCacheableNavigation(request, cached, url)) {
+            return cached;
+          }
           return new Response(OFFLINE_HTML, {
             status: 503,
             headers: {
@@ -168,7 +170,9 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
           return response;
         } catch {
           const cached = await pages.match(request);
-          if (cached) return cached;
+          if (cached && isCacheableNavigation(request, cached, url)) {
+            return cached;
+          }
           return new Response(OFFLINE_HTML, {
             status: 503,
             headers: {
