@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 18 November 2026  
-**Verified source baseline:** `main` at `41805887fee753b1c47e2b1442218ac53c4d948f`  
+**Verified source baseline:** `main` at `6439dac92f889b3838e4446023e563a11db56e7` (CSS audit baseline; PR #186 is based on this commit)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -44,6 +44,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 ### 1.3 Reconciliation baseline
 
+- The 18 November 2026 Tailwind/CSS inventory and PR #186 base use `main` commit `6439dac92f889b3838e4446023e563a11db56e7`; this is newer than the earlier PR #180/CI evidence recorded below.
 - Main commit `41805887fee753b1c47e2b1442218ac53c4d948f` includes PR #180.
 - Main GuitarLab CI run [#44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully.
 - Main curriculum validation [#44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) completed successfully.
