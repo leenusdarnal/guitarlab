@@ -324,7 +324,7 @@
 <main class="fretboard-page">
   <a class="back-link tool-page-back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
-  <header class="tool-page-heading">
+  <header class="page-heading tool-page-heading">
     <div class="tool-page-eyebrow">THE PRACTICE WORKBENCH · NOTES &amp; PITCH</div>
     <h1>Fretboard explorer.</h1>
     <p>
