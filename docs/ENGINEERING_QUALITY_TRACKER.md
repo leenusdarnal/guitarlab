@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 18 November 2026  
-**Verified source baseline:** \`main\` at \`41805887fee753b1c47e2b1442218ac53c4d948f\`  
+**Verified source baseline:** `main` at `41805887fee753b1c47e2b1442218ac53c4d948f`  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -44,7 +44,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 ### 1.3 Reconciliation baseline
 
-- Main commit \`41805887fee753b1c47e2b1442218ac53c4d948f\` includes PR #180.
+- Main commit `41805887fee753b1c47e2b1442218ac53c4d948f` includes PR #180.
 - Main GuitarLab CI run [#44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully.
 - Main curriculum validation [#44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) completed successfully.
 - PR #180's final required CI run [#44287911608](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911608) passed before merge.
@@ -74,17 +74,17 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| OFF-01 | P0 | **OPEN** | Replace permissive HTML caching with an explicit public-content policy. The current service worker accepts same-origin successful HTML when it is not marked \`private\`/\`no-store\` and does not expose \`Set-Cookie\`. The authenticated account page returns the account name/email but does not explicitly set a private no-store policy. This is a source-level privacy risk; a live exploit has not been reproduced. | \`src/service-worker/index.ts\`; \`src/routes/account/+page.server.ts\`; \`src/hooks.server.ts\` |
+| OFF-01 | P0 | **OPEN** | Replace permissive HTML caching with an explicit public-content policy. The current service worker accepts same-origin successful HTML when it is not marked `private`/`no-store` and does not expose `Set-Cookie`. The authenticated account page returns the account name/email but does not explicitly set a private no-store policy. This is a source-level privacy risk; a live exploit has not been reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
 | OFF-02 | P1 | **OPEN** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. | Depends on OFF-01 |
-| OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat \`navigator.onLine\` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
+| OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat `navigator.onLine` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
 ### OFF-01 acceptance checklist
 
 - [ ] Cache only an explicit allowlist of public app assets and public curriculum pages, or require an explicit public cache directive in addition to an allowlist.
-- [ ] Do not rely on the absence of \`Set-Cookie\` as the privacy boundary.
-- [ ] Mark authenticated account HTML and sensitive authentication responses \`Cache-Control: private, no-store\`.
+- [ ] Do not rely on the absence of `Set-Cookie` as the privacy boundary.
+- [ ] Mark authenticated account HTML and sensitive authentication responses `Cache-Control: private, no-store`.
 - [ ] Exclude account, sign-in, sign-up, verification, password-reset, session and all API/private routes from runtime page caching.
 - [ ] Exclude responses that vary by credentials/cookies or otherwise contain user-specific data.
 - [ ] Keep non-GET and cross-origin requests out of Cache Storage.
@@ -192,7 +192,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 - [ ] Capture LCP/INP/CLS for the five high-value journeys above under repeatable mobile and desktop conditions.
 - [ ] Record test device profile, browser, viewport, network/CPU throttling and exact commit SHA.
 - [ ] Inspect long tasks and INP interaction attribution before changing interaction code.
-- [ ] Consider \`web-vitals\` attribution only after privacy and telemetry decisions are reviewed; do not send learner notes, account data, raw input or sensitive URL/query content to analytics.
+- [ ] Consider `web-vitals` attribution only after privacy and telemetry decisions are reviewed; do not send learner notes, account data, raw input or sensitive URL/query content to analytics.
 - [ ] Treat Long Animation Frames data as optional diagnostic enhancement: support is not uniform across Safari and Firefox, and core functionality must not depend on it.
 - [ ] Re-measure after each optimization and report the before/after result; do not claim a performance gain from source-size estimates alone.
 
@@ -208,7 +208,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 |---|---|---|---|---|
 | ARC-01 | P2 | **OPEN** | Split large route-level screens into feature components (Today dashboard, lesson reader, fretboard, chord library, Data & backups). | [OPTIMIZATION_ROADMAP.md](OPTIMIZATION_ROADMAP.md) |
 | ARC-02 | P2 | **OPEN** | Consolidate repeated buttons, form fields, chips, panels, alerts, empty states and loading/error patterns into shared components where behaviour is genuinely shared. | UI audit and design direction |
-| ARC-03 | P2 | **OPEN** | Centralise theme preference resolution and persistence; remove duplicate theme application logic between root layout and dashboard. | \`src/routes/+layout.svelte\`; \`src/routes/+page.svelte\` |
+| ARC-03 | P2 | **OPEN** | Centralise theme preference resolution and persistence; remove duplicate theme application logic between root layout and dashboard. | `src/routes/+layout.svelte`; `src/routes/+page.svelte` |
 | ARC-04 | P2 | **OPEN** | Decompose oversized application orchestration and IndexedDB modules along use-case/repository boundaries, retaining framework-independent domain logic. | Architecture and optimization roadmaps |
 | ARC-05 | P2 | **OPEN** | Document supported browsers and baseline policy for any newly adopted web platform feature; add fallbacks for features outside the supported baseline. | Modern Web Guidance; physical matrix in Section 7 |
 
@@ -246,7 +246,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 - [ ] Verify password-reset request and completion, expired/used token behaviour and session revocation after reset.
 - [ ] Ensure responses do not disclose whether an email address is registered.
 - [ ] Verify CSRF/origin checks and configured rate limits against the running Worker.
-- [ ] Inspect actual session cookie attributes on HTTPS: HttpOnly, Secure, SameSite and Path. Review whether a \`__Host-\` prefix is supported without changing Better Auth's security semantics.
+- [ ] Inspect actual session cookie attributes on HTTPS: HttpOnly, Secure, SameSite and Path. Review whether a `__Host-` prefix is supported without changing Better Auth's security semantics.
 - [ ] Verify no password, cookie, session token, verification/reset token, learner notes or recordings are written to logs.
 - [ ] Include `/login`, `/account` and verification/reset states in axe and browser accessibility acceptance when auth is configured; the current core accessibility route list does not include those routes.
 - [ ] Verify every environment uses a distinct auth database and the correct exact origin/secrets.
@@ -300,7 +300,7 @@ Related tracking: [Issue #9](https://github.com/leenusdarnal/guitarlab/issues/9)
 
 | ID | Priority | Status | Required evidence |
 |---|---|---|---|
-| QA-04 | P1 | **OPEN** | Reconcile the exact deployed Worker version to the intended current \`main\` SHA. Earlier docs record a successful first production release for \`306f7aea19596731dac88192d8228590544f00fc\`; this audit does not establish that \`41805887fee753b1c47e2b1442218ac53c4d948f\` is deployed. Verify routes, security headers, retained artifact and rollback to a prior Worker version. |
+| QA-04 | P1 | **OPEN** | Reconcile the exact deployed Worker version to the intended current `main` SHA. Earlier docs record a successful first production release for `306f7aea19596731dac88192d8228590544f00fc`; this audit does not establish that `41805887fee753b1c47e2b1442218ac53c4d948f` is deployed. Verify routes, security headers, retained artifact and rollback to a prior Worker version. |
 | QA-05 | P2 | **OPEN** | Complete the controlled CI failure-injection and recovery rehearsal (see CI-01/CI-02 and [CI failure recovery runbook](CI_FAILURE_RECOVERY.md)); record the actual workflow run URLs. A currently green CI run does not prove this rehearsal has been completed. |
 | QA-06 | P1 | **OPEN** | Complete the umbrella M9 privacy, security, accessibility, offline, performance and release review; close only when all required P1 evidence is recorded. |
 
@@ -335,11 +335,11 @@ Never record account credentials, session tokens, personal learner data, private
 | ID | Priority | Status | Work item / current evidence | Acceptance |
 |---|---|---|---|---|
 | CI-01 | P1 | **PARTIAL** | Independent validation steps now continue after unrelated sibling failures when dependency installation succeeded. | Inject a controlled formatting/lint failure and prove independent checks still report their results; dependent steps must skip safely. |
-| CI-02 | P1 | **PARTIAL** | Migration drift detection checks tracked and untracked changes under \`drizzle/migrations\` after generation/finalization. | Inject an uncommitted generated migration and prove CI fails with changed-path diagnostics; clean committed migrations must pass. |
-| CI-03 | P2 | **DONE — automated** | npm cache is enabled for the Node 22 and Node 26 dependency-install jobs and keyed to the lockfile. | Keep \`npm ci\` reproducible; cache is only a package-download optimization. |
+| CI-02 | P1 | **PARTIAL** | Migration drift detection checks tracked and untracked changes under `drizzle/migrations` after generation/finalization. | Inject an uncommitted generated migration and prove CI fails with changed-path diagnostics; clean committed migrations must pass. |
+| CI-03 | P2 | **DONE — automated** | npm cache is enabled for the Node 22 and Node 26 dependency-install jobs and keyed to the lockfile. | Keep `npm ci` reproducible; cache is only a package-download optimization. |
 | CI-04 | P2 | **OPEN** | Formatting validation still uses a changed-file allowlist; Svelte route formatting has not been brought into a clean repository-wide baseline. | Inventory managed file types, clean existing debt deliberately, and broaden formatting without auto-modifying code in CI. |
-| CI-05 | P1 | **OPEN** | CI installs Playwright and axe-core with \`npm install --no-save --package-lock=false\` after \`npm ci\`. | Pin compatible versions in \`package.json\`/lockfile, remove the ad hoc install, and verify a clean \`npm ci\` supplies the test tools. |
-| CI-06 | P2 | **OPEN** | Browser acceptance scripts still contain multiple \`networkidle\` waits (the accessibility script has seven occurrences in the reviewed baseline). | Replace timing-sensitive waits selectively with route/heading/application-state readiness assertions; retain meaningful end-to-end behaviour coverage. |
+| CI-05 | P1 | **OPEN** | CI installs Playwright and axe-core with `npm install --no-save --package-lock=false` after `npm ci`. | Pin compatible versions in `package.json`/lockfile, remove the ad hoc install, and verify a clean `npm ci` supplies the test tools. |
+| CI-06 | P2 | **OPEN** | Browser acceptance scripts still contain multiple `networkidle` waits (the accessibility script has seven occurrences in the reviewed baseline). | Replace timing-sensitive waits selectively with route/heading/application-state readiness assertions; retain meaningful end-to-end behaviour coverage. |
 | CI-07 | P3 | **DEFERRED** | A pinned Playwright container already provides matching browser binaries and OS dependencies; an additional browser-binary cache is currently redundant. | Reconsider only if measurements show container/image startup is a material bottleneck. |
 | CI-08 | P2 | **OPEN** | Failure diagnostics need better retention for Playwright traces/screenshots and Wrangler/browser logs. Current CI preserves a short-lived preview build artifact on main pushes, not a general test-failure evidence bundle. | Upload useful diagnostics on failure with short retention; confirm artifacts contain no learner data, secrets or credentials. |
 | CI-09 | P1 | **DONE — automated** | Dependency audits distinguish complete reports from registry/incomplete-report failures; high/critical production advisories block, while development-toolchain advisories are reported. | Preserve fail-closed behaviour when the audit report is missing/incomplete; never turn a network/provider error into a passing security result. |
@@ -350,15 +350,15 @@ Never record account credentials, session tokens, personal learner data, private
 
 - [ ] Run a controlled failure-injection case for CI-01 and record the workflow run URL, SHA and expected failed step.
 - [ ] Run a migration-drift injection for CI-02 in a disposable branch/worktree and record the expected failure; never alter a real release migration to manufacture the result.
-- [x] Confirm the current Node 22/npm cache and Node 26/npm cache are configured in \`.github/workflows/ci.yml\`.
+- [x] Confirm the current Node 22/npm cache and Node 26/npm cache are configured in `.github/workflows/ci.yml`.
 - [ ] Move Playwright and axe-core to lockfile-controlled development dependencies.
-- [ ] Replace high-risk \`networkidle\` waits with explicit application-readiness assertions in the browser suites.
+- [ ] Replace high-risk `networkidle` waits with explicit application-readiness assertions in the browser suites.
 - [ ] Preserve failure traces/screenshots/logs as bounded GitHub Actions artifacts, with no private learner data or secrets.
 - [x] Confirm incomplete or unavailable npm audit reports fail rather than pass silently.
 - [ ] Measure workflow duration before changing job/step timeout values.
 - [ ] Review duplicate validation work while retaining Node.js compatibility checks.
 
-**Current CI evidence:** main CI [run #44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully on \`41805887fee753b1c47e2b1442218ac53c4d948f\`; curriculum validation [run #44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) also passed. Green normal CI does not prove CI-01/CI-02 fault-injection cases or QA-05 controlled failure/recovery rehearsal have been run.
+**Current CI evidence:** main CI [run #44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully on `41805887fee753b1c47e2b1442218ac53c4d948f`; curriculum validation [run #44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) also passed. Green normal CI does not prove CI-01/CI-02 fault-injection cases or QA-05 controlled failure/recovery rehearsal have been run.
 
 **Change-control guardrails:** do not weaken branch-protection contexts, disable validation, format files automatically in CI, or run production deployment as part of a reliability experiment. Distinguish product/code failures, repo hygiene, dependency/security findings and runner/network failures.
 
