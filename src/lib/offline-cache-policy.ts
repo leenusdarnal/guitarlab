@@ -28,12 +28,25 @@ export function isCacheablePublicNavigation(
   if (response.headers.get('x-guitarlab-cache') !== 'public') return false;
   if (response.headers.has('set-cookie')) return false;
 
-  const cacheControl = response.headers.get('cache-control')?.toLowerCase() ?? '';
-  if (cacheControl.includes('private') || cacheControl.includes('no-store')) return false;
-
-  const vary = response.headers.get('vary')?.toLowerCase() ?? '';
-  if (vary.split(',').some((value) => ['*', 'cookie', 'authorization'].includes(value.trim()))) {
+  const cacheControl =
+    response.headers.get('cache-control')?.toLowerCase() ?? '';
+  if (
+    cacheControl.includes('private') ||
+    cacheControl.includes('no-store')
+  ) {
     return false;
   }
+
+  const vary = response.headers.get('vary')?.toLowerCase() ?? '';
+  if (
+    vary
+      .split(',')
+      .some((value) =>
+        ['*', 'cookie', 'authorization'].includes(value.trim())
+      )
+  ) {
+    return false;
+  }
+
   return true;
 }
