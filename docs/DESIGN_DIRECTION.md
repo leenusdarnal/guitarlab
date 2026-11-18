@@ -4,7 +4,7 @@
 **Last reviewed:** 16 November 2026  
 **Product:** GuitarLab — personal guitar-learning and practice environment  
 **Design authority:** This document defines the visual and interaction direction.  
-**Related guidance:** [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [UI/UX Implementation Tracker](UI_UX_IMPLEMENTATION_TRACKER.md), [UI/UX Audit](UI_UX_AUDIT_2026-11-15.md)
+**Related guidance:** [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), [Historical UI/UX Audit](UI_UX_AUDIT_2026-11-15.md)
 
 ---
 
