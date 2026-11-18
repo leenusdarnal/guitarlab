@@ -106,7 +106,7 @@ jobs:
       - name: Install Playwright system dependencies
         if: ${{ !cancelled() && steps.install-playwright.outcome == 'success' }}
         id: install-browser-dependencies
-        timeout-minutes: 8
+        timeout-minutes: 15
         run: npx playwright install-deps chromium webkit
 
       - name: Install Chromium and WebKit browser binaries
