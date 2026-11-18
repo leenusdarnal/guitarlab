@@ -1,6 +1,6 @@
 {
   "id": "year-2-intermediate",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "Year 2 - Structured intermediate development",
   "description": "The 52-week continuation of the curated master course. This route deepens fretboard fluency, chord vocabulary, style, ear skills, arranging and performance readiness.",
   "year": 2,
@@ -76,9 +76,9 @@
       "week": 1,
       "phaseId": "fretboard-triads",
       "title": "Fretboard map 1",
-      "focus": "Natural notes on low E and A",
-      "checkpoint": "Find and name every natural note to fret 5",
-      "practiceExercise": "Low E/A note map, 2 minutes daily",
+      "focus": "Natural notes on the low E and A strings from open position through fret 5",
+      "checkpoint": "Name the natural notes from open to fret 5 on the low E string (E, F, G, A) and A string (A, B, C, D) without reading a chart.",
+      "practiceExercise": "Natural-note map on low E and A from open position through fret 5",
       "startingTempoBpm": 62
     },
     {
@@ -86,9 +86,9 @@
       "week": 2,
       "phaseId": "fretboard-triads",
       "title": "Fretboard map 2",
-      "focus": "Octaves across adjacent string sets",
-      "checkpoint": "Find octave roots on E/A, A/D and D/G strings",
-      "practiceExercise": "Root-to-octave jumps in C and G",
+      "focus": "Octave shapes on E–D, A–G and D–B string pairs",
+      "checkpoint": "Find and play C octaves from low E fret 8 to D fret 10 and A fret 3 to G fret 5, then find G from D fret 5 to B fret 8 and explain the three-fret offset on D–B.",
+      "practiceExercise": "C and G octave shapes: E–D (+2 frets), A–G (+2 frets) and D–B (+3 frets)",
       "startingTempoBpm": 64
     },
     {
@@ -594,6 +594,7 @@
   ],
   "schemaVersion": 1,
   "revisionNotes": [
-    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and specialist sequence. Review checkpoints now prioritise accuracy over speed."
+    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and specialist sequence. Review checkpoints now prioritise accuracy over speed.",
+    "1.1.1: Clarified Year 2 Weeks 1–2 fretboard scope, natural-note landmarks and octave-pair offsets; preserved stable week IDs."
   ]
 }
