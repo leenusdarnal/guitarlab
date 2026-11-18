@@ -2,7 +2,8 @@
 
 **Reviewed baseline:** `main` at `9a4d01452b8d6aaab3b3941140af7344955632e4` (12 November 2026).  
 **Implementation branch:** `chore/accessibility-axe-quality`  
-**Scope:** learner-facing interface, navigation, interaction feedback, responsive behaviour and accessibility. No backend, storage model, music-domain or deployment changes are included.
+**Scope:** learner-facing interface, navigation, interaction feedback, responsive behaviour and accessibility. No backend, storage model, music-domain or deployment changes are included.  
+**Record type:** historical UX audit snapshot. Current UX/accessibility task status and acceptance evidence live in [ENGINEERING_QUALITY_TRACKER.md](ENGINEERING_QUALITY_TRACKER.md), Section 3.
 
 ## Summary
 
