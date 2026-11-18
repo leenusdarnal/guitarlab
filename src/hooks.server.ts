@@ -36,8 +36,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (event.locals.authUser || privatePath) {
     headers.set('Cache-Control', 'private, no-store');
     headers.delete('X-GuitarLab-Cache');
-  } else {
-    headers.delete('X-GuitarLab-Cache');
   }
 
   headers.set('X-Content-Type-Options', 'nosniff');
