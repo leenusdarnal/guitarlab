@@ -104,10 +104,21 @@ function validateDimensionRecords(version, name, records) {
 function validateSnapshot(snapshot) {
   check(isText(snapshot.version), 'Practice taxonomy: snapshot missing version');
   const version = snapshot.version || 'unknown';
-  const topicIds = validateDimensionRecords(version, 'topic', snapshot.topics);
-  const techniqueIds = validateDimensionRecords(version, 'technique', snapshot.techniques);
-  const positionIds = validateDimensionRecords(version, 'fret position', snapshot.fretPositions);
-  const strings = snapshot.strings;
+
+  // Taxonomy v0.3.0 is a legacy scope-only snapshot. Its dimension catalogue
+  // was not copied into the archive, so validate its references against the
+  // retained active definitions rather than treating absent arrays as empty.
+  const isLegacyScopeOnlySnapshot =
+    version === '0.3.0' &&
+    !('topics' in snapshot) &&
+    !('techniques' in snapshot) &&
+    !('fretPositions' in snapshot) &&
+    !('strings' in snapshot);
+  const dimensions = isLegacyScopeOnlySnapshot ? current : snapshot;
+  const topicIds = validateDimensionRecords(version, 'topic', dimensions.topics);
+  const techniqueIds = validateDimensionRecords(version, 'technique', dimensions.techniques);
+  const positionIds = validateDimensionRecords(version, 'fret position', dimensions.fretPositions);
+  const strings = dimensions.strings;
   check(Array.isArray(strings) && strings.length === 6, `Practice taxonomy ${version}: expected six strings`);
   const stringNumbers = Array.isArray(strings) ? strings.map((item) => item.number) : [];
   check(
