@@ -40,17 +40,23 @@ const offlineResponse = () =>
     headers: { 'cache-control': 'no-store' }
   });
 
+function cacheRequestKey(target: RequestInfo | URL): string {
+  if (typeof target === 'string') return target;
+  if (target instanceof URL) return target.toString();
+  return target.url;
+}
+
 function createCache(seed: Record<string, Response> = {}) {
   const entries = new Map(Object.entries(seed));
   const cache: PublicNavigationCache = {
     async match(target) {
-      return entries.get(target.url);
+      return entries.get(cacheRequestKey(target));
     },
     async put(target, value) {
-      entries.set(target.url, value);
+      entries.set(cacheRequestKey(target), value);
     },
     async delete(target) {
-      return entries.delete(target.url);
+      return entries.delete(cacheRequestKey(target));
     }
   };
   return { cache, entries };
