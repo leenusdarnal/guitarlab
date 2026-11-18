@@ -31,7 +31,11 @@ const PUBLIC_PAGE_PATHS = new Set(
 );
 
 function isEligiblePublicPage(url: URL) {
-  return isEligiblePublicNavigation(url, worker.location.origin, PUBLIC_PAGE_PATHS);
+  return isEligiblePublicNavigation(
+    url,
+    worker.location.origin,
+    PUBLIC_PAGE_PATHS
+  );
 }
 
 const OFFLINE_HTML = `<!doctype html>
