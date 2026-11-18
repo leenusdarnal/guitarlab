@@ -12,10 +12,11 @@ import {
 describe('versioned curriculum skill catalogue', () => {
   it('exposes the current local release and a stable set of canonical skill IDs', () => {
     const skills = listCurriculumSkills();
-    expect(ACTIVE_CURRICULUM_RELEASE_ID).toBe('curriculum-v1.0.6');
-    expect(SKILL_CATALOG_VERSION).toBe('1.0.0');
-    expect(skills).toHaveLength(34);
-    expect(new Set(skills.map((skill) => skill.id)).size).toBe(34);
+    expect(ACTIVE_CURRICULUM_RELEASE_ID).toBe('curriculum-v1.0.7');
+    expect(SKILL_CATALOG_VERSION).toBe('1.0.1');
+    expect(skills).toHaveLength(35);
+    expect(skills.map((skill) => skill.id)).toContain('instrument.fretting');
+    expect(new Set(skills.map((skill) => skill.id)).size).toBe(35);
     expect(skills).toEqual(
       [...skills].sort((left, right) => left.id.localeCompare(right.id))
     );
