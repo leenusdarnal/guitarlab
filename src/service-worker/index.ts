@@ -6,6 +6,11 @@
 import { assets, immutable, prerendered } from '$app/manifest';
 import { version } from '$app/env';
 import { resolve } from '$app/paths';
+import {
+  isCacheablePublicNavigation,
+  isEligiblePublicNavigation,
+  resolvePublicNavigation
+} from '../lib/offline-cache-policy';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
@@ -17,6 +22,18 @@ const PRECACHE_URLS = [
   ...prerendered.map((page) => resolve(page.path))
 ];
 const MAX_CACHED_PAGES = 40;
+
+// Prerendered routes are implicitly public. Dynamic routes must explicitly opt
+// in with Cache-Control: public before their HTML can enter the offline cache.
+const PUBLIC_PAGE_PATHS = new Set(
+  prerendered.map(
+    (page) => new URL(resolve(page.path), worker.location.origin).pathname
+  )
+);
+
+function isEligiblePublicPage(url: URL) {
+  return isEligiblePublicNavigation(url, worker.location.origin);
+}
 
 const OFFLINE_HTML = `<!doctype html>
 <html lang="en">
@@ -41,20 +58,36 @@ const OFFLINE_HTML = `<!doctype html>
   </main></body>
 </html>`;
 
-function isCacheableNavigation(request: Request, response: Response, url: URL) {
-  if (request.method !== 'GET' || request.mode !== 'navigate') return false;
-  if (url.origin !== worker.location.origin) return false;
-  if (url.pathname.startsWith('/api/')) return false;
-  if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) {
-    return false;
-  }
-  if (response.headers.has('set-cookie')) return false;
+function createOfflineResponse() {
+  return new Response(OFFLINE_HTML, {
+    status: 503,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store'
+    }
+  });
+}
 
-  const cacheControl =
-    response.headers.get('cache-control')?.toLowerCase() ?? '';
-  return (
-    !cacheControl.includes('private') && !cacheControl.includes('no-store')
+function isCacheableNavigation(request: Request, response: Response, url: URL) {
+  return isCacheablePublicNavigation(
+    request,
+    response,
+    url,
+    worker.location.origin,
+    PUBLIC_PAGE_PATHS
+  );
+}
+
+async function removeNonPublicPageEntries(cache: Cache) {
+  const keys = await cache.keys();
+  await Promise.all(
+    keys.map(async (request) => {
+      const url = new URL(request.url);
+      const cached = await cache.match(request);
+      if (!cached || !isCacheableNavigation(request, cached, url)) {
+        await cache.delete(request);
+      }
+    })
   );
 }
 
@@ -88,6 +121,10 @@ worker.addEventListener('activate', (event: ExtendableEvent) => {
           )
           .map((key) => caches.delete(key))
       );
+      await caches
+        .open(PAGE_CACHE)
+        .then(removeNonPublicPageEntries)
+        .catch(() => undefined);
       await worker.clients.claim();
     })
   );
@@ -101,38 +138,26 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   if (url.origin !== worker.location.origin) return;
 
   if (request.mode === 'navigate') {
+    // Private routes never read from Cache Storage. The shared resolver also
+    // returns the offline fallback directly when the browser is offline.
     event.respondWith(
       (async () => {
-        const pages = await caches.open(PAGE_CACHE);
-        if (!worker.navigator.onLine) {
-          const cached = await pages.match(request);
-          if (cached) return cached;
-          return new Response(OFFLINE_HTML, {
-            status: 503,
-            headers: {
-              'Content-Type': 'text/html; charset=utf-8',
-              'Cache-Control': 'no-store'
-            }
-          });
-        }
-        try {
-          const response = await fetch(request);
-          if (isCacheableNavigation(request, response, url)) {
-            await pages.put(request, response.clone());
-            await trimPageCache(pages);
+        const pages = isEligiblePublicPage(url)
+          ? await caches.open(PAGE_CACHE).catch(() => null)
+          : null;
+        return resolvePublicNavigation(
+          request,
+          pages,
+          url,
+          worker.location.origin,
+          PUBLIC_PAGE_PATHS,
+          {
+            online: worker.navigator.onLine,
+            fetchNavigation: () => fetch(request),
+            offlineResponse: createOfflineResponse,
+            afterCacheWrite: pages ? () => trimPageCache(pages) : undefined
           }
-          return response;
-        } catch {
-          const cached = await pages.match(request);
-          if (cached) return cached;
-          return new Response(OFFLINE_HTML, {
-            status: 503,
-            headers: {
-              'Content-Type': 'text/html; charset=utf-8',
-              'Cache-Control': 'no-store'
-            }
-          });
-        }
+        );
       })()
     );
     return;
