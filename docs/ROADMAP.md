@@ -79,11 +79,11 @@ M4.1 is merged in PR #29. M4.2 section progress and checkpoint completion are im
 
 - [x] Local IndexedDB learner profile and repository foundation (delivered in M2.3).
 - [x] Initial privacy-safe offline app shell and previously visited public lesson caching (PR #35); complete selected-curriculum pre-caching remains future work.
-- [ ] Complete offline lesson/practice capture and recovery across physical-device browser restarts; automated viewport acceptance is merged, manual device acceptance remains.
+- [ ] Complete offline lesson/practice capture and recovery across physical-device browser restarts; automated viewport acceptance is merged, manual device acceptance remains (task-level status and evidence: OFF-03/OFF-04 and QA-03 in [the unified tracker](ENGINEERING_QUALITY_TRACKER.md)).
 - [x] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
-- [ ] Account registration/login and secure sessions ([Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176); see [authentication decision](AUTHENTICATION_DECISION.md)); optional and separate from guest/local mode.
+- [ ] Complete optional account registration/login and secure sessions ([Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176); runtime/account foundation merged in PR #177; lifecycle and environment acceptance remain open under SEC-01–SEC-03 in [the unified tracker](ENGINEERING_QUALITY_TRACKER.md)); guest/local mode remains the default.
 - [ ] Outbox-based cloud sync, idempotency, conflict recovery and account-scoped data ownership; do not enable until account export/deletion and security gates pass.
 - [x] Local export and validated restore workflow; browser round-trip/rollback acceptance remains.
 
@@ -100,7 +100,7 @@ M4.1 is merged in PR #29. M4.2 section progress and checkpoint completion are im
 - [x] Confidence-aware single-note pitch estimation and stable-note tracking (PRs #81 and #83).
 - [x] Chromatic tuner and guided note-recognition exercise (PRs #84–85).
 - [x] Synthetic pitch benchmarks and local real-recording evaluation tooling (PRs #86, #90–91).
-- [ ] Real-guitar corpus measurements and physical-browser/device acceptance (Issue #89).
+- [ ] Real-guitar corpus measurements and physical-browser/device acceptance (Issue #89; detailed evidence status: QA-01/QA-02 in [the unified tracker](ENGINEERING_QUALITY_TRACKER.md)).
 
 PRs #45–46 provide the fretboard, chord library and metronome. The audio follow-up is now implemented through PRs #73–86 and #90–91: feature-owned audio sessions, local opt-in microphone capture, a confidence-aware pitch estimator, stable-note tracking, tuner, guided recognition exercise and synthetic/local-recording evaluation tools. Issue #68 is closed. Issue #89 remains open for consented real-guitar corpus measurements and physical-device/browser acceptance; do not represent synthetic or mocked browser tests as hardware evidence.
 
