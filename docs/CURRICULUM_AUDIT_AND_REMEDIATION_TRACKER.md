@@ -243,6 +243,117 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 
 ---
 
+
+### Lesson-level checkbox appendix
+
+Use these stable lesson IDs to track the 92 Year 1 / Year 2 authoring tasks individually. These are included in the route-level counts above, not additional work. Check a row only after the lesson meets the authoring standard and its review evidence is recorded.
+
+#### Year 1 — 43 lessons requiring task-specific authoring
+
+Complete all remaining records below. CURR-001 and CURR-002 are priority corrections within this list.
+
+| Done | Week | Lesson ID | Lesson |
+|---|---:|---|---|
+| [ ] | 1 | `y1-w01-lesson` | Meet your guitar |
+| [ ] | 2 | `y1-w02-lesson` | Clear single notes |
+| [ ] | 3 | `y1-w03-lesson` | Read guitar maps |
+| [ ] | 5 | `y1-w05-lesson` | Open chords A, D and E |
+| [ ] | 6 | `y1-w06-lesson` | First complete chord loop |
+| [ ] | 8 | `y1-w08-lesson` | Optional notation: strings 1 and 2 |
+| [ ] | 9 | `y1-w09-lesson` | Add C, Am and Dm |
+| [ ] | 10 | `y1-w10-lesson` | Make rhythm musical |
+| [ ] | 12 | `y1-w12-lesson` | Quarter 1 review and recording |
+| [ ] | 13 | `y1-w13-lesson` | Optional notation: strings 3 and 4 |
+| [ ] | 14 | `y1-w14-lesson` | Optional notation: low E and A landmarks |
+| [ ] | 18 | `y1-w18-lesson` | Shell chords: roots and guide tones |
+| [ ] | 19 | `y1-w19-lesson` | Your first 12-bar blues |
+| [ ] | 20 | `y1-w20-lesson` | Play with expression |
+| [ ] | 21 | `y1-w21-lesson` | Movable power chords |
+| [ ] | 22 | `y1-w22-lesson` | Approach barre chords safely |
+| [ ] | 24 | `y1-w24-lesson` | Half-year playing test |
+| [ ] | 25 | `y1-w25-lesson` | Find roots and octaves |
+| [ ] | 27 | `y1-w27-lesson` | Chords in keys |
+| [ ] | 28 | `y1-w28-lesson` | Capo and transposition |
+| [ ] | 29 | `y1-w29-lesson` | Suspended and seventh chords |
+| [ ] | 30 | `y1-w30-lesson` | Sixteenth-note rhythm |
+| [ ] | 31 | `y1-w31-lesson` | Hammer-ons and pull-offs |
+| [ ] | 32 | `y1-w32-lesson` | Quarter 2 review |
+| [ ] | 33 | `y1-w33-lesson` | Major pentatonic and phrasing |
+| [ ] | 34 | `y1-w34-lesson` | Improvise with motifs |
+| [ ] | 35 | `y1-w35-lesson` | Arpeggios and chord tones |
+| [ ] | 36 | `y1-w36-lesson` | Three notes per string |
+| [ ] | 38 | `y1-w38-lesson` | Songwriting and arrangement |
+| [ ] | 39 | `y1-w39-lesson` | Blues turnarounds |
+| [ ] | 40 | `y1-w40-lesson` | Rock rhythm and muting |
+| [ ] | 41 | `y1-w41-lesson` | Jazz chord grips |
+| [ ] | 42 | `y1-w42-lesson` | The ii-V-I connection |
+| [ ] | 43 | `y1-w43-lesson` | Comping styles |
+| [ ] | 44 | `y1-w44-lesson` | Quarter 3 review |
+| [ ] | 45 | `y1-w45-lesson` | Sight-read across strings |
+| [ ] | 46 | `y1-w46-lesson` | Move between positions |
+| [ ] | 47 | `y1-w47-lesson` | Chord melody basics |
+| [ ] | 48 | `y1-w48-lesson` | Compose a complete study |
+| [ ] | 49 | `y1-w49-lesson` | Dynamics and articulation |
+| [ ] | 50 | `y1-w50-lesson` | Repertoire polishing |
+| [ ] | 51 | `y1-w51-lesson` | Mock performance and transcription |
+| [ ] | 52 | `y1-w52-lesson` | Year-end playing test |
+
+#### Year 2 — 49 lessons requiring task-specific authoring
+
+CURR-003 and CURR-004 are priority corrections within this list.
+
+| Done | Week | Lesson ID | Lesson |
+|---|---:|---|---|
+| [ ] | 1 | `y2-w01-lesson` | Fretboard map 1 |
+| [ ] | 2 | `y2-w02-lesson` | Fretboard map 2 |
+| [ ] | 3 | `y2-w03-lesson` | CAGED and advanced fretboard map |
+| [ ] | 5 | `y2-w05-lesson` | Minor triad inversions |
+| [ ] | 6 | `y2-w06-lesson` | Quarter review: fretboard |
+| [ ] | 7 | `y2-w07-lesson` | Power-chord accuracy |
+| [ ] | 8 | `y2-w08-lesson` | Palm-muted groove |
+| [ ] | 9 | `y2-w09-lesson` | Barre chord refresh |
+| [ ] | 10 | `y2-w10-lesson` | A-shape barre chords |
+| [ ] | 11 | `y2-w11-lesson` | Quarter review: rhythm guitar |
+| [ ] | 12 | `y2-w12-lesson` | Major scale position 1 |
+| [ ] | 13 | `y2-w13-lesson` | Scale sequences |
+| [ ] | 14 | `y2-w14-lesson` | Position changes |
+| [ ] | 15 | `y2-w15-lesson` | Major scale phrase-making |
+| [ ] | 16 | `y2-w16-lesson` | Quarter review: melody |
+| [ ] | 17 | `y2-w17-lesson` | Blues shuffle 1 |
+| [ ] | 18 | `y2-w18-lesson` | Blues shuffle 2 |
+| [ ] | 19 | `y2-w19-lesson` | Blues lead vocabulary |
+| [ ] | 20 | `y2-w20-lesson` | Bends and vibrato |
+| [ ] | 21 | `y2-w21-lesson` | Blues turnaround |
+| [ ] | 22 | `y2-w22-lesson` | Quarter review: blues |
+| [ ] | 23 | `y2-w23-lesson` | Fingerstyle bass independence |
+| [ ] | 24 | `y2-w24-lesson` | Fingerstyle pattern changes |
+| [ ] | 25 | `y2-w25-lesson` | Fingerstyle melody balance |
+| [ ] | 26 | `y2-w26-lesson` | Percussive and muted accents |
+| [ ] | 27 | `y2-w27-lesson` | Arrange a folk piece |
+| [ ] | 28 | `y2-w28-lesson` | Quarter review: acoustic |
+| [ ] | 29 | `y2-w29-lesson` | Song form and sections |
+| [ ] | 31 | `y2-w31-lesson` | Learn by ear: bass |
+| [ ] | 32 | `y2-w32-lesson` | Learn by ear: melody |
+| [ ] | 33 | `y2-w33-lesson` | Chord melody II |
+| [ ] | 34 | `y2-w34-lesson` | Quarter review: repertoire |
+| [ ] | 35 | `y2-w35-lesson` | Music theory: intervals |
+| [ ] | 36 | `y2-w36-lesson` | Build seventh chords |
+| [ ] | 37 | `y2-w37-lesson` | Chord extensions |
+| [ ] | 38 | `y2-w38-lesson` | Chord substitution |
+| [ ] | 39 | `y2-w39-lesson` | Quarter review: harmony |
+| [ ] | 40 | `y2-w40-lesson` | Jazz swing comping |
+| [ ] | 41 | `y2-w41-lesson` | Jazz ii-V-I voice leading |
+| [ ] | 42 | `y2-w42-lesson` | Bossa nova foundation |
+| [ ] | 43 | `y2-w43-lesson` | Jazz melody phrasing |
+| [ ] | 44 | `y2-w44-lesson` | Jazz blues |
+| [ ] | 45 | `y2-w45-lesson` | Quarter review: jazz |
+| [ ] | 46 | `y2-w46-lesson` | Practice architecture |
+| [ ] | 47 | `y2-w47-lesson` | Transcribe a phrase |
+| [ ] | 48 | `y2-w48-lesson` | Write a solo chorus |
+| [ ] | 49 | `y2-w49-lesson` | Arrangement, dynamics and style comparison |
+| [ ] | 51 | `y2-w51-lesson` | Rehearsal, stamina and a 3-piece set |
+| [ ] | 52 | `y2-w52-lesson` | Year 2 mock exam and next-path plan |
+
 ## 6. P1 — Complete the lesson-to-skill mapping audit
 
 ### CURR-P1-06 — Rebaseline the mapping register to v1.0.6
