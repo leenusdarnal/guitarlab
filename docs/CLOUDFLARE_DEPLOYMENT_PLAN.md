@@ -6,8 +6,8 @@
 **Framework:** SvelteKit with `@sveltejs/adapter-cloudflare`  
 **Local persistence:** IndexedDB / browser-local storage  
 **Remote database:** Cloudflare D1 is configured in the repository's local development setup, but remote learner-data persistence is not currently enabled  
-**Status:** First local-first production deployment succeeded on 2026-11-16 for SHA `306f7aea19596731dac88192d8228590544f00fc`; latest-main redeployment remains pending  
-**Last reviewed:** 13 November 2026
+**Status:** Historical deployment plan and environment reference. The first local-first production deployment succeeded on 2026-11-16 for SHA `306f7aea19596731dac88192d8228590544f00fc`; exact-current-main deployment and rollback acceptance are tracked as QA-04 in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md).  
+**Last reconciled:** 18 November 2026
 
 ---
 
@@ -74,7 +74,7 @@ Useful repository references:
 - [Drizzle configuration](../drizzle.config.ts)
 - [Data model documentation](DATA_MODEL.md)
 - [Manual acceptance runbook](MANUAL_ACCEPTANCE.md)
-- [Execution priority plan](EXECUTION_PRIORITY.md)
+- [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md)
 
 ## 3. Target environment model
 

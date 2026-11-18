@@ -1,6 +1,6 @@
 # Application security response policy
 
-**Status:** Implemented in the application build; deployment-level verification and release review remain open.
+**Status:** This document defines the security-header/CSP policy. Current deployment verification and security release status are tracked in [ENGINEERING_QUALITY_TRACKER.md](ENGINEERING_QUALITY_TRACKER.md), especially SEC-05 and QA-06.
 
 ## Content Security Policy
 

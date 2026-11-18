@@ -1,8 +1,12 @@
 # GuitarLab authentication decision
 
-**Status:** Runtime foundation, guest-first account UX and sign-out surface implemented; live email and deployment activation remain pending  
+**Status:** Architecture decision and requirements; live implementation/acceptance status is maintained in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), Section 6. PR #177 delivered the runtime/account foundation; full lifecycle and environment activation remain unverified.  
 **Date:** 2026-11-17  
 **Tracking:** [Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176)
+
+## Status authority
+
+This document defines the accepted authentication design and security requirements; it is not a second task tracker. Use [SEC-01–SEC-06 in the Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md#6-security-authentication-and-account-readiness) for current implementation state, owners, test evidence and release readiness.
 
 ## Decision
 

@@ -4,7 +4,7 @@
 **Last reviewed:** 16 November 2026  
 **Product:** GuitarLab — personal guitar-learning and practice environment  
 **Design authority:** This document defines the visual and interaction direction.  
-**Related guidance:** [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [UI/UX Implementation Tracker](UI_UX_IMPLEMENTATION_TRACKER.md), [UI/UX Audit](UI_UX_AUDIT_2026-11-15.md)
+**Related guidance:** [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), [Historical UI/UX Audit](UI_UX_AUDIT_2026-11-15.md)
 
 ---
 
@@ -459,7 +459,7 @@ Visual design must never create a false product promise.
 
 This document defines the current visual system and implementation guidance. The semantic theme values in `src/app.css` follow the palette in section 3.1; route-level refinements remain tracked in the UI/UX implementation tracker.
 
-Implement the refresh incrementally, using the ordered work in the [UI/UX Implementation Tracker](UI_UX_IMPLEMENTATION_TRACKER.md):
+Implement the refresh incrementally. The design requirements below are acceptance criteria, not a task-status checklist; implementation status and evidence are maintained in Section 3 of the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md):
 
 1. Establish semantic tokens, theme behaviour, type roles, spacing and control boundaries.
 2. Standardise the application shell, desktop rail, mobile navigation and shared controls.
@@ -485,19 +485,19 @@ Do not rewrite all routes in one large change. Each implementation slice should 
 
 A design-system implementation is ready for review only when:
 
-- [ ] Dark and light themes use the approved semantic token names consistently.
-- [ ] Normal text, muted text, primary actions and interactive control boundaries meet contrast requirements.
-- [ ] The app uses a consistent type scale and readable lesson copy.
-- [ ] Mobile form controls use at least 16px text.
-- [ ] Spacing, content widths, radii and panel treatments are consistent across routes.
-- [ ] Desktop and mobile navigation expose the same product destinations coherently.
-- [ ] Every page has one clear primary action or an intentional focused state.
-- [ ] Practice mode reduces distraction and keeps essential controls reachable.
-- [ ] Instrument diagrams remain accurate, responsive and understandable without colour alone.
-- [ ] Keyboard focus, screen-reader names, reduced motion and save/error states are included.
-- [ ] No core route has horizontal page overflow at 320px or wider.
-- [ ] The 152 lessons, six routes, stable identifiers and learning evidence semantics remain unchanged.
-- [ ] Automated checks pass and outstanding physical-device/screen-reader checks are recorded honestly.
+- Dark and light themes use the approved semantic token names consistently.
+- Normal text, muted text, primary actions and interactive control boundaries meet contrast requirements.
+- The app uses a consistent type scale and readable lesson copy.
+- Mobile form controls use at least 16px text.
+- Spacing, content widths, radii and panel treatments are consistent across routes.
+- Desktop and mobile navigation expose the same product destinations coherently.
+- Every page has one clear primary action or an intentional focused state.
+- Practice mode reduces distraction and keeps essential controls reachable.
+- Instrument diagrams remain accurate, responsive and understandable without colour alone.
+- Keyboard focus, screen-reader names, reduced motion and save/error states are included.
+- No core route has horizontal page overflow at 320px or wider.
+- The 152 lessons, six routes, stable identifiers and learning evidence semantics remain unchanged.
+- Automated checks pass and outstanding physical-device/screen-reader checks are recorded honestly.
 
 **A visual refresh is not complete because the screens look consistent in a mockup. It is complete when learners can find, understand and use the next learning action on real screen sizes without losing data or musical meaning.**
 

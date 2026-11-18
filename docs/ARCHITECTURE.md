@@ -4,7 +4,7 @@
 **Decision date:** 2026-11-11  
 **Scope:** Personal, single-learner product with a public source repository and private runtime data.
 
-This is the implementation authority for M1–M9. It resolves earlier planning options. The chosen architecture is a modular SvelteKit application on Cloudflare Workers, with IndexedDB as the local-first store and D1 as the optional authenticated cloud-sync store.
+This is the implementation authority for M1–M9. It resolves earlier planning options. The chosen architecture is a modular SvelteKit application on Cloudflare Workers, with IndexedDB as the local-first store and D1 as the optional authenticated cloud-sync store. Implementation-quality status, privacy acceptance and release evidence are tracked in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md); this document remains the architecture decision authority.
 
 ## 1. Final technology decisions
 

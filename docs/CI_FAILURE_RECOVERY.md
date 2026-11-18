@@ -28,11 +28,8 @@ Do not rerun or cancel the required application CI as part of this exercise. The
 - Failure injection is a deterministic shell exit and cannot modify repository data.
 - The recovery mode confirms a clean independent run; it does not automatically turn the failed run green.
 
-## Evidence log
+## Evidence recording
 
-| Mode | Workflow run URL | Commit SHA | Date / timezone | Reviewer | Result |
-| --- | --- | --- | --- | --- | --- |
-| failure-injection | Pending — dispatch after merge | Pending | Pending | Pending | Not run |
-| recovery | Pending — dispatch after failed run | Pending | Pending | Pending | Not run |
+After both runs finish, record the two workflow run URLs, commit SHA, date/time/timezone and reviewer against **QA-05** in [ENGINEERING_QUALITY_TRACKER.md](ENGINEERING_QUALITY_TRACKER.md#74-production-and-ci-release-evidence). This runbook defines the procedure; it is not a second evidence/status log.
 
-**Issue #5 status:** remains open until both real workflow runs are recorded. A PR that adds the rehearsal is not itself proof that the rehearsal passed.
+**Issue #5** remains open until both real workflow runs are recorded. A PR that adds the rehearsal is not itself proof that the rehearsal passed.
