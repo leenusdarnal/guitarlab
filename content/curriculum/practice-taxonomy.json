@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "curriculumReleaseId": "curriculum-v1.0.7",
   "authoringPolicy": "Only tag dimensions directly stated by the authored exercise instructions or success criterion. Omit unknown string, fret and position details; never infer them from a lesson title, skill name or generic exercise template.",
   "topics": [
@@ -1148,6 +1148,386 @@
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Extend the pattern to four bars, noting repetitions or changes."
+        }
+      ]
+    },
+    {
+      "version": "0.3.0",
+      "exerciseScopes": [
+        {
+          "lessonId": "y1-w01-lesson",
+          "exerciseId": "y1-w01-lesson-focus",
+          "topicIds": [
+            "instrument.standard-tuning"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Tune all six strings, then play four even quarter notes on each string."
+        },
+        {
+          "lessonId": "y1-w03-lesson",
+          "exerciseId": "y1-w03-lesson-focus",
+          "topicIds": [
+            "notation.tab-reading"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Say each string and fret aloud, then play it slowly while keeping the written order."
+        },
+        {
+          "lessonId": "y1-w04-lesson",
+          "exerciseId": "y1-w04-lesson-focus",
+          "topicIds": [
+            "harmony.open-chord-voicings"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "fretPositionIds": [
+            "position.open-position"
+          ],
+          "sourceEvidence": "Form Em, pick strings 6 through 1 separately and correct one unclear note."
+        },
+        {
+          "lessonId": "y1-w07-lesson",
+          "exerciseId": "y1-w07-lesson-focus",
+          "topicIds": [
+            "rhythm.eighth-note-subdivision"
+          ],
+          "techniqueIds": [
+            "technique.down-up-strumming"
+          ],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play eight evenly spaced down-up strokes on muted strings while saying the count."
+        },
+        {
+          "lessonId": "y1-w08-lesson",
+          "exerciseId": "y1-w08-lesson-focus",
+          "topicIds": [
+            "notation.tab-reading"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2
+          ],
+          "fretPositionIds": [
+            "position.first-position"
+          ],
+          "sourceEvidence": "The learner translates the phrase into the correct string/fret sequence and preserves the order and rhythm."
+        },
+        {
+          "lessonId": "y1-w11-lesson",
+          "exerciseId": "y1-w11-lesson-focus",
+          "topicIds": [
+            "fretboard.natural-note-landmarks"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            5,
+            6
+          ],
+          "fretPositionIds": [],
+          "fretRange": {
+            "minFret": 0,
+            "maxFret": 5
+          },
+          "sourceEvidence": "Find E, F, G and A on the low E string and say the fret number for each."
+        },
+        {
+          "lessonId": "y1-w15-lesson",
+          "exerciseId": "y1-w15-lesson-focus",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.alternate-picking",
+            "technique.string-crossing"
+          ],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
+        },
+        {
+          "lessonId": "y1-w23-lesson",
+          "exerciseId": "y1-w23-lesson-focus",
+          "topicIds": [
+            "lead.a-minor-pentatonic-box-1"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "fretPositionIds": [
+            "position.pentatonic-box-1"
+          ],
+          "sourceEvidence": "Play the box 1 shape slowly from low E to high E and back."
+        },
+        {
+          "lessonId": "y1-w26-lesson",
+          "exerciseId": "y1-w26-lesson-focus",
+          "topicIds": [
+            "harmony.triad-voicings"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play each C, F and G triad reference one string at a time."
+        },
+        {
+          "lessonId": "y1-w31-lesson",
+          "exerciseId": "y1-w31-lesson-music",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.legato"
+          ],
+          "stringNumbers": [
+            1
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Demonstrate this week's checkpoint: Play a hammer-on and pull-off without re-picking every note."
+        },
+        {
+          "lessonId": "y1-w16-lesson",
+          "exerciseId": "y1-w16-lesson-music",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.fingerstyle-thumb-independence"
+          ],
+          "stringNumbers": [
+            6
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play the low E bass note with the thumb and the treble notes with i–m–a."
+        },
+        {
+          "lessonId": "y1-w17-lesson",
+          "exerciseId": "y1-w17-lesson-focus",
+          "topicIds": [
+            "theory.major-scale-construction",
+            "lead.a-minor-pentatonic-note-set"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play one octave of C major and name each note while playing."
+        },
+        {
+          "lessonId": "y1-w37-lesson",
+          "exerciseId": "y1-w37-lesson-focus",
+          "topicIds": [
+            "ear.melody-transcription"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Locate the opening note, work out subsequent interval movement and record note order."
+        },
+        {
+          "lessonId": "y2-w04-lesson",
+          "exerciseId": "y2-w04-lesson-focus",
+          "topicIds": [
+            "harmony.triad-inversions"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Play first inversion and identify the third as the lowest chord tone."
+        },
+        {
+          "lessonId": "y2-w30-lesson",
+          "exerciseId": "y2-w30-lesson-focus",
+          "topicIds": [
+            "rhythm.groove-transcription"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [],
+          "sourceEvidence": "Extend the pattern to four bars, noting repetitions or changes."
+        },
+        {
+          "lessonId": "y1-w13-lesson",
+          "exerciseId": "y1-w13-lesson-music",
+          "topicIds": [
+            "notation.tab-reading"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            3,
+            4
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Apply the week's exercise: G-D string answer melody (TAB core; staff optional)."
+        },
+        {
+          "lessonId": "y1-w45-lesson",
+          "exerciseId": "y1-w45-lesson-music",
+          "topicIds": [],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Demonstrate this week's checkpoint: Read a short melody on strings 1-4 with rests and repeated notes."
+        },
+        {
+          "lessonId": "y2-w01-lesson",
+          "exerciseId": "y2-w01-lesson-music",
+          "topicIds": [
+            "fretboard.natural-note-landmarks"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            5,
+            6
+          ],
+          "fretPositionIds": [],
+          "sourceEvidence": "Demonstrate this week's checkpoint: Find and name every natural note to fret 5"
+        },
+        {
+          "lessonId": "y3-rock-blues-w03-lesson",
+          "exerciseId": "y3-rock-blues-w03-lesson-focus",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.pitch-bending"
+          ],
+          "stringNumbers": [
+            2
+          ],
+          "fretPositionIds": [],
+          "fretRange": {
+            "minFret": 8,
+            "maxFret": 10
+          },
+          "sourceEvidence": "Fret B-string fret 8 with a supported finger position."
+        },
+        {
+          "lessonId": "y3-rock-blues-w04-lesson",
+          "exerciseId": "y3-rock-blues-w04-lesson-focus",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.alternate-picking",
+            "technique.legato",
+            "technique.string-crossing"
+          ],
+          "stringNumbers": [
+            2,
+            3,
+            4
+          ],
+          "fretPositionIds": [],
+          "fretRange": {
+            "minFret": 5,
+            "maxFret": 7
+          },
+          "sourceEvidence": "Play D-string frets 5–7 then G-string frets 5–7 using down-up-down-up strokes."
+        },
+        {
+          "lessonId": "y3-rock-blues-w08-lesson",
+          "exerciseId": "y3-rock-blues-w08-lesson-focus",
+          "topicIds": [
+            "lead.a-minor-pentatonic-box-1"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "fretPositionIds": [
+            "position.pentatonic-box-1"
+          ],
+          "fretRange": {
+            "minFret": 5,
+            "maxFret": 8
+          },
+          "sourceEvidence": "Use A minor pentatonic box 1: low E 5–8, A 5–7, D 5–7, G 5–7, B 5–8 and high e 5–8. Choose only three to five notes for the first motif."
+        },
+        {
+          "lessonId": "y3-rock-blues-w02-lesson",
+          "exerciseId": "y3-rock-blues-w02-lesson-focus",
+          "topicIds": [
+            "lead.a-minor-pentatonic-box-1"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [],
+          "fretPositionIds": [
+            "position.pentatonic-box-1",
+            "position.pentatonic-box-2"
+          ],
+          "sourceEvidence": "Play the adjacent box 2 and name the notes as they are reached."
+        },
+        {
+          "lessonId": "y3-fingerstyle-acoustic-w02-lesson",
+          "exerciseId": "y3-fingerstyle-acoustic-w02-lesson-focus",
+          "topicIds": [],
+          "techniqueIds": [
+            "technique.pima-fingerstyle"
+          ],
+          "stringNumbers": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "fretPositionIds": [
+            "position.open-position"
+          ],
+          "fretRange": {
+            "minFret": 0,
+            "maxFret": 3
+          },
+          "sourceEvidence": "Play p–i–m–a slowly on strings 5–3–2–1. Say the finger names aloud as each note sounds."
+        },
+        {
+          "lessonId": "y3-jazz-harmony-w05-lesson",
+          "exerciseId": "y3-jazz-harmony-w05-lesson-focus",
+          "topicIds": [
+            "harmony.extended-chord-voicings"
+          ],
+          "techniqueIds": [],
+          "stringNumbers": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "fretPositionIds": [],
+          "fretRange": {
+            "minFret": 2,
+            "maxFret": 5
+          },
+          "sourceEvidence": "Build Dm9 x5355xx. Pick strings 5–2 separately: D–F–C–E. The fifth is deliberately omitted."
         }
       ]
     }
