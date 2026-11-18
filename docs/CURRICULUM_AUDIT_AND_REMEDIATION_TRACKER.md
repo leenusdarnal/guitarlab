@@ -1,6 +1,6 @@
 # GuitarLab Curriculum Audit & Remediation Tracker
 
-**Status:** Open — audit baseline recorded; remediation not yet started by this tracker  
+**Status:** In progress — four P0 corrections implemented in the curriculum-v1.0.7 candidate; remaining P1/P2 audit work stays open  
 **Audit date:** 2026-11-18  
 **Baseline branch:** `main`  
 **Baseline commit:** `fbaae1701d0e15eed7258863d105d6232e600904`  
@@ -10,6 +10,23 @@
 > Working source of truth for closing the curriculum audit. Check tasks only when the change is merged and its acceptance evidence is recorded. A structurally valid lesson is not automatically a pedagogically complete lesson.
 
 ---
+
+## Current implementation status — 18 November 2026
+
+**Candidate release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`)  
+**Completed in this batch:** CURR-P0-01 through CURR-P0-04. Stable lesson IDs and week IDs are unchanged.
+
+| Measure | Before batch | Current candidate |
+|---|---:|---:|
+| Task-specific lesson authoring | 44 / 152 | 48 / 152 |
+| Year 1 task-specific lessons | 9 / 52 | 11 / 52 |
+| Year 2 task-specific lessons | 3 / 52 | 5 / 52 |
+| Year 3+ task-specific lessons | 32 / 48 | 32 / 48 |
+| Skill identifiers | 34 | 35 |
+| Lesson-to-skill associations | 391 | 390 |
+| Draft assessment profiles | 34 | 35 |
+
+The new `instrument.fretting` profile remains draft. The 104 remaining generic lessons, 390 mapping dispositions and the full prerequisite/progression audit remain open. These are implementation-candidate counts until PR review and merge.
 
 ## 1. Executive status
 
@@ -88,43 +105,43 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 **Current concern:** The focus and checkpoint are about fretting-hand fundamentals, clean tone and relaxed pressure. Its mappings still name `harmony.triads` and `harmony.voice-leading`, and its key explanation / focused exercise retain unrelated harmony and note-formula language.
 
-- [ ] Rewrite the key idea and plain-language explanation around clean fretting, minimum effective pressure and relaxed movement.
-- [ ] Rewrite the demonstration and exercises to teach finger placement, note clarity, buzzing diagnosis and two-hand coordination.
-- [ ] Replace unrelated theory prompts with concrete single-note tasks and observable correction steps.
-- [ ] Define task-specific criteria for note clarity, pressure, coordination and comfort.
-- [ ] Resolve the mapping only after the skill-catalogue decision below; do not force-fit an unrelated skill.
-- [ ] Confirm outline checkpoint and authored lesson checkpoint remain identical.
+- [x] Rewrite the key idea and plain-language explanation around clean fretting, minimum effective pressure and relaxed movement.
+- [x] Rewrite the demonstration and exercises to teach finger placement, note clarity, buzzing diagnosis and two-hand coordination.
+- [x] Replace unrelated theory prompts with concrete single-note tasks and observable correction steps.
+- [x] Define task-specific criteria for note clarity, pressure, coordination and comfort.
+- [x] Resolve the mapping only after the skill-catalogue decision below; do not force-fit an unrelated skill.
+- [x] Confirm outline checkpoint and authored lesson checkpoint remain identical.
 - [ ] Record a guitar-instructor review of the exercise and fret/string examples.
 
-**Owner decision required:** Should the two unsupported harmony mappings be removed, and should clean fretting / single-note tone become a new skill identifier? The candidate `technique.clean-fretting` has been mentioned in earlier review notes but is not an approved ID.
+**Decision recorded in release candidate v1.0.7:** Remove both unsupported harmony mappings and add `instrument.fretting` as a focused instrument skill. The ID is consistent with the instrument-skill example already documented in `CURRICULUM_CONTENT_MODEL.md`. Its assessment profile remains draft, requires human review and has no automated grading approval.
 
 **Acceptance evidence:** A reviewer can follow the lesson and learn the stated clean-note skill without being asked to perform unrelated chord theory; every mapped skill has direct task evidence.
 
-**Status:** Blocked — owner decision
+**Status:** Ready for curriculum-owner / guitar-instructor review (v1.0.7)
 
 ### CURR-P0-02 — Year 1 Week 20: Play with expression
 
 **Current concern:** Its mappings have already been corrected to `lead.phrasing` and `technique.bends`, but the key explanation and focused exercise still contain unrelated music-theory / root-formula language. The focus covers slides, bends, dynamics and phrasing.
 
-- [ ] Rewrite the explanation so it teaches expressive note movement, target pitch, timing, dynamics and phrase shape.
-- [ ] Add specific slide and bend demonstrations with playable note/fret examples.
-- [ ] Make the focused exercise practise the intended expressive technique rather than chord formulas.
-- [ ] Define task-specific criteria for intonation, timing, articulation, dynamics and comfort.
-- [ ] Confirm that `lead.phrasing` and `technique.bends` are justified by the actual learner tasks; document slides/dynamics as uncovered outcomes if no current ID fits.
-- [ ] Check the accessible alternative preserves the expressive learning goal.
+- [x] Rewrite the explanation so it teaches expressive note movement, target pitch, timing, dynamics and phrase shape.
+- [x] Add specific slide and bend demonstrations with playable note/fret examples.
+- [x] Make the focused exercise practise the intended expressive technique rather than chord formulas.
+- [x] Define task-specific criteria for intonation, timing, articulation, dynamics and comfort.
+- [x] Confirm that `lead.phrasing` and `technique.bends` are justified by the actual learner tasks; document slides/dynamics as uncovered outcomes if no current ID fits.
+- [x] Check the accessible alternative preserves the expressive learning goal.
 
 **Acceptance evidence:** The whole lesson teaches and assesses expression; no unrelated harmony instructions remain; current stable lesson ID is preserved.
 
-**Status:** Not started
+**Status:** Ready for curriculum-owner / guitar-instructor review (v1.0.7)
 
 ### CURR-P0-03 — Year 2 Week 1: Fretboard map 1
 
 **Current concern:** The focus and worked example introduce natural notes on the low E and A strings through fret 5, while the checkpoint says “every natural note to fret 5” without stating a string range.
 
-- [ ] Decide whether the intended scope is low E and A only or a wider set of strings.
-- [ ] Align focus, objectives, demonstration, exercises, worked examples and checkpoint to the same string/fret scope.
-- [ ] Make the independent recall task test the exact scope taught.
-- [ ] Keep the checkpoint aligned between the outline and authored lesson.
+- [x] Decide whether the intended scope is low E and A only or a wider set of strings.
+- [x] Align focus, objectives, demonstration, exercises, worked examples and checkpoint to the same string/fret scope.
+- [x] Make the independent recall task test the exact scope taught.
+- [x] Keep the checkpoint aligned between the outline and authored lesson.
 
 **Acceptance evidence:** A learner can tell exactly which strings and frets are included, and the demonstrated notes cover the complete stated task.
 
@@ -134,10 +151,10 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 **Current concern:** The lesson teaches octave relationships, but its current mappings are `fretboard.string-map` and `fretboard.natural-notes`; it does not map to the existing `fretboard.octaves` skill. That skill currently has only one association across the full curriculum.
 
-- [ ] Review the complete explanation, exercises and checkpoint for direct octave-skill evidence.
-- [ ] Add `fretboard.octaves` if the lesson explicitly teaches and assesses octave locations; otherwise document why it is not an assessed outcome.
-- [ ] Add a task-specific octave criterion and a transfer task across another string set.
-- [ ] Update the mapping register and coverage audit after the decision.
+- [x] Review the complete explanation, exercises and checkpoint for direct octave-skill evidence.
+- [x] Add `fretboard.octaves` if the lesson explicitly teaches and assesses octave locations; otherwise document why it is not an assessed outcome.
+- [x] Add a task-specific octave criterion and a transfer task across another string set.
+- [x] Update the mapping register and coverage audit after the decision.
 
 **Acceptance evidence:** Octave-location teaching, assessment and skill mapping agree; the learner demonstrates the relationship rather than only memorising a shape.
 
@@ -205,7 +222,7 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 
 ## 5. P1 — Complete Year 1 and Year 2 lesson authoring
 
-### CURR-P1-04 — Year 1 remaining 43 lessons
+### CURR-P1-04 — Year 1 remaining 41 lessons
 
 - [ ] Process lessons in stable week order, in small reviewable batches.
 - [ ] Replace generic objective 2 and objective 3 with distinct, observable tasks and transfer outcomes.
@@ -218,13 +235,13 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 - [ ] Keep optional staff notation genuinely optional where the route says it is optional.
 - [ ] Complete a musical accuracy review of chord names, fingerings, TAB, rhythms and scale examples.
 
-**Baseline:** 9 of 52 are task-specific; 43 remain.
+**Current candidate:** 11 of 52 are task-specific; 41 remain.
 
 **Acceptance evidence:** Every remaining lesson meets the authoring standard in Section 9 and is checked against its weekly outline.
 
 **Status:** Not started
 
-### CURR-P1-05 — Year 2 remaining 49 lessons
+### CURR-P1-05 — Year 2 remaining 47 lessons
 
 - [ ] Process lessons in stable week order, in small reviewable batches.
 - [ ] Replace generic objective 2 and objective 3 with specific performance, understanding and transfer outcomes.
@@ -235,7 +252,7 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 - [ ] Ensure Year 2 develops and revisits Year 1 foundations rather than only increasing topic difficulty.
 - [ ] Complete a musical accuracy and accessibility review.
 
-**Baseline:** 3 of 52 are task-specific; 49 remain.
+**Current candidate:** 5 of 52 are task-specific; 47 remain.
 
 **Acceptance evidence:** Every remaining lesson is self-contained, level-appropriate, task-specific and aligned to its outline checkpoint.
 
@@ -255,7 +272,7 @@ Complete all remaining records below. CURR-001 and CURR-002 are priority correct
 | Done | Week | Lesson ID | Lesson |
 |---|---:|---|---|
 | [ ] | 1 | `y1-w01-lesson` | Meet your guitar |
-| [ ] | 2 | `y1-w02-lesson` | Clear single notes |
+| [x] | 2 | `y1-w02-lesson` | Clear single notes |
 | [ ] | 3 | `y1-w03-lesson` | Read guitar maps |
 | [ ] | 5 | `y1-w05-lesson` | Open chords A, D and E |
 | [ ] | 6 | `y1-w06-lesson` | First complete chord loop |
@@ -267,7 +284,7 @@ Complete all remaining records below. CURR-001 and CURR-002 are priority correct
 | [ ] | 14 | `y1-w14-lesson` | Optional notation: low E and A landmarks |
 | [ ] | 18 | `y1-w18-lesson` | Shell chords: roots and guide tones |
 | [ ] | 19 | `y1-w19-lesson` | Your first 12-bar blues |
-| [ ] | 20 | `y1-w20-lesson` | Play with expression |
+| [x] | 20 | `y1-w20-lesson` | Play with expression |
 | [ ] | 21 | `y1-w21-lesson` | Movable power chords |
 | [ ] | 22 | `y1-w22-lesson` | Approach barre chords safely |
 | [ ] | 24 | `y1-w24-lesson` | Half-year playing test |
@@ -304,8 +321,8 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 | Done | Week | Lesson ID | Lesson |
 |---|---:|---|---|
-| [ ] | 1 | `y2-w01-lesson` | Fretboard map 1 |
-| [ ] | 2 | `y2-w02-lesson` | Fretboard map 2 |
+| [x] | 1 | `y2-w01-lesson` | Fretboard map 1 |
+| [x] | 2 | `y2-w02-lesson` | Fretboard map 2 |
 | [ ] | 3 | `y2-w03-lesson` | CAGED and advanced fretboard map |
 | [ ] | 5 | `y2-w05-lesson` | Minor triad inversions |
 | [ ] | 6 | `y2-w06-lesson` | Quarter review: fretboard |
@@ -578,11 +595,13 @@ Append one entry for every implementation batch. Keep entries chronological; do 
 | Date | PR / commit | Scope / lesson IDs | Validation | Reviewer | Status / notes |
 |---|---|---|---|---|---|
 | 2026-11-18 | Audit baseline | 152 lessons / 391 mappings | Source metrics inspected | Pending | Tracker created; no curriculum data changed by the audit |
+| 2026-11-18 | PR #180 / release candidate v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | In-memory source/outline/profile/release consistency checks; CI pending | Pending | Four P0 corrections ready for owner review; stable lesson/week IDs preserved |
 
 ### Decision log
 
 | Date | Decision | Rationale / evidence | Approved by | Related task / PR |
 |---|---|---|---|---|
+| 2026-11-18 | Add `instrument.fretting` and correct P0 mappings | Week 2 clean-fretting outcome lacked a direct skill ID; content model already anticipated the instrument skill | Pending curriculum-owner review | PR #180 / curriculum-v1.0.7 |
 |  |  |  |  |  |
 
 ### Blockers and deferred items
