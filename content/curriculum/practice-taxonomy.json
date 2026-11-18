@@ -218,7 +218,10 @@
       "lessonId": "y1-w15-lesson",
       "exerciseId": "y1-w15-lesson-focus",
       "topicIds": [],
-      "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+      "techniqueIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
       "stringNumbers": [],
       "fretPositionIds": [],
       "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -262,7 +265,10 @@
     {
       "lessonId": "y1-w17-lesson",
       "exerciseId": "y1-w17-lesson-focus",
-      "topicIds": ["theory.major-scale-construction", "lead.a-minor-pentatonic-note-set"],
+      "topicIds": [
+        "theory.major-scale-construction",
+        "lead.a-minor-pentatonic-note-set"
+      ],
       "techniqueIds": [],
       "stringNumbers": [],
       "fretPositionIds": [],
@@ -375,7 +381,10 @@
       "topicIds": ["lead.a-minor-pentatonic-box-1"],
       "techniqueIds": [],
       "stringNumbers": [],
-      "fretPositionIds": ["position.pentatonic-box-1", "position.pentatonic-box-2"],
+      "fretPositionIds": [
+        "position.pentatonic-box-1",
+        "position.pentatonic-box-2"
+      ],
       "sourceEvidence": "Play the adjacent box 2 and name the notes as they are reached."
     },
     {
@@ -573,7 +582,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "techniqueIds": [
+            "technique.alternate-picking",
+            "technique.string-crossing"
+          ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -804,7 +816,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "techniqueIds": [
+            "technique.alternate-picking",
+            "technique.string-crossing"
+          ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -951,7 +966,10 @@
           "lessonId": "y1-w15-lesson",
           "exerciseId": "y1-w15-lesson-focus",
           "topicIds": [],
-          "techniqueIds": ["technique.alternate-picking", "technique.string-crossing"],
+          "techniqueIds": [
+            "technique.alternate-picking",
+            "technique.string-crossing"
+          ],
           "stringNumbers": [],
           "fretPositionIds": [],
           "sourceEvidence": "Play a four-note D–U–D–U cell on one string."
@@ -1107,7 +1125,10 @@
           "topicIds": ["lead.a-minor-pentatonic-box-1"],
           "techniqueIds": [],
           "stringNumbers": [],
-          "fretPositionIds": ["position.pentatonic-box-1", "position.pentatonic-box-2"],
+          "fretPositionIds": [
+            "position.pentatonic-box-1",
+            "position.pentatonic-box-2"
+          ],
           "sourceEvidence": "Play the adjacent box 2 and name the notes as they are reached."
         },
         {
