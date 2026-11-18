@@ -13,6 +13,12 @@ const skillCatalog = JSON.parse(
   )
 );
 const activeCurriculumReleaseId = skillCatalog.curriculumReleaseId;
+const practiceTaxonomy = JSON.parse(
+  await readFile(
+    new URL('../content/curriculum/practice-taxonomy.json', import.meta.url),
+    'utf8'
+  )
+);
 const skillIdFor = (displayName) => {
   const skill = skillCatalog.skills.find(
     (item) => item.displayName === displayName
@@ -1868,9 +1874,18 @@ try {
     '.active-evidence-list .authored-observation-link'
   );
   await authoredObservationLink.waitFor();
+  const authoredObservationLinkText = await authoredObservationLink.innerText();
   assert.match(
-    await authoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.3\.0/
+    authoredObservationLinkText,
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus/
+  );
+  assert.ok(
+    authoredObservationLinkText.includes(activeCurriculumReleaseId),
+    'The authored observation link should use the active curriculum release.'
+  );
+  assert.ok(
+    authoredObservationLinkText.includes(practiceTaxonomy.version),
+    'The authored observation link should use the active practice taxonomy version.'
   );
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
