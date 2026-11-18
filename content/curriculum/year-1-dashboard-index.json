@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "outlineVersion": "1.1.0",
-  "contentVersion": "1.0.1",
+  "outlineVersion": "1.1.1",
+  "contentVersion": "1.0.2",
   "phases": [
     {
       "id": "beginner-base",
@@ -47,7 +47,7 @@
       "title": "Clear single notes",
       "focus": "Fretting-hand basics, clean tone and relaxed pressure",
       "estimatedMinutes": 30,
-      "skillIds": ["harmony.triads", "harmony.voice-leading"]
+      "skillIds": ["instrument.fretting"]
     },
     {
       "id": "y1-w03-lesson",
