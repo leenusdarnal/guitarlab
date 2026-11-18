@@ -77,7 +77,7 @@ async function removeNonPublicPageEntries(cache: Cache) {
     keys
       .filter((request) => {
         const url = new URL(request.url);
-        return request.mode !== 'navigate' || !isEligiblePublicPage(url);
+        return !isEligiblePublicPage(url);
       })
       .map((request) => cache.delete(request))
   );
