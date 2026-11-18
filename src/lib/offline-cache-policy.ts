@@ -29,7 +29,6 @@ export function isCacheablePublicNavigation(
   ) {
     return false;
   }
-  if (response.headers.get('x-guitarlab-cache') !== 'public') return false;
   if (response.headers.has('set-cookie')) return false;
 
   const cacheControl =
