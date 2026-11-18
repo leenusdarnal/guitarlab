@@ -36,16 +36,17 @@ describe('public offline navigation cache policy', () => {
   it(
     'allows dynamic public pages only with an explicit public directive',
     () => {
-    expect(
-      isCacheablePublicNavigation(
-        request(),
-        response({ 'cache-control': 'public, max-age=0, must-revalidate' }),
-        new URL('/learn', origin),
-        origin,
-        publicPaths
-      )
-    ).toBe(true);
-  });
+      expect(
+        isCacheablePublicNavigation(
+          request(),
+          response({ 'cache-control': 'public, max-age=0, must-revalidate' }),
+          new URL('/learn', origin),
+          origin,
+          publicPaths
+        )
+      ).toBe(true);
+    }
+  );
 
   it.each([
     '/account',
