@@ -11,7 +11,7 @@ import {
 describe('versioned authored exercise practice taxonomy', () => {
   it('is scoped to the active curriculum release and exposes the expanded author-reviewed scope', () => {
     expect(PRACTICE_TAXONOMY_RELEASE_ID).toBe('curriculum-v1.0.7');
-    expect(PRACTICE_TAXONOMY_VERSION).toBe('0.3.0');
+    expect(PRACTICE_TAXONOMY_VERSION).toBe('0.4.0');
     expect(listAuthoredPracticeScopes()).toHaveLength(24);
     expect(
       listAuthoredPracticeScopeSnapshots().map((snapshot) => [
@@ -21,7 +21,8 @@ describe('versioned authored exercise practice taxonomy', () => {
     ).toEqual([
       ['0.1.0', 10],
       ['0.2.0', 15],
-      ['0.3.0', 24]
+      ['0.3.0', 24],
+      ['0.4.0', 24]
     ]);
   });
 
