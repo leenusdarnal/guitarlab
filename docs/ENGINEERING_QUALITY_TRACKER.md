@@ -82,7 +82,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 ### OFF-01 acceptance checklist
 
-**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist, an explicit anonymous-public response marker, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is being added; OFF-01 remains open until CI and browser-level cache-isolation checks pass.
+**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is being added; OFF-01 remains open until CI and browser-level cache-isolation checks pass.
 
 
 - [ ] Cache only an explicit allowlist of public app assets and public curriculum pages, or require an explicit public cache directive in addition to an allowlist.
