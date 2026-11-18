@@ -127,7 +127,7 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   if (url.origin !== worker.location.origin) return;
 
   if (request.mode === 'navigate') {
-    // Never read an existing cache entry for a dynamic, private or query-bearing
+    // Never read an existing cache entry for a private or query-bearing
     // navigation. This also prevents legacy cache entries from being replayed.
     if (!isEligiblePublicPage(url)) {
       event.respondWith(
