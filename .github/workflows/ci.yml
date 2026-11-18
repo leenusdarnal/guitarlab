@@ -16,7 +16,7 @@ jobs:
   validate:
     name: Validate application and curriculum
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -106,7 +106,8 @@ jobs:
       - name: Install Playwright system dependencies
         if: ${{ !cancelled() && steps.install-playwright.outcome == 'success' }}
         id: install-browser-dependencies
-        timeout-minutes: 15
+        # WebKit adds a large multimedia dependency set on fresh Ubuntu runners.
+        timeout-minutes: 25
         run: npx playwright install-deps chromium webkit
 
       - name: Install Chromium and WebKit browser binaries
