@@ -65,6 +65,11 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 7 | QA-04 — Reconcile exact production SHA and rollback evidence | P1 | OPEN |
 | 8 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
 | 9 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
+| 10 | CSS-01 — Inventory Tailwind version, configuration and styling usage | P2 | DONE — read-only |
+| 11 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | PARTIAL |
+| 12 | CSS-03 — Define staged Tailwind/CSS modernisation plan | P2 | IN PROGRESS |
+| 13 | CSS-04 — Implement approved, incremental CSS improvements | P2 | OPEN |
+| 14 | CSS-05 — Verify visual, accessibility and build regressions | P2 | OPEN |
 
 ---
 
@@ -75,7 +80,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
 | OFF-01 | P0 | **IN PROGRESS** | Replace permissive HTML caching with an explicit public-content policy. Baseline finding before PR #186: the service worker accepted same-origin successful HTML unless it was marked `private`/`no-store` or exposed `Set-Cookie`; the authenticated account page returned account details without an explicit private no-store policy. This was a source-level privacy risk; a live exploit was not reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
-| OFF-02 | P1 | **OPEN** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. | Depends on OFF-01 |
+| OFF-02 | P1 | **IN PROGRESS** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. PR #186 extracts the navigation resolver and adds unit coverage for private-cache replay after logout, private-route cache-read exclusion, public cache updates, network fallback and Cache Storage write failures. Browser-level service-worker/session acceptance remains outstanding. | [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); full CI and browser-level isolation checks required |
 | OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat `navigator.onLine` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
@@ -384,7 +389,89 @@ This table records the state observed during the 18 November 2026 reconciliation
 
 ---
 
-## 10. Definition of done and update protocol
+
+---
+
+## 10. CSS, Tailwind and styling maintainability
+
+**Goal:** improve maintainability and consistency without redesigning GuitarLab, replacing its semantic design system, or delaying the P0 service-worker privacy fix.
+
+### 10.1 Read-only baseline (18 November 2026)
+
+**Repository baseline:** main at 6439dac92f889b3838e4446023e563a11db56e7f. This inventory is a source-level scan of the 26 styling-bearing files under src/ (25 Svelte component style blocks plus src/app.css). Counts are approximate where pattern matching is involved; they are not a runtime CSS coverage or visual-regression measurement.
+
+| Area | Finding |
+|---|---|
+| Tailwind package | tailwindcss: ^4.0.0; package-lock resolves 4.3.5 |
+| Vite integration | @tailwindcss/vite: ^4.0.0; package-lock resolves 4.3.5; plugin is enabled in vite.config.ts |
+| CSS entry | src/app.css starts with @import "tailwindcss"; |
+| Configuration | No legacy tailwind.config.* or standalone PostCSS config was found at the repository root |
+| Styling ownership | One global stylesheet and 25 Svelte component-scoped <style> blocks |
+| CSS size | About 148,746 characters in component-scoped styles plus 4,711 in src/app.css |
+| CSS structure | Approx. 1,495 rule blocks and 4,088 declarations in the scanned styles |
+| Class usage | 952 literal class attributes and 1,020 tokens; only 5 tokens matched a broad utility-class pattern. This is a heuristic, not a full Tailwind AST report |
+| Tailwind directives | No @apply was found in the scanned styles; no custom @theme block was found |
+| Overrides / dynamic styling | 19 !important occurrences, 7 literal style= attributes and 67 Svelte class: directives |
+| Design tokens | src/app.css defines 65 custom properties, including dark/light semantic colours, spacing, typography, radii and layout roles |
+
+**Interpretation:** Tailwind v4 is integrated correctly through its Vite plugin and CSS import, but the current UI is overwhelmingly styled with semantic class names and component-scoped CSS. Tailwind utility adoption is minimal. In practice Tailwind currently supplies its CSS processing, theme defaults and Preflight more than a utility-first component styling convention.
+
+The semantic token system in src/app.css is an asset, not migration debt. Preserve the existing dark/light themes, CSS variables, accessible control defaults, safe-area rules and reduced-motion behaviour. Do not replace them with the Tailwind default palette or a wholesale utility-class conversion.
+
+### 10.2 Main CSS hotspots for a later, targeted review
+
+| File | Scoped CSS characters | Approx. rules | Notes |
+|---|---:|---:|---|
+| src/routes/+page.svelte | 16,206 | 197 | Dashboard; largest stylesheet block |
+| src/routes/practice/+page.svelte | 16,320 | 153 | Practice workflow; largest declaration count |
+| src/routes/learn/[lessonId]/+page.svelte | 11,904 | 140 | Lesson and progress interaction |
+| src/routes/tools/fretboard/+page.svelte | 11,101 | 97 | Diagram geometry and responsive scrolling |
+| src/routes/skills/+page.svelte | 10,825 | 106 | Skill map and state presentation |
+| src/routes/learn/+page.svelte | 6,967 | 81 | Curriculum browsing |
+| src/routes/tools/chords/+page.svelte | 7,401 | 70 | Chord diagram and selector UI |
+| src/routes/tools/tuner/+page.svelte | 7,188 | 68 | Audio state and tuner presentation |
+
+These are investigation targets, not evidence that the styles are duplicated or safe to delete. The fretboard, audio tools, practice and lesson views contain specialised interaction states; keep their component styles unless a concrete duplication or maintenance problem is demonstrated.
+
+### 10.3 Staged modernisation plan
+
+| Stage | Task | Guardrails / acceptance |
+|---|---|---|
+| CSS-01 — Inventory | Record resolved Tailwind version, Vite integration, CSS entry points, class usage, directives, tokens and hotspots | **Complete — read-only baseline above** |
+| CSS-02 — Ownership review | For each hotspot, classify global tokens/resets, reusable patterns, component-specific layout, state styling and genuinely duplicated declarations | **Partial** — inventory complete; selector-by-selector duplication and dead-style validation still required |
+| CSS-03 — Styling contract | Adopt a documented rule: semantic CSS variables remain the source of truth for product tokens; component-scoped CSS owns complex domain visuals and interaction states; Tailwind utilities are optional for simple layout/spacing/typography primitives when they improve clarity | Do not convert classes solely to increase Tailwind usage; do not duplicate design tokens |
+| CSS-04 — Incremental implementation | Make small, component-scoped changes only after CSS-02 identifies a specific benefit; keep each change independently reviewable and avoid broad route rewrites | Block implementation until OFF-01/OFF-02 have passed required CI and browser privacy checks |
+| CSS-05 — Verification | Compare screenshots and built CSS; run npm run check, npm run lint, npm run test:run, production build and browser acceptance | Verify dark/light themes, 320px through desktop widths, 200% reflow, keyboard focus, reduced motion, contrast and mobile safe areas |
+
+### 10.4 Technical recommendations
+
+1. **Keep Tailwind v4.** There is no v3-to-v4 migration to perform. Do not change package versions or add a legacy JavaScript config / PostCSS layer without a concrete, tested requirement.
+2. **Keep the current Vite plugin and CSS import.** This matches Tailwind's documented Vite setup for SvelteKit. The absence of a legacy config file is not itself a defect in v4's CSS-first model.
+3. **Preserve semantic CSS variables.** Do not move all 65 current tokens into @theme. Consider selective @theme inline aliases only when a real utility-class use case is established and the alias correctly follows the active light/dark theme.
+4. **Use utilities selectively.** Prefer them for simple, local layout primitives. Keep authored component CSS for fretboard geometry, audio feedback, lesson states, practice controls and other domain-specific behaviour.
+5. **Do not introduce @apply as a default abstraction.** Tailwind v4 requires @reference for theme definitions used from separately bundled Svelte style blocks; using the existing CSS variables directly is often clearer and avoids generating extra utility CSS in those blocks.
+6. **Investigate the 19 !important declarations and 7 inline-style attributes individually.** Remove or replace them only when the cascade/state intent is understood and regression evidence exists.
+7. **Treat compiler unused-selector warnings as leads, not automatic deletion instructions.** Check conditional rendering, dynamic class names and route states before removing a selector.
+8. **Measure output before claiming performance gains.** Record generated CSS bytes and a consistent production build baseline before and after each change; do not infer bundle savings from source character counts.
+
+Official Tailwind references: [Vite installation](https://tailwindcss.com/docs/installation/using-vite), [theme variables and CSS-first configuration](https://tailwindcss.com/docs/theme), [Preflight behaviour](https://tailwindcss.com/docs/preflight), and [Svelte @reference guidance](https://tailwindcss.com/docs/upgrade-guide).
+
+### 10.5 CSS workstream acceptance
+
+- [x] Confirm package declarations and exact lockfile-resolved Tailwind / Vite plugin versions.
+- [x] Confirm Vite plugin and CSS entry-point integration.
+- [x] Inventory all 26 source styling files and quantify the current style ownership model.
+- [x] Record existing design-token and theme architecture to preserve.
+- [ ] Complete selector-level duplication and unused-style review for the largest component stylesheets.
+- [ ] Agree on the styling contract before migrating or rewriting component CSS.
+- [ ] Keep implementation after the P0 offline privacy fix and required cache-isolation checks.
+- [ ] Measure built CSS and verify dark/light, responsive, keyboard and reduced-motion behaviour for each implementation slice.
+
+**Current decision:** no CSS or Tailwind implementation changes are authorised by this audit. The next CSS action is selector-level review of the identified hotspots after the P0 privacy work is verified.
+
+---
+
+## 11. Definition of done and update protocol
 
 A task may move to **DONE — automated** only when its implementation is merged, relevant automated checks pass on the final merged SHA, and the evidence link is recorded.
 
