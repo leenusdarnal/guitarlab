@@ -23,7 +23,7 @@ Open `http://127.0.0.1:8787` in a desktop browser. The preview uses a local-only
 
 Service workers require a secure context. A phone visiting a plain `http://<computer-lan-ip>` address will generally not be able to run the service worker, so that is not a valid offline acceptance environment.
 
-For iOS Safari or Android Chrome, use an approved HTTPS preview URL or a trusted local HTTPS development setup. The public Cloudflare preview deployment is intentionally deferred until the GitHub `preview` environment and credentials are configured. Do not deploy to production for this test.
+For iOS Safari or Android Chrome, use an approved HTTPS preview URL or a trusted local HTTPS development setup. Use a currently approved HTTPS preview URL or a trusted local HTTPS development setup. Check the current preview environment and deployment status before testing; do not assume a historical URL is still available and do not deploy to production for this test.
 
 ## Desktop and mobile acceptance
 
