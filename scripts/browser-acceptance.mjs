@@ -79,6 +79,7 @@ try {
     () =>
       'serviceWorker' in navigator &&
       Boolean(navigator.serviceWorker.controller),
+    null,
     { timeout: 20000 }
   );
   await cacheBoundaryPage.evaluate(async () => {
