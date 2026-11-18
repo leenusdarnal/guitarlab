@@ -28,6 +28,15 @@ const PUBLIC_PAGE_PATHS = new Set(
     .filter((pathname) => !PRIVATE_PATH_PATTERN.test(pathname))
 );
 
+function isEligiblePublicPage(url: URL) {
+  return (
+    url.origin === worker.location.origin &&
+    !url.search &&
+    !PRIVATE_PATH_PATTERN.test(url.pathname) &&
+    PUBLIC_PAGE_PATHS.has(url.pathname)
+  );
+}
+
 const OFFLINE_HTML = `<!doctype html>
 <html lang="en">
   <head>
@@ -72,6 +81,18 @@ function isCacheableNavigation(request: Request, response: Response, url: URL) {
   );
 }
 
+async function removeNonPublicPageEntries(cache: Cache) {
+  const keys = await cache.keys();
+  await Promise.all(
+    keys
+      .filter((request) => {
+        const url = new URL(request.url);
+        return request.mode !== 'navigate' || !isEligiblePublicPage(url);
+      })
+      .map((request) => cache.delete(request))
+  );
+}
+
 async function trimPageCache(cache: Cache) {
   const keys = await cache.keys();
   const pageRequests = keys.filter((request) => request.mode === 'navigate');
@@ -102,6 +123,7 @@ worker.addEventListener('activate', (event: ExtendableEvent) => {
           )
           .map((key) => caches.delete(key))
       );
+      await removeNonPublicPageEntries(await caches.open(PAGE_CACHE));
       await worker.clients.claim();
     })
   );
@@ -115,6 +137,24 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   if (url.origin !== worker.location.origin) return;
 
   if (request.mode === 'navigate') {
+    // Never read an existing cache entry for a dynamic, private or query-bearing
+    // navigation. This also prevents legacy cache entries from being replayed.
+    if (!isEligiblePublicPage(url)) {
+      event.respondWith(
+        fetch(request).catch(
+          () =>
+            new Response(OFFLINE_HTML, {
+              status: 503,
+              headers: {
+                'Content-Type': 'text/html; charset=utf-8',
+                'Cache-Control': 'no-store'
+              }
+            })
+        )
+      );
+      return;
+    }
+
     event.respondWith(
       (async () => {
         const pages = await caches.open(PAGE_CACHE);
