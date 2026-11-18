@@ -524,7 +524,7 @@ Every lesson changed under this tracker must meet this minimum contract:
 
 The following are candidates for review, not approved new identifiers:
 
-- [ ] Clean fretting / individual-note tone: compare all existing technique and instrument skills before deciding whether a new ID is necessary.
+- [x] Clean fretting / individual-note tone: added `instrument.fretting` in release candidate v1.0.7 after comparing the gap with the instrument skill definitions; final scope approval remains a curriculum-owner review item.
 - [ ] Staff notation / sight-reading: `docs/CURRICULUM_CONTENT_MODEL.md` references `notation.staff`, but the active catalogue currently contains only the TAB notation skill. Decide whether staff reading should be represented as a distinct skill or remain optional content outside the current assessable catalogue.
 - [ ] Arpeggios: verify whether the content-model example `lead.arpeggios` should be a real catalogue skill or whether current chord-tone / harmony definitions sufficiently cover the outcomes.
 - [ ] Slides and dynamics: review whether these are subcriteria under phrasing or require separately assessable skills.
@@ -608,7 +608,7 @@ Append one entry for every implementation batch. Keep entries chronological; do 
 
 | Item | Blocker / reason | Owner | Next review date | Status |
 |---|---|---|---|---|
-| Year 1 Week 2 skill mapping / clean-fretting taxonomy decision | Owner decision required before changing the mapping or introducing an ID | Curriculum owner |  | Blocked — owner decision |
+| Review `instrument.fretting` definition and Year 1 Week 2 mapping in v1.0.7 | Confirm that the new skill boundary and evidence criteria match the intended curriculum standard | Curriculum owner / guitar instructor |  | Ready for review |
 
 ---
 
