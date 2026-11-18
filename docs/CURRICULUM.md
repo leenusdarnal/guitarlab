@@ -115,3 +115,7 @@ Lessons are self-contained and do not require a specific paid course or a partic
 ## Research-backed revision
 
 The curriculum framework uses focused repetition for new movements, progressive mixed practice, adaptive retrieval, flexible session lengths and multi-dimensional assessment. Research findings and limitations are documented in [CURRICULUM_RESEARCH.md](CURRICULUM_RESEARCH.md). Review intervals and mastery thresholds remain transparent product heuristics rather than claims of scientifically optimal timing.
+
+## Curriculum audit implementation tracking
+
+The current curriculum-quality findings and ordered remediation checklist are tracked in [CURRICULUM_AUDIT_IMPLEMENTATION_TRACKER.md](CURRICULUM_AUDIT_IMPLEMENTATION_TRACKER.md). Use that document as the implementation status source of truth; this overview describes the curriculum design and learner-facing promise.
