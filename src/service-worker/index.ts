@@ -6,6 +6,7 @@
 import { assets, immutable, prerendered } from '$app/manifest';
 import { version } from '$app/env';
 import { resolve } from '$app/paths';
+import { isCacheablePublicNavigation, isEligiblePublicNavigation, PRIVATE_NAVIGATION_PATH_PATTERN } from '../lib/offline-cache-policy';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
@@ -20,21 +21,14 @@ const MAX_CACHED_PAGES = 40;
 
 // Only prerendered public routes are eligible for offline HTML caching. Dynamic
 // routes are intentionally excluded, even when their response looks cacheable.
-const PRIVATE_PATH_PATTERN =
-  /^\/(?:api|account|login|register|signup|verify|password-reset)(?:\/|$)/;
 const PUBLIC_PAGE_PATHS = new Set(
-  prerendered
-    .map((page) => new URL(resolve(page.path), worker.location.origin).pathname)
-    .filter((pathname) => !PRIVATE_PATH_PATTERN.test(pathname))
+  prerendered.map(
+    (page) => new URL(resolve(page.path), worker.location.origin).pathname
+  )
 );
 
 function isEligiblePublicPage(url: URL) {
-  return (
-    url.origin === worker.location.origin &&
-    !url.search &&
-    !PRIVATE_PATH_PATTERN.test(url.pathname) &&
-    PUBLIC_PAGE_PATHS.has(url.pathname)
-  );
+  return isEligiblePublicNavigation(url, worker.location.origin, PUBLIC_PAGE_PATHS);
 }
 
 const OFFLINE_HTML = `<!doctype html>
@@ -61,23 +55,12 @@ const OFFLINE_HTML = `<!doctype html>
 </html>`;
 
 function isCacheableNavigation(request: Request, response: Response, url: URL) {
-  if (request.method !== 'GET' || request.mode !== 'navigate') return false;
-  if (url.origin !== worker.location.origin) return false;
-  if (PRIVATE_PATH_PATTERN.test(url.pathname)) return false;
-  if (url.search || !PUBLIC_PAGE_PATHS.has(url.pathname)) return false;
-  if (response.headers.get('x-guitarlab-cache') !== 'public') return false;
-  if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) {
-    return false;
-  }
-  // Keep this as defence in depth; the explicit public marker and route
-  // allowlist above are the actual privacy boundary.
-  if (response.headers.has('set-cookie')) return false;
-
-  const cacheControl =
-    response.headers.get('cache-control')?.toLowerCase() ?? '';
-  return (
-    !cacheControl.includes('private') && !cacheControl.includes('no-store')
+  return isCacheablePublicNavigation(
+    request,
+    response,
+    url,
+    worker.location.origin,
+    PUBLIC_PAGE_PATHS
   );
 }
 
