@@ -962,35 +962,38 @@ try {
     .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
     .waitFor({ state: 'detached' });
 
-  const adaptiveFeedbackSnapshot = await page.evaluate(async (activeCurriculumReleaseId) => {
-    const database = await new Promise((resolve, reject) => {
-      const request = indexedDB.open('guitarlab-local');
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const learnerId = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('metadata')
-        .objectStore('metadata')
-        .get('activeLearnerId');
-      request.onsuccess = () => resolve(request.result?.value);
-      request.onerror = () => reject(request.error);
-    });
-    const rows = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('adaptiveRecommendationFeedback')
-        .objectStore('adaptiveRecommendationFeedback')
-        .index('byLearnerRelease')
-        .getAll([learnerId, activeCurriculumReleaseId]);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const hasFeedbackStore = database.objectStoreNames.contains(
-      'adaptiveRecommendationFeedback'
-    );
-    database.close();
-    return { rows, hasFeedbackStore };
-  }, activeCurriculumReleaseId);
+  const adaptiveFeedbackSnapshot = await page.evaluate(
+    async (activeCurriculumReleaseId) => {
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const learnerId = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('metadata')
+          .objectStore('metadata')
+          .get('activeLearnerId');
+        request.onsuccess = () => resolve(request.result?.value);
+        request.onerror = () => reject(request.error);
+      });
+      const rows = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('adaptiveRecommendationFeedback')
+          .objectStore('adaptiveRecommendationFeedback')
+          .index('byLearnerRelease')
+          .getAll([learnerId, activeCurriculumReleaseId]);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const hasFeedbackStore = database.objectStoreNames.contains(
+        'adaptiveRecommendationFeedback'
+      );
+      database.close();
+      return { rows, hasFeedbackStore };
+    },
+    activeCurriculumReleaseId
+  );
   assert.equal(adaptiveFeedbackSnapshot.hasFeedbackStore, true);
   assert.deepEqual(
     adaptiveFeedbackSnapshot.rows
