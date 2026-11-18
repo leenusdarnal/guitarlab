@@ -27,6 +27,20 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const headers = new Headers(response.headers);
+  const privatePath =
+    /^\/(?:api|account|login|register|signup|verify|password-reset)(?:\/|$)/.test(
+      event.url.pathname
+    );
+
+  // Authenticated HTML and all identity/API routes must never be cached.
+  if (event.locals.authUser || privatePath) {
+    headers.set('Cache-Control', 'private, no-store');
+    headers.delete('X-GuitarLab-Cache');
+  } else {
+    // The service worker still applies its own exact prerendered-route allowlist.
+    headers.set('X-GuitarLab-Cache', 'public');
+  }
+
   headers.set('X-Content-Type-Options', 'nosniff');
   headers.set('X-Frame-Options', 'DENY');
   headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
