@@ -118,4 +118,4 @@ The curriculum framework uses focused repetition for new movements, progressive 
 
 ## Curriculum audit implementation tracking
 
-The current curriculum-quality findings and ordered remediation checklist are tracked in [CURRICULUM_AUDIT_IMPLEMENTATION_TRACKER.md](CURRICULUM_AUDIT_IMPLEMENTATION_TRACKER.md). Use that document as the implementation status source of truth; this overview describes the curriculum design and learner-facing promise.
+The current curriculum-quality findings and ordered remediation checklist are tracked in [CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Use that document as the implementation status source of truth; this overview describes the curriculum design and learner-facing promise.
