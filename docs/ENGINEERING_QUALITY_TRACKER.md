@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 18 November 2026  
-**Verified source baseline:** `main` at `6439dac92f889b3838e4446023e563a11db56e7` (CSS audit baseline; PR #186 is based on this commit)  
+**Verified source baseline:** `main` at `2a1e50cd0d91ddabe941deeb6c480b7521940046` (PR #186 merged; CSS inventory below remains measured against the earlier `6439dac` source snapshot)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -44,7 +44,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 ### 1.3 Reconciliation baseline
 
-- The 18 November 2026 Tailwind/CSS inventory and PR #186 base use `main` commit `6439dac92f889b3838e4446023e563a11db56e7`; this is newer than the earlier PR #180/CI evidence recorded below.
+- PR #186 merged to `main` as `2a1e50cd0d91ddabe941deeb6c480b7521940046`; final required CI run [#44341993219](https://github.com/leenusdarnal/guitarlab/actions/runs/44341993219) passed all three checks. The CSS inventory remains a historical source scan at `6439dac92f889b3838e4446023e563a11db56e7` and should be refreshed only if source changes materially affect styling.
 - Main commit `41805887fee753b1c47e2b1442218ac53c4d948f` includes PR #180.
 - Main GuitarLab CI run [#44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully.
 - Main curriculum validation [#44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) completed successfully.
@@ -57,8 +57,8 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | Order | Task | Priority | Status |
 |---:|---|---|---|
-| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | IN PROGRESS |
-| 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | OPEN |
+| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
+| 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
 | 3 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
 | 4 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
 | 5 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
@@ -67,8 +67,8 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 8 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
 | 9 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
 | 10 | CSS-01 — Inventory Tailwind version, configuration and styling usage | P2 | DONE — read-only |
-| 11 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | PARTIAL |
-| 12 | CSS-03 — Define staged Tailwind/CSS modernisation plan | P2 | IN PROGRESS |
+| 11 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | DONE — automated review |
+| 12 | CSS-03 — Define staged Tailwind/CSS modernisation plan | P2 | DONE — documented |
 | 13 | CSS-04 — Implement approved, incremental CSS improvements | P2 | OPEN |
 | 14 | CSS-05 — Verify visual, accessibility and build regressions | P2 | OPEN |
 
@@ -80,15 +80,15 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| OFF-01 | P0 | **IN PROGRESS** | Replace permissive HTML caching with an explicit public-content policy. Baseline finding before PR #186: the service worker accepted same-origin successful HTML unless it was marked `private`/`no-store` or exposed `Set-Cookie`; the authenticated account page returned account details without an explicit private no-store policy. This was a source-level privacy risk; a live exploit was not reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
-| OFF-02 | P1 | **IN PROGRESS** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. PR #186 extracts the navigation resolver and adds unit coverage for private-cache replay after logout, private-route cache-read exclusion, public cache updates, network fallback and Cache Storage write failures. Browser-level service-worker/session acceptance remains outstanding. | [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); full CI and browser-level isolation checks required |
+| OFF-01 | P0 | **DONE — automated** | PR #186 replaces permissive HTML caching with an explicit public-content policy, private/no-store response handling, credential-sensitive response exclusions and stale private-entry cleanup. Final required CI, including browser acceptance, passed on the merged head. Physical-device offline acceptance remains separately tracked under OFF-04. | [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); [CI run #44341993219](https://github.com/leenusdarnal/guitarlab/actions/runs/44341993219) |
+| OFF-02 | P1 | **DONE — automated** | PR #186 adds unit and Playwright/browser acceptance coverage for private-cache replay after logout, private-route cache-read exclusion, public cache updates, network fallback and Cache Storage write failures. All required checks passed on the final merged SHA. Physical-device acceptance is not claimed; it remains OFF-04. | [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); [CI run #44341993219](https://github.com/leenusdarnal/guitarlab/actions/runs/44341993219) |
 | OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat `navigator.onLine` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
 ### OFF-01 acceptance checklist
 
-**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist plus support for explicit `Cache-Control: public` on approved dynamic public content, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is included in [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); OFF-01 remains open until CI and browser-level cache-isolation checks pass.
+**Implemented and merged:** [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186) enforces the public-only page-cache boundary and passed final required CI, including browser acceptance, on merged commit `2a1e50cd0d91ddabe941deeb6c480b7521940046`. This establishes automated coverage, not physical-device acceptance; complete OFF-04 separately.
 
 
 - [ ] Cache only an explicit allowlist of public app assets and public curriculum pages, or require an explicit public cache directive in addition to an allowlist.
@@ -112,7 +112,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 - [ ] A cache quota/write failure does not break an otherwise successful online navigation.
 - [ ] Service-worker update/activation removes only stale GuitarLab-owned caches and works with multiple open tabs.
 
-**Security note:** OFF-01 is the first implementation action. Until it passes, do not describe the service-worker cache as privacy-verified.
+**Security note:** the automated OFF-01/OFF-02 implementation is merged and green. Do not describe offline behaviour as fully device-verified until OFF-04 physical-device acceptance is recorded.
 
 ---
 
@@ -439,8 +439,8 @@ These are investigation targets, not evidence that the styles are duplicated or 
 | Stage | Task | Guardrails / acceptance |
 |---|---|---|
 | CSS-01 — Inventory | Record resolved Tailwind version, Vite integration, CSS entry points, class usage, directives, tokens and hotspots | **Complete — read-only baseline above** |
-| CSS-02 — Ownership review | For each hotspot, classify global tokens/resets, reusable patterns, component-specific layout, state styling and genuinely duplicated declarations | **Partial** — inventory complete; selector-by-selector duplication and dead-style validation still required |
-| CSS-03 — Styling contract | Adopt a documented rule: semantic CSS variables remain the source of truth for product tokens; component-scoped CSS owns complex domain visuals and interaction states; Tailwind utilities are optional for simple layout/spacing/typography primitives when they improve clarity | Do not convert classes solely to increase Tailwind usage; do not duplicate design tokens |
+| CSS-02 — Ownership review | For each hotspot, classify global tokens/resets, reusable patterns, component-specific layout, state styling and genuinely duplicated declarations | **Complete — source-level review**: across seven hotspot files, 25 selector names recur, but most are generic scoped selectors with different declarations. Exact shared tool-page chrome was confirmed between fretboard and chords: `.panel`, `.back-link`, `.page-heading`, `.eyebrow` and `.privacy-note`; their declarations are identical. Tuner shares several patterns but has intentional panel/heading variants. No selector was classified as safe to delete solely because it recurs. Dead-style removal still requires dynamic-state/browser verification. |
+| CSS-03 — Styling contract | Adopt a documented rule: semantic CSS variables remain the source of truth for product tokens; component-scoped CSS owns complex domain visuals and interaction states; Tailwind utilities are optional for simple layout/spacing/typography primitives when they improve clarity | **Complete — approved direction**: preserve semantic tokens and themes; keep specialised instrument/practice/lesson styles scoped; use Tailwind utilities only where they improve simple local primitives; no wholesale conversion or `@apply` abstraction. |
 | CSS-04 — Incremental implementation | Make small, component-scoped changes only after CSS-02 identifies a specific benefit; keep each change independently reviewable and avoid broad route rewrites | Block implementation until OFF-01/OFF-02 have passed required CI and browser privacy checks |
 | CSS-05 — Verification | Compare screenshots and built CSS; run npm run check, npm run lint, npm run test:run, production build and browser acceptance | Verify dark/light themes, 320px through desktop widths, 200% reflow, keyboard focus, reduced motion, contrast and mobile safe areas |
 
@@ -463,12 +463,12 @@ Official Tailwind references: [Vite installation](https://tailwindcss.com/docs/i
 - [x] Confirm Vite plugin and CSS entry-point integration.
 - [x] Inventory all 26 source styling files and quantify the current style ownership model.
 - [x] Record existing design-token and theme architecture to preserve.
-- [ ] Complete selector-level duplication and unused-style review for the largest component stylesheets.
-- [ ] Agree on the styling contract before migrating or rewriting component CSS.
-- [ ] Keep implementation after the P0 offline privacy fix and required cache-isolation checks.
+- [x] Complete selector-level duplication review for the largest component stylesheets; exact shared tool-page chrome candidates are recorded above. Unused-style deletion remains conditional on runtime/browser evidence.
+- [x] Agree on the styling contract before any CSS migration or rewrite.
+- [x] Keep implementation after the P0 offline privacy fix and required cache-isolation checks; PR #186 is merged and final CI/browser acceptance passed.
 - [ ] Measure built CSS and verify dark/light, responsive, keyboard and reduced-motion behaviour for each implementation slice.
 
-**Current decision:** no CSS or Tailwind implementation changes are authorised by this audit. The next CSS action is selector-level review of the identified hotspots after the P0 privacy work is verified.
+**Current decision:** proceed with a narrow CSS-04 extraction of the confirmed identical tool-page chrome shared by fretboard and chords. Keep tuner-specific variants and all instrument geometry/state styling local. Do not remove selectors based only on recurrence; pair the extraction with build, unit, browser and visual checks.
 
 ---
 
