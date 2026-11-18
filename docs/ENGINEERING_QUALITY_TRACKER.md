@@ -74,7 +74,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| OFF-01 | P0 | **IN PROGRESS** | Replace permissive HTML caching with an explicit public-content policy. The current service worker accepts same-origin successful HTML when it is not marked `private`/`no-store` and does not expose `Set-Cookie`. The authenticated account page returns the account name/email but does not explicitly set a private no-store policy. This is a source-level privacy risk; a live exploit has not been reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
+| OFF-01 | P0 | **IN PROGRESS** | Replace permissive HTML caching with an explicit public-content policy. Baseline finding before PR #186: the service worker accepted same-origin successful HTML unless it was marked `private`/`no-store` or exposed `Set-Cookie`; the authenticated account page returned account details without an explicit private no-store policy. This was a source-level privacy risk; a live exploit was not reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
 | OFF-02 | P1 | **OPEN** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. | Depends on OFF-01 |
 | OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat `navigator.onLine` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
@@ -82,7 +82,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 ### OFF-01 acceptance checklist
 
-**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is being added; OFF-01 remains open until CI and browser-level cache-isolation checks pass.
+**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is included in [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); OFF-01 remains open until CI and browser-level cache-isolation checks pass.
 
 
 - [ ] Cache only an explicit allowlist of public app assets and public curriculum pages, or require an explicit public cache directive in addition to an allowlist.
