@@ -33,7 +33,9 @@ describe('public offline navigation cache policy', () => {
     ).toBe(true);
   });
 
-  it('allows dynamic public pages only with an explicit public directive', () => {
+  it(
+    'allows dynamic public pages only with an explicit public directive',
+    () => {
     expect(
       isCacheablePublicNavigation(
         request(),
@@ -89,9 +91,7 @@ describe('public offline navigation cache policy', () => {
     'no-store',
     'private, no-store',
     'private="Set-Cookie"'
-  ])(
-    'rejects Cache-Control: %s',
-    (cacheControl) => {
+  ])('rejects Cache-Control: %s', (cacheControl) => {
       expect(
         isCacheablePublicNavigation(
           request(),
@@ -101,8 +101,7 @@ describe('public offline navigation cache policy', () => {
           publicPaths
         )
       ).toBe(false);
-    }
-  );
+  });
 
   it.each(['Cookie', 'Authorization', '*'])('rejects Vary: %s', (vary) => {
     expect(
