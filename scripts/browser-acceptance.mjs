@@ -962,7 +962,7 @@ try {
     .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
     .waitFor({ state: 'detached' });
 
-  const adaptiveFeedbackSnapshot = await page.evaluate(async () => {
+  const adaptiveFeedbackSnapshot = await page.evaluate(async (activeCurriculumReleaseId) => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
       request.onsuccess = () => resolve(request.result);
@@ -990,7 +990,7 @@ try {
     );
     database.close();
     return { rows, hasFeedbackStore };
-  });
+  }, activeCurriculumReleaseId);
   assert.equal(adaptiveFeedbackSnapshot.hasFeedbackStore, true);
   assert.deepEqual(
     adaptiveFeedbackSnapshot.rows
