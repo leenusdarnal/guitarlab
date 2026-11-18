@@ -22,14 +22,23 @@ export function isCacheablePublicNavigation(
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
   if (!isEligiblePublicNavigation(url, origin)) return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) return false;
+  if (
+    !response.headers.get('content-type')?.includes('text/html')
+  ) {
+    return false;
+  }
   if (response.headers.has('set-cookie')) return false;
 
-  const cacheControl = response.headers.get('cache-control')?.toLowerCase() ?? '';
+  const cacheControl =
+    response.headers.get('cache-control')?.toLowerCase() ?? '';
   const directives = cacheControl
     .split(',')
     .map((directive) => directive.split('=', 1)[0].trim());
-  if (directives.some((directive) => ['private', 'no-store'].includes(directive))) {
+  if (
+    directives.some((directive) =>
+      ['private', 'no-store'].includes(directive)
+    )
+  ) {
     return false;
   }
 
