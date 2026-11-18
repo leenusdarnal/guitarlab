@@ -6,7 +6,10 @@
 import { assets, immutable, prerendered } from '$app/manifest';
 import { version } from '$app/env';
 import { resolve } from '$app/paths';
-import { isCacheablePublicNavigation, isEligiblePublicNavigation, PRIVATE_NAVIGATION_PATH_PATTERN } from '../lib/offline-cache-policy';
+import {
+  isCacheablePublicNavigation,
+  isEligiblePublicNavigation
+} from '../lib/offline-cache-policy';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
