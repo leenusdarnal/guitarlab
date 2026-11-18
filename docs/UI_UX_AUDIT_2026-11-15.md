@@ -3,7 +3,8 @@
 **Review date:** 15 November 2026  
 **Implementation branch:** `feat/ui-ux-lesson-discovery`  
 **Baseline:** `main` at `555b27c1ba230a87a59e4d75c5f7348127f8fd28`  
-**Scope:** learner-facing navigation, lesson discovery, lesson reading, responsive layout, interaction clarity and accessibility.
+**Scope:** learner-facing navigation, lesson discovery, lesson reading, responsive layout, interaction clarity and accessibility.  
+**Record type:** historical source audit, not a live status tracker. Current task status and acceptance evidence live in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), Sections 3 and 7.
 
 ## Executive finding
 
