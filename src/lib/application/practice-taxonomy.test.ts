@@ -10,7 +10,7 @@ import {
 
 describe('versioned authored exercise practice taxonomy', () => {
   it('is scoped to the active curriculum release and exposes the expanded author-reviewed scope', () => {
-    expect(PRACTICE_TAXONOMY_RELEASE_ID).toBe('curriculum-v1.0.6');
+    expect(PRACTICE_TAXONOMY_RELEASE_ID).toBe('curriculum-v1.0.7');
     expect(PRACTICE_TAXONOMY_VERSION).toBe('0.3.0');
     expect(listAuthoredPracticeScopes()).toHaveLength(24);
     expect(
