@@ -18,6 +18,16 @@ const PRECACHE_URLS = [
 ];
 const MAX_CACHED_PAGES = 40;
 
+// Only prerendered public routes are eligible for offline HTML caching. Dynamic
+// routes are intentionally excluded, even when their response looks cacheable.
+const PRIVATE_PATH_PATTERN =
+  /^\/(?:api|account|login|register|signup|verify|password-reset)(?:\/|$)/;
+const PUBLIC_PAGE_PATHS = new Set(
+  prerendered
+    .map((page) => new URL(resolve(page.path), worker.location.origin).pathname)
+    .filter((pathname) => !PRIVATE_PATH_PATTERN.test(pathname))
+);
+
 const OFFLINE_HTML = `<!doctype html>
 <html lang="en">
   <head>
@@ -44,11 +54,15 @@ const OFFLINE_HTML = `<!doctype html>
 function isCacheableNavigation(request: Request, response: Response, url: URL) {
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
   if (url.origin !== worker.location.origin) return false;
-  if (url.pathname.startsWith('/api/')) return false;
+  if (PRIVATE_PATH_PATTERN.test(url.pathname)) return false;
+  if (url.search || !PUBLIC_PAGE_PATHS.has(url.pathname)) return false;
+  if (response.headers.get('x-guitarlab-cache') !== 'public') return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
   if (!response.headers.get('content-type')?.includes('text/html')) {
     return false;
   }
+  // Keep this as defence in depth; the explicit public marker and route
+  // allowlist above are the actual privacy boundary.
   if (response.headers.has('set-cookie')) return false;
 
   const cacheControl =
