@@ -68,6 +68,76 @@ try {
 
   browser = await chromium.launch({ headless: true });
 
+  // Seed legacy private HTML into Cache Storage and verify the active worker
+  // never replays it for either a personalized dashboard or an account route.
+  const cacheBoundaryContext = await browser.newContext({
+    viewport: { width: 390, height: 844 }
+  });
+  const cacheBoundaryPage = await cacheBoundaryContext.newPage();
+  await cacheBoundaryPage.goto(origin, { waitUntil: 'networkidle' });
+  await cacheBoundaryPage.waitForFunction(
+    () =>
+      'serviceWorker' in navigator &&
+      Boolean(navigator.serviceWorker.controller),
+    { timeout: 20000 }
+  );
+  await cacheBoundaryPage.evaluate(async () => {
+    const pageCacheName = (await caches.keys()).find((name) =>
+      name.startsWith('guitarlab-pages-')
+    );
+    if (!pageCacheName) {
+      throw new Error('The active service worker did not create its page cache.');
+    }
+    const pageCache = await caches.open(pageCacheName);
+    await pageCache.put(
+      new Request(new URL('/', location.origin)),
+      new Response('PRIVATE_DASHBOARD_CACHE_SENTINEL', {
+        headers: {
+          'content-type': 'text/html; charset=utf-8',
+          'cache-control': 'private, no-store'
+        }
+      })
+    );
+    await pageCache.put(
+      new Request(new URL('/account', location.origin)),
+      new Response('PRIVATE_ACCOUNT_CACHE_SENTINEL', {
+        headers: {
+          'content-type': 'text/html; charset=utf-8',
+          'cache-control': 'private, no-store'
+        }
+      })
+    );
+  });
+  await cacheBoundaryContext.setOffline(true);
+  await cacheBoundaryPage.goto(origin, { waitUntil: 'domcontentloaded' });
+  await cacheBoundaryPage
+    .getByRole('heading', { name: 'Keep your practice going.' })
+    .waitFor();
+  let offlineContent = await cacheBoundaryPage.locator('body').innerText();
+  assert.equal(
+    offlineContent.includes('PRIVATE_DASHBOARD_CACHE_SENTINEL'),
+    false,
+    'An offline signed-out dashboard must not replay previously cached personalized HTML.'
+  );
+  await cacheBoundaryPage.goto(origin + '/account', {
+    waitUntil: 'domcontentloaded'
+  });
+  await cacheBoundaryPage
+    .getByRole('heading', { name: 'Keep your practice going.' })
+    .waitFor();
+  offlineContent = await cacheBoundaryPage.locator('body').innerText();
+  assert.equal(
+    offlineContent.includes('PRIVATE_ACCOUNT_CACHE_SENTINEL'),
+    false,
+    'An offline account route must not replay a legacy private cache entry.'
+  );
+  await cacheBoundaryContext.setOffline(false);
+  await cacheBoundaryPage.goto(origin, { waitUntil: 'networkidle' });
+  await cacheBoundaryPage
+    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .waitFor();
+  await cacheBoundaryContext.close();
+
   // Upgrade a real v1 learner database to v2 without losing learner-owned records.
   const upgradeContext = await browser.newContext({
     viewport: { width: 1440, height: 1000 }
