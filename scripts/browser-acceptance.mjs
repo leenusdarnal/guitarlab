@@ -1909,9 +1909,13 @@ try {
   await reloadedAuthoredObservationLink.waitFor();
   const reloadedAuthoredObservationLinkText =
     await reloadedAuthoredObservationLink.innerText();
-  assert.match(
-    reloadedAuthoredObservationLinkText,
-    /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus/
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes('y1-w01-lesson'),
+    'The reloaded authored observation link should include the lesson ID.'
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes('y1-w01-lesson-focus'),
+    'The reloaded authored observation link should include the focus ID.'
   );
   assert.ok(
     reloadedAuthoredObservationLinkText.includes(activeCurriculumReleaseId),
