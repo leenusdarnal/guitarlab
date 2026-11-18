@@ -31,15 +31,14 @@ const response = (
     clone() {
       return response(headers, body);
     },
-    body
-  }) as Response;
+    text: async () => body
+  }) as unknown as Response;
 
 const offlineResponse = () =>
-  ({
+  new Response('offline fallback', {
     status: 503,
-    headers: new Headers({ 'cache-control': 'no-store' }),
-    body: 'offline fallback'
-  }) as Response;
+    headers: { 'cache-control': 'no-store' }
+  });
 
 function createCache(seed: Record<string, Response> = {}) {
   const entries = new Map(Object.entries(seed));
@@ -54,30 +53,8 @@ function createCache(seed: Record<string, Response> = {}) {
       return entries.delete(target.url);
     }
   };
-  return {
-    cache,
-    entries,
-    calls: { match: 0, put: 0, delete: 0 },
-    createTrackedCache() {
-      return {
-        async match(target: Request) {
-          thisCalls.match += 1;
-          return cache.match(target);
-        },
-        async put(target: Request, value: Response) {
-          thisCalls.put += 1;
-          return cache.put(target, value);
-        },
-        async delete(target: Request) {
-          thisCalls.delete += 1;
-          return cache.delete(target);
-        }
-      } as PublicNavigationCache;
-    }
-  };
+  return { cache, entries };
 }
-
-const thisCalls = { match: 0, put: 0, delete: 0 };
 
 describe('public offline navigation cache policy', () => {
   it('allows allowlisted prerendered public pages', () => {
@@ -247,7 +224,7 @@ describe('public offline navigation cache policy', () => {
     );
 
     expect(result.status).toBe(503);
-    expect((result as Response & { body: string }).body).toBe('offline fallback');
+    expect(await result.text()).toBe('offline fallback');
     expect(entries.has(target.url)).toBe(false);
   });
 
@@ -256,11 +233,10 @@ describe('public offline navigation cache policy', () => {
     const { cache } = createCache({
       [target.url]: response({ 'cache-control': 'private, no-store' })
     });
-    thisCalls.match = 0;
-
+    let cacheReads = 0;
     const trackedCache: PublicNavigationCache = {
       async match(request) {
-        thisCalls.match += 1;
+        cacheReads += 1;
         return cache.match(request);
       },
       put: (request, value) => cache.put(request, value),
@@ -283,7 +259,7 @@ describe('public offline navigation cache policy', () => {
     );
 
     expect(result.status).toBe(503);
-    expect(thisCalls.match).toBe(0);
+    expect(cacheReads).toBe(0);
   });
 
   it('updates the public page cache after a successful network response', async () => {
