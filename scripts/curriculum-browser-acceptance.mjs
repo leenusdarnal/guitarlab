@@ -339,7 +339,7 @@ try {
     );
   });
   assert.ok(savedAssessment, 'The objective assessment must be saved locally');
-  assert.equal(savedAssessment.curriculumReleaseId, 'curriculum-v1.0.6');
+  assert.equal(savedAssessment.curriculumReleaseId, 'curriculum-v1.0.7');
   assert.equal(savedAssessment.skillId, 'instrument.tuning');
   assert.equal(savedAssessment.score, 100);
   assert.equal(savedAssessment.outcome, 'passed');
