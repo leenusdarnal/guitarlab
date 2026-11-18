@@ -76,7 +76,7 @@ describe('versioned authored curriculum catalogue', () => {
   it('returns the complete authored lesson by its stable ID and version', () => {
     const result = findCurriculumLesson('y1-w01-lesson');
     expect(result?.route.id).toBe('year-1');
-    expect(result?.route.contentVersion).toBe('1.0.1');
+    expect(result?.route.contentVersion).toBe('1.0.2');
     expect(result?.lesson).toMatchObject({
       id: 'y1-w01-lesson',
       curriculumWeekId: 'y1-w01',

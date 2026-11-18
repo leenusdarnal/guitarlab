@@ -16,10 +16,16 @@ jobs:
   validate:
     name: Validate application and curriculum
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+      options: --ipc=host
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Mark checkout safe for container Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Set up Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
@@ -93,11 +99,8 @@ jobs:
         id: install-playwright
         run: npm install --no-save --package-lock=false playwright@1.56.1 axe-core@4.14.0
 
-      - name: Install Chromium and WebKit for browser acceptance
-        if: ${{ !cancelled() && steps.install-playwright.outcome == 'success' }}
-        id: install-chromium
-        run: npx playwright install --with-deps chromium webkit
-
+      # The pinned Playwright container already ships matching Chromium/WebKit
+      # binaries and their OS dependencies; avoid slow, runner-specific apt installs.
       - name: Generate and finalize Drizzle migration
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         id: generate-migrations
@@ -232,23 +235,23 @@ jobs:
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
       - name: Browser acceptance tests
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-chromium.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-playwright.outcome == 'success' }}
         run: npm run test:browser
 
       - name: Music tools browser acceptance tests
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-chromium.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-playwright.outcome == 'success' }}
         run: npm run test:music-tools-browser
 
       - name: Accessibility browser acceptance tests
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-chromium.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-playwright.outcome == 'success' }}
         run: npm run test:accessibility
 
       - name: Curriculum browser acceptance tests
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-chromium.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-playwright.outcome == 'success' }}
         run: npm run test:curriculum-browser
 
       - name: WebKit accessibility and responsive acceptance
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-chromium.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-playwright.outcome == 'success' }}
         env:
           GUITARLAB_BROWSER_ENGINE: webkit
         run: npm run test:accessibility

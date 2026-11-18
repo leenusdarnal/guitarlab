@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "draft",
-  "curriculumReleaseId": "curriculum-v1.0.6",
-  "skillCatalogVersion": "1.0.0",
+  "curriculumReleaseId": "curriculum-v1.0.7",
+  "skillCatalogVersion": "1.0.1",
   "scoringPolicy": "No universal cut scores, numeric mastery thresholds, or automated pass/fail decisions are approved in this draft.",
   "feedbackPolicy": "Feedback should identify the task or process criterion, invite learner interpretation, and support a next-step decision. Do not use a single real-time score as proof of retained learning.",
   "profiles": [
@@ -467,6 +467,35 @@
       "humanReviewRequired": true,
       "automatedDecisionStatus": "not_approved",
       "cautions": "The best movement depends on the progression, range, style and intended voicing; avoid a single universal shape."
+    },
+    {
+      "skillId": "instrument.fretting",
+      "status": "draft",
+      "assessmentMode": "performance",
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "descriptor": "Places the fingertip just behind the target fret and produces a clear note without persistent buzzing."
+        },
+        {
+          "id": "criterion-2",
+          "descriptor": "Uses the minimum effective fretting pressure while keeping the thumb, wrist and hand relaxed."
+        },
+        {
+          "id": "criterion-3",
+          "descriptor": "Releases and changes between fretted notes with controlled timing and without unnecessary gripping."
+        }
+      ],
+      "evidenceTypes": [
+        "teacher_observation",
+        "performance_video",
+        "learner_reflection"
+      ],
+      "retentionProbe": "Repeat a short fretting ladder on a later day without the original visual prompt and identify any note that needs a placement correction.",
+      "transferProbe": "Apply the same fingertip placement and pressure rule to a different string and a short melody in another fret position.",
+      "humanReviewRequired": true,
+      "automatedDecisionStatus": "not_approved",
+      "cautions": "String height, fret condition, setup and individual hand anatomy affect note clarity. Do not treat one recording or one clean attempt as proof of stable technique; stop if pain, numbness or tingling occurs."
     },
     {
       "skillId": "instrument.posture",

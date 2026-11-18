@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "curriculum-v1.0.6",
-  "version": "1.0.6",
-  "parentReleaseId": "curriculum-v1.0.5",
-  "publishedAt": "2026-11-14T08:40:00.000Z",
+  "id": "curriculum-v1.0.7",
+  "version": "1.0.7",
+  "parentReleaseId": "curriculum-v1.0.6",
+  "publishedAt": "2026-11-18T03:32:00.000Z",
   "changeType": "content_patch",
-  "summary": "Author Jazz & Harmony Weeks 5–8 with accurate chord-extension distinctions and partial guitar voicings, an integrated comping review, a two-layer bossa-inspired starter pattern and a 12-bar jazz-blues form with an explicit variation. Preserve all stable lesson and skill identifiers.",
+  "summary": "Correct four P0 curriculum issues: add a precise clean-fretting skill and rewrite Year 1 Week 2, replace the unrelated theory template in Year 1 Week 20 with slide/bend/phrasing instruction, align Year 2 Week 1 natural-note scope, and teach/map accurate octave shapes in Year 2 Week 2. Preserve stable lesson and week IDs.",
   "compatibility": {
-    "skillIdsUnchanged": true,
+    "skillIdsUnchanged": false,
     "lessonIdsUnchanged": true,
     "mappingsUnchanged": false,
-    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1, curriculum-v1.0.2, curriculum-v1.0.3, curriculum-v1.0.4 and curriculum-v1.0.5. New progress is recorded against curriculum-v1.0.6; no automatic migration or mastery carry-forward is performed."
+    "learnerHistory": "Preserve all learner evidence and progress under curriculum-v1, curriculum-v1.0.1, curriculum-v1.0.2, curriculum-v1.0.3, curriculum-v1.0.4, curriculum-v1.0.5 and curriculum-v1.0.6. New progress is recorded against curriculum-v1.0.7; no automatic migration or mastery carry-forward is performed."
   }
 }

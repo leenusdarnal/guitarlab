@@ -165,9 +165,9 @@ for (const lesson of lessons) {
 const skillIds = [
   ...new Set(lessons.flatMap((lesson) => lesson.skillIds))
 ].sort();
-if (lessons.length !== 152 || skillIds.length !== 34) {
+if (lessons.length !== 152 || skillIds.length !== 35) {
   throw new Error(
-    'Expected 152 lessons and 34 skills; found ' +
+    'Expected 152 lessons and 35 skills; found ' +
       lessons.length +
       ' lessons and ' +
       skillIds.length +

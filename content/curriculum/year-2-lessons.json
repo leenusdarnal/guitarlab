@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "id": "guitarlab-year-2-authored-lessons",
   "title": "Year 2 — Intermediate musicianship",
   "sourceCurriculumId": "year-2-intermediate",
-  "sourceCurriculumVersion": "1.1.0",
+  "sourceCurriculumVersion": "1.1.1",
   "description": "Fully authored lesson content for every Year 2 weekly curriculum card. Exercises use original, non-copyrighted examples and the lesson pace is flexible.",
   "authoringStandard": "GuitarLab lesson-content contract v1",
   "lessons": [
@@ -15,111 +15,113 @@
       "week": 1,
       "route": "core",
       "title": "Fretboard map 1",
-      "focus": "Natural notes on low E and A",
+      "focus": "Natural notes on the low E and A strings from open position through fret 5",
       "estimatedMinutes": 30,
       "startingTempoBpm": 62,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: natural notes on low e and a.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Explain that each fret is one semitone and that the natural-note sequence skips between B–C and E–F.",
+        "Locate and name E, F, G and A on the low E string and A, B, C and D on the A string through fret 5.",
+        "Recall the two string maps without a chart and use the note locations to start a short root-note pattern."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "The fretboard is a repeating pitch map. Each adjacent fret is one semitone. The natural-note sequence repeats A–G; B–C and E–F are adjacent semitones. Octave shapes connect the same note name in different positions.",
-        "plainLanguage": "This lesson focuses on natural notes on low e and a. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Low E/A note map, 2 minutes daily"
+        "keyIdea": "Each fret moves a note one semitone higher. On the low E string, the natural notes through fret 5 are E (open), F (1), G (3) and A (5). On the A string they are A (open), B (2), C (3) and D (5). B–C and E–F are one fret apart.",
+        "plainLanguage": "This lesson covers only the low E and A strings from the open string through fret 5. Say the note name before playing it. Use the open string as your starting point and count each fret as one semitone; do not assume every natural note is one fret apart.",
+        "workedExample": "Low E: E(open), F(1), G(3), A(5). A string: A(open), B(2), C(3), D(5). Find each note, say its name, play it and then locate it again without the chart."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of natural notes on low e and a from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a clear fretboard diagram showing only the low E (sixth) and A (fifth) strings from open position to fret 5. The note list and steps here provide the complete task.",
         "steps": [
-          "Start from a known open-string note and move one fret at a time, naming each semitone.",
-          "Use the natural-note sequence A, B, C, D, E, F, G, remembering B–C and E–F have no intervening natural note.",
-          "Find the same note on another string using an octave relationship, then verify the pitch."
+          "Name the low E string and play it open: E.",
+          "Move one fret to F at fret 1, then two more frets to G at fret 3; A is at fret 5.",
+          "Name the A string and play it open: A. Find B at fret 2, C at fret 3 and D at fret 5.",
+          "Say the note name before playing each target, then reverse the task by asking yourself for a note name and finding its fret.",
+          "Remove the diagram and recall the eight natural-note locations in mixed order."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y2-w01-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Hear the two string maps",
+          "content": "Play the open low E and A strings. Move to the natural-note landmarks through fret 5 and listen as each fret raises the pitch by one semitone."
         },
         {
           "id": "y2-w01-lesson-concept",
           "type": "explanation",
-          "title": "Understand the idea",
-          "content": "The fretboard is a repeating pitch map. Each adjacent fret is one semitone. The natural-note sequence repeats A–G; B–C and E–F are adjacent semitones. Octave shapes connect the same note name in different positions."
+          "title": "Map natural notes through fret 5",
+          "content": "The low E string gives E–F–G–A at frets 0, 1, 3 and 5. The A string gives A–B–C–D at frets 0, 2, 3 and 5. Each fret is one semitone; B–C and E–F are adjacent natural notes."
         },
         {
           "id": "y2-w01-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Find and name each note",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Start from a known open-string note and move one fret at a time, naming each semitone.",
-            "Use the natural-note sequence A, B, C, D, E, F, G, remembering B–C and E–F have no intervening natural note.",
-            "Find the same note on another string using an octave relationship, then verify the pitch.",
-            "Work on this week's target: Low E/A note map, 2 minutes daily. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Play low E open, then F at fret 1, G at fret 3 and A at fret 5.",
+            "Play A open, then B at fret 2, C at fret 3 and D at fret 5.",
+            "Say the note name before playing it. Use the open string and semitone steps to verify your answer.",
+            "Mix the eight note names and find each one without following the written sequence.",
+            "Remove the chart and repeat the recall task from a different starting note."
           ]
         },
         {
           "id": "y2-w01-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Low E/A note map, 2 minutes daily. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Use the note map in a phrase",
+          "content": "Play E–F–G–A on the low E string and A–B–C–D on the A string as two short, even note lines. Count steadily and name each note before playing."
         },
         {
           "id": "y2-w01-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "How many semitones separate adjacent frets?",
-            "How can an octave shape help you find the same note elsewhere?"
+            "Which frets on the low E string give F, G and A?",
+            "Which frets on the A string give B, C and D?",
+            "Why are E–F and B–C only one fret apart?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y2-w01-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen and name the open strings",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Play low E and A open strings and say their note names.",
+            "Recall that each move to the next fret is one semitone.",
+            "Choose whether to begin with low E or A; keep the fret range limited to 0–5."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner correctly names the two open strings and explains that each fret is one semitone.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y2-w01-lesson-focus",
-          "title": "Focused skill drill",
+          "title": "Natural-note map: low E and A",
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Choose two note names from the target area. Find each on the assigned strings, say the note name before playing and verify the result.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "On low E, find E(open), F(1), G(3) and A(5). Say each note before playing it.",
+            "On A, find A(open), B(2), C(3) and D(5). Say each note before playing it.",
+            "Ask for the notes in mixed order, then find the requested fret without looking at the chart.",
+            "If a note is missed, return to the open-string reference and count semitones rather than guessing."
           ],
-          "successCriterion": "The learner locates the target notes in the stated fretboard area and explains the semitone, octave or shape relationship used.",
+          "successCriterion": "The learner locates and names all eight natural notes in the specified strings and fret range without relying on the chart.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y2-w01-lesson-music",
-          "title": "Musical application",
+          "title": "Play the note map in time",
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Low E/A note map, 2 minutes daily.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count in and play E–F–G–A on low E, then A–B–C–D on the A string, one note per beat.",
+            "Reverse the direction and keep the pulse as you move between strings.",
+            "Repeat once without the note list and check the two semitone pairs E–F and B–C."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Find and name every natural note to fret 5",
+          "successCriterion": "The learner plays both four-note lines in order with steady timing and names each note correctly.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -128,113 +130,121 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the diagram away and write or say the fret positions for E, F, G and A on low E.",
+            "Do the same for A, B, C and D on the A string.",
+            "Record which string or note needed the most checking."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the taught string/fret scope and chooses a specific note-location target for later review.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Low E/A note map, 2 minutes daily",
+        "prompt": "Play E–F–G–A on low E and A–B–C–D on the A string, one note per beat; reverse the lines on the second pass.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in before playing and name each note aloud before sounding it.",
+          "Move between the two strings without losing the count.",
+          "On the second pass, remove the written note list and retrieve each location from memory."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
           "dimension": "accuracy",
-          "criterion": "The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used."
+          "criterion": "The learner identifies E, F, G and A on low E and A, B, C and D on the A string at the correct fret positions through fret 5."
         },
         {
           "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "criterion": "The two four-note lines are played in order with a clear attack and a steady one-note-per-beat pulse."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "criterion": "The learner moves between strings and frets without unnecessary gripping or tension; pause if discomfort appears."
         },
         {
           "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "criterion": "The learner explains one-semitone fret movement and recalls the E–F and B–C adjacent natural-note pairs without a chart."
         },
         {
           "dimension": "curriculum-checkpoint",
-          "criterion": "Find and name every natural note to fret 5"
+          "criterion": "Name the natural notes from open to fret 5 on the low E string (E, F, G, A) and A string (A, B, C, D) without reading a chart."
         }
       ],
       "commonMistakesAndCorrections": [
         {
           "mistake": "Counting fret spaces instead of fret changes.",
-          "correction": "Treat every move to the next fret as one semitone and count from a known open string."
+          "correction": "Start from the open string and count each move to the next fret as one semitone."
         },
         {
-          "mistake": "Memorising a shape without checking which note is the root.",
-          "correction": "Say the root note at each shape and verify one location before moving to another."
+          "mistake": "Placing every natural note one fret apart.",
+          "correction": "Remember that B–C and E–F are adjacent; the other natural-note steps have a fret between them."
+        },
+        {
+          "mistake": "Naming a fret without checking which string is being played.",
+          "correction": "Say the string name first, then count the fret from that string's open note."
         }
       ],
-      "accessibleAlternative": "Restrict the map to one string or a small fret range. Use note labels initially, then remove them for retrieval practice.",
+      "accessibleAlternative": "Start with only the low E string and find E, F, G and A. Use a labelled diagram and a slower pulse, then add the A string when the first map is comfortable. The goal remains accurate note location, not speed.",
       "retrievalPrompt": [
-        "How many semitones separate adjacent frets?",
-        "How can an octave shape help you find the same note elsewhere?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What are the natural notes on low E through fret 5, and which frets are they on?",
+        "What are the natural notes on A through fret 5, and which frets are they on?",
+        "Which natural-note pairs are one fret apart?",
+        "Can you find one requested note on either string without a chart?"
       ],
       "nextReviewSuggestion": {
-        "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
+        "approach": "Adaptive retrieval of the specified low-E and A-string natural-note landmarks.",
         "suggestedChecks": [
-          "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
-          "About one month later: apply the skill in a different progression, rhythm or musical context."
+          "Next practice session: recall the eight note locations before looking at the diagram.",
+          "About one week later: find the notes in mixed order on both strings.",
+          "About one month later: retrieve the same landmarks from a different starting note, then extend only if ready."
         ],
-        "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
+        "adaptation": "Review sooner after a missed note or confused string; extend the interval after accurate recall on separate days and without the chart."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: name the open E and A strings and recall the semitone rule",
+          "5 min: map natural notes through fret 5 on both strings",
+          "3 min: play both note lines without the chart"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: listen to open E and A",
+          "10 min: locate and name all eight natural notes",
+          "5 min: play the two note lines in both directions",
+          "2 min: record one note-location target"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
-          "3 min: reflect"
+          "5 min: retrieve open-string notes and semitone pairs",
+          "15 min: focused low-E and A maps",
+          "10 min: mixed-order recall without the chart",
+          "7 min: apply the notes in a steady two-string phrase",
+          "3 min: reflect and choose a review target"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Keep the stated range to low E and A through fret 5; expand the map only after these notes can be recalled reliably."
       },
       "instructorNotes": {
-        "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 62 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
-        "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
+        "pacing": "Repeat the two-string map across sessions. Keep the focus on accurate note locations before expanding to the D and G strings.",
+        "tempoGuidance": "The outline tempo of 62 BPM is a starting reference for the note-line application, not a speed requirement.",
+        "masteryBoundary": "Recall of these two strings does not prove full-neck fluency. Retest later and use a changed starting note before generalising the result."
       },
-      "checkpoint": "Find and name every natural note to fret 5",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "checkpoint": "Name the natural notes from open to fret 5 on the low E string (E, F, G, A) and A string (A, B, C, D) without reading a chart.",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
-          "kind": "chord-reference",
-          "label": "Chord shapes in this lesson",
-          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. A: x02220; E: 022100. Form each shape slowly and check individual strings before strumming."
+          "kind": "fretboard-reference",
+          "label": "Natural notes on low E",
+          "content": "Low E (sixth string), open through fret 5: open E, fret 1 F, fret 3 G and fret 5 A. Fret 2 is F♯ and fret 4 is G♯."
         },
         {
           "kind": "fretboard-reference",
-          "label": "Natural-note landmarks",
-          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+          "label": "Natural notes on A",
+          "content": "A (fifth string), open through fret 5: open A, fret 2 B, fret 3 C and fret 5 D. Fret 1 is A♯/B♭ and fret 4 is C♯/D♭."
         },
         {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Low E/A note map, 2 minutes daily Success target: Find and name every natural note to fret 5"
+          "label": "This week's note lines",
+          "content": "Play E–F–G–A on low E and A–B–C–D on the A string, then retrieve the same locations in mixed order without the chart."
         }
       ]
     },
@@ -245,111 +255,114 @@
       "week": 2,
       "route": "core",
       "title": "Fretboard map 2",
-      "focus": "Octaves across adjacent string sets",
+      "focus": "Octave shapes on E–D, A–G and D–B string pairs",
       "estimatedMinutes": 30,
       "startingTempoBpm": 64,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: octaves across adjacent string sets.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Explain that an octave is a 12-semitone relationship and that the same note name can appear in more than one fretboard position.",
+        "Locate C and G octave pairs on the E–D, A–G and D–B string pairs using the correct fret offsets.",
+        "Use one octave shape to move a short root-to-octave phrase to another string pair while keeping the note name accurate."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "The fretboard is a repeating pitch map. Each adjacent fret is one semitone. The natural-note sequence repeats A–G; B–C and E–F are adjacent semitones. Octave shapes connect the same note name in different positions.",
-        "plainLanguage": "This lesson focuses on octaves across adjacent string sets. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Root-to-octave jumps in C and G"
+        "keyIdea": "An octave is 12 semitones. In standard tuning, a common octave shape skips one string: low E to D and A to G use a two-fret offset; D to B uses a three-fret offset because the G and B strings are tuned a major third apart rather than a perfect fourth.",
+        "plainLanguage": "Find a root note, then locate the same note name higher on a string pair. For low E to D and A to G, the upper note is two frets higher. For D to B, it is three frets higher. Say the note name at both positions so the shape does not become a memorised pattern without a root.",
+        "workedExample": "C: low E fret 8 to D fret 10; A fret 3 to G fret 5. G: D fret 5 to B fret 8. Each pair names the same pitch class one octave apart."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of octaves across adjacent string sets from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a fretboard diagram in standard tuning highlighting the E–D, A–G and D–B string pairs. Label the root and octave note at both positions and show the different D–B fret offset.",
         "steps": [
-          "Start from a known open-string note and move one fret at a time, naming each semitone.",
-          "Use the natural-note sequence A, B, C, D, E, F, G, remembering B–C and E–F have no intervening natural note.",
-          "Find the same note on another string using an octave relationship, then verify the pitch."
+          "Find C on low E fret 8. Move to D string fret 10; both notes are C, one octave apart.",
+          "Find C on A-string fret 3. Move to G-string fret 5; this is the same two-fret octave shape on the next pair.",
+          "Find G on D-string fret 5. Move to B-string fret 8; the octave shape uses three frets on this pair.",
+          "Compare the offsets. The B string is tuned a major third above G, so the D–B shape needs three frets rather than two.",
+          "Name the note at both ends before playing a root-to-octave phrase. Then try a different root without looking at the examples."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y2-w02-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Hear the same note in two registers",
+          "content": "Play a root and its octave together or one after the other. Listen for the same note name at a higher pitch, not just two notes that happen to fit a shape."
         },
         {
           "id": "y2-w02-lesson-concept",
           "type": "explanation",
-          "title": "Understand the idea",
-          "content": "The fretboard is a repeating pitch map. Each adjacent fret is one semitone. The natural-note sequence repeats A–G; B–C and E–F are adjacent semitones. Octave shapes connect the same note name in different positions."
+          "title": "Use the correct octave offset",
+          "content": "On E–D and A–G string pairs, skip one string and move two frets higher for the octave. On D–B, move three frets higher because the G–B tuning interval is different."
         },
         {
           "id": "y2-w02-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Find C and G octave pairs",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Start from a known open-string note and move one fret at a time, naming each semitone.",
-            "Use the natural-note sequence A, B, C, D, E, F, G, remembering B–C and E–F have no intervening natural note.",
-            "Find the same note on another string using an octave relationship, then verify the pitch.",
-            "Work on this week's target: Root-to-octave jumps in C and G. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Play C at low E fret 8, then C at D fret 10.",
+            "Play C at A-string fret 3, then C at G fret 5.",
+            "Play G at D-string fret 5, then G at B fret 8.",
+            "Say the note name at both positions and compare the two-fret and three-fret offsets.",
+            "Repeat the shapes without the diagram, then try a different root and verify both notes."
           ]
         },
         {
           "id": "y2-w02-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Root-to-octave jumps in C and G. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Make a root-to-octave phrase",
+          "content": "Alternate C3–C4 using low E fret 8 and D fret 10, then A fret 3 and G fret 5. Answer with G3–G4 using D fret 5 and B fret 8. Keep a steady pulse and name each root."
         },
         {
           "id": "y2-w02-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "How many semitones separate adjacent frets?",
-            "How can an octave shape help you find the same note elsewhere?"
+            "Which string pairs use a two-fret octave offset?",
+            "Why does the D–B pair use three frets?",
+            "Where are the C octave pair on low E and D, and on A and G?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y2-w02-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Hear and name an octave",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Play C at low E fret 8 and then C at D fret 10.",
+            "Say the note name at both positions and listen for the higher register.",
+            "Recall that an octave spans 12 semitones."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner identifies both notes as C and explains that they are one octave apart.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y2-w02-lesson-focus",
-          "title": "Focused skill drill",
+          "title": "Map the three octave shapes",
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Choose two note names from the target area. Find each on the assigned strings, say the note name before playing and verify the result.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Find C at low E fret 8 and its octave at D fret 10.",
+            "Find C at A fret 3 and its octave at G fret 5.",
+            "Find G at D fret 5 and its octave at B fret 8.",
+            "Say the note name at both ends, then cover the examples and rebuild each pair from the root.",
+            "Explain why the D–B pair moves three frets while the E–D and A–G pairs move two."
           ],
-          "successCriterion": "The learner locates the target notes in the stated fretboard area and explains the semitone, octave or shape relationship used.",
+          "successCriterion": "The learner locates all three octave pairs with correct note names and explains the D–B tuning adjustment.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y2-w02-lesson-music",
-          "title": "Musical application",
+          "title": "Apply octave shapes in a phrase",
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Root-to-octave jumps in C and G.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count in and play C3–C4 on E–D, then C3–C4 on A–G.",
+            "Answer with G3–G4 on D–B and maintain the same pulse.",
+            "Repeat once with a different root chosen by the learner; check the note names at both ends."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Find octave roots on E/A, A/D and D/G strings",
+          "successCriterion": "The learner plays the root-to-octave phrase in time and transfers one shape to a new root without losing the octave relationship.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -358,113 +371,126 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the diagram away and state the fret offset for E–D, A–G and D–B.",
+            "Record one root note that was easiest and one that needed checking.",
+            "Choose a new root to retrieve in the next session."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the two-fret and three-fret rules and identifies a concrete transfer target.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Root-to-octave jumps in C and G",
+        "prompt": "Alternate C3–C4 on E–D and A–G, then answer with G3–G4 on D–B; name both notes in each octave pair.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in and play each root and octave as a short two-note answer.",
+          "Keep the same pulse as you move between string pairs.",
+          "On the second pass, choose a different root and verify the note names at both positions."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
           "dimension": "accuracy",
-          "criterion": "The learner locates the target notes in the stated area and explains the semitone movement or octave relationship used."
+          "criterion": "The learner locates C at low E fret 8 and D fret 10, C at A fret 3 and G fret 5, and G at D fret 5 and B fret 8; each pair is one octave."
         },
         {
           "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "criterion": "The root-to-octave phrase is played with clear notes and a steady pulse across all three string pairs."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "criterion": "The learner moves between the string pairs without unnecessary tension or rushed position changes."
         },
         {
           "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "criterion": "The learner explains the two-fret offsets on E–D and A–G and the three-fret offset on D–B, then locates a different root."
         },
         {
           "dimension": "curriculum-checkpoint",
-          "criterion": "Find octave roots on E/A, A/D and D/G strings"
+          "criterion": "Find and play C octaves from low E fret 8 to D fret 10 and A fret 3 to G fret 5, then find G from D fret 5 to B fret 8 and explain the three-fret offset on D–B."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Counting fret spaces instead of fret changes.",
-          "correction": "Treat every move to the next fret as one semitone and count from a known open string."
+          "mistake": "Using a two-fret offset on the D–B string pair.",
+          "correction": "Remember that G–B strings are tuned a major third apart; move three frets higher on B for the octave from D."
         },
         {
-          "mistake": "Memorising a shape without checking which note is the root.",
-          "correction": "Say the root note at each shape and verify one location before moving to another."
+          "mistake": "Memorising the shape without naming the root.",
+          "correction": "Say the root note at the lower position, then verify that the upper note has the same name before calling it an octave."
+        },
+        {
+          "mistake": "Choosing the wrong second string and accidentally playing another interval.",
+          "correction": "Use the named pair: E–D, A–G or D–B, skipping one string between the root and octave strings."
         }
       ],
-      "accessibleAlternative": "Restrict the map to one string or a small fret range. Use note labels initially, then remove them for retrieval practice.",
+      "accessibleAlternative": "Begin with the two-fret C shapes on E–D and A–G only. Use a labelled diagram and play the two notes slowly; add the D–B three-fret shape after the first two are secure. The same octave goal is preserved without requiring all three pairs at once.",
       "retrievalPrompt": [
-        "How many semitones separate adjacent frets?",
-        "How can an octave shape help you find the same note elsewhere?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "What is an octave in semitones?",
+        "Which fret offsets are used on E–D and A–G?",
+        "Why does D–B use a three-fret offset?",
+        "Can you find the same note name at both ends of a new octave pair?"
       ],
       "nextReviewSuggestion": {
-        "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
+        "approach": "Adaptive retrieval of octave location and string-pair offsets.",
         "suggestedChecks": [
-          "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
-          "About one month later: apply the skill in a different progression, rhythm or musical context."
+          "Next practice session: rebuild the three C and G octave pairs without viewing the diagram.",
+          "About one week later: find a new root on each string pair and say both note names.",
+          "About one month later: apply an octave shape while outlining a simple progression or melody."
         ],
-        "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
+        "adaptation": "Review sooner when the root note or D–B offset is missed; extend the interval after correct recall and transfer on separate days."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: recall what an octave means",
+          "5 min: map C and G on the three string pairs",
+          "3 min: play one root-to-octave phrase without the diagram"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: hear C and its octave",
+          "10 min: practise E–D, A–G and D–B shapes",
+          "5 min: transfer the shapes to a new root",
+          "2 min: reflect on the D–B offset"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
-          "3 min: reflect"
+          "5 min: retrieve the octave definition and offsets",
+          "15 min: focused octave-pair mapping",
+          "10 min: mixed-root recall without a diagram",
+          "7 min: apply octave movement in a musical phrase",
+          "3 min: choose a later transfer target"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Prioritise correct note identity and octave relationship before speed or full-neck coverage."
       },
       "instructorNotes": {
-        "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 64 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
-        "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
+        "pacing": "Teach the two-fret E–D and A–G shapes first, then explain the D–B adjustment. Repeat or split the lesson if the string-pair logic is not secure.",
+        "tempoGuidance": "The outline tempo of 64 BPM is a starting reference for the root-to-octave phrase, not a pass mark.",
+        "masteryBoundary": "Correctly reproducing three memorised pairs is not full fretboard fluency. Retest different roots and positions after a delay before generalising mastery."
       },
-      "checkpoint": "Find octave roots on E/A, A/D and D/G strings",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "checkpoint": "Find and play C octaves from low E fret 8 to D fret 10 and A fret 3 to G fret 5, then find G from D fret 5 to B fret 8 and explain the three-fret offset on D–B.",
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.octaves"
+      ],
       "workedExamples": [
         {
-          "kind": "chord-reference",
-          "label": "Chord shapes in this lesson",
-          "content": "Fret numbers are written from low E to high e. x = do not play/mute; 0 = open string; a number = fret. G: 320003; C: x32010. Form each shape slowly and check individual strings before strumming."
+          "kind": "fretboard-reference",
+          "label": "C octave on low E and D",
+          "content": "Low E string fret 8 = C3. D string fret 10 = C4. The D-string note is two frets higher and one octave above the low-E note."
         },
         {
           "kind": "fretboard-reference",
-          "label": "Natural-note landmarks",
-          "content": "Standard tuning open strings: E–A–D–G–B–E. Low E string natural notes through fret 5: E(open), F(1), G(3), A(5). A string through fret 5: A(open), B(2), C(3), D(5). Adjacent frets are one semitone apart."
+          "label": "C octave on A and G",
+          "content": "A string fret 3 = C3. G string fret 5 = C4. This pair also uses a two-fret offset."
+        },
+        {
+          "kind": "fretboard-reference",
+          "label": "G octave on D and B",
+          "content": "D string fret 5 = G3. B string fret 8 = G4. This pair needs a three-fret offset because the G and B strings are tuned a major third apart."
         },
         {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Root-to-octave jumps in C and G Success target: Find octave roots on E/A, A/D and D/G strings"
+          "label": "Root-to-octave phrase",
+          "content": "Play C3–C4 on E–D and A–G, then G3–G4 on D–B. Name both pitches in every pair and keep a steady pulse."
         }
       ]
     },
@@ -679,7 +705,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Trace C, A, G, E and D shapes and name natural-note landmarks through fret 12",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -910,7 +939,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play three inversions of a major triad on the top string set, name the root and identify which chord tone is in the bass of each voicing.",
-      "skillIds": ["harmony.triads"],
+      "skillIds": [
+        "harmony.triads"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1135,7 +1166,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move Am, Dm and Em triads between close positions",
-      "skillIds": ["harmony.open-chords", "harmony.triads"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.triads"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1589,7 +1623,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Name roots while changing power chords",
-      "skillIds": ["harmony.open-chords", "harmony.power-chords"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.power-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2049,7 +2086,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move F, G and A barres with short relaxed holds",
-      "skillIds": ["harmony.open-chords", "harmony.barre-chords"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.barre-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2274,7 +2314,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play Bm, C#m and Dm as movable shapes",
-      "skillIds": ["harmony.open-chords", "harmony.barre-chords"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.barre-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2728,7 +2771,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play one position evenly in two keys",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2958,7 +3004,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Practise a scale in thirds without changing pulse",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3188,7 +3237,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Shift between two scale patterns with a target note",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3418,7 +3470,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play scale notes then end phrases on chord tones",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3882,7 +3937,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep swung eighths even through 12 bars",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4112,7 +4171,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play A7-D7-E7 in 12-bar form",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -4337,7 +4400,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Create two motifs over A blues",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4567,7 +4633,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Match a comfortable bend to a fretted target pitch, then add controlled vibrato without forcing the hand",
-      "skillIds": ["lead.pentatonic", "lead.phrasing", "technique.bends"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing",
+        "technique.bends"
+      ],
       "workedExamples": [
         {
           "kind": "form-reference",
@@ -4792,7 +4862,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a turnaround with correct form timing",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5256,7 +5329,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Repeat a Travis-style pattern slowly",
-      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5486,7 +5562,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep thumb steady across chord changes",
-      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5716,7 +5795,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play melody notes louder without rushing bass",
-      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -5941,7 +6023,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Integrate one muted accent per bar",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.muting"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.muting"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -6166,7 +6252,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Arrange two sections using fingerstyle and strumming",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -6625,7 +6714,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Map the form of one song before learning it",
-      "skillIds": ["arrangement.song-form"],
+      "skillIds": [
+        "arrangement.song-form"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6853,7 +6944,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Write or speak a four-bar rhythm after listening, preserving its beat grouping, accents and rests.",
-      "skillIds": ["ear.rhythm"],
+      "skillIds": [
+        "ear.rhythm"
+      ],
       "workedExamples": [
         {
           "kind": "ear-practice",
@@ -7543,7 +7636,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep the top voice connected through chord changes",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -7992,7 +8087,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play and sing unison, thirds, fifths and octaves",
-      "skillIds": ["ear.intervals"],
+      "skillIds": [
+        "ear.intervals"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8217,7 +8314,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Name chord tones before finding a shape",
-      "skillIds": ["harmony.seventh-chords"],
+      "skillIds": [
+        "harmony.seventh-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8442,7 +8541,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Compare basic triad and extended version",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8667,7 +8768,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep melody common tones where possible",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9126,7 +9229,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep 2 and 4 in the body while comping",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9356,7 +9463,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Track the third and seventh through the sequence",
-      "skillIds": ["harmony.voice-leading"],
+      "skillIds": [
+        "harmony.voice-leading"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -9576,7 +9685,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep bass pulse stable and chord attacks quiet",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9806,7 +9919,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Leave space and use chord tones at changes",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -10031,7 +10147,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep chord changes clear through a jazz blues",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -10490,7 +10609,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Use maintenance, growth and repertoire slots",
-      "skillIds": ["harmony.triads", "harmony.voice-leading"],
+      "skillIds": [
+        "harmony.triads",
+        "harmony.voice-leading"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -10940,7 +11062,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Plan opening, development and ending",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "creative-prompt",
@@ -11165,7 +11290,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Record the same 8-bar progression in two styles with different dynamics",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "creative-prompt",

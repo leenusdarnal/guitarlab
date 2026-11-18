@@ -2,7 +2,7 @@ export const standardTuningAssessment = {
   definitionId: 'guitar.standard-tuning-open-pitches',
   definitionVersion: 1,
   scoringRuleVersion: 'exact-pitch-five-of-six-v1',
-  curriculumReleaseId: 'curriculum-v1.0.6',
+  curriculumReleaseId: 'curriculum-v1.0.7',
   lessonId: 'y1-w01-lesson',
   skillId: 'instrument.tuning',
   passThreshold: 5,

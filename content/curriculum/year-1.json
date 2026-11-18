@@ -1,6 +1,6 @@
 {
   "id": "year-1-core",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "Year 1 - Foundations to independent playing",
   "description": "The complete 52-week first-year route from the curated master guitar course. Weekly BPM values are starting reference points, not deadlines or mandatory pass marks. Use the checkpoint to decide when to advance.",
   "year": 1,
@@ -53,7 +53,7 @@
       "title": "Clear single notes",
       "focus": "Fretting-hand basics, clean tone and relaxed pressure",
       "checkpoint": "Fret one note close behind the fret and coordinate both hands.",
-      "practiceExercise": "Four-fret ladder: 0-1-2-3-4-3-2-1",
+      "practiceExercise": "Four-fret ladder: 0-1-2-3-4-3-2-1-0",
       "startingTempoBpm": 48
     },
     {
@@ -232,8 +232,8 @@
       "phaseId": "skills-in-context",
       "title": "Play with expression",
       "focus": "Slides, bends, dynamics and phrasing",
-      "checkpoint": "Use one expressive technique accurately in a short phrase.",
-      "practiceExercise": "Five-note slide phrase",
+      "checkpoint": "Play a two-bar A-centred phrase with one controlled slide or bend, one planned dynamic contrast and an intentional ending while keeping the pulse.",
+      "practiceExercise": "B-string E-to-G slide and G-to-A target-pitch bend in a two-bar A-centred phrase",
       "startingTempoBpm": 60
     },
     {
@@ -559,6 +559,7 @@
   ],
   "schemaVersion": 1,
   "revisionNotes": [
-    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and sequence except prerequisite correction in Week 6 and a narrower first fretboard checkpoint in Week 11."
+    "1.1.0: Added the GuitarLab spiral learning framework; preserved all existing week IDs and sequence except prerequisite correction in Week 6 and a narrower first fretboard checkpoint in Week 11.",
+    "1.1.1: Clarified the Year 1 Week 20 expressive-technique checkpoint and preserved stable week IDs."
   ]
 }

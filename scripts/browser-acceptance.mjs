@@ -13,6 +13,12 @@ const skillCatalog = JSON.parse(
   )
 );
 const activeCurriculumReleaseId = skillCatalog.curriculumReleaseId;
+const practiceTaxonomy = JSON.parse(
+  await readFile(
+    new URL('../content/curriculum/practice-taxonomy.json', import.meta.url),
+    'utf8'
+  )
+);
 const skillIdFor = (displayName) => {
   const skill = skillCatalog.skills.find(
     (item) => item.displayName === displayName
@@ -488,7 +494,7 @@ try {
     .getByRole('button', { name: 'Try again' })
     .click();
   await recoveryPage
-    .getByText('Showing 34 of 34 skills', { exact: true })
+    .getByText('Showing 35 of 35 skills', { exact: true })
     .waitFor();
   await recoveryPage
     .locator('.storage-warning')
@@ -962,35 +968,38 @@ try {
     .locator(`.adaptive-list li[data-recommendation-id="${recommendationId}"]`)
     .waitFor({ state: 'detached' });
 
-  const adaptiveFeedbackSnapshot = await page.evaluate(async () => {
-    const database = await new Promise((resolve, reject) => {
-      const request = indexedDB.open('guitarlab-local');
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const learnerId = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('metadata')
-        .objectStore('metadata')
-        .get('activeLearnerId');
-      request.onsuccess = () => resolve(request.result?.value);
-      request.onerror = () => reject(request.error);
-    });
-    const rows = await new Promise((resolve, reject) => {
-      const request = database
-        .transaction('adaptiveRecommendationFeedback')
-        .objectStore('adaptiveRecommendationFeedback')
-        .index('byLearnerRelease')
-        .getAll([learnerId, 'curriculum-v1.0.6']);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const hasFeedbackStore = database.objectStoreNames.contains(
-      'adaptiveRecommendationFeedback'
-    );
-    database.close();
-    return { rows, hasFeedbackStore };
-  });
+  const adaptiveFeedbackSnapshot = await page.evaluate(
+    async (activeCurriculumReleaseId) => {
+      const database = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('guitarlab-local');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const learnerId = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('metadata')
+          .objectStore('metadata')
+          .get('activeLearnerId');
+        request.onsuccess = () => resolve(request.result?.value);
+        request.onerror = () => reject(request.error);
+      });
+      const rows = await new Promise((resolve, reject) => {
+        const request = database
+          .transaction('adaptiveRecommendationFeedback')
+          .objectStore('adaptiveRecommendationFeedback')
+          .index('byLearnerRelease')
+          .getAll([learnerId, activeCurriculumReleaseId]);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const hasFeedbackStore = database.objectStoreNames.contains(
+        'adaptiveRecommendationFeedback'
+      );
+      database.close();
+      return { rows, hasFeedbackStore };
+    },
+    activeCurriculumReleaseId
+  );
   assert.equal(adaptiveFeedbackSnapshot.hasFeedbackStore, true);
   assert.deepEqual(
     adaptiveFeedbackSnapshot.rows
@@ -1865,9 +1874,18 @@ try {
     '.active-evidence-list .authored-observation-link'
   );
   await authoredObservationLink.waitFor();
+  const authoredObservationLinkText = await authoredObservationLink.innerText();
   assert.match(
-    await authoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.3\.0/
+    authoredObservationLinkText,
+    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus/
+  );
+  assert.ok(
+    authoredObservationLinkText.includes(activeCurriculumReleaseId),
+    'The authored observation link should use the active curriculum release.'
+  );
+  assert.ok(
+    authoredObservationLinkText.includes(practiceTaxonomy.version),
+    'The authored observation link should use the active practice taxonomy version.'
   );
   await delay(1_200);
   await page.getByRole('button', { name: 'Pause session' }).click();
@@ -1889,9 +1907,23 @@ try {
     '.active-evidence-list .authored-observation-link'
   );
   await reloadedAuthoredObservationLink.waitFor();
-  assert.match(
-    await reloadedAuthoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.3\.0/
+  const reloadedAuthoredObservationLinkText =
+    await reloadedAuthoredObservationLink.innerText();
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes('y1-w01-lesson'),
+    'The reloaded authored observation link should include the lesson ID.'
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes('y1-w01-lesson-focus'),
+    'The reloaded authored observation link should include the focus ID.'
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes(activeCurriculumReleaseId),
+    'The reloaded authored observation link should use the active curriculum release.'
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes(practiceTaxonomy.version),
+    'The reloaded authored observation link should use the active practice taxonomy version.'
   );
   const authoredExposure = page
     .locator('details.adaptive-analytics')
@@ -2282,9 +2314,9 @@ try {
   await page
     .getByRole('heading', { name: 'See the skills behind the music.' })
     .waitFor();
-  await page.getByText('Showing 34 of 34 skills', { exact: true }).waitFor();
+  await page.getByText('Showing 35 of 35 skills', { exact: true }).waitFor();
   await page.getByLabel('Find a skill').fill('chord transition');
-  await page.getByText('Showing 1 of 34 skills', { exact: true }).waitFor();
+  await page.getByText('Showing 1 of 35 skills', { exact: true }).waitFor();
   const chordTransitionChoice = page.getByRole('button', {
     name: /Chord transitions/i
   });
