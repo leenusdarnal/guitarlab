@@ -1907,9 +1907,19 @@ try {
     '.active-evidence-list .authored-observation-link'
   );
   await reloadedAuthoredObservationLink.waitFor();
+  const reloadedAuthoredObservationLinkText =
+    await reloadedAuthoredObservationLink.innerText();
   assert.match(
-    await reloadedAuthoredObservationLink.innerText(),
-    /y1-w01-lesson[\s\S]*y1-w01-lesson-focus[\s\S]*curriculum-v1\.0\.6[\s\S]*0\.3\.0/
+    reloadedAuthoredObservationLinkText,
+    /y1-w01-lesson[\\s\\S]*y1-w01-lesson-focus/
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes(activeCurriculumReleaseId),
+    'The reloaded authored observation link should use the active curriculum release.'
+  );
+  assert.ok(
+    reloadedAuthoredObservationLinkText.includes(practiceTaxonomy.version),
+    'The reloaded authored observation link should use the active practice taxonomy version.'
   );
   const authoredExposure = page
     .locator('details.adaptive-analytics')
