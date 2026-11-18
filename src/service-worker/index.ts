@@ -8,7 +8,8 @@ import { version } from '$app/env';
 import { resolve } from '$app/paths';
 import {
   isCacheablePublicNavigation,
-  isEligiblePublicNavigation
+  isEligiblePublicNavigation,
+  resolvePublicNavigation
 } from '../lib/offline-cache-policy';
 
 const worker = self as unknown as ServiceWorkerGlobalScope;
@@ -57,6 +58,16 @@ const OFFLINE_HTML = `<!doctype html>
   </main></body>
 </html>`;
 
+function createOfflineResponse() {
+  return new Response(OFFLINE_HTML, {
+    status: 503,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-store'
+    }
+  });
+}
+
 function isCacheableNavigation(request: Request, response: Response, url: URL) {
   return isCacheablePublicNavigation(
     request,
@@ -73,10 +84,7 @@ async function removeNonPublicPageEntries(cache: Cache) {
     keys.map(async (request) => {
       const url = new URL(request.url);
       const cached = await cache.match(request);
-      if (
-        !cached ||
-        !isCacheableNavigation(request, cached, url)
-      ) {
+      if (!cached || !isCacheableNavigation(request, cached, url)) {
         await cache.delete(request);
       }
     })
@@ -113,7 +121,10 @@ worker.addEventListener('activate', (event: ExtendableEvent) => {
           )
           .map((key) => caches.delete(key))
       );
-      await removeNonPublicPageEntries(await caches.open(PAGE_CACHE));
+      await caches
+        .open(PAGE_CACHE)
+        .then(removeNonPublicPageEntries)
+        .catch(() => undefined);
       await worker.clients.claim();
     })
   );
@@ -127,60 +138,28 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
   if (url.origin !== worker.location.origin) return;
 
   if (request.mode === 'navigate') {
-    // Never read an existing cache entry for a private or query-bearing
-    // navigation. This also prevents legacy cache entries from being replayed.
+    // Private routes are network-only and are never read from Cache Storage.
     if (!isEligiblePublicPage(url)) {
-      event.respondWith(
-        fetch(request).catch(
-          () =>
-            new Response(OFFLINE_HTML, {
-              status: 503,
-              headers: {
-                'Content-Type': 'text/html; charset=utf-8',
-                'Cache-Control': 'no-store'
-              }
-            })
-        )
-      );
+      event.respondWith(fetch(request).catch(createOfflineResponse));
       return;
     }
 
     event.respondWith(
       (async () => {
-        const pages = await caches.open(PAGE_CACHE);
-        if (!worker.navigator.onLine) {
-          const cached = await pages.match(request);
-          if (cached && isCacheableNavigation(request, cached, url)) {
-            return cached;
+        const pages = await caches.open(PAGE_CACHE).catch(() => null);
+        return resolvePublicNavigation(
+          request,
+          pages,
+          url,
+          worker.location.origin,
+          PUBLIC_PAGE_PATHS,
+          {
+            online: worker.navigator.onLine,
+            fetchNavigation: () => fetch(request),
+            offlineResponse: createOfflineResponse,
+            afterCacheWrite: pages ? () => trimPageCache(pages) : undefined
           }
-          return new Response(OFFLINE_HTML, {
-            status: 503,
-            headers: {
-              'Content-Type': 'text/html; charset=utf-8',
-              'Cache-Control': 'no-store'
-            }
-          });
-        }
-        try {
-          const response = await fetch(request);
-          if (isCacheableNavigation(request, response, url)) {
-            await pages.put(request, response.clone());
-            await trimPageCache(pages);
-          }
-          return response;
-        } catch {
-          const cached = await pages.match(request);
-          if (cached && isCacheableNavigation(request, cached, url)) {
-            return cached;
-          }
-          return new Response(OFFLINE_HTML, {
-            status: 503,
-            headers: {
-              'Content-Type': 'text/html; charset=utf-8',
-              'Cache-Control': 'no-store'
-            }
-          });
-        }
+        );
       })()
     );
     return;
