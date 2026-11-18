@@ -4460,7 +4460,7 @@
           "id": "y1-w20-lesson-apply",
           "type": "musical-application",
           "title": "Shape a two-bar phrase",
-          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and finish on A. Keep the pulse moving through a counted rest; make the response slightly stronger than the opening and end deliberately on A."
+          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and release smoothly. After the release, pick B-string fret 10 (A) as the final note. Keep the pulse moving through a counted rest; make the response slightly stronger than the opening and end deliberately on A."
         },
         {
           "id": "y1-w20-lesson-reflect",
@@ -4509,7 +4509,7 @@
           "instructions": [
             "Use the supplied two-bar A-centred phrase or create a similar original phrase with a slide or bend.",
             "Play the opening more softly and the response more strongly; keep the pulse moving through one counted rest.",
-            "Finish on an intentional A-centred note and repeat once, changing only one expressive choice."
+            "Release the bend smoothly, then pick B-string fret 10 (A) as the final note. Repeat once, changing only one expressive choice."
           ],
           "successCriterion": "Play a two-bar A-centred phrase with one controlled slide or bend, one planned dynamic contrast and an intentional ending while keeping the pulse.",
           "evidenceType": "recording_reviewed"
@@ -4638,7 +4638,7 @@
         {
           "kind": "lesson-application",
           "label": "Two-bar A-centred phrase",
-          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and finish on A. Keep a counted rest, shape the response with a stronger dynamic and finish on A."
+          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and release smoothly. After the release, pick B-string fret 10 (A) as the final note. Keep a counted rest, shape the response with a stronger dynamic and finish on A."
         }
       ]
     },
