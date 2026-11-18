@@ -84,7 +84,12 @@ describe('public offline navigation cache policy', () => {
     ).toBe(false);
   });
 
-  it.each(['private', 'no-store', 'private, no-store'])(
+  it.each([
+    'private',
+    'no-store',
+    'private, no-store',
+    'private="Set-Cookie"'
+  ])(
     'rejects Cache-Control: %s',
     (cacheControl) => {
       expect(
