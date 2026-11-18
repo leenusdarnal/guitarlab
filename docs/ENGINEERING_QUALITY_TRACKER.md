@@ -56,7 +56,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | Order | Task | Priority | Status |
 |---:|---|---|---|
-| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | OPEN |
+| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | IN PROGRESS |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | OPEN |
 | 3 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
 | 4 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
@@ -74,13 +74,16 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| OFF-01 | P0 | **OPEN** | Replace permissive HTML caching with an explicit public-content policy. The current service worker accepts same-origin successful HTML when it is not marked `private`/`no-store` and does not expose `Set-Cookie`. The authenticated account page returns the account name/email but does not explicitly set a private no-store policy. This is a source-level privacy risk; a live exploit has not been reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
+| OFF-01 | P0 | **IN PROGRESS** | Replace permissive HTML caching with an explicit public-content policy. The current service worker accepts same-origin successful HTML when it is not marked `private`/`no-store` and does not expose `Set-Cookie`. The authenticated account page returns the account name/email but does not explicitly set a private no-store policy. This is a source-level privacy risk; a live exploit has not been reproduced. | `src/service-worker/index.ts`; `src/routes/account/+page.server.ts`; `src/hooks.server.ts` |
 | OFF-02 | P1 | **OPEN** | Add regression coverage for authenticated/private route exclusion, logout, cache fallback, cache update and failure cases. | Depends on OFF-01 |
 | OFF-03 | P1 | **PARTIAL** | Harden offline navigation and lifecycle behaviour: treat `navigator.onLine` as a hint rather than proof of connectivity; verify failed precache installation, storage quota/cache write errors, HTTP error handling and multi-tab service-worker updates. | Initial service worker and offline fallback are merged in PR #35 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
 ### OFF-01 acceptance checklist
+
+**Implementation in progress:** branch `fix/offline-public-cache-boundary` adds an exact prerendered-public-route allowlist, an explicit anonymous-public response marker, private/no-store headers for authenticated and identity routes, rejection of query/credential-varying responses, and removal of unsafe legacy page-cache entries on activation. Unit coverage is being added; OFF-01 remains open until CI and browser-level cache-isolation checks pass.
+
 
 - [ ] Cache only an explicit allowlist of public app assets and public curriculum pages, or require an explicit public cache directive in addition to an allowlist.
 - [ ] Do not rely on the absence of `Set-Cookie` as the privacy boundary.
