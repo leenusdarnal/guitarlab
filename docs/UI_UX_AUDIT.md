@@ -26,7 +26,7 @@ This first slice addresses three shared interaction issues and one curriculum-na
 | Mobile navigation lacked keyboard focus management and Escape dismissal | Keyboard and switch users could open a menu without a predictable focus destination or easy dismissal | Opening focuses the first link; Escape closes and restores focus; all links close the menu; the panel can scroll within short viewports |
 | Curriculum contained six long route sections without quick-jump links | Moving between core and specialist curricula required extended scrolling | Added one in-page jump link per route using the existing responsive chip styling |
 
-### Remaining design and usability backlog
+### Additional findings from this historical audit (current status is tracked centrally)
 
 1. **Consistent application navigation.** The dashboard has a persistent sidebar/header, while most secondary screens use a back link. Define a shared responsive app shell for dashboard, curriculum, lesson, practice and tools pages, with clear current-section state and a consistent home route. Preserve focused practice surfaces where a reduced chrome mode is useful.
 2. **Theme control beyond the dashboard.** Theme persistence now works on every route, but the visible theme toggle still lives only in the dashboard top bar. Move the control into the shared shell when that shell is implemented; do not duplicate multiple inconsistent toggles across every page.
