@@ -1,24 +1,83 @@
 import { describe, expect, it } from 'vitest';
 import {
   isCacheablePublicNavigation,
-  isEligiblePublicNavigation
+  isEligiblePublicNavigation,
+  resolvePublicNavigation,
+  type PublicNavigationCache
 } from './offline-cache-policy';
 
 const origin = 'https://guitarlab.example';
 const publicPaths = new Set(['/', '/learn/year-1']);
 
-const request = (overrides: Record<string, string> = {}) =>
-  ({ method: 'GET', mode: 'navigate', ...overrides }) as Request;
+const request = (path = '/', overrides: Record<string, string> = {}) =>
+  ({
+    url: new URL(path, origin).toString(),
+    method: 'GET',
+    mode: 'navigate',
+    ...overrides
+  }) as Request;
 
-const response = (headers: Record<string, string> = {}) =>
+const response = (
+  headers: Record<string, string> = {},
+  body = 'public page'
+) =>
   ({
     status: 200,
     type: 'basic',
     headers: new Headers({
       'content-type': 'text/html; charset=utf-8',
       ...headers
-    })
+    }),
+    clone() {
+      return response(headers, body);
+    },
+    body
   }) as Response;
+
+const offlineResponse = () =>
+  ({
+    status: 503,
+    headers: new Headers({ 'cache-control': 'no-store' }),
+    body: 'offline fallback'
+  }) as Response;
+
+function createCache(seed: Record<string, Response> = {}) {
+  const entries = new Map(Object.entries(seed));
+  const cache: PublicNavigationCache = {
+    async match(target) {
+      return entries.get(target.url);
+    },
+    async put(target, value) {
+      entries.set(target.url, value);
+    },
+    async delete(target) {
+      return entries.delete(target.url);
+    }
+  };
+  return {
+    cache,
+    entries,
+    calls: { match: 0, put: 0, delete: 0 },
+    createTrackedCache() {
+      return {
+        async match(target: Request) {
+          thisCalls.match += 1;
+          return cache.match(target);
+        },
+        async put(target: Request, value: Response) {
+          thisCalls.put += 1;
+          return cache.put(target, value);
+        },
+        async delete(target: Request) {
+          thisCalls.delete += 1;
+          return cache.delete(target);
+        }
+      } as PublicNavigationCache;
+    }
+  };
+}
+
+const thisCalls = { match: 0, put: 0, delete: 0 };
 
 describe('public offline navigation cache policy', () => {
   it('allows allowlisted prerendered public pages', () => {
@@ -33,27 +92,25 @@ describe('public offline navigation cache policy', () => {
     ).toBe(true);
   });
 
-  it(
-    'allows dynamic public pages only with an explicit public directive',
-    () => {
-      expect(
-        isCacheablePublicNavigation(
-          request(),
-          response({ 'cache-control': 'public, max-age=0, must-revalidate' }),
-          new URL('/learn', origin),
-          origin,
-          publicPaths
-        )
-      ).toBe(true);
-    }
-  );
+  it('allows dynamic public pages only with an explicit public directive', () => {
+    expect(
+      isCacheablePublicNavigation(
+        request('/learn'),
+        response({ 'cache-control': 'public, max-age=0, must-revalidate' }),
+        new URL('/learn', origin),
+        origin,
+        publicPaths
+      )
+    ).toBe(true);
+  });
 
   it.each([
     '/account',
     '/login',
     '/register',
     '/api/auth/session',
-    '/password-reset'
+    '/password-reset',
+    '/account/settings'
   ])('rejects private route %s', (path) => {
     expect(isEligiblePublicNavigation(new URL(path, origin), origin)).toBe(
       false
@@ -78,7 +135,7 @@ describe('public offline navigation cache policy', () => {
   it('rejects dynamic pages without an explicit public directive', () => {
     expect(
       isCacheablePublicNavigation(
-        request(),
+        request('/practice'),
         response(),
         new URL('/practice', origin),
         origin,
@@ -87,27 +144,25 @@ describe('public offline navigation cache policy', () => {
     ).toBe(false);
   });
 
-  it.each([
-    'private',
-    'no-store',
-    'private, no-store',
-    'private="Set-Cookie"'
-  ])('rejects Cache-Control: %s', (cacheControl) => {
+  it.each(['private', 'no-store', 'private, no-store', 'private="Set-Cookie"'])(
+    'rejects Cache-Control: %s',
+    (cacheControl) => {
       expect(
         isCacheablePublicNavigation(
-          request(),
+          request('/learn/year-1'),
           response({ 'cache-control': cacheControl }),
           new URL('/learn/year-1', origin),
           origin,
           publicPaths
         )
       ).toBe(false);
-  });
+    }
+  );
 
   it.each(['Cookie', 'Authorization', '*'])('rejects Vary: %s', (vary) => {
     expect(
       isCacheablePublicNavigation(
-        request(),
+        request('/learn/year-1'),
         response({ vary }),
         new URL('/learn/year-1', origin),
         origin,
@@ -119,7 +174,7 @@ describe('public offline navigation cache policy', () => {
   it('rejects invalid methods, modes and content types', () => {
     expect(
       isCacheablePublicNavigation(
-        request({ method: 'POST' }),
+        request('/learn/year-1', { method: 'POST' }),
         response(),
         new URL('/learn/year-1', origin),
         origin,
@@ -128,7 +183,7 @@ describe('public offline navigation cache policy', () => {
     ).toBe(false);
     expect(
       isCacheablePublicNavigation(
-        request({ mode: 'cors' }),
+        request('/learn/year-1', { mode: 'cors' }),
         response(),
         new URL('/learn/year-1', origin),
         origin,
@@ -137,12 +192,222 @@ describe('public offline navigation cache policy', () => {
     ).toBe(false);
     expect(
       isCacheablePublicNavigation(
-        request(),
+        request('/learn/year-1'),
         response({ 'content-type': 'application/json' }),
         new URL('/learn/year-1', origin),
         origin,
         publicPaths
       )
     ).toBe(false);
+  });
+
+  it('serves a previously cached public lesson when offline', async () => {
+    const target = request('/learn/year-1');
+    const page = response();
+    const { cache } = createCache({ [target.url]: page });
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: false,
+        fetchNavigation: async () => {
+          throw new Error('network should not be used while offline');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(page);
+  });
+
+  it('does not replay a cached authenticated dashboard after logout', async () => {
+    const target = request('/');
+    const privatePage = response({
+      'cache-control': 'private, no-store'
+    });
+    const { cache, entries } = createCache({ [target.url]: privatePage });
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: false,
+        fetchNavigation: async () => {
+          throw new Error('network should not be used while offline');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result.status).toBe(503);
+    expect((result as Response & { body: string }).body).toBe('offline fallback');
+    expect(entries.has(target.url)).toBe(false);
+  });
+
+  it('does not read a private account cache entry while offline', async () => {
+    const target = request('/account');
+    const { cache } = createCache({
+      [target.url]: response({ 'cache-control': 'private, no-store' })
+    });
+    thisCalls.match = 0;
+
+    const trackedCache: PublicNavigationCache = {
+      async match(request) {
+        thisCalls.match += 1;
+        return cache.match(request);
+      },
+      put: (request, value) => cache.put(request, value),
+      delete: (request) => cache.delete(request)
+    };
+
+    const result = await resolvePublicNavigation(
+      target,
+      trackedCache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: false,
+        fetchNavigation: async () => {
+          throw new Error('network unavailable');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result.status).toBe(503);
+    expect(thisCalls.match).toBe(0);
+  });
+
+  it('updates the public page cache after a successful network response', async () => {
+    const target = request('/learn/year-1');
+    const page = response();
+    const { cache, entries } = createCache();
+    let trimmed = false;
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: true,
+        fetchNavigation: async () => page,
+        offlineResponse,
+        afterCacheWrite: async () => {
+          trimmed = true;
+        }
+      }
+    );
+
+    expect(result).toBe(page);
+    expect(entries.has(target.url)).toBe(true);
+    expect(trimmed).toBe(true);
+  });
+
+  it('uses a cached public page when the online request fails', async () => {
+    const target = request('/learn/year-1');
+    const page = response();
+    const { cache } = createCache({ [target.url]: page });
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: true,
+        fetchNavigation: async () => {
+          throw new Error('temporary network failure');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(page);
+  });
+
+  it('does not cache private responses and still returns them to the active request', async () => {
+    const target = request('/learn/year-1');
+    const privatePage = response({ 'cache-control': 'private, no-store' });
+    const { cache, entries } = createCache();
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: true,
+        fetchNavigation: async () => privatePage,
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(privatePage);
+    expect(entries.has(target.url)).toBe(false);
+  });
+
+  it('keeps a successful online response when Cache Storage writes fail', async () => {
+    const target = request('/learn/year-1');
+    const page = response();
+    const cache: PublicNavigationCache = {
+      async match() {
+        return undefined;
+      },
+      async put() {
+        throw new Error('storage quota exceeded');
+      },
+      async delete() {
+        return false;
+      }
+    };
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: true,
+        fetchNavigation: async () => page,
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(page);
+  });
+
+  it('returns a no-store fallback when no cached response exists and the network fails', async () => {
+    const target = request('/learn/year-1');
+
+    const result = await resolvePublicNavigation(
+      target,
+      null,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        online: true,
+        fetchNavigation: async () => {
+          throw new Error('network unavailable');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result.status).toBe(503);
+    expect(result.headers.get('cache-control')).toBe('no-store');
   });
 });
