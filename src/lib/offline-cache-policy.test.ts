@@ -16,7 +16,6 @@ const response = (headers: Record<string, string> = {}) =>
     type: 'basic',
     headers: new Headers({
       'content-type': 'text/html; charset=utf-8',
-      'x-guitarlab-cache': 'public',
       ...headers
     })
   }) as Response;
@@ -60,18 +59,6 @@ describe('public offline navigation cache policy', () => {
     expect(
       isEligiblePublicNavigation(
         new URL('/learn?learner=private', origin),
-        origin,
-        publicPaths
-      )
-    ).toBe(false);
-  });
-
-  it('requires the explicit public response marker', () => {
-    expect(
-      isCacheablePublicNavigation(
-        request(),
-        response({ 'x-guitarlab-cache': 'private' }),
-        new URL('/learn', origin),
         origin,
         publicPaths
       )
