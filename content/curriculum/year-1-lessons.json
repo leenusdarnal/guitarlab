@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "id": "guitarlab-year-1-authored-lessons",
   "title": "Year 1 — Beginner to intermediate bridge",
   "sourceCurriculumId": "year-1-core",
-  "sourceCurriculumVersion": "1.1.0",
+  "sourceCurriculumVersion": "1.1.1",
   "description": "Fully authored lesson content for every Year 1 weekly curriculum card. Exercises use original, non-copyrighted examples and the lesson pace is flexible.",
   "authoringStandard": "GuitarLab lesson-content contract v1",
   "lessons": [
@@ -219,7 +219,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Tune all six strings; name them low-to-high E-A-D-G-B-E.",
-      "skillIds": ["instrument.tuning", "instrument.posture"],
+      "skillIds": [
+        "instrument.tuning",
+        "instrument.posture"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -239,107 +242,112 @@
       "estimatedMinutes": 30,
       "startingTempoBpm": 48,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: fretting-hand basics, clean tone and relaxed pressure.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Place a fingertip just behind a fret and use the lightest pressure that produces a clear note.",
+        "Fret and release a four-fret ladder on one string with even note starts and no persistent buzz, keeping the thumb relaxed.",
+        "Move the same small pattern to a second string and maintain a steady count while identifying one note that needs adjustment."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "Music theory names relationships that can be heard and played. Identify the tonal centre, describe the interval or chord quality, then use the idea in a progression instead of memorising labels alone.",
-        "plainLanguage": "This lesson focuses on fretting-hand basics, clean tone and relaxed pressure. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Four-fret ladder: 0-1-2-3-4-3-2-1"
+        "keyIdea": "A fretted note sounds clearly when the fingertip presses the string just behind the fret with only enough pressure to stop the string cleanly. Pressing too hard creates unnecessary tension; pressing too lightly or placing the finger too far behind the fret can cause buzzing.",
+        "plainLanguage": "Place the fingertip close behind, not on top of, the fret wire. Pluck the note, then add only enough pressure for it to ring clearly. Keep the thumb light and the wrist comfortable instead of squeezing the neck.",
+        "workedExample": "On the high E string, play open E, then frets 1, 2, 3 and 4 (E–F–F♯–G–G♯); return 3–2–1–0. Fret each note just behind its fret and listen for a clear, even sound."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of fretting-hand basics, clean tone and relaxed pressure from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a close-up GuitarLab or instructor-created demonstration showing fingertip placement just behind the fret, a light thumb position and the difference between a clean note and a buzzing note. The written steps here are sufficient to complete the task.",
         "steps": [
-          "Name the key or tonal centre and identify the root notes in the example.",
-          "Spell the chord, interval or scale using note names before choosing a guitar shape.",
-          "Compare the original with one changed note, chord or voicing and listen for the change in colour or function."
+          "Support the guitar with the body or strap. Rest the fretting-hand thumb lightly behind the neck and keep the wrist comfortable.",
+          "Pluck the open high E string. Fret the first fret with the fingertip just behind the fret wire, then pluck once.",
+          "If the note buzzes, check finger placement first. Add a small amount of pressure only if the fingertip is already in the right place.",
+          "Repeat at frets 2, 3 and 4. Let each note speak before moving to the next fret.",
+          "Walk back down 4–3–2–1–0. Keep the finger close to the string and avoid squeezing harder as you move.",
+          "When the high E string is comfortable and clear, repeat the same 0–1–2–3–4–3–2–1–0 pattern on the B string."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y1-w02-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Hear a clean note",
+          "content": "Pluck an open string, then a fretted note. Listen for a clear start and sustain. If you hear buzzing, notice where the finger sits before changing anything."
         },
         {
           "id": "y1-w02-lesson-concept",
           "type": "explanation",
-          "title": "Understand the idea",
-          "content": "Music theory names relationships that can be heard and played. Identify the tonal centre, describe the interval or chord quality, then use the idea in a progression instead of memorising labels alone."
+          "title": "Use only enough pressure",
+          "content": "Place the fingertip just behind the fret wire. The fret, not a hard squeeze, stops the string. A small placement adjustment often clears a buzz more effectively than adding force."
         },
         {
           "id": "y1-w02-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Fret and release slowly",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Name the key or tonal centre and identify the root notes in the example.",
-            "Spell the chord, interval or scale using note names before choosing a guitar shape.",
-            "Compare the original with one changed note, chord or voicing and listen for the change in colour or function.",
-            "Work on this week's target: Four-fret ladder: 0-1-2-3-4-3-2-1. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Settle the guitar securely and keep the fretting-hand thumb light.",
+            "Play the open high E string, then fret the first fret just behind the fret wire.",
+            "Pluck the note and use the least pressure that gives a clear sound.",
+            "Repeat on frets 2, 3 and 4; release between notes and listen for a clean start.",
+            "Play the four-fret ladder 0–1–2–3–4–3–2–1–0 at a comfortable pulse.",
+            "Repeat on the B string only after the first string feels relaxed and sounds clear.",
+            "Finish by naming one adjustment that improved a note."
           ]
         },
         {
           "id": "y1-w02-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Four-fret ladder: 0-1-2-3-4-3-2-1. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Make a short phrase",
+          "content": "Play the high E string 0–1–2–3–4–3–2–1–0 as an even note line. Count steadily, let each note ring until the next begins and finish on the open E."
         },
         {
           "id": "y1-w02-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What relationship does the formula describe?",
-            "Can you explain the same idea without its technical name?"
+            "Where should the fingertip sit in relation to the fret wire?",
+            "What is the lightest-pressure test for a clear note?",
+            "When a note buzzes, what should you check before squeezing harder?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y1-w02-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Find the lightest clear pressure",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Pluck the open high E string and listen to its clear, unfretted sound.",
+            "Fret the first fret just behind the fret wire and pluck once.",
+            "If the note buzzes, adjust fingertip placement before adding a little pressure."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The first-fret F rings clearly with a relaxed thumb and without a sustained buzz.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y1-w02-lesson-focus",
-          "title": "Focused skill drill",
+          "title": "Four-fret fretting ladder",
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Write or say the note names and formula for the week's example, then play it in one position and sing the root movement.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Play high E string frets 0–1–2–3–4–3–2–1–0, one note at a time, at or below the 48 BPM starting reference.",
+            "Place each fingertip just behind its fret. Release between notes and use only enough pressure for a clean sound.",
+            "When a note buzzes, pause and check placement, fingertip angle and instrument support before trying again; do not squeeze harder automatically.",
+            "Repeat the pattern on the B string only after the high E string remains clear and comfortable."
           ],
-          "successCriterion": "The learner explains the relationship in plain language, names the relevant notes or degrees and demonstrates the sound on the instrument.",
+          "successCriterion": "The learner plays the full high-E ladder in order with clear notes, controlled releases and relaxed fretting-hand posture.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y1-w02-lesson-music",
-          "title": "Musical application",
+          "title": "Turn the ladder into a phrase",
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Four-fret ladder: 0-1-2-3-4-3-2-1.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Count in and play the high-E 0–1–2–3–4–3–2–1–0 line with an even pulse.",
+            "Repeat the line once, keeping the same clean tone and giving the final open E a clear ending.",
+            "If the high E line is secure, play the same pattern on the B string and compare the two registers."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Fret one note close behind the fret and coordinate both hands.",
+          "successCriterion": "Two consecutive passes keep a steady pulse; the learner identifies one note that needed an adjustment and demonstrates the correction.",
           "evidenceType": "recording_reviewed"
         },
         {
@@ -348,39 +356,39 @@
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the lesson away and describe where the fingertip should sit.",
+            "Name the note or fret where buzzing first appeared, if any.",
+            "Record whether placement, finger angle or pressure made the clearest improvement."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner recalls the placement rule and records one specific adjustment for the next practice session.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Four-fret ladder: 0-1-2-3-4-3-2-1",
+        "prompt": "Play the high-E string line 0–1–2–3–4–3–2–1–0 as an even phrase; repeat on B only if the first string is comfortable.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in and use one steady pulse for each note.",
+          "Keep the fingertip close to the string between notes and let the final open E ring.",
+          "Repeat once with attention to the clearest note, not to a higher speed."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
           "dimension": "accuracy",
-          "criterion": "Each intended note speaks clearly at a relaxed pressure, with no avoidable buzz and no excess tension."
+          "criterion": "Each fretted note is stopped just behind the fret and rings without persistent buzz; the four-fret sequence is played in the correct order."
         },
         {
           "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "criterion": "The high-E ladder has clear note starts and an even pulse, with no skipped note during the finger changes."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "criterion": "The thumb and wrist remain relaxed and the learner uses only the pressure needed for a clear note; stop if pain, numbness or tingling occurs."
         },
         {
           "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "criterion": "The learner explains why fingertip placement is checked before pressure and can repeat the same clean-note process on a second string."
         },
         {
           "dimension": "curriculum-checkpoint",
@@ -389,62 +397,74 @@
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Memorising a chord shape without knowing what notes it contains.",
-          "correction": "Spell the chord from its formula and locate at least the root and third."
+          "mistake": "Placing the fingertip in the middle of the fret space or too far behind the fret, causing a buzz.",
+          "correction": "Move the fingertip closer to the fret wire without touching the wire, then pluck again before changing pressure."
         },
         {
-          "mistake": "Using Roman numerals or formulas without identifying the key centre.",
-          "correction": "Name the key first, then label each chord relative to that key."
+          "mistake": "Squeezing harder whenever a note buzzes.",
+          "correction": "Check fingertip placement and angle first. Add only a small amount of pressure if the placement is already correct."
+        },
+        {
+          "mistake": "Collapsing the wrist or gripping the neck with the thumb.",
+          "correction": "Reset the guitar support, let the thumb rest lightly behind the neck and shorten the exercise if the hand begins to tense."
         }
       ],
-      "accessibleAlternative": "Use one key and a small number of examples; colour-code roots and chord tones before removing the visual support.",
+      "accessibleAlternative": "Practise only the open high E and first-fret F, then add one fret at a time. Use a slower pulse or shorter sets; keep the same goal of a clear note with relaxed pressure. A learner with discomfort should stop rather than force the movement.",
       "retrievalPrompt": [
-        "What relationship does the formula describe?",
-        "Can you explain the same idea without its technical name?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Where should the fingertip sit in relation to the fret wire?",
+        "How can you find the lightest pressure that still gives a clear note?",
+        "What should you check first when a fretted note buzzes?",
+        "Can you repeat the same clean-note process on the B string?"
       ],
       "nextReviewSuggestion": {
-        "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
+        "approach": "Adaptive retrieval of finger placement, clear note production and relaxed pressure; suggested intervals are configurable practice heuristics.",
         "suggestedChecks": [
-          "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
-          "About one month later: apply the skill in a different progression, rhythm or musical context."
+          "Next practice session: play the high-E 0–1–2–3–4 ladder before opening the lesson.",
+          "About one week later: repeat the ladder and identify a clean-note correction without a visual prompt.",
+          "About one month later: apply the same placement and pressure rule to a short melody on two strings."
         ],
-        "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
+        "adaptation": "Review sooner if a note buzzes, the hand becomes tense or placement is hard to recall; extend the interval after clear, relaxed demonstrations on separate days."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: recall fingertip placement and test one clean fretted note",
+          "5 min: high-E four-fret ladder in short, relaxed sets",
+          "3 min: play the ladder as a steady phrase and reflect"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: prepare and listen for a clear note",
+          "10 min: high-E ladder, then B string if comfortable",
+          "5 min: two phrase passes with an even pulse",
+          "2 min: record one correction"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
+          "5 min: setup, listen and retrieve the placement rule",
+          "15 min: focused ladder practice on high E and B",
+          "10 min: rest, then repeat with less visual guidance",
           "7 min: musical application",
-          "3 min: reflect"
+          "3 min: reflect and choose a next target"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Use short, relaxed sets and stop if discomfort appears; never trade clean tone or comfort for speed."
       },
       "instructorNotes": {
-        "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 48 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
-        "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
+        "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate clean fretting on more than one occasion. The week number is an ordering aid, not a deadline.",
+        "tempoGuidance": "The outline tempo of 48 BPM is only a starting reference. Slow down or remove the pulse while learning placement; restore it after the notes remain clear and relaxed.",
+        "masteryBoundary": "A single clean ladder is useful evidence, not proof of stable fretting skill. Seek a later demonstration on a second string and in a short melody; lesson completion and time spent do not establish mastery."
       },
       "checkpoint": "Fret one note close behind the fret and coordinate both hands.",
-      "skillIds": ["harmony.triads", "harmony.voice-leading"],
+      "skillIds": [
+        "instrument.fretting"
+      ],
       "workedExamples": [
         {
+          "kind": "fretboard-reference",
+          "label": "High E string fretting ladder",
+          "content": "Standard tuning: high E open = E4; fret 1 = F4; fret 2 = F♯4; fret 3 = G4; fret 4 = G♯4. Play 0–1–2–3–4–3–2–1–0, using light pressure and listening for a clear note at each fret."
+        },
+        {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Four-fret ladder: 0-1-2-3-4-3-2-1 Success target: Fret one note close behind the fret and coordinate both hands."
+          "label": "This week's musical phrase",
+          "content": "Play the high-E 0–1–2–3–4–3–2–1–0 line with an even pulse. Check placement before pressure whenever a note buzzes."
         }
       ]
     },
@@ -659,7 +679,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Translate a short TAB line into string and fret movements.",
-      "skillIds": ["notation.tab"],
+      "skillIds": [
+        "notation.tab"
+      ],
       "workedExamples": [
         {
           "kind": "notation-reference",
@@ -889,7 +911,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Form Em (022000) and G (320003), sound each intended string clearly, then change between the shapes while keeping a steady four-beat pulse.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1114,7 +1138,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Form A, D and E and check every intended string.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1339,7 +1365,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a four-chord loop with four beats per chord.",
-      "skillIds": ["harmony.open-chords", "harmony.transitions"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.transitions"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -1569,7 +1598,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Count eighth notes evenly, play a down-up pattern on muted strings, and keep the hand moving through one deliberately skipped stroke.",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -1794,7 +1827,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Core: play the melody from TAB. Optional: match the same notes to staff notation.",
-      "skillIds": ["notation.tab"],
+      "skillIds": [
+        "notation.tab"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2024,7 +2059,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Learn C, Am and Dm; move between them at a slow pulse.",
-      "skillIds": ["harmony.triads", "harmony.voice-leading"],
+      "skillIds": [
+        "harmony.triads",
+        "harmony.voice-leading"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -2249,7 +2287,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a pattern with one accent and one intentional rest.",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -2479,7 +2520,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Name the open strings E–A–D–G–B–E, explain that adjacent frets are one semitone apart, and locate two requested natural notes on the low E and A strings.",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -2933,7 +2977,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Core: play the TAB phrase. Optional: identify matching G- and D-string notes.",
-      "skillIds": ["notation.tab"],
+      "skillIds": [
+        "notation.tab"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3163,7 +3209,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Core: find listed frets and play TAB. Optional: connect note names to staff positions.",
-      "skillIds": ["notation.tab"],
+      "skillIds": [
+        "notation.tab"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -3398,7 +3446,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a down-up-down-up sequence on one string, then carry the alternating sequence across two neighbouring strings without losing an even attack.",
-      "skillIds": ["technique.alternate-picking", "technique.string-crossing"],
+      "skillIds": [
+        "technique.alternate-picking",
+        "technique.string-crossing"
+      ],
       "workedExamples": [
         {
           "kind": "technique-reference",
@@ -3628,7 +3679,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Keep a steady bass-thumb pulse while adding a four-note treble pattern without interrupting the bass role.",
-      "skillIds": ["fingerstyle.thumb-independence", "fingerstyle.patterns"],
+      "skillIds": [
+        "fingerstyle.thumb-independence",
+        "fingerstyle.patterns"
+      ],
       "workedExamples": [
         {
           "kind": "fingerstyle-reference",
@@ -3858,7 +3912,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play and name a one-octave C major fragment, then identify A–C–D–E–G as A minor pentatonic and resolve a short phrase to A.",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4088,7 +4145,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play Cmaj7, Dm7 and G7 shell grips; move Dm7-G7-Cmaj7 in time.",
-      "skillIds": ["harmony.seventh-chords", "harmony.voice-leading"],
+      "skillIds": [
+        "harmony.seventh-chords",
+        "harmony.voice-leading"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4313,7 +4373,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a 12-bar blues in A with a steady quarter-note pulse.",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -4343,212 +4406,239 @@
       "estimatedMinutes": 30,
       "startingTempoBpm": 60,
       "learningObjectives": [
-        "Explain or demonstrate the main idea: slides, bends, dynamics and phrasing.",
-        "Perform the target task accurately at a comfortable, controlled tempo.",
-        "Apply the skill in a short musical context and identify one next improvement."
+        "Hear and describe the difference between a slide that connects two fretted pitches and a bend that raises one fretted pitch.",
+        "Slide from B-string fret 5 (E) to fret 8 (G) and bend B-string fret 8 (G) towards the A target at fret 10 with controlled release.",
+        "Shape a two-bar A-centred phrase with a planned dynamic contrast, rhythmic space and an intentional ending."
       ],
       "prerequisites": [],
       "priorTopicsToRefresh": [],
       "explanation": {
-        "keyIdea": "Music theory names relationships that can be heard and played. Identify the tonal centre, describe the interval or chord quality, then use the idea in a progression instead of memorising labels alone.",
-        "plainLanguage": "This lesson focuses on slides, bends, dynamics and phrasing. First understand the sound or movement, then practise a small part, then return to the musical whole. Treat the written checkpoint as an observable target, not a deadline.",
-        "workedExample": "Five-note slide phrase"
+        "keyIdea": "Expression comes from how a note moves, sounds and sits in time. A slide connects two pitches while the finger travels along the string; a bend raises a fretted note towards a target pitch. Dynamics, rests and phrase endings make the same notes sound more musical.",
+        "plainLanguage": "Pick the first note of a slide, keep the fingertip in contact with the string and move to the target fret without picking again. For a bend, hear the target note first, then raise the lower note towards it in a controlled way. Shape the phrase with a clear pulse, a volume change and a deliberate ending.",
+        "workedExample": "On the B string, fret 5 is E and fret 8 is G. Pick fret 5 and slide to fret 8. Fret 8 is G; a whole-step bend towards fret 10 reaches the A target. Compare the bent pitch with the fretted target before releasing."
       },
       "demonstrationOrReference": {
         "kind": "guided-demonstration",
-        "referenceSuggestion": "Use a clear, slow demonstration of slides, bends, dynamics and phrasing from a reputable guitar-learning source or your own view of the fretboard. Compare the demonstration with the step-by-step guide here; no paid-course video or protected tab is reproduced.",
+        "referenceSuggestion": "Use a close-up GuitarLab or instructor-created demonstration that compares one picked note, a connected slide and a target-pitch bend. Show the target note before the bend and demonstrate relaxed wrist movement; do not reproduce a commercial riff or protected tab.",
         "steps": [
-          "Name the key or tonal centre and identify the root notes in the example.",
-          "Spell the chord, interval or scale using note names before choosing a guitar shape.",
-          "Compare the original with one changed note, chord or voicing and listen for the change in colour or function."
+          "Play B-string fret 5 (E), then fret 8 (G), as two separate notes so the target is familiar.",
+          "Return to fret 5, pick once and slide to fret 8 without lifting the fingertip or picking again. Stop just behind fret 8 and let G ring.",
+          "Play B-string fret 10 (A) so the bend target is audible. Then play fret 8 (G) and raise it towards that target with a small, supported wrist movement.",
+          "Use the ring finger with nearby fingers supporting it. Do not pull with the fingertip alone or force the string; stop if discomfort appears.",
+          "Release the bend smoothly back to G. Compare the pitch with fret 10 again and reduce the movement if the target is overshot.",
+          "Play the slide and bend inside the two-bar phrase, keeping a steady count through the rest and changing dynamics deliberately."
         ]
       },
       "lessonBlocks": [
         {
           "id": "y1-w20-lesson-notice",
           "type": "listen-and-notice",
-          "title": "Hear the target",
-          "content": "Before playing, listen to the target sound, sing or count it where possible, and identify what you want to notice."
+          "title": "Hear connected and raised pitches",
+          "content": "Compare two separately picked notes with a slide between the same pitches. Then hear a fretted G, its bend towards A and the fretted A target. Notice the continuous movement and the release."
         },
         {
           "id": "y1-w20-lesson-concept",
           "type": "explanation",
-          "title": "Understand the idea",
-          "content": "Music theory names relationships that can be heard and played. Identify the tonal centre, describe the interval or chord quality, then use the idea in a progression instead of memorising labels alone."
+          "title": "Move the pitch and shape the phrase",
+          "content": "A slide connects two fret positions while the finger stays in contact with the string. A bend raises one note towards a target pitch. Dynamics, rhythmic space and a clear ending shape the musical phrase around those techniques."
         },
         {
           "id": "y1-w20-lesson-demo",
           "type": "guided-demonstration",
-          "title": "See and try it slowly",
+          "title": "Slide, bend and release",
           "content": [
-            "Set up the instrument comfortably and check that the exercise is pain-free.",
-            "Name the key or tonal centre and identify the root notes in the example.",
-            "Spell the chord, interval or scale using note names before choosing a guitar shape.",
-            "Compare the original with one changed note, chord or voicing and listen for the change in colour or function.",
-            "Work on this week's target: Five-note slide phrase. Begin below the suggested reference tempo if accuracy is not yet secure.",
-            "Apply the skill in a musical phrase or progression; keep the pulse going through a small error.",
-            "Finish by recalling the key idea without looking and recording one observation."
+            "Play B-string frets 5 (E) and 8 (G) as separate target notes.",
+            "Pick fret 5 once and slide to fret 8 without re-picking.",
+            "Play fret 10 (A), then fret 8 (G); bend G towards the heard A target using relaxed, supported movement.",
+            "Release the bend smoothly and compare the returning G with the original note.",
+            "Practise the slide and bend in short sets, keeping the pulse slow and comfortable.",
+            "Add one softer phrase and one stronger response, then leave a counted rest before the ending.",
+            "Finish by naming one audible change that made the phrase more expressive."
           ]
         },
         {
           "id": "y1-w20-lesson-apply",
           "type": "musical-application",
-          "title": "Make music with it",
-          "content": "Apply the skill to Five-note slide phrase. Preserve the pulse and give the phrase a clear beginning and ending."
+          "title": "Shape a two-bar phrase",
+          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and finish on A. Keep the pulse moving through a counted rest; make the response slightly stronger than the opening and end deliberately on A."
         },
         {
           "id": "y1-w20-lesson-reflect",
           "type": "retrieval",
           "title": "Recall without looking",
           "content": [
-            "What relationship does the formula describe?",
-            "Can you explain the same idea without its technical name?"
+            "How does a slide differ from playing two separate notes?",
+            "Which fretted note is the target for the G-to-A bend?",
+            "How can a dynamic change or a rest make a short phrase clearer?"
           ]
         }
       ],
       "exercises": [
         {
           "id": "y1-w20-lesson-orient",
-          "title": "Listen, name and prepare",
+          "title": "Listen for the target pitch",
           "type": "recall",
           "durationMinutes": 4,
           "instructions": [
-            "Say what you are trying to make sound or demonstrate.",
-            "Listen to a reference or hum the target before playing.",
-            "Choose a comfortable starting tempo and one observable quality target."
+            "Play B-string fret 8 (G), then fret 10 (A), and listen to the whole-step distance.",
+            "Play the two notes separately before attempting a slide or bend.",
+            "Choose a slow, comfortable pulse and stop if the fretting hand feels strained."
           ],
-          "successCriterion": "You can state the target and identify what a successful attempt should sound or feel like.",
+          "successCriterion": "The learner can hear and locate G at B-string fret 8 and A at B-string fret 10 before attempting the bend.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y1-w20-lesson-focus",
-          "title": "Focused skill drill",
+          "title": "Slide and bend control",
           "type": "focused-practice",
           "durationMinutes": 10,
           "instructions": [
-            "Write or say the note names and formula for the week's example, then play it in one position and sing the root movement.",
-            "Work in short sets; pause to identify and correct one specific issue before repeating.",
-            "Only increase tempo after clean, relaxed repetitions; reduce it if accuracy or comfort declines."
+            "Slide on the B string from fret 5 (E) to fret 8 (G): pick once, keep light fingertip contact and arrive cleanly without re-picking.",
+            "Play fret 10 (A) as the target, then fret 8 (G); use a supported, comfortable wrist movement to bend towards A and release smoothly.",
+            "Compare the bend with the fretted A target. Work slowly; do not force the string or continue if there is pain, numbness or tingling.",
+            "Practise the slide and bend in separate short sets before combining them."
           ],
-          "successCriterion": "The learner explains the relationship in plain language, names the relevant notes or degrees and demonstrates the sound on the instrument.",
+          "successCriterion": "The slide reaches G without a gap and the bend moves towards the heard A target with a controlled release at a comfortable effort.",
           "evidenceType": "observed_or_self_checked"
         },
         {
           "id": "y1-w20-lesson-music",
-          "title": "Musical application",
+          "title": "Make the phrase expressive",
           "type": "musical-application",
           "durationMinutes": 8,
           "instructions": [
-            "Apply the week's exercise: Five-note slide phrase.",
-            "Play a short phrase, loop or section with a count-in and intentional ending.",
-            "Where possible, combine the new skill with one familiar skill while preserving the pulse."
+            "Use the supplied two-bar A-centred phrase or create a similar original phrase with a slide or bend.",
+            "Play the opening more softly and the response more strongly; keep the pulse moving through one counted rest.",
+            "Finish on an intentional A-centred note and repeat once, changing only one expressive choice."
           ],
-          "successCriterion": "Demonstrate this week's checkpoint: Use one expressive technique accurately in a short phrase.",
+          "successCriterion": "Play a two-bar A-centred phrase with one controlled slide or bend, one planned dynamic contrast and an intentional ending while keeping the pulse.",
           "evidenceType": "recording_reviewed"
         },
         {
           "id": "y1-w20-lesson-reflect",
-          "title": "Recall and reflect",
+          "title": "Review the expressive choice",
           "type": "reflection",
           "durationMinutes": 3,
           "instructions": [
-            "Put the diagram or notes away and answer the retrieval prompts.",
-            "Record one thing that improved and one issue that still needs attention.",
-            "Choose whether the next session should repeat, simplify, mix or extend the task."
+            "Put the written steps away and explain what the slide or bend did to the pitch.",
+            "Listen to the phrase and identify whether the bend approached the target and whether the dynamic contrast was audible.",
+            "Choose one next improvement, such as smoother slide arrival, closer bend intonation, steadier pulse or a clearer ending."
           ],
-          "successCriterion": "A clear next target is recorded and the concept can be recalled without immediately viewing the explanation.",
+          "successCriterion": "The learner identifies one audible strength and one specific improvement tied to pitch, timing, dynamics or phrase shape.",
           "evidenceType": "self_reported"
         }
       ],
       "musicalApplication": {
-        "prompt": "Five-note slide phrase",
+        "prompt": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and finish on A.",
         "instructions": [
-          "Count in before beginning.",
-          "Play the entire short phrase or loop without stopping for a small error.",
-          "Repeat once with attention to the weakest quality, not simply at a higher speed."
+          "Count in over a slow A-centred pulse and play the slide phrase without rushing the pitch movement.",
+          "Use the bend only with relaxed, supported movement; compare it with the fretted A target.",
+          "Make the response slightly stronger, keep a counted rest and finish deliberately on A."
         ],
         "sourcePolicy": "Use original GuitarLab examples, learner-created material or properly licensed/public-domain repertoire; link to commercial song tabs rather than copying them."
       },
       "successCriteria": [
         {
           "dimension": "accuracy",
-          "criterion": "The learner keeps the form and pulse, identifies the chord position, and uses controlled phrasing or articulation without forcing the hand."
+          "criterion": "The B-string slide arrives at fret 8 (G) without a second pick, and the fret-8 bend moves towards the fret-10 A target before a controlled release."
         },
         {
           "dimension": "sound-and-time",
-          "criterion": "The notes or chords are clear enough for the task and the pulse remains understandable."
+          "criterion": "The two-bar phrase keeps a steady pulse through the counted rest, with clear note starts, a deliberate dynamic contrast and an intentional ending."
         },
         {
           "dimension": "control-and-comfort",
-          "criterion": "Movement remains relaxed; stop and reset if pain, numbness or tingling occurs."
+          "criterion": "Slide pressure stays light and bend movement is supported and comfortable; the learner stops if pain, numbness or tingling occurs."
         },
         {
           "dimension": "understanding-and-transfer",
-          "criterion": "The learner can explain the key idea and apply it in the week's musical example."
+          "criterion": "The learner explains how a slide connects two frets, how a bend approaches a target pitch and how dynamics or space shape the phrase."
         },
         {
           "dimension": "curriculum-checkpoint",
-          "criterion": "Use one expressive technique accurately in a short phrase."
+          "criterion": "Play a two-bar A-centred phrase with one controlled slide or bend, one planned dynamic contrast and an intentional ending while keeping the pulse."
         }
       ],
       "commonMistakesAndCorrections": [
         {
-          "mistake": "Memorising a chord shape without knowing what notes it contains.",
-          "correction": "Spell the chord from its formula and locate at least the root and third."
+          "mistake": "Lifting the finger during a slide and hearing two disconnected picked notes.",
+          "correction": "Keep light fingertip contact with the string, pick only at the starting fret and arrive just behind the target fret."
         },
         {
-          "mistake": "Using Roman numerals or formulas without identifying the key centre.",
-          "correction": "Name the key first, then label each chord relative to that key."
+          "mistake": "Bending past the target or stopping short without comparing pitches.",
+          "correction": "Play the target fret first, listen, then bend towards it and compare again after releasing."
+        },
+        {
+          "mistake": "Trying to force the bend with the fingertip or squeezing the neck.",
+          "correction": "Use nearby fingers to support the bend and a small, relaxed wrist movement. Reduce the range or stop if the movement is uncomfortable."
+        },
+        {
+          "mistake": "Adding dynamics by speeding up or losing the pulse.",
+          "correction": "Keep the count unchanged and vary attack strength or note length rather than tempo."
         }
       ],
-      "accessibleAlternative": "Use one key and a small number of examples; colour-code roots and chord tones before removing the visual support.",
+      "accessibleAlternative": "Practise the slide from B-string fret 5 to fret 8 at a slower pulse, then compare G and A as separately fretted target notes. Attempt a smaller, comfortable bend only if it remains pain-free; a learner should never force a bend. Keep the same goal of shaping the phrase with dynamics and space.",
       "retrievalPrompt": [
-        "What relationship does the formula describe?",
-        "Can you explain the same idea without its technical name?",
-        "What is one thing you will listen for or change the next time you practise?"
+        "Which fret on the B string gives the A target for the G-to-A bend?",
+        "What must stay in contact with the string during a slide?",
+        "How can you tell whether a bend has reached its target pitch?",
+        "What changed when you played the phrase more softly, more strongly or with a rest?"
       ],
       "nextReviewSuggestion": {
-        "approach": "Adaptive retrieval; suggested intervals are configurable product heuristics, not scientifically optimal fixed intervals.",
+        "approach": "Adaptive retrieval of slide continuity, bend target pitch and expressive phrasing; suggested intervals are configurable practice heuristics.",
         "suggestedChecks": [
-          "Next practice session: recall the concept before viewing this lesson.",
-          "About one week later: repeat the task without the original step-by-step prompt.",
-          "About one month later: apply the skill in a different progression, rhythm or musical context."
+          "Next practice session: play the slide and compare G with the fretted A target before attempting the bend.",
+          "About one week later: perform the two-bar phrase without the written fret prompts, if comfortable.",
+          "About one month later: use one slide or controlled bend in a different original phrase while keeping the same pulse."
         ],
-        "adaptation": "Review sooner after errors, hesitation, low confidence or loss of control; extend the interval after confident retrieval on separate occasions."
+        "adaptation": "Review sooner if the slide breaks, the bend misses the target or the hand becomes tense; extend the interval after accurate, comfortable demonstrations on separate days."
       },
       "practiceOptions": {
         "tenMinutes": [
-          "2 min: prepare and retrieve",
-          "5 min: focused drill",
-          "3 min: musical application"
+          "2 min: hear G and A target notes",
+          "5 min: slide and bend in short, comfortable sets",
+          "3 min: one two-bar phrase with a dynamic contrast"
         ],
         "twentyMinutes": [
-          "3 min: prepare and listen",
-          "10 min: focused drill",
-          "5 min: musical application",
-          "2 min: reflect"
+          "3 min: listen to the target notes and count the pulse",
+          "8 min: practise slide and bend separately",
+          "6 min: apply both in an original two-bar phrase",
+          "3 min: record one strength and one improvement"
         ],
         "fortyMinutes": [
-          "5 min: prepare and review a related skill",
-          "15 min: focused drill in short sets",
-          "10 min: new learning or extension",
-          "7 min: musical application",
-          "3 min: reflect"
+          "5 min: hear target pitches and review pulse",
+          "12 min: focused slide and bend practice",
+          "8 min: rest, then repeat with fewer visual prompts",
+          "10 min: shape the phrase with dynamics and rests",
+          "5 min: reflect and set the next target"
         ],
-        "rule": "Select the highest-value tasks for the time available; do not rush every activity into a short session."
+        "rule": "Accuracy, target pitch and comfort matter more than bend range or speed. Stop if discomfort appears."
       },
       "instructorNotes": {
-        "pacing": "Repeat or split the lesson across sessions until the learner can demonstrate the target reliably. Week numbers are an ordering aid, not a calendar deadline.",
-        "tempoGuidance": "The outline tempo of 60 BPM is a reference only. Begin slower if needed; increase only after accuracy and comfort remain steady.",
-        "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
+        "pacing": "Split slide and bend work across sessions if needed. Keep the first attempts short and do not require a full-step bend if the learner cannot perform it comfortably.",
+        "tempoGuidance": "The outline tempo of 60 BPM is a starting reference for the phrase, not a pass mark. Practise the pitch movement without a pulse first if necessary.",
+        "masteryBoundary": "One accurate bend or expressive phrase is not proof of retained skill. Revisit the target pitch later and use the slide/bend in a different musical phrase before treating the skill as stable."
       },
-      "checkpoint": "Use one expressive technique accurately in a short phrase.",
-      "skillIds": ["lead.phrasing", "technique.bends"],
+      "checkpoint": "Play a two-bar A-centred phrase with one controlled slide or bend, one planned dynamic contrast and an intentional ending while keeping the pulse.",
+      "skillIds": [
+        "lead.phrasing",
+        "technique.bends"
+      ],
       "workedExamples": [
         {
+          "kind": "fretboard-reference",
+          "label": "A slide on the B string",
+          "content": "B string fret 5 = E; B string fret 8 = G. Pick fret 5 once, keep the fingertip in contact and slide to fret 8 without picking again."
+        },
+        {
+          "kind": "fretboard-reference",
+          "label": "A bend towards a target pitch",
+          "content": "B string fret 8 = G and fret 10 = A. Play A first, then bend G towards that heard target and release smoothly. Use supported, relaxed movement; do not force the string."
+        },
+        {
           "kind": "lesson-application",
-          "label": "This week's example",
-          "content": "Five-note slide phrase Success target: Use one expressive technique accurately in a short phrase."
+          "label": "Two-bar A-centred phrase",
+          "content": "Over a slow A-centred pulse, slide B-string fret 5 (E) to fret 8 (G), play G-string fret 5 (C) and B-string fret 5 (E), then answer with a controlled B-string fret-8 (G) bend towards fret 10 (A) and finish on A. Keep a counted rest, shape the response with a stronger dynamic and finish on A."
         }
       ]
     },
@@ -4763,7 +4853,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move a power-chord shape and mute unwanted strings.",
-      "skillIds": ["harmony.power-chords"],
+      "skillIds": [
+        "harmony.power-chords"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -4983,7 +5075,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Build a partial F shape and test each string individually.",
-      "skillIds": ["harmony.barre-chords"],
+      "skillIds": [
+        "harmony.barre-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5213,7 +5307,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play A minor pentatonic box 1 across the six strings, identify the root A locations and end a short phrase on A.",
-      "skillIds": ["lead.pentatonic"],
+      "skillIds": [
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -5911,7 +6007,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play C, F and G triads on the top three strings, name each root and identify the three chord tones in the selected voicing.",
-      "skillIds": ["harmony.triads"],
+      "skillIds": [
+        "harmony.triads"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -6131,7 +6229,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Build I, IV, V and vi in C and G major.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -6356,7 +6456,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Use a capo or transpose a short progression and explain the result.",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
           "kind": "fretboard-reference",
@@ -6581,7 +6684,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Compare D-Dsus4-D and A-A7-A.",
-      "skillIds": ["harmony.open-chords", "harmony.seventh-chords"],
+      "skillIds": [
+        "harmony.open-chords",
+        "harmony.seventh-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -6806,7 +6912,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Count 1-e-and-a at a slow tempo and play a clean muted pattern.",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -7494,7 +7603,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a short major pentatonic phrase over a major chord.",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "scale-reference",
@@ -7719,7 +7831,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Create a four-bar solo from a two-note motif.",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -7949,7 +8064,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play an arpeggio that follows Em-G-D-C without losing the beat.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8174,7 +8291,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a short three-notes-per-string fragment with alternate picking.",
-      "skillIds": ["lead.major-scale", "lead.pentatonic"],
+      "skillIds": [
+        "lead.major-scale",
+        "lead.pentatonic"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8642,7 +8762,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Write a progression and pair it with a melody or picking pattern.",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -8872,7 +8995,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play a short turnaround and return to the I chord on time.",
-      "skillIds": ["lead.pentatonic", "lead.phrasing"],
+      "skillIds": [
+        "lead.pentatonic",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9102,7 +9228,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play two power chords with tight starts and stops.",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.muting"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.muting"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9332,7 +9462,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play Dm7-G7-Cmaj7 as a slow ii-V-I.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9557,7 +9689,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Move Dm7-G7-Cmaj7 using the smallest hand movement.",
-      "skillIds": ["harmony.voice-leading"],
+      "skillIds": [
+        "harmony.voice-leading"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -9782,7 +9916,11 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Play the same progression as straight eighths, shuffle and sparse accents.",
-      "skillIds": ["rhythm.pulse", "rhythm.subdivision", "rhythm.strumming"],
+      "skillIds": [
+        "rhythm.pulse",
+        "rhythm.subdivision",
+        "rhythm.strumming"
+      ],
       "workedExamples": [
         {
           "kind": "rhythm-reference",
@@ -10236,7 +10374,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Read a short melody on strings 1-4 with rests and repeated notes.",
-      "skillIds": ["notation.tab"],
+      "skillIds": [
+        "notation.tab"
+      ],
       "workedExamples": [
         {
           "kind": "notation-reference",
@@ -10461,7 +10601,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Link two positions of G major and land on B or G.",
-      "skillIds": ["fretboard.string-map", "fretboard.natural-notes"],
+      "skillIds": [
+        "fretboard.string-map",
+        "fretboard.natural-notes"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -10691,7 +10834,9 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Harmonise a three-note melody using small chord shapes.",
-      "skillIds": ["harmony.open-chords"],
+      "skillIds": [
+        "harmony.open-chords"
+      ],
       "workedExamples": [
         {
           "kind": "lesson-application",
@@ -10911,7 +11056,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Build an A section and contrasting B section from your motifs.",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "chord-reference",
@@ -11141,7 +11289,10 @@
         "masteryBoundary": "Lesson completion, time spent and video viewing do not equal mastery. Record evidence separately and require more than one successful demonstration over time for a stable skill."
       },
       "checkpoint": "Perform the same phrase softly, loudly and with a clear final note.",
-      "skillIds": ["arrangement.song-form", "lead.phrasing"],
+      "skillIds": [
+        "arrangement.song-form",
+        "lead.phrasing"
+      ],
       "workedExamples": [
         {
           "kind": "creative-prompt",
