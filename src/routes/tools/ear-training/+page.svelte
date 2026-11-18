@@ -5,6 +5,7 @@
   import { resolve } from '$app/paths';
   import Icon from '../../../lib/components/Icon.svelte';
   import {
+    recordActiveChordMovementRecognitionAssessment,
     recordActiveIntervalRecognitionAssessment,
     recordActivePulseRecognitionAssessment
   } from '../../../lib/storage/assessment';
@@ -153,13 +154,15 @@
       feedbackState = 'incorrect';
     }
 
-    if (kind === 'interval' || kind === 'pulse') {
+    if (kind === 'interval' || kind === 'pulse' || kind === 'chord-movement') {
       evidenceSaveState = 'saving';
       try {
         if (kind === 'pulse') {
           await recordActivePulseRecognitionAssessment(exercise, answer);
-        } else {
+        } else if (kind === 'interval') {
           await recordActiveIntervalRecognitionAssessment(exercise, answer);
+        } else {
+          await recordActiveChordMovementRecognitionAssessment(exercise, answer);
         }
         evidenceSaveState = 'saved';
       } catch {
@@ -187,7 +190,7 @@
   <title>Ear training — GuitarLab</title>
   <meta
     name="description"
-    content="Practise pulse, pitch, melodic contour and interval recognition with locally generated listening exercises."
+    content="Practise pulse, pitch, melodic contour, intervals and chord movement with locally generated listening exercises."
   />
 </svelte:head>
 
@@ -281,15 +284,15 @@
       </div>
     {/if}
 
-    {#if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'saving'}
+    {#if (kind === 'pulse' || kind === 'interval' || kind === 'chord-movement') && evidenceSaveState === 'saving'}
       <p class="audio-caption" role="status">
-        Saving this {kind === 'pulse' ? 'pulse' : 'interval'} response on this device…
+        Saving this {kind === 'pulse' ? 'pulse' : kind === 'interval' ? 'interval' : 'chord-movement'} response on this device…
       </p>
-    {:else if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'saved'}
+    {:else if (kind === 'pulse' || kind === 'interval' || kind === 'chord-movement') && evidenceSaveState === 'saved'}
       <p class="audio-caption" role="status">
-        {kind === 'pulse' ? 'Pulse' : 'Interval'} item evidence saved locally. This supporting probe does not establish skill mastery.
+        {kind === 'pulse' ? 'Pulse' : kind === 'interval' ? 'Interval' : 'Chord movement'} item evidence saved locally. This supporting probe does not establish skill mastery or playing ability.
       </p>
-    {:else if (kind === 'pulse' || kind === 'interval') && evidenceSaveState === 'error'}
+    {:else if (kind === 'pulse' || kind === 'interval' || kind === 'chord-movement') && evidenceSaveState === 'error'}
       <p class="audio-error" role="alert">
         This response could not be saved locally. You can retry the answer to try saving again.
       </p>

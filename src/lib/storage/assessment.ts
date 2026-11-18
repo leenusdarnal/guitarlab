@@ -1,7 +1,9 @@
 import { recordAssessmentAttempt } from '../application/services';
 import {
+  chordMovementRecognitionAssessment,
   intervalRecognitionAssessment,
   pulseRecognitionAssessment,
+  scoreChordMovementResponse,
   scoreIntervalRecognitionResponse,
   scorePulseRecognitionResponse,
   type ScoredEarTrainingResponse
@@ -168,7 +170,7 @@ export async function loadLatestActiveStandardTuningAssessment(): Promise<Assess
  */
 async function recordActiveEarTrainingProbe(
   skillId: string,
-  exerciseKind: 'interval' | 'pulse',
+  exerciseKind: 'interval' | 'pulse' | 'chord-movement',
   scored: ScoredEarTrainingResponse
 ): Promise<AssessmentAttemptRecord> {
   const database = await openLocalDatabase();
@@ -189,7 +191,12 @@ async function recordActiveEarTrainingProbe(
       findLesson: async () => null
     };
     const isCorrect = scored.itemEvidence[0].outcome === 'correct';
-    const label = exerciseKind === 'pulse' ? 'pulse' : 'interval';
+    const label =
+      exerciseKind === 'pulse'
+        ? 'pulse'
+        : exerciseKind === 'interval'
+          ? 'interval'
+          : 'chord-movement';
 
     return await recordAssessmentAttempt(
       {
@@ -247,6 +254,21 @@ export async function recordActivePulseRecognitionAssessment(
   return recordActiveEarTrainingProbe(
     pulseRecognitionAssessment.skillId,
     'pulse',
+    scored
+  );
+}
+
+/**
+ * Append a supporting-probe outcome for the chord-movement listening exercise.
+ */
+export async function recordActiveChordMovementRecognitionAssessment(
+  exercise: EarTrainingExercise,
+  response: EarTrainingAnswer
+): Promise<AssessmentAttemptRecord> {
+  const scored = scoreChordMovementResponse(exercise, response);
+  return recordActiveEarTrainingProbe(
+    chordMovementRecognitionAssessment.skillId,
+    'chord-movement',
     scored
   );
 }
