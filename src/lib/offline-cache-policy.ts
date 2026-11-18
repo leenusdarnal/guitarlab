@@ -24,7 +24,11 @@ export function isCacheablePublicNavigation(
   if (request.method !== 'GET' || request.mode !== 'navigate') return false;
   if (!isEligiblePublicNavigation(url, origin, publicPaths)) return false;
   if (response.status !== 200 || response.type !== 'basic') return false;
-  if (!response.headers.get('content-type')?.includes('text/html')) return false;
+  if (
+    !response.headers.get('content-type')?.includes('text/html')
+  ) {
+    return false;
+  }
   if (response.headers.get('x-guitarlab-cache') !== 'public') return false;
   if (response.headers.has('set-cookie')) return false;
 
