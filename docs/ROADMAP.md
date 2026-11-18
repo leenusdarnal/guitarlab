@@ -154,7 +154,7 @@ The initial local-first production Worker and baseline security-header checks we
 
 ## M7 implementation note (2026-11-12)
 
-The first slice adds `/practice`, a local IndexedDB-backed session flow and history. It reuses the existing application services and does not award mastery from time spent. See [the execution priority and resume plan](EXECUTION_PRIORITY.md) for the active branch, validation status and next slice.
+The first slice adds `/practice`, a local IndexedDB-backed session flow and history. It reuses the existing application services and does not award mastery from time spent. See the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) for cross-cutting quality gates and current verification evidence.
 
 ## Definition of done
 
