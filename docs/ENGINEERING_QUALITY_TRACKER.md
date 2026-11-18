@@ -59,12 +59,12 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | OPEN |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | OPEN |
 | 3 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
-| 4 | UX-01 — Complete manual accessibility and responsive acceptance | P1 | BLOCKED |
+| 4 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
 | 5 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
 | 6 | QA-01 / QA-02 — Complete real-audio and physical-browser validation | P1 | BLOCKED |
 | 7 | QA-04 — Reconcile exact production SHA and rollback evidence | P1 | OPEN |
 | 8 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
-| 9 | ARC-01 — Split oversized route components and consolidate shared UI patterns | P2 | OPEN |
+| 9 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
 
 ---
 
