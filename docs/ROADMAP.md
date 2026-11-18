@@ -35,7 +35,7 @@ M0 product, architecture, curriculum and implementation guidelines are ready for
 - [x] Add the initial responsive application shell using the approved hybrid design direction and semantic design tokens.
 - [ ] Complete manual mobile, keyboard and component-level accessibility verification.
 
-M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The isolated no-D1 production config and manual release workflow are implemented. The first local-first production deployment succeeded on 2026-11-16 for commit `306f7aea19596731dac88192d8228590544f00fc`; five route smoke tests and security-header checks passed, and a 90-day artifact records Worker version `36ba069d-3462-467d-8076-90c17383f255`. Current `main` (`357105dfc9bcdbf3d76d1b89a04836cdc694c5c9`) is newer and requires a fresh production redeploy before its latest UX improvements are live. Temporary host: `https://guitarlab.leenusdarnal.workers.dev`; no custom domain or zone is connected.
+M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The isolated no-D1 production config and manual release workflow are implemented. The first local-first production deployment succeeded on 2026-11-16 for commit `306f7aea19596731dac88192d8228590544f00fc`; five route smoke tests and security-header checks passed, and a 90-day artifact records Worker version `36ba069d-3462-467d-8076-90c17383f255`. Subsequent `main` changes require exact-SHA deployment reconciliation before they can be called live; see [QA-04 in the unified engineering-quality tracker](ENGINEERING_QUALITY_TRACKER.md#74-production-and-ci-release-evidence). Temporary host: `https://guitarlab.leenusdarnal.workers.dev`; no custom domain or zone is connected.
 
 ### M2 — Data foundation
 
@@ -141,19 +141,16 @@ PR #61 and PR #67 deliver the first local, generated-audio listening exercises. 
 
 ### M9 — Release hardening
 
-- [ ] Full PWA installability and expanded offline curriculum strategy; initial privacy-safe app shell and previously visited page caching are implemented (PR #35).
-- [ ] Accessibility and physical-device mobile usability audit (automated responsive/offline viewport coverage is not a substitute).
-- [ ] Complete security, CSP and privacy review; baseline response-security headers and storage durability controls are implemented (PR #36).
-- [x] Automated Chromium backup/restore/rollback/reset verification (PR #42); [ ] physical-device backup/restore verification.
-- [x] Automated lifecycle, microphone-permission and tuner browser-acceptance coverage exists for mocked Chromium and regression fixtures (PRs #73–90).
-- [ ] Physical desktop/mobile and supported-browser audio timing, microphone and resource-cleanup acceptance (Issues #89 and #18).
-- [ ] Performance and reliability checks, including audio startup/stop and resource cleanup.
-- [ ] Third-party dependency and licence register; review all optional integrations before adoption.
-- [x] Curriculum validator integrated into the main application CI.
-- [ ] Verify preview deployment and browser smoke check against the current v1.0.6 main commit; the preview workflow has succeeded for an earlier main commit.
-- [x] First local-first production deployment and five-route/security-header smoke tests (2026-11-16; deployed SHA `306f7aea19596731dac88192d8228590544f00fc`; Worker version `36ba069d-3462-467d-8076-90c17383f255`; 90-day evidence artifact retained). [ ] Redeploy the latest `main` SHA and verify smoke tests/evidence. [ ] Verify rollback procedure against an actual prior Worker version.
+M9 is the product-level release milestone. Detailed engineering-quality tasks, their owners, current states, CI links and physical-device evidence are maintained **only** in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md). This roadmap records the milestone gates, not duplicate task-level checklists.
 
-Release hardening remains open under [Issue #18](https://github.com/leenusdarnal/guitarlab/issues/18). The initial local-first production Worker is deployed; re-deployment of the latest `main` remains outstanding. This release does not enable login, D1, remote learner data or cloud sync.
+- [ ] Privacy-safe offline caching and useful offline recovery verified (OFF-01–OFF-04).
+- [ ] Accessibility, responsive usability and physical-device acceptance verified (UX-01–UX-09; QA-01–QA-03).
+- [ ] Authentication lifecycle, environment isolation, CSP and privacy/security review verified (SEC-01–SEC-06).
+- [ ] Performance, reliability, audio and data-recovery evidence recorded (PERF-01–PERF-05; QA-01–QA-05).
+- [ ] Current production SHA, smoke tests and rollback procedure verified (QA-04).
+- [ ] M9 release sign-off recorded and Issue #18 reconciled (QA-06).
+
+The initial local-first production Worker and baseline security-header checks were deployed previously. A successful deployment of an earlier commit is not evidence that the latest `main` SHA is deployed. This release remains guest/local-first unless optional account infrastructure is separately configured; cloud learner-data sync remains disabled until its security, ownership and recovery gates pass.
 
 ## M7 implementation note (2026-11-12)
 
