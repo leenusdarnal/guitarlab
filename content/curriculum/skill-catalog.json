@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0",
-  "curriculumReleaseId": "curriculum-v1.0.6",
+  "version": "1.0.1",
+  "curriculumReleaseId": "curriculum-v1.0.7",
   "categories": [
     {
       "id": "arrangement",
@@ -166,6 +166,12 @@
       "category": "harmony",
       "displayName": "Voice leading",
       "description": "Connect chords by moving individual notes efficiently."
+    },
+    {
+      "id": "instrument.fretting",
+      "category": "instrument",
+      "displayName": "Clean single-note fretting",
+      "description": "Fret individual notes with accurate fingertip placement and the minimum effective pressure needed for a clear, controlled pitch."
     },
     {
       "id": "instrument.posture",
