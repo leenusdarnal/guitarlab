@@ -114,10 +114,23 @@ function validateSnapshot(snapshot) {
     !('techniques' in snapshot) &&
     !('fretPositions' in snapshot) &&
     !('strings' in snapshot);
+  const isCurrentSnapshot = version === current.version;
   const dimensions = isLegacyScopeOnlySnapshot ? current : snapshot;
-  const topicIds = validateDimensionRecords(version, 'topic', dimensions.topics);
-  const techniqueIds = validateDimensionRecords(version, 'technique', dimensions.techniques);
-  const positionIds = validateDimensionRecords(version, 'fret position', dimensions.fretPositions);
+  const topicIds = validateDimensionRecords(
+    version,
+    'topic',
+    dimensions.topics
+  );
+  const techniqueIds = validateDimensionRecords(
+    version,
+    'technique',
+    dimensions.techniques
+  );
+  const positionIds = validateDimensionRecords(
+    version,
+    'fret position',
+    dimensions.fretPositions
+  );
   const strings = dimensions.strings;
   check(Array.isArray(strings) && strings.length === 6, `Practice taxonomy ${version}: expected six strings`);
   const stringNumbers = Array.isArray(strings) ? strings.map((item) => item.number) : [];
@@ -145,10 +158,18 @@ function validateSnapshot(snapshot) {
     const key = `${scope.lessonId}:${scope.exerciseId}`;
     check(exercises.has(key), `Practice taxonomy ${version}: unknown authored exercise ${key}`);
     const authored = exercises.get(key)?.exercise;
+    // Current evidence must be grounded in the current authored exercise.
+    // Historical snapshots preserve their original excerpt even when the
+    // stable lesson/exercise ID has since been rewritten in a newer release.
+    const evidenceIsValid =
+      isCurrentSnapshot
+        ? evidenceMatchesExercise(scope.sourceEvidence, authored)
+        : isText(scope.sourceEvidence);
     check(
-      isText(scope.sourceEvidence) &&
-        evidenceMatchesExercise(scope.sourceEvidence, authored),
-      `Practice taxonomy ${version} ${key}: source evidence must be an exact excerpt from this exercise's instructions or success criterion`
+      evidenceIsValid,
+      isCurrentSnapshot
+        ? `Practice taxonomy ${version} ${key}: source evidence must be an exact excerpt from this exercise's instructions or success criterion`
+        : `Practice taxonomy ${version} ${key}: historical source evidence must be preserved`
     );
 
     for (const [field, allowed] of [
