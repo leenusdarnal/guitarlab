@@ -981,7 +981,7 @@ try {
         .transaction('adaptiveRecommendationFeedback')
         .objectStore('adaptiveRecommendationFeedback')
         .index('byLearnerRelease')
-        .getAll([learnerId, 'curriculum-v1.0.6']);
+        .getAll([learnerId, activeCurriculumReleaseId]);
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
     });
