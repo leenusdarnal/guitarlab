@@ -105,7 +105,9 @@ describe('public offline navigation cache policy', () => {
     ).toBe(false);
   });
 
-  it('rejects non-navigation, non-GET, cross-origin and non-HTML responses', () => {
+  it(
+    'rejects non-navigation, non-GET, cross-origin and non-HTML responses',
+    () => {
     expect(
       isCacheablePublicNavigation(
         request({ method: 'POST' }),
@@ -142,5 +144,6 @@ describe('public offline navigation cache policy', () => {
         publicPaths
       )
     ).toBe(false);
-  });
+    }
+  );
 });
