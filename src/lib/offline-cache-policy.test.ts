@@ -5,7 +5,7 @@ import {
 } from './offline-cache-policy';
 
 const origin = 'https://guitarlab.example';
-const publicPaths = new Set(['/', '/learn', '/learn/year-1']);
+const publicPaths = new Set(['/', '/learn/year-1']);
 
 const request = (overrides: Record<string, string> = {}) =>
   ({ method: 'GET', mode: 'navigate', ...overrides }) as Request;
@@ -26,6 +26,18 @@ describe('public offline navigation cache policy', () => {
       isCacheablePublicNavigation(
         request(),
         response(),
+        new URL('/learn/year-1', origin),
+        origin,
+        publicPaths
+      )
+    ).toBe(true);
+  });
+
+  it('allows dynamic public pages only with an explicit public directive', () => {
+    expect(
+      isCacheablePublicNavigation(
+        request(),
+        response({ 'cache-control': 'public, max-age=0, must-revalidate' }),
         new URL('/learn', origin),
         origin,
         publicPaths
@@ -40,25 +52,32 @@ describe('public offline navigation cache policy', () => {
     '/api/auth/session',
     '/password-reset'
   ])('rejects private route %s', (path) => {
-    expect(
-      isEligiblePublicNavigation(new URL(path, origin), origin, publicPaths)
-    ).toBe(false);
+    expect(isEligiblePublicNavigation(new URL(path, origin), origin)).toBe(
+      false
+    );
   });
 
-  it('rejects dynamic pages outside the prerendered allowlist', () => {
+  it('rejects cross-origin and query-bearing navigation targets', () => {
     expect(
       isEligiblePublicNavigation(
-        new URL('/practice', origin),
-        origin,
-        publicPaths
+        new URL('/learn?learner=private', origin),
+        origin
+      )
+    ).toBe(false);
+    expect(
+      isEligiblePublicNavigation(
+        new URL('/learn', 'https://other.example'),
+        origin
       )
     ).toBe(false);
   });
 
-  it('rejects query-bearing URLs', () => {
+  it('rejects dynamic pages without an explicit public directive', () => {
     expect(
-      isEligiblePublicNavigation(
-        new URL('/learn?learner=private', origin),
+      isCacheablePublicNavigation(
+        request(),
+        response(),
+        new URL('/practice', origin),
         origin,
         publicPaths
       )
@@ -72,7 +91,7 @@ describe('public offline navigation cache policy', () => {
         isCacheablePublicNavigation(
           request(),
           response({ 'cache-control': cacheControl }),
-          new URL('/learn', origin),
+          new URL('/learn/year-1', origin),
           origin,
           publicPaths
         )
@@ -85,19 +104,19 @@ describe('public offline navigation cache policy', () => {
       isCacheablePublicNavigation(
         request(),
         response({ vary }),
-        new URL('/learn', origin),
+        new URL('/learn/year-1', origin),
         origin,
         publicPaths
       )
     ).toBe(false);
   });
 
-  it('rejects invalid methods, modes, origins and content types', () => {
+  it('rejects invalid methods, modes and content types', () => {
     expect(
       isCacheablePublicNavigation(
         request({ method: 'POST' }),
         response(),
-        new URL('/learn', origin),
+        new URL('/learn/year-1', origin),
         origin,
         publicPaths
       )
@@ -106,16 +125,7 @@ describe('public offline navigation cache policy', () => {
       isCacheablePublicNavigation(
         request({ mode: 'cors' }),
         response(),
-        new URL('/learn', origin),
-        origin,
-        publicPaths
-      )
-    ).toBe(false);
-    expect(
-      isCacheablePublicNavigation(
-        request(),
-        response(),
-        new URL('/learn', 'https://other.example'),
+        new URL('/learn/year-1', origin),
         origin,
         publicPaths
       )
@@ -124,7 +134,7 @@ describe('public offline navigation cache policy', () => {
       isCacheablePublicNavigation(
         request(),
         response({ 'content-type': 'application/json' }),
-        new URL('/learn', origin),
+        new URL('/learn/year-1', origin),
         origin,
         publicPaths
       )
