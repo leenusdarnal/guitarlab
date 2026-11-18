@@ -255,8 +255,8 @@ describe('chord movement recognition assessment evidence', () => {
       ...createEarTrainingExercise('chord-movement'),
       answer: 'rising' as EarTrainingAnswer
     };
-    expect(() =>
-      scoreChordMovementResponse(invalid, 'subdominant')
-    ).toThrow('does not have an authored answer');
+    expect(() => scoreChordMovementResponse(invalid, 'subdominant')).toThrow(
+      'does not have an authored answer'
+    );
   });
 });
