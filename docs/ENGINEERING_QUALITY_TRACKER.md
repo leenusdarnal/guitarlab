@@ -301,7 +301,7 @@ Related tracking: [Issue #9](https://github.com/leenusdarnal/guitarlab/issues/9)
 | ID | Priority | Status | Required evidence |
 |---|---|---|---|
 | QA-04 | P1 | **OPEN** | Reconcile the exact deployed Worker version to the intended current \`main\` SHA. Earlier docs record a successful first production release for \`306f7aea19596731dac88192d8228590544f00fc\`; this audit does not establish that \`41805887fee753b1c47e2b1442218ac53c4d948f\` is deployed. Verify routes, security headers, retained artifact and rollback to a prior Worker version. |
-| QA-05 | P2 | **OPEN** | Complete controlled CI failure-injection and recovery rehearsals and record the actual workflow run URLs; a currently green CI run does not prove the recovery rehearsal has been completed. |
+| QA-05 | P2 | **OPEN** | Complete the controlled CI failure-injection and recovery rehearsal (see CI-01/CI-02 and [CI failure recovery runbook](CI_FAILURE_RECOVERY.md)); record the actual workflow run URLs. A currently green CI run does not prove this rehearsal has been completed. |
 | QA-06 | P1 | **OPEN** | Complete the umbrella M9 privacy, security, accessibility, offline, performance and release review; close only when all required P1 evidence is recorded. |
 
 Related issues: [#18](https://github.com/leenusdarnal/guitarlab/issues/18) remains open for release hardening; [#5](https://github.com/leenusdarnal/guitarlab/issues/5) remains open for CI process tracking. Reconcile stale issue status against current evidence rather than treating an old issue state as proof of a current defect or completion.
@@ -328,7 +328,43 @@ Never record account credentials, session tokens, personal learner data, private
 
 ---
 
-## 8. GitHub issue reconciliation
+## 8. CI reliability and developer workflow
+
+**Goal:** keep required CI representative, diagnosable and reproducible without weakening application, security, accessibility, type, migration or browser checks.
+
+| ID | Priority | Status | Work item / current evidence | Acceptance |
+|---|---|---|---|---|
+| CI-01 | P1 | **PARTIAL** | Independent validation steps now continue after unrelated sibling failures when dependency installation succeeded. | Inject a controlled formatting/lint failure and prove independent checks still report their results; dependent steps must skip safely. |
+| CI-02 | P1 | **PARTIAL** | Migration drift detection checks tracked and untracked changes under \`drizzle/migrations\` after generation/finalization. | Inject an uncommitted generated migration and prove CI fails with changed-path diagnostics; clean committed migrations must pass. |
+| CI-03 | P2 | **DONE — automated** | npm cache is enabled for the Node 22 and Node 26 dependency-install jobs and keyed to the lockfile. | Keep \`npm ci\` reproducible; cache is only a package-download optimization. |
+| CI-04 | P2 | **OPEN** | Formatting validation still uses a changed-file allowlist; Svelte route formatting has not been brought into a clean repository-wide baseline. | Inventory managed file types, clean existing debt deliberately, and broaden formatting without auto-modifying code in CI. |
+| CI-05 | P1 | **OPEN** | CI installs Playwright and axe-core with \`npm install --no-save --package-lock=false\` after \`npm ci\`. | Pin compatible versions in \`package.json\`/lockfile, remove the ad hoc install, and verify a clean \`npm ci\` supplies the test tools. |
+| CI-06 | P2 | **OPEN** | Browser acceptance scripts still contain multiple \`networkidle\` waits (the accessibility script has seven occurrences in the reviewed baseline). | Replace timing-sensitive waits selectively with route/heading/application-state readiness assertions; retain meaningful end-to-end behaviour coverage. |
+| CI-07 | P3 | **DEFERRED** | A pinned Playwright container already provides matching browser binaries and OS dependencies; an additional browser-binary cache is currently redundant. | Reconsider only if measurements show container/image startup is a material bottleneck. |
+| CI-08 | P2 | **OPEN** | Failure diagnostics need better retention for Playwright traces/screenshots and Wrangler/browser logs. Current CI preserves a short-lived preview build artifact on main pushes, not a general test-failure evidence bundle. | Upload useful diagnostics on failure with short retention; confirm artifacts contain no learner data, secrets or credentials. |
+| CI-09 | P1 | **DONE — automated** | Dependency audits distinguish complete reports from registry/incomplete-report failures; high/critical production advisories block, while development-toolchain advisories are reported. | Preserve fail-closed behaviour when the audit report is missing/incomplete; never turn a network/provider error into a passing security result. |
+| CI-10 | P2 | **PARTIAL** | Job-level timeouts and bounded audit commands exist (45-minute application job, 15-minute Node 26 job, 120-second audit commands). | Measure workflow duration and step-level hangs; set evidence-based per-step bounds without causing premature cancellation. |
+| CI-11 | P3 | **OPEN** | Type/Svelte checks, unit tests and production build run in both main validation and Node 26 compatibility jobs. | Review the deliberate duplication after measuring runtime; retain compatibility coverage and clear failure attribution. |
+
+### CI reliability acceptance checklist
+
+- [ ] Run a controlled failure-injection case for CI-01 and record the workflow run URL, SHA and expected failed step.
+- [ ] Run a migration-drift injection for CI-02 in a disposable branch/worktree and record the expected failure; never alter a real release migration to manufacture the result.
+- [x] Confirm the current Node 22/npm cache and Node 26/npm cache are configured in \`.github/workflows/ci.yml\`.
+- [ ] Move Playwright and axe-core to lockfile-controlled development dependencies.
+- [ ] Replace high-risk \`networkidle\` waits with explicit application-readiness assertions in the browser suites.
+- [ ] Preserve failure traces/screenshots/logs as bounded GitHub Actions artifacts, with no private learner data or secrets.
+- [x] Confirm incomplete or unavailable npm audit reports fail rather than pass silently.
+- [ ] Measure workflow duration before changing job/step timeout values.
+- [ ] Review duplicate validation work while retaining Node.js compatibility checks.
+
+**Current CI evidence:** main CI [run #44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully on \`41805887fee753b1c47e2b1442218ac53c4d948f\`; curriculum validation [run #44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) also passed. Green normal CI does not prove CI-01/CI-02 fault-injection cases or QA-05 controlled failure/recovery rehearsal have been run.
+
+**Change-control guardrails:** do not weaken branch-protection contexts, disable validation, format files automatically in CI, or run production deployment as part of a reliability experiment. Distinguish product/code failures, repo hygiene, dependency/security findings and runner/network failures.
+
+---
+
+## 9. GitHub issue reconciliation
 
 This table records the state observed during the 18 November 2026 reconciliation. Refresh live GitHub state before changing issue status.
 
@@ -345,7 +381,7 @@ This table records the state observed during the 18 November 2026 reconciliation
 
 ---
 
-## 9. Definition of done and update protocol
+## 10. Definition of done and update protocol
 
 A task may move to **DONE — automated** only when its implementation is merged, relevant automated checks pass on the final merged SHA, and the evidence link is recorded.
 
