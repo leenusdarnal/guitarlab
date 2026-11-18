@@ -84,7 +84,7 @@ The updated curriculum browser acceptance suite covers:
 
 The repository's existing axe-based accessibility suite remains the automated accessibility gate. Automated checks do not replace physical iOS/Android testing, keyboard-only review with a human, screen-reader review or the visual audit of a reachable deployed preview.
 
-## Remaining acceptance work
+## Historical acceptance findings (current status is tracked centrally)
 
 1. Review the PR's full CI result on the final head commit.
 2. Capture real desktop and mobile screenshots from a reachable preview and compare the rendered layouts.
