@@ -125,6 +125,7 @@ jobs:
         run: npm run db:migrate:local
 
       - name: Apply and verify the isolated auth D1 migration
+        id: apply-auth-migrations
         if: ${{ !cancelled() && steps.apply-local-migrations.outcome == 'success' }}
         run: npm run db:auth:migrate:local && npm run db:auth:test:local
 
@@ -234,7 +235,7 @@ jobs:
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
       - name: Authentication lifecycle browser acceptance
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' && steps.apply-auth-migrations.outcome == 'success' }}
         run: npm run test:auth-browser
 
       - name: Browser acceptance tests
