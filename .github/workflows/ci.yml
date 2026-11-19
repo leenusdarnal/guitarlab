@@ -233,6 +233,10 @@ jobs:
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
+      - name: Authentication lifecycle browser acceptance
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' }}
+        run: npm run test:auth-browser
+
       - name: Browser acceptance tests
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' }}
         run: npm run test:browser
