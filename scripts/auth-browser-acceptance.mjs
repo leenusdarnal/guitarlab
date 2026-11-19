@@ -136,9 +136,9 @@ function redactSensitiveValues(value) {
   return [...new Set(sensitiveValues)]
     .sort((left, right) => right.length - left.length)
     .reduce((result, secret) => result.split(secret).join('[redacted]'), value)
-    .replace(/([?&]token=)[^&\\s]+/gi, '$1[redacted]')
-    .replace(/(\\/(?:reset-password|verify-email)\\/)[^/?\\s]+/gi, '$1[redacted]')
-    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi, '[redacted-email]');
+    .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
+    .replace(/(\/(?:reset-password|verify-email)\/)[^/?\s]+/gi, '$1[redacted]')
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted-email]');
 }
 
 function safeErrorMessage(error) {
@@ -231,9 +231,9 @@ try {
       'RESEND_API_KEY=local-test-only',
       'AUTH_FROM_EMAIL=auth@example.test',
       `AUTH_TEST_MAIL_SINK_URL=http://127.0.0.1:${sinkAddress.port}/emails`,
-      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=12',
-      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=2',
-      'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=2',
+      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=20',
+      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=3',
+      'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=5',
       ''
     ].join('\\n')
   );
@@ -275,6 +275,10 @@ try {
   const originalPassword = 'GuitarLab-Test-Password-123!';
   const replacementPassword = 'GuitarLab-New-Password-456!';
   rememberSensitive(email);
+  rememberSensitive('cross-origin@example.test');
+  rememberSensitive('rate-limit-probe@example.test');
+  rememberSensitive('not-a-real-password');
+  rememberSensitive('deliberately-invalid-password');
   rememberSensitive(originalPassword);
   rememberSensitive(replacementPassword);
 
@@ -386,7 +390,7 @@ try {
       url.searchParams.has('token')
   );
   rememberSensitive(new URL(expiredResetUrl).searchParams.get('token') ?? '');
-  await delay(3000);
+  await delay(6000);
   await page.goto(expiredResetUrl);
   await assertAuthAccessibility(page, '/login (expired reset token)');
   await page.locator('input[name="password"]').fill(replacementPassword);
@@ -473,7 +477,7 @@ try {
   assert.ok(initialExpiryCookie, 'A new session must establish a session cookie.');
   const initialCookieExpiry = initialExpiryCookie.expires;
   rememberSensitive(initialExpiryCookie.value);
-  await delay(3000);
+  await delay(4000);
   await expiryPage.goto(origin + '/account');
   const refreshedExpiryCookie = (await expiryContext.cookies(origin)).find((cookie) =>
     cookie.name.includes('session_token')
@@ -484,9 +488,9 @@ try {
     'Using a session after updateAge must extend its cookie expiry.'
   );
   rememberSensitive(refreshedExpiryCookie.value);
-  await delay(13000);
+  await delay(21000);
   await expiryPage.goto(origin + '/account');
-  await expiryPage.waitForURL(/\\/login(?:$|\\?)/);
+  await expiryPage.waitForURL(/\/login(?:$|\?)/);
   await expiryContext.close();
 
   const rateLimitStatuses = [];
@@ -525,9 +529,9 @@ try {
   if (previewOutput) {
     const safeOutput = redactSensitiveValues(
       previewOutput
-        .replace(/BETTER_AUTH_SECRET=[^\\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
-        .replace(/RESEND_API_KEY=[^\\s]+/g, 'RESEND_API_KEY=[redacted]')
-        .replace(/AUTH_FROM_EMAIL=[^\\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
+        .replace(/BETTER_AUTH_SECRET=[^\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
+        .replace(/RESEND_API_KEY=[^\s]+/g, 'RESEND_API_KEY=[redacted]')
+        .replace(/AUTH_FROM_EMAIL=[^\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
     );
     console.error(safeOutput.split('\n').slice(-80).join('\n'));
   }
