@@ -182,6 +182,9 @@ try {
   const replacementPassword = 'GuitarLab-New-Password-456!';
 
   await page.goto(origin + '/login');
+  if (await page.getByText('Account access is not enabled here yet.').count()) {
+    throw new Error('Local Wrangler authentication bindings were not loaded.');
+  }
   await page
     .getByRole('button', { name: 'Create account', exact: true })
     .first()
@@ -196,12 +199,18 @@ try {
     .click();
   await page.getByText(/If the address can be registered/).waitFor();
 
-  await page.getByRole('button', { name: 'Create account', exact: true }).first().click();
+  await page
+    .getByRole('button', { name: 'Create account', exact: true })
+    .first()
+    .click();
   await page.getByLabel('Your name').fill('Duplicate GuitarLab Acceptance');
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByLabel('Confirm password').fill(originalPassword);
-  await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
+  await page
+    .getByRole('button', { name: 'Create account', exact: true })
+    .last()
+    .click();
   await page.getByRole('alert').waitFor();
 
   await page
@@ -209,7 +218,10 @@ try {
     .first()
     .click();
   await page.getByLabel('Password').fill(originalPassword);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
+  await page
+    .getByRole('button', { name: 'Sign in', exact: true })
+    .last()
+    .click();
   await page.getByRole('alert').waitFor();
   await waitForMessageCount('Verify your GuitarLab email', 2);
   const priorVerificationMessages = messages.filter(
