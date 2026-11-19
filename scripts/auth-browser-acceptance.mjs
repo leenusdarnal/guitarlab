@@ -181,13 +181,12 @@ try {
   startPreview();
   await waitForPreview();
 
-  const crossOriginResponse = await fetch(
-    origin + '/api/auth/sign-in/email',
-    {
+  const crossOriginResponse = await fetch(origin + '/api/auth/sign-in/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Origin: 'https://attacker.example'
+        Origin: 'https://attacker.example',
+        'cf-connecting-ip': '192.0.2.20'
       },
       body: JSON.stringify({
         email: 'cross-origin@example.test',
@@ -208,7 +207,9 @@ try {
 
   browser = await chromium.launch({ headless: true });
 
-  const context = await browser.newContext();
+  const context = await browser.newContext({
+    extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.21' }
+  });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
@@ -288,7 +289,9 @@ try {
   assert.equal(sessionCookie.sameSite, 'Lax');
   assert.equal(sessionCookie.path, '/');
 
-  const secondContext = await browser.newContext();
+  const secondContext = await browser.newContext({
+    extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.22' }
+  });
   const secondPage = await secondContext.newPage();
   await signIn(secondPage, email, originalPassword);
   await secondPage.waitForURL(origin + '/');
@@ -357,7 +360,8 @@ try {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Origin: origin
+        Origin: origin,
+        'cf-connecting-ip': '192.0.2.23'
       },
       body: JSON.stringify({
         email: 'rate-limit-probe@example.test',
