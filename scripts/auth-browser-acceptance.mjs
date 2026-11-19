@@ -291,7 +291,9 @@ try {
 
   const resetUrl = extractActionUrl(
     resetEmail,
-    (url) => url.pathname === '/login' && url.searchParams.has('token')
+    (url) =>
+      url.pathname.includes('/api/auth/reset-password') ||
+      (url.pathname === '/login' && url.searchParams.has('token'))
   );
   await page.goto(resetUrl);
   await page.getByLabel('Password').first().fill(replacementPassword);
