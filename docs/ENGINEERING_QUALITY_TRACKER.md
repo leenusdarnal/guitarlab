@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 19 November 2026  
-**Verified source baseline:** `main` at `96eea7728b51a03b5a4ebd291c8b752329fbf27c` (PRs #188–#190 merged; CSS inventory below remains a historical source snapshot at `6439dac`)  
+**Verified source baseline:** `main` at `b94eee42c92e30fdd88813b029fd341b364cd0f8` (PRs #193–#194 merged; OFF-03 lifecycle recovery implementation is in review)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -86,7 +86,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 |---|---|---|---|---|
 | OFF-01 | P0 | **DONE — automated** | PR #193 completes the server-side public-only response boundary: authenticated/private routes and every response setting `Set-Cookie` receive `Cache-Control: private, no-store`, and the public cache marker is removed. The service worker only stores validated public navigations. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
 | OFF-02 | P1 | **DONE — automated** | Unit and browser regression coverage verifies cookie-setting response policy, private route families, no private cache reads/replay, successful public-page caching, network-first navigation, transient 5xx public-cache fallback, 404 preservation and explicit offline fallback for unvisited pages. Browser offline tests stop the loopback Worker so they exercise an actual network failure rather than Playwright's offline emulation alone. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
-| OFF-03 | P1 | **PARTIAL** | Automated navigation hardening is complete: do not trust `navigator.onLine`, bypass the browser HTTP cache, use validated public cache on transient 5xx, preserve 404s, precache build assets only, and cache public HTML only after a successful visit. Remaining: failed-install recovery, storage quota behaviour and multi-tab service-worker update acceptance. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); physical-device checks remain OFF-04 |
+| OFF-03 | P1 | **IN PROGRESS — PR** | Navigation hardening is merged in PR #193. This follow-up adds rollback of partially populated asset caches after failed install, explicit read/write quota failure coverage, and multi-tab controller/activation acceptance. Automated completion depends on required CI passing. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); lifecycle follow-up PR pending; physical-device checks remain OFF-04 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
@@ -495,4 +495,4 @@ When updating this tracker:
 5. Update the reconciliation baseline and review date.
 6. Keep [ROADMAP.md](ROADMAP.md) at milestone level and link back here for detailed engineering-quality status.
 
-**Current exit criterion:** OFF-01 and OFF-02 must pass before offline caching is described as privacy-verified. The P1 physical-device, accessibility, authentication and production evidence gates must be completed before declaring M9 release hardening verified.
+**Current exit criterion:** OFF-01 and OFF-02 are automated-complete on merged PR #193; OFF-03 remains open until the lifecycle follow-up passes required CI; OFF-04 remains blocked until physical-device acceptance is recorded. Do not describe the entire offline workstream as fully verified while OFF-04 is outstanding. OFF-01 and OFF-02 must pass before offline caching is described as privacy-verified. The P1 physical-device, accessibility, authentication and production evidence gates must be completed before declaring M9 release hardening verified.
