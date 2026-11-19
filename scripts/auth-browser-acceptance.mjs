@@ -240,8 +240,8 @@ try {
       'RESEND_API_KEY=local-test-only',
       'AUTH_FROM_EMAIL=auth@example.test',
       `AUTH_TEST_MAIL_SINK_URL=http://127.0.0.1:${sinkAddress.port}/emails`,
-      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=20',
-      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=3',
+      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=60',
+      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=5',
       'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=5',
       ''
     ].join(String.fromCharCode(10))
@@ -486,7 +486,7 @@ try {
   assert.ok(initialExpiryCookie, 'A new session must establish a session cookie.');
   const initialCookieExpiry = initialExpiryCookie.expires;
   rememberSensitive(initialExpiryCookie.value);
-  await delay(4000);
+  await delay(6000);
   await expiryPage.goto(origin + '/account');
   const refreshedExpiryCookie = (await expiryContext.cookies(origin)).find((cookie) =>
     cookie.name.includes('session_token')
@@ -497,7 +497,7 @@ try {
     'Using a session after updateAge must extend its cookie expiry.'
   );
   rememberSensitive(refreshedExpiryCookie.value);
-  await delay(21000);
+  await delay(61000);
   await expiryPage.goto(origin + '/account');
   await expiryPage.waitForURL(/\/login(?:$|\?)/);
   await expiryContext.close();
