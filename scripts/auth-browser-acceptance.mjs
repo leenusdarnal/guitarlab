@@ -9,6 +9,7 @@ import { chromium } from 'playwright';
 
 const port = Number(process.env.GUITARLAB_AUTH_PREVIEW_PORT ?? 8788);
 const origin = `http://127.0.0.1:${port}`;
+const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 const varsPath = fileURLToPath(new URL('../.dev.vars', import.meta.url));
 const previousVars = await readFile(varsPath).catch(() => null);
 const messages = [];
@@ -40,9 +41,22 @@ function startMailSink() {
 
 function startPreview() {
   preview = spawn(
-    'npm',
-    ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-    { stdio: 'ignore', detached: process.platform !== 'win32' }
+    'npx',
+    [
+      'wrangler',
+      'dev',
+      '--config',
+      'wrangler.jsonc',
+      '--ip',
+      '127.0.0.1',
+      '--port',
+      String(port)
+    ],
+    {
+      cwd: projectRoot,
+      stdio: 'ignore',
+      detached: process.platform !== 'win32'
+    }
   );
 }
 
@@ -69,7 +83,9 @@ async function waitForMessageCount(subject, count) {
     }
     await delay(100);
   }
-  throw new Error('Expected transactional email count was not delivered to the local test sink.');
+  throw new Error(
+    'Expected transactional email count was not delivered to the local test sink.'
+  );
 }
 
 async function waitForMessage(subject) {
@@ -78,7 +94,9 @@ async function waitForMessage(subject) {
     if (message) return message;
     await delay(100);
   }
-  throw new Error('Expected transactional email was not delivered to the local test sink.');
+  throw new Error(
+    'Expected transactional email was not delivered to the local test sink.'
+  );
 }
 
 function safeErrorMessage(error) {
@@ -89,8 +107,9 @@ function safeErrorMessage(error) {
 }
 
 function extractActionUrl(message, predicate) {
-  const urls = [...message.text.matchAll(/https?:\/\/[^\s<>"']+/g)]
-    .map((match) => match[0].replace(/[),.;]+$/, ''));
+  const urls = [...message.text.matchAll(/https?:\/\/[^\s<>"']+/g)].map(
+    (match) => match[0].replace(/[),.;]+$/, '')
+  );
   const match = urls.find((value) => {
     try {
       return predicate(new URL(value));
@@ -98,7 +117,10 @@ function extractActionUrl(message, predicate) {
       return false;
     }
   });
-  assert.ok(match, 'The delivered test email must contain the expected one-time action link.');
+  assert.ok(
+    match,
+    'The delivered test email must contain the expected one-time action link.'
+  );
   return match;
 }
 
@@ -106,7 +128,10 @@ async function signIn(page, email, password) {
   await page.goto(origin + '/login');
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(password);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
+  await page
+    .getByRole('button', { name: 'Sign in', exact: true })
+    .last()
+    .click();
 }
 
 async function stopPreview() {
@@ -137,10 +162,10 @@ try {
   await writeFile(
     varsPath,
     [
-      `BETTER_AUTH_SECRET=${randomBytes(48).toString('base64')}`,
+      `BETTER_AUTH_SECRET=${randomBytes(32).toString('hex')}`,
       `BETTER_AUTH_URL=${origin}`,
       'RESEND_API_KEY=local-test-only',
-      'AUTH_FROM_EMAIL="GuitarLab <auth@example.test>"',
+      'AUTH_FROM_EMAIL=auth@example.test',
       `AUTH_TEST_MAIL_SINK_URL=http://127.0.0.1:${sinkAddress.port}/emails`,
       ''
     ].join('\n')
@@ -157,12 +182,18 @@ try {
   const replacementPassword = 'GuitarLab-New-Password-456!';
 
   await page.goto(origin + '/login');
-  await page.getByRole('button', { name: 'Create account', exact: true }).first().click();
+  await page
+    .getByRole('button', { name: 'Create account', exact: true })
+    .first()
+    .click();
   await page.getByLabel('Your name').fill('GuitarLab Acceptance');
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByLabel('Confirm password').fill(originalPassword);
-  await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
+  await page
+    .getByRole('button', { name: 'Create account', exact: true })
+    .last()
+    .click();
   await page.getByText(/If the address can be registered/).waitFor();
 
   await page.getByRole('button', { name: 'Create account', exact: true }).first().click();
@@ -173,19 +204,26 @@ try {
   await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
   await page.getByRole('alert').waitFor();
 
-  await page.getByRole('button', { name: 'Sign in', exact: true }).first().click();
+  await page
+    .getByRole('button', { name: 'Sign in', exact: true })
+    .first()
+    .click();
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
   await page.getByRole('alert').waitFor();
   await waitForMessageCount('Verify your GuitarLab email', 2);
-  const priorVerificationMessages = messages.filter((message) => message.subject === 'Verify your GuitarLab email').length;
+  const priorVerificationMessages = messages.filter(
+    (message) => message.subject === 'Verify your GuitarLab email'
+  ).length;
   await page.getByRole('button', { name: 'Resend verification email' }).click();
-  await waitForMessageCount('Verify your GuitarLab email', priorVerificationMessages + 1);
+  await waitForMessageCount(
+    'Verify your GuitarLab email',
+    priorVerificationMessages + 1
+  );
 
   const verificationEmail = await waitForMessage('Verify your GuitarLab email');
-  const verificationUrl = extractActionUrl(
-    verificationEmail,
-    (url) => url.pathname.includes('/api/auth/verify-email')
+  const verificationUrl = extractActionUrl(verificationEmail, (url) =>
+    url.pathname.includes('/api/auth/verify-email')
   );
   await page.goto(verificationUrl);
   await page.waitForURL((url) => url.searchParams.get('verified') === '1');
@@ -197,7 +235,10 @@ try {
   const sessionCookie = (await context.cookies(origin)).find((cookie) =>
     cookie.name.includes('session_token')
   );
-  assert.ok(sessionCookie, 'A successful sign-in must establish a session cookie.');
+  assert.ok(
+    sessionCookie,
+    'A successful sign-in must establish a session cookie.'
+  );
   assert.equal(sessionCookie.httpOnly, true);
   assert.equal(sessionCookie.sameSite, 'Lax');
   assert.equal(sessionCookie.path, '/');
@@ -231,14 +272,17 @@ try {
 
   const resetUrl = extractActionUrl(
     resetEmail,
-    (url) =>
-      url.pathname === '/login' && url.searchParams.has('token')
+    (url) => url.pathname === '/login' && url.searchParams.has('token')
   );
   await page.goto(resetUrl);
   await page.getByLabel('Password').fill(replacementPassword);
   await page.getByLabel('Confirm password').fill(replacementPassword);
   await page.getByRole('button', { name: 'Save new password' }).click();
-  await page.getByText('Your password has been updated. Sign in with your new password.').waitFor();
+  await page
+    .getByText(
+      'Your password has been updated. Sign in with your new password.'
+    )
+    .waitFor();
   await page.goto(resetUrl);
   await page.getByRole('alert').waitFor();
 
