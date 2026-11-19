@@ -155,16 +155,20 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
       maxPasswordLength: 128,
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
-      sendResetPassword: ({ user, url }) =>
-        queueEmail({
+      sendResetPassword: ({ user, token }) => {
+        const resetUrl = new URL('/login', baseUrl);
+        resetUrl.searchParams.set('mode', 'reset');
+        resetUrl.searchParams.set('token', token);
+        return queueEmail({
           to: user.email,
           subject: 'Reset your GuitarLab password',
           text: `Use this one-time link to reset your GuitarLab password:
 
-${url}
+${resetUrl.toString()}
 
 If you did not request a reset, you can ignore this email.`
-        })
+        });
+      }
     },
     emailVerification: {
       sendOnSignUp: true,
