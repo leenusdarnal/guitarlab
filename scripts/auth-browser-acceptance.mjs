@@ -328,13 +328,13 @@ try {
   console.error(safeErrorMessage(error));
   if (previewOutput) {
     const safeOutput = previewOutput
-      .replace(/BETTER_AUTH_SECRET=[^\\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
-      .replace(/RESEND_API_KEY=[^\\s]+/g, 'RESEND_API_KEY=[redacted]')
       .replace(/BETTER_AUTH_SECRET=[^\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
       .replace(/RESEND_API_KEY=[^\s]+/g, 'RESEND_API_KEY=[redacted]')
       .replace(/AUTH_FROM_EMAIL=[^\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
       .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]');
     console.error(safeOutput.split('\n').slice(-80).join('\n'));
+  }
+  process.exitCode = 1;
 } finally {
   await browser?.close();
   await stopPreview();
