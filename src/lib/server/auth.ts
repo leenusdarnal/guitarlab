@@ -78,11 +78,9 @@ function testTimingConfigurationIsValid(
     return false;
   }
 
-  if (
-    sessionExpiresIn !== undefined &&
-    sessionUpdateAge !== undefined &&
-    sessionUpdateAge >= sessionExpiresIn
-  ) {
+  const effectiveSessionExpiresIn = sessionExpiresIn ?? 60 * 60 * 24 * 30;
+  const effectiveSessionUpdateAge = sessionUpdateAge ?? 60 * 60 * 24;
+  if (effectiveSessionUpdateAge >= effectiveSessionExpiresIn) {
     return false;
   }
 
