@@ -183,6 +183,7 @@ try {
   browser = await chromium.launch({ headless: true });
 
   const context = await browser.newContext();
+  await context.setExtraHTTPHeaders({ 'x-guitarlab-auth-test': '1' });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
