@@ -177,6 +177,7 @@ try {
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
   await page.getByRole('alert').waitFor();
+  await waitForMessageCount('Verify your GuitarLab email', 2);
   const priorVerificationMessages = messages.filter((message) => message.subject === 'Verify your GuitarLab email').length;
   await page.getByRole('button', { name: 'Resend verification email' }).click();
   await waitForMessageCount('Verify your GuitarLab email', priorVerificationMessages + 1);
