@@ -184,7 +184,7 @@
 </svelte:head>
 
 <main class="tuner-page">
-  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
+  <a class="back-link tool-page-back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · PITCH</div>
@@ -317,12 +317,6 @@
     margin: 0 auto;
     padding: 30px 0 64px;
     color: var(--text);
-  }
-  .back-link {
-    display: inline-block;
-    margin-bottom: 28px;
-    color: var(--muted);
-    font-size: 12px;
   }
   .page-heading { max-width: 680px; padding-bottom: 22px; }
   .eyebrow {

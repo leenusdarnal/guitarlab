@@ -1,8 +1,8 @@
 # GuitarLab Engineering Quality & Release Tracker
 
 **Status:** Active — canonical engineering-quality tracker  
-**Last reconciled:** 18 November 2026  
-**Verified source baseline:** `main` at `2a1e50cd0d91ddabe941deeb6c480b7521940046` (PR #186 merged; CSS inventory below remains measured against the earlier `6439dac` source snapshot)  
+**Last reconciled:** 19 November 2026  
+**Verified source baseline:** `main` at `570ea9243ad49c0af06b7e09293614bb4726dc4f` (PR #188 merged; CSS inventory below remains a historical source snapshot at `6439dac`)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -439,10 +439,10 @@ These are investigation targets, not evidence that the styles are duplicated or 
 | Stage | Task | Guardrails / acceptance |
 |---|---|---|
 | CSS-01 — Inventory | Record resolved Tailwind version, Vite integration, CSS entry points, class usage, directives, tokens and hotspots | **Complete — read-only baseline above** |
-| CSS-02 — Ownership review | For each hotspot, classify global tokens/resets, reusable patterns, component-specific layout, state styling and genuinely duplicated declarations | **Complete — source-level review**: across seven hotspot files, 25 selector names recur, but most are generic scoped selectors with different declarations. Exact shared tool-page chrome was confirmed between fretboard and chords: `.panel`, `.back-link`, `.page-heading`, `.eyebrow` and `.privacy-note`; their declarations are identical. Tuner shares several patterns but has intentional panel/heading variants. No selector was classified as safe to delete solely because it recurs. Dead-style removal still requires dynamic-state/browser verification. |
+| CSS-02 — Ownership review | For each hotspot, classify global tokens/resets, reusable patterns, component-specific layout, state styling and genuinely duplicated declarations | **Complete — source-level review**: across the hotspot files, repeated selector names were compared by declarations and usage, not treated as proof of duplication. PR #188 extracted the identical fretboard/chords page chrome. A follow-up comparison found the exact `.back-link` declaration shared by tuner, metronome and ear-training; their panel, typography and guidance variants remain route-owned. No selector was classified as safe to delete solely because it recurs. Dead-style removal still requires dynamic-state/browser verification. |
 | CSS-03 — Styling contract | Adopt a documented rule: semantic CSS variables remain the source of truth for product tokens; component-scoped CSS owns complex domain visuals and interaction states; Tailwind utilities are optional for simple layout/spacing/typography primitives when they improve clarity | **Complete — approved direction**: preserve semantic tokens and themes; keep specialised instrument/practice/lesson styles scoped; use Tailwind utilities only where they improve simple local primitives; no wholesale conversion or `@apply` abstraction. |
-| CSS-04 — Incremental implementation | Make small, component-scoped changes only after CSS-02 identifies a specific benefit; keep each change independently reviewable and avoid broad route rewrites | Block implementation until OFF-01/OFF-02 have passed required CI and browser privacy checks |
-| CSS-05 — Verification | Compare screenshots and built CSS; run npm run check, npm run lint, npm run test:run, production build and browser acceptance | Verify dark/light themes, 320px through desktop widths, 200% reflow, keyboard focus, reduced motion, contrast and mobile safe areas |
+| CSS-04 — Incremental implementation | Make small, component-scoped changes only after CSS-02 identifies a specific benefit; keep each change independently reviewable and avoid broad route rewrites | **IN PROGRESS** — PR #188 merged the first shared guitar-tool chrome slice; next exact back-link extraction is in PR review. Keep specialised layout/state styles local. |
+| CSS-05 — Verification | Compare screenshots and built CSS; run npm run check, npm run lint, npm run test:run, production build and browser acceptance | **PARTIAL** — PR #188 passed required CI including browser accessibility and tool acceptance. Built-CSS size comparison and manual visual/device acceptance remain open. |
 
 ### 10.4 Technical recommendations
 
@@ -468,7 +468,7 @@ Official Tailwind references: [Vite installation](https://tailwindcss.com/docs/i
 - [x] Keep implementation after the P0 offline privacy fix and required cache-isolation checks; PR #186 is merged and final CI/browser acceptance passed.
 - [ ] Measure built CSS and verify dark/light, responsive, keyboard and reduced-motion behaviour for each implementation slice.
 
-**Current decision:** proceed with a narrow CSS-04 extraction of the confirmed identical tool-page chrome shared by fretboard and chords. Keep tuner-specific variants and all instrument geometry/state styling local. Do not remove selectors based only on recurrence; pair the extraction with build, unit, browser and visual checks.
+**Current decision:** PR #188 completed the first narrow CSS-04 extraction for fretboard and chords. The next slice shares only the byte-for-byte identical back-link chrome across tuner, metronome and ear-training. Keep each tool's heading, panel, guidance, audio state and instrument geometry local. Do not remove selectors based only on recurrence; pair each extraction with build, unit, browser and visual checks.
 
 ---
 
