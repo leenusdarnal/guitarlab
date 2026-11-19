@@ -93,15 +93,20 @@ describe('service-worker asset installation recovery', () => {
     const failure = new Error('asset download failed');
     const storage = {
       async open() {
-        return { async addAll() { throw failure; } };
+        return {
+          async addAll() {
+            throw failure;
+          }
+        };
       },
       async delete() {
         throw new Error('cleanup failed');
       }
     };
 
-    await expect(precacheAssets(storage, 'guitarlab-assets-test', []))
-      .rejects.toBe(failure);
+    await expect(
+      precacheAssets(storage, 'guitarlab-assets-test', [])
+    ).rejects.toBe(failure);
   });
 });
 
