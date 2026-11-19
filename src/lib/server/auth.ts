@@ -44,11 +44,9 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
 
   try {
     const url = new URL(env.BETTER_AUTH_URL);
-    const isLocalDevelopmentHost = [
-      'localhost',
-      '127.0.0.1',
-      '[::1]'
-    ].includes(url.hostname);
+    const isLocalDevelopmentHost = ['localhost', '127.0.0.1', '[::1]'].includes(
+      url.hostname
+    );
     const validOrigin =
       (url.protocol === 'https:' ||
         (url.protocol === 'http:' && isLocalDevelopmentHost)) &&
