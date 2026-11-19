@@ -16,7 +16,7 @@ The first local-first production deployment was completed successfully on 17 Nov
 - **Workflow:** [Deploy GuitarLab production — run #44054131712](https://github.com/leenusdarnal/guitarlab/actions/runs/44054131712)
 - **Exact deployed commit:** `1e18998eba43d0c2f6e3267ddeccb11b198b4188`
 - **Workflow result:** successful; exact-commit CI verification, production build/deploy, five-route smoke tests, security-header checks and evidence capture completed.
-- **Evidence artifact:** `guitarlab-production-deployment-1e18998eba43d0c2f2f6e3267` (the canonical artifact name recorded in Issue #3 is `guitarlab-production-deployment-1e18998eba43d0c2f6e3267`).
+- **Evidence artifact:** `guitarlab-production-deployment-1e18998eba43d0c2f6e3267` (the canonical artifact name recorded in Issue #3 is `guitarlab-production-deployment-1e18998eba43d0c2f6e3267`).
 - **Retention recorded by Issue #3:** through 15 February 2027.
 - **Issue:** [#3 — Deploy first local-first GuitarLab production Worker](https://github.com/leenusdarnal/guitarlab/issues/3), closed 17 November after all first-release acceptance criteria were checked.
 
