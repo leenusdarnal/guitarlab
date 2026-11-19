@@ -105,9 +105,7 @@ async function trimPageCache(cache: Cache) {
 }
 
 worker.addEventListener('install', (event: ExtendableEvent) => {
-  event.waitUntil(
-    caches.open(ASSET_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
-  );
+  event.waitUntil(precacheAssets(caches, ASSET_CACHE, PRECACHE_URLS));
 });
 
 worker.addEventListener('activate', (event: ExtendableEvent) => {
