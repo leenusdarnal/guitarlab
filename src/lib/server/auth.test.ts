@@ -119,6 +119,12 @@ describe('isAuthConfigured', () => {
     expect(
       isAuthConfigured({
         ...localTestEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...localTestEnvironment,
         AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS: '61'
       })
     ).toBe(false);
