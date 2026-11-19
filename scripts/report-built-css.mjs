@@ -18,9 +18,7 @@ async function collectCss(directory) {
   for (const entry of entries) {
     const path = join(directory.pathname, entry.name);
     if (entry.isDirectory()) {
-      files.push(
-        ...(await collectCss(new URL(`./${entry.name}/`, directory)))
-      );
+      files.push(...(await collectCss(new URL(`./${entry.name}/`, directory))));
     } else if (entry.isFile() && entry.name.endsWith('.css')) {
       files.push(path);
     }
