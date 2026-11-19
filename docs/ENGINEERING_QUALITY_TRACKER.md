@@ -61,7 +61,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 |---:|---|---|---|
 | 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
-| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | PARTIAL — automated navigation hardening complete; lifecycle acceptance remains |
+| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | IN PROGRESS — lifecycle recovery and multi-tab acceptance in PR #195 |
 | 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
 | 5 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
 | 6 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
