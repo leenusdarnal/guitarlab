@@ -81,7 +81,7 @@ async function waitForMessageCount(subject, count) {
 
 async function waitForMessage(subject) {
   for (let attempt = 0; attempt < 100; attempt += 1) {
-    const message = messages.find((item) => item.subject === subject);
+    const message = messages.filter((item) => item.subject === subject).at(-1);
     if (message) return message;
     await delay(100);
   }
