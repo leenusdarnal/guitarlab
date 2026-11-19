@@ -43,7 +43,7 @@ function startPreview() {
   preview = spawn(
     'npm',
     ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-    { stdio: ['ignore', 'pipe', 'pipe'] }
+    { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
   );
   preview.stdout.on('data', (chunk) => {
     previewOutput += chunk.toString();
@@ -103,7 +103,15 @@ async function stopPreview() {
   if (!preview) return;
   const current = preview;
   if (current.exitCode === null) {
-    current.kill('SIGTERM');
+    if (current.pid && process.platform !== 'win32') {
+      try {
+        process.kill(-current.pid, 'SIGTERM');
+      } catch {
+        // The preview process may already have exited.
+      }
+    } else {
+      current.kill('SIGTERM');
+    }
     await Promise.race([
       new Promise((resolve) => current.once('exit', resolve)),
       delay(5000)
@@ -181,8 +189,7 @@ try {
   const resetUrl = extractActionUrl(
     resetEmail,
     (url) =>
-      url.pathname.includes('/login') ||
-      url.pathname.includes('/reset-password')
+      url.pathname === '/login' && url.searchParams.has('token')
   );
   await page.goto(resetUrl);
   await page.getByLabel('Password').fill(replacementPassword);
