@@ -218,7 +218,7 @@ try {
     .getByRole('button', { name: 'Create account', exact: true })
     .last()
     .click();
-  await page.getByRole('alert').waitFor();
+  await page.getByText(/If the address can be registered/).waitFor();
 
   await page
     .getByRole('button', { name: 'Sign in', exact: true })
