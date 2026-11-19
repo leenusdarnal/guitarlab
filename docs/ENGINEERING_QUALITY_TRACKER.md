@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 19 November 2026  
-**Verified source baseline:** `main` at `f0eab761d49823c163243311ba47018c0feb42b3` (PRs #188 and #189 merged; CSS inventory below remains a historical source snapshot at `6439dac`)  
+**Verified source baseline:** `main` at `96eea7728b51a03b5a4ebd291c8b752329fbf27c` (PRs #188–#190 merged; CSS inventory below remains a historical source snapshot at `6439dac`)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -50,6 +50,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 - Main curriculum validation [#44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) completed successfully.
 - PR #180's final required CI run [#44287911608](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911608) passed before merge.
 - PR #188 and PR #189 delivered two narrowly scoped shared guitar-tool chrome extractions; PR #189 is merged as `f0eab761d49823c163243311ba47018c0feb42b3` after all three required CI jobs passed.
+- PR #190 moved Playwright 1.56.1 and axe-core 4.14.0 into exact lockfile-controlled development dependencies and removed the second install. Required CI [run #44469593267](https://github.com/leenusdarnal/guitarlab/actions/runs/44469593267) passed all three jobs, including browser, WebKit and accessibility suites; merged as `96eea7728b51a03b5a4ebd291c8b752329fbf27c`.
 - PR #177 delivered the Better Auth runtime/account foundation. Issue [#176](https://github.com/leenusdarnal/guitarlab/issues/176) remains open; the full email/account lifecycle and isolated environment activation have not been evidenced as complete.
 - The initial offline app-shell/previously visited public-page caching slice was delivered in PR #35; its original Issue [#34](https://github.com/leenusdarnal/guitarlab/issues/34) is closed. That closure does **not** establish the authenticated-page cache boundary or physical-device offline acceptance described below.
 - No live Core Web Vitals or production bundle-budget measurements were established by this audit. No physical-device, screen-reader or real-guitar recording results are claimed.
@@ -61,7 +62,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
 | 3 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
-| 4 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | IN PROGRESS |
+| 4 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
 | 5 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
 | 6 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
 | 7 | QA-01 / QA-02 — Complete real-audio and physical-browser validation | P1 | BLOCKED |
@@ -349,7 +350,7 @@ Never record account credentials, session tokens, personal learner data, private
 | CI-02 | P1 | **PARTIAL** | Migration drift detection checks tracked and untracked changes under `drizzle/migrations` after generation/finalization. | Inject an uncommitted generated migration and prove CI fails with changed-path diagnostics; clean committed migrations must pass. |
 | CI-03 | P2 | **DONE — automated** | npm cache is enabled for the Node 22 and Node 26 dependency-install jobs and keyed to the lockfile. | Keep `npm ci` reproducible; cache is only a package-download optimization. |
 | CI-04 | P2 | **OPEN** | Formatting validation still uses a changed-file allowlist; Svelte route formatting has not been brought into a clean repository-wide baseline. | Inventory managed file types, clean existing debt deliberately, and broaden formatting without auto-modifying code in CI. |
-| CI-05 | P1 | **IN PROGRESS** | Move the existing Playwright 1.56.1 and axe-core 4.14.0 browser-test dependencies into exact `devDependencies` and the npm lockfile; remove the post-`npm ci` ad hoc install. The implementation is in [PR #190](https://github.com/leenusdarnal/guitarlab/pull/190); keep the Playwright container at the matching 1.56.1 version. | Required PR CI must prove clean `npm ci`, dependency-resolution check and all browser/accessibility suites pass without a second install. |
+| CI-05 | P1 | **DONE — automated** | Playwright 1.56.1 and axe-core 4.14.0 are exact development dependencies resolved by `package-lock.json`; CI now runs a clean `npm ci` and verifies both packages with `npm ls` without a second install. | [PR #190](https://github.com/leenusdarnal/guitarlab/pull/190); [CI run #44469593267](https://github.com/leenusdarnal/guitarlab/actions/runs/44469593267) passed all three required jobs, including all browser and accessibility suites. |
 | CI-06 | P2 | **OPEN** | Browser acceptance scripts still contain multiple `networkidle` waits (the accessibility script has seven occurrences in the reviewed baseline). | Replace timing-sensitive waits selectively with route/heading/application-state readiness assertions; retain meaningful end-to-end behaviour coverage. |
 | CI-07 | P3 | **DEFERRED** | A pinned Playwright container already provides matching browser binaries and OS dependencies; an additional browser-binary cache is currently redundant. | Reconsider only if measurements show container/image startup is a material bottleneck. |
 | CI-08 | P2 | **OPEN** | Failure diagnostics need better retention for Playwright traces/screenshots and Wrangler/browser logs. Current CI preserves a short-lived preview build artifact on main pushes, not a general test-failure evidence bundle. | Upload useful diagnostics on failure with short retention; confirm artifacts contain no learner data, secrets or credentials. |
@@ -362,14 +363,14 @@ Never record account credentials, session tokens, personal learner data, private
 - [ ] Run a controlled failure-injection case for CI-01 and record the workflow run URL, SHA and expected failed step.
 - [ ] Run a migration-drift injection for CI-02 in a disposable branch/worktree and record the expected failure; never alter a real release migration to manufacture the result.
 - [x] Confirm the current Node 22/npm cache and Node 26/npm cache are configured in `.github/workflows/ci.yml`.
-- [ ] Move Playwright and axe-core to lockfile-controlled development dependencies; implementation is in [PR #190](https://github.com/leenusdarnal/guitarlab/pull/190), pending required CI and merge evidence.
+- [x] Move Playwright and axe-core to lockfile-controlled development dependencies; [PR #190](https://github.com/leenusdarnal/guitarlab/pull/190) is merged and required CI passed on the final PR head.
 - [ ] Replace high-risk `networkidle` waits with explicit application-readiness assertions in the browser suites.
 - [ ] Preserve failure traces/screenshots/logs as bounded GitHub Actions artifacts, with no private learner data or secrets.
 - [x] Confirm incomplete or unavailable npm audit reports fail rather than pass silently.
 - [ ] Measure workflow duration before changing job/step timeout values.
 - [ ] Review duplicate validation work while retaining Node.js compatibility checks.
 
-**Current CI evidence:** main CI [run #44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully on `41805887fee753b1c47e2b1442218ac53c4d948f`; curriculum validation [run #44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) also passed. Green normal CI does not prove CI-01/CI-02 fault-injection cases or QA-05 controlled failure/recovery rehearsal have been run.
+**Current CI evidence:** main CI [run #44310609981](https://github.com/leenusdarnal/guitarlab/actions/runs/44310609981) completed successfully on `41805887fee753b1c47e2b1442218ac53c4d948f`; curriculum validation [run #44310610413](https://github.com/leenusdarnal/guitarlab/actions/runs/44310610413) also passed. CI-05 verification is recorded on PR #190's final head by [run #44469593267](https://github.com/leenusdarnal/guitarlab/actions/runs/44469593267). Green normal CI does not prove CI-01/CI-02 fault-injection cases or QA-05 controlled failure/recovery rehearsal have been run.
 
 **Change-control guardrails:** do not weaken branch-protection contexts, disable validation, format files automatically in CI, or run production deployment as part of a reliability experiment. Distinguish product/code failures, repo hygiene, dependency/security findings and runner/network failures.
 
