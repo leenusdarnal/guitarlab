@@ -54,7 +54,6 @@ export function isCacheablePublicNavigation(
 export type PublicNavigationCache = Pick<Cache, 'match' | 'put' | 'delete'>;
 
 export interface PublicNavigationResolutionOptions {
-  online: boolean;
   fetchNavigation: () => Promise<Response>;
   offlineResponse: () => Response;
   afterCacheWrite?: () => Promise<unknown>;
@@ -75,8 +74,6 @@ export async function resolvePublicNavigation(
   const offlineResponse = () => options.offlineResponse();
 
   if (!isEligiblePublicNavigation(url, origin)) {
-    if (!options.online) return offlineResponse();
-
     try {
       return await options.fetchNavigation();
     } catch {
@@ -103,12 +100,15 @@ export async function resolvePublicNavigation(
     return null;
   };
 
-  if (!options.online) {
-    return (await readPublicCache()) ?? offlineResponse();
-  }
-
   try {
     const response = await options.fetchNavigation();
+
+    // A transient server/gateway failure should not hide a previously cached
+    // public page. Never apply this fallback to private navigation.
+    if (response.status >= 500 && response.status < 600) {
+      return (await readPublicCache()) ?? response;
+    }
+
     if (
       cache &&
       isCacheablePublicNavigation(request, response, url, origin, publicPaths)
