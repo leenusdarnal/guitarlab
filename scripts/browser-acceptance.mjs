@@ -99,6 +99,7 @@ async function startPreviewServerAndWait() {
 }
 
 let browser;
+let lifecycleServer;
 try {
   await startPreviewServerAndWait();
 
@@ -108,7 +109,7 @@ try {
   // controlled tabs remain open. The updated worker must wait until every
   // client of the previous worker has closed, then claim a newly opened tab.
   let lifecycleWorkerVersion = 1;
-  const lifecycleServer = createServer((request, response) => {
+  lifecycleServer = createServer((request, response) => {
     if (request.url === '/worker.js') {
       response.writeHead(200, {
         'content-type': 'application/javascript; charset=utf-8',
@@ -144,7 +145,7 @@ try {
   const lifecycleTabA = await lifecycleContext.newPage();
   const lifecycleTabB = await lifecycleContext.newPage();
   await lifecycleTabA.goto(lifecycleOrigin);
-  const lifecycleRegistration = await lifecycleTabA.evaluate(async () => {
+  await lifecycleTabA.evaluate(async () => {
     const registration = await navigator.serviceWorker.register('/worker.js', {
       scope: '/',
       updateViaCache: 'none'
@@ -210,7 +211,6 @@ try {
     await registration?.unregister();
   });
   await lifecycleContext.close();
-  await new Promise((resolve) => lifecycleServer.close(resolve));
 
   // Seed legacy private HTML into Cache Storage and verify the active worker
   // never replays it for either a personalized dashboard or an account route.
@@ -2661,6 +2661,9 @@ try {
   console.error('Wrangler preview output:\n' + serverOutput);
   process.exitCode = 1;
 } finally {
+  if (lifecycleServer?.listening) {
+    await new Promise((resolve) => lifecycleServer.close(resolve));
+  }
   await browser?.close();
   await stopPreviewServer();
 }
