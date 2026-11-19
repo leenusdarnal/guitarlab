@@ -292,8 +292,9 @@ try {
   const resetUrl = extractActionUrl(
     resetEmail,
     (url) =>
-      url.pathname.includes('/api/auth/reset-password') ||
-      (url.pathname === '/login' && url.searchParams.has('token'))
+      url.pathname === '/login' &&
+      url.searchParams.get('mode') === 'reset' &&
+      url.searchParams.has('token')
   );
   await page.goto(resetUrl);
   await page.getByLabel('Password').first().fill(replacementPassword);
@@ -305,6 +306,9 @@ try {
     )
     .waitFor();
   await page.goto(resetUrl);
+  await page.getByLabel('Password').first().fill(replacementPassword);
+  await page.getByLabel('Confirm password').fill(replacementPassword);
+  await page.getByRole('button', { name: 'Save new password' }).click();
   await page.getByRole('alert').waitFor();
 
   await secondPage.goto(origin + '/account');
