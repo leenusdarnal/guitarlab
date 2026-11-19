@@ -182,18 +182,17 @@ try {
   await waitForPreview();
 
   const crossOriginResponse = await fetch(origin + '/api/auth/sign-in/email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Origin: 'https://attacker.example',
-        'cf-connecting-ip': '192.0.2.20'
-      },
-      body: JSON.stringify({
-        email: 'cross-origin@example.test',
-        password: 'not-a-real-password'
-      })
-    }
-  );
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Origin: 'https://attacker.example',
+      'cf-connecting-ip': '192.0.2.20'
+    },
+    body: JSON.stringify({
+      email: 'cross-origin@example.test',
+      password: 'not-a-real-password'
+    })
+  });
   assert.equal(
     crossOriginResponse.status,
     403,
