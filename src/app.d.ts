@@ -17,7 +17,6 @@ declare global {
         expiresAt: Date;
       } | null;
     }
-
   }
 }
 
