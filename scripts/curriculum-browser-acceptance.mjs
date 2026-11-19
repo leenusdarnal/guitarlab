@@ -12,7 +12,10 @@ function startPreviewServer() {
   server = spawn(
     'npm',
     ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-    { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
+    {
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: process.platform !== 'win32'
+    }
   );
   server.stdout.on('data', (chunk) => {
     output += chunk.toString();
