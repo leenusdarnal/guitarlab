@@ -92,6 +92,8 @@ describe('public offline navigation cache policy', () => {
     '/account',
     '/login',
     '/register',
+    '/signup',
+    '/verify',
     '/api/auth/session',
     '/password-reset',
     '/account/settings'
