@@ -16,7 +16,7 @@
 **Merged active release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`), recorded in `content/curriculum/release.json`.  
 **Completed in this batch:** CURR-P0-01 through CURR-P0-04. Stable lesson IDs and week IDs are unchanged.
 
-| Measure | Before batch | Current candidate |
+| Measure | Before batch | Merged v1.0.7 |
 |---|---:|---:|
 | Task-specific lesson authoring | 44 / 152 | 48 / 152 |
 | Year 1 task-specific lessons | 9 / 52 | 11 / 52 |
