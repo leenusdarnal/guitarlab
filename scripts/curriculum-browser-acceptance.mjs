@@ -5,52 +5,25 @@ import { chromium } from 'playwright';
 
 const port = Number(process.env.GUITARLAB_PREVIEW_PORT ?? 8787);
 const origin = `http://127.0.0.1:${port}`;
-const server = spawn(
-  'npm',
-  ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-  { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
-);
-
 let output = '';
-server.stdout.on('data', (chunk) => {
-  output += chunk.toString();
-});
-server.stderr.on('data', (chunk) => {
-  output += chunk.toString();
-});
-let browser;
+let server;
 
-async function waitForProgressSummary(page, expectedLabel) {
-  await page.waitForFunction((expected) => {
-    const summary = document.querySelector('.progress-summary strong');
-    if (!summary) return false;
-    const bounds = summary.getBoundingClientRect();
-    const text = summary.textContent?.replace(/\s+/g, ' ').trim() ?? '';
-    return bounds.width > 0 && bounds.height > 0 && text.includes(expected);
-  }, expectedLabel);
+function startPreviewServer() {
+  server = spawn(
+    'npm',
+    ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
+    { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
+  );
+  server.stdout.on('data', (chunk) => {
+    output += chunk.toString();
+  });
+  server.stderr.on('data', (chunk) => {
+    output += chunk.toString();
+  });
 }
 
-try {
-  let ready = false;
-  for (let attempt = 0; attempt < 45; attempt += 1) {
-    if (server.exitCode !== null)
-      throw new Error(`Wrangler preview exited early.\n${output}`);
-    try {
-      const response = await fetch(origin);
-      if (response.ok) {
-        ready = true;
-        break;
-      }
-    } catch {
-      // The Worker is still starting.
-    }
-    await delay(1000);
-  }
-  assert.equal(
-    ready,
-    true,
-    `Wrangler preview did not become ready.\n${output}`
-  );
+async function waitForPreviewServer() {
+  await startPreviewServerAndWait();
 
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
@@ -629,6 +602,9 @@ try {
       `${device.name} lesson layout overflows horizontally: ${JSON.stringify(lessonLayout)}`
     );
     await offlineContext.setOffline(true);
+    // Offline emulation still permits service-worker fetches to loopback.
+    // Stop the Worker so cached/unvisited-page behaviour is tested offline.
+    await stopPreviewServer();
     assert.equal(
       await offlinePage.evaluate(() => navigator.onLine),
       false,
@@ -665,6 +641,7 @@ try {
       `${device.name} offline browser runtime errors: ${offlineErrors.join('; ')}`
     );
     await offlineContext.close();
+    await startPreviewServerAndWait();
   }
 
   assert.deepEqual(
@@ -681,13 +658,5 @@ try {
   process.exitCode = 1;
 } finally {
   await browser?.close();
-  if (server.pid && process.platform !== 'win32') {
-    try {
-      process.kill(-server.pid, 'SIGTERM');
-    } catch {
-      /* The preview process may already have exited. */
-    }
-  } else {
-    server.kill('SIGTERM');
-  }
+  await stopPreviewServer();
 }
