@@ -173,8 +173,6 @@ try {
   await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
   await page.getByRole('alert').waitFor();
 
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-  await page.getByLabel('Password').fill(originalPassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).first().click();
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
