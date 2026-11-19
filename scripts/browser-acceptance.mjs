@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { chromium } from 'playwright';
@@ -102,6 +103,121 @@ try {
   await startPreviewServerAndWait();
 
   browser = await chromium.launch({ headless: true });
+
+  // Exercise a real update of one service-worker registration while two
+  // controlled tabs remain open. The updated worker must wait until every
+  // client of the previous worker has closed, then claim a newly opened tab.
+  let lifecycleWorkerVersion = 1;
+  const lifecycleServer = createServer((request, response) => {
+    if (request.url === '/worker.js') {
+      response.writeHead(200, {
+        'content-type': 'application/javascript; charset=utf-8',
+        'cache-control': 'no-store'
+      });
+      response.end(`
+        const VERSION = ${lifecycleWorkerVersion};
+        self.addEventListener('activate', (event) => {
+          event.waitUntil(self.clients.claim());
+        });
+        self.addEventListener('message', (event) => {
+          if (event.data === 'version') {
+            event.ports[0]?.postMessage(VERSION);
+          }
+        });
+      `);
+      return;
+    }
+    response.writeHead(200, {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'no-store'
+    });
+    response.end('<!doctype html><html><head><title>SW lifecycle acceptance</title></head><body>Service-worker lifecycle acceptance</body></html>');
+  });
+  await new Promise((resolve, reject) => {
+    lifecycleServer.once('error', reject);
+    lifecycleServer.listen(0, '127.0.0.1', resolve);
+  });
+  const lifecycleAddress = lifecycleServer.address();
+  assert.ok(lifecycleAddress && typeof lifecycleAddress === 'object');
+  const lifecycleOrigin = `http://127.0.0.1:${lifecycleAddress.port}`;
+  const lifecycleContext = await browser.newContext();
+  const lifecycleTabA = await lifecycleContext.newPage();
+  const lifecycleTabB = await lifecycleContext.newPage();
+  const lifecycleRegistration = await lifecycleTabA.evaluate(async (origin) => {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.textContent = '';
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.append(script);
+      resolve();
+    });
+    const registration = await navigator.serviceWorker.register('/worker.js', {
+      scope: '/',
+      updateViaCache: 'none'
+    });
+    await navigator.serviceWorker.ready;
+    await new Promise((resolve, reject) => {
+      if (navigator.serviceWorker.controller) return resolve();
+      const timeout = setTimeout(() => reject(new Error('Initial service worker did not claim tab A.')), 10000);
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        clearTimeout(timeout);
+        resolve();
+      }, { once: true });
+    });
+    return { scope: registration.scope };
+  }, lifecycleOrigin);
+  await lifecycleTabB.goto(lifecycleOrigin);
+  await lifecycleTabB.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+  const readLifecycleWorkerVersion = (page) => page.evaluate(async () => {
+    const controller = navigator.serviceWorker.controller;
+    if (!controller) throw new Error('Tab is not controlled by a service worker.');
+    const channel = new MessageChannel();
+    const version = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Timed out reading active worker version.')), 5000);
+      channel.port1.onmessage = (event) => {
+        clearTimeout(timeout);
+        resolve(event.data);
+      };
+    });
+    controller.postMessage('version', [channel.port2]);
+    return version;
+  });
+  assert.equal(await readLifecycleWorkerVersion(lifecycleTabA), 1);
+  assert.equal(await readLifecycleWorkerVersion(lifecycleTabB), 1);
+
+  lifecycleWorkerVersion = 2;
+  await lifecycleTabA.evaluate(async () => {
+    const registration = await navigator.serviceWorker.getRegistration('/');
+    if (!registration) throw new Error('Service-worker registration disappeared before update.');
+    await registration.update();
+  });
+  await lifecycleTabA.waitForFunction(async () => {
+    const registration = await navigator.serviceWorker.getRegistration('/');
+    return registration?.waiting?.state === 'installed';
+  });
+  assert.equal(await readLifecycleWorkerVersion(lifecycleTabA), 1);
+  await lifecycleTabB.close();
+  await lifecycleTabA.waitForFunction(async () => {
+    const registration = await navigator.serviceWorker.getRegistration('/');
+    return registration?.waiting?.state === 'installed';
+  });
+  await lifecycleTabA.close();
+
+  const lifecycleTabAfterUpdate = await lifecycleContext.newPage();
+  await lifecycleTabAfterUpdate.goto(lifecycleOrigin);
+  await lifecycleTabAfterUpdate.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+  assert.equal(
+    await readLifecycleWorkerVersion(lifecycleTabAfterUpdate),
+    2,
+    'The updated worker must activate after all tabs controlled by the previous worker close.'
+  );
+  await lifecycleTabAfterUpdate.evaluate(async () => {
+    const registration = await navigator.serviceWorker.getRegistration('/');
+    await registration?.unregister();
+  });
+  await lifecycleContext.close();
+  await new Promise((resolve) => lifecycleServer.close(resolve));
 
   // Seed legacy private HTML into Cache Storage and verify the active worker
   // never replays it for either a personalized dashboard or an account route.
