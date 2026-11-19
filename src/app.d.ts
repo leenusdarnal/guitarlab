@@ -18,20 +18,6 @@ declare global {
       } | null;
     }
 
-    interface Platform {
-      env: {
-        DB: D1Database;
-        AUTH_DB?: D1Database;
-        BETTER_AUTH_SECRET?: string;
-        BETTER_AUTH_URL?: string;
-        RESEND_API_KEY?: string;
-        AUTH_FROM_EMAIL?: string;
-        AUTH_TEST_MAIL_SINK_URL?: string;
-      };
-      context?: {
-        waitUntil(promise: Promise<unknown>): void;
-      };
-    }
   }
 }
 
