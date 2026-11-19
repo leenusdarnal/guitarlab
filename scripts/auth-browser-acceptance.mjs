@@ -134,7 +134,7 @@ function extractActionUrl(message, predicate) {
 async function signIn(page, email, password) {
   await page.goto(origin + '/login');
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Password', { exact: true }).first().fill(password);
+  await page.locator('input[name="password"]').fill(password);
   await page
     .getByRole('button', { name: 'Sign in', exact: true })
     .last()
@@ -198,8 +198,8 @@ try {
     .click();
   await page.getByLabel('Your name').fill('GuitarLab Acceptance');
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Password', { exact: true }).first().fill(originalPassword);
-  await page.getByLabel('Confirm password').fill(originalPassword);
+  await page.locator('input[name="password"]').fill(originalPassword);
+  await page.locator('input[name="confirmPassword"]').fill(originalPassword);
   await page
     .getByRole('button', { name: 'Create account', exact: true })
     .last()
@@ -212,8 +212,8 @@ try {
     .click();
   await page.getByLabel('Your name').fill('Duplicate GuitarLab Acceptance');
   await page.getByLabel('Email address').fill(email);
-  await page.getByLabel('Password', { exact: true }).first().fill(originalPassword);
-  await page.getByLabel('Confirm password').fill(originalPassword);
+  await page.locator('input[name="password"]').fill(originalPassword);
+  await page.locator('input[name="confirmPassword"]').fill(originalPassword);
   await page
     .getByRole('button', { name: 'Create account', exact: true })
     .last()
@@ -224,7 +224,7 @@ try {
     .getByRole('button', { name: 'Sign in', exact: true })
     .first()
     .click();
-  await page.getByLabel('Password', { exact: true }).first().fill(originalPassword);
+  await page.locator('input[name="password"]').fill(originalPassword);
   await page
     .getByRole('button', { name: 'Sign in', exact: true })
     .last()
@@ -297,8 +297,8 @@ try {
       url.searchParams.has('token')
   );
   await page.goto(resetUrl);
-  await page.getByLabel('Password', { exact: true }).first().fill(replacementPassword);
-  await page.getByLabel('Confirm password').fill(replacementPassword);
+  await page.locator('input[name="password"]').fill(replacementPassword);
+  await page.locator('input[name="confirmPassword"]').fill(replacementPassword);
   await page.getByRole('button', { name: 'Save new password' }).click();
   await page
     .getByText(
@@ -306,8 +306,8 @@ try {
     )
     .waitFor();
   await page.goto(resetUrl);
-  await page.getByLabel('Password', { exact: true }).first().fill(replacementPassword);
-  await page.getByLabel('Confirm password').fill(replacementPassword);
+  await page.locator('input[name="password"]').fill(replacementPassword);
+  await page.locator('input[name="confirmPassword"]').fill(replacementPassword);
   await page.getByRole('button', { name: 'Save new password' }).click();
   await page.getByRole('alert').waitFor();
 
