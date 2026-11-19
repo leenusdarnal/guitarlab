@@ -1,19 +1,19 @@
 # GuitarLab Curriculum Audit & Remediation Tracker
 
-**Status:** In progress — four P0 corrections implemented in the curriculum-v1.0.7 candidate; remaining P1/P2 audit work stays open  
-**Audit date:** 2026-11-18  
+**Status:** In progress — curriculum-v1.0.7 is the active merged release; remaining P1/P2 audit work stays open  
+**Audit date:** 2026-11-19  
 **Baseline branch:** `main`  
-**Baseline commit:** `fbaae1701d0e15eed7258863d105d6232e600904`  
-**Active curriculum release:** `curriculum-v1.0.6`  
+**Baseline commit:** `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf`  
+**Active curriculum release:** `curriculum-v1.0.7`  
 **Scope:** 152 authored lessons across Year 1, Year 2 and four optional Year 3 specialisations
 
 > Working source of truth for closing the curriculum audit. Check tasks only when the change is merged and its acceptance evidence is recorded. A structurally valid lesson is not automatically a pedagogically complete lesson.
 
 ---
 
-## Current implementation status — 18 November 2026
+## Current implementation status — 19 November 2026
 
-**Candidate release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`)  
+**Merged active release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`), recorded in `content/curriculum/release.json`.  
 **Completed in this batch:** CURR-P0-01 through CURR-P0-04. Stable lesson IDs and week IDs are unchanged.
 
 | Measure | Before batch | Current candidate |
@@ -26,7 +26,9 @@
 | Lesson-to-skill associations | 391 | 390 |
 | Draft assessment profiles | 34 | 35 |
 
-The new `instrument.fretting` profile remains draft. The 104 remaining generic lessons, 390 mapping dispositions and the full prerequisite/progression audit remain open. These are implementation-candidate counts until PR review and merge.
+The `instrument.fretting` profile remains draft and requires curriculum-owner / guitar-instructor review; it is not approved for automated grading. The 104 remaining generic lessons, 390 mapping dispositions and full prerequisite/progression audit remain open. These counts describe the merged v1.0.7 source, not an unmerged candidate.
+
+**Historical snapshot note:** The executive baseline table and Year 1/Year 2 authoring breakdown immediately below are the original pre-v1.0.7 audit snapshot (44 task-specific lessons, 34 skills, 391 associations). They are retained as historical context, not current release metrics. The current merged v1.0.7 metrics are in the implementation-status table above and `content/curriculum/release.json`.
 
 ## 1. Executive status
 
@@ -113,7 +115,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 - [x] Confirm outline checkpoint and authored lesson checkpoint remain identical.
 - [ ] Record a guitar-instructor review of the exercise and fret/string examples.
 
-**Decision recorded in release candidate v1.0.7:** Remove both unsupported harmony mappings and add `instrument.fretting` as a focused instrument skill. The ID is consistent with the instrument-skill example already documented in `CURRICULUM_CONTENT_MODEL.md`. Its assessment profile remains draft, requires human review and has no automated grading approval.
+**Decision included in merged release v1.0.7:** Remove both unsupported harmony mappings and add `instrument.fretting` as a focused instrument skill. The ID is consistent with the instrument-skill example already documented in `CURRICULUM_CONTENT_MODEL.md`. Its assessment profile remains draft, requires human review and has no automated grading approval.
 
 **Acceptance evidence:** A reviewer can follow the lesson and learn the stated clean-note skill without being asked to perform unrelated chord theory; every mapped skill has direct task evidence.
 
@@ -373,11 +375,11 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ## 6. P1 — Complete the lesson-to-skill mapping audit
 
-### CURR-P1-06 — Rebaseline the mapping register to v1.0.6
+### CURR-P1-06 — Rebaseline the mapping register to v1.0.7
 
-**Current concern:** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.6. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
+**Current concern:** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.7. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
 
-- [ ] Regenerate the 152-row register from the current v1.0.6 lesson sources.
+- [ ] Regenerate the 152-row register from the current v1.0.7 lesson sources.
 - [ ] Include every current skill association, with one review decision per association.
 - [ ] Capture the evidence source: objective, teaching passage, exercise, worked example or checkpoint.
 - [ ] Use explicit dispositions: keep, remove, clarify, or owner decision.
@@ -540,7 +542,7 @@ The following are candidates for review, not approved new identifiers:
 
 ### CURR-P2-05 — Bring audit documents up to date
 
-- [ ] Update the mapping register source baseline from v1.0.2 to the active reviewed release.
+- [ ] Update the mapping register source baseline from v1.0.2 to the active reviewed release v1.0.7.
 - [ ] Reconcile the counts in the lesson-quality, coverage, mapping and authoring-pilot reports.
 - [ ] Distinguish historical findings from current source facts.
 - [ ] Link this tracker from the relevant curriculum documentation / implementation tracker.
@@ -595,7 +597,7 @@ Append one entry for every implementation batch. Keep entries chronological; do 
 | Date | PR / commit | Scope / lesson IDs | Validation | Reviewer | Status / notes |
 |---|---|---|---|---|---|
 | 2026-11-18 | Audit baseline | 152 lessons / 391 mappings | Source metrics inspected | Pending | Tracker created; no curriculum data changed by the audit |
-| 2026-11-18 | PR #180 / release candidate v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | In-memory source/outline/profile/release consistency checks; CI pending | Pending | Four P0 corrections ready for owner review; stable lesson/week IDs preserved |
+| 2026-11-18 | PR #180 / merged release v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | In-memory source/outline/profile/release consistency checks; CI pending | Pending | Four P0 corrections merged in v1.0.7; stable lesson/week IDs preserved; owner review remains open |
 
 ### Decision log
 
