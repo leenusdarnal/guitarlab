@@ -322,10 +322,10 @@
 </svelte:head>
 
 <main class="fretboard-page">
-  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
+  <a class="back-link tool-page-back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
-  <header class="page-heading">
-    <div class="eyebrow">THE PRACTICE WORKBENCH · NOTES &amp; PITCH</div>
+  <header class="page-heading tool-page-heading">
+    <div class="tool-page-eyebrow">THE PRACTICE WORKBENCH · NOTES &amp; PITCH</div>
     <h1>Fretboard explorer.</h1>
     <p>
       Find your way across the strings one note at a time. The diagram keeps each
@@ -336,10 +336,10 @@
 
 
 
-  <section class="panel explorer-panel" aria-labelledby="diagram-title">
+  <section class="tool-page-panel explorer-panel" aria-labelledby="diagram-title">
     <div class="section-heading">
       <div>
-        <div class="eyebrow">STANDARD E TUNING</div>
+        <div class="tool-page-eyebrow">STANDARD E TUNING</div>
         <h2 id="diagram-title">Six strings, every note.</h2>
       </div>
       <button class="primary-button" type="button" onclick={startFindMode} aria-pressed={findMode}>
@@ -520,7 +520,7 @@
     {#if selectedNote && !findMode}
       <div class="note-detail" aria-live="polite">
         <div>
-          <span class="eyebrow">SELECTED POSITION</span>
+          <span class="tool-page-eyebrow">SELECTED POSITION</span>
           <strong>{selectedNote.noteName}{selectedNote.octave}</strong>
           <p>String {selectedNote.stringNumber} · Fret {selectedNote.fret}</p>
         </div>
@@ -542,10 +542,10 @@
     {/if}
   </section>
 
-  <section class="panel settings-panel" aria-labelledby="settings-title">
+  <section class="tool-page-panel settings-panel" aria-labelledby="settings-title">
     <div class="section-heading">
       <div>
-        <div class="eyebrow">YOUR VIEW</div>
+        <div class="tool-page-eyebrow">YOUR VIEW</div>
         <h2 id="settings-title">Fretboard settings</h2>
       </div>
       <span class="local-label">Runs locally</span>
@@ -586,7 +586,7 @@
     {/if}
   </section>
 
-  <p class="privacy-note">
+  <p class="tool-page-privacy-note">
     No microphone permission is needed. Note positions and the find-a-note exercise
     run in this browser; no learner data or audio is uploaded.
   </p>
@@ -610,42 +610,18 @@
     padding: 30px 0 64px;
     color: var(--text);
   }
-  .back-link {
-    display: inline-block;
-    margin-bottom: 28px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .page-heading {
-    max-width: 700px;
-    padding-bottom: 22px;
-  }
-  .eyebrow {
-    color: var(--muted);
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-  }
-  h1 {
+h1 {
     margin: 10px 0;
     font: 500 clamp(34px, 5vw, 54px) / 1.08 Georgia, serif;
     letter-spacing: -1.5px;
   }
-  .page-heading p,
-  .privacy-note {
+  .tool-page-heading p {
     max-width: 680px;
     color: var(--muted);
     font-size: 12px;
     line-height: 1.7;
   }
-  .panel {
-    margin-top: 16px;
-    padding: clamp(16px, 3vw, 24px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-  }
-  .section-heading {
+.section-heading {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1020,11 +996,7 @@
     font-weight: 700;
     line-height: 1.2;
   }
-  .privacy-note {
-    margin-top: 18px;
-    font-size: 10px;
-  }
-  a:focus-visible {
+a:focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
   }
@@ -1074,7 +1046,7 @@
     }
   }
 
-  .page-heading p,
+  .tool-page-heading p,
   .diagram-hint,
   .find-panel > p {
     font-size: var(--font-size-body);
@@ -1083,7 +1055,6 @@
 
   .save-status,
   .feedback,
-  .privacy-note,
   .local-label {
     font-size: var(--font-size-supporting);
     line-height: var(--line-height-body);

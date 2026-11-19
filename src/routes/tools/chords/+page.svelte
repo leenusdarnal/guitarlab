@@ -189,10 +189,10 @@
 </svelte:head>
 
 <main class="chords-page">
-  <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
+  <a class="back-link tool-page-back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
-  <header class="page-heading">
-    <div class="eyebrow">THE PRACTICE WORKBENCH · HARMONY</div>
+  <header class="page-heading tool-page-heading">
+    <div class="tool-page-eyebrow">THE PRACTICE WORKBENCH · HARMONY</div>
     <h1>Chord library.</h1>
     <p>
       Learn five foundational open shapes. Every string is labelled as open,
@@ -201,10 +201,10 @@
     </p>
   </header>
 
-  <section class="panel" aria-labelledby="library-title">
+  <section class="tool-page-panel" aria-labelledby="library-title">
     <div class="section-heading">
       <div>
-        <div class="eyebrow">OPEN CHORDS</div>
+        <div class="tool-page-eyebrow">OPEN CHORDS</div>
         <h2 id="library-title">Choose a shape.</h2>
       </div>
       <label class="field">
@@ -219,7 +219,7 @@
 
     <div class="chord-summary">
       <div>
-        <span class="eyebrow">{selectedChord.quality.toUpperCase()}</span>
+        <span class="tool-page-eyebrow">{selectedChord.quality.toUpperCase()}</span>
         <h3>{selectedChord.name}</h3>
       </div>
       <p>{selectedChord.description}</p>
@@ -284,8 +284,8 @@
     {/if}
   </section>
 
-  <section class="panel drill-panel" aria-labelledby="drill-title">
-    <div class="eyebrow">CHORD-CHANGE DRILL</div>
+  <section class="tool-page-panel drill-panel" aria-labelledby="drill-title">
+    <div class="tool-page-eyebrow">CHORD-CHANGE DRILL</div>
     <h2 id="drill-title">Move between two shapes.</h2>
     <p class="section-description">
       Choose two different chords, start the drill, and alternate between the
@@ -341,8 +341,8 @@
     </div>
   </section>
 
-  <section class="panel observation-panel" aria-labelledby="observation-title">
-    <div class="eyebrow">PRACTICE EVIDENCE</div>
+  <section class="tool-page-panel observation-panel" aria-labelledby="observation-title">
+    <div class="tool-page-eyebrow">PRACTICE EVIDENCE</div>
     <h2 id="observation-title">Chord-change observation.</h2>
     <p class="section-description">
       Record clean changes and elapsed time separately. GuitarLab does not
@@ -385,7 +385,7 @@
     {/if}
   </section>
 
-  <p class="privacy-note">
+  <p class="tool-page-privacy-note">
     These observations remain on this page and are not saved as learner
     mastery or uploaded practice evidence.
   </p>
@@ -398,42 +398,18 @@
     padding: 30px 0 64px;
     color: var(--text);
   }
-  .back-link {
-    display: inline-block;
-    margin-bottom: 28px;
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .page-heading {
-    max-width: 700px;
-    padding-bottom: 22px;
-  }
-  .eyebrow {
-    color: var(--muted);
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-  }
-  h1 {
+h1 {
     margin: 10px 0;
     font: 500 clamp(34px, 5vw, 54px) / 1.08 Georgia, serif;
     letter-spacing: -1.5px;
   }
-  .page-heading p,
-  .section-description,
-  .privacy-note {
+  .tool-page-heading p,
+  .section-description {
     color: var(--muted);
     font-size: 12px;
     line-height: 1.7;
   }
-  .panel {
-    margin-top: 16px;
-    padding: clamp(16px, 3vw, 24px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-  }
-  .section-heading {
+.section-heading {
     display: flex;
     align-items: end;
     justify-content: space-between;
@@ -659,11 +635,7 @@
     color: var(--danger);
     font-size: 11px;
   }
-  .privacy-note {
-    margin-top: 18px;
-    font-size: 10px;
-  }
-  a:focus-visible,
+a:focus-visible,
   button:focus-visible,
   input:focus-visible,
   select:focus-visible {
@@ -694,14 +666,13 @@
     }
   }
 
-  .page-heading p,
+  .tool-page-heading p,
   .section-description {
     font-size: var(--font-size-body);
     line-height: var(--line-height-body);
   }
 
   .profile-status,
-  .privacy-note,
   .observation-fields,
   .drill-actions button {
     font-size: var(--font-size-supporting);
