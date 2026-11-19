@@ -195,7 +195,7 @@
   />
 </svelte:head>
 
-<main class="skill-page">
+<main class="skill-page max-w-[1240px] mx-auto px-[clamp(16px,4vw,52px)] pt-8 pb-16 text-content max-[420px]:px-[15px]">
   <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
   <header>
     <div class="eyebrow">YOUR LEARNING MAP</div>
@@ -463,12 +463,6 @@
 </main>
 
 <style>
-  .skill-page {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 32px clamp(16px, 4vw, 52px) 64px;
-    color: var(--text);
-  }
   .back {
     display: inline-block;
     margin-bottom: 24px;
@@ -932,9 +926,6 @@
     }
     .evidence .full {
       grid-column: auto;
-    }
-    .skill-page {
-      padding-inline: 15px;
     }
     .state-guide,
     .skill-list,
