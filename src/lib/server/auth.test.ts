@@ -66,7 +66,6 @@ describe('isAuthConfigured', () => {
   });
 });
 
-
 describe('test-only transactional email delivery', () => {
   it('delivers test messages only to an explicitly configured loopback sink', async () => {
     const fetcher = vi.fn(async () => new Response(null, { status: 202 }));
@@ -84,19 +83,16 @@ describe('test-only transactional email delivery', () => {
     await sendTransactionalEmail(environment, message, fetcher);
 
     expect(fetcher).toHaveBeenCalledOnce();
-    expect(fetcher).toHaveBeenCalledWith(
-      'http://127.0.0.1:4555/emails',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from: 'GuitarLab <auth@guitarlab.example>',
-          to: ['learner@example.test'],
-          subject: 'Verify your GuitarLab email',
-          text: 'Use this one-time link: http://localhost:8787/verify?token=test-token'
-        })
-      }
-    );
+    expect(fetcher).toHaveBeenCalledWith('http://127.0.0.1:4555/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: 'GuitarLab <auth@guitarlab.example>',
+        to: ['learner@example.test'],
+        subject: 'Verify your GuitarLab email',
+        text: 'Use this one-time link: http://localhost:8787/verify?token=test-token'
+      })
+    });
   });
 
   it('rejects a test mail sink outside loopback before making a network request', async () => {
