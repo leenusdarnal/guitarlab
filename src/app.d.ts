@@ -26,6 +26,7 @@ declare global {
         BETTER_AUTH_URL?: string;
         RESEND_API_KEY?: string;
         AUTH_FROM_EMAIL?: string;
+        AUTH_TEST_MAIL_SINK_URL?: string;
       };
       context?: {
         waitUntil(promise: Promise<unknown>): void;
