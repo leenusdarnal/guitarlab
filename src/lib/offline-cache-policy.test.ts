@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   isCacheablePublicNavigation,
   isEligiblePublicNavigation,
+  precacheAssets,
   resolvePublicNavigation,
   type PublicNavigationCache
 } from './offline-cache-policy';
