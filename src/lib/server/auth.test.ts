@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { isAuthConfigured } from './auth';
+import { isAuthConfigured, sendTransactionalEmail } from './auth';
 
 const configuredEnvironment = {
   AUTH_DB: {} as D1Database,
@@ -119,6 +119,16 @@ describe('test-only transactional email delivery', () => {
     ).rejects.toThrow('Test email sink must use a loopback HTTP address.');
 
     expect(fetcher).not.toHaveBeenCalled();
+  });
+
+  it('accepts a loopback test sink for a local authentication origin', () => {
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'http://localhost:8787',
+        AUTH_TEST_MAIL_SINK_URL: 'http://127.0.0.1:4555/emails'
+      })
+    ).toBe(true);
   });
 
   it('keeps test mail delivery unavailable for non-local authentication origins', () => {
