@@ -27,7 +27,7 @@ The auth Worker needs these bindings/secrets:
 | `RESEND_API_KEY` | Transactional email API key used for verification and password reset |
 | `AUTH_FROM_EMAIL` | Sender identity verified by the email provider |
 
-The SvelteKit hook uses Better Auth's SvelteKit handler, reads the server session into request locals, and retains the application's existing response security headers. The global navigation switches between Sign in and Account from the server-validated session; the account page provides sign-out. A guest request to the account page redirects to Sign in. Better Auth's origin/CSRF protections remain enabled. Session cookies are HttpOnly, Secure on HTTPS, SameSite=Lax and path-scoped. Rate limits are persisted in the auth D1 database and use Cloudflare's `cf-connecting-ip` header.
+The SvelteKit 3 hook reads Cloudflare bindings from the `cloudflare:workers` module (`env` and `waitUntil`); do not use the removed SvelteKit `event.platform` binding API. It uses Better Auth's SvelteKit handler, reads the server session into request locals, and retains the application's existing response security headers. The global navigation switches between Sign in and Account from the server-validated session; the account page provides sign-out. A guest request to the account page redirects to Sign in. Better Auth's origin/CSRF protections remain enabled. Session cookies are HttpOnly, Secure on HTTPS, SameSite=Lax and path-scoped. Rate limits are persisted in the auth D1 database and use Cloudflare's `cf-connecting-ip` header.
 
 ## Deployment gates
 
