@@ -152,7 +152,8 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
           worker.location.origin,
           PUBLIC_PAGE_PATHS,
           {
-            online: worker.navigator.onLine,
+            // Always try the request: navigator.onLine is only a hint and can
+            // be stale. The resolver falls back to public cache/offline HTML.
             fetchNavigation: () => fetch(request),
             offlineResponse: createOfflineResponse,
             afterCacheWrite: pages ? () => trimPageCache(pages) : undefined
