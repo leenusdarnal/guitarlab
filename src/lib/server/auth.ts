@@ -6,11 +6,29 @@ export interface AuthEnvironment {
   BETTER_AUTH_URL?: string;
   RESEND_API_KEY?: string;
   AUTH_FROM_EMAIL?: string;
+  /** Local-only override used by automated account lifecycle acceptance. */
+  AUTH_TEST_MAIL_SINK_URL?: string;
 }
 
 export type WaitUntil = (promise: Promise<unknown>) => void;
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
+
+function isLoopbackHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'http:' &&
+      ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) &&
+      !url.username &&
+      !url.password &&
+      !url.search &&
+      !url.hash
+    );
+  } catch {
+    return false;
+  }
+}
 
 export function isAuthConfigured(env?: AuthEnvironment): boolean {
   if (
@@ -26,35 +44,60 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
 
   try {
     const url = new URL(env.BETTER_AUTH_URL);
-    const isLocalDevelopmentHost =
-      url.hostname === 'localhost' ||
-      url.hostname === '127.0.0.1' ||
-      url.hostname === '[::1]';
-
-    return (
+    const isLocalDevelopmentHost = ['localhost', '127.0.0.1', '[::1]'].includes(
+      url.hostname
+    );
+    const validOrigin =
       (url.protocol === 'https:' ||
         (url.protocol === 'http:' && isLocalDevelopmentHost)) &&
       url.pathname === '/' &&
       !url.search &&
       !url.hash &&
       !url.username &&
-      !url.password
-    );
+      !url.password;
+
+    if (!validOrigin) return false;
+    if (
+      env.AUTH_TEST_MAIL_SINK_URL &&
+      (!isLocalDevelopmentHost ||
+        !isLoopbackHttpUrl(env.AUTH_TEST_MAIL_SINK_URL))
+    ) {
+      return false;
+    }
+
+    return true;
   } catch {
     return false;
   }
 }
 
-async function sendTransactionalEmail(
+export async function sendTransactionalEmail(
   env: AuthEnvironment,
-  message: { to: string; subject: string; text: string }
+  message: { to: string; subject: string; text: string },
+  fetcher: typeof fetch = fetch
 ): Promise<void> {
-  const response = await fetch(RESEND_ENDPOINT, {
+  const testSink = env.AUTH_TEST_MAIL_SINK_URL;
+  if (
+    testSink &&
+    (!env.BETTER_AUTH_URL ||
+      !isLoopbackHttpUrl(testSink) ||
+      !['localhost', '127.0.0.1', '[::1]'].includes(
+        new URL(env.BETTER_AUTH_URL).hostname
+      ))
+  ) {
+    throw new Error('Test email sink must use a loopback HTTP address.');
+  }
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+  if (!testSink) {
+    headers.Authorization = `Bearer ${env.RESEND_API_KEY}`;
+  }
+
+  const response = await fetcher(testSink ?? RESEND_ENDPOINT, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify({
       from: env.AUTH_FROM_EMAIL,
       to: [message.to],
@@ -112,16 +155,20 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
       maxPasswordLength: 128,
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
-      sendResetPassword: ({ user, url }) =>
-        queueEmail({
+      sendResetPassword: ({ user, token }) => {
+        const resetUrl = new URL('/login', baseUrl);
+        resetUrl.searchParams.set('mode', 'reset');
+        resetUrl.searchParams.set('token', token);
+        return queueEmail({
           to: user.email,
           subject: 'Reset your GuitarLab password',
           text: `Use this one-time link to reset your GuitarLab password:
 
-${url}
+${resetUrl.toString()}
 
 If you did not request a reset, you can ignore this email.`
-        })
+        });
+      }
     },
     emailVerification: {
       sendOnSignUp: true,

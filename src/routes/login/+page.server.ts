@@ -1,6 +1,7 @@
+import { env } from 'cloudflare:workers';
 import type { PageServerLoad } from './$types';
-import { isAuthConfigured } from '../../lib/server/auth';
+import { isAuthConfigured, type AuthEnvironment } from '../../lib/server/auth';
 
-export const load: PageServerLoad = ({ platform }) => ({
-  authAvailable: isAuthConfigured(platform?.env)
+export const load: PageServerLoad = () => ({
+  authAvailable: isAuthConfigured(env as unknown as AuthEnvironment)
 });

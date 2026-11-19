@@ -125,6 +125,7 @@ jobs:
         run: npm run db:migrate:local
 
       - name: Apply and verify the isolated auth D1 migration
+        id: apply-auth-migrations
         if: ${{ !cancelled() && steps.apply-local-migrations.outcome == 'success' }}
         run: npm run db:auth:migrate:local && npm run db:auth:test:local
 
@@ -166,7 +167,7 @@ jobs:
               scripts/generate-curriculum-index.mjs|scripts/validate-design-tokens.mjs|scripts/finalize-db-migration.mjs|\
               scripts/test-local-db.mjs|scripts/browser-acceptance.mjs|\
               scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs|\
-              scripts/accessibility-browser-acceptance.mjs|scripts/install-git-hooks.mjs|scripts/evaluate-pitch-recordings.mjs|scripts/report-built-css.mjs)
+              scripts/accessibility-browser-acceptance.mjs|scripts/auth-browser-acceptance.mjs|scripts/install-git-hooks.mjs|scripts/evaluate-pitch-recordings.mjs|scripts/report-built-css.mjs)
                 changed_files+=("$file")
                 ;;
             esac
@@ -232,6 +233,10 @@ jobs:
           fi
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
+
+      - name: Authentication lifecycle browser acceptance
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' && steps.apply-auth-migrations.outcome == 'success' }}
+        run: npm run test:auth-browser
 
       - name: Browser acceptance tests
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' }}
