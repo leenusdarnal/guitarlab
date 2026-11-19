@@ -59,9 +59,9 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | Order | Task | Priority | Status |
 |---:|---|---|---|
-| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | IN PROGRESS — PR #193 |
-| 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | IN PROGRESS — PR #193 |
-| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | IN PROGRESS — PR #193 |
+| 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
+| 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
+| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | PARTIAL — automated navigation hardening complete; lifecycle acceptance remains |
 | 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
 | 5 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
 | 6 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
@@ -84,9 +84,9 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| OFF-01 | P0 | **IN PROGRESS — PR #193** | PR #186 established the public-only page-cache policy. Follow-up hardening adds server-side `private, no-store` for every response that sets `Set-Cookie`, rather than relying on browser-visible response headers. The PR is awaiting final required CI; physical-device acceptance remains OFF-04. | [PR #186](https://github.com/leenusdarnal/guitarlab/pull/186); [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193) |
-| OFF-02 | P1 | **IN PROGRESS — PR #193** | Extends PR #186 regression coverage with server-side cookie response policy, private route families, network-first navigation, transient 5xx fallback, 404 preservation and real offline browser acceptance. The latest browser runs pass after the test harness stops the loopback Worker during offline checks; final CI is pending. Physical-device acceptance remains OFF-04. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193) |
-| OFF-03 | P1 | **IN PROGRESS — PR #193** | Navigation now attempts the network without trusting `navigator.onLine`, bypasses the browser HTTP cache, uses a previously validated public page on transient 5xx, and falls back when the network is actually unavailable. Install-time precache is limited to build assets; HTML enters the page cache only after a successful visit. Remaining work: failed-install recovery, storage quota behaviour and multi-tab update acceptance. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); physical-device checks remain OFF-04 |
+| OFF-01 | P0 | **DONE — automated** | PR #193 completes the server-side public-only response boundary: authenticated/private routes and every response setting `Set-Cookie` receive `Cache-Control: private, no-store`, and the public cache marker is removed. The service worker only stores validated public navigations. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
+| OFF-02 | P1 | **DONE — automated** | Unit and browser regression coverage verifies cookie-setting response policy, private route families, no private cache reads/replay, successful public-page caching, network-first navigation, transient 5xx public-cache fallback, 404 preservation and explicit offline fallback for unvisited pages. Browser offline tests stop the loopback Worker so they exercise an actual network failure rather than Playwright's offline emulation alone. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
+| OFF-03 | P1 | **PARTIAL** | Automated navigation hardening is complete: do not trust `navigator.onLine`, bypass the browser HTTP cache, use validated public cache on transient 5xx, preserve 404s, precache build assets only, and cache public HTML only after a successful visit. Remaining: failed-install recovery, storage quota behaviour and multi-tab service-worker update acceptance. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); physical-device checks remain OFF-04 |
 | OFF-04 | P1 | **BLOCKED** | Complete physical-device offline acceptance: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
