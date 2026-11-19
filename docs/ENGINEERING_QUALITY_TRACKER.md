@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 19 November 2026  
-**Verified source baseline:** `main` at `b94eee42c92e30fdd88813b029fd341b364cd0f8` (PRs #193–#194 merged; OFF-03 lifecycle recovery implementation is in review)  
+**Verified source baseline:** `main` at `ae450ac26d880258ab026b4f639aa501f23956bc` (PRs #193–#195 merged)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -61,7 +61,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 |---:|---|---|---|
 | 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
-| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | IN PROGRESS — lifecycle recovery and multi-tab acceptance in PR #195 |
+| 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | DONE — automated |
 | 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
 | 5 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
 | 6 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
@@ -73,7 +73,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 12 | CSS-01 — Inventory Tailwind version, configuration and styling usage | P2 | DONE — read-only |
 | 13 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | DONE — automated review |
 | 14 | CSS-03 — Define staged Tailwind/CSS modernisation plan | P2 | DONE — documented |
-| 15 | CSS-04 — Implement approved, incremental CSS improvements | P2 | IN PROGRESS |
+| 15 | CSS-04 — Implement approved, incremental CSS improvements | P2 | IN PROGRESS — token-mapped Tailwind utility migration started in PR |
 | 16 | CSS-05 — Verify visual, accessibility and build regressions | P2 | PARTIAL |
 | 17 | OFF-04 — Physical-device offline acceptance (future follow-up) | P2 | DEFERRED — outside the current implementation sequence |
 
@@ -87,7 +87,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 |---|---|---|---|---|
 | OFF-01 | P0 | **DONE — automated** | PR #193 completes the server-side public-only response boundary: authenticated/private routes and every response setting `Set-Cookie` receive `Cache-Control: private, no-store`, and the public cache marker is removed. The service worker only stores validated public navigations. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
 | OFF-02 | P1 | **DONE — automated** | Unit and browser regression coverage verifies cookie-setting response policy, private route families, no private cache reads/replay, successful public-page caching, network-first navigation, transient 5xx public-cache fallback, 404 preservation and explicit offline fallback for unvisited pages. Browser offline tests stop the loopback Worker so they exercise an actual network failure rather than Playwright's offline emulation alone. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [CI run #44509897385](https://github.com/leenusdarnal/guitarlab/actions/runs/44509897385) |
-| OFF-03 | P1 | **IN PROGRESS — PR** | Navigation hardening is merged in PR #193. This follow-up adds rollback of partially populated asset caches after failed install, explicit read/write quota failure coverage, and real multi-tab service-worker update/waiting/activation acceptance. Automated completion depends on required CI passing. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); lifecycle follow-up PR #195; physical-device acceptance is tracked separately as deferred OFF-04 |
+| OFF-03 | P1 | **DONE — automated** | Navigation hardening, failed-install cache rollback, read/write failure coverage and real multi-tab update/waiting/activation acceptance are merged. Required CI passed on PR #195. | [PR #193](https://github.com/leenusdarnal/guitarlab/pull/193); [PR #195](https://github.com/leenusdarnal/guitarlab/pull/195); [CI run #44522527995](https://github.com/leenusdarnal/guitarlab/actions/runs/44522527995). Physical-device testing remains separate under OFF-04 |
 | OFF-04 | P2 | **DEFERRED** | Future physical-device acceptance, deliberately deferred on 19 November 2026 and not a blocker for the current implementation sequence. On real iOS Safari and Android Chrome: visit a public lesson online, activate the worker, go offline, reopen the visited lesson, verify an unvisited page gets an accessible fallback, restore connectivity and repeat in portrait/landscape. | Reopen when physical-device testing is scheduled; follow [MANUAL_ACCEPTANCE.md](MANUAL_ACCEPTANCE.md); Issues #9/#10/#18 |
 | OFF-05 | P3 | **DEFERRED** | Decide and implement full PWA installability and learner-selected offline curriculum packs, including storage quota messaging and explicit download/remove controls. Do not silently precache the entire curriculum. | M9 in [ROADMAP.md](ROADMAP.md) |
 
