@@ -1,18 +1,20 @@
-import { building } from '$app/env';
+import { building } from '$app/environment';
+import { env, waitUntil } from 'cloudflare:workers';
 import type { Handle } from '@sveltejs/kit/hooks';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
-import { createAuth, isAuthConfigured } from './lib/server/auth';
+import {
+  createAuth,
+  isAuthConfigured,
+  type AuthEnvironment
+} from './lib/server/auth';
 import { applyPrivateResponseCachePolicy } from './lib/server/response-cache-policy';
 
 export const handle: Handle = async ({ event, resolve }) => {
   let response: Response;
-  const env = event.platform?.env;
+  const authEnv = env as unknown as AuthEnvironment;
 
-  if (!building && env && isAuthConfigured(env)) {
-    const waitUntil = event.platform?.context?.waitUntil?.bind(
-      event.platform.context
-    );
-    const auth = createAuth(env, waitUntil);
+  if (!building && isAuthConfigured(authEnv)) {
+    const auth = createAuth(authEnv, waitUntil);
     const session = await auth.api.getSession({
       headers: event.request.headers
     });
