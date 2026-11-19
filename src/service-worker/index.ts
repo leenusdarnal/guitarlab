@@ -16,10 +16,12 @@ const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
 const ASSET_CACHE = `${CACHE_PREFIX}-assets-${version}`;
 const PAGE_CACHE = `${CACHE_PREFIX}-pages-${version}`;
+// Precache only build assets. HTML documents are added to PAGE_CACHE only
+// after a successful visit, so an unvisited page is not silently available
+// offline merely because it was prerendered at build time.
 const PRECACHE_URLS = [
   ...immutable.map((file) => resolve(file.path)),
-  ...assets.map((file) => resolve(file.path)),
-  ...prerendered.map((page) => resolve(page.path))
+  ...assets.map((file) => resolve(file.path))
 ];
 const MAX_CACHED_PAGES = 40;
 
