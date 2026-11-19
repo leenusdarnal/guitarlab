@@ -244,7 +244,7 @@ try {
       'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=3',
       'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=5',
       ''
-    ].join('\\n')
+    ].join(String.fromCharCode(10))
   );
   await createHttpsTestConfig();
 
