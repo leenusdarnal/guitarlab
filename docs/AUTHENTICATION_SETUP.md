@@ -34,3 +34,12 @@ The SvelteKit hook uses Better Auth's SvelteKit handler, reads the server sessio
 Preview and production Wrangler configs intentionally have no `AUTH_DB` binding yet. Do not add one or deploy auth until each environment has its own D1 database, its migrations have been rehearsed against that database, the Better Auth secret and Resend credentials have been stored as environment secrets, and the exact origin/sender have been verified. No production database or secret is provisioned by this change.
 
 Cloud sync remains out of scope. Do not attach, upload or backfill IndexedDB learner profiles or practice history during account creation. The separate sync milestone must cover export, deletion, ownership, idempotency and conflict recovery before learner data is stored in cloud D1.
+
+## Automated account lifecycle acceptance
+
+CI runs `npm run test:auth-browser` against the local Wrangler Worker and the isolated local `AUTH_DB`. The script creates a temporary `.dev.vars` file with a fresh random Better Auth secret, a local-only sender identity and a loopback mail sink; it restores any previous `.dev.vars` file and stops both local servers during cleanup.
+
+`AUTH_TEST_MAIL_SINK_URL` is an optional test-only override. It is accepted only when `BETTER_AUTH_URL` is a loopback development origin and the sink itself is an HTTP loopback URL (`localhost`, `127.0.0.1` or `[::1]`). The sink receives verification/reset messages only inside the local acceptance run; it does not receive a Resend bearer token. A non-local auth origin with this override fails the auth configuration gate. Never set this variable in preview or production.
+
+The browser journey covers duplicate registration, pending verification, unverified sign-in rejection, verification resend and completion, sign-in, account access, password reset, reset-link replay, session revocation after password reset, logout and guest-safe protected-route redirects. It also checks the local session cookie's HttpOnly, SameSite and Path attributes. HTTPS Secure-cookie verification, session refresh/expiry, CSRF/origin and rate-limit acceptance remain separate security checks; a passing local HTTP journey is not production activation evidence.
+
