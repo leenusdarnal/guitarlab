@@ -53,6 +53,34 @@ export function isCacheablePublicNavigation(
 
 export type PublicNavigationCache = Pick<Cache, 'match' | 'put' | 'delete'>;
 
+export interface AssetPrecacheStorage {
+  open(name: string): Promise<Pick<Cache, 'addAll'>>;
+  delete(name: string): Promise<boolean>;
+}
+
+/**
+ * Install the immutable app shell as one recoverable unit. A failed addAll
+ * must not leave a partial cache that a later install could mistake as valid.
+ */
+export async function precacheAssets(
+  storage: AssetPrecacheStorage,
+  cacheName: string,
+  urls: string[]
+): Promise<void> {
+  try {
+    const cache = await storage.open(cacheName);
+    await cache.addAll(urls);
+  } catch (error) {
+    // Preserve the install error even if cleanup also fails.
+    try {
+      await storage.delete(cacheName);
+    } catch {
+      // A later activation/install can retry; never mask the original error.
+    }
+    throw error;
+  }
+}
+
 export interface PublicNavigationResolutionOptions {
   fetchNavigation: () => Promise<Response>;
   offlineResponse: () => Response;

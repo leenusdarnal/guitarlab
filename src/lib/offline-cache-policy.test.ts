@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   isCacheablePublicNavigation,
   isEligiblePublicNavigation,
+  precacheAssets,
   resolvePublicNavigation,
   type PublicNavigationCache
 } from './offline-cache-policy';
@@ -62,6 +63,52 @@ function createCache(seed: Record<string, Response> = {}) {
   };
   return { cache, entries };
 }
+
+describe('service-worker asset installation recovery', () => {
+  it('removes a partially populated asset cache when precaching fails', async () => {
+    const deleted: string[] = [];
+    const failure = new Error('quota exceeded');
+    const storage = {
+      async open(name: string) {
+        expect(name).toBe('guitarlab-assets-test');
+        return {
+          async addAll() {
+            throw failure;
+          }
+        };
+      },
+      async delete(name: string) {
+        deleted.push(name);
+        return true;
+      }
+    };
+
+    await expect(
+      precacheAssets(storage, 'guitarlab-assets-test', ['/asset.js'])
+    ).rejects.toBe(failure);
+    expect(deleted).toEqual(['guitarlab-assets-test']);
+  });
+
+  it('preserves the original install failure if cache cleanup also fails', async () => {
+    const failure = new Error('asset download failed');
+    const storage = {
+      async open() {
+        return {
+          async addAll() {
+            throw failure;
+          }
+        };
+      },
+      async delete() {
+        throw new Error('cleanup failed');
+      }
+    };
+
+    await expect(
+      precacheAssets(storage, 'guitarlab-assets-test', [])
+    ).rejects.toBe(failure);
+  });
+});
 
 describe('public offline navigation cache policy', () => {
   it('allows allowlisted prerendered public pages', () => {
@@ -406,6 +453,38 @@ describe('public offline navigation cache policy', () => {
 
     expect(result).toBe(privatePage);
     expect(entries.has(target.url)).toBe(false);
+  });
+
+  it('falls back safely when Cache Storage reads fail', async () => {
+    const target = request('/learn/year-1');
+    const cache: PublicNavigationCache = {
+      async match() {
+        throw new Error('storage unavailable');
+      },
+      async put() {
+        throw new Error('storage unavailable');
+      },
+      async delete() {
+        return false;
+      }
+    };
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        fetchNavigation: async () => {
+          throw new Error('network unavailable');
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result.status).toBe(503);
+    expect(result.headers.get('cache-control')).toBe('no-store');
   });
 
   it('keeps a successful online response when Cache Storage writes fail', async () => {
