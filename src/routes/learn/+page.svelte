@@ -88,7 +88,7 @@
   <meta name="description" content="Search and browse all 152 GuitarLab lessons by name, topic, learning path and lesson length." />
 </svelte:head>
 
-<main class="catalog">
+<main class="catalog max-w-[1180px] mx-auto px-[clamp(16px,4vw,50px)] pt-7 pb-[72px] text-content max-[520px]:px-[15px] max-[520px]:pt-5 max-[520px]:pb-[55px]">
   <header class="catalog-header">
     <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
     <div class="eyebrow">THE GUITARLAB CURRICULUM</div>
@@ -240,7 +240,6 @@
 </main>
 
 <style>
-  .catalog{max-width:1180px;margin:0 auto;padding:28px clamp(16px,4vw,50px) 72px;color:var(--text)}
   .catalog-header{padding:8px 0 26px}
   .back{display:inline-block;font-size:13px;color:var(--muted);margin-bottom:24px}
   .eyebrow{font-size:11px;letter-spacing:1.25px;font-weight:800;color:var(--muted)}
@@ -306,6 +305,6 @@
   footer{margin-top:25px;padding-top:16px;border-top:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--muted)}
   a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:760px){.lesson-results,.routes{grid-template-columns:1fr}.finder{padding:17px}.finder-heading,.directory-heading{align-items:flex-start;flex-direction:column}.browse-paths-link,.directory-heading>a{white-space:normal}.directory-heading h2{font-size:25px}.route-card p{min-height:0}}
-  @media(max-width:520px){.catalog{padding:20px 15px 55px}.filters{grid-template-columns:1fr}.stats span{flex:1 1 42%}.results-heading{align-items:flex-start;flex-direction:column}.result-footer{align-items:flex-start;flex-direction:column}.lesson-result-link{min-height:44px}}
+  @media(max-width:520px){.filters{grid-template-columns:1fr}.stats span{flex:1 1 42%}.results-heading{align-items:flex-start;flex-direction:column}.result-footer{align-items:flex-start;flex-direction:column}.lesson-result-link{min-height:44px}}
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
