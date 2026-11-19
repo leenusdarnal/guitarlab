@@ -132,7 +132,9 @@ try {
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'no-store'
     });
-    response.end('<!doctype html><html><head><title>SW lifecycle acceptance</title></head><body>Service-worker lifecycle acceptance</body></html>');
+    response.end(
+      '<!doctype html><html><head><title>SW lifecycle acceptance</title></head><body>Service-worker lifecycle acceptance</body></html>'
+    );
   });
   await new Promise((resolve, reject) => {
     lifecycleServer.once('error', reject);
@@ -153,37 +155,52 @@ try {
     await navigator.serviceWorker.ready;
     await new Promise((resolve, reject) => {
       if (navigator.serviceWorker.controller) return resolve();
-      const timeout = setTimeout(() => reject(new Error('Initial service worker did not claim tab A.')), 10000);
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        clearTimeout(timeout);
-        resolve();
-      }, { once: true });
+      const timeout = setTimeout(
+        () => reject(new Error('Initial service worker did not claim tab A.')),
+        10000
+      );
+      navigator.serviceWorker.addEventListener(
+        'controllerchange',
+        () => {
+          clearTimeout(timeout);
+          resolve();
+        },
+        { once: true }
+      );
     });
     return { scope: registration.scope };
   });
   await lifecycleTabB.goto(lifecycleOrigin);
-  await lifecycleTabB.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
-  const readLifecycleWorkerVersion = (page) => page.evaluate(async () => {
-    const controller = navigator.serviceWorker.controller;
-    if (!controller) throw new Error('Tab is not controlled by a service worker.');
-    const channel = new MessageChannel();
-    const version = new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('Timed out reading active worker version.')), 5000);
-      channel.port1.onmessage = (event) => {
-        clearTimeout(timeout);
-        resolve(event.data);
-      };
+  await lifecycleTabB.waitForFunction(() =>
+    Boolean(navigator.serviceWorker.controller)
+  );
+  const readLifecycleWorkerVersion = (page) =>
+    page.evaluate(async () => {
+      const controller = navigator.serviceWorker.controller;
+      if (!controller)
+        throw new Error('Tab is not controlled by a service worker.');
+      const channel = new MessageChannel();
+      const version = new Promise((resolve, reject) => {
+        const timeout = setTimeout(
+          () => reject(new Error('Timed out reading active worker version.')),
+          5000
+        );
+        channel.port1.onmessage = (event) => {
+          clearTimeout(timeout);
+          resolve(event.data);
+        };
+      });
+      controller.postMessage('version', [channel.port2]);
+      return version;
     });
-    controller.postMessage('version', [channel.port2]);
-    return version;
-  });
   assert.equal(await readLifecycleWorkerVersion(lifecycleTabA), 1);
   assert.equal(await readLifecycleWorkerVersion(lifecycleTabB), 1);
 
   lifecycleWorkerVersion = 2;
   await lifecycleTabA.evaluate(async () => {
     const registration = await navigator.serviceWorker.getRegistration('/');
-    if (!registration) throw new Error('Service-worker registration disappeared before update.');
+    if (!registration)
+      throw new Error('Service-worker registration disappeared before update.');
     await registration.update();
   });
   await lifecycleTabA.waitForFunction(async () => {
@@ -200,7 +217,9 @@ try {
 
   const lifecycleTabAfterUpdate = await lifecycleContext.newPage();
   await lifecycleTabAfterUpdate.goto(lifecycleOrigin);
-  await lifecycleTabAfterUpdate.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+  await lifecycleTabAfterUpdate.waitForFunction(() =>
+    Boolean(navigator.serviceWorker.controller)
+  );
   assert.equal(
     await readLifecycleWorkerVersion(lifecycleTabAfterUpdate),
     2,
