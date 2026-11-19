@@ -154,7 +154,9 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
           {
             // Always try the request: navigator.onLine is only a hint and can
             // be stale. The resolver falls back to public cache/offline HTML.
-            fetchNavigation: () => fetch(request),
+            // Bypass the browser HTTP cache. Offline pages are available
+            // only through the explicitly validated GuitarLab Cache Storage.
+            fetchNavigation: () => fetch(request, { cache: 'no-store' }),
             offlineResponse: createOfflineResponse,
             afterCacheWrite: pages ? () => trimPageCache(pages) : undefined
           }
