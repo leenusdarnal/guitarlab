@@ -1,97 +1,87 @@
-# GuitarLab — production environment decision and release gates
+# GuitarLab — production environment decision and release record
 
-**Status: pending owner decisions and explicit release approval. No production configuration or resource is authorized by this document.**
+**Status: first local-first production release deployed; ongoing production changes remain approval-gated.**
 
-This decision record supports Issue #3. It records what is known, what must be decided, and the conditions required before a production Worker, database, domain or credential is created or changed.
+**Last reconciled:** 19 November 2026  
+**Repository baseline:** `main` at `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf`
 
-## 1. Current verified position
+This document is the current record for the first production release and the decisions that remain open. It supersedes the earlier pre-deployment statement that no production deployment had been authorized. The historical 13 November account inventory below is retained only as dated evidence, not as the current production state.
 
-The repository's Cloudflare deployment plan records the following account-scope findings from the 13 November 2026 audit:
+## 1. Verified first production release
 
-- The connected Cloudflare account exposed the preview Worker `guitarlab-preview`; no production Worker named `guitarlab` was confirmed in that account.
-- The account-level D1 listing returned no databases and no Worker custom domains were listed at audit time.
-- The preview Wrangler config omits D1 and the current learner data path uses IndexedDB/browser-local storage.
-- The application does not currently expose authenticated server routes for learner data or a cloud-sync API.
-- The repository release scope says production must be access-restricted or protected by secure authentication before personal cloud data is stored.
-- No production Wrangler config or production deployment workflow is present in the audited paths.
+The first local-first production deployment was completed successfully on 17 November 2026.
 
-These statements are limited to the connected account and audit date. They are not a guarantee that a resource does not exist in another account or zone. Recheck the account and resource owner before any future change.
+- **Worker:** `guitarlab`
+- **Temporary URL:** https://guitarlab.leenusdarnal.workers.dev
+- **Workflow:** [Deploy GuitarLab production — run #44054131712](https://github.com/leenusdarnal/guitarlab/actions/runs/44054131712)
+- **Exact deployed commit:** `1e18998eba43d0c2f6e3267ddeccb11b198b4188`
+- **Workflow result:** successful; exact-commit CI verification, production build/deploy, five-route smoke tests, security-header checks and evidence capture completed.
+- **Evidence artifact:** `guitarlab-production-deployment-1e18998eba43d0c2f2f6e3267` (the canonical artifact name recorded in Issue #3 is `guitarlab-production-deployment-1e18998eba43d0c2f6e3267`).
+- **Retention recorded by Issue #3:** through 15 February 2027.
+- **Issue:** [#3 — Deploy first local-first GuitarLab production Worker](https://github.com/leenusdarnal/guitarlab/issues/3), closed 17 November after all first-release acceptance criteria were checked.
 
-## 2. Proposed first-release boundary — for owner approval
+The first release is intentionally local-first: learner profiles, progress, practice sessions and preferences remain in browser-local IndexedDB. The release did not enable D1, server-side learner data, registration/login, user sessions or cloud sync.
 
-The current product design is local-first: learner profiles, practice sessions and personal notes are browser-local. The lowest-risk first-release proposal is therefore:
+## 2. Current release reconciliation
 
-1. Keep learner data in IndexedDB/local storage.
-2. Do not provision or bind remote D1 for the first release unless a separately scoped cloud-sync feature is approved.
-3. Do not add user identity, authentication or sync APIs implicitly as part of deploying the current local-first build.
-4. Treat the Worker as an application delivery/runtime environment, not as an authorized learner-data store.
-5. Decide explicitly whether the production URL should be private/restricted or publicly reachable as a stateless app shell. A public URL must not expose private learner data or imply account security that does not exist.
+Current repository `main` is `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf` (19 November; PR #201). The verified first deployment is older, at `1e18998eba43d0c2f6e3267ddeccb11b198b4188`.
 
-This is a proposal, not an approved production decision. The owner must confirm the intended access model and data boundary before configuration is created.
+**Do not describe the current main SHA as deployed.** The GitHub deployment workflow evidence proves the initial release SHA and its smoke tests; it does not prove that later commits have been deployed. The active Worker version was not independently queried during this documentation reconciliation.
 
-## 3. Decisions required before writing production configuration
+QA-04 in `ENGINEERING_QUALITY_TRACKER.md` remains OPEN until the current Worker version is reconciled against the deployment artifact and an explicit decision is recorded to keep or update production. No production redeployment is authorized by this documentation change.
 
-| Decision | Required owner input | Current state |
-| --- | --- | --- |
-| Cloudflare account and zone owner | Name/team accountable for billing, access and incident response | Pending |
-| Production Worker identity | Confirm intended Worker name and whether a resource already exists | Pending |
-| Production hostname / routing | Confirm domain ownership, hostname and routing model | Pending |
-| Access model | Public stateless shell, private access, or authenticated product | Pending |
-| Learner data location | Browser-local only, or separately approved remote persistence | Pending |
-| Remote D1 | Yes/no; if yes, schema, owner, backup, retention and recovery | Pending — not provisioned |
-| Authentication / authorization | Required only if accounts or private server-side data are in scope; specify implementation and threat model | Pending |
-| Secrets and environment variables | Required names, least-privilege token scopes, secret owner and rotation process | Pending |
-| Release approval | Authorized approver, change window and rollback decision owner | Pending |
-| Incident / rollback ownership | Who can inspect Worker logs, roll back code and recover data | Pending |
+## 3. First-release architecture and continuing boundaries
 
-Do not infer an approval from repository access, a successful preview deployment or the existence of a local D1 placeholder.
+- Learner profiles, progress, practice sessions and preferences remain browser-local.
+- The Worker serves the application shell and public curriculum.
+- No remote D1 binding or remote learner-data store is part of this release.
+- Authentication and cloud sync remain separate M5 work; they must not be inferred from the production deployment.
+- The production URL is a stateless application release, not evidence of account security or server-side learner-data protection.
 
-## 4. Isolation requirements
+## 4. Historical environment audit (13 November 2026)
 
-When the owner approves an environment model:
+The pre-release audit recorded that the connected Cloudflare account exposed the preview Worker `guitarlab-preview`; it did not confirm a production Worker named `guitarlab` at that time. The account-level D1 listing returned no databases and no Worker custom domains were listed during that audit. The preview Wrangler config omitted D1, and the learner data path used browser-local storage.
 
-- Preview and production must use explicit, independent Wrangler configuration and GitHub environments.
-- Preview must never bind to production databases, secrets, routes or data.
-- Production secrets must be stored in the protected production environment and never written to source, logs, documentation or PR descriptions.
-- Do not use production learner data in browser acceptance or preview.
-- Do not add remote D1 unless the data architecture explicitly requires it. If approved, preview and production require separate database IDs and migration/recovery plans.
-- Local configuration must remain local-only; the all-zero placeholder D1 identifier is not a production binding.
-- Do not make production deployment an automatic side effect of a normal PR merge.
-- Production release must use the exact approved commit/build that passed required CI and preview acceptance.
+Those observations are limited to the connected account and the 13 November audit date. They are historical and must not be presented as a current inventory after the 17 November production deployment.
 
-## 5. Production release gates
+## 5. Decisions still required for future production changes
 
-All gates must have evidence and an accountable reviewer.
+| Decision | Current state | Required before changing production |
+|---|---|---|
+| Cloudflare account / zone ownership | Not reverified in this audit | Confirm accountable owner and access |
+| Production Worker identity | Initial Worker `guitarlab` deployed | Confirm current resource and version |
+| Hostname / routing | Temporary workers.dev URL in use | Approve custom domain / route separately |
+| Access model | Public stateless app shell | Reassess before adding private server-side data |
+| Learner data location | Browser-local only | Separate approval for any remote persistence |
+| Remote D1 | Not part of first release | Schema, isolation, backup, retention and recovery decision |
+| Authentication / authorization | Not enabled by first release | Threat model, implementation and lifecycle acceptance |
+| Secrets / environment variables | Production workflow uses protected GitHub environment | Review least privilege, ownership and rotation |
+| Release approval | First release completed | Explicit approval required for each future production deployment |
+| Incident / rollback ownership | Workflow and retained deployment evidence exist | Confirm operator and rollback procedure |
 
-| Gate | Required evidence | State |
-| --- | --- | --- |
-| Account/resource ownership | Confirmed Cloudflare account, Worker and zone owner | Not run |
-| Access model decision | Approved public/private/authenticated scope | Pending owner |
-| Data architecture decision | Local-only or approved authenticated cloud-sync design | Pending owner |
-| Configuration isolation | Reviewed production Wrangler configuration and protected environment | Blocked on decisions |
-| Secret permissions | Least-privilege token, secure storage and rotation owner | Not verified |
-| Application acceptance | Exact commit passes CI and preview browser/manual acceptance | Not run for production |
-| Privacy / security review | Data-flow, authentication, logging, CSP and threat-model sign-off | Not run |
-| Backup / recovery | Tested recovery procedure appropriate to selected storage architecture | Not run |
-| Rollback | Known-good Worker version and data rollback compatibility | Not run |
-| Explicit release approval | Named approver and recorded approval for exact SHA | Not approved |
+## 6. Release gates for subsequent deployments
 
-## 6. Prohibited actions until approval
+A subsequent production deployment must:
 
-- Do not create or rename a production Worker.
-- Do not create production D1, apply remote migrations or bind any remote database.
-- Do not create production routes, custom domains or DNS records.
-- Do not create, print or commit production secrets.
-- Do not deploy production or grant public access to personal server-side learner data.
-- Do not close Issue #3 solely because this decision record exists.
+1. Be manually initiated from `main` with explicit confirmation.
+2. Verify required CI for the exact selected SHA.
+3. Build and dry-run the production configuration.
+4. Use the protected `production` GitHub environment and its configured credentials.
+5. Run route and security-header smoke tests.
+6. Preserve the exact SHA, Worker version/deployment ID, timestamp, target URL and smoke-test results as a retained artifact.
+7. Record a known-good rollback version and verify compatibility before changing production.
 
-## 7. Decision and sign-off log
+Do not treat the successful first release as blanket approval for later deployments, database provisioning, authentication, custom domains or cloud-sync changes.
 
-| Decision / approval | Owner | Date / timezone | Evidence / ticket | Status |
-| --- | --- | --- | --- | --- |
-| Account and resource ownership | Pending | Pending | Pending | Not approved |
-| Access and data model | Pending | Pending | Pending | Not approved |
-| Production configuration review | Pending | Pending | Pending | Not run |
-| Production release approval | Pending | Pending | Pending | Not approved |
+## 7. Sign-off and decision log
 
-**Issue #3 remains open.** This document is preparation for a future owner decision; it does not define actual production resource identifiers or authorize a deployment.
+| Decision / approval | Current evidence | Status |
+|---|---|---|
+| First local-first production deployment | Run #44054131712, SHA `1e18998eba43d0c2f6e3267ddeccb11b198b4188`, Issue #3 | **DONE — first release** |
+| Current live Worker version | Not independently queried during 19 November reconciliation | **OPEN — QA-04** |
+| Access and data model for first release | Browser-local learner data; no remote D1 / cloud sync | **DONE — first-release boundary** |
+| Production configuration for future changes | Existing manual workflow and protected environment | Review before each change |
+| Backup / recovery for remote learner data | No remote learner-data store in first release | Not applicable to first release; required if architecture changes |
+| Rollback evidence for current live Worker | Must reconcile retained artifact and active version | **OPEN — QA-04** |
+
+**Authority:** Issue #3 records the completed first deployment. `ENGINEERING_QUALITY_TRACKER.md` owns the remaining QA-04 status. This document records release facts and future change gates; it does not authorize a new deployment or infrastructure mutation.
