@@ -46,6 +46,56 @@ function startPreviewServer() {
 }
 
 async function waitForPreviewServer() {
+  let ready = false;
+  for (let attempt = 0; attempt < 45; attempt += 1) {
+    if (!server || server.exitCode !== null) {
+      throw new Error(`Wrangler preview exited early.\n${serverOutput}`);
+    }
+    try {
+      const response = await fetch(origin);
+      if (response.ok) {
+        ready = true;
+        break;
+      }
+    } catch {
+      // The local Worker is still starting.
+    }
+    await delay(1000);
+  }
+  assert.equal(
+    ready,
+    true,
+    `Wrangler preview did not become ready.\n${serverOutput}`
+  );
+}
+
+async function stopPreviewServer() {
+  const current = server;
+  if (!current) return;
+  const exited = new Promise((resolve) => {
+    if (current.exitCode !== null) resolve();
+    else current.once('exit', resolve);
+  });
+  if (current.pid && process.platform !== 'win32') {
+    try {
+      process.kill(-current.pid, 'SIGTERM');
+    } catch {
+      // The preview process may already have exited.
+    }
+  } else {
+    current.kill('SIGTERM');
+  }
+  await Promise.race([exited, delay(5000)]);
+  server = null;
+}
+
+async function startPreviewServerAndWait() {
+  startPreviewServer();
+  await waitForPreviewServer();
+}
+
+let browser;
+try {
   await startPreviewServerAndWait();
 
   browser = await chromium.launch({ headless: true });
