@@ -84,8 +84,8 @@ async function waitForMessage(subject) {
 function safeErrorMessage(error) {
   const message = error instanceof Error ? error.message : String(error);
   return message
-    .replace(/([?&]token=)[^&\\s]+/gi, '$1[redacted]')
-    .replace(/(\\/(?:reset-password|verify-email)\\/)[^/?\\s]+/gi, '$1[redacted]');
+    .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
+    .replace(/(\/(?:reset-password|verify-email)\/)[^/?\s]+/gi, '$1[redacted]');
 }
 
 function extractActionUrl(message, predicate) {
