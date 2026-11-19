@@ -106,7 +106,7 @@ async function signIn(page, email, password) {
   await page.goto(origin + '/login');
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(password);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
 }
 
 async function stopPreview() {
@@ -175,7 +175,9 @@ try {
 
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await page.getByLabel('Password').fill(originalPassword);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: 'Sign in', exact: true }).first().click();
+  await page.getByLabel('Password').fill(originalPassword);
+  await page.getByRole('button', { name: 'Sign in', exact: true }).last().click();
   await page.getByRole('alert').waitFor();
   await page.getByRole('button', { name: 'Resend verification email' }).click();
   await waitForMessageCount('Verify your GuitarLab email', 2);
