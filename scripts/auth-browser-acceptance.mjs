@@ -69,6 +69,16 @@ async function waitForPreview() {
   throw new Error('The local authentication Worker did not become ready.');
 }
 
+async function waitForMessageCount(subject, count) {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    if (messages.filter((item) => item.subject === subject).length >= count) {
+      return;
+    }
+    await delay(100);
+  }
+  throw new Error('Expected transactional email count was not delivered to the local test sink.');
+}
+
 async function waitForMessage(subject) {
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const message = messages.find((item) => item.subject === subject);
@@ -155,9 +165,19 @@ try {
   await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
   await page.getByText(/If the address can be registered/).waitFor();
 
+  await page.getByRole('button', { name: 'Create account', exact: true }).first().click();
+  await page.getByLabel('Your name').fill('Duplicate GuitarLab Acceptance');
+  await page.getByLabel('Email address').fill(email);
+  await page.getByLabel('Password').fill(originalPassword);
+  await page.getByLabel('Confirm password').fill(originalPassword);
+  await page.getByRole('button', { name: 'Create account', exact: true }).last().click();
+  await page.getByRole('alert').waitFor();
+
   await page.getByLabel('Password').fill(originalPassword);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await page.getByRole('alert').waitFor();
+  await page.getByRole('button', { name: 'Resend verification email' }).click();
+  await waitForMessageCount('Verify your GuitarLab email', 2);
 
   const verificationEmail = await waitForMessage('Verify your GuitarLab email');
   const verificationUrl = extractActionUrl(
@@ -171,6 +191,13 @@ try {
   await page.waitForURL(origin + '/');
   await page.goto(origin + '/account');
   await page.getByRole('heading', { name: 'Account' }).waitFor();
+  const sessionCookie = (await context.cookies(origin)).find((cookie) =>
+    cookie.name.includes('session_token')
+  );
+  assert.ok(sessionCookie, 'A successful sign-in must establish a session cookie.');
+  assert.equal(sessionCookie.httpOnly, true);
+  assert.equal(sessionCookie.sameSite, 'Lax');
+  assert.equal(sessionCookie.path, '/');
 
   const secondContext = await browser.newContext();
   const secondPage = await secondContext.newPage();
@@ -186,6 +213,19 @@ try {
   await page.getByText(/If an account matches that address/).waitFor();
 
   const resetEmail = await waitForMessage('Reset your GuitarLab password');
+  const deliveredEmailCount = messages.length;
+  await page.goto(origin + '/login');
+  await page.getByRole('button', { name: 'Forgot your password?' }).click();
+  await page.getByLabel('Email address').fill('unknown-account@example.test');
+  await page.getByRole('button', { name: 'Send reset link' }).click();
+  await page.getByText(/If an account matches that address/).waitFor();
+  await delay(300);
+  assert.equal(
+    messages.length,
+    deliveredEmailCount,
+    'A password-reset request for an unknown address must not send a message.'
+  );
+
   const resetUrl = extractActionUrl(
     resetEmail,
     (url) =>
@@ -196,6 +236,8 @@ try {
   await page.getByLabel('Confirm password').fill(replacementPassword);
   await page.getByRole('button', { name: 'Save new password' }).click();
   await page.getByText('Your password has been updated. Sign in with your new password.').waitFor();
+  await page.goto(resetUrl);
+  await page.getByRole('alert').waitFor();
 
   await secondPage.goto(origin + '/account');
   await secondPage.waitForURL(/\/login(?:$|\?)/);
