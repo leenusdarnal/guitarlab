@@ -117,6 +117,45 @@ try {
     null,
     { timeout: 20000 }
   );
+  // A second same-origin tab must be claimed by the same active worker. This
+  // catches lifecycle regressions where activation leaves sibling tabs stale.
+  const siblingPage = await cacheBoundaryContext.newPage();
+  await siblingPage.goto(origin, { waitUntil: 'domcontentloaded' });
+  await siblingPage.waitForFunction(
+    () => Boolean(navigator.serviceWorker.controller),
+    null,
+    { timeout: 20000 }
+  );
+  const multiTabWorkerState = await Promise.all([
+    cacheBoundaryPage.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      return {
+        controlled: Boolean(navigator.serviceWorker.controller),
+        active: registration.active?.state ?? null,
+        scope: registration.scope
+      };
+    }),
+    siblingPage.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      return {
+        controlled: Boolean(navigator.serviceWorker.controller),
+        active: registration.active?.state ?? null,
+        scope: registration.scope
+      };
+    })
+  ]);
+  assert.ok(
+    multiTabWorkerState.every(
+      (tab) => tab.controlled && tab.active === 'activated'
+    ),
+    `Both open tabs must be controlled by an activated worker: ${JSON.stringify(multiTabWorkerState)}`
+  );
+  assert.equal(
+    multiTabWorkerState[0].scope,
+    multiTabWorkerState[1].scope,
+    'Sibling tabs must share the same service-worker registration scope.'
+  );
+  await siblingPage.close();
   await cacheBoundaryPage.evaluate(async () => {
     const pageCacheName = (await caches.keys()).find((name) =>
       name.startsWith('guitarlab-pages-')
