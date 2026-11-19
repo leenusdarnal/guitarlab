@@ -17,16 +17,20 @@ const request = (path = '/', overrides: Record<string, string> = {}) =>
     ...overrides
   }) as Request;
 
-const response = (headers: Record<string, string> = {}, body = 'public page') =>
+const response = (
+  headers: Record<string, string> = {},
+  body = 'public page',
+  status = 200
+) =>
   ({
-    status: 200,
+    status,
     type: 'basic',
     headers: new Headers({
       'content-type': 'text/html; charset=utf-8',
       ...headers
     }),
     clone() {
-      return response(headers, body);
+      return response(headers, body, status);
     },
     text: async () => body
   }) as unknown as Response;
@@ -88,6 +92,8 @@ describe('public offline navigation cache policy', () => {
     '/account',
     '/login',
     '/register',
+    '/signup',
+    '/verify',
     '/api/auth/session',
     '/password-reset',
     '/account/settings'
@@ -193,7 +199,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: false,
         fetchNavigation: async () => {
           throw new Error('network should not be used while offline');
         },
@@ -218,7 +223,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: false,
         fetchNavigation: async () => {
           throw new Error('network should not be used while offline');
         },
@@ -254,7 +258,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: false,
         fetchNavigation: async () => {
           networkRequests += 1;
           throw new Error('network unavailable');
@@ -265,7 +268,75 @@ describe('public offline navigation cache policy', () => {
 
     expect(result.status).toBe(503);
     expect(cacheReads).toBe(0);
-    expect(networkRequests).toBe(0);
+    expect(networkRequests).toBe(1);
+  });
+
+  it('tries the network before serving a previously cached public page', async () => {
+    const target = request('/learn/year-1');
+    const stalePage = response({}, 'stale page');
+    const freshPage = response({}, 'fresh page');
+    const { cache, entries } = createCache({ [target.url]: stalePage });
+    let networkRequests = 0;
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        fetchNavigation: async () => {
+          networkRequests += 1;
+          return freshPage;
+        },
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(freshPage);
+    expect(networkRequests).toBe(1);
+    expect(entries.get(target.url)).not.toBe(stalePage);
+  });
+
+  it('uses a cached public page when the server returns a transient 5xx response', async () => {
+    const target = request('/learn/year-1');
+    const cachedPage = response({}, 'cached public page');
+    const { cache } = createCache({ [target.url]: cachedPage });
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        fetchNavigation: async () => response({}, 'upstream unavailable', 503),
+        offlineResponse
+      }
+    );
+
+    expect(result).toBe(cachedPage);
+  });
+
+  it('preserves a 404 response instead of masking it with stale cached content', async () => {
+    const target = request('/learn/year-1');
+    const cachedPage = response({}, 'old page');
+    const { cache } = createCache({ [target.url]: cachedPage });
+
+    const result = await resolvePublicNavigation(
+      target,
+      cache,
+      new URL(target.url),
+      origin,
+      publicPaths,
+      {
+        fetchNavigation: async () => response({}, 'not found', 404),
+        offlineResponse
+      }
+    );
+
+    expect(result.status).toBe(404);
+    expect(await result.text()).toBe('not found');
   });
 
   it('updates the public page cache after a successful network response', async () => {
@@ -281,7 +352,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: true,
         fetchNavigation: async () => page,
         offlineResponse,
         afterCacheWrite: async () => {
@@ -307,7 +377,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: true,
         fetchNavigation: async () => {
           throw new Error('temporary network failure');
         },
@@ -330,7 +399,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: true,
         fetchNavigation: async () => privatePage,
         offlineResponse
       }
@@ -362,7 +430,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: true,
         fetchNavigation: async () => page,
         offlineResponse
       }
@@ -381,7 +448,6 @@ describe('public offline navigation cache policy', () => {
       origin,
       publicPaths,
       {
-        online: true,
         fetchNavigation: async () => {
           throw new Error('network unavailable');
         },

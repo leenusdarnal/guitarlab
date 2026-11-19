@@ -16,10 +16,12 @@ const worker = self as unknown as ServiceWorkerGlobalScope;
 const CACHE_PREFIX = 'guitarlab';
 const ASSET_CACHE = `${CACHE_PREFIX}-assets-${version}`;
 const PAGE_CACHE = `${CACHE_PREFIX}-pages-${version}`;
+// Precache only build assets. HTML documents are added to PAGE_CACHE only
+// after a successful visit, so an unvisited page is not silently available
+// offline merely because it was prerendered at build time.
 const PRECACHE_URLS = [
   ...immutable.map((file) => resolve(file.path)),
-  ...assets.map((file) => resolve(file.path)),
-  ...prerendered.map((page) => resolve(page.path))
+  ...assets.map((file) => resolve(file.path))
 ];
 const MAX_CACHED_PAGES = 40;
 
@@ -152,8 +154,11 @@ worker.addEventListener('fetch', (event: FetchEvent) => {
           worker.location.origin,
           PUBLIC_PAGE_PATHS,
           {
-            online: worker.navigator.onLine,
-            fetchNavigation: () => fetch(request),
+            // Always try the request: navigator.onLine is only a hint and can
+            // be stale. The resolver falls back to public cache/offline HTML.
+            // Bypass the browser HTTP cache. Offline pages are available
+            // only through the explicitly validated GuitarLab Cache Storage.
+            fetchNavigation: () => fetch(request, { cache: 'no-store' }),
             offlineResponse: createOfflineResponse,
             afterCacheWrite: pages ? () => trimPageCache(pages) : undefined
           }

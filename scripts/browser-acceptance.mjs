@@ -28,25 +28,30 @@ const skillIdFor = (displayName) => {
 };
 const alternatePickingSkillId = skillIdFor('Alternate picking');
 const chordTransitionsSkillId = skillIdFor('Chord transitions');
-const server = spawn(
-  'npm',
-  ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-  { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
-);
-
 let serverOutput = '';
-server.stdout.on('data', (chunk) => {
-  serverOutput += chunk.toString();
-});
-server.stderr.on('data', (chunk) => {
-  serverOutput += chunk.toString();
-});
+let server;
 
-let browser;
-try {
+function startPreviewServer() {
+  server = spawn(
+    'npm',
+    ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
+    {
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: process.platform !== 'win32'
+    }
+  );
+  server.stdout.on('data', (chunk) => {
+    serverOutput += chunk.toString();
+  });
+  server.stderr.on('data', (chunk) => {
+    serverOutput += chunk.toString();
+  });
+}
+
+async function waitForPreviewServer() {
   let ready = false;
   for (let attempt = 0; attempt < 45; attempt += 1) {
-    if (server.exitCode !== null) {
+    if (!server || server.exitCode !== null) {
       throw new Error(`Wrangler preview exited early.\n${serverOutput}`);
     }
     try {
@@ -65,6 +70,36 @@ try {
     true,
     `Wrangler preview did not become ready.\n${serverOutput}`
   );
+}
+
+async function stopPreviewServer() {
+  const current = server;
+  if (!current) return;
+  const exited = new Promise((resolve) => {
+    if (current.exitCode !== null) resolve();
+    else current.once('exit', resolve);
+  });
+  if (current.pid && process.platform !== 'win32') {
+    try {
+      process.kill(-current.pid, 'SIGTERM');
+    } catch {
+      // The preview process may already have exited.
+    }
+  } else {
+    current.kill('SIGTERM');
+  }
+  await Promise.race([exited, delay(5000)]);
+  server = null;
+}
+
+async function startPreviewServerAndWait() {
+  startPreviewServer();
+  await waitForPreviewServer();
+}
+
+let browser;
+try {
+  await startPreviewServerAndWait();
 
   browser = await chromium.launch({ headless: true });
 
@@ -112,6 +147,9 @@ try {
     );
   });
   await cacheBoundaryContext.setOffline(true);
+  // Offline emulation still permits service-worker fetches to loopback.
+  // Stop the Worker so this is a real network-failure test.
+  await stopPreviewServer();
   await cacheBoundaryPage.goto(origin, { waitUntil: 'domcontentloaded' });
   await cacheBoundaryPage
     .getByRole('heading', { name: 'Keep your practice going.' })
@@ -135,6 +173,7 @@ try {
     false,
     'An offline account route must not replay a legacy private cache entry.'
   );
+  await startPreviewServerAndWait();
   await cacheBoundaryContext.setOffline(false);
   await cacheBoundaryPage.goto(origin, { waitUntil: 'networkidle' });
   await cacheBoundaryPage
@@ -2475,13 +2514,5 @@ try {
   process.exitCode = 1;
 } finally {
   await browser?.close();
-  if (server.pid && process.platform !== 'win32') {
-    try {
-      process.kill(-server.pid, 'SIGTERM');
-    } catch {
-      /* The preview process may already have exited. */
-    }
-  } else {
-    server.kill('SIGTERM');
-  }
+  await stopPreviewServer();
 }

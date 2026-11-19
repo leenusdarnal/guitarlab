@@ -2,6 +2,7 @@ import { building } from '$app/env';
 import type { Handle } from '@sveltejs/kit/hooks';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import { createAuth, isAuthConfigured } from './lib/server/auth';
+import { applyPrivateResponseCachePolicy } from './lib/server/response-cache-policy';
 
 export const handle: Handle = async ({ event, resolve }) => {
   let response: Response;
@@ -32,11 +33,13 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.url.pathname
     );
 
-  // Authenticated HTML and all identity/API routes must never be cached.
-  if (event.locals.authUser || privatePath) {
-    headers.set('Cache-Control', 'private, no-store');
-    headers.delete('X-GuitarLab-Cache');
-  }
+  // Authenticated, identity/API, and cookie-setting responses must never be
+  // replayed from Cache Storage. Enforce Set-Cookie server-side because the
+  // browser may hide that response header from service-worker JavaScript.
+  applyPrivateResponseCachePolicy(headers, {
+    authenticated: Boolean(event.locals.authUser),
+    privatePath
+  });
 
   headers.set('X-Content-Type-Options', 'nosniff');
   headers.set('X-Frame-Options', 'DENY');
