@@ -143,15 +143,8 @@ try {
   const lifecycleContext = await browser.newContext();
   const lifecycleTabA = await lifecycleContext.newPage();
   const lifecycleTabB = await lifecycleContext.newPage();
-  const lifecycleRegistration = await lifecycleTabA.evaluate(async (origin) => {
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.textContent = '';
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.append(script);
-      resolve();
-    });
+  await lifecycleTabA.goto(lifecycleOrigin);
+  const lifecycleRegistration = await lifecycleTabA.evaluate(async () => {
     const registration = await navigator.serviceWorker.register('/worker.js', {
       scope: '/',
       updateViaCache: 'none'
@@ -166,7 +159,7 @@ try {
       }, { once: true });
     });
     return { scope: registration.scope };
-  }, lifecycleOrigin);
+  });
   await lifecycleTabB.goto(lifecycleOrigin);
   await lifecycleTabB.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
   const readLifecycleWorkerVersion = (page) => page.evaluate(async () => {
