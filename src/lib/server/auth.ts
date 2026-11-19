@@ -34,7 +34,9 @@ function isLoopbackHttpUrl(value: string): boolean {
   }
 }
 
-function parseTestSeconds(value: string | undefined): number | null | undefined {
+function parseTestSeconds(
+  value: string | undefined
+): number | null | undefined {
   if (value === undefined) return undefined;
   if (!/^[1-9]\d*$/.test(value)) return null;
 
