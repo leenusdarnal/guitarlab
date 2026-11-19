@@ -18,7 +18,7 @@ function unavailable(): Response {
 
 async function handle({ request, platform }: Parameters<RequestHandler>[0]) {
   const env = platform?.env;
-  if (!isAuthConfigured(env)) return unavailable();
+  if (!env || !isAuthConfigured(env)) return unavailable();
 
   const waitUntil = platform?.context?.waitUntil?.bind(platform.context);
   const auth = createAuth(env, waitUntil);
