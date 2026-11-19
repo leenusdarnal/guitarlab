@@ -156,7 +156,6 @@ function safeErrorMessage(error) {
 }
 
 async function assertAuthAccessibility(page, routeLabel) {
-  await page.addScriptTag({ content: axeSource });
   const results = await page.evaluate(async () =>
     window.axe.run(document, {
       runOnly: {
@@ -281,6 +280,7 @@ try {
     ignoreHTTPSErrors: true,
     extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.21' }
   });
+  await context.addInitScript({ content: axeSource });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
