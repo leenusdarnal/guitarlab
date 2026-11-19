@@ -193,6 +193,9 @@
     font-size: var(--font-size-supporting);
     line-height: var(--line-height-body);
   }
+  .privacy-note {
+    font-size: 10px;
+  }
   .tool-group-heading {
     display: grid;
     gap: 5px;
