@@ -180,9 +180,35 @@ try {
 
   startPreview();
   await waitForPreview();
+
+  const crossOriginResponse = await fetch(origin + '/api/auth/sign-in/email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Origin: 'https://attacker.example',
+      'cf-connecting-ip': '192.0.2.20'
+    },
+    body: JSON.stringify({
+      email: 'cross-origin@example.test',
+      password: 'not-a-real-password'
+    })
+  });
+  assert.equal(
+    crossOriginResponse.status,
+    403,
+    'The authentication Worker must reject state-changing requests from an untrusted Origin.'
+  );
+  assert.equal(
+    crossOriginResponse.headers.get('set-cookie'),
+    null,
+    'A rejected cross-origin request must not create a session cookie.'
+  );
+
   browser = await chromium.launch({ headless: true });
 
-  const context = await browser.newContext();
+  const context = await browser.newContext({
+    extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.21' }
+  });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
@@ -262,7 +288,9 @@ try {
   assert.equal(sessionCookie.sameSite, 'Lax');
   assert.equal(sessionCookie.path, '/');
 
-  const secondContext = await browser.newContext();
+  const secondContext = await browser.newContext({
+    extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.22' }
+  });
   const secondPage = await secondContext.newPage();
   await signIn(secondPage, email, originalPassword);
   await secondPage.waitForURL(origin + '/');
@@ -324,6 +352,28 @@ try {
   await page.waitForURL(origin + '/');
   await page.goto(origin + '/account');
   await page.waitForURL(/\/login(?:$|\?)/);
+
+  const rateLimitStatuses = [];
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const response = await fetch(origin + '/api/auth/sign-in/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: origin,
+        'cf-connecting-ip': '192.0.2.23'
+      },
+      body: JSON.stringify({
+        email: 'rate-limit-probe@example.test',
+        password: 'deliberately-invalid-password'
+      })
+    });
+    rateLimitStatuses.push(response.status);
+    if (response.status === 429) break;
+  }
+  assert.ok(
+    rateLimitStatuses.includes(429),
+    `Repeated invalid sign-in attempts must reach the configured rate limit (received HTTP statuses: ${rateLimitStatuses.join(', ')}).`
+  );
 
   await secondContext.close();
   await context.close();
