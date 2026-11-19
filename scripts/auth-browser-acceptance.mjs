@@ -232,10 +232,12 @@ try {
   const sinkAddress = mailSink.address();
   assert.ok(sinkAddress && typeof sinkAddress === 'object');
   api = await request.newContext({ ignoreHTTPSErrors: true });
+  const testSecret = randomBytes(32).toString('hex');
+  rememberSensitive(testSecret);
   await writeFile(
     varsPath,
     [
-      `BETTER_AUTH_SECRET=${randomBytes(32).toString('hex')}`,
+      `BETTER_AUTH_SECRET=${testSecret}`,
       `BETTER_AUTH_URL=${origin}`,
       'RESEND_API_KEY=local-test-only',
       'AUTH_FROM_EMAIL=auth@example.test',
