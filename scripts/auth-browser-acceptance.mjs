@@ -259,7 +259,7 @@ try {
     'The authentication Worker must reject state-changing requests from an untrusted Origin.'
   );
   assert.equal(
-    crossOriginResponse.headers()['set-cookie'],
+    crossOriginResponse.headers()['set-cookie'] ?? null,
     null,
     'A rejected cross-origin request must not create a session cookie.'
   );
@@ -278,7 +278,11 @@ try {
   rememberSensitive(originalPassword);
   rememberSensitive(replacementPassword);
 
-  await page.goto(origin + '/login');
+  const loginResponse = await page.goto(origin + '/login');
+  assert.equal(
+    loginResponse?.headers()['strict-transport-security'],
+    'max-age=31536000; includeSubDomains'
+  );
   await assertAuthAccessibility(page, '/login (guest)');
   if (await page.getByText('Account access is not enabled here yet.').count()) {
     throw new Error('Local Wrangler authentication bindings were not loaded.');
