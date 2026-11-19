@@ -5,15 +5,24 @@ import { createServer } from 'node:http';
 import { readFile, writeFile, unlink } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { createRequire } from 'node:module';
+import { chromium, request } from 'playwright';
 
 const port = Number(process.env.GUITARLAB_AUTH_PREVIEW_PORT ?? 8788);
-const origin = `http://127.0.0.1:${port}`;
+const origin = `https://localhost:${port}`;
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
+const require = createRequire(import.meta.url);
+const axeSource = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
+const wranglerConfigPath = fileURLToPath(new URL('../wrangler.jsonc', import.meta.url));
+const testWranglerConfigPath = fileURLToPath(
+  new URL(`../.wrangler.auth-test-${randomUUID()}.jsonc`, import.meta.url)
+);
 const varsPath = fileURLToPath(new URL('../.dev.vars', import.meta.url));
 const previousVars = await readFile(varsPath).catch(() => null);
 const messages = [];
+const sensitiveValues = [];
 let mailSink;
+let api;
 let preview;
 let previewOutput = '';
 let browser;
@@ -40,6 +49,17 @@ function startMailSink() {
   });
 }
 
+async function createHttpsTestConfig() {
+  const config = JSON.parse(await readFile(wranglerConfigPath, 'utf8'));
+  config.dev = {
+    ...config.dev,
+    ip: '127.0.0.1',
+    port,
+    local_protocol: 'https'
+  };
+  await writeFile(testWranglerConfigPath, JSON.stringify(config, null, 2) + '\n');
+}
+
 function startPreview() {
   preview = spawn(
     'npx',
@@ -47,7 +67,7 @@ function startPreview() {
       'wrangler',
       'dev',
       '--config',
-      'wrangler.jsonc',
+      testWranglerConfigPath,
       '--ip',
       '127.0.0.1',
       '--port',
@@ -73,8 +93,8 @@ async function waitForPreview() {
       throw new Error('The local authentication Worker exited during startup.');
     }
     try {
-      const response = await fetch(origin);
-      if (response.ok) return;
+      const response = await api.get(origin);
+      if (response.ok()) return;
     } catch {
       // Wrangler is still starting.
     }
@@ -106,11 +126,47 @@ async function waitForMessage(subject) {
   );
 }
 
+function rememberSensitive(value) {
+  if (typeof value === 'string' && value.length > 0) {
+    sensitiveValues.push(value);
+  }
+}
+
+function redactSensitiveValues(value) {
+  return [...new Set(sensitiveValues)]
+    .sort((left, right) => right.length - left.length)
+    .reduce((result, secret) => result.split(secret).join('[redacted]'), value)
+    .replace(/([?&]token=)[^&\\s]+/gi, '$1[redacted]')
+    .replace(/(\\/(?:reset-password|verify-email)\\/)[^/?\\s]+/gi, '$1[redacted]')
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi, '[redacted-email]');
+}
+
 function safeErrorMessage(error) {
   const message = error instanceof Error ? error.message : String(error);
-  return message
-    .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
-    .replace(/(\/(?:reset-password|verify-email)\/)[^/?\s]+/gi, '$1[redacted]');
+  return redactSensitiveValues(message);
+}
+
+async function assertAuthAccessibility(page, routeLabel) {
+  await page.addScriptTag({ content: axeSource });
+  const results = await page.evaluate(async () =>
+    window.axe.run(document, {
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']
+      }
+    })
+  );
+  const blockers = results.violations.filter((violation) =>
+    ['critical', 'serious'].includes(violation.impact)
+  );
+  assert.equal(
+    blockers.length,
+    0,
+    'Serious or critical accessibility violations on ' +
+      routeLabel +
+      ': ' +
+      blockers.map((violation) => violation.id).join(', ')
+  );
 }
 
 function extractActionUrl(message, predicate) {
@@ -166,6 +222,7 @@ try {
   await startMailSink();
   const sinkAddress = mailSink.address();
   assert.ok(sinkAddress && typeof sinkAddress === 'object');
+  api = await request.newContext({ ignoreHTTPSErrors: true });
   await writeFile(
     varsPath,
     [
@@ -174,32 +231,35 @@ try {
       'RESEND_API_KEY=local-test-only',
       'AUTH_FROM_EMAIL=auth@example.test',
       `AUTH_TEST_MAIL_SINK_URL=http://127.0.0.1:${sinkAddress.port}/emails`,
+      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=12',
+      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=2',
+      'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=2',
       ''
-    ].join('\n')
+    ].join('\\n')
   );
+  await createHttpsTestConfig();
 
   startPreview();
   await waitForPreview();
 
-  const crossOriginResponse = await fetch(origin + '/api/auth/sign-in/email', {
-    method: 'POST',
+  const crossOriginResponse = await api.post(origin + '/api/auth/sign-in/email', {
     headers: {
       'Content-Type': 'application/json',
       Origin: 'https://attacker.example',
       'cf-connecting-ip': '192.0.2.20'
     },
-    body: JSON.stringify({
+    data: {
       email: 'cross-origin@example.test',
       password: 'not-a-real-password'
-    })
+    }
   });
   assert.equal(
-    crossOriginResponse.status,
+    crossOriginResponse.status(),
     403,
     'The authentication Worker must reject state-changing requests from an untrusted Origin.'
   );
   assert.equal(
-    crossOriginResponse.headers.get('set-cookie'),
+    crossOriginResponse.headers()['set-cookie'],
     null,
     'A rejected cross-origin request must not create a session cookie.'
   );
@@ -207,14 +267,19 @@ try {
   browser = await chromium.launch({ headless: true });
 
   const context = await browser.newContext({
+    ignoreHTTPSErrors: true,
     extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.21' }
   });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
   const replacementPassword = 'GuitarLab-New-Password-456!';
+  rememberSensitive(email);
+  rememberSensitive(originalPassword);
+  rememberSensitive(replacementPassword);
 
   await page.goto(origin + '/login');
+  await assertAuthAccessibility(page, '/login (guest)');
   if (await page.getByText('Account access is not enabled here yet.').count()) {
     throw new Error('Local Wrangler authentication bindings were not loaded.');
   }
@@ -285,10 +350,14 @@ try {
     'A successful sign-in must establish a session cookie.'
   );
   assert.equal(sessionCookie.httpOnly, true);
+  assert.equal(sessionCookie.secure, true);
   assert.equal(sessionCookie.sameSite, 'Lax');
   assert.equal(sessionCookie.path, '/');
+  rememberSensitive(sessionCookie.value);
+  await assertAuthAccessibility(page, '/account (authenticated)');
 
   const secondContext = await browser.newContext({
+    ignoreHTTPSErrors: true,
     extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.22' }
   });
   const secondPage = await secondContext.newPage();
