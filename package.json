@@ -37,7 +37,8 @@
     "deploy:production": "wrangler deploy --config wrangler.production.jsonc",
     "db:auth:migrate:local": "wrangler d1 migrations apply AUTH_DB --local",
     "db:auth:test:local": "node scripts/test-auth-db.mjs",
-    "css:report": "node scripts/report-built-css.mjs"
+    "css:report": "node scripts/report-built-css.mjs",
+    "test:auth-browser": "node scripts/auth-browser-acceptance.mjs"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
