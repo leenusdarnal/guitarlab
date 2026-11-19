@@ -12,8 +12,13 @@ const port = Number(process.env.GUITARLAB_AUTH_PREVIEW_PORT ?? 8788);
 const origin = `https://localhost:${port}`;
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 const require = createRequire(import.meta.url);
-const axeSource = await readFile(require.resolve('axe-core/axe.min.js'), 'utf8');
-const wranglerConfigPath = fileURLToPath(new URL('../wrangler.jsonc', import.meta.url));
+const axeSource = await readFile(
+  require.resolve('axe-core/axe.min.js'),
+  'utf8'
+);
+const wranglerConfigPath = fileURLToPath(
+  new URL('../wrangler.jsonc', import.meta.url)
+);
 const testWranglerConfigPath = fileURLToPath(
   new URL(`../.wrangler.auth-test-${randomUUID()}.jsonc`, import.meta.url)
 );
@@ -55,9 +60,13 @@ async function createHttpsTestConfig() {
     ...config.dev,
     ip: '127.0.0.1',
     port,
-    local_protocol: 'https'
+    local_protocol: 'https',
+    upstream_protocol: 'http'
   };
-  await writeFile(testWranglerConfigPath, JSON.stringify(config, null, 2) + '\n');
+  await writeFile(
+    testWranglerConfigPath,
+    JSON.stringify(config, null, 2) + '\n'
+  );
 }
 
 function startPreview() {
@@ -160,7 +169,14 @@ async function assertAuthAccessibility(page, routeLabel) {
     window.axe.run(document, {
       runOnly: {
         type: 'tag',
-        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']
+        values: [
+          'wcag2a',
+          'wcag2aa',
+          'wcag21a',
+          'wcag21aa',
+          'wcag22aa',
+          'best-practice'
+        ]
       }
     })
   );
@@ -252,17 +268,20 @@ try {
   startPreview();
   await waitForPreview();
 
-  const crossOriginResponse = await api.post(origin + '/api/auth/sign-in/email', {
-    headers: {
-      'Content-Type': 'application/json',
-      Origin: 'https://attacker.example',
-      'cf-connecting-ip': '192.0.2.20'
-    },
-    data: {
-      email: 'cross-origin@example.test',
-      password: 'not-a-real-password'
+  const crossOriginResponse = await api.post(
+    origin + '/api/auth/sign-in/email',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: 'https://attacker.example',
+        'cf-connecting-ip': '192.0.2.20'
+      },
+      data: {
+        email: 'cross-origin@example.test',
+        password: 'not-a-real-password'
+      }
     }
-  });
+  );
   assert.equal(
     crossOriginResponse.status(),
     403,
@@ -392,7 +411,9 @@ try {
   await page.getByRole('button', { name: 'Send reset link' }).click();
   await page.getByText(/If an account matches that address/).waitFor();
 
-  const expiredResetEmail = await waitForMessage('Reset your GuitarLab password');
+  const expiredResetEmail = await waitForMessage(
+    'Reset your GuitarLab password'
+  );
   const expiredResetUrl = extractActionUrl(
     expiredResetEmail,
     (url) =>
@@ -482,18 +503,24 @@ try {
   await signIn(expiryPage, email, replacementPassword);
   await expiryPage.waitForURL(origin + '/');
   await expiryPage.goto(origin + '/account');
-  const initialExpiryCookie = (await expiryContext.cookies(origin)).find((cookie) =>
-    cookie.name.includes('session_token')
+  const initialExpiryCookie = (await expiryContext.cookies(origin)).find(
+    (cookie) => cookie.name.includes('session_token')
   );
-  assert.ok(initialExpiryCookie, 'A new session must establish a session cookie.');
+  assert.ok(
+    initialExpiryCookie,
+    'A new session must establish a session cookie.'
+  );
   const initialCookieExpiry = initialExpiryCookie.expires;
   rememberSensitive(initialExpiryCookie.value);
   await delay(6000);
   await expiryPage.goto(origin + '/account');
-  const refreshedExpiryCookie = (await expiryContext.cookies(origin)).find((cookie) =>
-    cookie.name.includes('session_token')
+  const refreshedExpiryCookie = (await expiryContext.cookies(origin)).find(
+    (cookie) => cookie.name.includes('session_token')
   );
-  assert.ok(refreshedExpiryCookie, 'The active session cookie must remain present after refresh.');
+  assert.ok(
+    refreshedExpiryCookie,
+    'The active session cookie must remain present after refresh.'
+  );
   assert.ok(
     refreshedExpiryCookie.expires > initialCookieExpiry + 1,
     'Using a session after updateAge must extend its cookie expiry.'
@@ -544,7 +571,12 @@ try {
         .replace(/RESEND_API_KEY=[^ ]+/g, 'RESEND_API_KEY=[redacted]')
         .replace(/AUTH_FROM_EMAIL=[^ ]+/g, 'AUTH_FROM_EMAIL=[redacted]')
     );
-    console.error(safeOutput.split(String.fromCharCode(10)).slice(-80).join(String.fromCharCode(10)));
+    console.error(
+      safeOutput
+        .split(String.fromCharCode(10))
+        .slice(-80)
+        .join(String.fromCharCode(10))
+    );
   }
   process.exitCode = 1;
 } finally {
