@@ -14,7 +14,6 @@ const previousVars = await readFile(varsPath).catch(() => null);
 const messages = [];
 let mailSink;
 let preview;
-let previewOutput = '';
 let browser;
 
 function startMailSink() {
@@ -43,14 +42,8 @@ function startPreview() {
   preview = spawn(
     'npm',
     ['run', 'preview', '--', '--ip', '127.0.0.1', '--port', String(port)],
-    { stdio: ['ignore', 'pipe', 'pipe'], detached: process.platform !== 'win32' }
+    { stdio: 'ignore', detached: process.platform !== 'win32' }
   );
-  preview.stdout.on('data', (chunk) => {
-    previewOutput += chunk.toString();
-  });
-  preview.stderr.on('data', (chunk) => {
-    previewOutput += chunk.toString();
-  });
 }
 
 async function waitForPreview() {
