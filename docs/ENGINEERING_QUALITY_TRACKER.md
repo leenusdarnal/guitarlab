@@ -62,7 +62,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 1 | OFF-01 — Restrict Cache Storage to explicitly public content | P0 | DONE — automated |
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
 | 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | DONE — automated |
-| 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | PARTIAL |
+| 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | IN PROGRESS — PR #203 adds a loopback-only test mail sink and real Worker/browser lifecycle coverage; final CI evidence pending |
 | 5 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
 | 6 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
 | 7 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
@@ -244,7 +244,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| SEC-01 | P1 | **PARTIAL** | Complete registration, email verification/resend, sign-in, password-reset, logout, session-expiry and revocation journeys with a safe test-mail sink. | PR #177 merged; Issue #176 remains open |
+| SEC-01 | P1 | **IN PROGRESS** | PR #203 adds a test-only loopback email sink and a real local Worker/Playwright journey for duplicate registration, verification pending/resend/completion, unverified sign-in rejection, password reset/replay, reset-triggered session revocation, logout and guest-safe redirects. Local cookie checks cover HttpOnly, SameSite and Path. Session refresh/expiry and final CI evidence remain outstanding. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md); Issue #176 remains open |
 | SEC-02 | P1 | **BLOCKED** | Provision and verify isolated local/preview/production auth D1 databases, migrations, Better Auth secret, exact origin and transactional email credentials before enabling account endpoints in those environments. | [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md) states preview/production auth bindings are not enabled |
 | SEC-03 | P1 | **PARTIAL** | Verify security and privacy behaviour end-to-end: no account enumeration, origin/CSRF protection, rate limiting, secure cookie attributes, session revocation and no sensitive data in logs/responses. | Better Auth configuration and local security-header checks exist; end-to-end evidence incomplete |
 | SEC-04 | P1 | **DEFERRED** | Keep cloud learner-data sync disabled until account ownership enforcement, export/deletion, idempotency, conflict handling and recovery are separately implemented and tested. | Architecture and authentication decision |
@@ -253,11 +253,11 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 
 ### SEC-01 / SEC-02 acceptance checklist
 
-- [ ] Use a test-mail sink; never send real verification or password-reset email from automated tests.
-- [ ] Verify sign-up, duplicate-account response, verification pending, verification resend and successful verification.
-- [ ] Verify unverified users cannot obtain a usable authenticated session.
+- [x] Add a test-mail sink restricted to loopback authentication origins; never send real verification or password-reset email from automated tests. PR #203 CI evidence is pending.
+- [x] Add browser coverage for sign-up, duplicate-account response, verification pending, verification resend and successful verification; final CI evidence is pending.
+- [x] Add browser coverage proving unverified users cannot sign in before verification; final CI evidence is pending.
 - [ ] Verify sign-in, sign-out, session refresh/expiry and server-side revocation.
-- [ ] Verify password-reset request and completion, expired/used token behaviour and session revocation after reset.
+- [ ] Verify password-reset request and completion, expired/used token behaviour and session revocation after reset. PR #203 adds completion, used-link replay and revocation coverage; expired-token behaviour remains.
 - [ ] Ensure responses do not disclose whether an email address is registered.
 - [ ] Verify CSRF/origin checks and configured rate limits against the running Worker.
 - [ ] Inspect actual session cookie attributes on HTTPS: HttpOnly, Secure, SameSite and Path. Review whether a `__Host-` prefix is supported without changing Better Auth's security semantics.
