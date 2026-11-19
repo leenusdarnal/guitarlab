@@ -133,12 +133,21 @@ function rememberSensitive(value) {
 }
 
 function redactSensitiveValues(value) {
+  const nonSpace = '[^& ' + String.fromCharCode(9) + ']+';
+  const tokenQueryPattern = new RegExp('([?&]token=)' + nonSpace, 'gi');
+  const slash = String.fromCharCode(47);
+  const tokenPathPattern = new RegExp(
+    '(' + slash + '(?:reset-password|verify-email)' + slash + ')[^/? ]+',
+    'gi'
+  );
+  const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+[.][A-Z]{2,}/gi;
+
   return [...new Set(sensitiveValues)]
     .sort((left, right) => right.length - left.length)
     .reduce((result, secret) => result.split(secret).join('[redacted]'), value)
-    .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
-    .replace(/(\/(?:reset-password|verify-email)\/)[^/?\s]+/gi, '$1[redacted]')
-    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted-email]');
+    .replace(tokenQueryPattern, '$1[redacted]')
+    .replace(tokenPathPattern, '$1[redacted]')
+    .replace(emailPattern, '[redacted-email]');
 }
 
 function safeErrorMessage(error) {
@@ -529,11 +538,11 @@ try {
   if (previewOutput) {
     const safeOutput = redactSensitiveValues(
       previewOutput
-        .replace(/BETTER_AUTH_SECRET=[^\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
-        .replace(/RESEND_API_KEY=[^\s]+/g, 'RESEND_API_KEY=[redacted]')
-        .replace(/AUTH_FROM_EMAIL=[^\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
+        .replace(/BETTER_AUTH_SECRET=[^ ]+/g, 'BETTER_AUTH_SECRET=[redacted]')
+        .replace(/RESEND_API_KEY=[^ ]+/g, 'RESEND_API_KEY=[redacted]')
+        .replace(/AUTH_FROM_EMAIL=[^ ]+/g, 'AUTH_FROM_EMAIL=[redacted]')
     );
-    console.error(safeOutput.split('\n').slice(-80).join('\n'));
+    console.error(safeOutput.split(String.fromCharCode(10)).slice(-80).join(String.fromCharCode(10)));
   }
   process.exitCode = 1;
 } finally {
