@@ -15,6 +15,7 @@ const previousVars = await readFile(varsPath).catch(() => null);
 const messages = [];
 let mailSink;
 let preview;
+let previewOutput = '';
 let browser;
 
 function startMailSink() {
@@ -54,10 +55,16 @@ function startPreview() {
     ],
     {
       cwd: projectRoot,
-      stdio: 'ignore',
+      stdio: ['ignore', 'pipe', 'pipe'],
       detached: process.platform !== 'win32'
     }
   );
+  preview.stdout.on('data', (chunk) => {
+    previewOutput += chunk.toString();
+  });
+  preview.stderr.on('data', (chunk) => {
+    previewOutput += chunk.toString();
+  });
 }
 
 async function waitForPreview() {
@@ -319,6 +326,14 @@ try {
   );
 } catch (error) {
   console.error(safeErrorMessage(error));
+  if (previewOutput) {
+    const safeOutput = previewOutput
+      .replace(/BETTER_AUTH_SECRET=[^\\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
+      .replace(/RESEND_API_KEY=[^\\s]+/g, 'RESEND_API_KEY=[redacted]')
+      .replace(/AUTH_FROM_EMAIL=[^\\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
+      .replace(/([?&]token=)[^&\\s]+/gi, '$1[redacted]');
+    console.error(safeOutput.split('\\n').slice(-80).join('\\n'));
+  }
   process.exitCode = 1;
 } finally {
   await browser?.close();
