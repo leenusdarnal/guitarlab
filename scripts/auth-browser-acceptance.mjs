@@ -267,11 +267,7 @@ try {
     'Authentication browser acceptance passed: verified registration, unverified sign-in rejection, password reset, session revocation, logout and guest-safe routing.'
   );
 } catch (error) {
-  console.error(error);
-  if (previewOutput) {
-    console.error('Local Worker startup output (secrets and email contents are not included):');
-    console.error(previewOutput.replace(/BETTER_AUTH_SECRET=[^\s]+/g, 'BETTER_AUTH_SECRET=[redacted]'));
-  }
+  console.error(safeErrorMessage(error));
   process.exitCode = 1;
 } finally {
   await browser?.close();
