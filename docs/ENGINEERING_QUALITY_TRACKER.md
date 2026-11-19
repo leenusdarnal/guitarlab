@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 19 November 2026  
-**Verified source baseline:** `main` at `4ee210ae6b85f7dab7a3cdd719b303d6d40173c0` (PRs #193–#200 merged)  
+**Verified source baseline:** `main` at `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf` (PR #201 merged)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -314,7 +314,7 @@ Related tracking: [Issue #9](https://github.com/leenusdarnal/guitarlab/issues/9)
 
 | ID | Priority | Status | Required evidence |
 |---|---|---|---|
-| QA-04 | P1 | **OPEN** | Reconcile the exact deployed Worker version to the intended current `main` SHA. Earlier docs record a successful first production release for `306f7aea19596731dac88192d8228590544f00fc`; this audit does not establish that `41805887fee753b1c47e2b1442218ac53c4d948f` is deployed. Verify routes, security headers, retained artifact and rollback to a prior Worker version. |
+| QA-04 | P1 | **OPEN** | Reconcile the exact deployed Worker version to the intended current `main` SHA. The first local-first production deployment is verified by workflow run [#44054131712](https://github.com/leenusdarnal/guitarlab/actions/runs/44054131712) at exact SHA `1e18998eba43d0c2f6e3267ddeccb11b198b4188` (17 November 2026). Current `main` is `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf`; this tracker does not claim that newer SHA is deployed. Reconcile the active Worker version against the deployment artifact, verify rollback target and record current production smoke-test evidence. |
 | QA-05 | P2 | **OPEN** | Complete the controlled CI failure-injection and recovery rehearsal (see CI-01/CI-02 and [CI failure recovery runbook](CI_FAILURE_RECOVERY.md)); record the actual workflow run URLs. A currently green CI run does not prove this rehearsal has been completed. |
 | QA-06 | P1 | **OPEN** | Complete the umbrella M9 privacy, security, accessibility, offline, performance and release review; close only when all required P1 evidence is recorded. |
 
