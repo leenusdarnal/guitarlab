@@ -107,6 +107,10 @@ function authTiming(env: AuthEnvironment) {
   };
 }
 
+export function isEmailPasswordAuthConfigured(env?: AuthEnvironment): boolean {
+  return Boolean(env?.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim());
+}
+
 export function isAuthConfigured(env?: AuthEnvironment): boolean {
   if (
     !env?.AUTH_DB ||
@@ -115,7 +119,7 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
     !env.BETTER_AUTH_URL ||
     (!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) &&
       !(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) &&
-      !(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()))
+      !isEmailPasswordAuthConfigured(env))
   ) {
     return false;
   }
@@ -195,8 +199,8 @@ export async function sendTransactionalEmail(
 
 /**
  * Construct Better Auth from the request's Cloudflare bindings. Auth is not
- * instantiated unless its isolated D1 database, secret, public URL and email
- * delivery configuration are all present.
+ * instantiated unless its isolated D1 database, secret, public URL and at least
+ * one complete sign-in method are configured.
  */
 export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
   if (!isAuthConfigured(env)) {
@@ -240,7 +244,7 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
       updateAge: timing.sessionUpdateAge
     },
     emailAndPassword: {
-      enabled: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
+      enabled: isEmailPasswordAuthConfigured(env),
       minPasswordLength: 12,
       maxPasswordLength: 128,
       requireEmailVerification: true,
@@ -262,8 +266,8 @@ If you did not request a reset, you can ignore this email.`
       }
     },
     emailVerification: {
-      sendOnSignUp: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
-      sendOnSignIn: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
+      sendOnSignUp: isEmailPasswordAuthConfigured(env),
+      sendOnSignIn: isEmailPasswordAuthConfigured(env),
       autoSignInAfterVerification: false,
       expiresIn: 60 * 60,
       sendVerificationEmail: ({ user, url }) =>
