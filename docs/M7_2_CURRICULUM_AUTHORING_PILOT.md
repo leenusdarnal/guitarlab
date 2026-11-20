@@ -1,4 +1,7 @@
-# M7.2 — Representative Curriculum Authoring Pilot\n\n> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.\n
+# M7.2 — Representative Curriculum Authoring Pilot
+
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
 
 **Status:** Representative pilot and Jazz & Harmony Weeks 1–8 merged; curriculum v1.0.6 was the active release at the time of this report  
 **Current release:** `curriculum-v1.0.6`  
