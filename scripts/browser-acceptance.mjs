@@ -105,6 +105,19 @@ async function waitForOnboardingProfile(page) {
   });
 }
 
+async function waitForDataPageReady(page) {
+  await page.waitForFunction(() => {
+    const storagePanel = document.querySelector(
+      '[aria-labelledby="storage-protection-title"]'
+    );
+    const status = storagePanel?.querySelector('p')?.textContent ?? '';
+    return (
+      status.length > 0 &&
+      !status.includes("Checking this browser's data-protection options")
+    );
+  });
+}
+
 let browser;
 let lifecycleServer;
 try {
@@ -1431,6 +1444,7 @@ try {
     () => document.querySelector('#backup-reminder') === null
   );
   await page.goto(origin + '/settings/data', { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
 
   // Invalid JSON and unsupported backup versions must be rejected without preview.
   const backupInput = page.locator('input[type="file"]');
@@ -1501,6 +1515,7 @@ try {
     }
   };
   await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.locator('input[type="file"]').setInputFiles({
     name: 'transaction-rollback.json',
     mimeType: 'application/json',
@@ -1535,6 +1550,7 @@ try {
 
   // Reset is gated by both the typed phrase and the browser confirmation dialog.
   await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   const resetInput = page.locator('#reset-confirm');
   const resetButton = page.getByRole('button', {
     name: 'Reset active learner data'
@@ -1559,6 +1575,7 @@ try {
   );
 
   await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.locator('#reset-confirm').fill('RESET');
   await resetButton.scrollIntoViewIfNeeded();
   let acceptedDialogMessage = '';
@@ -1643,6 +1660,7 @@ try {
     'Reset should create a fresh profile with no assumed practice duration'
   );
   await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.evaluate(() =>
     localStorage.setItem('guitarlab.last-backup-export-at', String(Date.now()))
   );
