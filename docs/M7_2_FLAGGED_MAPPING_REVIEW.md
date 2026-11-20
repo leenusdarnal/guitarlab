@@ -1,4 +1,4 @@
-# M7.2 — Focused Review of Flagged Lesson Mappings
+# M7.2 — Focused Review of Flagged Lesson Mappings\n\n> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.\n
 
 **Status:** Initial source review completed for five candidates; two mapping concerns require curriculum-owner decision  
 **Sources inspected:** Authored lesson focus, objectives, explanations, lesson blocks, demonstrations, exercises, retrieval prompts, success criteria, and checkpoints  
