@@ -487,7 +487,9 @@ try {
   await page.getByRole('alert').waitFor();
 
   await secondPage.goto(origin + '/account');
-  await secondPage.waitForURL(/\/login(?:$|\?)/, { waitUntil: 'domcontentloaded' });
+  await secondPage.waitForURL(/\/login(?:$|\?)/, {
+    waitUntil: 'domcontentloaded'
+  });
 
   await signIn(page, email, originalPassword);
   await page.getByRole('alert').waitFor();
@@ -533,7 +535,9 @@ try {
   rememberSensitive(refreshedExpiryCookie.value);
   await delay(61000);
   await expiryPage.goto(origin + '/account');
-  await expiryPage.waitForURL(/\/login(?:$|\?)/, { waitUntil: 'domcontentloaded' });
+  await expiryPage.waitForURL(/\/login(?:$|\?)/, {
+    waitUntil: 'domcontentloaded'
+  });
   await expiryContext.close();
 
   const rateLimitStatuses = [];
