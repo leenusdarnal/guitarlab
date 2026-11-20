@@ -1,5 +1,8 @@
 # M7.2 — Practice Evidence and Planner Audit
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Objective item capture and comparable item analytics are implemented (PRs #107–110). The next slice introduces a versioned, author-evidenced exercise taxonomy; learner exposure coverage remains deferred until practice records can reference stable authored exercise IDs and curriculum releases.  
 **Reviewed against:** merged PR #110 at `a04d284e82447707de6b4d70a01115f2b2982e0b` (PRs #92–94, #103–110 merged)  
 **Scope:** Existing practice planning, activity observations, assessment history and skill-state rules
