@@ -11,7 +11,7 @@
 
 **Tech Stack:** Svelte 5, SvelteKit 3, CSS custom properties, Node.js validation script, Vitest/browser acceptance already configured in the repository.
 
-**Spec:** \`docs/DESIGN_DIRECTION.md\`, sections 3, 9, 10, 13 and 14; \`docs/UI_UX_IMPLEMENTATION_TRACKER.md\`, UX-02/03/04.
+**Spec:** \`docs/DESIGN_DIRECTION.md\`, sections 3, 9, 10, 13 and 14; \`docs/ENGINEERING_QUALITY_TRACKER.md\`, UX-02/03/04.
 
 ## Global Constraints
 
