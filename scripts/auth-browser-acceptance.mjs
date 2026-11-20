@@ -377,7 +377,10 @@ try {
   );
   rememberSensitive(new URL(verificationUrl).searchParams.get('token') ?? '');
   await page.goto(verificationUrl);
-  await page.waitForURL((url) => url.searchParams.get('verified') === '1', { waitUntil: 'domcontentloaded' });
+  await page.waitForURL(
+    (url) => url.searchParams.get('verified') === '1',
+    { waitUntil: 'domcontentloaded' }
+  );
 
   await signIn(page, email, originalPassword);
   await page.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
