@@ -1,6 +1,6 @@
 # GuitarLab Implementation Guidelines
 
-**Status:** Implementation baseline for the first application build  
+**Status:** Maintained implementation guidance; not a task tracker  
 **Repository:** `leenusdarnal/guitarlab`  
 **Purpose:** Translate the canonical product specification, curriculum, architecture and visual-design decisions into implementable behaviour. This document owns implementation guidance for personalisation, lessons, practice, mastery and privacy; it does not create a parallel product scope or task tracker. The [Product Specification](PRODUCT_SPEC.md) owns product requirements, the [Roadmap](ROADMAP.md) owns milestone status and the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) owns engineering/release task evidence.
 
