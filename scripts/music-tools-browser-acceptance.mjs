@@ -566,6 +566,15 @@ try {
   await page.getByLabel('A4 reference frequency').selectOption('442');
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
+  // The heading can be present in server-rendered HTML before onMount restores
+  // the saved calibration from localStorage. Wait for that hydrated state rather
+  // than treating DOM content readiness as application readiness.
+  await page.waitForFunction(() => {
+    const select = document.querySelector<HTMLSelectElement>(
+      'select[aria-label="A4 reference frequency"]'
+    );
+    return select?.value === '442';
+  });
   assert.equal(
     await page.getByLabel('A4 reference frequency').inputValue(),
     '442'
