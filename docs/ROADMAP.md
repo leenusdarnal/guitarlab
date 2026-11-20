@@ -113,7 +113,7 @@ PRs #45–46 provide the fretboard, chord library and metronome. The audio follo
 - [x] Explainable skill states and learner corrections with provenance (PR #59).
 - [ ] Accuracy-first tempo ladders and richer per-item performance trends.
 - [x] First adaptive-practice read model: deterministic reason codes, active learner/release scoping, measured-score summaries, missing-evidence states and assessment-category coverage (PR #93).
-- [x] Practice Studio recommendation list, category assessment-coverage view and canonical 34-skill catalogue (PR #94).
+- [x] Practice Studio recommendation list, category assessment-coverage view and canonical skill catalogue, now at 35 identifiers (PR #94 introduced its initial 34-skill version; active count is in the curriculum tracker).
 - [x] Append-only local dismiss/correct feedback with provenance, deterministic resolution, backup/restore/reset handling and browser acceptance (PR #103).
 - [x] Per-skill measured-score summaries, descriptive score spread and conservative four-score trends within the latest assessment kind (PR #104).
 - [ ] Structured per-item assessment outcomes and confusion metadata with provenance, versioning and privacy-safe backup/restore.
