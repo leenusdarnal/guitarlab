@@ -88,6 +88,25 @@ async function waitForPreview() {
   throw new Error('Wrangler preview did not become ready.\n' + serverOutput);
 }
 
+/**
+ * Wait for the SvelteKit layout to finish its initial mount/navigation.
+ * The root layout assigns #main-content from afterNavigate, so this is an
+ * application-owned readiness signal rather than an assumption that every
+ * network request has become idle.
+ */
+async function navigateAndWaitFor(
+  page,
+  url,
+  readySelector = 'main#main-content'
+) {
+  const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+  await page.locator('main#main-content').waitFor({ state: 'visible' });
+  if (readySelector !== 'main#main-content') {
+    await page.locator(readySelector).waitFor({ state: 'visible' });
+  }
+  return response;
+}
+
 function assertResponseSecurityHeaders(response) {
   const headers = response?.headers() ?? {};
 
@@ -306,9 +325,7 @@ try {
 
     for (const route of routes) {
       await page.setViewportSize({ width: 320, height: 900 });
-      const mobileResponse = await page.goto(origin + route, {
-        waitUntil: 'networkidle'
-      });
+      const mobileResponse = await navigateAndWaitFor(page, origin + route);
       assert.equal(
         mobileResponse?.status(),
         200,
@@ -625,9 +642,11 @@ try {
           'The lesson starting tempo should be carried into the metronome URL.'
         );
         const metronomePage = await context.newPage();
-        await metronomePage.goto(new URL(metronomeHref, origin).toString(), {
-          waitUntil: 'networkidle'
-        });
+        await navigateAndWaitFor(
+          metronomePage,
+          new URL(metronomeHref, origin).toString(),
+          'input[aria-label="Enter tempo in beats per minute"]'
+        );
         assert.equal(
           await metronomePage
             .getByRole('spinbutton', {
@@ -797,7 +816,11 @@ try {
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+    await navigateAndWaitFor(
+      page,
+      origin + '/learn',
+      'main#main-content select[aria-label="Appearance"]'
+    );
     const firstFrameTheme = await page.evaluate(() => ({
       applied: document.documentElement.dataset.theme,
       firstFrame: window.__guitarlabThemeAtFirstFrame,
@@ -811,7 +834,7 @@ try {
     );
     assert.equal(firstFrameTheme.preference, theme);
 
-    const appearance = page.locator('select[aria-label="Appearance"]');
+    const appearance = page.locator('main#main-content select[aria-label="Appearance"]');
     assert.equal(await appearance.inputValue(), theme);
     await appearance.selectOption('system');
     assert.equal(
@@ -856,9 +879,13 @@ try {
     );
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(origin, { waitUntil: 'networkidle' });
+    await navigateAndWaitFor(
+      page,
+      origin,
+      'main#main-content select[aria-label="Appearance"]'
+    );
     const dashboardAppearance = page.locator(
-      'select[aria-label="Appearance"]:visible'
+      'main#main-content select[aria-label="Appearance"]:visible'
     );
     assert.equal(await dashboardAppearance.inputValue(), 'dark');
     await dashboardAppearance.selectOption('light');
@@ -878,8 +905,12 @@ try {
         themeColor: '#F5F4F0'
       }
     );
-    await page.goto(origin + '/practice', { waitUntil: 'networkidle' });
-    const sharedAppearance = page.locator('select[aria-label="Appearance"]');
+    await navigateAndWaitFor(
+      page,
+      origin + '/practice',
+      'main#main-content select[aria-label="Appearance"]'
+    );
+    const sharedAppearance = page.locator('main#main-content select[aria-label="Appearance"]');
     assert.equal(
       await sharedAppearance.inputValue(),
       'light',
@@ -905,7 +936,7 @@ try {
 
     if (theme === 'dark') {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto(origin, { waitUntil: 'networkidle' });
+      await navigateAndWaitFor(page, origin);
       await page.keyboard.press('Tab');
       const firstFocus = await page.evaluate(() => ({
         text: document.activeElement?.textContent?.trim() ?? '',
@@ -961,7 +992,11 @@ try {
       );
     }
 
-    await page.goto(origin + '/settings/data', { waitUntil: 'networkidle' });
+    await navigateAndWaitFor(
+      page,
+      origin + '/settings/data',
+      'label.file-picker'
+    );
     const restorePicker = page
       .locator('label.file-picker')
       .filter({ has: page.locator('input[type="file"]') });
