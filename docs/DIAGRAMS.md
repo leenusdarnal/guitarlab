@@ -1,6 +1,6 @@
 # GuitarLab System Diagrams
 
-These diagrams describe the approved architecture and implementation boundaries. They are architecture views, not a live status dashboard; use the [Implementation Tracker](IMPLEMENTATION_TRACKER.md) and [Roadmap](ROADMAP.md) for current delivery status. M2.3 local IndexedDB persistence and M2.4 local backup/restore are implemented; M4.2 checkpoints/resume, full offline app-shell support, authenticated sync and live Cloudflare deployment remain later work.
+These diagrams describe architecture and implementation boundaries; they are not a live status dashboard. Use the [Roadmap](ROADMAP.md) for product milestone state and the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) for task-level engineering and release evidence. The diagrams are explanatory views, not a claim that every depicted future component is currently deployed or enabled.
 
 ## 1. System context and trust boundaries
 
