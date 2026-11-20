@@ -29,7 +29,7 @@ GuitarLab is a self-contained guitar-learning environment. It teaches the learne
 
 ## Learning system
 
-GuitarLab contains a complete 52-week Year 1 route, a 52-week Year 2 continuation and four optional 12-week Year 3+ specialisations. All 156 weekly lessons have authored lesson content. Each lesson is self-contained and does not depend on a paid external course. See [Curriculum](CURRICULUM.md), the [content model](CURRICULUM_CONTENT_MODEL.md) and the machine-readable files under `content/curriculum/`.
+GuitarLab contains a complete 52-week Year 1 route, a 52-week Year 2 continuation and four optional 12-week Year 3+ specialisations. All 152 weekly lessons have authored lesson content. Each lesson is self-contained and does not depend on a paid external course. See [Curriculum](CURRICULUM.md), the [content model](CURRICULUM_CONTENT_MODEL.md) and the machine-readable files under `content/curriculum/`.
 
 The learning sequence is built around hearing/observing, understanding, isolating a small skill, practising slowly, observing and adjusting, mixing with a known skill, applying to music and retrieving the idea. Weekly cards are ordering guides rather than seven-day deadlines.
 
