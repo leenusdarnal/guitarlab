@@ -114,6 +114,9 @@ jobs:
       - name: Validate preview deployment configuration
         run: npm run deploy:preview:dry-run
 
+      - name: Apply pending preview auth database migrations
+        run: npx wrangler d1 migrations apply guitarlab-auth-preview --remote --config wrangler.preview.jsonc
+
       - name: Deploy preview Worker
         run: npm run deploy:preview
 

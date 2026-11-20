@@ -11,5 +11,16 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "vars": {
+    "BETTER_AUTH_URL": "https://guitarlab-preview.leenusdarnal.workers.dev"
+  },
+  "d1_databases": [
+    {
+      "binding": "AUTH_DB",
+      "database_name": "guitarlab-auth-preview",
+      "database_id": "2abf9a07-620a-4c24-8d12-f75b34b31d21",
+      "migrations_dir": "drizzle/auth-migrations"
+    }
+  ]
 }

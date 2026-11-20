@@ -115,6 +115,9 @@ jobs:
       - name: Validate production deployment configuration
         run: npm run deploy:production:dry-run
 
+      - name: Apply pending production auth database migrations
+        run: npx wrangler d1 migrations apply guitarlab-auth-production --remote --config wrangler.production.jsonc
+
       - name: Deploy production Worker
         env:
           WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson

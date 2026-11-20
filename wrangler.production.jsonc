@@ -24,5 +24,16 @@
       "head_sampling_rate": 0.01,
       "persist": true
     }
-  }
+  },
+  "vars": {
+    "BETTER_AUTH_URL": "https://guitarlab.leenusdarnal.workers.dev"
+  },
+  "d1_databases": [
+    {
+      "binding": "AUTH_DB",
+      "database_name": "guitarlab-auth-production",
+      "database_id": "0b81ddcc-7612-4842-9878-051e26be6962",
+      "migrations_dir": "drizzle/auth-migrations"
+    }
+  ]
 }
