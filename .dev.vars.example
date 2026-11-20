@@ -3,3 +3,9 @@ BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:8787
 RESEND_API_KEY=
 AUTH_FROM_EMAIL=
+
+# Optional social sign-in providers (configure at least one for passwordless OAuth)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
