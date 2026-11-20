@@ -61,7 +61,7 @@ async function createHttpsTestConfig() {
     ip: '127.0.0.1',
     port,
     local_protocol: 'https',
-    upstream_protocol: 'http'
+    upstream_protocol: 'https'
   };
   await writeFile(
     testWranglerConfigPath,
