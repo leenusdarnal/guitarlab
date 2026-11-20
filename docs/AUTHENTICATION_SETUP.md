@@ -9,7 +9,7 @@ The local Wrangler configuration contains a separate `AUTH_DB` binding named `gu
 1. Copy `.dev.vars.example` to `.dev.vars`.
 2. Generate a secret with `openssl rand -base64 32` and set it as `BETTER_AUTH_SECRET`.
 3. Set `BETTER_AUTH_URL=http://localhost:8787` when using the local Wrangler Worker.
-4. Configure a real Resend API key and a sender address verified by that Resend account.
+4. For email/password registration, configure a real Resend API key and a sender address verified by that Resend account. For passwordless social sign-in, configure Google and/or GitHub OAuth credentials instead.
 5. Apply the isolated identity schema with `npm run db:auth:migrate:local`, then verify its tables with `npm run db:auth:test:local`.
 6. Build and run the Worker with `npm run build` followed by `npm run preview`.
 
@@ -25,7 +25,7 @@ The auth Worker needs these bindings/secrets:
 | `BETTER_AUTH_SECRET` | High-entropy Better Auth secret (at least 32 characters) |
 | `BETTER_AUTH_URL` | Exact public origin for this deployment, with no path |
 | `RESEND_API_KEY` | Transactional email API key used for verification and password reset |
-| `AUTH_FROM_EMAIL` | Sender identity verified by the email provider |
+| `AUTH_FROM_EMAIL` | Sender identity verified by the email provider (only needed for email/password, verification and password reset) |\n| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional Google OAuth application credentials |\n| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Optional GitHub OAuth application credentials |
 
 The SvelteKit 3 hook reads Cloudflare bindings from the `cloudflare:workers` module (`env` and `waitUntil`); do not use the removed SvelteKit `event.platform` binding API. It uses Better Auth's SvelteKit handler, reads the server session into request locals, and retains the application's existing response security headers. The global navigation switches between Sign in and Account from the server-validated session; the account page provides sign-out. A guest request to the account page redirects to Sign in. Better Auth's origin/CSRF protections remain enabled. Session cookies are HttpOnly, Secure on HTTPS, SameSite=Lax and path-scoped. Rate limits are persisted in the auth D1 database and use Cloudflare's `cf-connecting-ip` header.
 
@@ -51,7 +51,7 @@ Before enabling remote account endpoints, configure each Worker independently in
 3. Set `AUTH_FROM_EMAIL` as a non-secret variable to a sender identity that is verified in the corresponding Resend account.
 4. Keep the `BETTER_AUTH_URL` and `AUTH_DB` values from the checked-in Wrangler config; do not substitute the other environment's URL or database.
 
-Secret additions through `wrangler secret put` create and deploy a new Worker version immediately. Apply them only to the intended Worker and only after the matching D1 binding has been deployed. Never reuse the preview Better Auth secret in production. The app remains fail-closed while any required binding, secret, origin or sender value is absent.
+Secret additions through `wrangler secret put` create and deploy a new Worker version immediately. Apply them only to the intended Worker and only after the matching D1 binding has been deployed. Never reuse the preview Better Auth secret in production. The app remains fail-closed while the database, secret or origin is absent, or when no usable sign-in method is configured. Google and GitHub OAuth can operate without an email delivery provider. Email/password registration, verification and password reset remain disabled unless both `RESEND_API_KEY` and `AUTH_FROM_EMAIL` are configured.
 
 Recommended rollout: migrate preview D1; configure preview credentials and verified sender; deploy preview and complete registration, verification, reset and session smoke tests; then repeat independently for production with production credentials and deployment approval. Do not copy preview data or secrets into production. This setup does not enable cloud learner-data sync.
 
@@ -67,3 +67,16 @@ The browser acceptance test also sets three timing overrides: `AUTH_TEST_SESSION
 
 Password-reset messages link directly to the frontend reset route with Better Auth's one-time token; the client submits that token to Better Auth's reset endpoint. The local HTTPS journey covers duplicate registration and generic responses, pending verification, unverified sign-in rejection, verification resend/completion, successful sign-in, protected account access, HttpOnly/Secure/SameSite/Path cookie attributes, expired and replayed reset tokens, password-reset session revocation, session refresh and eventual expiry, logout, guest-safe redirects, untrusted-Origin rejection without a session cookie, sign-in HTTP 429 rate limiting, and axe checks for sign-in/account/reset states. Worker output is checked for the synthetic emails, credentials, session cookies and one-time tokens used by the run. None of this enables remote account access: preview/production still require separately provisioned D1 databases, migrations, secrets, exact HTTPS origins and verified sender credentials. A passing local HTTPS journey is not production environment or physical-device sign-off.
 
+
+## Social OAuth setup (no email delivery provider required)
+
+Google and GitHub sign-in are optional Better Auth social providers. Configure the provider credentials as Worker secrets on the intended environment; never commit them or paste them into chat, issues, pull requests or logs.
+
+| Provider | Environment variables | Preview callback |
+| --- | --- | --- |
+| Google | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | `https://guitarlab-preview.leenusdarnal.workers.dev/api/auth/callback/google` |
+| GitHub | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | `https://guitarlab-preview.leenusdarnal.workers.dev/api/auth/callback/github` |
+
+For each OAuth application, register the preview callback above. Register the matching production callback separately using `https://guitarlab.leenusdarnal.workers.dev/api/auth/callback/google` or `/api/auth/callback/github`. Keep preview and production OAuth applications/credentials separate where practical. Google JavaScript origins should contain only the preview or production Worker origin (without a path). GitHub OAuth Apps accept one callback URL, so use separate preview and production OAuth Apps.
+
+Add the four provider values as Cloudflare Worker secrets only for providers you have configured. Social sign-in does not require `RESEND_API_KEY` or `AUTH_FROM_EMAIL`; those remain necessary only if email/password registration and transactional messages are enabled. The login page retains guest access.
