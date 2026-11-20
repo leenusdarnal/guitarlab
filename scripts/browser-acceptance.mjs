@@ -98,6 +98,13 @@ async function startPreviewServerAndWait() {
   await waitForPreviewServer();
 }
 
+async function waitForOnboardingProfile(page) {
+  await page.waitForFunction(() => {
+    const saveButton = document.querySelector('form button[type="submit"]');
+    return saveButton instanceof HTMLButtonElement && !saveButton.disabled;
+  });
+}
+
 let browser;
 let lifecycleServer;
 try {
@@ -1457,6 +1464,7 @@ try {
 
   // Change the profile after export so rollback and restore have observable outcomes.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   await page.getByRole('radio', { name: '40 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page
@@ -1518,12 +1526,7 @@ try {
     .waitFor();
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => {
-    const practiceTarget = document.querySelector(
-      'input[type="radio"][name="minutes"][value="40"]'
-    );
-    return practiceTarget instanceof HTMLInputElement && practiceTarget.checked;
-  });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '40 min' }).isChecked(),
     true,
@@ -1548,6 +1551,7 @@ try {
   assert.match(cancelledDialogMessage, /Reset GuitarLab learner data/);
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '40 min' }).isChecked(),
     true,
@@ -1632,6 +1636,7 @@ try {
 
   // Restore the downloaded backup into a new, empty learner profile.
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '20 min' }).isChecked(),
     false,
@@ -1666,6 +1671,7 @@ try {
   );
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '20 min' }).isChecked(),
     true,
