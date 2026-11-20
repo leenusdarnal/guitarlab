@@ -1,5 +1,8 @@
 # Modern Theme Foundation Implementation Plan
 
+> **Historical implementation-plan snapshot — not current task status.** The plan and its checkboxes record the proposed/observed work at the date in the filename. Current product milestones belong in [ROADMAP.md](../../ROADMAP.md); current engineering/release gates belong in [ENGINEERING_QUALITY_TRACKER.md](../../ENGINEERING_QUALITY_TRACKER.md). Do not resume or close work from this historical checklist without checking those authorities and live GitHub state.
+
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (\`- [ ]\`) syntax for tracking.
 
 **Goal:** Implement the first Modern Music Studio foundation in GuitarLab: semantic dark/light theme tokens, readable global typography defaults, contrast validation, and reliable theme selection before first paint.
