@@ -1518,6 +1518,12 @@ try {
     .waitFor();
 
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => {
+    const practiceTarget = document.querySelector(
+      'input[type="radio"][name="minutes"][value="40"]'
+    );
+    return practiceTarget instanceof HTMLInputElement && practiceTarget.checked;
+  });
   assert.equal(
     await page.getByRole('radio', { name: '40 min' }).isChecked(),
     true,

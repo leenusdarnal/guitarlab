@@ -185,7 +185,9 @@ try {
     name: 'Enter tempo in beats per minute'
   });
   await page.waitForFunction(() => {
-    const tempo = document.querySelector('input[aria-label="Enter tempo in beats per minute"]');
+    const tempo = document.querySelector(
+      'input[aria-label="Enter tempo in beats per minute"]'
+    );
     return tempo instanceof HTMLInputElement && tempo.value === '96';
   });
   assert.equal(await deepLinkTempo.inputValue(), '96');
