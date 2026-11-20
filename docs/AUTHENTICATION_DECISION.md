@@ -10,7 +10,7 @@ This document defines the accepted authentication design and security requiremen
 
 ## Decision
 
-Use **Better Auth** as the authentication/session framework for the Cloudflare Workers application, backed by the existing Drizzle/D1 server boundary. The first account release uses email and password only. Social providers and learner-data sync are separate follow-up work.
+Use **Better Auth** as the authentication/session framework for the Cloudflare Workers application, backed by the existing Drizzle/D1 server boundary. The first account release supports email/password authentication and optional Google/GitHub social sign-in. Social providers are opt-in per environment: they are available only when a complete provider credential pair is configured. Email/password verification and password-reset delivery remain dependent on the transactional email provider. Learner-data sync is separate follow-up work.
 
 Better Auth is preferred over a hand-rolled password/session implementation because it supplies established account, credential, session, verification and reset flows, while allowing GuitarLab to keep authorization and learner-data ownership in its own server use cases.
 
@@ -25,9 +25,10 @@ The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Clou
 
 - Guest/local-only use remains the default. A learner can use lessons, practice, tools, IndexedDB, offline mode and JSON backup without registering.
 - Registration is optional and does not silently upload or attach the existing local profile to an account.
-- The first authenticated release provides registration, verified-email login, session refresh, logout and password reset.
+- The first authenticated release provides registration, verified-email login, session refresh, logout and password reset when email/password is configured, plus optional Google and GitHub OAuth when their provider credentials are configured.
+- OAuth providers are independently optional; missing or incomplete provider credentials must not enable a broken sign-in button or disable another fully configured sign-in method. Guest/local-only use remains available.
 - Do not issue a usable authenticated session until the email address is verified.
-- No social login in the first slice.
+- Social sign-in is optional, not mandatory. Enable only the provider whose client ID and secret are both configured; use exact environment-specific callback URLs and keep provider credentials out of source control and logs.
 - Cloud sync is not part of the login release. It remains disabled until the separate outbox, idempotency, conflict, ownership and account-deletion requirements are implemented.
 
 ## Security requirements
@@ -60,13 +61,13 @@ The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Clou
 
 1. **Auth foundation (Issue #176):** dependency/API compatibility proof, schema and migration, server auth handler, environment configuration and secure session resolution.
 2. **Account UX:** sign-up, sign-in, verification pending/resend, reset password, account settings and sign-out, with a visible guest path. The sign-in and account surfaces are implemented; live email verification/reset journeys still require provider-backed acceptance.
-3. **Security and acceptance:** rate-limit/CSRF/origin tests, enumeration resistance, session expiry/revocation, browser journeys, export/deletion.
+3. **Security and acceptance:** rate-limit/CSRF/origin tests, enumeration resistance, session expiry/revocation, browser journeys for each enabled sign-in method (including OAuth callback/state handling), export/deletion.
 4. **Separate M5 sync:** only after auth and deletion gates pass; outbox/idempotency/conflict and per-account ownership are a distinct milestone.
 
 ## Non-goals
 
 - Mandatory account creation.
 - Cloud sync in the authentication PR.
-- Social sign-in.
+- Additional identity providers beyond the optional Google and GitHub integrations.
 - Server-side audio or recording uploads.
 - Importing or inferring learner history from previous chats, devices or external tools.
