@@ -64,13 +64,14 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 2 | OFF-02 — Add cache-isolation, logout and offline regression tests | P1 | DONE — automated |
 | 3 | OFF-03 — Harden offline navigation and service-worker lifecycle | P1 | DONE — automated |
 | 4 | SEC-01 — Complete authenticated account lifecycle acceptance | P1 | DONE — automated — local Worker lifecycle/security acceptance merged in PR #205; required CI passed |
-| 5 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
-| 6 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
-| 7 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
-| 8 | QA-01 / QA-02 — Complete real-audio and physical-browser validation | P1 | BLOCKED |
-| 9 | QA-04 — Reconcile exact production SHA and rollback evidence | P1 | OPEN |
-| 10 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
-| 11 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
+| 5 | SEC-02 — Provision isolated preview/production auth environments | P1 | IN PROGRESS — separate D1 resources created; config and migration workflow staged in PR #206; migrations and provider credentials pending |
+| 6 | CI-05 — Make browser-test dependencies lockfile-controlled | P1 | DONE — automated |
+| 7 | UX-02 / UX-03 — Complete manual accessibility and physical-device acceptance | P1 | BLOCKED |
+| 8 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
+| 9 | QA-01 / QA-02 — Complete real-audio and physical-browser validation | P1 | BLOCKED |
+| 10 | QA-04 — Reconcile exact production SHA and rollback evidence | P1 | OPEN |
+| 11 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
+| 12 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
 | 12 | CSS-01 — Inventory Tailwind version, configuration and styling usage | P2 | DONE — read-only |
 | 13 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | DONE — automated review |
 | 14 | CSS-03 — Define staged Tailwind/CSS modernisation plan | P2 | DONE — documented |
@@ -246,7 +247,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
 | SEC-01 | P1 | **DONE — automated** | Local Better Auth lifecycle is exercised against the real HTTPS Wrangler Worker and isolated local AUTH_DB: registration, verification/resend, unverified sign-in rejection, password reset, used/expired token rejection, session refresh/expiry, reset-triggered revocation, logout, secure cookie attributes and auth-route axe coverage. Required CI passed on the final PR head. This does not provision or activate preview/production authentication. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [PR #204](https://github.com/leenusdarnal/guitarlab/pull/204); [PR #205](https://github.com/leenusdarnal/guitarlab/pull/205); [CI run #44669861146](https://github.com/leenusdarnal/guitarlab/actions/runs/44669861146); [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md) |
-| SEC-02 | P1 | **BLOCKED** | Provision and verify isolated local/preview/production auth D1 databases, migrations, Better Auth secret, exact origin and transactional email credentials before enabling account endpoints in those environments. | [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md) states preview/production auth bindings are not enabled |
+| SEC-02 | P1 | **IN PROGRESS** | Two empty, separate Cloudflare D1 databases have been provisioned for preview and production (APAC primary-location hints). Their IDs, dedicated `AUTH_DB` bindings and exact HTTPS `BETTER_AUTH_URL` values are staged in the matching Wrangler configs in PR #206. A guarded migration-only workflow and migration-before-deploy steps are included. Remote migrations, deployment of the bindings, unique per-environment `BETTER_AUTH_SECRET`, `RESEND_API_KEY`, and a verified `AUTH_FROM_EMAIL` remain outstanding. Keep account endpoints fail-closed until every prerequisite is verified. | Cloudflare D1 resources created 20 Nov 2026; [PR #206](https://github.com/leenusdarnal/guitarlab/pull/206); [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md) |
 | SEC-03 | P1 | **DONE — automated (local Worker)** | Automated local acceptance covers generic registration/reset responses, untrusted-Origin rejection, sign-in HTTP 429, reset replay/expiry and session revocation, secure HTTPS cookie attributes, session refresh/expiry, sensitive diagnostic redaction and axe checks on auth routes. Production HTTPS/CSP/privacy verification remains a separate SEC-05 gate. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [PR #204](https://github.com/leenusdarnal/guitarlab/pull/204); [PR #205](https://github.com/leenusdarnal/guitarlab/pull/205); [CI run #44669861146](https://github.com/leenusdarnal/guitarlab/actions/runs/44669861146) |
 | SEC-04 | P1 | **DEFERRED** | Keep cloud learner-data sync disabled until account ownership enforcement, export/deletion, idempotency, conflict handling and recovery are separately implemented and tested. | Architecture and authentication decision |
 | SEC-05 | P1 | **PARTIAL** | Verify CSP and security headers on the actual deployed environment and complete a production privacy/configuration review. Consider CSP reporting/violation monitoring only with a privacy-safe endpoint and reviewed data handling. | Local Worker preview header/CSP assertions pass; deployment review remains open |
@@ -264,7 +265,11 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 - [x] Inspect HTTPS session cookie attributes: HttpOnly, Secure, SameSite=Lax and Path `/` (PR #205; CI run #44669861146). A `__Host-` prefix remains a separate compatibility review, not an assumed requirement.
 - [x] Verify test Worker diagnostics omit test email addresses, credentials, cookies and one-time tokens (PR #205; CI run #44669861146). Learner notes/recordings remain outside cloud auth sync (SEC-04).
 - [x] Include `/login`, `/account` and expired-reset-token states in axe/browser accessibility acceptance when auth is configured (PR #205; CI run #44669861146).
-- [ ] Verify every environment uses a distinct auth database and the correct exact origin/secrets.
+- [x] Create distinct remote preview and production D1 databases and record their IDs in `AUTHENTICATION_SETUP.md` (20 Nov 2026). No learner DB or existing unrelated D1 database was reused.
+- [x] Confirm exact preview and production origins against the existing deployment workflows; stage each as `BETTER_AUTH_URL` in its matching Wrangler config (PR #206).
+- [ ] Merge/deploy the matching `AUTH_DB` bindings, apply `0001_auth_tables.sql` separately to each remote database using the guarded migration workflow, and verify the five auth tables plus no pending migrations.
+- [ ] Configure unique per-environment `BETTER_AUTH_SECRET`, Resend `RESEND_API_KEY` and verified `AUTH_FROM_EMAIL`; verify the actual Worker bindings without exposing secret values.
+- [ ] Complete preview account/email lifecycle smoke tests before activating production authentication.
 - [ ] Keep public/preview/production account endpoints unavailable until the required environment configuration and mail provider are approved.
 - [ ] Keep local IndexedDB learner records separate from account creation; no silent migration or upload.
 
