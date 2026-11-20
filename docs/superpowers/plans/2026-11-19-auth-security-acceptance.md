@@ -1,5 +1,8 @@
 # Authentication Security Acceptance Implementation Plan
 
+> **Historical implementation-plan snapshot — not current task status.** The plan and its checkboxes record the proposed/observed work at the date in the filename. Current product milestones belong in [ROADMAP.md](../../ROADMAP.md); current engineering/release gates belong in [ENGINEERING_QUALITY_TRACKER.md](../../ENGINEERING_QUALITY_TRACKER.md). Do not resume or close work from this historical checklist without checking those authorities and live GitHub state.
+
+
 > **For agentic workers:** Use the test-driven-development workflow; each test must be observed failing before any production behavior is changed.
 
 **Goal:** Exercise the local authentication lifecycle and its security boundaries over HTTPS, including origin protection, rate limiting, secure cookies, reset-token expiry/replay, session refresh/expiry, session revocation, privacy-safe diagnostics and auth-route accessibility.
