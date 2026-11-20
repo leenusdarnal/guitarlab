@@ -8,5 +8,7 @@ import {
 
 export const load: PageServerLoad = () => ({
   authAvailable: isAuthConfigured(env as unknown as AuthEnvironment),
-  emailPasswordAvailable: isEmailPasswordAuthConfigured(env as unknown as AuthEnvironment)
+  emailPasswordAvailable: isEmailPasswordAuthConfigured(
+    env as unknown as AuthEnvironment
+  )
 });
