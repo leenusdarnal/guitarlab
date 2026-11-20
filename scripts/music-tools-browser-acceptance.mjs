@@ -181,12 +181,14 @@ try {
     waitUntil: 'domcontentloaded'
   });
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
-  assert.equal(
-    await page
-      .getByRole('spinbutton', { name: 'Enter tempo in beats per minute' })
-      .inputValue(),
-    '96'
-  );
+  const deepLinkTempo = page.getByRole('spinbutton', {
+    name: 'Enter tempo in beats per minute'
+  });
+  await page.waitForFunction(() => {
+    const tempo = document.querySelector('input[aria-label="Enter tempo in beats per minute"]');
+    return tempo instanceof HTMLInputElement && tempo.value === '96';
+  });
+  assert.equal(await deepLinkTempo.inputValue(), '96');
   await page.getByRole('button', { name: 'Start metronome' }).waitFor();
 
   // Audio starts only from an explicit user action and can be stopped.
@@ -603,7 +605,9 @@ try {
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${origin}/tools/fretboard`, {
+    waitUntil: 'domcontentloaded'
+  });
   await assertBackIcon();
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('.find-progress').waitFor();

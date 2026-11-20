@@ -641,7 +641,9 @@ try {
       () => navigator.serviceWorker.controller !== null
     );
 
-    await offlinePage.goto(`${origin}/learn`, { waitUntil: 'domcontentloaded' });
+    await offlinePage.goto(`${origin}/learn`, {
+      waitUntil: 'domcontentloaded'
+    });
     const layout = await offlinePage.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       content: document.documentElement.scrollWidth

@@ -744,7 +744,9 @@ try {
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(false)
   );
-  await recoveryPage.goto(origin + '/skills', { waitUntil: 'domcontentloaded' });
+  await recoveryPage.goto(origin + '/skills', {
+    waitUntil: 'domcontentloaded'
+  });
   await recoveryPage
     .getByText(
       'Your local skill map could not be loaded. Check browser storage and try again.',
@@ -1114,9 +1116,9 @@ try {
     'Practice history has a stable destination'
   );
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
-  const actionLinks = await planner
-    .locator('.practice-task .task-action')
-    .count();
+  const taskActionLinks = planner.locator('.practice-task .task-action');
+  await taskActionLinks.first().waitFor({ state: 'visible' });
+  const actionLinks = await taskActionLinks.count();
   assert.ok(
     actionLinks > 0,
     'Every suggested task should expose a useful action'
@@ -2305,7 +2307,9 @@ try {
     });
   });
   const wakeLockPage = await wakeLockContext.newPage();
-  await wakeLockPage.goto(`${origin}/practice`, { waitUntil: 'domcontentloaded' });
+  await wakeLockPage.goto(`${origin}/practice`, {
+    waitUntil: 'domcontentloaded'
+  });
   await wakeLockPage.locator('#duration').fill('5');
   await wakeLockPage.locator('#focus').fill('Wake lock lifecycle test');
   await wakeLockPage.getByRole('button', { name: 'Start practice' }).click();
