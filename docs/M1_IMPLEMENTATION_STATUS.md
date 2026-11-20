@@ -3,7 +3,7 @@
 **Implementation slice:** Initial foundation, merged in PR #21 on 2026-11-11  
 **Branch at implementation:** `feat/m1-application-foundation`  
 **Status:** Historical milestone report. Current product milestone state is tracked in [Roadmap](ROADMAP.md); current engineering-quality and release acceptance is tracked in [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md).  
-**Architecture authority:** [Architecture](ARCHITECTURE.md), [Roadmap](ROADMAP.md), [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md)
+**Architecture authority:** [Architecture](ARCHITECTURE.md), [Roadmap](ROADMAP.md), [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md), [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md)
 
 ## Scope delivered in the initial foundation slice
 
