@@ -3,7 +3,7 @@
 **Reviewed:** 15 November 2026  
 **Status:** Research complete; no UI package has been added  
 **Scope:** User-supplied Tailwind component sources, Made with Svelte, and Svelte-native alternatives required to make the comparison useful for this repository  
-**Related tracker:** [UI/UX Implementation Tracker](../UI_UX_IMPLEMENTATION_TRACKER.md)  
+**Related tracker:** [Engineering Quality & Release Tracker](../ENGINEERING_QUALITY_TRACKER.md)  
 **Design authority:** [Modern Music Studio direction](../DESIGN_DIRECTION.md)
 
 ---
