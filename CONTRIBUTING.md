@@ -4,7 +4,9 @@ Thanks for helping improve GuitarLab.
 
 ## Before making changes
 
+- Start with the [documentation index](docs/README.md) to find the canonical authority for the topic.
 - Read the [product specification](docs/PRODUCT_SPEC.md), [architecture](docs/ARCHITECTURE.md) and [roadmap](docs/ROADMAP.md).
+- Update existing canonical trackers rather than creating a second checklist or status document.
 - Keep the local-first learning experience intact.
 - Do not commit personal learner data, recordings, secrets or credentials.
 - Do not add copyrighted course material or song tabs without permission.
