@@ -29,9 +29,31 @@ The auth Worker needs these bindings/secrets:
 
 The SvelteKit 3 hook reads Cloudflare bindings from the `cloudflare:workers` module (`env` and `waitUntil`); do not use the removed SvelteKit `event.platform` binding API. It uses Better Auth's SvelteKit handler, reads the server session into request locals, and retains the application's existing response security headers. The global navigation switches between Sign in and Account from the server-validated session; the account page provides sign-out. A guest request to the account page redirects to Sign in. Better Auth's origin/CSRF protections remain enabled. Session cookies are HttpOnly, Secure on HTTPS, SameSite=Lax and path-scoped. Rate limits are persisted in the auth D1 database and use Cloudflare's `cf-connecting-ip` header.
 
-## Deployment gates
+## Remote environment provisioning
 
-Preview and production Wrangler configs intentionally have no `AUTH_DB` binding yet. Do not add one or deploy auth until each environment has its own D1 database, its migrations have been rehearsed against that database, the Better Auth secret and Resend credentials have been stored as environment secrets, and the exact origin/sender have been verified. No production database or secret is provisioned by this change.
+The two remote authentication databases have been created in the Cloudflare account and are intentionally empty until the migration workflow is run. They are independent of the learner-domain database and of each other.
+
+| Environment | Worker | Exact Better Auth origin | Dedicated D1 database | Database ID |
+| --- | --- | --- | --- | --- |
+| Preview | `guitarlab-preview` | `https://guitarlab-preview.leenusdarnal.workers.dev` | `guitarlab-auth-preview` | `2abf9a07-620a-4c24-8d12-f75b34b31d21` |
+| Production | `guitarlab` | `https://guitarlab.leenusdarnal.workers.dev` | `guitarlab-auth-production` | `0b81ddcc-7612-4842-9878-051e26be6962` |
+
+The matching `AUTH_DB` bindings and exact `BETTER_AUTH_URL` values are staged in `wrangler.preview.jsonc` and `wrangler.production.jsonc`. Both use `drizzle/auth-migrations`. The two deployment workflows apply pending auth migrations to their own database before deploying the corresponding Worker. A separate **Migrate GuitarLab auth D1** workflow can apply and verify the schema without deploying Worker code.
+
+### Remaining credentials and activation gates
+
+The live Worker inspection on 20 November 2026 found no `BETTER_AUTH_SECRET` or `RESEND_API_KEY` secret bindings on either Worker. Do not add credentials to source control, PR comments, chat, workflow logs or Wrangler config files.
+
+Before enabling remote account endpoints, configure each Worker independently in Cloudflare Dashboard → Workers & Pages → select the Worker → Settings → Variables and Secrets:
+
+1. Add a unique `BETTER_AUTH_SECRET` secret for that environment, generated with a cryptographically secure random generator (at least 32 characters; `openssl rand -base64 48` is suitable).
+2. Add `RESEND_API_KEY` as a secret, using a sending-only key where the provider supports scoped keys.
+3. Set `AUTH_FROM_EMAIL` as a non-secret variable to a sender identity that is verified in the corresponding Resend account.
+4. Keep the `BETTER_AUTH_URL` and `AUTH_DB` values from the checked-in Wrangler config; do not substitute the other environment's URL or database.
+
+Secret additions through `wrangler secret put` create and deploy a new Worker version immediately. Apply them only to the intended Worker and only after the matching D1 binding has been deployed. Never reuse the preview Better Auth secret in production. The app remains fail-closed while any required binding, secret, origin or sender value is absent.
+
+Recommended rollout: migrate preview D1; configure preview credentials and verified sender; deploy preview and complete registration, verification, reset and session smoke tests; then repeat independently for production with production credentials and deployment approval. Do not copy preview data or secrets into production. This setup does not enable cloud learner-data sync.
 
 Cloud sync remains out of scope. Do not attach, upload or backfill IndexedDB learner profiles or practice history during account creation. The separate sync milestone must cover export, deletion, ownership, idempotency and conflict recovery before learner data is stored in cloud D1.
 
