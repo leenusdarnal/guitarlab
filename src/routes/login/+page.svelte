@@ -203,7 +203,7 @@
       <div class="configuration-notice" role="status">
         <strong>Account access is not enabled here yet.</strong>
         <span>
-          GuitarLab is still available in guest mode. Account access requires its own database, secure server configuration and verified email delivery.
+          GuitarLab is still available in guest mode. Account access requires its own database, secure server configuration and at least one configured sign-in method.
         </span>
       </div>
     {:else}
@@ -218,7 +218,8 @@
         </div>
       {/if}
 
-      {#if mode === 'sign-in' || mode === 'sign-up'}
+      {#if data.emailPasswordAvailable}
+        {#if mode === 'sign-in' || mode === 'sign-up'}
         <div class="mode-switch" role="group" aria-label="Account action">
           <button
             type="button"
@@ -350,6 +351,7 @@
         <button type="button" class="text-action back-link" onclick={() => selectMode('sign-in')}>
           Back to sign in
         </button>
+      {/if}
       {/if}
     {/if}
 
