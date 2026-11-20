@@ -111,7 +111,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-03 — Year 2 Week 1: Fretboard map 1
 
-**Current concern:** The focus and worked example introduce natural notes on the low E and A strings through fret 5, while the checkpoint says “every natural note to fret 5” without stating a string range.
+**Original finding (resolved in v1.0.7):** The focus and worked example introduce natural notes on the low E and A strings through fret 5, while the checkpoint says “every natural note to fret 5” without stating a string range.
 
 - [x] Decide whether the intended scope is low E and A only or a wider set of strings.
 - [x] Align focus, objectives, demonstration, exercises, worked examples and checkpoint to the same string/fret scope.
@@ -124,7 +124,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-04 — Year 2 Week 2: Octaves across adjacent string sets
 
-**Current concern:** The lesson teaches octave relationships, but its current mappings are `fretboard.string-map` and `fretboard.natural-notes`; it does not map to the existing `fretboard.octaves` skill. That skill currently has only one association across the full curriculum.
+**Original finding (resolved in v1.0.7):** The lesson teaches octave relationships, but its current mappings are `fretboard.string-map` and `fretboard.natural-notes`; it does not map to the existing `fretboard.octaves` skill. That skill currently has only one association across the full curriculum.
 
 - [x] Review the complete explanation, exercises and checkpoint for direct octave-skill evidence.
 - [x] Add `fretboard.octaves` if the lesson explicitly teaches and assesses octave locations; otherwise document why it is not an assessed outcome.
@@ -350,7 +350,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P1-06 — Rebaseline the mapping register to v1.0.7
 
-**Current concern:** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.7. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
+**Original finding (resolved in v1.0.7):** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.7. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
 
 - [ ] Regenerate the 152-row register from the current v1.0.7 lesson sources.
 - [ ] Include every current skill association, with one review decision per association.
@@ -386,7 +386,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P1-08 — Build the prerequisite model
 
-**Current concern:** All 152 lessons currently have empty `prerequisites` arrays. Year 3 specialist lessons do populate `priorTopicsToRefresh`, but refresh topics are not a substitute for formal dependencies.
+**Original finding (resolved in v1.0.7):** All 152 lessons currently have empty `prerequisites` arrays. Year 3 specialist lessons do populate `priorTopicsToRefresh`, but refresh topics are not a substitute for formal dependencies.
 
 - [ ] Define a documented prerequisite vocabulary and reference model using stable skill IDs.
 - [ ] For each lesson, decide whether it has no prerequisite, a recommended prerequisite, or an essential mastery prerequisite.
