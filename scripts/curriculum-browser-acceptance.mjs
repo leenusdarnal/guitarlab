@@ -96,14 +96,14 @@ try {
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.getByRole('link', { name: 'Curriculum' }).first().click();
   await page.getByRole('heading', { name: /Find your next lesson/ }).waitFor();
   await page.getByRole('navigation', { name: 'Primary navigation' }).waitFor();
   await page.getByRole('searchbox', { name: 'Search lessons' }).waitFor();
 
   // Start finder interaction from a fully loaded route rather than racing the SPA navigation.
-  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/learn', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-catalog-hydrated="true"]').waitFor();
 
   assert.equal(
@@ -167,7 +167,7 @@ try {
     .getByRole('link', { name: 'Open lesson: Fretboard map 1' })
     .click();
   await page.getByRole('heading', { name: 'Fretboard map 1' }).waitFor();
-  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/learn', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await lessonSearch.fill('zzzz-no-matching-lesson');
   await page
@@ -216,7 +216,7 @@ try {
     }
   ];
   for (const presentation of presentationCases) {
-    await page.goto(origin + '/onboarding', { waitUntil: 'networkidle' });
+    await page.goto(origin + '/onboarding', { waitUntil: 'domcontentloaded' });
     await page
       .getByRole('radio', { name: new RegExp(presentation.label) })
       .check();
@@ -228,7 +228,7 @@ try {
       .waitFor();
 
     await page.goto(origin + '/learn/y1-w01-lesson', {
-      waitUntil: 'networkidle'
+      waitUntil: 'domcontentloaded'
     });
     const lessonContent = page.locator(
       `.lesson-content[data-presentation="${presentation.value}"]`
@@ -256,7 +256,7 @@ try {
       orderedSections.every((section) => section.visible),
       `${presentation.label} must not hide authored lesson content`
     );
-    await page.reload({ waitUntil: 'networkidle' });
+    await page.reload({ waitUntil: 'domcontentloaded' });
     await lessonContent.waitFor();
     const reloadedSections = await lessonContent
       .locator(':scope > .content-section')
@@ -384,7 +384,7 @@ try {
     savedAssessment.itemEvidence.every((item) => item.outcome === 'correct'),
     'All six selected pitches should be stored with direct correct outcomes'
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByText('Check passed', { exact: true }).waitFor();
   assert.equal(
     await page.locator('.assessment-item select').count(),
@@ -414,7 +414,7 @@ try {
     null,
     { timeout: 10000 }
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByText(progressLabel).waitFor();
   await page
     .getByRole('button', { name: 'Continue from saved section' })
@@ -507,12 +507,12 @@ try {
   );
   await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.context().setOffline(false);
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await waitForProgressSummary(page, `2 of ${sectionCount} sections completed`);
   await page.getByRole('button', { name: 'Mark lesson complete' }).click();
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
   await page.goto(origin + '/learn/y1-w01-lesson', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await page.getByText('Lesson completed.', { exact: true }).waitFor();
   const completedLessonState = await page.evaluate(() => ({
@@ -543,7 +543,7 @@ try {
     .waitFor();
 
   // Year 2 route and an optional specialist route use the same reader contract.
-  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/learn', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
@@ -564,7 +564,7 @@ try {
     .waitFor();
   assert.equal(new URL(page.url()).pathname, '/learn/y2-w01-lesson');
 
-  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/learn', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-catalog-hydrated="true"]').waitFor();
   await page
     .getByRole('searchbox', { name: 'Search lessons' })
@@ -590,7 +590,7 @@ try {
 
   // Invalid IDs render the explicit not-found state rather than a blank page.
   await page.goto(origin + '/learn/not-a-real-lesson', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await page
     .getByRole('heading', { name: "We couldn't open that lesson." })
@@ -599,7 +599,7 @@ try {
 
   // The route index remains within the mobile viewport.
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(origin + '/learn', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/learn', { waitUntil: 'domcontentloaded' });
   const mobileLearnTab = page
     .locator('.mobile-tab-bar')
     .getByRole('link', { name: 'Learn', exact: true });
@@ -630,7 +630,7 @@ try {
     const offlinePage = await offlineContext.newPage();
     const offlineErrors = [];
     offlinePage.on('pageerror', (error) => offlineErrors.push(error.message));
-    await offlinePage.goto(origin, { waitUntil: 'networkidle' });
+    await offlinePage.goto(origin, { waitUntil: 'domcontentloaded' });
     await offlinePage.evaluate(async () => {
       const registration = await navigator.serviceWorker.ready;
       if (!registration.active) {
@@ -641,7 +641,7 @@ try {
       () => navigator.serviceWorker.controller !== null
     );
 
-    await offlinePage.goto(`${origin}/learn`, { waitUntil: 'networkidle' });
+    await offlinePage.goto(`${origin}/learn`, { waitUntil: 'domcontentloaded' });
     const layout = await offlinePage.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       content: document.documentElement.scrollWidth
@@ -652,7 +652,7 @@ try {
     );
 
     const cachedLessonUrl = `${origin}/learn/y1-w01-lesson`;
-    await offlinePage.goto(cachedLessonUrl, { waitUntil: 'networkidle' });
+    await offlinePage.goto(cachedLessonUrl, { waitUntil: 'domcontentloaded' });
     await offlinePage
       .getByRole('heading', { name: 'Meet your guitar' })
       .waitFor();
@@ -674,7 +674,7 @@ try {
       `${device.name} browser context should report that it is offline`
     );
     const cachedLessonResponse = await offlinePage.goto(cachedLessonUrl, {
-      waitUntil: 'networkidle'
+      waitUntil: 'domcontentloaded'
     });
     assert.equal(
       cachedLessonResponse?.status(),
@@ -687,7 +687,7 @@ try {
     const uncachedLessonResponse = await offlinePage.goto(
       `${origin}/learn/y1-w03-lesson`,
       {
-        waitUntil: 'networkidle'
+        waitUntil: 'domcontentloaded'
       }
     );
     assert.equal(

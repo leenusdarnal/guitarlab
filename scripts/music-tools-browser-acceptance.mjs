@@ -75,7 +75,7 @@ try {
     );
   };
 
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
@@ -178,7 +178,7 @@ try {
 
   // A valid BPM deep link pre-fills tempo without starting audio.
   await page.goto(`${origin}/tools/metronome?bpm=96`, {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await page.getByRole('heading', { name: 'Metronome.' }).waitFor();
   assert.equal(
@@ -465,7 +465,7 @@ try {
     'Tuner retry should make one new user-initiated microphone request'
   );
   // Missing devices receive a distinct, actionable message.
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   await page.evaluate(() => {
     window.__guitarLabMicErrorName = 'NotFoundError';
@@ -483,7 +483,7 @@ try {
   );
 
   // Unsupported browser APIs fail safely without requesting permission.
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'domcontentloaded' });
   await page.evaluate(() => {
     Object.defineProperty(navigator, 'mediaDevices', {
       configurable: true,
@@ -548,7 +548,7 @@ try {
     'Note-recognition retry should make one new user-initiated microphone request'
   );
 
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   assert.equal(
     await page.locator('.note-display').getAttribute('aria-live'),
@@ -560,7 +560,7 @@ try {
     .filter({ hasText: 'The tuner is ready' })
     .waitFor();
   await page.getByLabel('A4 reference frequency').selectOption('442');
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   assert.equal(
     await page.getByLabel('A4 reference frequency').inputValue(),
@@ -603,7 +603,7 @@ try {
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/fretboard`, { waitUntil: 'domcontentloaded' });
   await assertBackIcon();
   await page.getByRole('button', { name: 'Find a note' }).click();
   await page.locator('.find-progress').waitFor();
@@ -649,7 +649,7 @@ try {
     dimensions.page <= dimensions.viewport,
     `Music tool page overflows horizontally on mobile: ${JSON.stringify(dimensions)}`
   );
-  await page.goto(`${origin}/repertoire`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/repertoire`, { waitUntil: 'domcontentloaded' });
   await assertBackIcon();
 
   assert.deepEqual(
