@@ -219,8 +219,16 @@ async function signIn(page, email, password) {
     .getByRole('button', { name: 'Sign in', exact: true })
     .last()
     .click();
-  await page.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+}
+
+async function waitForHome(page) {
+  await page.waitForFunction(() => window.location.pathname === '/');
   await page.getByRole('heading', { name: 'Make room for music.' }).waitFor();
+}
+
+async function waitForLogin(page) {
+  await page.waitForFunction(() => window.location.pathname === '/login');
+  await page.getByRole('heading', { name: 'Welcome back' }).waitFor();
 }
 
 async function stopPreview() {
@@ -377,13 +385,12 @@ try {
   );
   rememberSensitive(new URL(verificationUrl).searchParams.get('token') ?? '');
   await page.goto(verificationUrl);
-  await page.waitForURL(
-    (url) => url.searchParams.get('verified') === '1',
-    { waitUntil: 'domcontentloaded' }
-  );
+  await page
+    .getByText('Your email has been verified. You can now sign in.')
+    .waitFor();
 
   await signIn(page, email, originalPassword);
-  await page.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+  await waitForHome(page);
   await page.goto(origin + '/account');
   await page.getByRole('heading', { name: 'Account' }).waitFor();
   const sessionCookie = (await context.cookies(origin)).find((cookie) =>
@@ -406,7 +413,7 @@ try {
   });
   const secondPage = await secondContext.newPage();
   await signIn(secondPage, email, originalPassword);
-  await secondPage.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+  await waitForHome(secondPage);
   await secondPage.goto(origin + '/account');
   await secondPage.getByRole('heading', { name: 'Account' }).waitFor();
 
@@ -487,20 +494,18 @@ try {
   await page.getByRole('alert').waitFor();
 
   await secondPage.goto(origin + '/account');
-  await secondPage.waitForURL(/\/login(?:$|\?)/, {
-    waitUntil: 'domcontentloaded'
-  });
+  await waitForLogin(secondPage);
 
   await signIn(page, email, originalPassword);
   await page.getByRole('alert').waitFor();
   await signIn(page, email, replacementPassword);
-  await page.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+  await waitForHome(page);
   await page.goto(origin + '/account');
   await page.getByRole('heading', { name: 'Account' }).waitFor();
   await page.getByRole('button', { name: 'Sign out' }).click();
-  await page.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+  await waitForHome(page);
   await page.goto(origin + '/account');
-  await page.waitForURL(/\/login(?:$|\?)/, { waitUntil: 'domcontentloaded' });
+  await waitForLogin(page);
 
   const expiryContext = await browser.newContext({
     ignoreHTTPSErrors: true,
@@ -508,7 +513,7 @@ try {
   });
   const expiryPage = await expiryContext.newPage();
   await signIn(expiryPage, email, replacementPassword);
-  await expiryPage.waitForURL(origin + '/', { waitUntil: 'domcontentloaded' });
+  await waitForHome(expiryPage);
   await expiryPage.goto(origin + '/account');
   const initialExpiryCookie = (await expiryContext.cookies(origin)).find(
     (cookie) => cookie.name.includes('session_token')
@@ -535,9 +540,7 @@ try {
   rememberSensitive(refreshedExpiryCookie.value);
   await delay(61000);
   await expiryPage.goto(origin + '/account');
-  await expiryPage.waitForURL(/\/login(?:$|\?)/, {
-    waitUntil: 'domcontentloaded'
-  });
+  await waitForLogin(expiryPage);
   await expiryContext.close();
 
   const rateLimitStatuses = [];
