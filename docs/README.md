@@ -12,7 +12,7 @@ This index defines which document owns each kind of decision or status. Its purp
 | Curriculum remediation | [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md) | Current curriculum authoring, mapping, assessment, taxonomy and progression work |
 | Machine-readable curriculum release | `content/curriculum/release.json` and versioned lesson/catalogue files | Active curriculum release, lesson records, stable identifiers and skill definitions |
 | System architecture | [Architecture decision](ARCHITECTURE.md) | Runtime, trust boundaries, data ownership, persistence, sync and technology decisions |
-| Application contracts | [Application services](APPLICATION_SERVICES.md) and [data model](DATA_MODEL.md) | Use-case/repository boundaries and persisted record rules |
+| Application service boundaries | [Application services](APPLICATION_SERVICES.md) | Use-case, repository and domain-service contracts |\n| Learner-data persistence model | [Data model](DATA_MODEL.md) | Learner-owned records, local persistence and future sync constraints |
 | Product implementation behaviour | [Implementation guidelines](IMPLEMENTATION_GUIDELINES.md) | Personalisation, lesson delivery, practice, mastery and privacy implementation rules |
 | Visual and interaction design | [Design Direction](DESIGN_DIRECTION.md) | Visual system, tokens, navigation, components, responsive behaviour and accessibility principles |
 | Brand assets and usage | [Brand identity](BRAND_IDENTITY.md) | Logo/icon inventory and brand-asset usage |
