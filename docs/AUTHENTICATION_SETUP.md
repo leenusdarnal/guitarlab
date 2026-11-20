@@ -1,6 +1,6 @@
 # Optional account authentication setup
 
-Account creation is optional. The guest application continues to use the existing browser-local learner profile and storage. Authentication does not copy local learner data to D1.
+Account creation is optional. The guest application continues to use the existing browser-local learner profile and storage. Authentication does not copy local learner data to D1. The first account release supports email/password plus opt-in Google and GitHub OAuth. Each method is independently enabled only when its required environment credentials are complete; configuring OAuth does not require a transactional email provider, while email/password verification and password reset do.
 
 ## Local setup
 
