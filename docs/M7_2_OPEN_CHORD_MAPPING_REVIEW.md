@@ -1,5 +1,8 @@
 # M7.2 — Focused Review: `harmony.open-chords` Across 33 Lessons
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** 33 lesson associations inspected at focus/checkpoint/worked-example level; curriculum-owner disposition pending  
 **Skill definition:** “Form open-position chords and check their intended notes.”  
 **Baseline:** 33 uses across 152 lessons, spanning Year 1, Year 2 and Year 3+  
