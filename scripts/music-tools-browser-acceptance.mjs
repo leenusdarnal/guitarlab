@@ -570,10 +570,10 @@ try {
   // the saved calibration from localStorage. Wait for that hydrated state rather
   // than treating DOM content readiness as application readiness.
   await page.waitForFunction(() => {
-    const select = document.querySelector<HTMLSelectElement>(
+    const select = document.querySelector(
       'select[aria-label="A4 reference frequency"]'
     );
-    return select?.value === '442';
+    return select instanceof HTMLSelectElement && select.value === '442';
   });
   assert.equal(
     await page.getByLabel('A4 reference frequency').inputValue(),
