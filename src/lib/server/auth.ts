@@ -6,6 +6,10 @@ export interface AuthEnvironment {
   BETTER_AUTH_URL?: string;
   RESEND_API_KEY?: string;
   AUTH_FROM_EMAIL?: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
   /** Local-only override used by automated account lifecycle acceptance. */
   AUTH_TEST_MAIL_SINK_URL?: string;
   /** Local-only timing overrides used to exercise expiry and refresh quickly. */
@@ -109,8 +113,9 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
     !env.BETTER_AUTH_SECRET ||
     env.BETTER_AUTH_SECRET.length < 32 ||
     !env.BETTER_AUTH_URL ||
-    !env.RESEND_API_KEY ||
-    !env.AUTH_FROM_EMAIL?.trim()
+    (!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) &&
+      !(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) &&
+      !(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()))
   ) {
     return false;
   }
@@ -222,12 +227,20 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
     database: env.AUTH_DB,
     trustedOrigins: [baseUrl.origin],
     telemetry: { enabled: false },
+    socialProviders: {
+      ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+        ? { google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET } }
+        : {}),
+      ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+        ? { github: { clientId: env.GITHUB_CLIENT_ID, clientSecret: env.GITHUB_CLIENT_SECRET } }
+        : {})
+    },
     session: {
       expiresIn: timing.sessionExpiresIn,
       updateAge: timing.sessionUpdateAge
     },
     emailAndPassword: {
-      enabled: true,
+      enabled: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
       minPasswordLength: 12,
       maxPasswordLength: 128,
       requireEmailVerification: true,
@@ -249,8 +262,8 @@ If you did not request a reset, you can ignore this email.`
       }
     },
     emailVerification: {
-      sendOnSignUp: true,
-      sendOnSignIn: true,
+      sendOnSignUp: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
+      sendOnSignIn: Boolean(env.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim()),
       autoSignInAfterVerification: false,
       expiresIn: 60 * 60,
       sendVerificationEmail: ({ user, url }) =>
