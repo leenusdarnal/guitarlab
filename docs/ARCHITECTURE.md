@@ -27,6 +27,8 @@ This is the implementation authority for M1–M9. It resolves earlier planning o
 
 **Product posture:** local-first single-player application. Cloud sync is optional and must not be enabled before authentication, authorisation and conflict handling are implemented and tested. Public source code does not mean public learner data or a public application profile.
 
+**Current persistence boundary:** the dedicated Better Auth D1 database stores identity, accounts, sessions, verification and rate-limit records only. It is not the learner-data cloud-sync store. Learner progress and practice records remain in browser-local IndexedDB; the learner-domain D1 schema is not an enabled remote sync service.
+
 ## 2. System context and trust boundaries
 
 ~~~mermaid
