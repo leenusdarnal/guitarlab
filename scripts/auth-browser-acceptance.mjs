@@ -219,6 +219,8 @@ async function signIn(page, email, password) {
     .getByRole('button', { name: 'Sign in', exact: true })
     .last()
     .click();
+  await page.waitForURL(origin + '/');
+  await page.getByRole('heading', { name: 'Make room for music.' }).waitFor();
 }
 
 async function stopPreview() {
