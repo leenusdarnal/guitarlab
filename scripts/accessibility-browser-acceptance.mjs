@@ -834,7 +834,9 @@ try {
     );
     assert.equal(firstFrameTheme.preference, theme);
 
-    const appearance = page.locator('main#main-content select[aria-label="Appearance"]');
+    const appearance = page.locator(
+      'main#main-content select[aria-label="Appearance"]'
+    );
     assert.equal(await appearance.inputValue(), theme);
     await appearance.selectOption('system');
     assert.equal(
@@ -910,7 +912,9 @@ try {
       origin + '/practice',
       'main#main-content select[aria-label="Appearance"]'
     );
-    const sharedAppearance = page.locator('main#main-content select[aria-label="Appearance"]');
+    const sharedAppearance = page.locator(
+      'main#main-content select[aria-label="Appearance"]'
+    );
     assert.equal(
       await sharedAppearance.inputValue(),
       'light',
