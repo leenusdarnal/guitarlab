@@ -33,6 +33,23 @@
     confirmPassword = '';
   }
 
+  async function signInSocial(provider: 'google' | 'github') {
+    if (busy) return;
+    busy = true;
+    errorMessage = '';
+    try {
+      const result = await authClient.signIn.social({
+        provider,
+        callbackURL: window.location.origin + '/'
+      });
+      if (result.error) errorMessage = 'We could not start social sign-in. Please try again.';
+    } catch {
+      errorMessage = 'Something went wrong. Please try again.';
+    } finally {
+      busy = false;
+    }
+  }
+
   async function submit(event: SubmitEvent) {
     event.preventDefault();
     if (busy) return;
@@ -218,6 +235,16 @@
         </div>
       {/if}
 
+      <div class="social-actions" aria-label="Sign in with a social account">
+        <button class="social-action" type="button" onclick={() => signInSocial('google')} disabled={busy}>
+          Continue with Google
+        </button>
+        <button class="social-action" type="button" onclick={() => signInSocial('github')} disabled={busy}>
+          Continue with GitHub
+        </button>
+      </div>
+      <p class="social-caption">Use an existing account. No email service is needed for social sign-in.</p>
+
       <form onsubmit={submit}>
         {#if mode === 'sign-up'}
           <label>
@@ -340,6 +367,11 @@
   .eyebrow{margin:0 0 12px;color:var(--primary);font-size:11px;font-weight:800;letter-spacing:.12em}
   h1{margin:0;color:var(--text);font-size:clamp(26px,5vw,34px);line-height:1.15;letter-spacing:-.035em}
   .intro{margin:12px 0 24px;color:var(--muted);font-size:14px;line-height:1.65}
+  .social-actions{display:grid;gap:10px;margin:18px 0 0}
+  .social-action{min-height:48px;padding:12px 16px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+  .social-action:disabled{opacity:.6;cursor:wait}
+  .social-action:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .social-caption{margin:8px 0 18px;color:var(--muted);font-size:11px;text-align:center}
   form{display:grid;gap:16px}
   label{display:grid;gap:7px;color:var(--text);font-size:13px;font-weight:700}
   input{width:100%;min-height:48px;padding:11px 13px;border:1px solid var(--border-strong);border-radius:10px;background:var(--bg);color:var(--text);font:inherit;font-size:15px}
