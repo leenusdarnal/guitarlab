@@ -6,6 +6,10 @@ export interface AuthEnvironment {
   BETTER_AUTH_URL?: string;
   RESEND_API_KEY?: string;
   AUTH_FROM_EMAIL?: string;
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
   /** Local-only override used by automated account lifecycle acceptance. */
   AUTH_TEST_MAIL_SINK_URL?: string;
   /** Local-only timing overrides used to exercise expiry and refresh quickly. */
@@ -103,14 +107,19 @@ function authTiming(env: AuthEnvironment) {
   };
 }
 
+export function isEmailPasswordAuthConfigured(env?: AuthEnvironment): boolean {
+  return Boolean(env?.RESEND_API_KEY && env.AUTH_FROM_EMAIL?.trim());
+}
+
 export function isAuthConfigured(env?: AuthEnvironment): boolean {
   if (
     !env?.AUTH_DB ||
     !env.BETTER_AUTH_SECRET ||
     env.BETTER_AUTH_SECRET.length < 32 ||
     !env.BETTER_AUTH_URL ||
-    !env.RESEND_API_KEY ||
-    !env.AUTH_FROM_EMAIL?.trim()
+    (!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) &&
+      !(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) &&
+      !isEmailPasswordAuthConfigured(env))
   ) {
     return false;
   }
@@ -190,8 +199,8 @@ export async function sendTransactionalEmail(
 
 /**
  * Construct Better Auth from the request's Cloudflare bindings. Auth is not
- * instantiated unless its isolated D1 database, secret, public URL and email
- * delivery configuration are all present.
+ * instantiated unless its isolated D1 database, secret, public URL and at least
+ * one complete sign-in method are configured.
  */
 export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
   if (!isAuthConfigured(env)) {
@@ -222,12 +231,30 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
     database: env.AUTH_DB,
     trustedOrigins: [baseUrl.origin],
     telemetry: { enabled: false },
+    socialProviders: {
+      ...(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+        ? {
+            google: {
+              clientId: env.GOOGLE_CLIENT_ID,
+              clientSecret: env.GOOGLE_CLIENT_SECRET
+            }
+          }
+        : {}),
+      ...(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET
+        ? {
+            github: {
+              clientId: env.GITHUB_CLIENT_ID,
+              clientSecret: env.GITHUB_CLIENT_SECRET
+            }
+          }
+        : {})
+    },
     session: {
       expiresIn: timing.sessionExpiresIn,
       updateAge: timing.sessionUpdateAge
     },
     emailAndPassword: {
-      enabled: true,
+      enabled: isEmailPasswordAuthConfigured(env),
       minPasswordLength: 12,
       maxPasswordLength: 128,
       requireEmailVerification: true,
@@ -249,8 +276,8 @@ If you did not request a reset, you can ignore this email.`
       }
     },
     emailVerification: {
-      sendOnSignUp: true,
-      sendOnSignIn: true,
+      sendOnSignUp: isEmailPasswordAuthConfigured(env),
+      sendOnSignIn: isEmailPasswordAuthConfigured(env),
       autoSignInAfterVerification: false,
       expiresIn: 60 * 60,
       sendVerificationEmail: ({ user, url }) =>
