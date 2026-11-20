@@ -25,7 +25,9 @@ The auth Worker needs these bindings/secrets:
 | `BETTER_AUTH_SECRET` | High-entropy Better Auth secret (at least 32 characters) |
 | `BETTER_AUTH_URL` | Exact public origin for this deployment, with no path |
 | `RESEND_API_KEY` | Transactional email API key used for verification and password reset |
-| `AUTH_FROM_EMAIL` | Sender identity verified by the email provider (only needed for email/password, verification and password reset) |\n| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional Google OAuth application credentials |\n| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Optional GitHub OAuth application credentials |
+| `AUTH_FROM_EMAIL` | Sender identity verified by the email provider (only needed for email/password, verification and password reset) | 
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional Google OAuth application credentials | 
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Optional GitHub OAuth application credentials |
 
 The SvelteKit 3 hook reads Cloudflare bindings from the `cloudflare:workers` module (`env` and `waitUntil`); do not use the removed SvelteKit `event.platform` binding API. It uses Better Auth's SvelteKit handler, reads the server session into request locals, and retains the application's existing response security headers. The global navigation switches between Sign in and Account from the server-validated session; the account page provides sign-out. A guest request to the account page redirects to Sign in. Better Auth's origin/CSRF protections remain enabled. Session cookies are HttpOnly, Secure on HTTPS, SameSite=Lax and path-scoped. Rate limits are persisted in the auth D1 database and use Cloudflare's `cf-connecting-ip` header.
 
