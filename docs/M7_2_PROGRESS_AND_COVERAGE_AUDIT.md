@@ -1,5 +1,8 @@
 # M7.2 — Curriculum Skill Progression and Coverage Audit
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Quantitative progression scan complete; pedagogical sequencing review in progress  
 **Release reviewed:** `curriculum-v1.0.6`  
 **Source:** All 152 authored lessons across Year 1, Year 2 and four Year 3+ specialist routes  
