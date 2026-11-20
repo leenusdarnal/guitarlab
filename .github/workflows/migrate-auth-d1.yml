@@ -118,6 +118,28 @@ jobs:
         env:
           TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
 
+      - name: Verify Cloudflare API token and selected D1 access
+        shell: bash
+        run: |
+          token_check="$(curl --fail --silent --show-error \
+            --connect-timeout 10 --max-time 30 \
+            --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/user/tokens/verify")"
+          if ! jq -e '.success == true and .result.status == "active"' <<< "$token_check" >/dev/null; then
+            echo "Cloudflare API token verification failed or the token is not active."
+            exit 1
+          fi
+          echo "Cloudflare API token is active."
+
+          if ! npx wrangler d1 execute "$D1_NAME" --remote \
+            --config "$WRANGLER_CONFIG" \
+            --command "SELECT 1 AS auth_db_access_check" --json; then
+            echo "The active Cloudflare token cannot query the selected D1 database."
+            echo "Check the environment token's account scope and D1 Write permission."
+            exit 1
+          fi
+          echo "Selected D1 database access verified."
+
       - name: List pending migrations before apply
         run: npx wrangler d1 migrations list "$D1_NAME" --remote --config "$WRANGLER_CONFIG"
 
