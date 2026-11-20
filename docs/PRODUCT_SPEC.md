@@ -1,5 +1,7 @@
 # GuitarLab Product Specification
 
+**Authority:** Canonical product requirements and learner-facing behaviour. This document does not own implementation status; see [Roadmap](ROADMAP.md) for milestone state and the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) for engineering/release acceptance.
+
 ## Product promise
 
 GuitarLab is a self-contained guitar-learning environment. It teaches the learner what to practise, why the skill matters, how to perform it, how to apply it musically and how to judge whether it is becoming reliable.
@@ -82,7 +84,7 @@ External resources are optional demonstrations or alternate explanations, never 
 
 ## First release
 
-The initial private release is defined in [First-Release Scope](RELEASE_SCOPE.md). It prioritises the fresh-start Year 1 curriculum, dashboard, authored lesson viewer, practice logging, local-first/offline support and foundational music tools. Cloud sync is enabled only after authentication and authorisation are in place.
+The first-release product behaviour is defined in this specification. It prioritises the fresh-start curriculum, dashboard, authored lesson viewer, practice logging, local-first/offline support and foundational music tools. Product milestones are tracked in [Roadmap](ROADMAP.md), and engineering/release acceptance is tracked in [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md). Cloud learner-data sync remains disabled until authentication, authorisation, export/deletion and conflict-recovery requirements are met.
 
 ## Success measures
 
