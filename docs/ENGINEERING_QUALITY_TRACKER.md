@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 20 November 2026  
-**Verified source baseline:** `main` at `0cefe5722cca1f27391ff968f150f67824b05326` (PR #212 merged; post-merge CI run #44783678807 passed all required checks)  
+**Audit baseline:** `main` at `0cefe5722cca1f27391ff968f150f67824b05326` (PR #212 merged; post-merge CI run #44783678807 passed all required checks)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
