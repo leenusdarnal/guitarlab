@@ -78,7 +78,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-01 — Year 1 Week 2: Clear single notes
 
-**Original finding (resolved in v1.0.7):** The focus and checkpoint are about fretting-hand fundamentals, clean tone and relaxed pressure. Its mappings still name `harmony.triads` and `harmony.voice-leading`, and its key explanation / focused exercise retain unrelated harmony and note-formula language.
+**Original pre-v1.0.7 finding:** The focus and checkpoint were about fretting-hand fundamentals, clean tone and relaxed pressure, but the mappings named `harmony.triads` and `harmony.voice-leading`, and the explanation/exercise included unrelated harmony material. Release v1.0.7 rewrote the lesson and replaced those mappings with `instrument.fretting`.
 
 - [x] Rewrite the key idea and plain-language explanation around clean fretting, minimum effective pressure and relaxed movement.
 - [x] Rewrite the demonstration and exercises to teach finger placement, note clarity, buzzing diagnosis and two-hand coordination.
@@ -96,7 +96,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-02 — Year 1 Week 20: Play with expression
 
-**Original finding (resolved in v1.0.7):** Its mappings have already been corrected to `lead.phrasing` and `technique.bends`, but the key explanation and focused exercise still contain unrelated music-theory / root-formula language. The focus covers slides, bends, dynamics and phrasing.
+**Original pre-v1.0.7 finding:** The explanation and focused exercise contained unrelated music-theory/root-formula language despite a focus on slides, bends, dynamics and phrasing. Release v1.0.7 rewrote the lesson around expressive note movement, target pitch, timing, dynamics and phrase shape, retaining the supported `lead.phrasing` and `technique.bends` mappings.
 
 - [x] Rewrite the explanation so it teaches expressive note movement, target pitch, timing, dynamics and phrase shape.
 - [x] Add specific slide and bend demonstrations with playable note/fret examples.
@@ -111,7 +111,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-03 — Year 2 Week 1: Fretboard map 1
 
-**Original finding (resolved in v1.0.7):** The focus and worked example introduce natural notes on the low E and A strings through fret 5, while the checkpoint says “every natural note to fret 5” without stating a string range.
+**Original pre-v1.0.7 finding:** The focus/worked example limited the exercise to low E and A through fret 5, while the checkpoint used the ambiguous phrase “every natural note to fret 5”. Release v1.0.7 aligned the focus, worked examples, exercises and checkpoint to one explicit string/fret scope.
 
 - [x] Decide whether the intended scope is low E and A only or a wider set of strings.
 - [x] Align focus, objectives, demonstration, exercises, worked examples and checkpoint to the same string/fret scope.
@@ -124,7 +124,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-04 — Year 2 Week 2: Octaves across adjacent string sets
 
-**Original finding (resolved in v1.0.7):** The lesson teaches octave relationships, but its current mappings are `fretboard.string-map` and `fretboard.natural-notes`; it does not map to the existing `fretboard.octaves` skill. That skill currently has only one association across the full curriculum.
+**Original pre-v1.0.7 finding:** The lesson taught octave relationships but did not map to `fretboard.octaves`. Release v1.0.7 added the supported octave mapping and aligned the task-specific criterion and transfer task.
 
 - [x] Review the complete explanation, exercises and checkpoint for direct octave-skill evidence.
 - [x] Add `fretboard.octaves` if the lesson explicitly teaches and assesses octave locations; otherwise document why it is not an assessed outcome.
