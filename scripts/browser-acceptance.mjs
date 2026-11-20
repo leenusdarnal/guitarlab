@@ -98,6 +98,26 @@ async function startPreviewServerAndWait() {
   await waitForPreviewServer();
 }
 
+async function waitForOnboardingProfile(page) {
+  await page.waitForFunction(() => {
+    const saveButton = document.querySelector('form button[type="submit"]');
+    return saveButton instanceof HTMLButtonElement && !saveButton.disabled;
+  });
+}
+
+async function waitForDataPageReady(page) {
+  await page.waitForFunction(() => {
+    const storagePanel = document.querySelector(
+      '[aria-labelledby="storage-protection-title"]'
+    );
+    const status = storagePanel?.querySelector('p')?.textContent ?? '';
+    return (
+      status.length > 0 &&
+      !status.includes("Checking this browser's data-protection options")
+    );
+  });
+}
+
 let browser;
 let lifecycleServer;
 try {
@@ -237,7 +257,7 @@ try {
     viewport: { width: 390, height: 844 }
   });
   const cacheBoundaryPage = await cacheBoundaryContext.newPage();
-  await cacheBoundaryPage.goto(origin, { waitUntil: 'networkidle' });
+  await cacheBoundaryPage.goto(origin, { waitUntil: 'domcontentloaded' });
   await cacheBoundaryPage.waitForFunction(
     () =>
       'serviceWorker' in navigator &&
@@ -342,7 +362,7 @@ try {
   );
   await startPreviewServerAndWait();
   await cacheBoundaryContext.setOffline(false);
-  await cacheBoundaryPage.goto(origin, { waitUntil: 'networkidle' });
+  await cacheBoundaryPage.goto(origin, { waitUntil: 'domcontentloaded' });
   await cacheBoundaryPage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
@@ -353,7 +373,7 @@ try {
     viewport: { width: 1440, height: 1000 }
   });
   const upgradePage = await upgradeContext.newPage();
-  await upgradePage.goto(origin, { waitUntil: 'networkidle' });
+  await upgradePage.goto(origin, { waitUntil: 'domcontentloaded' });
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
@@ -508,7 +528,7 @@ try {
         );
     });
   });
-  await upgradePage.reload({ waitUntil: 'networkidle' });
+  await upgradePage.reload({ waitUntil: 'domcontentloaded' });
   await upgradePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
@@ -667,7 +687,7 @@ try {
   restrictedStoragePage.on('pageerror', (error) =>
     restrictedStorageErrors.push(error.message)
   );
-  await restrictedStoragePage.goto(origin, { waitUntil: 'networkidle' });
+  await restrictedStoragePage.goto(origin, { waitUntil: 'domcontentloaded' });
   await restrictedStoragePage
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
@@ -714,7 +734,7 @@ try {
     });
   });
   const recoveryPage = await recoveryContext.newPage();
-  await recoveryPage.goto(origin, { waitUntil: 'networkidle' });
+  await recoveryPage.goto(origin, { waitUntil: 'domcontentloaded' });
   await recoveryPage
     .getByText('Dashboard unavailable', { exact: true })
     .waitFor();
@@ -744,7 +764,9 @@ try {
   await recoveryPage.evaluate(() =>
     window.__guitarlabSetDatabaseAvailable(false)
   );
-  await recoveryPage.goto(origin + '/skills', { waitUntil: 'networkidle' });
+  await recoveryPage.goto(origin + '/skills', {
+    waitUntil: 'domcontentloaded'
+  });
   await recoveryPage
     .getByText(
       'Your local skill map could not be loaded. Check browser storage and try again.',
@@ -787,7 +809,7 @@ try {
     window.__guitarlabSetDatabaseAvailable(false)
   );
   await recoveryPage.goto(origin + '/practice', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   const practiceHistoryRecovery = recoveryPage.locator('.recovery-message');
   await practiceHistoryRecovery.waitFor();
@@ -817,7 +839,7 @@ try {
     window.__guitarlabSetDatabaseAvailable(false)
   );
   await recoveryPage.goto(origin + '/repertoire', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   const repertoireRecovery = recoveryPage.locator('.load-error');
   await repertoireRecovery.waitFor();
@@ -854,7 +876,7 @@ try {
   });
   const savedThemePage = await savedThemeContext.newPage();
   await savedThemePage.goto(origin + '/tools/fretboard', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await savedThemePage.waitForFunction(
     () => document.documentElement.dataset.theme === 'light'
@@ -883,7 +905,7 @@ try {
   page.on('pageerror', (error) => pageErrors.push(error.message));
 
   // Keyboard users can skip persistent notices and move directly to page content.
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.keyboard.press('Tab');
   const skipLink = page.getByRole('link', { name: 'Skip to main content' });
   assert.equal(
@@ -919,7 +941,7 @@ try {
   );
 
   // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
-  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools`, { waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
     .waitFor();
@@ -958,7 +980,7 @@ try {
   );
 
   // Microphone tools explain capture and permission before any Start action.
-  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools/tuner`, { waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Find your note.' }).waitFor();
   await page
     .locator('.microphone-permission-note')
@@ -972,7 +994,7 @@ try {
     'Opening the tuner must not request microphone access'
   );
   await page.goto(`${origin}/tools/note-recognition`, {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await page.getByRole('heading', { name: 'Play the right note.' }).waitFor();
   await page
@@ -987,7 +1009,7 @@ try {
     'Opening note recognition must not request microphone access'
   );
 
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', { name: 'Your journey begins with the foundations.' })
     .waitFor();
@@ -1022,7 +1044,7 @@ try {
     await page.evaluate(() => localStorage.getItem('guitarlab-theme')),
     'light'
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
 
   // Learner preferences persist in IndexedDB and feed the dashboard.
@@ -1051,7 +1073,7 @@ try {
   await page.getByRole('link', { name: 'Go to Today' }).click();
   await page.waitForURL((url) => url.pathname === '/');
   assert.match(await page.locator('.practice-number').innerText(), /20/);
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   const personalizedReasons = await page
     .locator('.practice-task p')
@@ -1113,10 +1135,10 @@ try {
     await page.locator('#practice-history').count(),
     'Practice history has a stable destination'
   );
-  await page.goto(origin, { waitUntil: 'networkidle' });
-  const actionLinks = await planner
-    .locator('.practice-task .task-action')
-    .count();
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
+  const taskActionLinks = planner.locator('.practice-task .task-action');
+  await taskActionLinks.first().waitFor({ state: 'visible' });
+  const actionLinks = await taskActionLinks.count();
   assert.ok(
     actionLinks > 0,
     'Every suggested task should expose a useful action'
@@ -1172,11 +1194,11 @@ try {
   await page
     .getByRole('heading', { name: 'Practice history', exact: true })
     .waitFor();
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
 
   // Mobile navigation and planner cards remain usable at a narrow viewport.
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   const mobileMenuButton = page.locator('.mobile-nav-trigger');
   await mobileMenuButton.click();
   let mobileNavigation = page.getByRole('navigation', {
@@ -1213,7 +1235,7 @@ try {
   );
 
   // M7.2 adaptive recommendation feedback is local, append-only and evidence-aware.
-  await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/practice`, { waitUntil: 'domcontentloaded' });
   const adaptiveRecommendation = page
     .locator('.adaptive-list li[data-target-type="skill"]')
     .first();
@@ -1233,7 +1255,7 @@ try {
     .getByText(/You asked for an easier starting step/)
     .waitFor();
 
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   const persistedRecommendation = page.locator(
     `.adaptive-list li[data-recommendation-id="${recommendationId}"]`
   );
@@ -1291,7 +1313,7 @@ try {
   );
 
   // M8 repertoire workspace: create, edit and reload learner-authored song notes.
-  await page.goto(`${origin}/repertoire`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/repertoire`, { waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Build your repertoire.' }).waitFor();
   await page
     .getByLabel('New song or study project')
@@ -1323,7 +1345,7 @@ try {
     0,
     saveFailureMessage ?? 'The song project did not save.'
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByLabel('Section 1 title').waitFor();
   assert.equal(await page.getByLabel('Section 1 title').inputValue(), 'Verse');
   assert.equal(
@@ -1336,7 +1358,7 @@ try {
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
 
   // Active learners see a quiet backup reminder until a recent download is started.
   await page.locator('#backup-reminder').waitFor({ state: 'visible' });
@@ -1417,11 +1439,12 @@ try {
   );
 
   // A recent download removes the reminder from Today without changing learner data.
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(
     () => document.querySelector('#backup-reminder') === null
   );
-  await page.goto(origin + '/settings/data', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/settings/data', { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
 
   // Invalid JSON and unsupported backup versions must be rejected without preview.
   const backupInput = page.locator('input[type="file"]');
@@ -1454,7 +1477,8 @@ try {
   );
 
   // Change the profile after export so rollback and restore have observable outcomes.
-  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   await page.getByRole('radio', { name: '40 min' }).check();
   await page.getByRole('button', { name: /Save my preferences/ }).click();
   await page
@@ -1490,7 +1514,8 @@ try {
       ]
     }
   };
-  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.locator('input[type="file"]').setInputFiles({
     name: 'transaction-rollback.json',
     mimeType: 'application/json',
@@ -1515,7 +1540,8 @@ try {
     })
     .waitFor();
 
-  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '40 min' }).isChecked(),
     true,
@@ -1523,7 +1549,8 @@ try {
   );
 
   // Reset is gated by both the typed phrase and the browser confirmation dialog.
-  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   const resetInput = page.locator('#reset-confirm');
   const resetButton = page.getByRole('button', {
     name: 'Reset active learner data'
@@ -1539,14 +1566,16 @@ try {
   await resetButton.click();
   assert.match(cancelledDialogMessage, /Reset GuitarLab learner data/);
 
-  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '40 min' }).isChecked(),
     true,
     'Dismissing the reset confirmation must preserve learner data'
   );
 
-  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.locator('#reset-confirm').fill('RESET');
   await resetButton.scrollIntoViewIfNeeded();
   let acceptedDialogMessage = '';
@@ -1623,13 +1652,15 @@ try {
   );
 
   // Restore the downloaded backup into a new, empty learner profile.
-  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '20 min' }).isChecked(),
     false,
     'Reset should create a fresh profile with no assumed practice duration'
   );
-  await page.goto(`${origin}/settings/data`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/settings/data`, { waitUntil: 'domcontentloaded' });
+  await waitForDataPageReady(page);
   await page.evaluate(() =>
     localStorage.setItem('guitarlab.last-backup-export-at', String(Date.now()))
   );
@@ -1657,7 +1688,8 @@ try {
     'A successful restore clears the previous backup date for the replaced profile'
   );
 
-  await page.goto(`${origin}/onboarding`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
   assert.equal(
     await page.getByRole('radio', { name: '20 min' }).isChecked(),
     true,
@@ -1708,7 +1740,7 @@ try {
 
   // Global navigation: keyboard open, active-section semantics, Escape and route focus.
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${origin}/tools`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/tools`, { waitUntil: 'domcontentloaded' });
   const globalMenuButton = page.locator('.mobile-nav-trigger');
   const globalMobileNavigation = page.locator('#mobile-more-navigation');
   const mobileTabBar = page.locator('.mobile-tab-bar');
@@ -1782,7 +1814,7 @@ try {
 
   // Restore the desktop viewport after the earlier mobile navigation acceptance.
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(origin, { waitUntil: 'networkidle' });
+  await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page.getByRole('link', { name: 'Tools', exact: true }).click();
   await page
     .getByRole('heading', { name: 'Tools for your practice.' })
@@ -1891,7 +1923,7 @@ try {
   });
   const fretboardMobilePage = await fretboardMobileContext.newPage();
   await fretboardMobilePage.goto(`${origin}/tools/fretboard`, {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded'
   });
   await fretboardMobilePage
     .getByRole('heading', { name: 'Fretboard explorer.' })
@@ -1907,7 +1939,7 @@ try {
   await fretboardMobileContext.close();
 
   // M7.3 saved routines: CRUD, authored sequence order, reuse and session snapshot recovery.
-  await page.goto(origin + '/practice', { waitUntil: 'networkidle' });
+  await page.goto(origin + '/practice', { waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
@@ -1950,7 +1982,7 @@ try {
       snapshotSequence.indexOf('Chord changes'),
     'The active session must use the saved routine order'
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.locator('.routine-run').waitFor();
   assert.equal(
     await page.locator('.routine-run ol').innerText(),
@@ -1995,7 +2027,7 @@ try {
     .waitFor();
 
   // M7.2 Practice Studio: start, pause, resume, reload recovery and active-time save.
-  await page.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/practice`, { waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', { name: 'Start a practice session' })
     .waitFor();
@@ -2177,7 +2209,7 @@ try {
     pausedElapsed,
     'Paused time must not increase active time'
   );
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByRole('heading', { name: 'Your session is paused' }).waitFor();
   await page
     .locator('.active-evidence-list')
@@ -2227,7 +2259,7 @@ try {
       exact: true
     })
     .waitFor();
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', {
       name: 'Browser acceptance scale drill',
@@ -2305,7 +2337,9 @@ try {
     });
   });
   const wakeLockPage = await wakeLockContext.newPage();
-  await wakeLockPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' });
+  await wakeLockPage.goto(`${origin}/practice`, {
+    waitUntil: 'domcontentloaded'
+  });
   await wakeLockPage.locator('#duration').fill('5');
   await wakeLockPage.locator('#focus').fill('Wake lock lifecycle test');
   await wakeLockPage.getByRole('button', { name: 'Start practice' }).click();
@@ -2453,8 +2487,8 @@ try {
   // serialize so exactly one tab can create the learner's active session.
   const competingPage = await page.context().newPage();
   await Promise.all([
-    page.goto(`${origin}/practice`, { waitUntil: 'networkidle' }),
-    competingPage.goto(`${origin}/practice`, { waitUntil: 'networkidle' })
+    page.goto(`${origin}/practice`, { waitUntil: 'domcontentloaded' }),
+    competingPage.goto(`${origin}/practice`, { waitUntil: 'domcontentloaded' })
   ]);
   await Promise.all([
     page.getByRole('heading', { name: 'Start a practice session' }).waitFor(),
@@ -2492,8 +2526,8 @@ try {
     'Exactly one tab may start an active practice session'
   );
   await Promise.all([
-    page.reload({ waitUntil: 'networkidle' }),
-    competingPage.reload({ waitUntil: 'networkidle' })
+    page.reload({ waitUntil: 'domcontentloaded' }),
+    competingPage.reload({ waitUntil: 'domcontentloaded' })
   ]);
   await Promise.all([
     page.getByRole('heading', { name: /Concurrent tab [AB]/ }).waitFor(),
@@ -2590,7 +2624,7 @@ try {
     skillFixture.active,
     'The skill-state fixture needs an active learner'
   );
-  await page.goto(`${origin}/skills`, { waitUntil: 'networkidle' });
+  await page.goto(`${origin}/skills`, { waitUntil: 'domcontentloaded' });
   await page
     .getByRole('heading', { name: 'See the skills behind the music.' })
     .waitFor();
