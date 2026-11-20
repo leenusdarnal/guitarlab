@@ -1,4 +1,4 @@
-# M7.2 — Evidence-Based Curriculum and Assessment Improvement Review
+# M7.2 — Evidence-Based Curriculum and Assessment Improvement Review\n\n> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.\n
 
 **Research status:** Multi-angle literature and product scan completed; recommendations below are ready for controlled implementation  
 **Repository baseline:** 34 skill identifiers, 12 catalogue categories, 152 authored lessons  
