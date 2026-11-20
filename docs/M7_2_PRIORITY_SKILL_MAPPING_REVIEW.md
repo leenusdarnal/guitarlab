@@ -1,5 +1,8 @@
 # M7.2 — Priority Mapping Review: Five High-Risk Skill Groups
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Focused triage completed; curriculum-owner disposition pending  
 **Scope:** 54 associations across five skill IDs identified by the lexical screen  
 **Important:** This is an evidence review of focus, checkpoint, teaching steps and worked examples where available. “Likely unsupported” is a review status, not an automatic deletion instruction.
