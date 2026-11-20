@@ -1,5 +1,8 @@
 # First Production Deployment Implementation Plan
 
+> **Historical implementation-plan snapshot — not current task status.** The plan and its checkboxes record the proposed/observed work at the date in the filename. Current product milestones belong in [ROADMAP.md](../../ROADMAP.md); current engineering/release gates belong in [ENGINEERING_QUALITY_TRACKER.md](../../ENGINEERING_QUALITY_TRACKER.md). Do not resume or close work from this historical checklist without checking those authorities and live GitHub state.
+
+
 > **For agentic workers:** Native execution in this session. Steps use checkbox syntax for tracking.
 
 **Goal:** Deploy the existing local-first GuitarLab application to a separate production Cloudflare Worker with exact-commit CI gates and post-deploy smoke verification.
@@ -50,7 +53,7 @@
 
 ### Task 3: Reconcile release priority and launch boundary
 
-**Files:** `docs/EXECUTION_PRIORITY.md`, `docs/IMPLEMENTATION_TRACKER.md`, `docs/CLOUDFLARE_DEPLOYMENT_PLAN.md`, `docs/SECURITY_RESPONSE_POLICY.md`, `docs/ROADMAP.md`, `README.md`.
+**Files:** `docs/PRODUCTION_ENVIRONMENT_DECISION.md`, `docs/CLOUDFLARE_DEPLOYMENT_PLAN.md`, `docs/SECURITY_RESPONSE_POLICY.md`, `docs/ROADMAP.md`, `docs/ENGINEERING_QUALITY_TRACKER.md`, `README.md`.
 
 - [ ] Record production deployment as P0/top priority.
 - [ ] Record Cloudflare resource inventory and temporary workers.dev hostname.
