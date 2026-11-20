@@ -819,7 +819,7 @@ try {
     await navigateAndWaitFor(
       page,
       origin + '/learn',
-      'main#main-content select[aria-label="Appearance"]'
+      'header.global-nav select[aria-label="Appearance"]'
     );
     const firstFrameTheme = await page.evaluate(() => ({
       applied: document.documentElement.dataset.theme,
@@ -835,7 +835,7 @@ try {
     assert.equal(firstFrameTheme.preference, theme);
 
     const appearance = page.locator(
-      'main#main-content select[aria-label="Appearance"]'
+      'header.global-nav select[aria-label="Appearance"]'
     );
     assert.equal(await appearance.inputValue(), theme);
     await appearance.selectOption('system');
@@ -884,10 +884,10 @@ try {
     await navigateAndWaitFor(
       page,
       origin,
-      'main#main-content select[aria-label="Appearance"]'
+      'header.global-nav select[aria-label="Appearance"]'
     );
     const dashboardAppearance = page.locator(
-      'main#main-content select[aria-label="Appearance"]:visible'
+      'header.global-nav select[aria-label="Appearance"]:visible'
     );
     assert.equal(await dashboardAppearance.inputValue(), 'dark');
     await dashboardAppearance.selectOption('light');
@@ -910,10 +910,10 @@ try {
     await navigateAndWaitFor(
       page,
       origin + '/practice',
-      'main#main-content select[aria-label="Appearance"]'
+      'header.global-nav select[aria-label="Appearance"]'
     );
     const sharedAppearance = page.locator(
-      'main#main-content select[aria-label="Appearance"]'
+      'header.global-nav select[aria-label="Appearance"]'
     );
     assert.equal(
       await sharedAppearance.inputValue(),
