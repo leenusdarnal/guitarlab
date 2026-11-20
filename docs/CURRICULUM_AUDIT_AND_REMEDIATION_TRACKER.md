@@ -11,25 +11,6 @@
 
 ---
 
-## Current implementation status — 19 November 2026
-
-**Merged active release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`), recorded in `content/curriculum/release.json`.  
-**Completed in this batch:** CURR-P0-01 through CURR-P0-04. Stable lesson IDs and week IDs are unchanged.
-
-| Measure | Before batch | Merged v1.0.7 |
-|---|---:|---:|
-| Task-specific lesson authoring | 44 / 152 | 48 / 152 |
-| Year 1 task-specific lessons | 9 / 52 | 11 / 52 |
-| Year 2 task-specific lessons | 3 / 52 | 5 / 52 |
-| Year 3+ task-specific lessons | 32 / 48 | 32 / 48 |
-| Skill identifiers | 34 | 35 |
-| Lesson-to-skill associations | 391 | 390 |
-| Draft assessment profiles | 34 | 35 |
-
-The `instrument.fretting` profile remains draft and requires curriculum-owner / guitar-instructor review; it is not approved for automated grading. The 104 remaining generic lessons, 390 mapping dispositions and full prerequisite/progression audit remain open. These counts describe the merged v1.0.7 source, not an unmerged candidate.
-
-**Historical snapshot note:** The executive baseline table and Year 1/Year 2 authoring breakdown immediately below are the original pre-v1.0.7 audit snapshot (44 task-specific lessons, 34 skills, 391 associations). They are retained as historical context, not current release metrics. The current merged v1.0.7 metrics are in the implementation-status table above and `content/curriculum/release.json`.
-
 ## 1. Current executive status
 
 **Overall assessment:** The curriculum architecture, authored content breadth and stable data model are established, but detailed lesson authoring, mapping decisions, progression review and human musical review remain incomplete. The figures below describe the active merged release `curriculum-v1.0.7` only.
@@ -115,7 +96,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-02 — Year 1 Week 20: Play with expression
 
-**Current concern:** Its mappings have already been corrected to `lead.phrasing` and `technique.bends`, but the key explanation and focused exercise still contain unrelated music-theory / root-formula language. The focus covers slides, bends, dynamics and phrasing.
+**Original finding (resolved in v1.0.7):** Its mappings have already been corrected to `lead.phrasing` and `technique.bends`, but the key explanation and focused exercise still contain unrelated music-theory / root-formula language. The focus covers slides, bends, dynamics and phrasing.
 
 - [x] Rewrite the explanation so it teaches expressive note movement, target pitch, timing, dynamics and phrase shape.
 - [x] Add specific slide and bend demonstrations with playable note/fret examples.
