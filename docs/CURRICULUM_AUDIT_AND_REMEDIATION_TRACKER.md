@@ -3,7 +3,7 @@
 **Status:** In progress — curriculum-v1.0.7 is the active merged release; remaining P1/P2 audit work stays open  
 **Audit date:** 2026-11-20  
 **Baseline branch:** `main`  
-**Baseline commit:** `0cefe5722cca1f27391ff968f150f67824b05326`  
+**Audit baseline commit:** `0cefe5722cca1f27391ff968f150f67824b05326`  
 **Active curriculum release:** `curriculum-v1.0.7`  
 **Scope:** 152 authored lessons across Year 1, Year 2 and four optional Year 3 specialisations
 
