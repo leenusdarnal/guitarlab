@@ -570,7 +570,7 @@ Append one entry for every implementation batch. Keep entries chronological; do 
 | Date | PR / commit | Scope / lesson IDs | Validation | Reviewer | Status / notes |
 |---|---|---|---|---|---|
 | 2026-11-18 | Audit baseline | 152 lessons / 391 mappings | Source metrics inspected | Pending | Tracker created; no curriculum data changed by the audit |
-| 2026-11-18 | PR #180 / merged release v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | In-memory source/outline/profile/release consistency checks; CI pending | Pending | Four P0 corrections merged in v1.0.7; stable lesson/week IDs preserved; owner review remains open |
+| 2026-11-18 | PR #180 / merged release v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | Curriculum validation [#44287911106](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911106) and required PR CI [#44287911608](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911608) passed | Curriculum-owner / guitar-instructor review pending | Four P0 corrections merged in v1.0.7; stable lesson/week IDs preserved; manual content review remains open |
 
 ### Decision log
 
