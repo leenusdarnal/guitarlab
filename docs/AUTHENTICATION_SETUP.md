@@ -13,7 +13,7 @@ The local Wrangler configuration contains a separate `AUTH_DB` binding named `gu
 5. Apply the isolated identity schema with `npm run db:auth:migrate:local`, then verify its tables with `npm run db:auth:test:local`.
 6. Build and run the Worker with `npm run build` followed by `npm run preview`.
 
-Do not commit `.dev.vars`. The example file contains placeholders only. The application deliberately disables account endpoints when the database, 32-character-or-longer secret, explicit base URL, or email sender configuration is missing.
+Do not commit `.dev.vars`. The example file contains placeholders only. The application deliberately disables account endpoints when the database, 32-character-or-longer secret, explicit base URL, or at least one complete sign-in method is missing.
 
 ## Runtime configuration
 
