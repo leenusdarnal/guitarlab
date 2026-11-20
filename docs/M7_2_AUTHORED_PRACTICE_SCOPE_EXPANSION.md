@@ -1,4 +1,4 @@
-# M7.2 — Authored practice taxonomy expansion
+# M7.2 — Authored practice taxonomy expansion\n\n> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.\n
 
 **Date:** 2026-11-14  
 **Curriculum release:** `curriculum-v1.0.6`  
