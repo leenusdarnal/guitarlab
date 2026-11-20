@@ -1,4 +1,10 @@
+import { env, waitUntil } from 'cloudflare:workers';
 import type { RequestHandler } from './$types';
+import {
+  createAuth,
+  isAuthConfigured,
+  type AuthEnvironment
+} from '../../../../lib/server/auth';
 
 function unavailable(): Response {
   return Response.json(
@@ -10,10 +16,18 @@ function unavailable(): Response {
     },
     {
       status: 503,
-      headers: { 'Cache-Control': 'no-store' }
+      headers: { 'Cache-Control': 'private, no-store' }
     }
   );
 }
 
-export const GET: RequestHandler = () => unavailable();
-export const POST: RequestHandler = () => unavailable();
+async function handle({ request }: Parameters<RequestHandler>[0]) {
+  const authEnv = env as unknown as AuthEnvironment;
+  if (!isAuthConfigured(authEnv)) return unavailable();
+
+  const auth = createAuth(authEnv, waitUntil);
+  return auth.handler(request);
+}
+
+export const GET: RequestHandler = handle;
+export const POST: RequestHandler = handle;

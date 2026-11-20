@@ -8,6 +8,10 @@ export interface AuthEnvironment {
   AUTH_FROM_EMAIL?: string;
   /** Local-only override used by automated account lifecycle acceptance. */
   AUTH_TEST_MAIL_SINK_URL?: string;
+  /** Local-only timing overrides used to exercise expiry and refresh quickly. */
+  AUTH_TEST_SESSION_EXPIRES_IN_SECONDS?: string;
+  AUTH_TEST_SESSION_UPDATE_AGE_SECONDS?: string;
+  AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS?: string;
 }
 
 export type WaitUntil = (promise: Promise<unknown>) => void;
@@ -28,6 +32,75 @@ function isLoopbackHttpUrl(value: string): boolean {
   } catch {
     return false;
   }
+}
+
+function parseTestSeconds(
+  value: string | undefined
+): number | null | undefined {
+  if (value === undefined) return undefined;
+  if (!/^[1-9]\d*$/.test(value)) return null;
+
+  const seconds = Number(value);
+  return Number.isSafeInteger(seconds) && seconds <= 60 ? seconds : null;
+}
+
+function testTimingConfigurationIsValid(
+  env: AuthEnvironment,
+  isLocalDevelopmentHost: boolean
+): boolean {
+  const sessionExpiresIn = parseTestSeconds(
+    env.AUTH_TEST_SESSION_EXPIRES_IN_SECONDS
+  );
+  const sessionUpdateAge = parseTestSeconds(
+    env.AUTH_TEST_SESSION_UPDATE_AGE_SECONDS
+  );
+  const resetTokenExpiresIn = parseTestSeconds(
+    env.AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS
+  );
+  const parsedValues = [
+    sessionExpiresIn,
+    sessionUpdateAge,
+    resetTokenExpiresIn
+  ];
+  if (parsedValues.some((value) => value === null)) return false;
+
+  const hasOverrides = [
+    env.AUTH_TEST_SESSION_EXPIRES_IN_SECONDS,
+    env.AUTH_TEST_SESSION_UPDATE_AGE_SECONDS,
+    env.AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS
+  ].some((value) => value !== undefined);
+
+  if (!hasOverrides) return true;
+
+  if (
+    !isLocalDevelopmentHost ||
+    !env.AUTH_TEST_MAIL_SINK_URL ||
+    !isLoopbackHttpUrl(env.AUTH_TEST_MAIL_SINK_URL)
+  ) {
+    return false;
+  }
+
+  const effectiveSessionExpiresIn = sessionExpiresIn ?? 60 * 60 * 24 * 30;
+  const effectiveSessionUpdateAge = sessionUpdateAge ?? 60 * 60 * 24;
+  if (effectiveSessionUpdateAge >= effectiveSessionExpiresIn) {
+    return false;
+  }
+
+  return true;
+}
+
+function authTiming(env: AuthEnvironment) {
+  return {
+    sessionExpiresIn: Number(
+      env.AUTH_TEST_SESSION_EXPIRES_IN_SECONDS ?? 60 * 60 * 24 * 30
+    ),
+    sessionUpdateAge: Number(
+      env.AUTH_TEST_SESSION_UPDATE_AGE_SECONDS ?? 60 * 60 * 24
+    ),
+    resetTokenExpiresIn: Number(
+      env.AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS ?? 60 * 60
+    )
+  };
 }
 
 export function isAuthConfigured(env?: AuthEnvironment): boolean {
@@ -57,6 +130,9 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
       !url.password;
 
     if (!validOrigin) return false;
+    if (!testTimingConfigurationIsValid(env, isLocalDevelopmentHost)) {
+      return false;
+    }
     if (
       env.AUTH_TEST_MAIL_SINK_URL &&
       (!isLocalDevelopmentHost ||
@@ -124,6 +200,7 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
 
   const baseUrl = new URL(env.BETTER_AUTH_URL!);
   const secureCookies = baseUrl.protocol === 'https:';
+  const timing = authTiming(env);
 
   const queueEmail = (message: {
     to: string;
@@ -146,8 +223,8 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
     trustedOrigins: [baseUrl.origin],
     telemetry: { enabled: false },
     session: {
-      expiresIn: 60 * 60 * 24 * 30,
-      updateAge: 60 * 60 * 24
+      expiresIn: timing.sessionExpiresIn,
+      updateAge: timing.sessionUpdateAge
     },
     emailAndPassword: {
       enabled: true,
@@ -155,6 +232,7 @@ export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
       maxPasswordLength: 128,
       requireEmailVerification: true,
       revokeSessionsOnPasswordReset: true,
+      resetPasswordTokenExpiresIn: timing.resetTokenExpiresIn,
       sendResetPassword: ({ user, token }) => {
         const resetUrl = new URL('/login', baseUrl);
         resetUrl.searchParams.set('mode', 'reset');

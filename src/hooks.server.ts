@@ -13,12 +13,17 @@ export const handle: Handle = async ({ event, resolve }) => {
   let response: Response;
   const authEnv = env as unknown as AuthEnvironment;
 
+  let refreshedSessionCookies: string[] = [];
+
   if (!building && isAuthConfigured(authEnv)) {
     const auth = createAuth(authEnv, waitUntil);
-    const session = await auth.api.getSession({
-      headers: event.request.headers
+    const sessionResult = await auth.api.getSession({
+      headers: event.request.headers,
+      returnHeaders: true
     });
+    const session = sessionResult.response;
 
+    refreshedSessionCookies = sessionResult.headers.getSetCookie();
     event.locals.authUser = session?.user ?? null;
     event.locals.authSession = session?.session ?? null;
 
@@ -30,6 +35,9 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   const headers = new Headers(response.headers);
+  for (const cookie of refreshedSessionCookies) {
+    headers.append('Set-Cookie', cookie);
+  }
   const privatePath =
     /^\/(?:api|account|login|register|signup|verify|password-reset)(?:\/|$)/.test(
       event.url.pathname

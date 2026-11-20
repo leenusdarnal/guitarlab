@@ -64,6 +64,71 @@ describe('isAuthConfigured', () => {
   it('accepts a fully configured isolated auth environment', () => {
     expect(isAuthConfigured(configuredEnvironment)).toBe(true);
   });
+
+  it('allows bounded short-lived timing overrides only with a loopback mail sink', () => {
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        BETTER_AUTH_URL: 'https://localhost:8787',
+        AUTH_TEST_MAIL_SINK_URL: 'http://127.0.0.1:4555/emails',
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12',
+        AUTH_TEST_SESSION_UPDATE_AGE_SECONDS: '2',
+        AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS: '2'
+      })
+    ).toBe(true);
+  });
+
+  it('rejects test timing overrides for non-local origins or without a loopback sink', () => {
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12',
+        AUTH_TEST_SESSION_UPDATE_AGE_SECONDS: '2'
+      })
+    ).toBe(false);
+
+    expect(
+      isAuthConfigured({
+        ...configuredEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12',
+        AUTH_TEST_MAIL_SINK_URL: 'http://127.0.0.1:4555/emails'
+      })
+    ).toBe(false);
+  });
+
+  it('rejects out-of-range or internally inconsistent test timing overrides', () => {
+    const localTestEnvironment = {
+      ...configuredEnvironment,
+      BETTER_AUTH_URL: 'http://localhost:8787',
+      AUTH_TEST_MAIL_SINK_URL: 'http://127.0.0.1:4555/emails'
+    };
+
+    expect(
+      isAuthConfigured({
+        ...localTestEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '0'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...localTestEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12',
+        AUTH_TEST_SESSION_UPDATE_AGE_SECONDS: '12'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...localTestEnvironment,
+        AUTH_TEST_SESSION_EXPIRES_IN_SECONDS: '12'
+      })
+    ).toBe(false);
+    expect(
+      isAuthConfigured({
+        ...localTestEnvironment,
+        AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS: '61'
+      })
+    ).toBe(false);
+  });
 });
 
 describe('test-only transactional email delivery', () => {

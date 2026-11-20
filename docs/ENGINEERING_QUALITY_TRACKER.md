@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 19 November 2026  
-**Verified source baseline:** `main` at `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf` (PR #201 merged)  
+**Verified source baseline:** `main` at `cdbf8a88dba794a844ca8b39e8f0fc03c418606e` (PR #204 merged)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -244,22 +244,22 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| SEC-01 | P1 | **IN PROGRESS** | PR #203 fixes the SvelteKit 3 runtime binding integration by using `cloudflare:workers` instead of the removed `event.platform` API, and adds a test-only loopback email sink plus a real local Worker/Playwright journey for duplicate registration, verification pending/resend/completion, unverified sign-in rejection, password reset/replay, reset-triggered session revocation, logout and guest-safe redirects. Local cookie checks cover HttpOnly, SameSite and Path. Session refresh/expiry and final CI evidence remain outstanding. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md); Issue #176 remains open |
+| SEC-01 | P1 | **IN PROGRESS — implementation extended; CI pending** | PR #203 merged the SvelteKit 3 Worker binding correction and local verified-account lifecycle journey. PR #204 merged untrusted-Origin rejection and bounded sign-in rate-limit coverage. The current slice adds local HTTPS, Secure-cookie/HSTS assertions, short-lived session refresh/expiry, reset-token expiry, sensitive-log checks and axe checks for auth routes. Do not advance to DONE until this PR's final CI passes. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [PR #204](https://github.com/leenusdarnal/guitarlab/pull/204); [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md); Issue #176 remains open |
 | SEC-02 | P1 | **BLOCKED** | Provision and verify isolated local/preview/production auth D1 databases, migrations, Better Auth secret, exact origin and transactional email credentials before enabling account endpoints in those environments. | [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md) states preview/production auth bindings are not enabled |
-| SEC-03 | P1 | **PARTIAL** | Verify security and privacy behaviour end-to-end: no account enumeration, origin/CSRF protection, rate limiting, secure cookie attributes, session revocation and no sensitive data in logs/responses. | Better Auth configuration and local security-header checks exist; end-to-end evidence incomplete |
+| SEC-03 | P1 | **PARTIAL — local coverage expanded; final CI pending** | Required security behaviours now have explicit tests for generic account/reset responses, origin rejection, sign-in HTTP 429, reset replay/revocation, and in [PR #205](https://github.com/leenusdarnal/guitarlab/pull/205) HTTPS cookies, session refresh/expiry, expired reset tokens, diagnostic redaction and auth-route axe checks. Production HTTPS/CSP/privacy verification remains a separate SEC-05 gate. | [PR #203](https://github.com/leenusdarnal/guitarlab/pull/203); [PR #204](https://github.com/leenusdarnal/guitarlab/pull/204); [PR #205](https://github.com/leenusdarnal/guitarlab/pull/205); final CI evidence pending |
 | SEC-04 | P1 | **DEFERRED** | Keep cloud learner-data sync disabled until account ownership enforcement, export/deletion, idempotency, conflict handling and recovery are separately implemented and tested. | Architecture and authentication decision |
 | SEC-05 | P1 | **PARTIAL** | Verify CSP and security headers on the actual deployed environment and complete a production privacy/configuration review. Consider CSP reporting/violation monitoring only with a privacy-safe endpoint and reviewed data handling. | Local Worker preview header/CSP assertions pass; deployment review remains open |
 | SEC-06 | P2 | **OPEN** | Complete the dependency, external-origin and content/licence register; review optional integrations before adoption. | M9 release checklist; preserve copyright/provenance decisions |
 
 ### SEC-01 / SEC-02 acceptance checklist
 
-- [x] Add a test-mail sink restricted to loopback authentication origins; never send real verification or password-reset email from automated tests. PR #203 CI evidence is pending.
-- [x] Add browser coverage for sign-up, duplicate-account response, verification pending, verification resend and successful verification; final CI evidence is pending.
-- [x] Add browser coverage proving unverified users cannot sign in before verification; final CI evidence is pending.
+- [x] Add a test-mail sink restricted to loopback authentication origins; never send real verification or password-reset email from automated tests. PR #203 required CI passed in [run #44571625258](https://github.com/leenusdarnal/guitarlab/actions/runs/44571625258).
+- [x] Add browser coverage for sign-up, duplicate-account response, verification pending, verification resend and successful verification; PR #203 required CI passed in [run #44571625258](https://github.com/leenusdarnal/guitarlab/actions/runs/44571625258).
+- [x] Add browser coverage proving unverified users cannot sign in before verification; PR #203 required CI passed in [run #44571625258](https://github.com/leenusdarnal/guitarlab/actions/runs/44571625258).
 - [ ] Verify sign-in, sign-out, session refresh/expiry and server-side revocation.
 - [ ] Verify password-reset request and completion, expired/used token behaviour and session revocation after reset. PR #203 adds completion, used-link replay and revocation coverage; expired-token behaviour remains.
-- [ ] Ensure responses do not disclose whether an email address is registered.
-- [ ] Verify CSRF/origin checks and configured rate limits against the running Worker.
+- [x] Verify generic registration and password-reset responses for duplicate/unknown addresses in the local lifecycle journey (PR #203); keep provider-backed production verification under SEC-02/SEC-05.
+- [x] Verify untrusted Origin rejection (HTTP 403, no session cookie) and the existing sign-in rate limit (HTTP 429) against the local Worker in [PR #204](https://github.com/leenusdarnal/guitarlab/pull/204); final PR #204 CI passed in [run #44586779025](https://github.com/leenusdarnal/guitarlab/actions/runs/44586779025).
 - [ ] Inspect actual session cookie attributes on HTTPS: HttpOnly, Secure, SameSite and Path. Review whether a `__Host-` prefix is supported without changing Better Auth's security semantics.
 - [ ] Verify no password, cookie, session token, verification/reset token, learner notes or recordings are written to logs.
 - [ ] Include `/login`, `/account` and verification/reset states in axe and browser accessibility acceptance when auth is configured; the current core accessibility route list does not include those routes.
@@ -391,7 +391,7 @@ This table records the state observed during the 18 November 2026 reconciliation
 | [#34 — initial offline app shell](https://github.com/leenusdarnal/guitarlab/issues/34) | Closed | Initial implementation shipped in PR #35. OFF-01–OFF-04 are follow-up privacy and acceptance tasks, not proof that the closed scope failed. |
 | [#69 — adaptive practice](https://github.com/leenusdarnal/guitarlab/issues/69) | Closed | Outside this engineering-quality tracker; retain its curriculum/practice evidence in the relevant product records. |
 | [#89 — real recordings/physical audio](https://github.com/leenusdarnal/guitarlab/issues/89) | Open | Remains a physical evidence task; synthetic fixtures are not a substitute. |
-| [#176 — authentication](https://github.com/leenusdarnal/guitarlab/issues/176) | Open | PR #177 merged the runtime/account foundation; full lifecycle and environment gates remain in SEC-01–SEC-03. |
+| [#176 — authentication](https://github.com/leenusdarnal/guitarlab/issues/176) | Open | PR #177 foundation, PR #203 local lifecycle and PR #204 origin/rate-limit checks are merged. Local HTTPS/session-expiry/reset-expiry/privacy/axe acceptance is in the current PR pending its final CI; preview/production provisioning remains blocked under SEC-02, deployed-header review remains SEC-05, and cloud sync remains deferred under SEC-04. |
 
 ---
 

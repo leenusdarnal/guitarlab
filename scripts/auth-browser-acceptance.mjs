@@ -5,15 +5,29 @@ import { createServer } from 'node:http';
 import { readFile, writeFile, unlink } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { createRequire } from 'node:module';
+import { chromium, request } from 'playwright';
 
 const port = Number(process.env.GUITARLAB_AUTH_PREVIEW_PORT ?? 8788);
-const origin = `http://127.0.0.1:${port}`;
+const origin = `https://localhost:${port}`;
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
+const require = createRequire(import.meta.url);
+const axeSource = await readFile(
+  require.resolve('axe-core/axe.min.js'),
+  'utf8'
+);
+const wranglerConfigPath = fileURLToPath(
+  new URL('../wrangler.jsonc', import.meta.url)
+);
+const testWranglerConfigPath = fileURLToPath(
+  new URL(`../.wrangler.auth-test-${randomUUID()}.jsonc`, import.meta.url)
+);
 const varsPath = fileURLToPath(new URL('../.dev.vars', import.meta.url));
 const previousVars = await readFile(varsPath).catch(() => null);
 const messages = [];
+const sensitiveValues = [];
 let mailSink;
+let api;
 let preview;
 let previewOutput = '';
 let browser;
@@ -40,6 +54,21 @@ function startMailSink() {
   });
 }
 
+async function createHttpsTestConfig() {
+  const config = JSON.parse(await readFile(wranglerConfigPath, 'utf8'));
+  config.dev = {
+    ...config.dev,
+    ip: '127.0.0.1',
+    port,
+    local_protocol: 'https',
+    upstream_protocol: 'https'
+  };
+  await writeFile(
+    testWranglerConfigPath,
+    JSON.stringify(config, null, 2) + '\n'
+  );
+}
+
 function startPreview() {
   preview = spawn(
     'npx',
@@ -47,7 +76,7 @@ function startPreview() {
       'wrangler',
       'dev',
       '--config',
-      'wrangler.jsonc',
+      testWranglerConfigPath,
       '--ip',
       '127.0.0.1',
       '--port',
@@ -73,8 +102,8 @@ async function waitForPreview() {
       throw new Error('The local authentication Worker exited during startup.');
     }
     try {
-      const response = await fetch(origin);
-      if (response.ok) return;
+      const response = await api.get(origin);
+      if (response.ok()) return;
     } catch {
       // Wrangler is still starting.
     }
@@ -106,11 +135,62 @@ async function waitForMessage(subject) {
   );
 }
 
+function rememberSensitive(value) {
+  if (typeof value === 'string' && value.length > 0) {
+    sensitiveValues.push(value);
+  }
+}
+
+function redactSensitiveValues(value) {
+  const nonSpace = '[^& ' + String.fromCharCode(9) + ']+';
+  const tokenQueryPattern = new RegExp('([?&]token=)' + nonSpace, 'gi');
+  const slash = String.fromCharCode(47);
+  const tokenPathPattern = new RegExp(
+    '(' + slash + '(?:reset-password|verify-email)' + slash + ')[^/? ]+',
+    'gi'
+  );
+  const emailPattern = /[A-Z0-9._%+-]+@[A-Z0-9.-]+[.][A-Z]{2,}/gi;
+
+  return [...new Set(sensitiveValues)]
+    .sort((left, right) => right.length - left.length)
+    .reduce((result, secret) => result.split(secret).join('[redacted]'), value)
+    .replace(tokenQueryPattern, '$1[redacted]')
+    .replace(tokenPathPattern, '$1[redacted]')
+    .replace(emailPattern, '[redacted-email]');
+}
+
 function safeErrorMessage(error) {
   const message = error instanceof Error ? error.message : String(error);
-  return message
-    .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]')
-    .replace(/(\/(?:reset-password|verify-email)\/)[^/?\s]+/gi, '$1[redacted]');
+  return redactSensitiveValues(message);
+}
+
+async function assertAuthAccessibility(page, routeLabel) {
+  const results = await page.evaluate(async () =>
+    window.axe.run(document, {
+      runOnly: {
+        type: 'tag',
+        values: [
+          'wcag2a',
+          'wcag2aa',
+          'wcag21a',
+          'wcag21aa',
+          'wcag22aa',
+          'best-practice'
+        ]
+      }
+    })
+  );
+  const blockers = results.violations.filter((violation) =>
+    ['critical', 'serious'].includes(violation.impact)
+  );
+  assert.equal(
+    blockers.length,
+    0,
+    'Serious or critical accessibility violations on ' +
+      routeLabel +
+      ': ' +
+      blockers.map((violation) => violation.id).join(', ')
+  );
 }
 
 function extractActionUrl(message, predicate) {
@@ -166,40 +246,49 @@ try {
   await startMailSink();
   const sinkAddress = mailSink.address();
   assert.ok(sinkAddress && typeof sinkAddress === 'object');
+  api = await request.newContext({ ignoreHTTPSErrors: true });
+  const testSecret = randomBytes(32).toString('hex');
+  rememberSensitive(testSecret);
   await writeFile(
     varsPath,
     [
-      `BETTER_AUTH_SECRET=${randomBytes(32).toString('hex')}`,
+      `BETTER_AUTH_SECRET=${testSecret}`,
       `BETTER_AUTH_URL=${origin}`,
       'RESEND_API_KEY=local-test-only',
       'AUTH_FROM_EMAIL=auth@example.test',
       `AUTH_TEST_MAIL_SINK_URL=http://127.0.0.1:${sinkAddress.port}/emails`,
+      'AUTH_TEST_SESSION_EXPIRES_IN_SECONDS=60',
+      'AUTH_TEST_SESSION_UPDATE_AGE_SECONDS=5',
+      'AUTH_TEST_RESET_TOKEN_EXPIRES_IN_SECONDS=5',
       ''
-    ].join('\n')
+    ].join(String.fromCharCode(10))
   );
+  await createHttpsTestConfig();
 
   startPreview();
   await waitForPreview();
 
-  const crossOriginResponse = await fetch(origin + '/api/auth/sign-in/email', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Origin: 'https://attacker.example',
-      'cf-connecting-ip': '192.0.2.20'
-    },
-    body: JSON.stringify({
-      email: 'cross-origin@example.test',
-      password: 'not-a-real-password'
-    })
-  });
+  const crossOriginResponse = await api.post(
+    origin + '/api/auth/sign-in/email',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: 'https://attacker.example',
+        'cf-connecting-ip': '192.0.2.20'
+      },
+      data: {
+        email: 'cross-origin@example.test',
+        password: 'not-a-real-password'
+      }
+    }
+  );
   assert.equal(
-    crossOriginResponse.status,
+    crossOriginResponse.status(),
     403,
     'The authentication Worker must reject state-changing requests from an untrusted Origin.'
   );
   assert.equal(
-    crossOriginResponse.headers.get('set-cookie'),
+    crossOriginResponse.headers()['set-cookie'] ?? null,
     null,
     'A rejected cross-origin request must not create a session cookie.'
   );
@@ -207,14 +296,28 @@ try {
   browser = await chromium.launch({ headless: true });
 
   const context = await browser.newContext({
+    ignoreHTTPSErrors: true,
     extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.21' }
   });
+  await context.addInitScript({ content: axeSource });
   const page = await context.newPage();
   const email = `auth-test-${randomUUID()}@example.test`;
   const originalPassword = 'GuitarLab-Test-Password-123!';
   const replacementPassword = 'GuitarLab-New-Password-456!';
+  rememberSensitive(email);
+  rememberSensitive('cross-origin@example.test');
+  rememberSensitive('rate-limit-probe@example.test');
+  rememberSensitive('not-a-real-password');
+  rememberSensitive('deliberately-invalid-password');
+  rememberSensitive(originalPassword);
+  rememberSensitive(replacementPassword);
 
-  await page.goto(origin + '/login');
+  const loginResponse = await page.goto(origin + '/login');
+  assert.equal(
+    loginResponse?.headers()['strict-transport-security'],
+    'max-age=31536000; includeSubDomains'
+  );
+  await assertAuthAccessibility(page, '/login (guest)');
   if (await page.getByText('Account access is not enabled here yet.').count()) {
     throw new Error('Local Wrangler authentication bindings were not loaded.');
   }
@@ -270,6 +373,7 @@ try {
   const verificationUrl = extractActionUrl(verificationEmail, (url) =>
     url.pathname.includes('/api/auth/verify-email')
   );
+  rememberSensitive(new URL(verificationUrl).searchParams.get('token') ?? '');
   await page.goto(verificationUrl);
   await page.waitForURL((url) => url.searchParams.get('verified') === '1');
 
@@ -285,10 +389,14 @@ try {
     'A successful sign-in must establish a session cookie.'
   );
   assert.equal(sessionCookie.httpOnly, true);
+  assert.equal(sessionCookie.secure, true);
   assert.equal(sessionCookie.sameSite, 'Lax');
   assert.equal(sessionCookie.path, '/');
+  rememberSensitive(sessionCookie.value);
+  await assertAuthAccessibility(page, '/account (authenticated)');
 
   const secondContext = await browser.newContext({
+    ignoreHTTPSErrors: true,
     extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.22' }
   });
   const secondPage = await secondContext.newPage();
@@ -303,7 +411,27 @@ try {
   await page.getByRole('button', { name: 'Send reset link' }).click();
   await page.getByText(/If an account matches that address/).waitFor();
 
-  const resetEmail = await waitForMessage('Reset your GuitarLab password');
+  const expiredResetEmail = await waitForMessage(
+    'Reset your GuitarLab password'
+  );
+  const expiredResetUrl = extractActionUrl(
+    expiredResetEmail,
+    (url) =>
+      url.pathname === '/login' &&
+      url.searchParams.get('mode') === 'reset' &&
+      url.searchParams.has('token')
+  );
+  rememberSensitive(new URL(expiredResetUrl).searchParams.get('token') ?? '');
+  await delay(6000);
+  await page.goto(expiredResetUrl);
+  await assertAuthAccessibility(page, '/login (expired reset token)');
+  await page.locator('input[name="password"]').fill(replacementPassword);
+  await page.locator('input[name="confirmPassword"]').fill(replacementPassword);
+  await page.getByRole('button', { name: 'Save new password' }).click();
+  await page
+    .getByText('This reset link is invalid or expired. Request a new one.')
+    .waitFor();
+
   const deliveredEmailCount = messages.length;
   await page.goto(origin + '/login');
   await page.getByRole('button', { name: 'Forgot your password?' }).click();
@@ -317,6 +445,19 @@ try {
     'A password-reset request for an unknown address must not send a message.'
   );
 
+  const resetMessageCountBeforeRenewal = messages.filter(
+    (message) => message.subject === 'Reset your GuitarLab password'
+  ).length;
+  await page.goto(origin + '/login');
+  await page.getByRole('button', { name: 'Forgot your password?' }).click();
+  await page.getByLabel('Email address').fill(email);
+  await page.getByRole('button', { name: 'Send reset link' }).click();
+  await page.getByText(/If an account matches that address/).waitFor();
+  await waitForMessageCount(
+    'Reset your GuitarLab password',
+    resetMessageCountBeforeRenewal + 1
+  );
+  const resetEmail = await waitForMessage('Reset your GuitarLab password');
   const resetUrl = extractActionUrl(
     resetEmail,
     (url) =>
@@ -324,6 +465,7 @@ try {
       url.searchParams.get('mode') === 'reset' &&
       url.searchParams.has('token')
   );
+  rememberSensitive(new URL(resetUrl).searchParams.get('token') ?? '');
   await page.goto(resetUrl);
   await page.locator('input[name="password"]').fill(replacementPassword);
   await page.locator('input[name="confirmPassword"]').fill(replacementPassword);
@@ -353,26 +495,66 @@ try {
   await page.goto(origin + '/account');
   await page.waitForURL(/\/login(?:$|\?)/);
 
+  const expiryContext = await browser.newContext({
+    ignoreHTTPSErrors: true,
+    extraHTTPHeaders: { 'cf-connecting-ip': '192.0.2.24' }
+  });
+  const expiryPage = await expiryContext.newPage();
+  await signIn(expiryPage, email, replacementPassword);
+  await expiryPage.waitForURL(origin + '/');
+  await expiryPage.goto(origin + '/account');
+  const initialExpiryCookie = (await expiryContext.cookies(origin)).find(
+    (cookie) => cookie.name.includes('session_token')
+  );
+  assert.ok(
+    initialExpiryCookie,
+    'A new session must establish a session cookie.'
+  );
+  const initialCookieExpiry = initialExpiryCookie.expires;
+  rememberSensitive(initialExpiryCookie.value);
+  await delay(6000);
+  await expiryPage.goto(origin + '/account');
+  const refreshedExpiryCookie = (await expiryContext.cookies(origin)).find(
+    (cookie) => cookie.name.includes('session_token')
+  );
+  assert.ok(
+    refreshedExpiryCookie,
+    'The active session cookie must remain present after refresh.'
+  );
+  assert.ok(
+    refreshedExpiryCookie.expires > initialCookieExpiry + 1,
+    'Using a session after updateAge must extend its cookie expiry.'
+  );
+  rememberSensitive(refreshedExpiryCookie.value);
+  await delay(61000);
+  await expiryPage.goto(origin + '/account');
+  await expiryPage.waitForURL(/\/login(?:$|\?)/);
+  await expiryContext.close();
+
   const rateLimitStatuses = [];
   for (let attempt = 0; attempt < 8; attempt += 1) {
-    const response = await fetch(origin + '/api/auth/sign-in/email', {
-      method: 'POST',
+    const response = await api.post(origin + '/api/auth/sign-in/email', {
       headers: {
         'Content-Type': 'application/json',
         Origin: origin,
         'cf-connecting-ip': '192.0.2.23'
       },
-      body: JSON.stringify({
+      data: {
         email: 'rate-limit-probe@example.test',
         password: 'deliberately-invalid-password'
-      })
+      }
     });
-    rateLimitStatuses.push(response.status);
-    if (response.status === 429) break;
+    rateLimitStatuses.push(response.status());
+    if (response.status() === 429) break;
   }
   assert.ok(
     rateLimitStatuses.includes(429),
     `Repeated invalid sign-in attempts must reach the configured rate limit (received HTTP statuses: ${rateLimitStatuses.join(', ')}).`
+  );
+  assert.equal(
+    sensitiveValues.some((value) => previewOutput.includes(value)),
+    false,
+    'Worker diagnostics must not contain test email addresses, credentials, cookies or one-time tokens.'
   );
 
   await secondContext.close();
@@ -383,12 +565,18 @@ try {
 } catch (error) {
   console.error(safeErrorMessage(error));
   if (previewOutput) {
-    const safeOutput = previewOutput
-      .replace(/BETTER_AUTH_SECRET=[^\s]+/g, 'BETTER_AUTH_SECRET=[redacted]')
-      .replace(/RESEND_API_KEY=[^\s]+/g, 'RESEND_API_KEY=[redacted]')
-      .replace(/AUTH_FROM_EMAIL=[^\s]+/g, 'AUTH_FROM_EMAIL=[redacted]')
-      .replace(/([?&]token=)[^&\s]+/gi, '$1[redacted]');
-    console.error(safeOutput.split('\n').slice(-80).join('\n'));
+    const safeOutput = redactSensitiveValues(
+      previewOutput
+        .replace(/BETTER_AUTH_SECRET=[^ ]+/g, 'BETTER_AUTH_SECRET=[redacted]')
+        .replace(/RESEND_API_KEY=[^ ]+/g, 'RESEND_API_KEY=[redacted]')
+        .replace(/AUTH_FROM_EMAIL=[^ ]+/g, 'AUTH_FROM_EMAIL=[redacted]')
+    );
+    console.error(
+      safeOutput
+        .split(String.fromCharCode(10))
+        .slice(-80)
+        .join(String.fromCharCode(10))
+    );
   }
   process.exitCode = 1;
 } finally {
@@ -397,6 +585,8 @@ try {
   if (mailSink) {
     await new Promise((resolve) => mailSink.close(resolve));
   }
+  await api?.dispose();
+  await unlink(testWranglerConfigPath).catch(() => {});
   if (previousVars) {
     await writeFile(varsPath, previousVars);
   } else {
