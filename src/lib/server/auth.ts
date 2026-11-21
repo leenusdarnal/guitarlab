@@ -17,7 +17,7 @@ export type WaitUntil = (promise: Promise<unknown>) => void;
 
 function parseTestSeconds(value: string | undefined): number | null | undefined {
   if (value === undefined) return undefined;
-  if (!/^[1-9]\\d*$/.test(value)) return null;
+  if (!/^[1-9]\d*$/.test(value)) return null;
   const seconds = Number(value);
   return Number.isSafeInteger(seconds) && seconds <= 60 ? seconds : null;
 }
