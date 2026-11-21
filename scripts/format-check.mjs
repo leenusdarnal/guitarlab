@@ -14,13 +14,59 @@ if (!baseSha || /^0+$/.test(baseSha)) {
   process.exit(1);
 }
 
+function commitExists(sha) {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${sha}^{commit}`], {
+      stdio: 'ignore'
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// actions/checkout uses a shallow fetch by default. Pull-request formatting
+// checks compare against the base SHA, which may not exist in that checkout.
+if (!commitExists(baseSha)) {
+  console.log(
+    `Base commit ${baseSha.slice(0, 12)} is not in the checkout; fetching it.`
+  );
+  try {
+    execFileSync(
+      'git',
+      ['fetch', '--no-tags', '--depth=1', 'origin', baseSha],
+      { stdio: 'inherit' }
+    );
+  } catch {
+    console.error(
+      `Unable to fetch the formatting base commit ${baseSha}. Check repository fetch permissions and the supplied base SHA.`
+    );
+    process.exit(1);
+  }
+}
+
+if (!commitExists(baseSha)) {
+  console.error(
+    `Formatting base commit ${baseSha} is still unavailable after fetch.`
+  );
+  process.exit(1);
+}
+
+const targetSha = process.env.GITHUB_SHA || 'HEAD';
 const changedFiles = execFileSync(
   'git',
-  ['diff', '--name-only', '--diff-filter=ACMR', '-z', baseSha, process.env.GITHUB_SHA || 'HEAD'],
+  ['diff', '--name-only', '--diff-filter=ACMR', '-z', baseSha, targetSha],
   { encoding: 'buffer' }
-).toString('utf8').split('\0').filter(Boolean);
+)
+  .toString('utf8')
+  .split('\0')
+  .filter(Boolean);
 
-console.log(`Checking formatting for ${changedFiles.length} changed file(s) against ${baseSha.slice(0, 12)}.`);
+console.log(
+  `Checking formatting for ${changedFiles.length} changed file(s) against ${baseSha.slice(0, 12)}.`
+);
 if (changedFiles.length > 0) {
-  execFileSync('node', ['scripts/prettier-files.mjs', ...changedFiles], { stdio: 'inherit' });
+  execFileSync('node', ['scripts/prettier-files.mjs', ...changedFiles], {
+    stdio: 'inherit'
+  });
 }
