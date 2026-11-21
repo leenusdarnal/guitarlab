@@ -141,37 +141,9 @@ jobs:
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         run: npm run design:validate
 
-      - name: Check formatting for changed files
+      - name: Check formatting
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
-        shell: bash
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: |
-          if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
-            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-              git fetch --no-tags --depth=2 origin "$GITHUB_SHA"
-              BASE_SHA="$(git rev-parse "${GITHUB_SHA}^")"
-            else
-              echo "A valid base commit is required for changed-file formatting checks."
-              exit 1
-            fi
-          fi
-          git fetch --no-tags --depth=1 origin "$BASE_SHA"
-          mapfile -d '' -t all_changed_files < <(git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" "$GITHUB_SHA")
-          changed_files=()
-          for file in "${all_changed_files[@]}"; do
-            case "$file" in
-              *.js|*.json|*.ts|wrangler*.jsonc|scripts/*.mjs)
-                changed_files+=("$file")
-                ;;
-            esac
-          done
-          if [ "${#changed_files[@]}" -eq 0 ]; then
-            echo "No Prettier-managed files changed."
-          else
-            npx prettier --check "${changed_files[@]}"
-          fi
-
+        run: npm run format:check
       - name: Lint
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         run: npm run lint
