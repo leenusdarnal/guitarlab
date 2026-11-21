@@ -1,8 +1,8 @@
 # GuitarLab Engineering Quality & Release Tracker
 
 **Status:** Active — canonical engineering-quality tracker  
-**Last reconciled:** 21 November 2026  
-**Audit baseline:** `main` at `346c723ace482a908785decfdb390773719619d4` (PR #220 merged; latest main status reports `Validate application and curriculum` = success; 21 November 2026)  
+**Last reconciled:** 22 November 2026  
+**Audit baseline:** `main` at `c0e1e58a8a6d62b53a5980ae2ce914657ab1ae20` (PR #221 merged; main CI run [#44936369352](https://github.com/leenusdarnal/guitarlab/actions/runs/44936369352) is the current post-merge validation; 22 November 2026)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -382,19 +382,19 @@ Never record account credentials, session tokens, personal learner data, private
 
 ## 9. GitHub issue reconciliation
 
-This table records the state observed during the 18 November 2026 reconciliation. Refresh live GitHub state before changing issue status.
+**Live issue state refreshed:** 22 November 2026. This table covers the currently open engineering-quality issues in this repository; manual/device-dependent gates remain open until the evidence is recorded.
 
-| Issue | Observed state | Reconciliation |
+| Issue | Live state | Current reconciliation / next action |
 |---|---|---|
-| [#5 — CI quality gates](https://github.com/leenusdarnal/guitarlab/issues/5) | Open | Main CI is green on the current baseline; keep the separate failure/recovery rehearsal as QA-05 and reconcile whether the original CI setup issue can be closed. |
-| [#9 — IndexedDB/local learner profile](https://github.com/leenusdarnal/guitarlab/issues/9) | Open | Core implementation exists; physical reload/offline/upgrade acceptance remains. |
-| [#10 — backup/restore/reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Open | Core implementation and automated rollback coverage exist; physical-device acceptance remains. |
-| [#18 — release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Open | Umbrella P1 release gate; close only after required sections in this tracker are verified. |
+| [#5 — CI quality gates](https://github.com/leenusdarnal/guitarlab/issues/5) | Open | The isolated [Controlled CI failure and recovery rehearsal](https://github.com/leenusdarnal/guitarlab/actions/workflows/controlled-ci-rehearsal.yml) is present with separate `failure-injection` and `recovery` dispatch modes. Both runs still need to be executed and linked before closing; normal green CI is not the rehearsal. |
+| [#9 — IndexedDB/local learner profile](https://github.com/leenusdarnal/guitarlab/issues/9) | Open | Automated profile, migration, persistence and failure-feedback coverage exists. Physical desktop/mobile upgrade, reload and offline-restart checks remain; use the local trusted-HTTPS runbook rather than a Preview Worker. |
+| [#10 — backup/restore/reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Open | Automated export/restore validation, rejection, transactional rollback and reset checks exist. Physical desktop/mobile file-picker, restore-cancel and reset-confirmation acceptance remains. |
+| [#18 — release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Open | Umbrella P1 release gate. Remaining work spans production OAuth and exact deployment/rollback evidence (SEC-02/QA-04), CSP/privacy review (SEC-05), physical accessibility/storage/audio acceptance, performance and dependency/licence review. |
 | [#34 — initial offline app shell](https://github.com/leenusdarnal/guitarlab/issues/34) | Closed | Initial implementation shipped in PR #35. OFF-01–OFF-04 are follow-up privacy and acceptance tasks, not proof that the closed scope failed. |
 | [#69 — adaptive practice](https://github.com/leenusdarnal/guitarlab/issues/69) | Closed | Outside this engineering-quality tracker; retain its curriculum/practice evidence in the relevant product records. |
-| [#89 — real recordings/physical audio](https://github.com/leenusdarnal/guitarlab/issues/89) | Open | Remains a physical evidence task; synthetic fixtures are not a substitute. |
-| [#176 — authentication](https://github.com/leenusdarnal/guitarlab/issues/176) | Open (last reconciled 18 November) | PR #177 foundation, PR #203 lifecycle, PR #204 origin/rate-limit checks and PR #205 full local HTTPS lifecycle/security acceptance are merged. Optional Google/GitHub OAuth scope has been reconciled in PR #212 and issue #176. Remote preview/production auth activation remains gated under SEC-02/SEC-05; cloud learner-data sync remains deferred under SEC-04. Refresh live issue state before closing. |
-
+| [#89 — real recordings/physical audio](https://github.com/leenusdarnal/guitarlab/issues/89) | Open | Synthetic WAV fixtures and mocked browser permissions are automated regression evidence only. A consented local real-guitar corpus, per-string metrics and physical microphone/browser matrix remain required. |
+| [#176 — authentication](https://github.com/leenusdarnal/guitarlab/issues/176) | Open | Scope is OAuth-only (Google and GitHub independently optional); email/password, verification email, password reset and transactional mail are explicitly out of scope. Local Worker security/lifecycle tests are complete. Production provider credentials/callbacks, OAuth state, session refresh/logout and guest smoke tests remain open under SEC-02. |
+| [#178 — development-toolchain advisories](https://github.com/leenusdarnal/guitarlab/issues/178) | Open | The cited CVE-2026-112366 GitHub advisory was withdrawn on 18 November 2026. Confirm the latest full-tree npm audit has no other active high/critical findings before closing; keep the blocking production-dependency audit intact. |
 ---
 
 
