@@ -26,6 +26,22 @@
       .join('') || 'GL';
   }
 
+  function getAvatarPreviewUrl(): string | null {
+    const candidate = avatarUrl.trim();
+    if (candidate) {
+      try {
+        const url = new URL(candidate);
+        if (url.protocol === 'https:' && !url.username && !url.password) {
+          return url.href;
+        }
+      } catch {
+        // Keep the current provider image visible while an invalid URL is edited.
+      }
+    }
+
+    return data.account.image ?? null;
+  }
+
   async function saveProfile(event: SubmitEvent) {
     event.preventDefault();
     if (savingProfile) return;
@@ -107,7 +123,7 @@
     <section class="account-card profile-card" aria-labelledby="profile-title">
       <div class="profile-heading">
         <div class="avatar" aria-label="Profile image preview">
-          {#if data.account.image && !avatarLoadFailed}
+          {#if getAvatarPreviewUrl() && !avatarLoadFailed}
             <img
               src={data.account.image}
               alt={`${data.account.name} profile`}
