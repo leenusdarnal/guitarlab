@@ -1,73 +1,87 @@
-# GuitarLab authentication decision
+# GuitarLab authentication and account decision
 
-**Status:** Architecture decision and requirements; live implementation/acceptance status is maintained in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), Section 6. The local account lifecycle/security acceptance is automated-complete (PR #205); remote preview/production activation remains gated by SEC-02 and deployed-environment review under SEC-05.  
-**Date:** 2026-11-17  
-**Tracking:** [Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176)
+**Status:** Accepted — OAuth-only account access. Live implementation and release acceptance are tracked in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md), Section 6.  
+**Last revised:** 21 November 2026  
+**Architecture tracking:** [Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176)  
+**Account and learner profile experience:** [Issue #218](https://github.com/leenusdarnal/guitarlab/issues/218)
 
-## Status authority
+## Authority and scope
 
-This document defines the accepted authentication design and security requirements; it is not a task tracker. Use [SEC-01–SEC-06 in the Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md#6-security-authentication-and-account-readiness) for current implementation state, owners, test evidence and release readiness. Environment identifiers, callback URLs and secret setup belong only in [Authentication Setup](AUTHENTICATION_SETUP.md).
+This document records the accepted authentication, account-profile and learner-data boundaries. It is an architecture decision, not a duplicate task checklist. Current implementation state and release evidence belong in the Engineering Quality & Release Tracker. Environment identifiers, callback URLs, migration instructions and secret setup belong in [Authentication Setup](AUTHENTICATION_SETUP.md).
 
 ## Decision
 
-Use **Better Auth** as the authentication/session framework for the Cloudflare Workers application, backed by the existing Drizzle/D1 server boundary. The first account release supports email/password authentication and optional Google/GitHub social sign-in. Social providers are opt-in per environment: they are available only when a complete provider credential pair is configured. Email/password verification and password-reset delivery remain dependent on the transactional email provider. Learner-data sync is separate follow-up work.
+Use **Better Auth** for authenticated sessions in the SvelteKit application on Cloudflare Workers, backed by the dedicated authentication D1 database.
 
-Better Auth is preferred over a hand-rolled password/session implementation because it supplies established account, credential, session, verification and reset flows, while allowing GuitarLab to keep authorization and learner-data ownership in its own server use cases.
+The only supported account sign-in methods are:
 
-References:
-- [Better Auth email/password and verification](https://better-auth.com/docs/authentication/email-password)
-- [Better Auth Cloudflare guide](https://better-auth.com/docs/guides/cloudflare)
-- [Better Auth configuration reference](https://better-auth.com/docs/reference/options)
+- Google OAuth.
+- GitHub OAuth.
 
-The runtime foundation pins Better Auth 1.7.25 (stable) and uses its native Cloudflare D1 binding plus the documented SvelteKit hook integration. Keep this dependency pinned and verify its generated lockfile in CI; do not use the 1.8 beta APIs in production. Local setup and environment gates are documented in [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md).
+Both providers are independently optional in an environment. A provider is available only when its complete client ID and client secret pair is configured. Guest use remains available when authentication is unavailable or a learner chooses not to sign in.
 
-## Product behaviour
+**Email/password sign-up and sign-in, password reset, email verification flows, and transactional email are not supported.** Do not add these flows without a new explicit product and security decision. The authentication setup and product UI must remain OAuth-only.
 
-- Guest/local-only use remains the default. A learner can use lessons, practice, tools, IndexedDB, offline mode and JSON backup without registering.
-- Registration is optional and does not silently upload or attach the existing local profile to an account.
-- The first authenticated release provides registration, verified-email login, session refresh, logout and password reset when email/password is configured, plus optional Google and GitHub OAuth when their provider credentials are configured.
-- OAuth providers are independently optional; missing or incomplete provider credentials must not enable a broken sign-in button or disable another fully configured sign-in method. Guest/local-only use remains available.
-- Do not issue a usable authenticated session until the email address is verified.
-- Social sign-in is optional, not mandatory. Enable only the provider whose client ID and secret are both configured; use exact environment-specific callback URLs and keep provider credentials out of source control and logs.
-- Cloud sync is not part of the login release. It remains disabled until the separate outbox, idempotency, conflict, ownership and account-deletion requirements are implemented.
+## Account profile and learner profile are different data
+
+### Account profile
+
+The account profile is identity information managed by Better Auth in the authentication database:
+
+- Display name: editable by the signed-in account holder.
+- Profile image: optional HTTPS image URL; GuitarLab does not provide image hosting or upload.
+- Email address: supplied and managed by the OAuth identity provider; it is read-only in GuitarLab.
+- Session: resolved from the validated server-side Better Auth session. Account screens may show the current session expiry and provide sign-out.
+
+Account profile updates must use Better Auth's authenticated current-user update API. Do not accept a client-supplied user ID as the target identity, create a parallel account table, or write directly to auth tables from browser code. Keep account and session responses private and non-cacheable.
+
+### Learner profile
+
+The learner profile is a local-first learning record managed by the existing IndexedDB repository and versioned preferences schema. It includes guitar context (instrument, experience, playing hand and tuning), musical goals, practice target and lesson-presentation preferences. The existing learner profile also owns practice history and progress.
+
+The learner profile:
+
+- Is available to signed-in and guest learners.
+- Remains on the current browser/device and continues to work without an account.
+- Is edited through the existing validated learner-preferences application/storage path.
+- Is not copied, attached, migrated, uploaded or synced when a person signs in or out.
+- Must retain compatibility with existing local profiles and versioned backups.
+
+**Account identity is not a learner identity.** Never use the authenticated account ID to replace the local learner ID, and do not merge account and learner records.
+
+Cloud learner-data sync is a separate future architecture decision. It must not be introduced as part of account-profile or learner-profile UI work. Before any sync is enabled, define account ownership, explicit opt-in, export, deletion, idempotency, conflict handling, recovery and multi-device behavior.
 
 ## Security requirements
 
-- Use opaque, high-entropy sessions managed by Better Auth; cookies must be HttpOnly, Secure on HTTPS, SameSite=Lax or stricter, path-scoped and have bounded lifetimes.
-- Validate request origins and use framework/library CSRF protections for state-changing requests. Do not invent a parallel cookie/session parser.
-- Apply rate limits to registration, sign-in, verification resend and password-reset endpoints. Authentication responses must not disclose whether an email address is registered.
-- Require strong password policy and use the framework's maintained password hashing implementation. Never implement custom password hashing.
-- Never log passwords, session identifiers, cookies, verification/reset tokens, learner notes or recordings.
-- Resolve the current account from the validated server-side session. Every future user-owned D1 query must scope by that account identity; a client-supplied user ID is never authorization.
-- Keep authentication endpoints same-origin. Do not broaden CSP or CORS to make auth work.
-- Provide export and account/data deletion before cloud learner-data sync is enabled.
+- Resolve the current account exclusively from the validated Better Auth session on the server.
+- Keep auth secrets and provider credentials in the intended Worker secret store; never commit or log them.
+- Use HttpOnly cookies, Secure cookies on HTTPS, SameSite=Lax or stricter, path scoping and bounded session lifetimes.
+- Preserve Better Auth's origin/CSRF protections. Keep auth endpoints same-origin; do not broaden CORS or CSP to bypass configuration.
+- Keep account, session and authentication API responses private and no-store. They must never enter the public service-worker cache.
+- Validate and bound user-editable account fields. Accept only HTTPS avatar URLs; do not accept email changes through the profile form.
+- Rate-limit sensitive authentication endpoints and keep diagnostic output free of cookies, session identifiers, provider credentials and learner content.
+- Keep the authentication database separate from learner-domain local storage and any future sync service.
+- Sign-out ends the account session; it must not clear or rewrite the local learner profile.
 
-## Infrastructure and secrets
+## Environment and operations
 
-- Add a dedicated D1 database for each local, preview and production environment. Never point preview/local at production.
-- Do not bind D1 to the existing production Worker until a separate migration and release approval is made.
-- Store the Better Auth secret and transactional email credentials in Wrangler/GitHub secret stores. No secret values belong in Git, browser bundles, CI logs or issue comments.
-- Email verification and password-reset messages require a real transactional email provider. The feature must remain clearly unavailable rather than pretending to send email when provider configuration is missing.
-- Do not use a real transactional email account in automated tests. The current tests cover configuration gates and schema presence only; a test mail sink and end-to-end verification/reset-token journeys remain required before production activation. Never expose verification/reset tokens in production responses or logs.
+Support local development and the production Worker only. Do not reintroduce a Preview Worker/environment as part of authentication. Authentication must fail closed unless the intended D1 binding, a high-entropy Better Auth secret, an explicit valid base URL and at least one complete OAuth provider are configured.
 
-## Data and migration boundaries
+Use [Authentication Setup](AUTHENTICATION_SETUP.md) as the sole operational source for local setup, production configuration, provider callbacks and guarded migrations. Do not copy live secret values into docs, source, issues or chat.
 
-- Add only the identity/session/verification tables required by Better Auth and the application. Keep namespaced auth tables separate from existing learner-domain tables.
-- Do not copy IndexedDB learner profiles or practice history into D1 during account creation.
-- Account deletion must revoke sessions and delete identity records; any future cloud learner-data deletion must be covered by the later sync/data-retention design.
-- Test migrations against a fresh local D1 and a disposable preview database before production.
+A successful build or production deployment is not proof that provider callbacks work. Production acceptance must separately verify the production migration state, intended Google/GitHub credentials, OAuth callback/state handling, session creation, session refresh, account profile update, sign-out and guest access. Record evidence in the Engineering Quality & Release Tracker.
 
-## Delivery slices
+## Delivery boundaries
 
-1. **Auth foundation (Issue #176):** dependency/API compatibility proof, schema and migration, server auth handler, environment configuration and secure session resolution.
-2. **Account UX:** sign-up, sign-in, verification pending/resend, reset password, account settings and sign-out, with a visible guest path. The sign-in and account surfaces are implemented; local HTTPS lifecycle acceptance is automated, while preview/production email verification and reset still require provider-backed acceptance and environment activation.
-3. **Security and acceptance:** rate-limit/CSRF/origin tests, enumeration resistance, session expiry/revocation, browser journeys for each enabled sign-in method (including OAuth callback/state handling), export/deletion.
-4. **Separate M5 sync:** only after auth and deletion gates pass; outbox/idempotency/conflict and per-account ownership are a distinct milestone.
+1. **Authentication foundation (Issue #176):** Better Auth, isolated auth schema, secure server session resolution, OAuth provider configuration and guest-safe fallback.
+2. **Account and learner profile experience (Issue #218):** editable account display name and optional avatar URL; read-only provider-managed email; visible session details and sign-out; editable local learner profile; clear navigation; tests and documentation.
+3. **Production acceptance:** validate the configured OAuth providers and session/security behavior on the production Worker. This remains distinct from local automated tests.
+4. **Future sync:** deferred until a separate architecture, privacy and deletion design is approved.
 
 ## Non-goals
 
-- Mandatory account creation.
-- Cloud sync in the authentication PR.
-- Additional identity providers beyond the optional Google and GitHub integrations.
+- Email/password authentication, email verification, password reset or transactional email.
+- Mandatory account creation or blocking guest learning.
+- Uploading or hosting profile images.
+- Cloud learner-data sync or merging local learner data into an account.
 - Server-side audio or recording uploads.
-- Importing or inferring learner history from previous chats, devices or external tools.
