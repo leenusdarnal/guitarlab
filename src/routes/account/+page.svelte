@@ -42,7 +42,9 @@
       }
     }
 
-    return data.account.image ?? null;
+    return data.account.image && isAllowedAccountAvatarUrl(data.account.image)
+      ? data.account.image
+      : null;
   }
 
   async function saveProfile(event: SubmitEvent) {
