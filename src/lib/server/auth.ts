@@ -64,7 +64,8 @@ export function isAuthConfigured(env?: AuthEnvironment): boolean {
 }
 
 /** Construct Better Auth only when its isolated D1, secret, URL, and OAuth provider are configured. */
-export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {\n  void waitUntil;
+export function createAuth(env: AuthEnvironment, waitUntil?: WaitUntil) {
+  void waitUntil;
   if (!isAuthConfigured(env)) {
     throw new Error('Authentication is not configured for this environment.');
   }
