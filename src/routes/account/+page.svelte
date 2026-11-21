@@ -46,8 +46,13 @@
     profileMessage = '';
 
     try {
-      const result = await authClient.updateUser(parsed.data);
-      if (result.error) {
+      const response = await fetch('/api/account/profile', {
+        method: 'PATCH',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsed.data)
+      });
+      if (!response.ok) {
         profileError = 'We could not update your account profile. Please try again.';
         return;
       }
