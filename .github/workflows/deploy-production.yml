@@ -192,7 +192,7 @@ jobs:
           const commitSha = process.env.GITHUB_SHA;
           const runId = process.env.GITHUB_RUN_ID;
           const runAttempt = process.env.GITHUB_RUN_ATTEMPT;
-          if (!/^[0-9a-f]{40}$/.test(commitSha || '') || !/^\\d+$/.test(runId || '') || !/^\\d+$/.test(runAttempt || '')) {
+          if (!/^[0-9a-f]{40}$/.test(commitSha || '') || !/^\d+$/.test(runId || '') || !/^\d+$/.test(runAttempt || '')) {
             throw new Error('GitHub did not provide a valid commit SHA and workflow run identity.');
           }
           const workerVersionTag = `guitarlab-prod-${commitSha}-${runId}-${runAttempt}`;
