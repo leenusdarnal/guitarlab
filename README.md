@@ -23,7 +23,7 @@ The curriculum contains 152 lesson records: 52 weeks in Year 1, 52 weeks in Year
 
 The application includes learner onboarding and local profiles, a personalised dashboard and practice planner, a curriculum catalogue and lesson reader, persisted lesson checkpoints and completion/resume, practice sessions and history, export/restore/reset, a fretboard explorer, chord tools, metronome, tuner, ear training and the initial privacy-bounded offline app shell.
 
-Optional account code is present: email/password and opt-in Google/GitHub OAuth are supported by the authentication design. Local account lifecycle/security acceptance is automated. Preview and production account activation remains gated on environment-specific database migrations, credentials and provider configuration. Accounts do not enable cloud learner-data synchronisation.
+Optional account code is present: email/password and opt-in Google/GitHub OAuth are supported by the authentication design. Local account lifecycle/security acceptance is automated. Production account activation remains gated on production database migrations, credentials and provider configuration. Accounts do not enable cloud learner-data synchronisation.
 
 ## Architecture
 
@@ -32,7 +32,7 @@ Optional account code is present: email/password and opt-in Google/GitHub OAuth 
 | Application | SvelteKit, Svelte 5, TypeScript |
 | Styling | Tailwind CSS 4 with semantic CSS design tokens |
 | Runtime | Cloudflare Workers |
-| Identity/session store | Dedicated Cloudflare D1 database per auth environment |
+| Identity/session store | Dedicated production Cloudflare D1 database |
 | Learner state | Browser-local IndexedDB |
 | ORM and migrations | Drizzle ORM / Drizzle Kit |
 | Validation | Zod |
@@ -90,7 +90,7 @@ npm run preview
 
 The default `wrangler.jsonc` is for local development. Local D1 commands must use Wrangler's local database only; do not use `--remote` for local checks. The auth-specific local schema has its own `npm run db:auth:migrate:local` and `npm run db:auth:test:local` commands.
 
-Preview and production deployments are manual GitHub Actions workflows with exact-SHA CI gates and protected environment configuration. Do not bypass those workflows or use the local Wrangler config for deployment. The [Cloudflare deployment reference](docs/CLOUDFLARE_DEPLOYMENT_PLAN.md) explains environment boundaries; current release and activation gates are tracked only in the [Engineering Quality & Release Tracker](docs/ENGINEERING_QUALITY_TRACKER.md).
+Production deployment is a manual GitHub Actions workflow with exact-SHA CI gates and protected environment configuration. Do not bypass those workflows or use the local Wrangler config for deployment. The [Cloudflare deployment reference](docs/CLOUDFLARE_DEPLOYMENT_PLAN.md) explains environment boundaries; current release and activation gates are tracked only in the [Engineering Quality & Release Tracker](docs/ENGINEERING_QUALITY_TRACKER.md).
 
 ## Privacy and copyright
 
