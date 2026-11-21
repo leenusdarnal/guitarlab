@@ -46,7 +46,7 @@ Add each configured provider's client ID and secret as Cloudflare Worker secrets
 
 ## Account and learner profile behavior
 
-The account profile is part of the Better Auth identity record. A signed-in learner may edit the display name and an optional HTTPS profile image URL. The email address remains read-only because it is managed by Google or GitHub. GuitarLab does not upload or host profile images.
+The account profile is part of the Better Auth identity record. A signed-in learner may edit the display name and an optional Google/GitHub-hosted avatar URL. Only `avatars.githubusercontent.com` and the `lh3`–`lh6.googleusercontent.com` hosts are accepted and allowed by CSP; arbitrary external image hosts are blocked. The email address remains read-only because it is managed by Google or GitHub. GuitarLab does not upload or host profile images.
 
 The learner profile is a separate, device-local record in the existing IndexedDB store. Learners can edit their instrument, experience level, playing hand, tuning, goals, practice target and lesson preferences whether signed in or using guest mode. Changes use the existing validated local-storage path and remain in versioned local backups.
 
