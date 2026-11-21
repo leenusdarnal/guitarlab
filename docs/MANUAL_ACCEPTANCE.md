@@ -23,7 +23,21 @@ Open `http://127.0.0.1:8787` in a desktop browser. The preview uses a local-only
 
 Service workers require a secure context. A phone visiting a plain `http://<computer-lan-ip>` address will generally not be able to run the service worker, so that is not a valid offline acceptance environment.
 
-For iOS Safari or Android Chrome, use an approved HTTPS preview URL or a trusted local HTTPS development setup. Use a currently approved HTTPS preview URL or a trusted local HTTPS development setup. Check the current preview environment and deployment status before testing; do not assume a historical URL is still available and do not deploy to production for this test.
+For iOS Safari or Android Chrome, use a trusted local HTTPS development setup that serves the local Wrangler Worker to the device over your private network. The Preview Worker/environment has been removed and is not part of this test path. Do not deploy to production for physical-device acceptance.
+
+One supported approach is to create a local certificate with a subject alternative name for the exact LAN hostname or IP address used by the phone, using a local CA such as `mkcert`. The phone must trust that CA certificate before opening the site; never copy or install the CA private key on the phone or share it. Keep the phone and development computer on the same trusted network, and allow the local Worker port through the computer's firewall.
+
+After the certificate is trusted, run the built local Worker with Wrangler's HTTPS listener (replace the certificate paths with the files generated for the chosen LAN hostname/IP):
+
+```bash
+npm run db:setup:local
+npm run build
+npm run preview -- --ip 0.0.0.0 --port 8787 --local-protocol https \
+  --https-cert-path /path/to/local-cert.pem \
+  --https-key-path /path/to/local-cert-key.pem
+```
+
+Open the exact `https://` LAN hostname/IP covered by the certificate on the phone. Do not bypass certificate warnings: an untrusted certificate is not valid service-worker acceptance.
 
 ## Desktop and mobile acceptance
 
