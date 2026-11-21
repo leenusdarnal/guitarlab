@@ -1,5 +1,8 @@
 # M7.2 — Skill Definition Audit (34 Existing Skills)
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Preliminary technical/content audit complete; curriculum-owner validation pending  
 **Catalogue baseline:** `content/curriculum/skill-catalog.json` v1.0.0  
 **Curriculum release:** `curriculum-v1`  

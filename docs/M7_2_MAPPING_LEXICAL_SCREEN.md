@@ -1,5 +1,8 @@
 # M7.2 — Advisory Lexical Evidence Screen for Lesson Mappings
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Automated screening complete; manual curriculum review remains open  
 **Source:** Three authored lesson JSON datasets on `feat/m7-skill-catalog-adaptive-practice`  
 **Scope:** 152 lessons, 341 lesson-to-skill associations, 34 catalogue skills

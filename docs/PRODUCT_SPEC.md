@@ -1,5 +1,7 @@
 # GuitarLab Product Specification
 
+**Authority:** Canonical product requirements and learner-facing behaviour. This document does not own implementation status; see [Roadmap](ROADMAP.md) for milestone state and the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) for engineering/release acceptance.
+
 ## Product promise
 
 GuitarLab is a self-contained guitar-learning environment. It teaches the learner what to practise, why the skill matters, how to perform it, how to apply it musically and how to judge whether it is becoming reliable.
@@ -27,7 +29,7 @@ GuitarLab is a self-contained guitar-learning environment. It teaches the learne
 
 ## Learning system
 
-GuitarLab contains a complete 52-week Year 1 route, a 52-week Year 2 continuation and four optional 12-week Year 3+ specialisations. All 156 weekly lessons have authored lesson content. Each lesson is self-contained and does not depend on a paid external course. See [Curriculum](CURRICULUM.md), the [content model](CURRICULUM_CONTENT_MODEL.md) and the machine-readable files under `content/curriculum/`.
+GuitarLab contains a 52-week Year 1 route, a 52-week Year 2 continuation and four optional 12-week Year 3+ specialisations, represented by 152 authored lesson records. These records are self-contained and do not depend on a paid external course, but structural authoring is not the same as task-specific instructional quality; some content still requires task-specific remediation. Current quality status and counts are owned only by the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md); release facts are defined by the machine-readable files under `content/curriculum/`. See [Curriculum](CURRICULUM.md) and the [content model](CURRICULUM_CONTENT_MODEL.md).
 
 The learning sequence is built around hearing/observing, understanding, isolating a small skill, practising slowly, observing and adjusting, mixing with a known skill, applying to music and retrieving the idea. Weekly cards are ordering guides rather than seven-day deadlines.
 
@@ -82,7 +84,7 @@ External resources are optional demonstrations or alternate explanations, never 
 
 ## First release
 
-The initial private release is defined in [First-Release Scope](RELEASE_SCOPE.md). It prioritises the fresh-start Year 1 curriculum, dashboard, authored lesson viewer, practice logging, local-first/offline support and foundational music tools. Cloud sync is enabled only after authentication and authorisation are in place.
+The first-release product behaviour is defined in this specification. It prioritises the fresh-start curriculum, dashboard, authored lesson viewer, practice logging, local-first/offline support and foundational music tools. Product milestones are tracked in [Roadmap](ROADMAP.md), and engineering/release acceptance is tracked in [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md). Cloud learner-data sync remains disabled until authentication, authorisation, export/deletion and conflict-recovery requirements are met.
 
 ## Success measures
 

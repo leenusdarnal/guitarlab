@@ -1,6 +1,6 @@
 # GuitarLab Design Direction
 
-**Status:** In implementation — core palette, brand identity, iconography and responsive navigation are shipped; route-level consistency and manual acceptance remain  
+**Status:** Accepted visual/interaction design authority. Implementation and manual acceptance status are tracked in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md).  
 **Last reviewed:** 16 November 2026  
 **Product:** GuitarLab — personal guitar-learning and practice environment  
 **Design authority:** This document defines the visual and interaction direction.  

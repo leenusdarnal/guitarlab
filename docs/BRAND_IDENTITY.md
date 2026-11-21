@@ -36,9 +36,9 @@ When a wordmark is linked to the home page, let its visible text provide the acc
 
 The ordinary app icons may have rounded artwork; the maskable icon must instead provide a full-bleed background and keep essential details within the central safe area. The service worker precaches the static assets through SvelteKit's asset manifest.
 
-## Authentication screen status
+## Authentication screen branding
 
-The repository currently has learner onboarding but does not contain a login route or an implemented authentication flow. The shared `Brand.svelte` component is ready for the future sign-in/sign-up shell. This change does not add a placeholder login page or imply that accounts are available.
+The shared `Brand.svelte` component is used by the application shell and account surfaces. Authentication behaviour, provider support and environment activation are specified in [Authentication Decision](AUTHENTICATION_DECISION.md) and [Authentication Setup](AUTHENTICATION_SETUP.md); implementation and release status belongs in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md). This brand inventory is not an account-availability statement.
 
 ## PWA acceptance
 

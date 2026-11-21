@@ -1,5 +1,8 @@
 # M7.2 — Curriculum Mapping Decisions, Batch 1
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Release:** `curriculum-v1.0.4`  
 **Scope:** First Year 1 / Year 2 authoring pilot plus high-confidence mapping corrections  
 **Baseline:** 152 lessons, 397 pre-batch associations and 34 stable skill IDs on the current Year 3 baseline  

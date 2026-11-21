@@ -1,5 +1,8 @@
 # M7.2 — Year 3 Rock & Blues Lesson Authoring Pilot
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Weeks 1–4 pilot merged in PR #97; CI passed; curriculum reviewer approval pending  
 **Curriculum dataset version:** 1.0.1  
 **Scope:** Four Year 3 Rock & Blues lessons (Weeks 1–4)  

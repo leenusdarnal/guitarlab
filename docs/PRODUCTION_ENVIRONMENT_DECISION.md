@@ -2,8 +2,8 @@
 
 **Status: first local-first production release deployed; ongoing production changes remain approval-gated.**
 
-**Last reconciled:** 19 November 2026  
-**Repository baseline:** `main` at `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf`
+**Last reconciled:** 20 November 2026  
+**Repository baseline:** `main` at `0cefe5722cca1f27391ff968f150f67824b05326`
 
 This document is the current record for the first production release and the decisions that remain open. It supersedes the earlier pre-deployment statement that no production deployment had been authorized. The historical 13 November account inventory below is retained only as dated evidence, not as the current production state.
 
@@ -24,7 +24,7 @@ The first release is intentionally local-first: learner profiles, progress, prac
 
 ## 2. Current release reconciliation
 
-Current repository `main` is `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf` (19 November; PR #201). The verified first deployment is older, at `1e18998eba43d0c2f6e3267ddeccb11b198b4188`.
+Current repository `main` at this reconciliation is `0cefe5722cca1f27391ff968f150f67824b05326` (20 November; PR #212). The verified first deployment is older, at `1e18998eba43d0c2f6e3267ddeccb11b198b4188`.
 
 **Do not describe the current main SHA as deployed.** The GitHub deployment workflow evidence proves the initial release SHA and its smoke tests; it does not prove that later commits have been deployed. The active Worker version was not independently queried during this documentation reconciliation.
 
@@ -54,7 +54,7 @@ Those observations are limited to the connected account and the 13 November audi
 | Access model | Public stateless app shell | Reassess before adding private server-side data |
 | Learner data location | Browser-local only | Separate approval for any remote persistence |
 | Remote D1 | Not part of first release | Schema, isolation, backup, retention and recovery decision |
-| Authentication / authorization | Not enabled by first release | Threat model, implementation and lifecycle acceptance |
+| Authentication / authorization | Not enabled in the first production release; Better Auth runtime and optional OAuth now exist in source | Preview/production activation remains gated by isolated auth migration, per-environment credentials and deployed security review (SEC-02 / SEC-05) |
 | Secrets / environment variables | Production workflow uses protected GitHub environment | Review least privilege, ownership and rotation |
 | Release approval | First release completed | Explicit approval required for each future production deployment |
 | Incident / rollback ownership | Workflow and retained deployment evidence exist | Confirm operator and rollback procedure |

@@ -1,5 +1,8 @@
 # M7.2 — Authored Lesson Content Quality Audit
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Dataset-level quality scan current through curriculum-v1.0.6; 32/48 Year 3+ specialist lessons have task-specific authoring; 16 specialist lessons and broader Year 1/Year 2 remediation remain open  
 **Scope:** 152 authored lessons across Year 1, Year 2 and Year 3+  
 **Purpose:** Find structural weaknesses that can make lessons appear complete while leaving learners with generic objectives or non-discriminating assessment criteria.

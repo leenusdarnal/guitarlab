@@ -1,9 +1,9 @@
 # GuitarLab Curriculum Audit & Remediation Tracker
 
 **Status:** In progress — curriculum-v1.0.7 is the active merged release; remaining P1/P2 audit work stays open  
-**Audit date:** 2026-11-19  
+**Audit date:** 2026-11-20  
 **Baseline branch:** `main`  
-**Baseline commit:** `55b1d34b57ef7ddeaa7ee7fdea649a3b764830bf`  
+**Audit baseline commit:** `0cefe5722cca1f27391ff968f150f67824b05326`  
 **Active curriculum release:** `curriculum-v1.0.7`  
 **Scope:** 152 authored lessons across Year 1, Year 2 and four optional Year 3 specialisations
 
@@ -11,38 +11,21 @@
 
 ---
 
-## Current implementation status — 19 November 2026
+## 1. Current executive status
 
-**Merged active release:** `curriculum-v1.0.7` (parent `curriculum-v1.0.6`), recorded in `content/curriculum/release.json`.  
-**Completed in this batch:** CURR-P0-01 through CURR-P0-04. Stable lesson IDs and week IDs are unchanged.
+**Overall assessment:** The curriculum architecture, authored content breadth and stable data model are established, but detailed lesson authoring, mapping decisions, progression review and human musical review remain incomplete. The figures below describe the active merged release `curriculum-v1.0.7` only.
 
-| Measure | Before batch | Merged v1.0.7 |
-|---|---:|---:|
-| Task-specific lesson authoring | 44 / 152 | 48 / 152 |
-| Year 1 task-specific lessons | 9 / 52 | 11 / 52 |
-| Year 2 task-specific lessons | 3 / 52 | 5 / 52 |
-| Year 3+ task-specific lessons | 32 / 48 | 32 / 48 |
-| Skill identifiers | 34 | 35 |
-| Lesson-to-skill associations | 391 | 390 |
-| Draft assessment profiles | 34 | 35 |
-
-The `instrument.fretting` profile remains draft and requires curriculum-owner / guitar-instructor review; it is not approved for automated grading. The 104 remaining generic lessons, 390 mapping dispositions and full prerequisite/progression audit remain open. These counts describe the merged v1.0.7 source, not an unmerged candidate.
-
-**Historical snapshot note:** The executive baseline table and Year 1/Year 2 authoring breakdown immediately below are the original pre-v1.0.7 audit snapshot (44 task-specific lessons, 34 skills, 391 associations). They are retained as historical context, not current release metrics. The current merged v1.0.7 metrics are in the implementation-status table above and `content/curriculum/release.json`.
-
-## 1. Executive status
-
-**Overall assessment:** The curriculum architecture and breadth are strong, but lesson authoring, mapping review and progression requirements are not complete enough to declare the curriculum finished.
-
-| Measure | Baseline | Interpretation |
-|---|---:|---|
-| Authored lessons | 152 | 52 Year 1, 52 Year 2, 48 Year 3 specialist lessons |
-| Authored exercises | 608 | Four per lesson; exercise IDs are unique in the current source |
-| Task-specific lessons | 44 / 152 | 29%; 108 lessons still use generic objectives / criteria |
-| Skill catalogue | 34 IDs | All 34 are used by at least one lesson |
-| Lesson-to-skill associations | 391 | Every association still requires evidence-based review |
-| Lessons with explicit prerequisites | 0 / 152 | No formal prerequisite graph is currently authored |
-| Skill assessment profiles | 34 | All remain draft; automated decisions are not approved |
+| Measure | Current release |
+|---|---:|
+| Authored lessons | 152 (52 Year 1, 52 Year 2, 48 Year 3+) |
+| Authored exercises | 608 |
+| Task-specific lesson authoring | 48 / 152 (31.6%); 104 remain generic |
+| Year 1 task-specific lessons | 11 / 52; 41 remain |
+| Year 2 task-specific lessons | 5 / 52; 47 remain |
+| Year 3+ task-specific lessons | 32 / 48; 16 remain |
+| Skill catalogue | 35 stable identifiers |
+| Lesson-to-skill associations | 390 |
+| Draft assessment profiles | 35; none approved for automated grading |
 
 ### Year 3 specialist authoring
 
@@ -54,17 +37,7 @@ The `instrument.fretting` profile remains draft and requires curriculum-owner / 
 | All-Round Musician | 0 / 12 | 12 |
 | **Total** | **32 / 48** | **16** |
 
-### Year 1 and Year 2 authoring
-
-| Stage | Task-specific lessons | Generic lessons remaining |
-|---|---:|---:|
-| Year 1 | 9 / 52 | 43 |
-| Year 2 | 3 / 52 | 49 |
-| **Total** | **12 / 104** | **92** |
-
-The 44 task-specific lessons are the 12 Year 1 / Year 2 pilot lessons plus 32 specialist lessons. These counts describe authoring specificity, not independent instructor approval.
-
----
+**Current blockers:** The `instrument.fretting` assessment profile remains draft and needs curriculum-owner / guitar-instructor review. All 390 lesson-to-skill associations still need a recorded evidence-based disposition. The prerequisite model, skill progression/retention audit and broader instructor review also remain open. A schema validator pass confirms structural integrity only; it does not prove musical accuracy or instructional quality.
 
 ## 2. Priority definitions and workflow
 
@@ -105,7 +78,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-01 — Year 1 Week 2: Clear single notes
 
-**Current concern:** The focus and checkpoint are about fretting-hand fundamentals, clean tone and relaxed pressure. Its mappings still name `harmony.triads` and `harmony.voice-leading`, and its key explanation / focused exercise retain unrelated harmony and note-formula language.
+**Original pre-v1.0.7 finding:** The focus and checkpoint were about fretting-hand fundamentals, clean tone and relaxed pressure, but the mappings named `harmony.triads` and `harmony.voice-leading`, and the explanation/exercise included unrelated harmony material. Release v1.0.7 rewrote the lesson and replaced those mappings with `instrument.fretting`.
 
 - [x] Rewrite the key idea and plain-language explanation around clean fretting, minimum effective pressure and relaxed movement.
 - [x] Rewrite the demonstration and exercises to teach finger placement, note clarity, buzzing diagnosis and two-hand coordination.
@@ -123,7 +96,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-02 — Year 1 Week 20: Play with expression
 
-**Current concern:** Its mappings have already been corrected to `lead.phrasing` and `technique.bends`, but the key explanation and focused exercise still contain unrelated music-theory / root-formula language. The focus covers slides, bends, dynamics and phrasing.
+**Original pre-v1.0.7 finding:** The explanation and focused exercise contained unrelated music-theory/root-formula language despite a focus on slides, bends, dynamics and phrasing. Release v1.0.7 rewrote the lesson around expressive note movement, target pitch, timing, dynamics and phrase shape, retaining the supported `lead.phrasing` and `technique.bends` mappings.
 
 - [x] Rewrite the explanation so it teaches expressive note movement, target pitch, timing, dynamics and phrase shape.
 - [x] Add specific slide and bend demonstrations with playable note/fret examples.
@@ -138,7 +111,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 ### CURR-P0-03 — Year 2 Week 1: Fretboard map 1
 
-**Current concern:** The focus and worked example introduce natural notes on the low E and A strings through fret 5, while the checkpoint says “every natural note to fret 5” without stating a string range.
+**Original pre-v1.0.7 finding:** The focus/worked example limited the exercise to low E and A through fret 5, while the checkpoint used the ambiguous phrase “every natural note to fret 5”. Release v1.0.7 aligned the focus, worked examples, exercises and checkpoint to one explicit string/fret scope.
 
 - [x] Decide whether the intended scope is low E and A only or a wider set of strings.
 - [x] Align focus, objectives, demonstration, exercises, worked examples and checkpoint to the same string/fret scope.
@@ -147,11 +120,11 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 **Acceptance evidence:** A learner can tell exactly which strings and frets are included, and the demonstrated notes cover the complete stated task.
 
-**Status:** Not started
+**Status:** Ready for curriculum-owner / guitar-instructor review (v1.0.7)
 
 ### CURR-P0-04 — Year 2 Week 2: Octaves across adjacent string sets
 
-**Current concern:** The lesson teaches octave relationships, but its current mappings are `fretboard.string-map` and `fretboard.natural-notes`; it does not map to the existing `fretboard.octaves` skill. That skill currently has only one association across the full curriculum.
+**Original pre-v1.0.7 finding:** The lesson taught octave relationships but did not map to `fretboard.octaves`. Release v1.0.7 added the supported octave mapping and aligned the task-specific criterion and transfer task.
 
 - [x] Review the complete explanation, exercises and checkpoint for direct octave-skill evidence.
 - [x] Add `fretboard.octaves` if the lesson explicitly teaches and assesses octave locations; otherwise document why it is not an assessed outcome.
@@ -160,7 +133,7 @@ These are the first remediation items. Inspect the full lesson before changing i
 
 **Acceptance evidence:** Octave-location teaching, assessment and skill mapping agree; the learner demonstrates the relationship rather than only memorising a shape.
 
-**Status:** Not started
+**Status:** Ready for curriculum-owner / guitar-instructor review (v1.0.7)
 
 ---
 
@@ -224,7 +197,7 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 
 ## 5. P1 — Complete Year 1 and Year 2 lesson authoring
 
-### CURR-P1-04 — Year 1 remaining 41 lessons
+### CURR-P1-04 — Year 1 task-specific authoring (41 remaining)
 
 - [ ] Process lessons in stable week order, in small reviewable batches.
 - [ ] Replace generic objective 2 and objective 3 with distinct, observable tasks and transfer outcomes.
@@ -243,7 +216,7 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 
 **Status:** Not started
 
-### CURR-P1-05 — Year 2 remaining 47 lessons
+### CURR-P1-05 — Year 2 task-specific authoring (47 remaining)
 
 - [ ] Process lessons in stable week order, in small reviewable batches.
 - [ ] Replace generic objective 2 and objective 3 with specific performance, understanding and transfer outcomes.
@@ -265,9 +238,9 @@ All Year 3 lessons must meet the same instructional contract. Keep the four rout
 
 ### Lesson-level checkbox appendix
 
-Use these stable lesson IDs to track the 92 Year 1 / Year 2 authoring tasks individually. These are included in the route-level counts above, not additional work. Check a row only after the lesson meets the authoring standard and its review evidence is recorded.
+Use these stable IDs to track the 92 in-scope Year 1 / Year 2 lessons individually. Four are already task-specific (two priority corrections plus the two completed pilot lessons); 88 remain in the generic-authoring pool. These records are included in the route-level totals above, not additional work. Check a row only after the lesson meets the authoring standard and its review evidence is recorded.
 
-#### Year 1 — 43 lessons requiring task-specific authoring
+#### Year 1 — 43 in-scope lessons (2 task-specific; 41 remain)
 
 Complete all remaining records below. CURR-001 and CURR-002 are priority corrections within this list.
 
@@ -317,7 +290,7 @@ Complete all remaining records below. CURR-001 and CURR-002 are priority correct
 | [ ] | 51 | `y1-w51-lesson` | Mock performance and transcription |
 | [ ] | 52 | `y1-w52-lesson` | Year-end playing test |
 
-#### Year 2 — 49 lessons requiring task-specific authoring
+#### Year 2 — 49 in-scope lessons (2 task-specific; 47 remain)
 
 CURR-003 and CURR-004 are priority corrections within this list.
 
@@ -377,7 +350,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P1-06 — Rebaseline the mapping register to v1.0.7
 
-**Current concern:** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.7. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
+**Original finding (resolved in v1.0.7):** `docs/M7_2_LESSON_SKILL_MAPPING_REGISTER.md` still identifies v1.0.2 as its source baseline, while the active curriculum release is v1.0.7. Its stated disposition summary does not amount to a complete review of all current lesson mappings.
 
 - [ ] Regenerate the 152-row register from the current v1.0.7 lesson sources.
 - [ ] Include every current skill association, with one review decision per association.
@@ -387,7 +360,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 - [ ] Record current totals and the active release ID at the top of the register.
 - [ ] Update the curriculum audit documents that cite older mapping totals or release versions.
 
-**Acceptance evidence:** The register matches all 152 current lessons and all 391 current associations; every association has an evidence-backed disposition or a clearly assigned owner decision.
+**Acceptance evidence:** The register matches all 152 current lessons and all 390 current associations; every association has an evidence-backed disposition or a clearly assigned owner decision.
 
 **Status:** Not started
 
@@ -403,7 +376,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 - [ ] Obtain curriculum-owner approval for disputed or consequential changes.
 - [ ] Add mapping decisions to a versioned release and preserve historical learner evidence.
 
-**Acceptance evidence:** All 391 associations have a disposition and rationale, unsupported mappings are removed only through approved changes, and missing capabilities are recorded without forced mappings.
+**Acceptance evidence:** All 390 associations have a disposition and rationale, unsupported mappings are removed only through approved changes, and missing capabilities are recorded without forced mappings.
 
 **Status:** Not started
 
@@ -413,7 +386,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P1-08 — Build the prerequisite model
 
-**Current concern:** All 152 lessons currently have empty `prerequisites` arrays. Year 3 specialist lessons do populate `priorTopicsToRefresh`, but refresh topics are not a substitute for formal dependencies.
+**Original finding (resolved in v1.0.7):** All 152 lessons currently have empty `prerequisites` arrays. Year 3 specialist lessons do populate `priorTopicsToRefresh`, but refresh topics are not a substitute for formal dependencies.
 
 - [ ] Define a documented prerequisite vocabulary and reference model using stable skill IDs.
 - [ ] For each lesson, decide whether it has no prerequisite, a recommended prerequisite, or an essential mastery prerequisite.
@@ -431,7 +404,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P1-09 — Audit skill introduction, practice, retention and transfer
 
-- [ ] For each of the 34 skills, record where it is introduced.
+- [ ] For each of the 35 skills, record where it is introduced.
 - [ ] Identify guided practice and independent performance opportunities.
 - [ ] Identify delayed retrieval / retention opportunities.
 - [ ] Identify application in a changed key, register, rhythm, progression or musical context.
@@ -449,7 +422,7 @@ CURR-003 and CURR-004 are priority corrections within this list.
 
 ### CURR-P2-01 — Improve skill-specific assessment profiles
 
-- [ ] Keep the 34 current assessment profiles in draft until their criteria have been reviewed.
+- [ ] Keep the 35 current assessment profiles in draft until their criteria have been reviewed.
 - [ ] Review each profile's assessment mode, criteria, evidence types, retention probe and transfer probe.
 - [ ] Define level-appropriate expectations without universal numeric cut scores.
 - [ ] Specify when human review is required.
@@ -597,7 +570,7 @@ Append one entry for every implementation batch. Keep entries chronological; do 
 | Date | PR / commit | Scope / lesson IDs | Validation | Reviewer | Status / notes |
 |---|---|---|---|---|---|
 | 2026-11-18 | Audit baseline | 152 lessons / 391 mappings | Source metrics inspected | Pending | Tracker created; no curriculum data changed by the audit |
-| 2026-11-18 | PR #180 / merged release v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | In-memory source/outline/profile/release consistency checks; CI pending | Pending | Four P0 corrections merged in v1.0.7; stable lesson/week IDs preserved; owner review remains open |
+| 2026-11-18 | PR #180 / merged release v1.0.7 | P0: y1-w02, y1-w20, y2-w01, y2-w02; add `instrument.fretting`; octave mapping correction | Curriculum validation [#44287911106](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911106) and required PR CI [#44287911608](https://github.com/leenusdarnal/guitarlab/actions/runs/44287911608) passed | Curriculum-owner / guitar-instructor review pending | Four P0 corrections merged in v1.0.7; stable lesson/week IDs preserved; manual content review remains open |
 
 ### Decision log
 
@@ -622,8 +595,8 @@ The curriculum audit can be closed only when:
 - [ ] All 48 Year 3 lessons are fully task-specific and reviewed.
 - [ ] All 104 Year 1 / Year 2 lessons meet the authoring standard.
 - [ ] All 152 lessons have an explicit prerequisite / no-prerequisite decision.
-- [ ] All 391 current skill associations have an evidence-backed disposition.
-- [ ] All 34 skills have a reviewed introduction → practice → independent performance → retention → transfer progression, or a documented reason why a stage is not applicable.
+- [ ] All 390 current skill associations have an evidence-backed disposition.
+- [ ] All 35 skills have a reviewed introduction → practice → independent performance → retention → transfer progression, or a documented reason why a stage is not applicable.
 - [ ] Candidate taxonomy gaps have approved decisions.
 - [ ] Assessment profiles have appropriate human review and remain non-automated until justified.
 - [ ] Required curriculum validation, repository CI and human musical review pass.

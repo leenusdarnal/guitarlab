@@ -5,7 +5,7 @@
 - Authored lesson bodies remain versioned JSON in content/curriculum.
 - D1 stores a release fingerprint plus lightweight lesson/skill lookup metadata.
 - Learner preferences, progress, completions, assessment attempts, mastery snapshots and practice sessions are learner-owned records.
-- No users, sessions, authentication, public progress endpoints or production D1 database are created by this milestone.
+- M2.1 defines the learner-domain data foundation only; identity/session storage, authentication, public progress endpoints and production learner-data D1 are outside that milestone. Later Better Auth identity resources are specified in `AUTHENTICATION_SETUP.md`; learner-data cloud sync remains separate and disabled.
 - A future cloud-sync route must authenticate and authorise a learner before it accesses their D1 rows. The current app has no such route.
 
 ## Tables
@@ -51,7 +51,7 @@ npm run db:migrate:local
 npm run db:test:local
 ```
 
-The migration finalizer seeds the current 152 lesson references and 34 stable skill IDs from authored JSON. It stores metadata only, never lesson bodies.
+The migration finalizer derives the 152 lesson references and the active skill catalogue from versioned curriculum JSON. The active catalogue has 35 skill identifiers in `curriculum-v1.0.7`; current curriculum counts and remediation status are owned by `CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md`. The finalizer stores metadata only, never lesson bodies.
 
 Wrangler local mode is isolated from remote D1. The D1 binding uses an all-zero local placeholder. No production database is provisioned.
 

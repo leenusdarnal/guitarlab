@@ -1,5 +1,8 @@
 # M7.2 — Jazz & Harmony Authoring Batch 1 (Weeks 1–4)
 
+> **Historical snapshot — not a live status tracker.** Status labels, counts, release IDs and checkboxes in this report describe the dated review or content version named below. The active curriculum release is defined by `content/curriculum/release.json`; current task status and remediation priorities belong only in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md). Preserve this report as evidence; do not use it to resume or close work.
+
+
 **Status:** Release manifest and migration seed committed; full CI validation and reviewer sign-off pending  
 **Dataset:** `year-3-specialisation-lessons.json` version `1.0.5`  
 **Scope:** Jazz & Harmony Weeks 1–4; stable lesson and week IDs preserved  

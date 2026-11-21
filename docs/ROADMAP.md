@@ -29,13 +29,13 @@ M0 product, architecture, curriculum and implementation guidelines are ready for
 - [x] Create SvelteKit/Svelte 5/TypeScript application (PR #21).
 - [x] Configure Tailwind CSS 4.
 - [x] Configure Cloudflare adapter and Wrangler for the local Worker runtime.
-- [ ] Establish isolated local, preview and production environments; no live deployment is configured yet.
+- [x] Establish isolated local, preview and production Worker configurations and guarded preview/production deployment workflows; remote authentication activation remains gated under SEC-02.
 - [x] Build a versioned, profile-scoped learner settings model and skippable onboarding.
 - [x] Add formatting, linting, type-checking, unit tests and GitHub Actions CI.
 - [x] Add the initial responsive application shell using the approved hybrid design direction and semantic design tokens.
-- [ ] Complete manual mobile, keyboard and component-level accessibility verification.
+Manual mobile, keyboard and component-level accessibility acceptance remains tracked in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md); this roadmap does not duplicate its task checklist.
 
-M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The isolated no-D1 production config and manual release workflow are implemented. The first local-first production deployment succeeded on 2026-11-16 for commit `306f7aea19596731dac88192d8228590544f00fc`; five route smoke tests and security-header checks passed, and a 90-day artifact records Worker version `36ba069d-3462-467d-8076-90c17383f255`. Subsequent `main` changes require exact-SHA deployment reconciliation before they can be called live; see [QA-04 in the unified engineering-quality tracker](ENGINEERING_QUALITY_TRACKER.md#74-production-and-ci-release-evidence). Temporary host: `https://guitarlab.leenusdarnal.workers.dev`; no custom domain or zone is connected.
+M1 foundation is merged in PR #21. Worker build and local smoke checks pass. Isolated local, preview and production configurations and guarded deployment workflows are implemented. The first local-first production release and its exact deployed SHA are recorded in [Production Environment Decision](PRODUCTION_ENVIRONMENT_DECISION.md). Later `main` changes must not be described as deployed until QA-04 in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md#74-production-and-ci-release-evidence) is verified. The temporary production URL is `https://guitarlab.leenusdarnal.workers.dev`; a custom domain has not been configured.
 
 ### M2 — Data foundation
 
@@ -48,7 +48,7 @@ M1 foundation is merged in PR #21. Worker build and local smoke checks pass. The
 - [x] Implement local export, validated restore preview, transactional replacement and safe reset (PR #25).
 - [ ] Complete physical-device IndexedDB reload/offline restart/upgrade and backup round-trip/rollback acceptance; automated Chromium migration and rollback coverage is merged (PRs #42–43).
 
-The D1 schema and migration are local/test foundations only. There is no production D1 database, learner-facing cloud route, authentication or cloud sync.
+The learner-domain D1 schema remains a local/test foundation; no learner-data cloud route or sync is enabled. Better Auth has a separate local auth database and dedicated preview/production auth D1 resources with environment-specific bindings and guarded migrations. Local account lifecycle/security acceptance is automated; remote account activation remains gated by SEC-02/SEC-05. Do not confuse identity/session storage with cloud learner-data storage.
 
 ### M3 — Learning dashboard
 
@@ -83,8 +83,8 @@ M4.1 is merged in PR #29. M4.2 section progress and checkpoint completion are im
 - [x] Initialize an empty versioned learner profile.
 - [ ] Outbox-based synchronisation and idempotent operation processing.
 - [ ] Conflict detection and recovery.
-- [ ] Complete optional account registration/login and secure sessions ([Issue #176](https://github.com/leenusdarnal/guitarlab/issues/176); runtime/account foundation merged in PR #177; lifecycle and environment acceptance remain open under SEC-01–SEC-03 in [the unified tracker](ENGINEERING_QUALITY_TRACKER.md)); guest/local mode remains the default.
-- [ ] Outbox-based cloud sync, idempotency, conflict recovery and account-scoped data ownership; do not enable until account export/deletion and security gates pass.
+- [x] Implement optional account surfaces and Better Auth runtime; local account lifecycle/security acceptance is automated-complete (PR #205). Remote preview/production account activation remains open under SEC-02/SEC-05 in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md); guest/local mode remains the default.
+- [ ] Outbox-based learner-data cloud sync, idempotency, conflict recovery and account-scoped data ownership; this is distinct from Better Auth identity databases and remains disabled until export/deletion and security gates pass.
 - [x] Local export and validated restore workflow; browser round-trip/rollback acceptance remains.
 
 ### M6 — Interactive music tools
@@ -113,17 +113,15 @@ PRs #45–46 provide the fretboard, chord library and metronome. The audio follo
 - [x] Explainable skill states and learner corrections with provenance (PR #59).
 - [ ] Accuracy-first tempo ladders and richer per-item performance trends.
 - [x] First adaptive-practice read model: deterministic reason codes, active learner/release scoping, measured-score summaries, missing-evidence states and assessment-category coverage (PR #93).
-- [x] Practice Studio recommendation list, category assessment-coverage view and canonical 34-skill catalogue (PR #94).
+- [x] Practice Studio recommendation list, category assessment-coverage view and canonical skill catalogue, now at 35 identifiers (PR #94 introduced its initial 34-skill version; active count is in the curriculum tracker).
 - [x] Append-only local dismiss/correct feedback with provenance, deterministic resolution, backup/restore/reset handling and browser acceptance (PR #103).
 - [x] Per-skill measured-score summaries, descriptive score spread and conservative four-score trends within the latest assessment kind (PR #104).
 - [ ] Structured per-item assessment outcomes and confusion metadata with provenance, versioning and privacy-safe backup/restore.
 - [ ] Canonical topic/technique/fretboard tags and derived exposure coverage based only on explicit tags and learner evidence (Issue #69).
 
-M7.1's core evidence loop is implemented in PRs #50–59. M7.2 now has deterministic read-only recommendations, category assessment coverage, append-only local learner feedback and comparable measured-score trends (PRs #92–94, #103–104). Issue #69 remains open for item-level correctness/confusion and topic/fretboard coverage because current practice observations are learner-entered activity notes, not item outcomes or structured instrument-location evidence. Do not infer accuracy from clean repetitions or mastery from time, lesson completion or repetitions.
+M7.1's core evidence loop is implemented in PRs #50–59. M7.2 added deterministic recommendations, category assessment coverage, append-only learner feedback and comparable measured-score trends. Current curriculum taxonomy and evidence remediation is tracked in the [Curriculum Audit & Remediation Tracker](CURRICULUM_AUDIT_AND_REMEDIATION_TRACKER.md); engineering gates remain in the [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md). Issue #69 remains the issue-level record for learner practice-evidence expansion. Do not infer accuracy from repetition notes or mastery from time, lesson completion or repetitions.
 
 - [ ] Optional external ComposeYogi launcher; core practice remains native.
-
-M7.1's core evidence loop is implemented in PRs #50–59. M7.2 now has deterministic read-only recommendations, category assessment coverage, append-only local learner feedback and comparable measured-score trends (PRs #92–94, #103–104). Issue #69 remains open for item-level correctness/confusion and topic/fretboard coverage because current practice observations are learner-entered activity notes, not item outcomes or structured instrument-location evidence. Do not infer accuracy from clean repetitions or mastery from time, lesson completion or repetitions.
 
 ### M8 — Musicianship and repertoire
 
@@ -183,14 +181,6 @@ Automatic polyphonic chord grading, AI tutoring, social features and collaborati
 Follow [Implementation Guidelines](IMPLEMENTATION_GUIDELINES.md) for the approved hybrid visual direction, per-profile onboarding, lesson presentation types, daily-plan composition and acceptance criteria. The shared curriculum remains canonical; the learner's session plan, goals, practice emphasis and teaching format are profile-specific. Do not use the current owner's acoustic/20-minute/all-round choices as application-wide defaults.
 
 
-### M7.2 — Pause/resume and reliable session timing (2026-11-12)
+### Historical M7.2 session-timing delivery
 
-- [x] Add pause/resume session lifecycle states.
-- [x] Persist accumulated active time and exclude paused intervals.
-- [x] Serialize session creation through a shared IndexedDB read/write transaction to prevent competing active sessions across tabs.
-- [x] Extend browser acceptance for pause, frozen timer, resume, reload recovery and completion.
-- [x] Pass full CI (PR #51 run `43207060655`); the documentation checkpoint is being revalidated on the latest head.
-- [x] Complete true two-tab concurrency browser acceptance before merge.
-- [ ] Add exercise sequencing and append-only exercise observations in a later slice.
-
-Paused time is not counted as active time. Active time remains learner-reported session metadata and is not evidence of playing accuracy or skill mastery.
+Pause/resume, accumulated active-time persistence, multi-tab session creation protection and browser acceptance were delivered in PR #51. Current remaining M7 product work is represented at milestone level above; task-level quality/evidence status belongs in the canonical trackers.

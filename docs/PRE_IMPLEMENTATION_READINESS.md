@@ -2,7 +2,7 @@
 
 **Review date:** 2026-11-11  
 **Repository:** [leenusdarnal/guitarlab](https://github.com/leenusdarnal/guitarlab)  
-**Status:** Historical readiness snapshot from before implementation began on 2026-11-11. The application foundation and multiple product slices have since been merged. Use the [Implementation Tracker](IMPLEMENTATION_TRACKER.md) and [Roadmap](ROADMAP.md) for current delivery status.  
+**Status:** Historical readiness snapshot from before implementation began on 2026-11-11. The application foundation and multiple product slices have since been merged. Use the [Implementation Roadmap](ROADMAP.md) and [Engineering Quality & Release Tracker](ENGINEERING_QUALITY_TRACKER.md) and [Roadmap](ROADMAP.md) for current delivery status.  
 **Purpose:** Preserve the product decisions and acceptance criteria that gated the initial application scaffold. This document is not the current implementation status report.
 
 ## 1. Executive decision
