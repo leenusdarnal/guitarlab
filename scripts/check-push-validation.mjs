@@ -57,10 +57,10 @@ if (changed([
   'src/hooks.server.ts'
 ])) run('test:auth-browser');
 
-if (changed(['src/', 'static/', 'vite.config.ts', 'svelte.config.js'])) run('test:browser');
+if (changed(['src/routes/', 'src/lib/', 'src/hooks.server.ts', 'src/app.css', 'src/app.html', 'static/', 'vite.config.ts', 'svelte.config.js'])) run('test:browser');
 if (changed(['src/lib/audio/', 'src/routes/tools/'])) run('test:music-tools-browser');
 if (changed(['content/curriculum/', 'src/routes/learn/'])) run('test:curriculum-browser');
-if (changed(['src/routes/', 'src/app.css', 'src/app.html'])) run('test:accessibility');
+if (changed(['src/routes/', 'src/app.css', 'src/app.html'])) {\n  run('test:accessibility');\n  console.log('The pre-push gate runs the browser accessibility suite in its configured default engine. CI remains authoritative for the additional WebKit matrix.');\n}
 
 const status = git(['status', '--porcelain', '--untracked-files=all']);
 if (status) {
