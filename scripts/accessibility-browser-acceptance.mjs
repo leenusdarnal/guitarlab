@@ -107,6 +107,19 @@ async function navigateAndWaitFor(
   return response;
 }
 
+async function waitForAppearancePreference(page, expected) {
+  await page.waitForFunction((preference) => {
+    const select = document.querySelector(
+      'header.global-nav select[aria-label="Appearance"]'
+    );
+    return (
+      select instanceof HTMLSelectElement &&
+      select.value === preference &&
+      document.documentElement.dataset.themePreference === preference
+    );
+  }, expected);
+}
+
 function assertResponseSecurityHeaders(response) {
   const headers = response?.headers() ?? {};
 
@@ -821,6 +834,7 @@ try {
       origin + '/learn',
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, theme);
     const firstFrameTheme = await page.evaluate(() => ({
       applied: document.documentElement.dataset.theme,
       firstFrame: window.__guitarlabThemeAtFirstFrame,
@@ -886,6 +900,7 @@ try {
       origin,
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, 'dark');
     const dashboardAppearance = page.locator(
       'header.global-nav select[aria-label="Appearance"]:visible'
     );
@@ -912,6 +927,7 @@ try {
       origin + '/practice',
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, 'light');
     const sharedAppearance = page.locator(
       'header.global-nav select[aria-label="Appearance"]'
     );
