@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import { page } from '$app/state';
   import Icon from '../../../lib/components/Icon.svelte';
   import {
     MAX_METRONOME_BPM,
@@ -13,7 +14,11 @@
   type WakeLockApiLike = { request(type: 'screen'): Promise<WakeLockSentinelLike> };
 
   const tempoPresets = [60, 80, 100, 120];
-  let tempo = $state(80);
+  const requestedTempo = Number(page.url.searchParams.get('bpm'));
+  const initialTempo = Number.isInteger(requestedTempo) && requestedTempo >= MIN_METRONOME_BPM && requestedTempo <= MAX_METRONOME_BPM
+    ? requestedTempo
+    : 80;
+  let tempo = $state(initialTempo);
   let beatsPerBar = $state(4);
   let metronome = $state<WebAudioMetronome | null>(null);
   let isMetronomeRunning = $state(false);
@@ -29,10 +34,6 @@
   let tapTimes: number[] = [];
 
   onMount(() => {
-    const requestedTempo = Number(new URLSearchParams(window.location.search).get('bpm'));
-    if (Number.isInteger(requestedTempo) && requestedTempo >= MIN_METRONOME_BPM && requestedTempo <= MAX_METRONOME_BPM) {
-      setTempo(requestedTempo);
-    }
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   });
