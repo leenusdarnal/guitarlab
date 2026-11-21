@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
-  import { goto } from '$app/navigation';
+  import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import type { PageProps } from './$types';
   import { accountProfileUpdateSchema } from '../../lib/domain/profile/account-profile';
