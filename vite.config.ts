@@ -32,9 +32,10 @@ export default defineConfig({
           'media-src': ['self', 'blob:'],
           'object-src': ['none'],
           'script-src': ['self'],
-          // Svelte transitions and component style attributes use inline CSS.
-          // Inline JavaScript remains disallowed.
-          'style-src': ['self', 'unsafe-inline'],
+          // Keep inline style attributes working without permitting inline style blocks.
+          // SvelteKit adds nonces/hashes to its generated style elements.
+          'style-src': ['self'],
+          'style-src-attr': ['unsafe-inline'],
           'worker-src': ['self', 'blob:']
         }
       }
