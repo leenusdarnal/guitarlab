@@ -56,6 +56,8 @@ Signing in, updating the account profile or signing out does not move, attach, r
 
 The production auth migration workflow is manually dispatched from `main`, requires explicit confirmation, checks CI for the selected commit, verifies Cloudflare token status and D1 access, applies pending migrations, and checks the resulting tables. Review the pending migration list and confirm the target is production before authorizing the workflow. Do not run migrations or deploy solely because credentials were added.
 
+Production Worker releases must use the guarded GitHub Actions **Deploy GuitarLab production** workflow from `main`. It verifies required CI checks against the exact selected commit, applies only reviewed pending auth migrations, tags the uploaded Worker version with the source commit SHA and workflow run identity, smoke-tests public routes and security headers, and preserves a deployment-evidence artifact. Use the Worker version tag/message and artifact together when reconciling the live deployment to source. A manual Wrangler deployment does not produce this complete release-evidence chain.
+
 After the schema and Worker configuration are verified, test Google and GitHub sign-in using the production callback URLs. Keep account endpoints fail-closed until the required database, secret, origin and at least one complete OAuth provider are configured.
 
 ## Security and data boundaries
