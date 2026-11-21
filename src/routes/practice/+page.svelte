@@ -791,7 +791,7 @@
   />
 </svelte:head>
 
-<main class="practice-page">
+<main id="main-content" tabindex="-1" class="practice-page">
   <header class="top">
     <a href={resolve('/')} aria-label="Back to Today">
       <Icon name="arrow-left" size={14} /> Today

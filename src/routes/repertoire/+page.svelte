@@ -189,7 +189,7 @@
   />
 </svelte:head>
 
-<main class="repertoire-page">
+<main id="main-content" tabindex="-1" class="repertoire-page">
   <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Practice tools</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · REPERTOIRE</div>

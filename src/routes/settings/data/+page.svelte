@@ -248,7 +248,7 @@
   />
 </svelte:head>
 
-<main class="data-page">
+<main id="main-content" tabindex="-1" class="data-page">
   <header>
     <a class="brand" href={resolve('/')}><span class="mark">G</span><strong>GuitarLab</strong></a>
     <a class="back-link" href={resolve('/')}><Icon name="arrow-left" size={14} /> Back to Today</a>

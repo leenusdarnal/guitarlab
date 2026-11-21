@@ -11,7 +11,7 @@
   />
 </svelte:head>
 
-<main class="tools-page mx-auto w-full max-w-[1040px] px-[clamp(18px,4vw,52px)] pt-[34px] pb-[70px] text-content">
+<main id="main-content" tabindex="-1" class="tools-page mx-auto w-full max-w-[1040px] px-[clamp(18px,4vw,52px)] pt-[34px] pb-[70px] text-content">
   <a class="back-link" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH</div>

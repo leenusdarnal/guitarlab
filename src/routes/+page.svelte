@@ -288,7 +288,7 @@
     </div>
   </aside>
 
-  <main class="main-area">
+  <main id="main-content" tabindex="-1" class="main-area">
     <header class="topbar">
       <div class="mobile-brand" aria-hidden="true"><Brand size="small" /></div>
       <div class="breadcrumb">Workspace <span>/</span> Today</div>

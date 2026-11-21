@@ -185,7 +185,7 @@
   />
 </svelte:head>
 
-<main class="exercise-page">
+<main id="main-content" tabindex="-1" class="exercise-page">
   <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
   <header class="page-heading">
     <div class="eyebrow">THE PRACTICE WORKBENCH · PITCH</div>

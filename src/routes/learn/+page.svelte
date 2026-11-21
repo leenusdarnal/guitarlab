@@ -88,7 +88,7 @@
   <meta name="description" content="Search and browse all 152 GuitarLab lessons by name, topic, learning path and lesson length." />
 </svelte:head>
 
-<main class="catalog max-w-[1180px] mx-auto px-[clamp(16px,4vw,50px)] pt-7 pb-[72px] text-content max-[520px]:px-[15px] max-[520px]:pt-5 max-[520px]:pb-[55px]">
+<main id="main-content" tabindex="-1" class="catalog max-w-[1180px] mx-auto px-[clamp(16px,4vw,50px)] pt-7 pb-[72px] text-content max-[520px]:px-[15px] max-[520px]:pt-5 max-[520px]:pb-[55px]">
   <header class="catalog-header">
     <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
     <div class="eyebrow">THE GUITARLAB CURRICULUM</div>

@@ -278,7 +278,7 @@
   <meta name="description" content={lesson.focus} />
 </svelte:head>
 
-<main class="lesson-page">
+<main id="main-content" tabindex="-1" class="lesson-page">
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href={resolve('/')}>Dashboard</a><span aria-hidden="true">/</span>
     <a href={resolve('/learn')}>Curriculum</a><span aria-hidden="true">/</span>

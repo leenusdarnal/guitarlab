@@ -183,7 +183,7 @@
   />
 </svelte:head>
 
-<main class="tuner-page">
+<main id="main-content" tabindex="-1" class="tuner-page">
   <a class="back-link tool-page-back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">
