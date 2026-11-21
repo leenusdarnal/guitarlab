@@ -584,7 +584,10 @@ describe('local learner profile persistence', () => {
     expect(updated?.preferences.handedness).toBe('left');
     expect(updated?.preferences.tuning).toBe('D-A-D-G-A-D');
     expect(updated?.preferences.startingPoint).toBe('some-experience');
-    expect(updated?.preferences.goals).toEqual(['rock-blues', 'singer-songwriter']);
+    expect(updated?.preferences.goals).toEqual([
+      'rock-blues',
+      'singer-songwriter'
+    ]);
     expect(updated?.preferences.practiceMinutes).toBe(40);
     expect(updated?.updatedAt).toBe(200);
     expect(
