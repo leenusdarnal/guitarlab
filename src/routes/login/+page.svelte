@@ -235,17 +235,25 @@
           >Create account</button>
         </div>
       {/if}
+      {/if}
 
-      <div class="social-actions" aria-label="Sign in with a social account">
-        <button class="social-action" type="button" onclick={() => signInSocial('google')} disabled={busy}>
-          Continue with Google
-        </button>
-        <button class="social-action" type="button" onclick={() => signInSocial('github')} disabled={busy}>
-          Continue with GitHub
-        </button>
-      </div>
-      <p class="social-caption">Use an existing account. No email service is needed for social sign-in.</p>
+      {#if data.googleAvailable || data.githubAvailable}
+        <div class="social-actions" aria-label="Sign in with a social account">
+          {#if data.googleAvailable}
+            <button class="social-action" type="button" onclick={() => signInSocial('google')} disabled={busy}>
+              Continue with Google
+            </button>
+          {/if}
+          {#if data.githubAvailable}
+            <button class="social-action" type="button" onclick={() => signInSocial('github')} disabled={busy}>
+              Continue with GitHub
+            </button>
+          {/if}
+        </div>
+        <p class="social-caption">Use an existing account. No email service is needed for social sign-in.</p>
+      {/if}
 
+      {#if data.emailPasswordAvailable}
       <form onsubmit={submit}>
         {#if mode === 'sign-up'}
           <label>

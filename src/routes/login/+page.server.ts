@@ -6,9 +6,17 @@ import {
   type AuthEnvironment
 } from '../../lib/server/auth';
 
-export const load: PageServerLoad = () => ({
-  authAvailable: isAuthConfigured(env as unknown as AuthEnvironment),
-  emailPasswordAvailable: isEmailPasswordAuthConfigured(
-    env as unknown as AuthEnvironment
-  )
-});
+export const load: PageServerLoad = () => {
+  const authEnv = env as unknown as AuthEnvironment;
+
+  return {
+    authAvailable: isAuthConfigured(authEnv),
+    emailPasswordAvailable: isEmailPasswordAuthConfigured(authEnv),
+    googleAvailable: Boolean(
+      authEnv.GOOGLE_CLIENT_ID && authEnv.GOOGLE_CLIENT_SECRET
+    ),
+    githubAvailable: Boolean(
+      authEnv.GITHUB_CLIENT_ID && authEnv.GITHUB_CLIENT_SECRET
+    )
+  };
+};
