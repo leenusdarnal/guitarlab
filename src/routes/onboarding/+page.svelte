@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import type { PageProps } from './$types';
   import Icon from '../../lib/components/Icon.svelte';
   import Brand from '../../lib/components/Brand.svelte';
   import {
@@ -13,6 +14,8 @@
     loadActiveLearnerProfile,
     saveActiveLearnerPreferences
   } from '../../lib/storage/indexeddb';
+
+  let { data }: PageProps = $props();
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
   let message = $state('');
@@ -130,7 +133,15 @@
 </svelte:head>
 
 <main id="main-content" tabindex="-1" class="setup-page">
-  <header><a href={resolve('/')} class="brand"><Brand size="small" /></a><a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a></header>
+  <header>
+      <a href={resolve('/')} class="brand"><Brand size="small" /></a>
+      <div class="page-actions">
+        {#if data.account}
+          <a href={resolve('/account')} class="account-profile-link">Account settings</a>
+        {/if}
+        <a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a>
+      </div>
+    </header>
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNER PROFILE · PRIVATE TO THIS DEVICE</div>
     <h1>Make GuitarLab <em>yours.</em></h1>
@@ -232,7 +243,7 @@
 </main>
 
 <style>
-  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:inline-flex;align-items:center;text-decoration:none}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.custom-practice{display:grid;gap:7px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:650}.custom-practice input{width:100%;max-width:220px;min-height:44px;border:1px solid var(--border);border-radius:9px;padding:8px 11px;background:var(--surface-raised);color:var(--text);font:inherit}.custom-practice-help{min-height:20px;margin:7px 0 0;color:var(--muted);font-size:11px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button :global(.icon){margin-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.preference-effect{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.6}.return-today{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:11px 16px;border:1px solid var(--primary);border-radius:10px;color:var(--primary);font-size:12px;font-weight:750}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.profile-fields{grid-template-columns:1fr}.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
+  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:inline-flex;align-items:center;text-decoration:none}.page-actions{display:flex;align-items:center;gap:16px}.account-profile-link{color:var(--primary);font-size:12px;font-weight:750}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.profile-fields label{display:grid;gap:7px;min-width:0;color:var(--muted);font-size:12px;font-weight:650}.profile-fields label>span{color:var(--text)}.profile-fields .optional{color:var(--muted);font-weight:500}.profile-fields select,.profile-fields input{width:100%;min-width:0;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font:inherit;font-size:13px}.profile-fields select:focus-visible,.profile-fields input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.custom-practice{display:grid;gap:7px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:650}.custom-practice input{width:100%;max-width:220px;min-height:44px;border:1px solid var(--border);border-radius:9px;padding:8px 11px;background:var(--surface-raised);color:var(--text);font:inherit}.custom-practice-help{min-height:20px;margin:7px 0 0;color:var(--muted);font-size:11px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button :global(.icon){margin-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.preference-effect{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.6}.return-today{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:11px 16px;border:1px solid var(--primary);border-radius:10px;color:var(--primary);font-size:12px;font-weight:750}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.profile-fields{grid-template-columns:1fr}.page-actions{gap:12px}.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
 
   .presentation-choices label {
     min-height: 82px;
