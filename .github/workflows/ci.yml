@@ -157,11 +157,19 @@ jobs:
             fi
           fi
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
-          mapfile -d '' -t changed_files < <(git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" "$GITHUB_SHA")
+          mapfile -d '' -t all_changed_files < <(git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" "$GITHUB_SHA")
+          changed_files=()
+          for file in "${all_changed_files[@]}"; do
+            case "$file" in
+              *.js|*.json|*.ts|wrangler*.jsonc|scripts/*.mjs)
+                changed_files+=("$file")
+                ;;
+            esac
+          done
           if [ "${#changed_files[@]}" -eq 0 ]; then
-            echo "No files changed."
+            echo "No Prettier-managed files changed."
           else
-            npx prettier --check --ignore-unknown "${changed_files[@]}"
+            npx prettier --check "${changed_files[@]}"
           fi
 
       - name: Lint
