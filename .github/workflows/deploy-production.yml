@@ -121,7 +121,10 @@ jobs:
       - name: Deploy production Worker
         env:
           WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson
-        run: npm run deploy:production
+        run: >-
+          npm run deploy:production --
+          --message "GuitarLab production source ${GITHUB_SHA} (workflow ${GITHUB_RUN_ID}, attempt ${GITHUB_RUN_ATTEMPT})"
+          --tag "guitarlab-prod-${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
 
       - name: Smoke-test production routes and security headers
         shell: bash
@@ -186,11 +189,21 @@ jobs:
           if (!deployment?.version_id || !deployment.timestamp || !deployment.targets?.length) {
             throw new Error('Wrangler output did not contain a complete production deployment record.');
           }
+          const commitSha = process.env.GITHUB_SHA;
+          const runId = process.env.GITHUB_RUN_ID;
+          const runAttempt = process.env.GITHUB_RUN_ATTEMPT;
+          if (!/^[0-9a-f]{40}$/.test(commitSha || '') || !/^\\d+$/.test(runId || '') || !/^\\d+$/.test(runAttempt || '')) {
+            throw new Error('GitHub did not provide a valid commit SHA and workflow run identity.');
+          }
+          const workerVersionTag = `guitarlab-prod-${commitSha}-${runId}-${runAttempt}`;
+          const workerVersionMessage = `GuitarLab production source ${commitSha} (workflow ${runId}, attempt ${runAttempt})`;
           const evidence = {
             worker: deployment.worker_name,
             versionId: deployment.version_id,
             deployedAt: deployment.timestamp,
-            commitSha: process.env.GITHUB_SHA,
+            commitSha,
+            workerVersionTag,
+            workerVersionMessage,
             deploymentUrls: deployment.targets,
             smokeTest: {
               result: 'passed',
@@ -213,6 +226,8 @@ jobs:
             versionId: evidence.versionId,
             deployedAt: evidence.deployedAt,
             commitSha: evidence.commitSha,
+            workerVersionTag: evidence.workerVersionTag,
+            workerVersionMessage: evidence.workerVersionMessage,
             deploymentUrls: evidence.deploymentUrls,
             smokeTest: evidence.smokeTest.result
           }, null, 2));
