@@ -215,7 +215,7 @@ jobs:
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' }}
         shell: bash
         run: |
-          ./node_modules/.bin/wrangler dev --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-preview.log" 2>&1 &
+          ./node_modules/.bin/wrangler dev --ip 127.0.0.1 --port 8787 > "$RUNNER_TEMP/wrangler-local.log" 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 30); do
@@ -225,7 +225,7 @@ jobs:
             sleep 2
           done
           if [ ! -s "$RUNNER_TEMP/guitarlab-home.html" ]; then
-            cat "$RUNNER_TEMP/wrangler-preview.log"
+            cat "$RUNNER_TEMP/wrangler-local.log"
             echo "Cloudflare Worker did not return the home page."
             exit 1
           fi
@@ -272,20 +272,10 @@ jobs:
           name: guitarlab-ci-failure-diagnostics
           path: |
             ${{ runner.temp }}/auth-browser-acceptance.log
-            ${{ runner.temp }}/wrangler-preview.log
+            ${{ runner.temp }}/wrangler-local.log
           if-no-files-found: ignore
           retention-days: 3
 
-      - name: Preserve Cloudflare preview build
-        if: github.event_name == 'push' && github.ref_name == 'main'
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: guitarlab-cloudflare-preview
-          path: |
-            .svelte-kit/cloudflare/
-            wrangler.jsonc
-          if-no-files-found: error
-          retention-days: 1
 
   publish-required-status:
     name: Publish required legacy status
