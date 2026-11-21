@@ -183,7 +183,7 @@
             <input type="text" maxlength="80" placeholder="e.g. E–A–D–G–B–E" value={preferences.tuning ?? ''} oninput={updateTuning} />
           </label>
         </div>
-        <p class="preference-effect">These details help GuitarLab interpret your musical context. Leave anything blank when you are unsure.</p>
+        <p class="preference-effect">These details are saved to your learner profile for future personalization. They do not yet change lesson content or recommendations. Leave anything blank when you are unsure.</p>
       </fieldset>
       <fieldset>
         <legend>02 · What would you like to work towards?</legend>
