@@ -43,18 +43,13 @@ export const PATCH: RequestHandler = async ({ request, locals }) => {
 
   try {
     const auth = createAuth(authEnv, waitUntil);
-    const updated = await auth.api.updateUser({
+    await auth.api.updateUser({
       body: parsed.data,
       headers: request.headers
     });
 
     return Response.json(
-      {
-        profile: {
-          name: updated.name,
-          image: updated.image ?? null
-        }
-      },
+      { success: true },
       { headers: { 'Cache-Control': 'private, no-store' } }
     );
   } catch {
