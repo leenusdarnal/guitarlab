@@ -1049,7 +1049,7 @@ try {
 
   // Learner preferences persist in IndexedDB and feed the dashboard.
   await page
-    .getByRole('link', { name: /Learning preferences/ })
+    .getByRole('link', { name: /Learner profile/ })
     .first()
     .click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
