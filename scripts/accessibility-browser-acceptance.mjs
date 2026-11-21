@@ -360,6 +360,15 @@ try {
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
         const moreNavigation = page.locator('#mobile-more-navigation');
         await moreNavigation.waitFor({ state: 'visible' });
+        await page.waitForFunction(() => {
+          const firstDestination = document.querySelector(
+            '#mobile-more-navigation a'
+          );
+          return (
+            firstDestination !== null &&
+            document.activeElement === firstDestination
+          );
+        });
         assert.equal(
           await moreNavigation
             .locator('a')
