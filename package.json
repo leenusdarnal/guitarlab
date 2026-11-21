@@ -12,7 +12,7 @@
     "preview": "wrangler dev",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write \"**/*.{js,json,ts}\" \"wrangler*.jsonc\" \"scripts/*.mjs\"",
+    "format": "node scripts/format-write.mjs",
     "format:check": "node scripts/format-check.mjs",
     "test": "vitest",
     "test:run": "vitest run",
