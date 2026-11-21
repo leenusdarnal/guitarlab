@@ -143,6 +143,9 @@ jobs:
 
       - name: Check formatting
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
+        env:
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          GITHUB_SHA: ${{ github.sha }}
         run: npm run format:check
       - name: Lint
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
