@@ -13,7 +13,7 @@
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,json,ts}\" \"wrangler*.jsonc\" \"scripts/*.mjs\"",
-    "format:check": "prettier --check \"**/*.{js,json,ts}\" \"wrangler*.jsonc\" \"scripts/*.mjs\" --ignore-path .prettierignore",
+    "format:check": "node scripts/format-check.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs && node scripts/validate-practice-taxonomy.mjs",
