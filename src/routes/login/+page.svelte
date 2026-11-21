@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { authClient } from '../../lib/auth-client';
   import type { PageProps } from './$types';
   let { data }: PageProps = $props();
@@ -34,7 +35,7 @@
       {#if errorMessage}<p class="error" role="alert">{errorMessage}</p>{/if}
     {/if}
     <div class="divider"><span>OR</span></div>
-    <a class="guest" href="/">Continue as guest</a>
+    <a class="guest" href={resolve("/")}>Continue as guest</a>
     <p class="privacy">Your local learner profile and practice history stay on this device.</p>
   </section>
 </main>
