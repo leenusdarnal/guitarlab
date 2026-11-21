@@ -1054,23 +1054,51 @@ try {
     .click();
   await page.getByRole('heading', { name: 'Make GuitarLab yours.' }).waitFor();
   assert.equal(
-    await page.getByRole('radio', { name: 'Acoustic guitar' }).count(),
-    0,
-    'Setup should not offer an instrument choice until it changes the learning experience'
+    await page.getByLabel('Instrument').count(),
+    1,
+    'Learner profile should expose the existing instrument preference'
+  );
+  assert.equal(
+    await page.getByLabel('Current experience').count(),
+    1,
+    'Learner profile should expose the learner experience preference'
+  );
+  assert.equal(
+    await page.getByLabel('Playing hand').count(),
+    1,
+    'Learner profile should expose handedness'
+  );
+  assert.equal(
+    await page.getByLabel(/Preferred tuning/).count(),
+    1,
+    'Learner profile should expose optional tuning'
   );
   assert.equal(
     await page.getByLabel('Preferred lesson presentation').count(),
     0,
-    'Setup should not promise a lesson-presentation effect that is not implemented'
+    'Setup should not add a duplicate presentation control'
   );
+  await page.getByLabel('Instrument').selectOption('acoustic');
+  await page.getByLabel('Current experience').selectOption('fresh-beginner');
+  await page.getByLabel('Playing hand').selectOption('right');
+  await page.getByLabel(/Preferred tuning/).fill('E-A-D-G-B-E');
   await page.getByRole('checkbox', { name: 'Acoustic & fingerstyle' }).check();
   await page.getByRole('radio', { name: '20 min' }).check();
-  await page.getByRole('button', { name: /Save my preferences/ }).click();
+  await page.getByRole('button', { name: /Save learner profile/ }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'saved privately on this device' })
     .waitFor();
-  await page.getByRole('link', { name: 'Go to Today' }).click();
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForOnboardingProfile(page);
+  assert.equal(await page.getByLabel('Instrument').inputValue(), 'acoustic');
+  assert.equal(
+    await page.getByLabel('Current experience').inputValue(),
+    'fresh-beginner'
+  );
+  assert.equal(await page.getByLabel('Playing hand').inputValue(), 'right');
+  assert.equal(await page.getByLabel(/Preferred tuning/).inputValue(), 'E-A-D-G-B-E');
+  await page.getByRole('link', { name: 'Back to Today' }).click();
   await page.waitForURL((url) => url.pathname === '/');
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'domcontentloaded' });
@@ -1480,7 +1508,7 @@ try {
   await page.goto(`${origin}/onboarding`, { waitUntil: 'domcontentloaded' });
   await waitForOnboardingProfile(page);
   await page.getByRole('radio', { name: '40 min' }).check();
-  await page.getByRole('button', { name: /Save my preferences/ }).click();
+  await page.getByRole('button', { name: /Save learner profile/ }).click();
   await page
     .getByRole('status')
     .filter({ hasText: 'saved privately on this device' })
