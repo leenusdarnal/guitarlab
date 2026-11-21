@@ -940,6 +940,41 @@ try {
     'camera=(), microphone=(self), geolocation=()'
   );
 
+  const csp = securityHeaders['content-security-policy'];
+  assert.ok(csp, 'Content-Security-Policy must be present');
+  const cspDirectives = new Map(
+    csp.split(';').map((directive) => {
+      const [name, ...values] = directive.trim().split(/\\s+/);
+      return [name, new Set(values)];
+    })
+  );
+  const directive = (name) => cspDirectives.get(name) ?? new Set();
+  assert.ok(directive('default-src').has("'self'"));
+  assert.ok(directive('base-uri').has("'self'"));
+  assert.ok(directive('object-src').has("'none'"));
+  assert.ok(directive('frame-ancestors').has("'none'"));
+  assert.ok(directive('form-action').has("'self'"));
+  assert.ok(
+    directive('script-src').has("'self'") &&
+      !directive('script-src').has("'unsafe-inline''),
+    'Inline JavaScript must remain blocked by the production CSP'
+  );
+  assert.ok(
+    [...directive('script-src')].some((value) =>
+      /^'nonce-[^']+'$|^'sha256-[^']+'$/.test(value)
+    ),
+    'SvelteKit-generated inline scripts must be protected by a nonce or hash'
+  );
+  assert.ok(
+    directive('style-src').has("'self'") &&
+      !directive('style-src').has("'unsafe-inline''),
+    'Inline style blocks must not be globally permitted'
+  );
+  assert.ok(
+    directive('style-src-attr').has("'unsafe-inline'"),
+    'Inline style attributes remain explicitly allowed for component layout and transitions'
+  );
+
   // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
   await page.goto(`${origin}/tools`, { waitUntil: 'domcontentloaded' });
   await page
