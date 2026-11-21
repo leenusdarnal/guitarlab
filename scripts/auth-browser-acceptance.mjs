@@ -21,6 +21,7 @@ const learnerStorage = await readFile(
   new URL('../src/lib/storage/indexeddb.ts', import.meta.url),
   'utf8'
 );
+const cspConfig = await readFile(new URL('../vite.config.ts', import.meta.url), 'utf8');
 const accountProfileEndpoint = await readFile(
   new URL('../src/routes/api/account/profile/+server.ts', import.meta.url),
   'utf8'
@@ -65,3 +66,7 @@ assert.match(accountProfileEndpoint, /private, no-store/);
 console.log(
   'Account and learner profile contract passed: OAuth-only sign-in, authenticated account updates and device-local learner preferences.'
 );
+
+assert.match(cspConfig, /https:\/\/avatars\.githubusercontent\.com/);
+assert.match(cspConfig, /https:\/\/lh3\.googleusercontent\.com/);
+assert.doesNotMatch(cspConfig, /'img-src':\s*\[[^\]]*'https:'[,\]]/);
