@@ -6,6 +6,7 @@ const login = await readFile(new URL('../src/routes/login/+page.svelte', import.
 const account = await readFile(new URL('../src/routes/account/+page.svelte', import.meta.url), 'utf8');
 const learnerProfile = await readFile(new URL('../src/routes/onboarding/+page.svelte', import.meta.url), 'utf8');
 const learnerStorage = await readFile(new URL('../src/lib/storage/indexeddb.ts', import.meta.url), 'utf8');
+const accountProfileEndpoint = await readFile(new URL('../src/routes/api/account/profile/+server.ts', import.meta.url), 'utf8');
 
 assert.match(auth, /socialProviders/);
 assert.match(auth, /google:/);
@@ -29,3 +30,11 @@ assert.match(learnerStorage, /saveActiveLearnerPreferences/);
 assert.match(learnerStorage, /updateLearnerPreferences/);
 
 console.log('Account and learner profile contract passed: OAuth-managed identity, editable account presentation and device-local learner preferences.');
+
+assert.match(account, /fetch\('\/api\/account\/profile'/);
+assert.match(accountProfileEndpoint, /locals\.authUser/);
+assert.match(accountProfileEndpoint, /request\.headers\.get\('origin'\)/);
+assert.match(accountProfileEndpoint, /accountProfileUpdateSchema\.safeParse/);
+assert.match(accountProfileEndpoint, /auth\.api\.updateUser/);
+assert.match(accountProfileEndpoint, /headers: request\.headers/);
+assert.match(accountProfileEndpoint, /private, no-store/);
