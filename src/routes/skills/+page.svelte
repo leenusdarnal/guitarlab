@@ -195,7 +195,7 @@
   />
 </svelte:head>
 
-<main class="skill-page max-w-[1240px] mx-auto px-[clamp(16px,4vw,52px)] pt-8 pb-16 text-content max-[420px]:px-[15px]">
+<main id="main-content" tabindex="-1" class="skill-page max-w-[1240px] mx-auto px-[clamp(16px,4vw,52px)] pt-8 pb-16 text-content max-[420px]:px-[15px]">
   <a class="back" href={resolve('/')}><Icon name="arrow-left" size={14} /> Today</a>
   <header>
     <div class="eyebrow">YOUR LEARNING MAP</div>

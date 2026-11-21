@@ -36,7 +36,7 @@
   <meta name="description" content="Manage your GuitarLab account and sign out securely." />
 </svelte:head>
 
-<main class="account-page">
+<main id="main-content" tabindex="-1" class="account-page">
   <section class="account-card" aria-labelledby="account-title">
     <p class="eyebrow">YOUR GUITARLAB ACCOUNT</p>
     <h1 id="account-title">Account</h1>

@@ -109,7 +109,7 @@
   <meta name="description" content="Choose musical goals and a daily practice target for GuitarLab. Every choice is optional." />
 </svelte:head>
 
-<main class="setup-page">
+<main id="main-content" tabindex="-1" class="setup-page">
   <header><a href={resolve('/')} class="brand"><Brand size="small" /></a><a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a></header>
   <section class="setup-card">
     <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>

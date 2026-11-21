@@ -153,7 +153,7 @@
   />
 </svelte:head>
 
-<main class="theory-page">
+<main id="main-content" tabindex="-1" class="theory-page">
   <a class="back-link" href={resolve('/tools')}><Icon name="arrow-left" size={14} /> Tools</a>
 
   <header class="page-heading">

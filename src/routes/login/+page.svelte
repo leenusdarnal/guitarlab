@@ -20,7 +20,7 @@
   <title>Sign in · GuitarLab</title>
   <meta name="description" content="Sign in with Google or GitHub, or continue learning as a guest." />
 </svelte:head>
-<main class="auth-page">
+<main id="main-content" tabindex="-1" class="auth-page">
   <section class="auth-card" aria-labelledby="auth-title">
     <p class="eyebrow">YOUR LEARNING, YOUR CHOICE</p>
     <h1 id="auth-title">Welcome to GuitarLab</h1>
