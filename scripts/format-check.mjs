@@ -1,13 +1,12 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
-const run = (args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const buffer = (args) => execFileSync('git', args);
 
 const baseSha = process.env.GITHUB_BASE_SHA || (() => {
   const eventPath = process.env.GITHUB_EVENT_PATH;
   if (!eventPath) return '';
-  const { readFileSync } = require('node:fs');
   const event = JSON.parse(readFileSync(eventPath, 'utf8'));
   return event.pull_request?.base?.sha || event.before || '';
 })();
