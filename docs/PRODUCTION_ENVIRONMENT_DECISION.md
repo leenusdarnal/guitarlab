@@ -2,8 +2,8 @@
 
 **Status: first local-first production release deployed; ongoing production changes remain approval-gated.**
 
-**Last reconciled:** 20 November 2026  
-**Repository baseline:** `main` at `0cefe5722cca1f27391ff968f150f67824b05326`
+**Last reconciled:** 21 November 2026  
+**Repository baseline:** `main` at `adf416a96a2e4a8bc511b22ddf9520a51c4b9d55` (PR #216; main CI run #44919017901 passed)
 
 This document is the current record for the first production release and the decisions that remain open. It supersedes the earlier pre-deployment statement that no production deployment had been authorized. The historical 13 November account inventory below is retained only as dated evidence, not as the current production state.
 
@@ -24,9 +24,9 @@ The first release is intentionally local-first: learner profiles, progress, prac
 
 ## 2. Current release reconciliation
 
-Current repository `main` at this reconciliation is `0cefe5722cca1f27391ff968f150f67824b05326` (20 November; PR #212). The verified first deployment is older, at `1e18998eba43d0c2f6e3267ddeccb11b198b4188`.
+Current repository `main` at this reconciliation is `adf416a96a2e4a8bc511b22ddf9520a51c4b9d55` (21 November; PR #216; required main CI run #44919017901 passed). The verified first deployment is older, at `1e18998eba43d0c2f6e3267ddeccb11b198b4188`.
 
-**Do not describe the current main SHA as deployed.** The GitHub deployment workflow evidence proves the initial release SHA and its smoke tests; it does not prove that later commits have been deployed. The active Worker version was not independently queried during this documentation reconciliation.
+**Do not describe the current main SHA as deployed.** The GitHub deployment workflow evidence proves the initial release SHA and its smoke tests; it does not prove that later commits have been deployed. The active Worker version observed on 21 November was `841bde0d-572d-425b-9417-4c325240444e` (100% traffic; Cloudflare source `dash`). It predates PR #216 and is not evidence that the current `main` SHA is deployed.
 
 QA-04 in `ENGINEERING_QUALITY_TRACKER.md` remains OPEN until the current Worker version is reconciled against the deployment artifact and an explicit decision is recorded to keep or update production. No production redeployment is authorized by this documentation change.
 
@@ -78,7 +78,7 @@ Do not treat the successful first release as blanket approval for later deployme
 | Decision / approval | Current evidence | Status |
 |---|---|---|
 | First local-first production deployment | Run #44054131712, SHA `1e18998eba43d0c2f6e3267ddeccb11b198b4188`, Issue #3 | **DONE — first release** |
-| Current live Worker version | Not independently queried during 19 November reconciliation | **OPEN — QA-04** |
+| Current live Worker version | Version `841bde0d-572d-425b-9417-4c325240444e` observed 21 November; predates PR #216 | **OPEN — QA-04** |
 | Access and data model for first release | Browser-local learner data; no remote D1 / cloud sync | **DONE — first-release boundary** |
 | Production configuration for future changes | Existing manual workflow and protected environment | Review before each change |
 | Backup / recovery for remote learner data | No remote learner-data store in first release | Not applicable to first release; required if architecture changes |
