@@ -357,6 +357,11 @@ try {
       if (route === '/' || route === '/practice') {
         const moreTrigger = page.locator('.mobile-nav-trigger');
         await moreTrigger.click();
+        await page.waitForFunction(() =>
+          document
+            .querySelector('.mobile-nav-trigger')
+            ?.getAttribute('aria-expanded') === 'true'
+        );
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
         const moreNavigation = page.locator('#mobile-more-navigation');
         await moreNavigation.waitFor({ state: 'visible' });
