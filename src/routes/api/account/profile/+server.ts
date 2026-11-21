@@ -16,7 +16,11 @@ function jsonError(code: string, status: number): Response {
 
 export const PATCH: RequestHandler = async ({ request, locals }) => {
   const authEnv = env as unknown as AuthEnvironment;
-  if (!locals.authUser || !isAuthConfigured(authEnv)) {
+  if (
+    !locals.authUser ||
+    !locals.authSession ||
+    !isAuthConfigured(authEnv)
+  ) {
     return jsonError('UNAUTHENTICATED', 401);
   }
 
