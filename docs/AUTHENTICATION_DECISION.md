@@ -29,7 +29,7 @@ Both providers are independently optional in an environment. A provider is avail
 The account profile is identity information managed by Better Auth in the authentication database:
 
 - Display name: editable by the signed-in account holder.
-- Profile image: optional HTTPS image URL; GuitarLab does not provide image hosting or upload.
+- Profile image: optional URL hosted by an approved Google or GitHub avatar domain; arbitrary external image hosts are blocked by CSP. GuitarLab does not provide image hosting or upload.
 - Email address: supplied and managed by the OAuth identity provider; it is read-only in GuitarLab.
 - Session: resolved from the validated server-side Better Auth session. Account screens may show the current session expiry and provide sign-out.
 
@@ -58,7 +58,7 @@ Cloud learner-data sync is a separate future architecture decision. It must not 
 - Use HttpOnly cookies, Secure cookies on HTTPS, SameSite=Lax or stricter, path scoping and bounded session lifetimes.
 - Preserve Better Auth's origin/CSRF protections. Keep auth endpoints same-origin; do not broaden CORS or CSP to bypass configuration.
 - Keep account, session and authentication API responses private and no-store. They must never enter the public service-worker cache.
-- Validate and bound user-editable account fields. Accept only HTTPS avatar URLs; do not accept email changes through the profile form.
+- Validate and bound user-editable account fields. Accept only HTTPS avatar URLs from the allowlisted Google/GitHub avatar hosts; do not permit arbitrary image hosts or email changes through the profile form.
 - Rate-limit sensitive authentication endpoints and keep diagnostic output free of cookies, session identifiers, provider credentials and learner content.
 - Keep the authentication database separate from learner-domain local storage and any future sync service.
 - Sign-out ends the account session; it must not clear or rewrite the local learner profile.
@@ -74,7 +74,7 @@ A successful build or production deployment is not proof that provider callbacks
 ## Delivery boundaries
 
 1. **Authentication foundation (Issue #176):** Better Auth, isolated auth schema, secure server session resolution, OAuth provider configuration and guest-safe fallback.
-2. **Account and learner profile experience (Issue #218):** editable account display name and optional avatar URL; read-only provider-managed email; visible session details and sign-out; editable local learner profile; clear navigation; tests and documentation.
+2. **Account and learner profile experience (Issue #218):** editable account display name and optional allowlisted Google/GitHub avatar URL; read-only provider-managed email; visible session details and sign-out; editable local learner profile; clear navigation; tests and documentation.
 3. **Production acceptance:** validate the configured OAuth providers and session/security behavior on the production Worker. This remains distinct from local automated tests.
 4. **Future sync:** deferred until a separate architecture, privacy and deletion design is approved.
 
