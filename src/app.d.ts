@@ -10,6 +10,7 @@ declare global {
         name: string;
         email: string;
         emailVerified: boolean;
+        image?: string | null;
       } | null;
       authSession: {
         id: string;
