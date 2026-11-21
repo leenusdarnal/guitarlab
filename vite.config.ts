@@ -19,7 +19,16 @@ export default defineConfig({
           'font-src': ['self', 'data:'],
           'form-action': ['self'],
           'frame-ancestors': ['none'],
-          'img-src': ['self', 'data:', 'blob:'],
+          'img-src': [
+            'self',
+            'data:',
+            'blob:',
+            'https://avatars.githubusercontent.com',
+            'https://lh3.googleusercontent.com',
+            'https://lh4.googleusercontent.com',
+            'https://lh5.googleusercontent.com',
+            'https://lh6.googleusercontent.com'
+          ],
           'media-src': ['self', 'blob:'],
           'object-src': ['none'],
           'script-src': ['self'],
