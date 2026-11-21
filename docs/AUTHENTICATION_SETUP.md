@@ -11,7 +11,7 @@ The supported account sign-in methods are Google OAuth and GitHub OAuth. Email/p
 3. Set `BETTER_AUTH_URL=http://localhost:8787` when using the local Wrangler Worker.
 4. Set up Google and/or GitHub OAuth credentials as described below.
 5. Apply the isolated local identity schema with `npm run db:auth:migrate:local`, then verify its tables with `npm run db:auth:test:local`.
-6. Build and run the Worker with `npm run build` followed by `npm run preview`.
+6. Build and run the Worker with `npm run build` followed by `npm run dev`.
 
 Do not commit `.dev.vars`. The example file contains placeholders only. Authentication remains unavailable unless its database, secret, explicit base URL and at least one complete OAuth provider are configured.
 
