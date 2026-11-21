@@ -157,7 +157,7 @@
         <a class:active={activeSection === 'tools'} aria-current={activeSection === 'tools' ? 'page' : undefined} href={resolve('/tools')}>Tools</a>
         <a class:active={activeSection === 'songs'} aria-current={activeSection === 'songs' ? 'page' : undefined} href={resolve('/repertoire')}>Songs</a>
         <a class:active={activeSection === 'progress'} aria-current={activeSection === 'progress' ? 'page' : undefined} href={resolve('/skills')}>Progress</a>
-        <a class:active={activeSection === 'preferences'} aria-current={activeSection === 'preferences' ? 'page' : undefined} href={resolve('/onboarding')}>Preferences</a>
+        <a class:active={activeSection === 'preferences'} aria-current={activeSection === 'preferences' ? 'page' : undefined} href={resolve('/onboarding')}>Learner profile</a>
       </nav>
 
       <div class="global-nav-actions">
@@ -196,7 +196,7 @@
         href={resolve('/onboarding')}
         aria-current={currentPath.startsWith('/onboarding') ? 'page' : undefined}
         onclick={closeMobileMenu}
-      ><span class="nav-icon" aria-hidden="true"><Icon name="settings" size={18} /></span>Preferences</a>
+      ><span class="nav-icon" aria-hidden="true"><Icon name="settings" size={18} /></span>Learner profile</a>
       <a
         href={resolve('/settings/data')}
         aria-current={currentPath.startsWith('/settings/data') ? 'page' : undefined}
