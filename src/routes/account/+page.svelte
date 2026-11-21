@@ -2,7 +2,10 @@
   import { goto, invalidateAll } from '$app/navigation';
   import { resolve } from '$app/paths';
   import type { PageProps } from './$types';
-  import { accountProfileUpdateSchema } from '../../lib/domain/profile/account-profile';
+  import {
+    accountProfileUpdateSchema,
+    isAllowedAccountAvatarUrl
+  } from '../../lib/domain/profile/account-profile';
   import { authClient } from '../../lib/auth-client';
 
   let { data }: PageProps = $props();
@@ -31,7 +34,7 @@
     if (candidate) {
       try {
         const url = new URL(candidate);
-        if (url.protocol === 'https:' && !url.username && !url.password) {
+        if (isAllowedAccountAvatarUrl(candidate)) {
           return url.href;
         }
       } catch {
@@ -52,7 +55,7 @@
     });
 
     if (!parsed.success) {
-      profileError = 'Enter a display name (up to 80 characters) and, optionally, a valid HTTPS image URL.';
+      profileError = 'Enter a display name (up to 80 characters) and, optionally, a valid Google or GitHub avatar URL.';
       profileMessage = '';
       return;
     }
@@ -164,12 +167,12 @@
           inputmode="url"
           autocomplete="url"
           maxlength="2048"
-          placeholder="https://example.com/your-image.png"
+          placeholder="https://avatars.githubusercontent.com/u/12345"
           bind:value={avatarUrl}
           disabled={savingProfile}
           aria-describedby="account-image-help"
         />
-        <p id="account-image-help" class="field-help">Use an HTTPS image URL. GuitarLab does not upload or host profile pictures; your browser loads the image from that address. Leave it blank to remove your custom image.</p>
+        <p id="account-image-help" class="field-help">Use an existing Google or GitHub profile image URL. Only the approved provider avatar hosts are loaded; GuitarLab does not upload or host profile pictures. Leave it blank to remove the custom image and use your initials or provider image.</p>
 
         {#if profileError}
           <p class="feedback error" role="alert">{profileError}</p>
