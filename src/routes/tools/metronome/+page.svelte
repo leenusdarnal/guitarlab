@@ -15,9 +15,12 @@
 
   const tempoPresets = [60, 80, 100, 120];
   const requestedTempo = Number(page.url.searchParams.get('bpm'));
-  const initialTempo = Number.isInteger(requestedTempo) && requestedTempo >= MIN_METRONOME_BPM && requestedTempo <= MAX_METRONOME_BPM
-    ? requestedTempo
-    : 80;
+  const initialTempo =
+    Number.isInteger(requestedTempo) &&
+    requestedTempo >= MIN_METRONOME_BPM &&
+    requestedTempo <= MAX_METRONOME_BPM
+      ? requestedTempo
+      : 80;
   let tempo = $state(initialTempo);
   let beatsPerBar = $state(4);
   let metronome = $state<WebAudioMetronome | null>(null);
