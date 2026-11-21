@@ -2,16 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { accountProfileUpdateSchema } from './account-profile';
 
 describe('account profile update contract', () => {
-  it('trims and accepts a display name with an optional HTTPS image', () => {
+  it('trims and accepts Google and GitHub provider avatar URLs', () => {
     expect(
       accountProfileUpdateSchema.parse({
         name: '  Guitar Learner  ',
-        image: 'https://cdn.example.test/avatar.png'
+        image: 'https://lh3.googleusercontent.com/a/avatar.png'
       })
     ).toEqual({
       name: 'Guitar Learner',
-      image: 'https://cdn.example.test/avatar.png'
+      image: 'https://lh3.googleusercontent.com/a/avatar.png'
     });
+
+    expect(
+      accountProfileUpdateSchema.parse({
+        name: 'GitHub Learner',
+        image: 'https://avatars.githubusercontent.com/u/12345?v=4'
+      }).image
+    ).toBe('https://avatars.githubusercontent.com/u/12345?v=4');
   });
 
   it('accepts clearing a previously configured avatar', () => {
@@ -37,12 +44,14 @@ describe('account profile update contract', () => {
     expect(oversizedName.success).toBe(false);
   });
 
-  it('rejects insecure, malformed and credential-bearing avatar URLs', () => {
+  it('rejects unapproved, insecure, malformed and credential-bearing avatar URLs', () => {
     for (const image of [
-      'http://example.test/avatar.png',
+      'http://avatars.githubusercontent.com/u/12345',
+      'https://cdn.example.test/avatar.png',
+      'https://user:secret@avatars.githubusercontent.com/u/12345',
+      'https://avatars.githubusercontent.com:8443/u/12345',
       'javascript:alert(1)',
-      'not a URL',
-      'https://user:secret@example.test/avatar.png'
+      'not a URL'
     ]) {
       expect(
         accountProfileUpdateSchema.safeParse({
