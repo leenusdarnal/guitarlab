@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-
-const buffer = (args) => execFileSync('git', args);
+import { readFileSync } from 'node:fs';
 
 const baseSha = process.env.GITHUB_BASE_SHA || (() => {
   const eventPath = process.env.GITHUB_EVENT_PATH;
@@ -16,21 +14,13 @@ if (!baseSha || /^0+$/.test(baseSha)) {
   process.exit(1);
 }
 
-const changedFiles = buffer([
-  'diff',
-  '--name-only',
-  '--diff-filter=ACMR',
-  '-z',
-  baseSha,
-  process.env.GITHUB_SHA || 'HEAD'
-])
-  .toString('utf8')
-  .split('\0')
-  .filter(Boolean);
+const changedFiles = execFileSync(
+  'git',
+  ['diff', '--name-only', '--diff-filter=ACMR', '-z', baseSha, process.env.GITHUB_SHA || 'HEAD'],
+  { encoding: 'buffer' }
+).toString('utf8').split('\0').filter(Boolean);
 
 console.log(`Checking formatting for ${changedFiles.length} changed file(s) against ${baseSha.slice(0, 12)}.`);
 if (changedFiles.length > 0) {
-  execFileSync('node', ['scripts/prettier-files.mjs', ...changedFiles], {
-    stdio: 'inherit'
-  });
+  execFileSync('node', ['scripts/prettier-files.mjs', ...changedFiles], { stdio: 'inherit' });
 }
