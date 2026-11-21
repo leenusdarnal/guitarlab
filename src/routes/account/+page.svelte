@@ -11,7 +11,11 @@
   let { data }: PageProps = $props();
 
   let displayName = $state(data.account.name);
-  let avatarUrl = $state(data.account.image ?? '');
+  let avatarUrl = $state(
+    data.account.image && isAllowedAccountAvatarUrl(data.account.image)
+      ? data.account.image
+      : ''
+  );
   let savingProfile = $state(false);
   let signingOut = $state(false);
   let avatarLoadFailed = $state(false);
