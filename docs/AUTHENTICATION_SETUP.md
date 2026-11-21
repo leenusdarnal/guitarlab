@@ -44,6 +44,14 @@ For Google, set the authorized JavaScript origin to `https://guitarlab.leenusdar
 
 Add each configured provider's client ID and secret as Cloudflare Worker secrets. Never paste credential values into chat or repository files. OAuth sign-in does not require an email delivery provider.
 
+## Account and learner profile behavior
+
+The account profile is part of the Better Auth identity record. A signed-in learner may edit the display name and an optional HTTPS profile image URL. The email address remains read-only because it is managed by Google or GitHub. GuitarLab does not upload or host profile images.
+
+The learner profile is a separate, device-local record in the existing IndexedDB store. Learners can edit their instrument, experience level, playing hand, tuning, goals, practice target and lesson preferences whether signed in or using guest mode. Changes use the existing validated local-storage path and remain in versioned local backups.
+
+Signing in, updating the account profile or signing out does not move, attach, reset or upload learner data. Account profile changes are persisted by Better Auth; learner preferences and practice data are persisted locally. Cloud learner-data sync is not supported by this setup.
+
 ## Migration and verification
 
 The production auth migration workflow is manually dispatched from `main`, requires explicit confirmation, checks CI for the selected commit, verifies Cloudflare token status and D1 access, applies pending migrations, and checks the resulting tables. Review the pending migration list and confirm the target is production before authorizing the workflow. Do not run migrations or deploy solely because credentials were added.
