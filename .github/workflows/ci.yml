@@ -168,7 +168,9 @@ jobs:
               scripts/test-local-db.mjs|scripts/browser-acceptance.mjs|\
               scripts/curriculum-browser-acceptance.mjs|scripts/music-tools-browser-acceptance.mjs|\
               scripts/accessibility-browser-acceptance.mjs|scripts/auth-browser-acceptance.mjs|scripts/install-git-hooks.mjs|scripts/evaluate-pitch-recordings.mjs|scripts/report-built-css.mjs)
-                changed_files+=("$file")
+                if [ -f "$file" ]; then
+                  changed_files+=("$file")
+                fi
                 ;;
             esac
           done < <(git diff --name-only "$BASE_SHA" "$GITHUB_SHA")
@@ -204,10 +206,6 @@ jobs:
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         id: production-build
         run: npm run build
-
-      - name: Validate Cloudflare preview deployment configuration
-        if: ${{ !cancelled() && steps.production-build.outcome == 'success' }}
-        run: npx wrangler deploy --config wrangler.preview.jsonc --dry-run
 
       - name: Validate Cloudflare production deployment configuration
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' }}
