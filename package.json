@@ -12,8 +12,8 @@
     "preview": "wrangler dev",
     "check": "wrangler types && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "lint": "eslint .",
-    "format": "prettier --write \"**/*.{js,json,ts}\" \"wrangler*.jsonc\" \"scripts/*.mjs\"",
-    "format:check": "prettier --check \"**/*.{js,json,ts}\" \"wrangler*.jsonc\" \"scripts/*.mjs\"",
+    "format": "node scripts/format-write.mjs",
+    "format:check": "node scripts/format-check.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "curriculum:validate": "node scripts/validate-curriculum.mjs && node scripts/validate-practice-taxonomy.mjs",
@@ -36,7 +36,9 @@
     "db:auth:migrate:local": "wrangler d1 migrations apply AUTH_DB --local",
     "db:auth:test:local": "node scripts/test-auth-db.mjs",
     "css:report": "node scripts/report-built-css.mjs",
-    "test:auth-browser": "node scripts/auth-browser-acceptance.mjs"
+    "test:auth-browser": "node scripts/auth-browser-acceptance.mjs",
+    "format:check:files": "node scripts/prettier-files.mjs",
+    "validate:local": "npm run format:check && npm run lint && npm run check && npm run test:run && npm run build"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^8.0.2",
