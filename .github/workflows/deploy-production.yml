@@ -197,11 +197,15 @@ jobs:
           }
           const workerVersionTag = `guitarlab-prod-${commitSha}-${runId}-${runAttempt}`;
           const workerVersionMessage = `GuitarLab production source ${commitSha} (workflow ${runId}, attempt ${runAttempt})`;
+          const commitUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${commitSha}`;
+          const workflowRunUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${runId}/attempts/${runAttempt}`;
           const evidence = {
             worker: deployment.worker_name,
             versionId: deployment.version_id,
             deployedAt: deployment.timestamp,
             commitSha,
+            commitUrl,
+            workflowRunUrl,
             workerVersionTag,
             workerVersionMessage,
             deploymentUrls: deployment.targets,
@@ -226,6 +230,8 @@ jobs:
             versionId: evidence.versionId,
             deployedAt: evidence.deployedAt,
             commitSha: evidence.commitSha,
+            commitUrl: evidence.commitUrl,
+            workflowRunUrl: evidence.workflowRunUrl,
             workerVersionTag: evidence.workerVersionTag,
             workerVersionMessage: evidence.workerVersionMessage,
             deploymentUrls: evidence.deploymentUrls,
