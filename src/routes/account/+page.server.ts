@@ -3,7 +3,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ locals, setHeaders }) => {
   setHeaders({ 'Cache-Control': 'private, no-store' });
-  if (!locals.authUser) {
+  if (!locals.authUser || !locals.authSession) {
     redirect(303, '/login');
   }
 
@@ -11,7 +11,11 @@ export const load: PageServerLoad = ({ locals, setHeaders }) => {
     account: {
       name: locals.authUser.name,
       email: locals.authUser.email,
-      emailVerified: locals.authUser.emailVerified
+      emailVerified: locals.authUser.emailVerified,
+      image: locals.authUser.image ?? null
+    },
+    session: {
+      expiresAt: locals.authSession.expiresAt.toISOString()
     }
   };
 };
