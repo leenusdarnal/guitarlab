@@ -944,7 +944,7 @@ try {
   assert.ok(csp, 'Content-Security-Policy must be present');
   const cspDirectives = new Map(
     csp.split(';').map((directive) => {
-      const [name, ...values] = directive.trim().split(/\\s+/);
+      const [name, ...values] = directive.trim().split(/\s+/);
       return [name, new Set(values)];
     })
   );
