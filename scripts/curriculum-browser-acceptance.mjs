@@ -220,9 +220,9 @@ try {
     await page
       .getByRole('radio', { name: new RegExp(presentation.label) })
       .check();
-    await page.getByRole('button', { name: 'Save my preferences' }).click();
+    await page.getByRole('button', { name: 'Save learner profile' }).click();
     await page
-      .getByText('Your preferences have been saved privately on this device.', {
+      .getByText('Your learner profile has been saved privately on this device.', {
         exact: true
       })
       .waitFor();
