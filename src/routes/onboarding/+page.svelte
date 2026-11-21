@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import type { PageProps } from './$types';
   import Icon from '../../lib/components/Icon.svelte';
   import Brand from '../../lib/components/Brand.svelte';
   import {
@@ -13,6 +14,8 @@
     loadActiveLearnerProfile,
     saveActiveLearnerPreferences
   } from '../../lib/storage/indexeddb';
+
+  let { data }: PageProps = $props();
 
   let preferences = $state<ProfilePreferences>(createEmptyProfilePreferences());
   let message = $state('');
@@ -34,7 +37,7 @@
       })
       .catch(() => {
         if (active) {
-          message = 'Local storage is unavailable. Your choices have not been saved.';
+          message = 'Local storage is unavailable. Your learner profile has not been saved.';
         }
       })
       .finally(() => {
@@ -74,6 +77,26 @@
     return true;
   }
 
+  function setInstrument(event: Event) {
+    const value = (event.currentTarget as HTMLSelectElement).value;
+    preferences.instrument = value === '' ? null : value as NonNullable<ProfilePreferences['instrument']>;
+  }
+
+  function setStartingPoint(event: Event) {
+    const value = (event.currentTarget as HTMLSelectElement).value;
+    preferences.startingPoint = value === '' ? null : value as NonNullable<ProfilePreferences['startingPoint']>;
+  }
+
+  function setHandedness(event: Event) {
+    const value = (event.currentTarget as HTMLSelectElement).value;
+    preferences.handedness = value === '' ? null : value as NonNullable<ProfilePreferences['handedness']>;
+  }
+
+  function updateTuning(event: Event) {
+    const value = (event.currentTarget as HTMLInputElement).value;
+    preferences.tuning = value.trim() ? value : null;
+  }
+
   function clearSaveConfirmation() {
     hasSavedPreferences = false;
     message = '';
@@ -94,10 +117,10 @@
       const saved = await saveActiveLearnerPreferences(result.data);
       preferences = saved.preferences;
       hasSavedPreferences = true;
-      message = 'Your preferences have been saved privately on this device.';
+      message = 'Your learner profile has been saved privately on this device.';
     } catch {
       hasSavedPreferences = false;
-      message = 'Could not save your preferences. Your existing local profile has been left unchanged.';
+      message = 'Could not save your learner profile. Your existing local data has been left unchanged.';
     } finally {
       isSaving = false;
     }
@@ -105,20 +128,65 @@
 </script>
 
 <svelte:head>
-  <title>Learner setup — GuitarLab</title>
-  <meta name="description" content="Choose musical goals and a daily practice target for GuitarLab. Every choice is optional." />
+  <title>Learner profile — GuitarLab</title>
+  <meta name="description" content="Manage your guitar experience, musical goals and practice preferences. Your learner profile stays on this device." />
 </svelte:head>
 
 <main id="main-content" tabindex="-1" class="setup-page">
-  <header><a href={resolve('/')} class="brand"><Brand size="small" /></a><a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a></header>
+  <header>
+      <a href={resolve('/')} class="brand"><Brand size="small" /></a>
+      <div class="page-actions">
+        {#if data.account}
+          <a href={resolve('/account')} class="account-profile-link">Account settings</a>
+        {/if}
+        <a href={resolve('/')} class="skip"><Icon name="arrow-left" size={14} /> Back to Today</a>
+      </div>
+    </header>
   <section class="setup-card">
-    <div class="eyebrow">YOUR LEARNING PROFILE · OPTIONAL SETUP</div>
+    <div class="eyebrow">YOUR LEARNER PROFILE · PRIVATE TO THIS DEVICE</div>
     <h1>Make GuitarLab <em>yours.</em></h1>
-    <p class="intro">Choose a musical direction and a realistic practice target. Only choices that affect your lessons or daily plan appear here. You can skip either choice or return to update them later.</p>
+    <p class="intro">Keep your guitar setup, experience, musical goals and practice preferences up to date. Everything here is optional and remains in this browser, whether you use GuitarLab as a guest or while signed in.</p>
 
     <form onsubmit={submitSetup} onchange={clearSaveConfirmation}>
       <fieldset>
-        <legend>01 · What would you like to work towards?</legend>
+        <legend>01 · Your guitar setup and experience</legend>
+        <div class="profile-fields">
+          <label>
+            <span>Instrument</span>
+            <select value={preferences.instrument ?? ''} onchange={setInstrument}>
+              <option value="">Not set</option>
+              <option value="acoustic">Acoustic guitar</option>
+              <option value="electric">Electric guitar</option>
+              <option value="classical">Classical guitar</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>
+            <span>Current experience</span>
+            <select value={preferences.startingPoint ?? ''} onchange={setStartingPoint}>
+              <option value="">Not set</option>
+              <option value="fresh-beginner">New to guitar</option>
+              <option value="some-experience">Some experience</option>
+              <option value="placement-needed">Help me find my level</option>
+            </select>
+          </label>
+          <label>
+            <span>Playing hand</span>
+            <select value={preferences.handedness ?? ''} onchange={setHandedness}>
+              <option value="">Not set</option>
+              <option value="right">Right-handed</option>
+              <option value="left">Left-handed</option>
+            </select>
+          </label>
+          <label>
+            <span>Preferred tuning <span class="optional">(optional)</span></span>
+            <input type="text" maxlength="80" placeholder="e.g. E–A–D–G–B–E" value={preferences.tuning ?? ''} oninput={updateTuning} />
+          </label>
+        </div>
+        <p class="preference-effect">These details are saved to your learner profile for future personalization. They do not yet change lesson content or recommendations. Leave anything blank when you are unsure.</p>
+      </fieldset>
+      <fieldset>
+        <legend>02 · What would you like to work towards?</legend>
         <div class="choices">
           {#each goalOptions as item (item.value)}
             <label class:chosen={preferences.goals.includes(item.value)}><input type="checkbox" checked={preferences.goals.includes(item.value)} onchange={(event)=>{preferences.goals=event.currentTarget.checked?[...preferences.goals,item.value as ProfilePreferences['goals'][number]]:preferences.goals.filter(goal=>goal!==item.value)}}/><span>{item.label}</span></label>
@@ -127,7 +195,7 @@
         <p class="preference-effect">These goals shape the musical application suggestions in your daily plan.</p>
       </fieldset>
       <fieldset>
-        <legend>02 · How long would you like to practise?</legend>
+        <legend>03 · How long would you like to practise?</legend>
         <div class="choices four">
           {#each practiceOptions as minutes (minutes)}
             <label class:chosen={preferences.practiceMinutes===minutes}><input type="radio" name="minutes" value={minutes} checked={preferences.practiceMinutes===minutes} onchange={()=>{preferences.practiceMinutes=minutes;customPracticeMinutes=String(minutes);customPracticeTouched=false;customPracticeError='';}}/><span>{minutes} min</span></label>
@@ -142,7 +210,7 @@
         </p>
       </fieldset>
       <fieldset>
-        <legend>03 · How should a lesson be presented?</legend>
+        <legend>04 · How should a lesson be presented?</legend>
         <div class="choices presentation-choices">
           {#each lessonPresentationOptions as item (item.value)}
             <label class:chosen={(preferences.lessonPresentation ?? 'balanced') === item.value}>
@@ -164,18 +232,18 @@
           This changes the order of teaching sections, not the learning goals or content. Every lesson keeps its full text, exercises and checkpoints.
         </p>
       </fieldset>
-      <div class="form-actions"><button type="submit" disabled={isLoading || isSaving}>{isLoading ? 'Loading profile…' : isSaving ? 'Saving…' : 'Save my preferences'} <Icon name="arrow-right" size={14} /></button><a href={resolve('/')}>Return to Today</a></div>
+      <div class="form-actions"><button type="submit" disabled={isLoading || isSaving}>{isLoading ? 'Loading profile…' : isSaving ? 'Saving…' : 'Save learner profile'} <Icon name="arrow-right" size={14} /></button><a href={resolve('/')}>Return to Today</a></div>
       {#if message}<p class="message" role="status">{message}</p>{/if}
       {#if hasSavedPreferences}
         <a class="return-today" href={resolve('/')}>Go to Today <Icon name="arrow-right" size={14} /></a>
       {/if}
     </form>
-    <p class="privacy-note">Privacy by design: your profile and preferences are stored in this browser only. They are not uploaded or synced to a server. No account or microphone permission is required.</p>
+    <p class="privacy-note">Privacy by design: your learner profile and practice history stay in this browser. They are not attached to your Google or GitHub account or synced to a server. No account or microphone permission is required.</p>
   </section>
 </main>
 
 <style>
-  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:inline-flex;align-items:center;text-decoration:none}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.custom-practice{display:grid;gap:7px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:650}.custom-practice input{width:100%;max-width:220px;min-height:44px;border:1px solid var(--border);border-radius:9px;padding:8px 11px;background:var(--surface-raised);color:var(--text);font:inherit}.custom-practice-help{min-height:20px;margin:7px 0 0;color:var(--muted);font-size:11px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button :global(.icon){margin-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.preference-effect{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.6}.return-today{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:11px 16px;border:1px solid var(--primary);border-radius:10px;color:var(--primary);font-size:12px;font-weight:750}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
+  .setup-page{max-width:850px;margin:0 auto;padding:25px 22px 70px}.setup-page header{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}.brand{display:inline-flex;align-items:center;text-decoration:none}.page-actions{display:flex;align-items:center;gap:16px}.account-profile-link{color:var(--primary);font-size:12px;font-weight:750}.skip{font-size:12px;color:var(--muted)}.setup-card{border:1px solid var(--border);border-radius:22px;background:var(--surface);padding:clamp(22px,5vw,48px)}.eyebrow{font-size:10px;letter-spacing:1.3px;color:var(--muted);font-weight:750}.setup-card h1{font:500 clamp(34px,6vw,48px)/1.1 Georgia,serif;letter-spacing:-1.5px;margin:13px 0}.setup-card h1 em{color:var(--primary)}.intro{color:var(--muted);font-size:13px;line-height:1.7;max-width:600px;margin:0 0 32px}fieldset{border:0;border-top:1px solid var(--border);padding:23px 0 0;margin:0 0 25px}legend{padding:0 0 14px;font-size:13px;font-weight:700}.profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.profile-fields label{display:grid;gap:7px;min-width:0;color:var(--muted);font-size:12px;font-weight:650}.profile-fields label>span{color:var(--text)}.profile-fields .optional{color:var(--muted);font-weight:500}.profile-fields select,.profile-fields input{width:100%;min-width:0;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font:inherit;font-size:13px}.profile-fields select:focus-visible,.profile-fields input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.four{grid-template-columns:repeat(4,minmax(0,1fr))}.choices label{display:flex;align-items:center;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:12px;cursor:pointer}.choices label.chosen{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 9%,var(--surface));color:var(--text)}.choices input{accent-color:var(--primary)}select{width:100%;min-height:46px;border:1px solid var(--border);border-radius:10px;padding:0 12px;background:var(--surface-raised);color:var(--text);font-size:12px}.custom-practice{display:grid;gap:7px;margin-top:14px;color:var(--muted);font-size:12px;font-weight:650}.custom-practice input{width:100%;max-width:220px;min-height:44px;border:1px solid var(--border);border-radius:9px;padding:8px 11px;background:var(--surface-raised);color:var(--text);font:inherit}.custom-practice-help{min-height:20px;margin:7px 0 0;color:var(--muted);font-size:11px}.form-actions{display:flex;align-items:center;gap:18px;margin-top:32px}.form-actions button:disabled{opacity:.65;cursor:wait}.form-actions button{border:0;border-radius:10px;padding:13px 17px;background:var(--primary);color:var(--primary-ink);font-weight:750;font-size:12px;cursor:pointer}.form-actions button :global(.icon){margin-left:12px}.form-actions>a{font-size:12px;color:var(--muted)}.message{padding:12px;background:var(--surface-raised);border-radius:9px;font-size:12px;line-height:1.6}.preference-effect{margin:10px 0 0;color:var(--muted);font-size:11px;line-height:1.6}.return-today{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:12px;padding:11px 16px;border:1px solid var(--primary);border-radius:10px;color:var(--primary);font-size:12px;font-weight:750}.privacy-note{border-top:1px solid var(--border);padding-top:18px;margin:25px 0 0;color:var(--muted);font-size:11px;line-height:1.7}@media(max-width:520px){.profile-fields{grid-template-columns:1fr}.page-actions{gap:12px}.choices,.choices.four{grid-template-columns:1fr 1fr}.setup-page header{margin-bottom:28px}.form-actions{align-items:stretch;flex-direction:column}.form-actions button{width:100%}}
 
   .presentation-choices label {
     min-height: 82px;

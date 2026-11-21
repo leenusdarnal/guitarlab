@@ -283,7 +283,7 @@
     </nav>
     <div class="sidebar-bottom">
       <div class="offline-indicator"><span></span> Your data stays on this device</div>
-      <a class="nav-link" href={resolve('/onboarding')}><span class="nav-icon" aria-hidden="true"><Icon name="settings" size={18} /></span> Learning preferences</a>
+      <a class="nav-link" href={resolve('/onboarding')}><span class="nav-icon" aria-hidden="true"><Icon name="settings" size={18} /></span> Learner profile</a>
       <a class="nav-link" href={resolve('/settings/data')}><span class="nav-icon" aria-hidden="true"><Icon name="download" size={18} /></span> Data &amp; backups</a>
     </div>
   </aside>
@@ -302,7 +302,7 @@
           </select>
         </label>
         <span class="status-pill"><i></i> Local-first learning</span>
-        <a class="avatar" href={resolve('/onboarding')} aria-label="Learning preferences"><Icon name="external-link" size={16} /></a>
+        <a class="avatar" href={resolve('/onboarding')} aria-label="Learner profile"><Icon name="external-link" size={16} /></a>
       </div>
     </header>
 
@@ -311,7 +311,7 @@
         <div><div class="eyebrow">YOUR PERSONAL PRACTICE SPACE</div><h1>Make room for <em>music.</em></h1><p>A clear next step, a flexible pace and progress based on what you can demonstrate.</p></div>
         <div class="welcome-actions">
           <a class="primary-button" href={resolve('/learn')}>Browse all lessons <Icon name="arrow-right" size={14} /></a>
-          <a class="secondary-button" href={resolve('/onboarding')}>Learning preferences <Icon name="external-link" size={13} /></a>
+          <a class="secondary-button" href={resolve('/onboarding')}>Learner profile <Icon name="external-link" size={13} /></a>
         </div>
       </section>
 
@@ -325,7 +325,7 @@
             <button type="button" class="secondary-button" onclick={() => void loadDashboard()}>
               Try again
             </button>
-            <a class="text-link" href={resolve('/onboarding')}>Review your profile preferences <Icon name="external-link" size={13} /></a>
+            <a class="text-link" href={resolve('/onboarding')}>Review your learner profile <Icon name="external-link" size={13} /></a>
           </div>
         </div>
       {:else if dashboard}
@@ -353,7 +353,7 @@
                 One-day override: {selectedPracticeMinutes ?? 'choose a duration'} min. Your saved {dashboard.practiceMinutes}-minute target is unchanged.
               {/if}
             {:else}
-              This is a one-day plan. Save a usual duration in Learning preferences when you are ready.
+              This is a one-day plan. Save a usual duration in your learner profile when you are ready.
             {/if}
           </p>
           <div class="duration-controls" role="group" aria-label="Today's practice duration">

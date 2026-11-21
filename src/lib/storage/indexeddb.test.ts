@@ -569,16 +569,26 @@ describe('local learner profile persistence', () => {
       profile.id,
       {
         ...profile.preferences,
-        instrument: 'acoustic',
-        startingPoint: 'fresh-beginner',
-        goals: ['all-round-musician'],
-        practiceMinutes: 20
+        instrument: 'electric',
+        handedness: 'left',
+        tuning: 'D-A-D-G-A-D',
+        startingPoint: 'some-experience',
+        goals: ['rock-blues', 'singer-songwriter'],
+        practiceMinutes: 40
       },
       200
     );
 
-    expect(updated?.preferences.instrument).toBe('acoustic');
-    expect(updated?.preferences.practiceMinutes).toBe(20);
+    expect(updated?.id).toBe(profile.id);
+    expect(updated?.preferences.instrument).toBe('electric');
+    expect(updated?.preferences.handedness).toBe('left');
+    expect(updated?.preferences.tuning).toBe('D-A-D-G-A-D');
+    expect(updated?.preferences.startingPoint).toBe('some-experience');
+    expect(updated?.preferences.goals).toEqual([
+      'rock-blues',
+      'singer-songwriter'
+    ]);
+    expect(updated?.preferences.practiceMinutes).toBe(40);
     expect(updated?.updatedAt).toBe(200);
     expect(
       await repositories.mastery.find(

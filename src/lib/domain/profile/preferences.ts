@@ -3,8 +3,8 @@ import { practiceRoutineSchema } from '../learning/practice-routine';
 
 export const profilePreferencesSchema = z.object({
   schemaVersion: z.literal(1),
-  // Compatibility-only values: preserve these fields when older local profiles or backups
-  // are re-saved. They are not offered in setup until an active feature consumes them.
+  // Learner-declared instrument and setup context. Persist these in the local profile;
+  // they do not currently alter curriculum content or recommendations.
   instrument: z.enum(['acoustic', 'electric', 'classical', 'other']).nullable(),
   handedness: z.enum(['right', 'left']).nullable(),
   tuning: z.string().trim().min(1).max(80).nullable(),

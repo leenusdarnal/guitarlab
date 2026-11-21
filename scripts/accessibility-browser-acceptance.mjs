@@ -107,6 +107,19 @@ async function navigateAndWaitFor(
   return response;
 }
 
+async function waitForAppearancePreference(page, expected) {
+  await page.waitForFunction((preference) => {
+    const select = document.querySelector(
+      'header.global-nav select[aria-label="Appearance"]'
+    );
+    return (
+      select instanceof HTMLSelectElement &&
+      select.value === preference &&
+      document.documentElement.dataset.themePreference === preference
+    );
+  }, expected);
+}
+
 function assertResponseSecurityHeaders(response) {
   const headers = response?.headers() ?? {};
 
@@ -146,6 +159,15 @@ function assertResponseSecurityHeaders(response) {
   requireSource('connect-src', "'self'");
   requireSource('form-action', "'self'");
   requireSource('img-src', "'self'");
+  requireSource('img-src', 'https://avatars.githubusercontent.com');
+  requireSource('img-src', 'https://lh3.googleusercontent.com');
+  requireSource('img-src', 'https://lh4.googleusercontent.com');
+  requireSource('img-src', 'https://lh5.googleusercontent.com');
+  requireSource('img-src', 'https://lh6.googleusercontent.com');
+  assert.ok(
+    !(directives.get('img-src') ?? []).includes('https:'),
+    'CSP must not allow arbitrary HTTPS image hosts.'
+  );
   requireSource('object-src', "'none'");
   requireSource('frame-ancestors', "'none'");
   requireSource('script-src', "'self'");
@@ -338,6 +360,15 @@ try {
         assert.equal(await moreTrigger.getAttribute('aria-expanded'), 'true');
         const moreNavigation = page.locator('#mobile-more-navigation');
         await moreNavigation.waitFor({ state: 'visible' });
+        await page.waitForFunction(() => {
+          const firstDestination = document.querySelector(
+            '#mobile-more-navigation a'
+          );
+          return (
+            firstDestination !== null &&
+            document.activeElement === firstDestination
+          );
+        });
         assert.equal(
           await moreNavigation
             .locator('a')
@@ -821,6 +852,7 @@ try {
       origin + '/learn',
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, theme);
     const firstFrameTheme = await page.evaluate(() => ({
       applied: document.documentElement.dataset.theme,
       firstFrame: window.__guitarlabThemeAtFirstFrame,
@@ -886,6 +918,7 @@ try {
       origin,
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, 'dark');
     const dashboardAppearance = page.locator(
       'header.global-nav select[aria-label="Appearance"]:visible'
     );
@@ -912,6 +945,7 @@ try {
       origin + '/practice',
       'header.global-nav select[aria-label="Appearance"]'
     );
+    await waitForAppearancePreference(page, 'light');
     const sharedAppearance = page.locator(
       'header.global-nav select[aria-label="Appearance"]'
     );
