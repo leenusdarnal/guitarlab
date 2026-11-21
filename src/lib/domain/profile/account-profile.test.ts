@@ -16,30 +16,39 @@ describe('account profile update contract', () => {
 
   it('accepts clearing a previously configured avatar', () => {
     expect(
-      accountProfileUpdateSchema.parse({ name: 'Learner', image: null })
+      accountProfileUpdateSchema.parse({
+        name: 'Learner',
+        image: null
+      })
     ).toEqual({ name: 'Learner', image: null });
   });
 
   it('rejects blank or oversized display names', () => {
-    expect(
-      accountProfileUpdateSchema.safeParse({ name: '   ', image: null }).success
-    ).toBe(false);
-    expect(
-      accountProfileUpdateSchema.safeParse({
-        name: 'x'.repeat(81),
-        image: null
-      }).success
-    ).toBe(false);
+    const blankName = accountProfileUpdateSchema.safeParse({
+      name: '   ',
+      image: null
+    });
+    const oversizedName = accountProfileUpdateSchema.safeParse({
+      name: 'x'.repeat(81),
+      image: null
+    });
+
+    expect(blankName.success).toBe(false);
+    expect(oversizedName.success).toBe(false);
   });
 
-  it('rejects insecure, malformed and non-HTTPS avatar URLs', () => {
+  it('rejects insecure, malformed and credential-bearing avatar URLs', () => {
     for (const image of [
       'http://example.test/avatar.png',
       'javascript:alert(1)',
-      'not a URL'
+      'not a URL',
+      'https://user:secret@example.test/avatar.png'
     ]) {
       expect(
-        accountProfileUpdateSchema.safeParse({ name: 'Learner', image }).success
+        accountProfileUpdateSchema.safeParse({
+          name: 'Learner',
+          image
+        }).success
       ).toBe(false);
     }
   });
