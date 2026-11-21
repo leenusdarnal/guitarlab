@@ -1,10 +1,8 @@
 # Copy this file to .dev.vars and replace every blank value. Never commit real values.
 BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:8787
-RESEND_API_KEY=
-AUTH_FROM_EMAIL=
 
-# Optional social sign-in providers (configure at least one for passwordless OAuth)
+# Optional social sign-in providers; configure at least one for OAuth sign-in.
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 GITHUB_CLIENT_ID=

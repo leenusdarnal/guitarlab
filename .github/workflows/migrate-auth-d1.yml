@@ -3,15 +3,8 @@ name: Migrate GuitarLab auth D1
 on:
   workflow_dispatch:
     inputs:
-      target_environment:
-        description: Select the isolated authentication database to migrate
-        required: true
-        type: choice
-        options:
-          - preview
-          - production
       confirm_migrations:
-        description: Confirm applying pending auth migrations to the selected remote database
+        description: Confirm applying pending auth migrations to production
         required: true
         type: boolean
         default: false
@@ -21,134 +14,90 @@ permissions:
   checks: read
 
 concurrency:
-  group: guitarlab-auth-d1-${{ inputs.target_environment }}
+  group: guitarlab-auth-d1-production
   cancel-in-progress: false
 
 jobs:
   migrate:
-    name: Apply and verify ${{ inputs.target_environment }} auth database migrations
+    name: Apply and verify production auth migrations
     if: github.ref == 'refs/heads/main' && inputs.confirm_migrations
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment:
-      name: ${{ inputs.target_environment }}
+      name: production
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
     steps:
-      - name: Checkout selected main commit
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
 
-      - name: Ensure selected commit is still the main tip
-        shell: bash
+      - name: Ensure selected commit is still main tip
         run: |
           main_sha="$(git ls-remote origin refs/heads/main | cut -f1)"
-          if [[ -z "$main_sha" || "$main_sha" != "$GITHUB_SHA" ]]; then
-            echo "The selected commit is no longer the current main branch tip."
-            echo "Selected: $GITHUB_SHA"
-            echo "Current main: $main_sha"
+          test -n "$main_sha" && test "$main_sha" = "$GITHUB_SHA" || {
+            echo "Selected commit is no longer the current main tip."
             exit 1
-          fi
+          }
 
       - name: Require successful CI for this exact commit
         env:
           GH_TOKEN: ${{ github.token }}
-        shell: bash
         run: |
           checks="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100")"
-          if ! jq -e --arg sha "$GITHUB_SHA" '
+          jq -e --arg sha "$GITHUB_SHA" '
             def passed($name):
-              ([
-                .check_runs[]
-                | select(.head_sha == $sha and .name == $name)
-              ]
-              | sort_by(.started_at // .created_at // "")
-              | last // {}) as $latest
-              | $latest.status == "completed"
-                and $latest.conclusion == "success";
+              ([.check_runs[] | select(.head_sha == $sha and .name == $name)]
+               | sort_by(.started_at // .created_at // "") | last // {}) as $latest
+              | $latest.status == "completed" and $latest.conclusion == "success";
             passed("Validate application and curriculum")
             and passed("Check Node.js 26 compatibility")
-          ' <<< "$checks" >/dev/null; then
-            echo "Required CI has not passed for $GITHUB_SHA. No migrations were applied."
+          ' <<< "$checks" >/dev/null || {
+            echo "Required CI has not passed. No migrations were applied."
             exit 1
-          fi
+          }
 
       - name: Verify Cloudflare credentials
-        shell: bash
         run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "Missing environment secret: CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "Missing production CLOUDFLARE_API_TOKEN"; exit 1; }
+          [[ "$CLOUDFLARE_ACCOUNT_ID" =~ ^[a-fA-F0-9]{32}$ ]] || {
+            echo "Set the production CLOUDFLARE_ACCOUNT_ID."
             exit 1
-          fi
-          if [[ ! "$CLOUDFLARE_ACCOUNT_ID" =~ ^[a-fA-F0-9]{32}$ ]]; then
-            echo "Set the environment variable CLOUDFLARE_ACCOUNT_ID."
-            exit 1
-          fi
+          }
 
-      - name: Set up Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
 
-      - name: Select the exact environment database and config
-        shell: bash
+      - name: Verify active token and production D1 access
         run: |
-          case "$TARGET_ENVIRONMENT" in
-            preview)
-              echo "D1_NAME=guitarlab-auth-preview" >> "$GITHUB_ENV"
-              echo "WRANGLER_CONFIG=wrangler.preview.jsonc" >> "$GITHUB_ENV"
-              ;;
-            production)
-              echo "D1_NAME=guitarlab-auth-production" >> "$GITHUB_ENV"
-              echo "WRANGLER_CONFIG=wrangler.production.jsonc" >> "$GITHUB_ENV"
-              ;;
-            *)
-              echo "Unsupported target environment."
-              exit 1
-              ;;
-          esac
-        env:
-          TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
-
-      - name: Verify Cloudflare API token and selected D1 access
-        shell: bash
-        run: |
-          token_check="$(curl --fail --silent --show-error \
-            --connect-timeout 10 --max-time 30 \
+          token_check="$(curl --fail --silent --show-error --connect-timeout 10 --max-time 30 \
             --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             "https://api.cloudflare.com/client/v4/user/tokens/verify")"
-          if ! jq -e '.success == true and .result.status == "active"' <<< "$token_check" >/dev/null; then
-            echo "Cloudflare API token verification failed or the token is not active."
+          jq -e '.success == true and .result.status == "active"' <<< "$token_check" >/dev/null || {
+            echo "Cloudflare token is inactive or could not be verified."
             exit 1
-          fi
-          echo "Cloudflare API token is active."
-
-          if ! npx wrangler d1 execute "$D1_NAME" --remote \
-            --config "$WRANGLER_CONFIG" \
-            --command "SELECT 1 AS auth_db_access_check" --json; then
-            echo "The active Cloudflare token cannot query the selected D1 database."
-            echo "Check the environment token's account scope and D1 Write permission."
-            exit 1
-          fi
-          echo "Selected D1 database access verified."
+          }
+          npx wrangler d1 execute guitarlab-auth-production --remote \
+            --config wrangler.production.jsonc \
+            --command "SELECT 1 AS auth_db_access_check" --json
 
       - name: List pending migrations before apply
-        run: npx wrangler d1 migrations list "$D1_NAME" --remote --config "$WRANGLER_CONFIG"
+        run: npx wrangler d1 migrations list guitarlab-auth-production --remote --config wrangler.production.jsonc
 
       - name: Apply pending authentication migrations
-        run: npx wrangler d1 migrations apply "$D1_NAME" --remote --config "$WRANGLER_CONFIG"
+        run: npx wrangler d1 migrations apply guitarlab-auth-production --remote --config wrangler.production.jsonc
 
-      - name: Verify all authentication tables exist
+      - name: Verify authentication tables exist
         run: |
-          npx wrangler d1 execute "$D1_NAME" --remote --config "$WRANGLER_CONFIG" --command "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('user', 'session', 'account', 'verification', 'rateLimit') ORDER BY name" --json
+          npx wrangler d1 execute guitarlab-auth-production --remote --config wrangler.production.jsonc \
+            --command "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('user', 'session', 'account', 'verification', 'rateLimit') ORDER BY name" --json
 
       - name: Verify no migrations remain pending
-        run: npx wrangler d1 migrations list "$D1_NAME" --remote --config "$WRANGLER_CONFIG"
+        run: npx wrangler d1 migrations list guitarlab-auth-production --remote --config wrangler.production.jsonc
