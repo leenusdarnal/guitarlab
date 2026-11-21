@@ -22,6 +22,6 @@ if (managed.length === 0) {
   process.exit(0);
 }
 
-execFileSync('npx', ['prettier', '--check', ...managed], {
+execFileSync('npx', ['prettier', '--check', '--ignore-path', '.prettierignore', ...managed], {
   stdio: 'inherit'
 });
