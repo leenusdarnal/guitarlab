@@ -520,7 +520,11 @@
   .intro,
   .section-copy,
   .backup-panel p,
-  .preview .section-copy,
+  .preview .section-copy {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
   .back-link,
   .primary-button,
   .danger-button,
