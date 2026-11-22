@@ -964,4 +964,39 @@
     font-size: 12px;
     font-weight: 700;
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Skill evidence: descriptions and correction guidance are learner-facing body copy. */
+  .eyebrow,
+  .catalogue-tag,
+  .result-count,
+  dt,
+  .lesson-links span,
+  .lesson-links small,
+  .form-footer span,
+  footer {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  label,
+  .skill-description,
+  dd,
+  .no-results,
+  .no-results button,
+  .mobile-back,
+  .related-actions a,
+  .notice,
+  .error,
+  .status,
+  .status-actions a {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .lesson-links strong {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-heading);
+  }
 </style>
