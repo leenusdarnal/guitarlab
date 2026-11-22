@@ -271,7 +271,7 @@
   .mobile-more-navigation a:hover,.mobile-more-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{min-height:40px;padding:6px 9px;font-size:11px}.account-initials{width:22px;height:22px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{min-height:44px;padding:6px 9px;font-size:11px}.account-initials{width:22px;height:22px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
   @media (min-width: 761px) {
     .global-nav.dashboard-mobile-only {
