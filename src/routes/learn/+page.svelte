@@ -307,4 +307,34 @@
   @media(max-width:760px){.lesson-results,.routes{grid-template-columns:1fr}.finder{padding:17px}.finder-heading,.directory-heading{align-items:flex-start;flex-direction:column}.browse-paths-link,.directory-heading>a{white-space:normal}.directory-heading h2{font-size:25px}.route-card p{min-height:0}}
   @media(max-width:520px){.filters{grid-template-columns:1fr}.stats span{flex:1 1 42%}.results-heading{align-items:flex-start;flex-direction:column}.result-footer{align-items:flex-start;flex-direction:column}.lesson-result-link{min-height:44px}}
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Lesson discovery: clear filter labels, readable explanations, quiet metadata. */
+  .eyebrow,
+  .result-meta,
+  .result-footer > span,
+  .result-count span,
+  .route-kind,
+  .route-count {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .search-label,
+  .filters label,
+  .lesson-result-link,
+  .show-more,
+  .empty-results button,
+  .route-card-footer a {
+    font-size: var(--font-size-supporting);
+  }
+
+  .show-more-wrap p,
+  .all-results-shown,
+  .result-focus,
+  .empty-results p {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>
