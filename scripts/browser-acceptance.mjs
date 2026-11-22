@@ -366,6 +366,7 @@ try {
   await cacheBoundaryPage
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await cacheBoundaryPage.locator('.hero-grid').waitFor();
   await cacheBoundaryContext.close();
 
   // Upgrade a real v1 learner database to v2 without losing learner-owned records.
@@ -377,6 +378,7 @@ try {
   await upgradePage
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await upgradePage.locator('.hero-grid').waitFor();
   await upgradePage.setViewportSize({ width: 390, height: 844 });
   const mobileDashboardOrder = await upgradePage.evaluate(() => {
     const nextStep = document.querySelector('.hero-grid');
@@ -529,6 +531,7 @@ try {
   await upgradePage
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await upgradePage.locator('.hero-grid').waitFor();
   await upgradePage.waitForFunction(async () => {
     const database = await new Promise((resolve, reject) => {
       const request = indexedDB.open('guitarlab-local');
@@ -688,6 +691,7 @@ try {
   await restrictedStoragePage
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await restrictedStoragePage.locator('.hero-grid').waitFor();
   await restrictedStoragePage
     .getByRole('combobox', { name: 'Appearance' })
     .selectOption('dark');
@@ -753,6 +757,7 @@ try {
   await recoveryPage
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await recoveryPage.locator('.hero-grid').waitFor();
   await recoveryPage
     .locator('.storage-warning')
     .getByRole('button', { name: 'Try again' })
@@ -1044,6 +1049,7 @@ try {
   await page
     .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await page.locator('.hero-grid').waitFor();
   await page.locator('#progress-overview summary').click();
   await page.locator('#practice-planner-details summary').click();
   await page.getByRole('heading', { name: 'Year 1 learning path' }).waitFor();
