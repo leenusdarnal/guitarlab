@@ -233,4 +233,12 @@
     font-size: var(--font-size-body);
     line-height: var(--line-height-body);
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Tool privacy and setup notes are instructional copy, not decoration. */
+  .privacy-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>
