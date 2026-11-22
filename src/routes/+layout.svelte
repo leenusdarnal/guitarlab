@@ -59,6 +59,16 @@
     }
   }
 
+  function accountInitials(name: string): string {
+    return name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('') || 'GL';
+  }
+
   function handleThemePreferenceChange(event: Event) {
     const selected = event.currentTarget as HTMLSelectElement;
     if (isThemePreference(selected.value)) {
@@ -122,6 +132,12 @@
     }
   }
 
+  function openLearningPath() {
+    const progressDetails = document.querySelector<HTMLDetailsElement>('#progress-overview');
+    if (progressDetails) progressDetails.open = true;
+    closeMobileMenu();
+  }
+
   function closeMobileMenu() {
     mobileMenuOpen = false;
     mobileMenuTrigger?.focus();
@@ -165,8 +181,13 @@
       </nav>
 
       <div class="global-nav-actions">
-        <a class="account-link" href={resolve(data.account ? '/account' : '/login')}>
-          {data.account ? 'Account' : 'Sign in'}
+        <a class="account-link" href={resolve(data.account ? '/account' : '/login')} aria-label={data.account ? 'Account settings for ' + data.account.name : 'Sign in'}>
+          {#if data.account}
+            <span class="account-initials" aria-hidden="true">{accountInitials(data.account.name)}</span>
+            <span>Account</span>
+          {:else}
+            Sign in
+          {/if}
         </a>
         <label class="theme-control">
           <span class="sr-only">Appearance</span>
@@ -194,7 +215,7 @@
         onclick={closeMobileMenu}
       ><span class="nav-icon" aria-hidden="true"><Icon name="song" size={18} /></span>Songs</a>
       {#if currentPath === '/'}
-        <a href="#learning-path" onclick={closeMobileMenu}><span class="nav-icon" aria-hidden="true"><Icon name="route" size={18} /></span>Learning path</a>
+        <a href="#learning-path" onclick={openLearningPath}><span class="nav-icon" aria-hidden="true"><Icon name="route" size={18} /></span>Learning path</a>
       {/if}
       <a
         href={resolve('/onboarding')}
@@ -235,7 +256,8 @@
   .desktop-primary-navigation a:hover{background:var(--surface);color:var(--text)}
   .desktop-primary-navigation a.active{background:color-mix(in srgb,var(--primary) 13%,var(--surface));color:var(--primary)}
   .global-nav-actions{display:flex;align-items:center;gap:8px;flex:none}
-  .account-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:750;white-space:nowrap}
+  .account-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 13px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:750;white-space:nowrap}
+  .account-initials{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:color-mix(in srgb,var(--primary) 14%,var(--surface-raised));color:var(--primary);font-size:10px;font-weight:850}
   .account-link:hover{border-color:var(--primary);color:var(--primary)}
   .account-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   .theme-control select{min-height:44px;max-width:132px;padding:8px 28px 8px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
@@ -249,7 +271,7 @@
   .mobile-more-navigation a:hover,.mobile-more-navigation a:focus-visible{background:var(--surface-raised)}
   .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{display:none}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{min-height:40px;padding:6px 9px;font-size:11px}.account-initials{width:22px;height:22px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
   @media (min-width: 761px) {
     .global-nav.dashboard-mobile-only {
