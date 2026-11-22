@@ -115,9 +115,9 @@ async function navigateAndWaitFor(
 
 async function waitForAppearancePreference(page, expected) {
   await page.waitForFunction((preference) => {
-    const select = document.querySelector(
-      'header.global-nav select[aria-label="Appearance"]'
-    );
+    const select = Array.from(
+      document.querySelectorAll('header.global-nav select[aria-label="Appearance"]')
+    ).find((element) => element.getClientRects().length > 0);
     return (
       select instanceof HTMLSelectElement &&
       select.value === preference &&
@@ -863,11 +863,12 @@ try {
     }
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await navigateAndWaitFor(
-      page,
-      origin + '/learn',
-      'header.global-nav select[aria-label="Appearance"]'
+    await navigateAndWaitFor(page, origin + '/learn');
+    await page.locator('.mobile-nav-trigger').click();
+    const appearance = page.locator(
+      '#mobile-more-navigation .mobile-theme-control select[aria-label="Appearance"]'
     );
+    await appearance.waitFor({ state: 'visible' });
     await waitForAppearancePreference(page, theme);
     const firstFrameTheme = await page.evaluate(() => ({
       applied: document.documentElement.dataset.theme,
@@ -882,9 +883,6 @@ try {
     );
     assert.equal(firstFrameTheme.preference, theme);
 
-    const appearance = page.locator(
-      'header.global-nav select[aria-label="Appearance"]'
-    );
     assert.equal(await appearance.inputValue(), theme);
     await appearance.selectOption('system');
     assert.equal(
@@ -929,15 +927,13 @@ try {
     );
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await navigateAndWaitFor(
-      page,
-      origin,
-      'header.global-nav select[aria-label="Appearance"]'
-    );
-    await waitForAppearancePreference(page, 'dark');
+    await navigateAndWaitFor(page, origin);
+    await page.locator('.mobile-nav-trigger').click();
     const dashboardAppearance = page.locator(
-      'header.global-nav select[aria-label="Appearance"]:visible'
+      '#mobile-more-navigation .mobile-theme-control select[aria-label="Appearance"]'
     );
+    await dashboardAppearance.waitFor({ state: 'visible' });
+    await waitForAppearancePreference(page, 'dark');
     assert.equal(await dashboardAppearance.inputValue(), 'dark');
     await dashboardAppearance.selectOption('light');
     assert.deepEqual(
@@ -956,15 +952,13 @@ try {
         themeColor: '#F5F4F0'
       }
     );
-    await navigateAndWaitFor(
-      page,
-      origin + '/practice',
-      'header.global-nav select[aria-label="Appearance"]'
-    );
-    await waitForAppearancePreference(page, 'light');
+    await navigateAndWaitFor(page, origin + '/practice');
+    await page.locator('.mobile-nav-trigger').click();
     const sharedAppearance = page.locator(
-      'header.global-nav select[aria-label="Appearance"]'
+      '#mobile-more-navigation .mobile-theme-control select[aria-label="Appearance"]'
     );
+    await sharedAppearance.waitFor({ state: 'visible' });
+    await waitForAppearancePreference(page, 'light');
     assert.equal(
       await sharedAppearance.inputValue(),
       'light',
