@@ -826,4 +826,71 @@
     }
   }
 
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Readability pass: keep instructions and actions out of the metadata scale. */
+  .nav-label,
+  .eyebrow {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .breadcrumb,
+  .status-pill,
+  .neutral-tag,
+  .target-meta,
+  .phase-count {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .planner-heading p,
+  .duration-help,
+  .target-footer,
+  .duration-context,
+  .planner-footer > p,
+  .planner-guardrail,
+  .planner-notice,
+  .planner-empty,
+  .empty-state p,
+  .review-list li,
+  .session-list li,
+  .session-copy small,
+  .backup-reminder p,
+  .section-heading p,
+  .phase-card > p,
+  .path-note,
+  .error-panel p {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .duration-controls button,
+  .planner-primary,
+  .planner-secondary,
+  .target-action,
+  .task-action,
+  .panel-action,
+  .text-link,
+  .phase-action,
+  .backup-reminder-action,
+  .error-actions .secondary-button {
+    font-size: var(--font-size-supporting);
+  }
+
+  .empty-state strong,
+  .fresh-copy h2,
+  .practice-task h3,
+  .backup-reminder h2 {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
+
+  .task-meta,
+  .review-date,
+  .session-duration {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
 </style>
