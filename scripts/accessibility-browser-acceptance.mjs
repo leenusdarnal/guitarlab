@@ -786,7 +786,11 @@ try {
             )
             .filter((fontSize) => fontSize < 16),
           visibleButtons: Array.from(document.querySelectorAll('button'))
-            .filter((button) => button.getClientRects().length > 0)
+            .filter(
+              (button) =>
+                button.getClientRects().length > 0 &&
+                !button.closest('details:not([open])')
+            )
             .map((button) => {
               const labelledBy = button.getAttribute('aria-labelledby');
               const referencedLabel = labelledBy
