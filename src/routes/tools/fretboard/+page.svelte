@@ -1085,7 +1085,11 @@ a:focus-visible {
 
   .controls label,
   .find-panel label,
-  .harmony-control label,
+  .harmony-control label {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
   .find-progress,
   .legend,
   .caged-shape strong,
