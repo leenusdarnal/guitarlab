@@ -285,7 +285,7 @@
     <div class="nav-label">YOUR WORKSPACE</div>
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span class="nav-icon" aria-hidden="true"><Icon name="home" size={18} /></span> Today</a>
-      <a class="nav-link" href={resolve('/learn')}><span class="nav-icon" aria-hidden="true"><Icon name="book-open" size={18} /></span> Lessons</a>
+      <a class="nav-link" href={resolve('/learn')}><span class="nav-icon" aria-hidden="true"><Icon name="book-open" size={18} /></span> Curriculum</a>
       <a class="nav-link" href={resolve('/practice')}><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span> Practice</a>
       <a class="nav-link" href={resolve('/tools')}><span class="nav-icon" aria-hidden="true"><Icon name="toolbox" size={18} /></span> Tools</a>
       <a class="nav-link" href={resolve('/skills')}><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span> Skills</a>
