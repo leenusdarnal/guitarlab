@@ -101,6 +101,12 @@ async function navigateAndWaitFor(
 ) {
   const response = await page.goto(url, { waitUntil: 'load' });
   await page.locator('main#main-content').waitFor({ state: 'visible' });
+  // The main landmark is assigned by afterNavigate and can exist before the
+  // layout has finished client hydration in slower browser engines such as
+  // WebKit. Wait for the root layout's onMount signal before interacting.
+  await page.waitForFunction(
+    () => document.documentElement.dataset.guitarlabReady === 'true'
+  );
   if (readySelector !== 'main#main-content') {
     await page.locator(readySelector).waitFor({ state: 'visible' });
   }
