@@ -82,6 +82,10 @@
   });
 
   onMount(() => {
+    // Mark the layout as ready only after Svelte has hydrated and mounted its
+    // event handlers. Browser acceptance tests use this to avoid racing SSR.
+    document.documentElement.dataset.guitarlabReady = 'true';
+
     const initialPreference = document.documentElement.dataset.themePreference;
     themePreference = isThemePreference(initialPreference) ? initialPreference : 'system';
     applyResolvedTheme(themePreference);
