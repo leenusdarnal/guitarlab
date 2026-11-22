@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 22 November 2026  
-**Audit baseline:** `main` at `c53e84e73c79f1556d45d1826719e702d667f447` (PR #225 merged; main CI run [#45001511596](https://github.com/leenusdarnal/guitarlab/actions/runs/45001511596) was still running at this audit; 22 November 2026)  
+**Audit baseline:** `main` at `c53e84e73c79f1556d45d1826719e702d667f447` (PR #225 merged; post-merge main CI run [#45001511596](https://github.com/leenusdarnal/guitarlab/actions/runs/45001511596) passed all three jobs on this exact SHA; 22 November 2026)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
