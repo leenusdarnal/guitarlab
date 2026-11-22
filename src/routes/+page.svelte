@@ -17,6 +17,7 @@
 
   type ThemePreference = 'system' | 'light' | 'dark';
   type ResolvedTheme = 'dark' | 'light';
+  let { data }: PageProps = $props();
   let themePreference = $state<ThemePreference>('system');
   let dashboard = $state<DashboardSnapshot | null>(null);
   let isLoading = $state(true);
