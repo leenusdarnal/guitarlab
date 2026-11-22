@@ -231,6 +231,14 @@
         <span class="nav-icon" aria-hidden="true"><Icon name="shield-check" size={18} /></span>
         {data.account ? 'Account' : 'Sign in'}
       </a>
+      <label class="mobile-theme-control">
+        <span>Appearance</span>
+        <select aria-label="Appearance" value={themePreference} onchange={handleThemePreferenceChange}>
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
     </nav>
   </header>
 {/if}
@@ -269,9 +277,11 @@
   .mobile-more-navigation a{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--text)}
   .mobile-more-navigation .nav-icon{display:grid;place-items:center;width:20px;flex:none;color:var(--muted)}
   .mobile-more-navigation a:hover,.mobile-more-navigation a:focus-visible{background:var(--surface-raised)}
-  .theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .theme-control select:focus-visible,.mobile-theme-control select:focus-visible,.mobile-nav-trigger:focus-visible,.mobile-more-navigation a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
   @media(max-width:920px){.global-nav-inner{gap:12px}.desktop-primary-navigation{gap:0}.desktop-primary-navigation a{padding-inline:8px;font-size:12px}}
-  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{min-height:44px;padding:6px 9px;font-size:11px}.account-initials{width:22px;height:22px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control select{width:84px;max-width:84px;min-height:44px;padding-inline:6px}}
+  .mobile-theme-control{display:none}
+  .mobile-theme-control select{min-width:112px;min-height:44px;padding:7px 28px 7px 10px;border:1px solid var(--border-strong);border-radius:var(--radius-control);background:var(--surface);color:var(--text);font:inherit;font-size:13px}
+  @media(max-width:760px){.desktop-primary-navigation{display:none}.global-nav-inner{justify-content:space-between;gap:8px;min-height:60px;padding-inline:12px}.global-nav-actions{gap:6px}.account-link{min-height:44px;padding:6px 9px;font-size:11px}.account-initials{width:22px;height:22px}.mobile-nav-trigger{display:inline-flex;gap:6px;padding-inline:9px}.theme-control{display:none}.mobile-theme-control{display:flex;grid-column:1/-1;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px;color:var(--muted);font-size:13px;font-weight:700}}
   @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
   @media (min-width: 761px) {
     .global-nav.dashboard-mobile-only {
