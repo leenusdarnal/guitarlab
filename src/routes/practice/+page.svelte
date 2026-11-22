@@ -2609,4 +2609,29 @@
       text-align: left;
     }
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Practice Studio: instructional notes and feedback remain readable beside session controls. */
+  .top span,
+  .eyebrow,
+  .count,
+  .history-heading > span,
+  .session-meta,
+  .evidence-meta,
+  .history-result-count {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .adaptive-heading .muted,
+  .adaptive-footnote,
+  .adaptive-analytics-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .history-filters label {
+    font-size: var(--font-size-supporting);
+  }
 </style>
