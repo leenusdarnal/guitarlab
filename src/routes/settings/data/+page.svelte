@@ -505,4 +505,36 @@
   td {
     font-size: var(--font-size-metadata);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .eyebrow,
+  .file-name,
+  table,
+  th,
+  td {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .intro,
+  .section-copy,
+  .backup-panel p,
+  .preview .section-copy,
+  .back-link,
+  .primary-button,
+  .danger-button,
+  .file-picker,
+  .reset-label,
+  .status-message,
+  .privacy-note {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  h2,
+  .preview h3 {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
 </style>
