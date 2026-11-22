@@ -99,7 +99,7 @@ async function navigateAndWaitFor(
   url,
   readySelector = 'main#main-content'
 ) {
-  const response = await page.goto(url, { waitUntil: 'domcontentloaded' });
+  const response = await page.goto(url, { waitUntil: 'load' });
   await page.locator('main#main-content').waitFor({ state: 'visible' });
   if (readySelector !== 'main#main-content') {
     await page.locator(readySelector).waitFor({ state: 'visible' });
