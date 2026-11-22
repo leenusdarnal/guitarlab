@@ -364,7 +364,7 @@ try {
   await cacheBoundaryContext.setOffline(false);
   await cacheBoundaryPage.goto(origin, { waitUntil: 'domcontentloaded' });
   await cacheBoundaryPage
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
   await cacheBoundaryContext.close();
 
@@ -375,32 +375,30 @@ try {
   const upgradePage = await upgradeContext.newPage();
   await upgradePage.goto(origin, { waitUntil: 'domcontentloaded' });
   await upgradePage
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
-  await upgradePage.getByText('Your first session is still ahead').waitFor();
   await upgradePage.setViewportSize({ width: 390, height: 844 });
   const mobileDashboardOrder = await upgradePage.evaluate(() => {
-    const plan = document.querySelector('.practice-planner');
-    const nextLesson = document.querySelector('.hero-grid');
-    const overview = document.querySelector('.dashboard-grid');
+    const nextStep = document.querySelector('.hero-grid');
+    const planner = document.querySelector('#practice-planner-details');
+    const progress = document.querySelector('#progress-overview');
     return {
-      planTop: plan?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
-      nextLessonTop:
-        nextLesson?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
-      overviewTop:
-        overview?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      nextStepTop: nextStep?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      plannerTop: planner?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      progressTop: progress?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+      plannerOpen: planner?.open ?? true,
+      progressOpen: progress?.open ?? true,
       documentWidth: document.documentElement.scrollWidth,
       viewportWidth: document.documentElement.clientWidth
     };
   });
   assert.ok(
-    mobileDashboardOrder.planTop < mobileDashboardOrder.nextLessonTop,
-    'Mobile Today must present the editable practice plan before the lesson overview.'
+    mobileDashboardOrder.nextStepTop < mobileDashboardOrder.plannerTop &&
+      mobileDashboardOrder.plannerTop < mobileDashboardOrder.progressTop,
+    'Mobile Today must lead with the next step and place optional details after it.'
   );
-  assert.ok(
-    mobileDashboardOrder.nextLessonTop < mobileDashboardOrder.overviewTop,
-    'Mobile Today must present the next lesson before historical progress panels.'
-  );
+  assert.equal(mobileDashboardOrder.plannerOpen, false, 'Practice planning should be collapsed on first view.');
+  assert.equal(mobileDashboardOrder.progressOpen, false, 'Progress history should be collapsed on first view.');
   assert.equal(
     mobileDashboardOrder.documentWidth,
     mobileDashboardOrder.viewportWidth,
@@ -408,20 +406,19 @@ try {
   );
   await upgradePage.setViewportSize({ width: 1440, height: 1000 });
   const desktopDashboardOrder = await upgradePage.evaluate(() => ({
-    planTop: document
-      .querySelector('.practice-planner')
-      ?.getBoundingClientRect().top,
-    nextLessonTop: document.querySelector('.hero-grid')?.getBoundingClientRect()
-      .top,
-    overviewTop: document
-      .querySelector('.dashboard-grid')
-      ?.getBoundingClientRect().top
+    nextStepTop: document.querySelector('.hero-grid')?.getBoundingClientRect().top,
+    plannerTop: document.querySelector('#practice-planner-details')?.getBoundingClientRect().top,
+    progressTop: document.querySelector('#progress-overview')?.getBoundingClientRect().top,
+    plannerOpen: document.querySelector('#practice-planner-details')?.open ?? true,
+    progressOpen: document.querySelector('#progress-overview')?.open ?? true
   }));
   assert.ok(
-    desktopDashboardOrder.planTop < desktopDashboardOrder.nextLessonTop &&
-      desktopDashboardOrder.nextLessonTop < desktopDashboardOrder.overviewTop,
-    'Desktop Today should retain the same action-first content order.'
+    desktopDashboardOrder.nextStepTop < desktopDashboardOrder.plannerTop &&
+      desktopDashboardOrder.plannerTop < desktopDashboardOrder.progressTop,
+    'Desktop Today should lead with the next step and place optional details after it.'
   );
+  assert.equal(desktopDashboardOrder.plannerOpen, false, 'Practice planning should be collapsed on first view.');
+  assert.equal(desktopDashboardOrder.progressOpen, false, 'Progress history should be collapsed on first view.');
   await upgradePage.evaluate(async () => {
     await new Promise((resolve, reject) => {
       const deletion = indexedDB.deleteDatabase('guitarlab-local');
@@ -530,7 +527,7 @@ try {
   });
   await upgradePage.reload({ waitUntil: 'domcontentloaded' });
   await upgradePage
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
   await upgradePage.waitForFunction(async () => {
     const database = await new Promise((resolve, reject) => {
@@ -689,7 +686,7 @@ try {
   );
   await restrictedStoragePage.goto(origin, { waitUntil: 'domcontentloaded' });
   await restrictedStoragePage
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
   await restrictedStoragePage
     .getByRole('combobox', { name: 'Appearance' })
@@ -754,7 +751,7 @@ try {
     .getByRole('button', { name: 'Try again' })
     .click();
   await recoveryPage
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
   await recoveryPage
     .locator('.storage-warning')
@@ -1045,9 +1042,12 @@ try {
 
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
   await page
-    .getByRole('heading', { name: 'Your journey begins with the foundations.' })
+    .getByRole('heading', { name: 'One step at a time.' })
     .waitFor();
+  await page.locator('#progress-overview summary').click();
+  await page.locator('#practice-planner-details summary').click();
   await page.getByRole('heading', { name: 'Year 1 learning path' }).waitFor();
+  await page.getByText('Your first session is still ahead').waitFor();
   assert.equal(
     await page.locator('.phase-card').count(),
     4,
@@ -1137,6 +1137,7 @@ try {
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'domcontentloaded' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
+  await page.locator('#practice-planner-details summary').click();
   const personalizedReasons = await page
     .locator('.practice-task p')
     .allTextContents();
@@ -1292,8 +1293,8 @@ try {
   assert.equal(new URL(page.url()).hash, '#learning-path');
   await page.locator('#learning-path').waitFor();
   assert.ok(
-    await page.locator('.practice-task').first().isVisible(),
-    'Practice recommendations should remain visible on mobile'
+    await page.locator('.phase-card').first().isVisible(),
+    'Learning path navigation should reveal the curriculum phases on mobile'
   );
 
   // M7.2 adaptive recommendation feedback is local, append-only and evidence-aware.
@@ -1422,7 +1423,10 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
 
-  // Active learners see a quiet backup reminder until a recent download is started.
+  // Active learners can reveal the quiet backup reminder inside progress details.
+  await page.locator('#progress-overview').evaluate((element) => {
+    element.open = true;
+  });
   await page.locator('#backup-reminder').waitFor({ state: 'visible' });
 
   // Backup navigation and export remain available from the learner dashboard.
