@@ -940,6 +940,40 @@ try {
     'camera=(), microphone=(self), geolocation=()'
   );
 
+  // Assert the actual Worker CSP without requiring a brittle exact nonce or
+  // hash value. SvelteKit's auto mode supplies nonces for dynamic responses
+  // and hashes for prerendered output; inline styles remain needed by transitions.
+  const csp = securityHeaders['content-security-policy'];
+  assert.ok(csp, 'Content-Security-Policy must be present');
+  const cspDirectives = new Map(
+    csp.split(';').map((directive) => {
+      const [name, ...values] = directive.trim().split(/\s+/);
+      return [name, new Set(values)];
+    })
+  );
+  const directive = (name) => cspDirectives.get(name) ?? new Set();
+  assert.ok(directive('default-src').has("'self'"));
+  assert.ok(directive('base-uri').has("'self'"));
+  assert.ok(directive('object-src').has("'none'"));
+  assert.ok(directive('frame-ancestors').has("'none'"));
+  assert.ok(directive('form-action').has("'self'"));
+  assert.ok(
+    directive('script-src').has("'self'") &&
+      !directive('script-src').has("'unsafe-inline'"),
+    'Inline JavaScript must remain blocked by CSP'
+  );
+  assert.ok(
+    [...directive('script-src')].some((value) =>
+      /^'nonce-[^']+'$|^'sha256-[^']+'$/.test(value)
+    ),
+    'Dynamic/prerendered inline scripts must be nonce/hash protected'
+  );
+  assert.ok(
+    directive('style-src').has("'self'") &&
+      directive('style-src').has("'unsafe-inline'"),
+    'Inline styles required by Svelte transitions must remain explicitly accounted for'
+  );
+
   // The Tools hub groups all eight destinations by learner task and avoids repeated availability badges.
   await page.goto(`${origin}/tools`, { waitUntil: 'domcontentloaded' });
   await page
