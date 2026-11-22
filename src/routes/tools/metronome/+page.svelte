@@ -672,4 +672,23 @@
     min-height: 44px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .eyebrow,
+  .audio-status,
+  .range-labels,
+  .range-labels small {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .tap-tempo p,
+  .wake-lock-note,
+  .tempo-slider,
+  .field,
+  .field label {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>
