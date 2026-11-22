@@ -364,4 +364,23 @@
     min-height: 48px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .eyebrow,
+  .progress,
+  .capture-state,
+  .target-label,
+  .target-string {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .microphone-permission-note h3,
+  .microphone-permission-note p,
+  .feedback p,
+  .result-state p {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>
