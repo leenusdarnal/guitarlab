@@ -568,7 +568,11 @@
     line-height: 1.4;
   }
 
-  .tuning-guidance p,
+  .tuning-guidance p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
   .microphone-permission-note p,
   .microphone-permission-note h2 {
     font-size: var(--font-size-supporting);
