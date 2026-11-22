@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { resolve } from '$app/paths';
+  import type { PageProps } from './$types';
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
   import { loadActiveLearnerDashboard } from '../lib/storage/indexeddb';
@@ -16,6 +17,7 @@
 
   type ThemePreference = 'system' | 'light' | 'dark';
   type ResolvedTheme = 'dark' | 'light';
+  let { data }: PageProps = $props();
   let themePreference = $state<ThemePreference>('system');
   let dashboard = $state<DashboardSnapshot | null>(null);
   let isLoading = $state(true);
@@ -60,6 +62,16 @@
         })
       : null
   );
+
+  function accountInitials(name: string): string {
+    return name
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('') || 'GL';
+  }
 
   function isThemePreference(value: string | undefined): value is ThemePreference {
     return value === 'system' || value === 'light' || value === 'dark';
@@ -274,12 +286,10 @@
     <nav class="nav-list">
       <a class="nav-link active" href="#today" aria-current="page"><span class="nav-icon" aria-hidden="true"><Icon name="home" size={18} /></span> Today</a>
       <a class="nav-link" href={resolve('/learn')}><span class="nav-icon" aria-hidden="true"><Icon name="book-open" size={18} /></span> Curriculum</a>
+      <a class="nav-link" href={resolve('/practice')}><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span> Practice</a>
       <a class="nav-link" href={resolve('/tools')}><span class="nav-icon" aria-hidden="true"><Icon name="toolbox" size={18} /></span> Tools</a>
-      <a class="nav-link" href="#learning-path"><span class="nav-icon" aria-hidden="true"><Icon name="route" size={18} /></span> Learning path</a>
-      <a class="nav-link" href={resolve('/skills')}><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span> Skill states</a>
-      <a class="nav-link" href="#reviews"><span class="nav-icon" aria-hidden="true"><Icon name="calendar-clock" size={18} /></span> Reviews</a>
-      <a class="nav-link" href={resolve('/practice')}><span class="nav-icon" aria-hidden="true"><Icon name="metronome" size={18} /></span> Practice Studio</a>
-      <a class="nav-link" href="#practice-history"><span class="nav-icon" aria-hidden="true"><Icon name="history" size={18} /></span> Practice history</a>
+      <a class="nav-link" href={resolve('/skills')}><span class="nav-icon" aria-hidden="true"><Icon name="target" size={18} /></span> Skills</a>
+      <a class="nav-link" href={resolve('/repertoire')}><span class="nav-icon" aria-hidden="true"><Icon name="song" size={18} /></span> Songs</a>
     </nav>
     <div class="sidebar-bottom">
       <div class="offline-indicator"><span></span> Your data stays on this device</div>
@@ -302,16 +312,20 @@
           </select>
         </label>
         <span class="status-pill"><i></i> Local-first learning</span>
-        <a class="avatar" href={resolve('/onboarding')} aria-label="Learner profile"><Icon name="external-link" size={16} /></a>
+        {#if data.account}
+          <a class="avatar account-avatar" href={resolve('/account')} aria-label={`Account settings for ${data.account.name}`}>{accountInitials(data.account.name)}</a>
+        {:else}
+          <a class="sign-in-link" href={resolve('/login')}>Sign in</a>
+        {/if}
       </div>
     </header>
 
     <div class="page-content">
       <section class="welcome" id="today">
-        <div><div class="eyebrow">YOUR PERSONAL PRACTICE SPACE</div><h1>Make room for <em>music.</em></h1><p>A clear next step, a flexible pace and progress based on what you can demonstrate.</p></div>
-        <div class="welcome-actions">
-          <a class="primary-button" href={resolve('/learn')}>Browse all lessons <Icon name="arrow-right" size={14} /></a>
-          <a class="secondary-button" href={resolve('/onboarding')}>Learner profile <Icon name="external-link" size={13} /></a>
+        <div>
+          <div class="eyebrow">TODAY</div>
+          <h1>One step at a time.</h1>
+          <p>Choose one thing to work on. Your lessons, practice tools and progress are here whenever you need them.</p>
         </div>
       </section>
 
@@ -329,10 +343,53 @@
           </div>
         </div>
       {:else if dashboard}
-        {#if dashboard.isFreshStart}
-          <section class="fresh-state" aria-labelledby="fresh-title"><div class="fresh-icon" aria-hidden="true"><Icon name="sparkles" size={22} /></div><div class="fresh-copy"><div class="eyebrow">A FRESH START</div><h2 id="fresh-title">Your journey begins with the foundations.</h2><p>No previous lessons or skill levels have been assumed. Your first step is Year 1, Week 1. Week numbers are a route, not deadlines.</p></div></section>
-        {/if}
 
+
+        <section class="hero-grid" aria-label="Your next steps">
+          <article class="target-card next-step-card">
+            <div class="eyebrow">{dashboard.isFreshStart ? 'START HERE' : 'YOUR NEXT STEP'}</div>
+            {#if dashboard.nextLesson}
+              <div class="target-meta">YEAR 1 <span>·</span> WEEK {dashboard.nextLesson.week}{#if dashboard.currentPhase}<span>·</span>{dashboard.currentPhase}{/if}</div>
+              <h2>{dashboard.nextLesson.title}</h2>
+              <p>{dashboard.isFreshStart ? 'Begin with the foundations. No previous experience is assumed.' : dashboard.nextLesson.focus}</p>
+              <div class="target-footer">
+                <span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span>
+                <a class="target-action" href={resolve('/learn/[lessonId]', { lessonId: dashboard.nextLesson.id })}>
+                  {dashboard.isFreshStart ? 'Start learning' : 'Continue lesson'} <Icon name="arrow-right" size={14} />
+                </a>
+              </div>
+            {:else}
+              <h2>Year 1 route complete</h2>
+              <p>You've completed every lesson in this route. Your learning record remains available for review.</p>
+              <div class="target-footer">
+                <span>{dashboard.completedLessons} lessons completed</span>
+                <a class="target-action" href={resolve('/learn')}>Explore lessons <Icon name="arrow-right" size={14} /></a>
+              </div>
+            {/if}
+          </article>
+          <article class="practice-target">
+            <div class="eyebrow">PRACTICE</div>
+            {#if dashboard.practiceMinutes}
+              <div class="practice-number">{dashboard.practiceMinutes}<small>min</small></div>
+              <h2>Your daily target</h2>
+              <p>A flexible guide, not a quota. A shorter focused session still counts.</p>
+            {:else}
+              <div class="practice-symbol" aria-hidden="true"><Icon name="clock" size={30} /></div>
+              <h2>Choose your own pace</h2>
+              <p>Start with a short session and decide how long to play as you go.</p>
+            {/if}
+            <a class="text-link" href={resolve('/practice')}>Start a practice session <Icon name="arrow-right" size={13} /></a>
+          </article>
+        </section>
+
+        <details class="disclosure-card planner-disclosure" id="practice-planner-details">
+          <summary class="disclosure-summary">
+            <span class="disclosure-copy">
+              <strong>Build a practice plan</strong>
+              <small>Choose a session length and get a few focused suggestions.</small>
+            </span>
+            <span class="disclosure-toggle">Personalise <Icon name="arrow-down" size={15} /></span>
+          </summary>
         <section class="practice-planner panel" aria-labelledby="planner-title">
           <div class="planner-heading">
             <div>
@@ -438,31 +495,17 @@
           {/if}
           <p class="planner-guardrail">These are suggestions only. GuitarLab will not mark lessons complete or award skill mastery because a plan was selected or time was spent practising.</p>
         </section>
+        </details>
 
-        <section class="hero-grid" aria-label="Today's learning">
-          <article class="target-card">
-            <div class="eyebrow">YOUR NEXT LEARNING TARGET</div>
-            {#if dashboard.nextLesson}
-              <div class="target-meta">YEAR 1 <span>·</span> WEEK {dashboard.nextLesson.week}{#if dashboard.currentPhase}<span>·</span>{dashboard.currentPhase}{/if}</div>
-              <h2>{dashboard.nextLesson.title}</h2><p>{dashboard.nextLesson.focus}</p>
-              <div class="target-footer"><span>{dashboard.nextLesson.estimatedMinutes} min lesson guide</span><a href={resolve('/learn/[lessonId]', { lessonId: dashboard.nextLesson.id })}>Open lesson <Icon name="arrow-right" size={14} /></a></div>
-            {:else}
-              <h2>Year 1 route complete</h2><p>You've completed every lesson in this route. Your learning record remains available for review.</p>
-              <div class="target-footer"><span>{dashboard.completedLessons} lessons completed</span><a href="#learning-path">Review your path <Icon name="arrow-right" size={14} /></a></div>
-            {/if}
-          </article>
-          <article class="practice-target">
-            <div class="eyebrow">TODAY'S PRACTICE PLAN</div>
-            {#if dashboard.practiceMinutes}
-              <div class="practice-number">{dashboard.practiceMinutes}<small>min</small></div><h2>Your chosen daily target</h2><p>Use this as a flexible guide, not a quota. A shorter focused session is still useful.</p>
-              <a class="text-link" href={resolve('/onboarding')}>Change practice target <Icon name="external-link" size={13} /></a>
-            {:else}
-              <div class="practice-symbol" aria-hidden="true"><Icon name="clock" size={30} /></div><h2>Choose a practice duration</h2><p>Set a time that fits your routine. You can change it whenever you need.</p>
-              <a class="text-link" href={resolve('/onboarding')}>Set your practice target <Icon name="external-link" size={13} /></a>
-            {/if}
-          </article>
-        </section>
-
+        <details class="disclosure-card progress-disclosure" id="progress-overview">
+          <summary class="disclosure-summary">
+            <span class="disclosure-copy">
+              <strong>Your progress</strong>
+              <small>{dashboard.completedLessons} of {dashboard.totalLessons} lessons complete · {dashboard.dueReviews.length} reviews due</small>
+            </span>
+            <span class="disclosure-toggle">View progress <Icon name="arrow-down" size={15} /></span>
+          </summary>
+          <div class="progress-details">
         <section class="dashboard-grid">
           <article class="panel" id="reviews">
             <div class="panel-heading"><div><div class="eyebrow">SPACED REVIEW</div><h2>Skills ready to revisit</h2></div><span class="neutral-tag">{dashboard.dueReviews.length} due</span></div>
@@ -526,6 +569,8 @@
           </div>
           <p class="path-note">The route is a guide, not a deadline. Repeat, pause or revisit a lesson whenever that helps you learn securely.</p>
         </section>
+          </div>
+        </details>
       {/if}
 
       <footer><span>GuitarLab · Learn. Practise. Master.</span><span>Built for thoughtful, independent learning.</span></footer>
@@ -653,5 +698,43 @@
       display: none;
     }
   }
+
+
+  .welcome{margin-bottom:22px}
+  .welcome h1{font-size:clamp(32px,4.4vw,46px);letter-spacing:-1.4px}
+  .welcome p{max-width:58ch;font-size:var(--font-size-body);line-height:var(--line-height-body)}
+  .hero-grid{grid-template-columns:minmax(0,1.5fr) minmax(230px,.7fr);align-items:stretch;margin-bottom:16px}
+  .next-step-card{min-height:250px;padding:clamp(22px,3vw,32px);background:linear-gradient(135deg,color-mix(in srgb,var(--primary) 7%,var(--surface)),var(--surface) 58%)}
+  .next-step-card .target-meta{margin-top:22px}
+  .next-step-card h2{max-width:24ch}
+  .target-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid var(--primary);border-radius:10px;background:var(--primary);color:var(--primary-ink);font-size:13px;font-weight:800;white-space:nowrap}
+  .target-action :global(svg){flex:none}
+  .practice-target{min-height:250px;justify-content:center;padding:24px}
+  .practice-target .practice-number{margin:16px 0 10px}
+  .practice-target .practice-symbol{margin:16px 0 10px}
+  .practice-target .text-link{display:inline-flex;align-items:center;gap:7px;min-height:44px;margin-top:14px}
+  .disclosure-card{margin:14px 0;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:clip}
+  .disclosure-summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:76px;padding:16px 20px;cursor:pointer;list-style:none}
+  .disclosure-summary::-webkit-details-marker{display:none}
+  .disclosure-summary::marker{content:''}
+  .disclosure-summary:focus-visible{outline:3px solid var(--focus);outline-offset:-3px;border-radius:var(--radius)}
+  .disclosure-copy{display:grid;gap:5px;min-width:0}
+  .disclosure-copy strong{font-size:15px;line-height:1.3;color:var(--text)}
+  .disclosure-copy small{font-size:var(--font-size-supporting);line-height:1.45;color:var(--muted)}
+  .disclosure-toggle{display:inline-flex;align-items:center;gap:8px;flex:none;color:var(--primary);font-size:var(--font-size-supporting);font-weight:750}
+  .disclosure-card[open]>.disclosure-summary{border-bottom:1px solid var(--border)}
+  .disclosure-card[open]>.disclosure-summary .disclosure-toggle :global(svg){transform:rotate(180deg)}
+  .disclosure-toggle :global(svg){transition:transform 140ms ease}
+  .practice-planner{margin:0;padding:22px;border:0;border-radius:0;background:transparent}
+  .progress-details{padding:0 20px 20px}
+  .progress-details .dashboard-grid{margin:20px 0 24px}
+  .progress-details .backup-reminder{margin-bottom:24px}
+  .progress-details .learning-path{margin-bottom:0}
+  .sign-in-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 15px;border:1px solid var(--primary);border-radius:var(--radius-control);background:var(--primary);color:var(--primary-ink);font-size:13px;font-weight:800}
+  .sign-in-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  .account-avatar{font-size:13px;letter-spacing:.02em}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.practice-target{min-height:190px}}
+  @media(max-width:720px){.welcome{margin-bottom:18px}.welcome h1{font-size:clamp(30px,8vw,40px)}.welcome p{display:block}.hero-grid{gap:12px}.next-step-card,.practice-target{min-height:0}.disclosure-summary{min-height:72px;padding:14px 16px}.disclosure-toggle{font-size:12px}.progress-details{padding:0 12px 16px}.practice-planner{padding:18px 14px}}
+  @media(prefers-reduced-motion:reduce){.disclosure-toggle :global(svg){transition:none}}
 
 </style>
