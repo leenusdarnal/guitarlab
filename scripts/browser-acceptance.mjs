@@ -1143,6 +1143,7 @@ try {
   assert.match(await page.locator('.practice-number').innerText(), /20/);
   await page.reload({ waitUntil: 'domcontentloaded' });
   assert.match(await page.locator('.practice-number').innerText(), /20/);
+  await page.locator('#progress-overview summary').click();
   await page.locator('#practice-planner-details summary').click();
   const personalizedReasons = await page
     .locator('.practice-task p')
@@ -1205,6 +1206,9 @@ try {
     'Practice history has a stable destination'
   );
   await page.goto(origin, { waitUntil: 'domcontentloaded' });
+  await page.locator('.hero-grid').waitFor();
+  await page.locator('#progress-overview summary').click();
+  await page.locator('#practice-planner-details summary').click();
   const taskActionLinks = planner.locator('.practice-task .task-action');
   await taskActionLinks.first().waitFor({ state: 'visible' });
   const actionLinks = await taskActionLinks.count();
