@@ -737,4 +737,93 @@
   @media(max-width:720px){.welcome{margin-bottom:18px}.welcome h1{font-size:clamp(30px,8vw,40px)}.welcome p{display:block}.hero-grid{gap:12px}.next-step-card,.practice-target{min-height:0}.disclosure-summary{min-height:72px;padding:14px 16px}.disclosure-toggle{font-size:12px}.progress-details{padding:0 12px 16px}.practice-planner{padding:18px 14px}}
   @media(prefers-reduced-motion:reduce){.disclosure-toggle :global(svg){transition:none}}
 
+
+  /* Refactoring UI-inspired refinement: clearer hierarchy with fewer competing outlines. */
+  .target-card,
+  .practice-target,
+  .panel,
+  .phase-card {
+    border-color: transparent;
+  }
+
+  .next-step-card {
+    padding: clamp(26px, 3.5vw, 38px);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary) 9%, var(--surface)),
+      var(--surface) 64%
+    );
+  }
+
+  .next-step-card .eyebrow,
+  .practice-target > .eyebrow {
+    font-size: var(--font-size-metadata);
+    letter-spacing: 0.08em;
+  }
+
+  .target-card h2 {
+    font-size: clamp(28px, 3vw, 36px);
+    line-height: 1.18;
+    max-width: 22ch;
+  }
+
+  .target-card > p,
+  .practice-target > p {
+    max-width: 56ch;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .practice-target {
+    background: var(--surface-raised);
+  }
+
+  .practice-number {
+    font-size: 48px;
+  }
+
+  .practice-target h2 {
+    font-size: var(--font-size-panel-title);
+  }
+
+  .target-footer {
+    padding-top: 26px;
+  }
+
+  .practice-task {
+    border-color: transparent;
+    background: var(--surface);
+  }
+
+  .practice-task h3 {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
+
+  .task-meta,
+  .task-meta span:last-child {
+    font-size: var(--font-size-metadata);
+  }
+
+  .target-action,
+  .planner-primary {
+    min-height: 48px;
+    padding-inline: 17px;
+  }
+
+  @media (max-width: 720px) {
+    .next-step-card {
+      padding: 22px;
+    }
+
+    .target-card h2 {
+      font-size: 28px;
+    }
+
+    .target-card > p,
+    .practice-target > p {
+      font-size: var(--font-size-body);
+    }
+  }
+
 </style>
