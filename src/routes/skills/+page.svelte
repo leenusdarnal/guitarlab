@@ -982,6 +982,7 @@
 
   label,
   .skill-description,
+  .guide-item p,
   dd,
   .no-results,
   .no-results button,
