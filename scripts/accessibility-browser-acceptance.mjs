@@ -354,6 +354,9 @@ try {
     for (const route of routes) {
       await page.setViewportSize({ width: 320, height: 900 });
       const mobileResponse = await navigateAndWaitFor(page, origin + route);
+      if (route === '/') {
+        await page.getByRole('link', { name: 'Sign in' }).waitFor();
+      }
       assert.equal(
         mobileResponse?.status(),
         200,
