@@ -289,4 +289,15 @@
     }
   }
 
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+  .desktop-primary-navigation a,
+  .mobile-nav-trigger,
+  .account-link,
+  .mobile-theme-control select,
+  .storage-warning,
+  .storage-warning button {
+    font-size: var(--font-size-supporting);
+    line-height: 1.4;
+  }
 </style>
