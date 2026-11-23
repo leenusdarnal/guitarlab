@@ -32,6 +32,7 @@ These preserve technical detail, research, decisions or dated audit evidence. Th
 - [Curriculum overview](CURRICULUM.md), [content model](CURRICULUM_CONTENT_MODEL.md) and [curriculum research](CURRICULUM_RESEARCH.md).
 - [Pre-implementation readiness](PRE_IMPLEMENTATION_READINESS.md), [M1 implementation report](M1_IMPLEMENTATION_STATUS.md), [research integration plan](RESEARCH_INTEGRATION_PLAN.md) and [interval training progression report](INTERVAL_TRAINING_PROGRESSION.md).
 - [Audio architecture audit](AUDIO_ARCHITECTURE_AUDIT.md), [synthetic pitch benchmarks](AUDIO_PITCH_BENCHMARKS.md), [real-recording evaluation protocol](AUDIO_REAL_RECORDING_EVALUATION.md) and [content provenance audit](CONTENT_PROVENANCE_AUDIT.md).
+- [Production client asset baseline](PRODUCTION_ASSET_BASELINE.md) is a dated build-output snapshot; actual browser transfers and Core Web Vitals remain separate measurements.
 - Dated UI/UX audits, component-source research and M7.2 curriculum reports are evidence snapshots. Current task status belongs only in the Engineering or Curriculum tracker above.
 - [CI failure/recovery runbook](CI_FAILURE_RECOVERY.md) is a procedure; execution evidence belongs in the Engineering tracker.
 
