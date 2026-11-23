@@ -8,8 +8,8 @@ const TYPE_BY_EXTENSION = new Map([
 ]);
 
 function normalizeAssetPath(file) {
-  let normalized = String(file).replaceAll('\\\\', '/').replace(/^\\.\\//, '');
-  normalized = posix.normalize(normalized).replace(/^\\/+/, '');
+  let normalized = String(file).replaceAll('\\', '/').replace(/^\.\//, '');
+  normalized = posix.normalize(normalized).replace(/^\/+/, '');
   const immutablePrefix = '_app/immutable/';
   if (normalized.startsWith(immutablePrefix)) {
     normalized = normalized.slice(immutablePrefix.length);
