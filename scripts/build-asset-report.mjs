@@ -343,6 +343,112 @@ export function buildRouteTransfers(routeDictionary, entries, rows) {
   });
 }
 
+
+function extractBalancedArrayAfter(source, marker) {
+  const markerIndex = source.indexOf(marker);
+  if (markerIndex < 0) return null;
+
+  const start = source.indexOf('[', markerIndex + marker.length);
+  if (start < 0) return null;
+
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
+
+  for (let index = start; index < source.length; index += 1) {
+    const character = source[index];
+
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (character === '\\') {
+        escaped = true;
+      } else if (character === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === '[') {
+      depth += 1;
+    } else if (character === ']') {
+      depth -= 1;
+      if (depth === 0) return source.slice(start + 1, index);
+    }
+  }
+
+  return null;
+}
+
+function parseManifestIndexList(value) {
+  return value
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map(Number)
+    .filter((index) => Number.isInteger(index) && index >= 0);
+}
+
+/**
+ * Parse SvelteKit's generated server manifest. In server-side route resolution
+ * the client dictionary is intentionally empty, but this manifest preserves
+ * route IDs and page node references. The nodes array maps server indexes back
+ * to the original SvelteKit node IDs used by the Vite client manifest.
+ */
+export function parseSvelteKitServerManifest(serverManifestSource) {
+  if (typeof serverManifestSource !== 'string') return [];
+
+  const nodesSource = extractBalancedArrayAfter(serverManifestSource, 'nodes:');
+  const routesSource = extractBalancedArrayAfter(serverManifestSource, 'routes:');
+  if (nodesSource === null || routesSource === null) return [];
+
+  const serverNodeToClientNode = [
+    ...nodesSource.matchAll(/import\(['"](?:\.\/)?nodes\/(\d+)\.js['"]\)/g)
+  ].map((match) => Number(match[1]));
+
+  const routePattern =
+    /\{\s*id:\s*("(?:\\.|[^"\\])*")\s*,[\s\S]*?page:\s*(?:null|\{\s*layouts:\s*\[([\s\S]*?)\]\s*,\s*errors:\s*\[([\s\S]*?)\]\s*,\s*leaf:\s*(\d+)\s*\})/g;
+
+  const routes = [];
+  for (const match of routesSource.matchAll(routePattern)) {
+    let route;
+    try {
+      route = JSON.parse(match[1]);
+    } catch {
+      continue;
+    }
+
+    const serverIndices = [
+      ...new Set([
+        ...parseManifestIndexList(match[2]),
+        Number(match[4])
+      ])
+    ];
+    const nodeIndices = [];
+    const missingServerNodeIndices = [];
+
+    for (const serverIndex of serverIndices) {
+      const clientIndex = serverNodeToClientNode[serverIndex];
+      if (Number.isInteger(clientIndex)) {
+        nodeIndices.push(clientIndex);
+      } else {
+        missingServerNodeIndices.push(serverIndex);
+      }
+    }
+
+    routes.push({
+      route,
+      nodeIndices,
+      usesServerData: null,
+      missingServerNodeIndices
+    });
+  }
+
+  return routes.sort((left, right) => left.route.localeCompare(right.route));
+}
+
 function formatBytes(value) {
   if (value >= 1024 * 1024) return `${(value / (1024 * 1024)).toFixed(2)} MiB`;
   if (value >= 1024) return `${(value / 1024).toFixed(1)} KiB`;
