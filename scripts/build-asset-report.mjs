@@ -195,6 +195,154 @@ export function buildEntryTransfers(manifest, rows) {
     .sort((left, right) => left.source.localeCompare(right.source));
 }
 
+
+function extractAssignedObject(source, assignment) {
+  const assignmentIndex = source.indexOf(assignment);
+  if (assignmentIndex < 0) return null;
+
+  const start = source.indexOf('{', assignmentIndex + assignment.length);
+  if (start < 0) return null;
+
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
+
+  for (let index = start; index < source.length; index += 1) {
+    const character = source[index];
+
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+      } else if (character === '\\') {
+        escaped = true;
+      } else if (character === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === '{') {
+      depth += 1;
+    } else if (character === '}') {
+      depth -= 1;
+      if (depth === 0) return source.slice(start, index + 1);
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Parse the route dictionary emitted by SvelteKit's generated client app.
+ * The dictionary stores each route's leaf node and optional child layouts.
+ * Node zero is the shared root layout; a "~" prefix records server data use.
+ */
+export function parseSvelteKitRouteDictionary(clientAppSource) {
+  if (typeof clientAppSource !== 'string') return [];
+
+  const dictionarySource = extractAssignedObject(
+    clientAppSource,
+    'export const dictionary ='
+  );
+  if (!dictionarySource) return [];
+
+  let dictionary;
+  try {
+    dictionary = JSON.parse(dictionarySource);
+  } catch {
+    return [];
+  }
+
+  return Object.entries(dictionary)
+    .map(([route, routeData]) => {
+      if (!Array.isArray(routeData) || routeData.length === 0) return null;
+
+      const rawLeaf = String(routeData[0]);
+      const leaf = Number.parseInt(rawLeaf.replace(/^~/, ''), 10);
+      if (!Number.isInteger(leaf) || leaf < 0) return null;
+
+      const layouts = Array.isArray(routeData[1]) ? routeData[1] : [];
+      const nodeIndices = [
+        ...new Set(
+          [0, ...layouts, leaf]
+            .filter((node) => node !== '' && node !== null && node !== undefined)
+            .map((node) => Number(node))
+            .filter((node) => Number.isInteger(node) && node >= 0)
+        )
+      ];
+
+      return {
+        route,
+        nodeIndices,
+        usesServerData: rawLeaf.startsWith('~')
+      };
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.route.localeCompare(right.route));
+}
+
+/**
+ * Estimate each route's initial static assets from the SvelteKit route
+ * dictionary and Vite manifest graphs. The shared client bootstrap is included
+ * once per route, then root/child layouts and the page node are unioned so shared
+ * chunks and CSS are only counted once. Dynamic imports remain deferred.
+ */
+export function buildRouteTransfers(routeDictionary, entries, rows) {
+  const assetsByPath = new Map(
+    rows.map((row) => [normalizeAssetPath(row.file), row])
+  );
+  const nodeEntries = new Map();
+
+  for (const entry of entries) {
+    const match = entry.source.match(/(?:^|\/)nodes\/(\d+)\.js$/);
+    if (match) nodeEntries.set(Number(match[1]), entry);
+  }
+
+  const bootstrapFiles = new Set(
+    entries
+      .filter((entry) => {
+        return (
+          entry.kind === 'entry' &&
+          !/(?:^|\/)nodes\/\d+\.js$/.test(entry.source)
+        );
+      })
+      .flatMap((entry) => entry.files.map(normalizeAssetPath))
+  );
+
+  return routeDictionary.map((route) => {
+    const selectedFiles = new Set(bootstrapFiles);
+    const missingNodeIndices = [];
+
+    for (const nodeIndex of route.nodeIndices) {
+      const nodeEntry = nodeEntries.get(nodeIndex);
+      if (!nodeEntry) {
+        missingNodeIndices.push(nodeIndex);
+        continue;
+      }
+
+      for (const file of nodeEntry.files) {
+        selectedFiles.add(normalizeAssetPath(file));
+      }
+    }
+
+    const files = [...selectedFiles].sort();
+    const includedAssets = files
+      .map((file) => assetsByPath.get(file))
+      .filter(Boolean);
+
+    return {
+      route: route.route,
+      nodeIndices: route.nodeIndices,
+      usesServerData: route.usesServerData,
+      missingNodeIndices,
+      files,
+      total: getAssetTotals(includedAssets)
+    };
+  });
+}
+
 function formatBytes(value) {
   if (value >= 1024 * 1024) return `${(value / (1024 * 1024)).toFixed(2)} MiB`;
   if (value >= 1024) return `${(value / 1024).toFixed(1)} KiB`;
@@ -247,6 +395,26 @@ export function formatAssetReport(report) {
     lines.push(
       `|${escapeMarkdown(asset.file)}|${asset.type}|${formatBytes(asset.raw)}|${formatBytes(asset.gzip)}|${formatBytes(asset.brotli)}|`
     );
+  }
+
+  lines.push(
+    '',
+    '## Route initial static graphs',
+    '',
+    'Each estimate includes the shared client bootstrap, root layout, route-specific layouts and page node. Shared JS/CSS assets are counted once per route. Deferred dynamic imports are excluded.',
+    '',
+    '| Route | Node IDs | Assets | Raw | Gzip | Brotli | Missing nodes |',
+    '|---|---|---:|---:|---:|---:|---:|'
+  );
+
+  if (!report.routes || report.routes.length === 0) {
+    lines.push('|(No SvelteKit page routes found)|(unavailable)|0|0 B|0 B|0|');
+  } else {
+    for (const route of report.routes) {
+      lines.push(
+        \`|\${escapeMarkdown(route.route)}|\${route.nodeIndices.join(', ')}|\${route.total.count}|\${formatBytes(route.total.raw)}|\${formatBytes(route.total.gzip)}|\${formatBytes(route.total.brotli)}|\${route.missingNodeIndices.length}|\`
+      );
+    }
   }
 
   lines.push(
