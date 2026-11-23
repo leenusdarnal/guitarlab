@@ -276,4 +276,28 @@
   .signout-card p{max-width:650px;margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.55}
   .signout-action{flex:none;border:1px solid var(--border-strong);background:var(--surface);color:var(--text)}
   @media(max-width:760px){.account-layout{grid-template-columns:minmax(0,1fr)}.signout-card{align-items:stretch;flex-direction:column}.signout-action{width:100%}}
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Account settings: keep identity, session and recovery messages easy to scan. */
+  .eyebrow,
+  .detail-label,
+  .verification-status {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .intro,
+  .profile-form label,
+  .field-help,
+  .session-status,
+  .feedback,
+  .signout-card p,
+  .primary-action,
+  .signout-action,
+  .secondary-action,
+  .text-action {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>

@@ -54,4 +54,21 @@ button:focus-visible,.guest:focus-visible{outline:3px solid var(--focus);outline
 .divider{display:flex;align-items:center;gap:12px;margin:24px 0 14px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.12em}
 .divider:before,.divider:after{height:1px;flex:1;background:var(--border);content:''}
 .privacy{margin:14px 0 0;color:var(--muted);font-size:11px;line-height:1.55;text-align:center}
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+  .eyebrow,
+  .divider {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .intro,
+  button,
+  .guest,
+  .notice,
+  .error,
+  .privacy {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>

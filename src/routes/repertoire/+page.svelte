@@ -560,4 +560,36 @@
     min-height: 44px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Repertoire workspace: distinguish field labels, editing guidance and metadata. */
+  .eyebrow,
+  .list-heading,
+  .section-number,
+  .save-row span {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .page-heading p,
+  .empty-copy,
+  .rights-note,
+  label,
+  .project-choice span,
+  .project-choice small,
+  .empty-editor p,
+  .status,
+  .primary-button,
+  .secondary-button,
+  .danger-button,
+  .text-button {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .project-choice strong {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
 </style>

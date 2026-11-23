@@ -318,4 +318,32 @@
       grid-template-columns: minmax(0, 1fr);
     }
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* First-run setup: preferences and privacy explanations are not microcopy. */
+  .eyebrow {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .intro {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .profile-fields label,
+  legend,
+  .choices label,
+  .custom-practice-help,
+  .form-actions button,
+  .form-actions > a,
+  .message,
+  .preference-effect,
+  .privacy-note,
+  .account-profile-link,
+  .skip {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>

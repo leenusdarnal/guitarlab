@@ -691,4 +691,21 @@ a:focus-visible,
     min-height: 44px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .chord-summary p,
+  .drill-target p,
+  .observation-result p,
+  .input-error {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .diagram-legend,
+  .drill-target > span,
+  .observation-result span {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
 </style>

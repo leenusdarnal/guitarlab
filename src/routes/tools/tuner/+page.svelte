@@ -552,4 +552,30 @@
     min-height: 44px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .eyebrow,
+  .calibration,
+  .frequency span,
+  .cents-value span,
+  .tick,
+  .meter-labels,
+  .capture-state,
+  .string-list span,
+  .string-list small {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .tuning-guidance p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .microphone-permission-note p,
+  .microphone-permission-note h2 {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>

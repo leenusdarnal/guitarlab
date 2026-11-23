@@ -744,4 +744,71 @@
   a:focus-visible {
     outline-color: var(--focus);
   }
+
+  /* UI readability and hierarchy pass — 22 Nov 2026 */
+
+  /* Lesson reader: instructional content always uses the body scale, including mobile. */
+  .breadcrumbs {
+    font-size: var(--font-size-metadata);
+    line-height: 1.5;
+  }
+
+  .eyebrow,
+  .kicker,
+  .lesson-meta span,
+  .checkpoint small,
+  .block-type,
+  .exercise-meta,
+  .references article > span {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
+
+  .content-section h3 {
+    font-size: var(--font-size-panel-title);
+    line-height: var(--line-height-heading);
+  }
+
+  .content-section p,
+  .content-section li {
+    max-width: 70ch;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: var(--text);
+  }
+
+  .success-target strong,
+  .mistakes strong,
+  .references h4,
+  .criteria strong,
+  .sidebar-card strong,
+  .sidebar-card > span:not(.eyebrow),
+  .progress-summary strong {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .sidebar-card p,
+  .sidebar-card a,
+  .success-target p,
+  .mistakes p,
+  .references p,
+  .criteria p,
+  .mastery-note,
+  .progress-message,
+  .saving-message,
+  .progress-error,
+  .progress-complete,
+  .checkpoint-check p,
+  .note-label,
+  .practice-options li,
+  .lesson-pagination a,
+  .lesson-pagination span,
+  .resume-button,
+  .checkpoint-actions button,
+  .completion-actions button,
+  .block-complete {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
 </style>

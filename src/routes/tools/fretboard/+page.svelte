@@ -1072,4 +1072,30 @@ a:focus-visible {
     min-height: 44px;
     font-size: var(--font-size-supporting);
   }
+
+  /* UI tool ergonomics pass — 22 Nov 2026 */
+
+  .preference-actions p,
+  .find-panel p,
+  .harmony-control p,
+  .note-detail p {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .controls label,
+  .find-panel label,
+  .harmony-control label {
+    font-size: var(--font-size-supporting);
+    line-height: var(--line-height-body);
+  }
+
+  .find-progress,
+  .legend,
+  .caged-shape strong,
+  .caged-shape span,
+  .caged-shape small {
+    font-size: var(--font-size-metadata);
+    line-height: 1.4;
+  }
 </style>
