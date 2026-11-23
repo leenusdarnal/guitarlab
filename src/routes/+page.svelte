@@ -6,6 +6,11 @@
   import Brand from '../lib/components/Brand.svelte';
   import { loadActiveLearnerDashboard } from '../lib/storage/indexeddb';
   import {
+    themePreferenceStore,
+    updateThemePreference,
+    type ThemePreference
+  } from '../lib/theme';
+  import {
     readLastBackupExportAt,
     shouldShowBackupReminder
   } from '../lib/storage/backup-metadata';
@@ -15,8 +20,6 @@
     type PracticePlanPreset
   } from '../lib/application/practice-plan';
 
-  type ThemePreference = 'system' | 'light' | 'dark';
-  type ResolvedTheme = 'dark' | 'light';
   let { data }: PageProps = $props();
   let themePreference = $state<ThemePreference>('system');
   let dashboard = $state<DashboardSnapshot | null>(null);
@@ -73,44 +76,10 @@
       .join('') || 'GL';
   }
 
-  function isThemePreference(value: string | undefined): value is ThemePreference {
-    return value === 'system' || value === 'light' || value === 'dark';
-  }
-
-  function readSavedThemePreference(): ThemePreference {
-    const currentPreference = document.documentElement.dataset.themePreference;
-    if (isThemePreference(currentPreference)) return currentPreference;
-    try {
-      const storedPreference = window.localStorage.getItem('guitarlab-theme') ?? undefined;
-      return isThemePreference(storedPreference) ? storedPreference : 'system';
-    } catch {
-      return 'system';
-    }
-  }
-
-  function applyResolvedTheme(preference: ThemePreference) {
-    const resolved: ResolvedTheme =
-      preference === 'system'
-        ? window.matchMedia('(prefers-color-scheme: light)').matches
-          ? 'light'
-          : 'dark'
-        : preference;
-    document.documentElement.dataset.themePreference = preference;
-    document.documentElement.dataset.theme = resolved;
-    document
-      .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-      ?.setAttribute('content', resolved === 'light' ? '#F5F4F0' : '#101318');
-  }
-
   function handleThemePreferenceChange(event: Event) {
     const selected = event.currentTarget as HTMLSelectElement;
-    if (!isThemePreference(selected.value)) return;
-    themePreference = selected.value;
-    applyResolvedTheme(themePreference);
-    try {
-      window.localStorage.setItem('guitarlab-theme', themePreference);
-    } catch {
-      // Keep the selected theme active for this session when storage is blocked.
+    if (selected.value === 'system' || selected.value === 'light' || selected.value === 'dark') {
+      updateThemePreference(selected.value);
     }
   }
 
@@ -151,18 +120,14 @@
     } catch {
       lastBackupExportAt = null;
     }
-    themePreference = readSavedThemePreference();
-    applyResolvedTheme(themePreference);
-    const themeMediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-    const handleSystemThemeChange = () => {
-      if (themePreference === 'system') applyResolvedTheme('system');
-    };
-    themeMediaQuery.addEventListener('change', handleSystemThemeChange);
+    const unsubscribeThemePreference = themePreferenceStore.subscribe((preference) => {
+      themePreference = preference;
+    });
     let active = true;
     void loadDashboard(() => active);
     return () => {
       active = false;
-      themeMediaQuery.removeEventListener('change', handleSystemThemeChange);
+      unsubscribeThemePreference();
     };
   });
 
