@@ -19,7 +19,7 @@ const immutableRoot = join(clientRoot, '_app', 'immutable');
 const manifestPath = join(clientRoot, '.vite', 'manifest.json');
 const clientAppManifestPath = join(
   clientRoot,
-  '../generated/build/client-optimized/app.js'
+  '../../generated/build/client-optimized/app.js'
 );
 const reportPath = join(clientRoot, 'build-asset-report.json');
 
