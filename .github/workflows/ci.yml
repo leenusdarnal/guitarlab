@@ -162,6 +162,8 @@ jobs:
       - name: Production build
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         id: production-build
+        env:
+          GUITARLAB_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: npm run build
 
       - name: Preserve production asset baseline
