@@ -8,7 +8,7 @@ import {
   buildRouteTransfers,
   createAssetRecord,
   formatAssetReport,
-  parseSvelteKitRouteDictionary,
+  parseSvelteKitServerManifest,
   summarizeAssets
 } from './build-asset-report.mjs';
 
@@ -17,10 +17,7 @@ const clientRoot = fileURLToPath(
 );
 const immutableRoot = join(clientRoot, '_app', 'immutable');
 const manifestPath = join(clientRoot, '.vite', 'manifest.json');
-const clientAppManifestPath = join(
-  clientRoot,
-  '../../generated/build/client/app.js'
-);
+const serverManifestPath = join(clientRoot, '../server/manifest.js');
 const reportPath = join(clientRoot, 'build-asset-report.json');
 
 async function collectClientAssets(directory) {
@@ -76,18 +73,18 @@ rows.sort((left, right) => left.file.localeCompare(right.file));
 const summary = summarizeAssets(rows, { largestLimit: 15 });
 const entries = buildEntryTransfers(manifest, rows);
 
-let clientAppSource;
+let serverManifestSource;
 try {
-  clientAppSource = await readFile(clientAppManifestPath, 'utf8');
+  serverManifestSource = await readFile(serverManifestPath, 'utf8');
 } catch (error) {
-  console.error('SvelteKit generated client app manifest is missing.');
+  console.error('SvelteKit generated server manifest is missing.');
   throw error;
 }
 
-const routeDictionary = parseSvelteKitRouteDictionary(clientAppSource);
+const routeDictionary = parseSvelteKitServerManifest(serverManifestSource);
 if (routeDictionary.length === 0) {
   throw new Error(
-    'SvelteKit generated client app does not contain a readable route dictionary.'
+    'SvelteKit generated server manifest does not contain readable page routes.'
   );
 }
 const routes = buildRouteTransfers(routeDictionary, entries, rows);
