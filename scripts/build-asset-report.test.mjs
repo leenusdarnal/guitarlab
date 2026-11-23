@@ -158,7 +158,7 @@ test('formats a readable production asset report with explicit measurement limit
   assert.match(markdown, /per emitted asset/);
   assert.match(markdown, /not a measured page transfer/);
   assert.match(markdown, /Route initial static graphs/);
-  assert.match(markdown, /\\|\\/learn\\|0, 4, 3\\|5\\|/);
+  assert.ok(markdown.includes('|/learn|0, 4, 3|5|'));
 });
 
 test('parses SvelteKit route dictionary into layout and leaf node indices', async () => {
