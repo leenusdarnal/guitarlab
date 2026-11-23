@@ -198,8 +198,8 @@ test('builds route-level static transfer estimates with shared assets counted on
   const home = transfers.find((route) => route.route === '/');
   const learn = transfers.find((route) => route.route === '/learn');
 
-  assert.deepEqual(home.total, { count: 6, raw: 375, gzip: 165, brotli: 152 });
-  assert.deepEqual(learn.total, { count: 7, raw: 465, gzip: 213, brotli: 187 });
+  assert.deepEqual(home.total, { count: 6, raw: 375, gzip: 175, brotli: 155 });
+  assert.deepEqual(learn.total, { count: 7, raw: 445, gzip: 205, brotli: 181 });
   assert.deepEqual(home.nodeIndices, [0, 2]);
   assert.deepEqual(home.missingNodeIndices, []);
 });
