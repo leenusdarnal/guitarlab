@@ -138,7 +138,15 @@ test('formats a readable production asset report with explicit measurement limit
       css: { count: 1, raw: 200, gzip: 80, brotli: 70 }
     },
     largestAssets: rows,
-    entries: []
+    entries: [],
+    routes: [
+      {
+        route: '/learn',
+        nodeIndices: [0, 4, 3],
+        total: { count: 5, raw: 465, gzip: 205, brotli: 181 },
+        missingNodeIndices: []
+      }
+    ]
   };
 
   const markdown = formatAssetReport(report);
@@ -149,6 +157,8 @@ test('formats a readable production asset report with explicit measurement limit
   assert.match(markdown, /chunks\/shared\.js/);
   assert.match(markdown, /per emitted asset/);
   assert.match(markdown, /not a measured page transfer/);
+  assert.match(markdown, /Route initial static graphs/);
+  assert.match(markdown, /\\|\\/learn\\|0, 4, 3\\|5\\|/);
 });
 
 test('parses SvelteKit route dictionary into layout and leaf node indices', async () => {
