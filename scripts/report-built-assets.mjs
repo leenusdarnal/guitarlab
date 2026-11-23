@@ -5,8 +5,10 @@ import { fileURLToPath } from 'node:url';
 
 import {
   buildEntryTransfers,
+  buildRouteTransfers,
   createAssetRecord,
   formatAssetReport,
+  parseSvelteKitRouteDictionary,
   summarizeAssets
 } from './build-asset-report.mjs';
 
@@ -15,6 +17,10 @@ const clientRoot = fileURLToPath(
 );
 const immutableRoot = join(clientRoot, '_app', 'immutable');
 const manifestPath = join(clientRoot, '.vite', 'manifest.json');
+const clientAppManifestPath = join(
+  clientRoot,
+  '../generated/build/client-optimized/app.js'
+);
 const reportPath = join(clientRoot, 'build-asset-report.json');
 
 async function collectClientAssets(directory) {
@@ -69,10 +75,26 @@ rows.sort((left, right) => left.file.localeCompare(right.file));
 
 const summary = summarizeAssets(rows, { largestLimit: 15 });
 const entries = buildEntryTransfers(manifest, rows);
+
+let clientAppSource;
+try {
+  clientAppSource = await readFile(clientAppManifestPath, 'utf8');
+} catch (error) {
+  console.error('SvelteKit generated client app manifest is missing.');
+  throw error;
+}
+
+const routeDictionary = parseSvelteKitRouteDictionary(clientAppSource);
+if (routeDictionary.length === 0) {
+  throw new Error(
+    'SvelteKit generated client app does not contain a readable route dictionary.'
+  );
+}
+const routes = buildRouteTransfers(routeDictionary, entries, rows);
 const report = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
-  commitSha: process.env.GITHUB_SHA || null,
+  commitSha: process.env.GUITARLAB_COMMIT_SHA || process.env.GITHUB_SHA || null,
   nodeVersion: process.version,
   compression: {
     gzip: 'gzip level 9, measured independently per emitted asset',
@@ -82,6 +104,7 @@ const report = {
   manifestPath: '.svelte-kit/output/client/.vite/manifest.json',
   ...summary,
   entries,
+  routes,
   assets: rows
 };
 
