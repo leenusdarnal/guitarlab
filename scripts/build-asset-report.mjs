@@ -405,25 +405,65 @@ export function parseSvelteKitServerManifest(serverManifestSource) {
   if (nodesSource === null || routesSource === null) return [];
 
   const serverNodeToClientNode = [
-    ...nodesSource.matchAll(/import\(['"](?:\.\/)?nodes\/(\d+)\.js['"]\)/g)
+    ...nodesSource.matchAll(/import\(['"](?:\.\/)?(?:.*\/)?nodes\/(\d+)\.js['"]\)/g)
   ].map((match) => Number(match[1]));
 
-  const routePattern =
-    /\{\s*id:\s*("(?:\\.|[^"\\])*")\s*,[\s\S]*?page:\s*(?:null|\{\s*layouts:\s*\[([\s\S]*?)\]\s*,\s*errors:\s*\[([\s\S]*?)\]\s*,\s*leaf:\s*(\d+)\s*\})/g;
+  const routeObjects = [];
+  for (let index = 0; index < routesSource.length; index += 1) {
+    if (routesSource[index] !== '{') continue;
+
+    const objectStart = index;
+    let depth = 0;
+    let quote = null;
+    let escaped = false;
+
+    for (; index < routesSource.length; index += 1) {
+      const character = routesSource[index];
+
+      if (quote) {
+        if (escaped) {
+          escaped = false;
+        } else if (character === '\\') {
+          escaped = true;
+        } else if (character === quote) {
+          quote = null;
+        }
+        continue;
+      }
+
+      if (character === '"' || character === "'") {
+        quote = character;
+      } else if (character === '{') {
+        depth += 1;
+      } else if (character === '}') {
+        depth -= 1;
+        if (depth === 0) {
+          routeObjects.push(routesSource.slice(objectStart, index + 1));
+          break;
+        }
+      }
+    }
+  }
 
   const routes = [];
-  for (const match of routesSource.matchAll(routePattern)) {
+  for (const routeObject of routeObjects) {
+    const idMatch = routeObject.match(/^\{\s*id:\s*("(?:\\.|[^"\\])*")\s*,/);
+    const pageMatch = routeObject.match(
+      /page:\s*\{\s*layouts:\s*\[([\s\S]*?)\]\s*,\s*errors:\s*\[([\s\S]*?)\]\s*,\s*leaf:\s*(\d+)\s*\}/
+    );
+    if (!idMatch || !pageMatch) continue;
+
     let route;
     try {
-      route = JSON.parse(match[1]);
+      route = JSON.parse(idMatch[1]);
     } catch {
       continue;
     }
 
     const serverIndices = [
       ...new Set([
-        ...parseManifestIndexList(match[2]),
-        Number(match[4])
+        ...parseManifestIndexList(pageMatch[1]),
+        Number(pageMatch[3])
       ])
     ];
     const nodeIndices = [];
