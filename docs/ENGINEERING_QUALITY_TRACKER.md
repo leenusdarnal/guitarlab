@@ -2,7 +2,7 @@
 
 **Status:** Active — canonical engineering-quality tracker  
 **Last reconciled:** 23 November 2026  
-**Audit baseline:** `main` at `27b64c2dbadbe42d47730815ca9f10916b56cec0` (PR #231 merged; full required CI and Node.js 26 compatibility passed on the final PR head. The merge adds a cross-route learner-facing hierarchy and readability pass; it is not yet recorded as deployed.)  
+**Audit baseline:** `main` at `5116ab0f7e4cecef93fd4d01c40ac34f6f6228f0` (PR #232 merged; shared theme preference handling is centralised. PR #233 is the current performance-baseline implementation branch against this main SHA.)  
 **Scope:** Architecture, UX, accessibility, performance, offline/PWA, privacy, security, authentication and release acceptance.
 
 > **Single source of truth:** This document owns the live status, priority, evidence and next actions for the engineering-quality work listed below. Do not maintain parallel checklists for these same tasks in the legacy UX, optimization, implementation, execution-priority or real-device tracker files.
@@ -58,7 +58,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 - Production deployment reconciliation (22 November 2026): guarded production workflow run [#45013807502](https://github.com/leenusdarnal/guitarlab/actions/runs/45013807502) completed successfully for exact `main` SHA `b88aff7f30c0ce12f08462aa98c3fd86037a7939`. The run verified successful CI for that SHA, built and deployed the production Worker, applied pending auth DB migrations, passed production route/security-header smoke tests, and saved artifact `guitarlab-production-deployment-b88aff7f30c0ce12f08462aa98c3fd86037a7939`. This remains the latest confirmed production source-SHA/deployment evidence: guarded run [#45050317202](https://github.com/leenusdarnal/guitarlab/actions/runs/45050317202) deployed exact `main` SHA `8887636c29adf652ee54a86283956a5ea503f5fd`, applied pending auth DB migrations, passed production route/security-header smoke tests and retained artifact `guitarlab-production-deployment-8887636c29adf652ee54a86283956a5ea503f5fd`. The prior production deployment, Worker version 8 `489c893b-d9de-4d35-a7a9-7c39ba7c8e55`, remains a traceable rollback candidate via run [#44922598465](https://github.com/leenusdarnal/guitarlab/actions/runs/44922598465) and its artifact, mapped to source SHA `adf416a96a2e4a8bc511b22ddf9520a51c4b9d55`; no rollback rehearsal has been performed. Cloudflare rollback does not revert D1 data or other connected resources, so schema compatibility must be checked before use ([Cloudflare rollback behavior](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/)). The prior production deployment, Worker version 8 `489c893b-d9de-4d35-a7a9-7c39ba7c8e55`, remains a traceable rollback candidate via run [#44922598465](https://github.com/leenusdarnal/guitarlab/actions/runs/44922598465) and its artifact, mapped to source SHA `adf416a96a2e4a8bc511b22ddf9520a51c4b9d55`; no rollback rehearsal has been performed. Cloudflare rollback does not revert D1 data or other connected resources, so schema compatibility must be checked before use ([Cloudflare rollback behavior](https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/)).
 - PR #177 delivered the Better Auth runtime foundation; PR #216 reconciled the supported product to Google/GitHub OAuth-only account access. Email/password, verification email, password reset and transactional email are not supported product flows. Production provider acceptance is manually confirmed by the project owner on 22 November 2026: Google OAuth and GitHub OAuth both work in production. This is user-reported interactive acceptance; it does not establish a separate rollback rehearsal.
 - The initial offline app-shell/previously visited public-page caching slice was delivered in PR #35; its original Issue [#34](https://github.com/leenusdarnal/guitarlab/issues/34) is closed. That closure does **not** establish the authenticated-page cache boundary or physical-device offline acceptance described below.
-- No live Core Web Vitals or production bundle-budget measurements were established by this audit. No physical-device, screen-reader or real-guitar recording results are claimed.
+- A reproducible production build-output baseline is now available in [PRODUCTION_ASSET_BASELINE.md](PRODUCTION_ASSET_BASELINE.md) and CI artifact [#45119905770](https://github.com/leenusdarnal/guitarlab/actions/runs/45119905770). It measures compressed emitted files and static route graphs, not actual HTTP transfers. No live Core Web Vitals or production bundle budgets have been established; no physical-device, screen-reader or real-guitar recording results are claimed.
 
 ### 1.4 Current priority queue
 
@@ -74,7 +74,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 | 8 | QA-03 — Complete physical-device storage/offline/backup acceptance | P1 | BLOCKED |
 | 9 | QA-01 / QA-02 — Complete real-audio and physical-browser validation | P1 | BLOCKED |
 | 10 | QA-04 — Reconcile exact production SHA and rollback evidence | P1 | PARTIAL — production SHA `8887636c29adf652ee54a86283956a5ea503f5fd` is verified by guarded run #45050317202, including successful auth DB migration and production smoke tests; rollback rehearsal remains open |
-| 11 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | OPEN |
+| 11 | PERF-01 — Establish production bundle and Core Web Vitals baselines | P2 | PARTIAL — reproducible build-output asset and route graph baseline published; network transfer and Web Vitals still open |
 | 12 | ARC-01 / ARC-02 — Split route components and consolidate shared UI patterns | P2 | OPEN |
 | 12 | CSS-01 — Inventory Tailwind version, configuration and styling usage | P2 | DONE — read-only |
 | 13 | CSS-02 — Review CSS ownership, hotspots and duplication candidates | P2 | DONE — automated review |
@@ -199,7 +199,7 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 
 | ID | Priority | Status | Finding / required outcome | Evidence / dependency |
 |---|---|---|---|---|
-| PERF-01 | P2 | **OPEN** | Establish production bundle and route-level transfer baselines; publish a bundle report and agree initial budgets. | [OPTIMIZATION_ROADMAP.md](OPTIMIZATION_ROADMAP.md) historical roadmap; no current budget |
+| PERF-01 | P2 | **PARTIAL** | Publish a reproducible build-output baseline for all emitted JS/CSS assets and 18 SvelteKit route static graphs. Agree bundle budgets only after actual route requests and performance measurements are collected. | [PRODUCTION_ASSET_BASELINE.md](PRODUCTION_ASSET_BASELINE.md); [CI run #45119905770](https://github.com/leenusdarnal/guitarlab/actions/runs/45119905770); retained [JSON asset artifact](https://github.com/leenusdarnal/guitarlab/actions/runs/45119905770/artifacts/14793033735) |
 | PERF-02 | P2 | **OPEN** | Measure LCP, INP and CLS for dashboard, Learn, lesson reader, Practice and Tools on desktop and mobile profiles. | No current production field/lab baseline established |
 | PERF-03 | P2 | **OPEN** | Reduce eager loading of large lesson bodies and split oversized route modules by feature where this reduces measured cost. | Existing generated compact curriculum index is a completed optimization |
 | PERF-04 | P2 | **OPEN** | Profile interaction latency and long tasks on lesson search, dashboard planning and interactive music tools; optimize only measured bottlenecks. | Modern Web Guidance performance references |
@@ -207,8 +207,9 @@ Record device/browser, theme, task completion, time, taps, confusion points and 
 
 ### Performance acceptance checklist
 
-- [ ] Capture a production build baseline with total JS/CSS, route chunks, largest dependencies and compressed transfer sizes.
-- [ ] Set and document an initial bundle budget only after recording the baseline.
+- [x] Capture a reproducible production build-output baseline with total JS/CSS, per-asset gzip/Brotli sizes, largest emitted assets and 18 route static-import graphs; publish the report and CI artifact. This is not an observed network transfer.
+- [ ] Capture actual route requests and compressed transfer sizes with browser network traces under repeatable conditions.
+- [ ] Set and document initial bundle budgets only after the build baseline and actual route-transfer measurements are compared.
 - [ ] Capture LCP/INP/CLS for the five high-value journeys above under repeatable mobile and desktop conditions.
 - [ ] Record test device profile, browser, viewport, network/CPU throttling and exact commit SHA.
 - [ ] Inspect long tasks and INP interaction attribution before changing interaction code.

@@ -162,7 +162,18 @@ jobs:
       - name: Production build
         if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         id: production-build
+        env:
+          GUITARLAB_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: npm run build
+
+      - name: Preserve production asset baseline
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: guitarlab-production-assets-${{ github.sha }}
+          path: .svelte-kit/output/client/build-asset-report.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Validate Cloudflare production deployment configuration
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' }}
