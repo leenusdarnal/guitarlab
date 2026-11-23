@@ -200,6 +200,23 @@ jobs:
           grep -q "GuitarLab" "$RUNNER_TEMP/guitarlab-home.html"
           echo "Cloudflare Worker smoke test passed: GET / returned GuitarLab HTML."
 
+      - name: Measure cold-cache browser route transfers
+        if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' }}
+        id: route-transfer-measurement
+        env:
+          GUITARLAB_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GUITARLAB_PERF_PORT: 8788
+        run: npm run perf:routes
+
+      - name: Preserve browser route-transfer report
+        if: ${{ !cancelled() && steps.route-transfer-measurement.outcome == 'success' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: guitarlab-route-transfers-${{ github.sha }}
+          path: .svelte-kit/output/client/route-transfer-report.json
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Authentication lifecycle browser acceptance
         if: ${{ !cancelled() && steps.production-build.outcome == 'success' && steps.install-dependencies.outcome == 'success' && steps.apply-auth-migrations.outcome == 'success' }}
         shell: bash
