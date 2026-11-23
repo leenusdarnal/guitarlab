@@ -5,6 +5,13 @@
   import { resolve } from '$app/paths';
   import '../app.css';
   import { loadActiveLearnerProfile } from '../lib/storage/indexeddb';
+  import {
+    initializeThemePreference,
+    isThemePreference,
+    themePreferenceStore,
+    updateThemePreference,
+    type ThemePreference
+  } from '../lib/theme';
   import Icon from '../lib/components/Icon.svelte';
   import Brand from '../lib/components/Brand.svelte';
   import MobileTabBar from '../lib/components/MobileTabBar.svelte';
@@ -15,10 +22,7 @@
   let localStorageUnavailable = $state(false);
   let mobileMenuOpen = $state(false);
   let mobileMenuTrigger = $state<HTMLButtonElement | null>(null);
-  type ThemePreference = 'system' | 'light' | 'dark';
-  type ResolvedTheme = 'dark' | 'light';
   let themePreference = $state<ThemePreference>('system');
-  let themeMediaQuery: MediaQueryList | null = null;
   let currentPath = $derived(page.url.pathname);
   let activeSection = $derived(
     currentPath.startsWith('/learn') ? 'learn' :
@@ -31,33 +35,6 @@
   );
   let showPrimaryNavigation = $derived(currentPath !== '/onboarding');
 
-  function isThemePreference(value: string | undefined): value is ThemePreference {
-    return value === 'system' || value === 'light' || value === 'dark';
-  }
-
-  function applyResolvedTheme(preference: ThemePreference) {
-    const resolved: ResolvedTheme =
-      preference === 'system'
-        ? window.matchMedia('(prefers-color-scheme: light)').matches
-          ? 'light'
-          : 'dark'
-        : preference;
-
-    document.documentElement.dataset.theme = resolved;
-    const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    themeColor?.setAttribute('content', resolved === 'light' ? '#F5F4F0' : '#101318');
-  }
-
-  function setThemePreference(preference: ThemePreference) {
-    themePreference = preference;
-    document.documentElement.dataset.themePreference = preference;
-    applyResolvedTheme(preference);
-    try {
-      window.localStorage.setItem('guitarlab-theme', preference);
-    } catch {
-      // The visible theme remains available for this session if storage is blocked.
-    }
-  }
 
   function accountInitials(name: string): string {
     return name
@@ -72,14 +49,12 @@
   function handleThemePreferenceChange(event: Event) {
     const selected = event.currentTarget as HTMLSelectElement;
     if (isThemePreference(selected.value)) {
-      setThemePreference(selected.value);
+      updateThemePreference(selected.value);
     }
   }
 
   afterNavigate(({ type }) => {
     mobileMenuOpen = false;
-    const savedPreference = document.documentElement.dataset.themePreference;
-    if (isThemePreference(savedPreference)) themePreference = savedPreference;
     void tick().then(() => {
       const mainContent = document.querySelector<HTMLElement>('main');
       if (mainContent) {
@@ -96,20 +71,16 @@
     // event handlers. Browser acceptance tests use this to avoid racing SSR.
     document.documentElement.dataset.guitarlabReady = 'true';
 
-    const initialPreference = document.documentElement.dataset.themePreference;
-    themePreference = isThemePreference(initialPreference) ? initialPreference : 'system';
-    applyResolvedTheme(themePreference);
-
-    themeMediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-    const handleSystemThemeChange = () => {
-      if (themePreference === 'system') applyResolvedTheme('system');
-    };
-    themeMediaQuery.addEventListener('change', handleSystemThemeChange);
+    const unsubscribeThemePreference = themePreferenceStore.subscribe((preference) => {
+      themePreference = preference;
+    });
+    const stopThemePreference = initializeThemePreference();
 
     void retryLocalStorage();
 
     return () => {
-      themeMediaQuery?.removeEventListener('change', handleSystemThemeChange);
+      stopThemePreference();
+      unsubscribeThemePreference();
     };
   });
 
