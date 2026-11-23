@@ -213,3 +213,57 @@ test('builds route-level static transfer estimates with shared assets counted on
   assert.deepEqual(home.nodeIndices, [0, 2]);
   assert.deepEqual(home.missingNodeIndices, []);
 });
+
+test('parses SvelteKit server routes and maps re-indexed nodes to client nodes', async () => {
+  const { parseSvelteKitServerManifest } = await import('./build-asset-report.mjs');
+  const source = `
+    export const manifest = (() => {
+      return {
+        nodes: [
+          __memo(() => import('./nodes/0.js')),
+          __memo(() => import('./nodes/1.js')),
+          __memo(() => import('./nodes/4.js')),
+          __memo(() => import('./nodes/2.js'))
+        ],
+        routes: [
+          {
+            id: "/",
+            pattern: /^\\/$/,
+            params: [],
+            page: { layouts: [0,], errors: [1,], leaf: 2 },
+            endpoint: null
+          },
+          {
+            id: "/learn",
+            pattern: /^\\/learn\\/?$/,
+            params: [],
+            page: { layouts: [0, 2,], errors: [1,], leaf: 3 },
+            endpoint: null
+          },
+          {
+            id: "/api",
+            pattern: /^\\/api\\/?$/,
+            params: [],
+            page: null,
+            endpoint: async () => ({})
+          }
+        ]
+      };
+    })();
+  `;
+
+  assert.deepEqual(parseSvelteKitServerManifest(source), [
+    {
+      route: '/',
+      nodeIndices: [0, 4],
+      usesServerData: null,
+      missingServerNodeIndices: []
+    },
+    {
+      route: '/learn',
+      nodeIndices: [0, 4, 2],
+      usesServerData: null,
+      missingServerNodeIndices: []
+    }
+  ]);
+});
