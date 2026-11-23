@@ -139,7 +139,7 @@ export function buildEntryTransfers(manifest, rows) {
     const file = chunk?.file;
     return (
       typeof file === 'string' &&
-      /\\.(?:m?js)$/i.test(file) &&
+      /\.(?:m?js)$/i.test(file) &&
       (chunk.isEntry === true || chunk.isDynamicEntry === true)
     );
   });
@@ -154,7 +154,7 @@ export function buildEntryTransfers(manifest, rows) {
       function includeFile(file) {
         if (typeof file !== 'string') return;
         const normalized = normalizeManifestFile(file);
-        if (visitedFiles.has(normalized)) return;
+        if (!classifyClientAsset(normalized) || visitedFiles.has(normalized)) return;
         visitedFiles.add(normalized);
         const asset = assetsByPath.get(normalized);
         if (asset) {
