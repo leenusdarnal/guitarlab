@@ -215,7 +215,7 @@ export function formatAssetReport(report) {
     '',
     `Commit: \`${report.commitSha || 'unknown'}\``,
     '',
-    'Compressed sizes below are calculated independently for each emitted asset (gzip level 9 and Node Brotli defaults).',
+    'Compressed sizes below are calculated per emitted asset (gzip level 9 and Node Brotli defaults).',
     '',
     '## Total emitted JS/CSS assets',
     '',
