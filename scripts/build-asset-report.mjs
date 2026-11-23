@@ -412,7 +412,7 @@ export function formatAssetReport(report) {
   } else {
     for (const route of report.routes) {
       lines.push(
-        \`|\${escapeMarkdown(route.route)}|\${route.nodeIndices.join(', ')}|\${route.total.count}|\${formatBytes(route.total.raw)}|\${formatBytes(route.total.gzip)}|\${formatBytes(route.total.brotli)}|\${route.missingNodeIndices.length}|\`
+        `|${escapeMarkdown(route.route)}|${route.nodeIndices.join(', ')}|${route.total.count}|${formatBytes(route.total.raw)}|${formatBytes(route.total.gzip)}|${formatBytes(route.total.brotli)}|${route.missingNodeIndices.length}|`
       );
     }
   }
