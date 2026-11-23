@@ -40,6 +40,10 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    // Used by the production asset baseline to resolve static route-entry imports.
+    manifest: true
+  },
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}']
   }
