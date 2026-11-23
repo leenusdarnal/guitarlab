@@ -7,7 +7,10 @@ export const THEME_STORAGE_KEY = 'guitarlab-theme';
 export const themePreferenceStore = writable<ThemePreference>('system');
 
 type ThemeRoot = {
-  dataset: Record<string, string>;
+  dataset: {
+    theme?: string;
+    themePreference?: string;
+  };
 };
 
 type ThemeColorMeta = {
