@@ -17,7 +17,7 @@ const clientRoot = fileURLToPath(
 );
 const immutableRoot = join(clientRoot, '_app', 'immutable');
 const manifestPath = join(clientRoot, '.vite', 'manifest.json');
-const serverManifestPath = join(clientRoot, '../server/manifest.js');
+const serverManifestPath = join(clientRoot, '../server/manifest-full.js');
 const reportPath = join(clientRoot, 'build-asset-report.json');
 
 async function collectClientAssets(directory) {
