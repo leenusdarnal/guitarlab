@@ -174,7 +174,7 @@ Priority: **P0** = privacy/security boundary requiring immediate correction; **P
 - [ ] Test fretboard/chord diagrams with keyboard and touch; preserve a useful textual equivalent.
 - [ ] Verify high-frequency tuner updates remain visual and stable note/state changes are announced succinctly.
 - [ ] Ensure microphone access is explicit, denial is recoverable and no audio is uploaded by default.
-- [ ] Audit learner-facing body copy so instructional content is not styled as small muted metadata.
+- [x] Audit learner-facing body copy so instructional content is not styled as small muted metadata; PR #231 applies the readability pass across the learner workspace and instrument-tool guidance.
 - [ ] Finish shared semantic text/control tokens across routes and both themes.
 - [ ] Extract shared buttons, fields, panels, banners, empty states and status messages incrementally.
 - [ ] Measure CLS on Today and other large surfaces before deciding where skeletons are useful.
@@ -391,7 +391,7 @@ Never record account credentials, session tokens, personal learner data, private
 
 | Issue | Live state | Current reconciliation / next action |
 |---|---|---|
-| [#5 — CI quality gates](https://github.com/leenusdarnal/guitarlab/issues/5) | Open | The isolated [Controlled CI failure and recovery rehearsal](https://github.com/leenusdarnal/guitarlab/actions/workflows/controlled-ci-rehearsal.yml) is present with separate `failure-injection` and `recovery` dispatch modes. Both runs still need to be executed and linked before closing; normal green CI is not the rehearsal. |
+| [#5 — CI quality gates](https://github.com/leenusdarnal/guitarlab/issues/5) | Closed | The controlled rehearsal completed on 22 November 2026: expected failure in [run #45000421222](https://github.com/leenusdarnal/guitarlab/actions/runs/45000421222) and clean recovery in [run #45000477504](https://github.com/leenusdarnal/guitarlab/actions/runs/45000477504). Separate CI-01/CI-02 fault-injection acceptance remains open. |
 | [#9 — IndexedDB/local learner profile](https://github.com/leenusdarnal/guitarlab/issues/9) | Open | Automated profile, migration, persistence and failure-feedback coverage exists. Physical desktop/mobile upgrade, reload and offline-restart checks remain; use the local trusted-HTTPS runbook rather than a Preview Worker. |
 | [#10 — backup/restore/reset](https://github.com/leenusdarnal/guitarlab/issues/10) | Open | Automated export/restore validation, rejection, transactional rollback and reset checks exist. Physical desktop/mobile file-picker, restore-cancel and reset-confirmation acceptance remains. |
 | [#18 — release hardening](https://github.com/leenusdarnal/guitarlab/issues/18) | Open | Umbrella P1 release gate. Remaining work spans production OAuth and exact deployment/rollback evidence (SEC-02/QA-04), CSP/privacy review (SEC-05), physical accessibility/storage/audio acceptance, performance and dependency/licence review. |
