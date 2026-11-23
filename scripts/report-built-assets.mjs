@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { appendFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, relative } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -62,7 +62,7 @@ try {
 const rows = [];
 for (const absolutePath of assetFiles) {
   const bytes = await readFile(absolutePath);
-  const relativePath = relative(immutableRoot, absolutePath).split('\\\\').join('/');
+  const relativePath = relative(immutableRoot, absolutePath).split(sep).join('/');
   rows.push(createAssetRecord(relativePath, bytes));
 }
 rows.sort((left, right) => left.file.localeCompare(right.file));
