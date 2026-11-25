@@ -61,7 +61,7 @@
     "wrangler": "^4.162.0",
     "@eslint/js": "^10.0.1",
     "drizzle-kit": "^0.31.11",
-    "axe-core": "4.14.0",
+    "axe-core": "4.14.1",
     "playwright": "1.56.1"
   },
   "dependencies": {
